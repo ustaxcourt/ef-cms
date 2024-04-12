@@ -8,4 +8,4 @@ ELASTICSEARCH_PORT=9200 \
   ELASTICSEARCH_PROTOCOL="http" \
   npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT}"
 
-npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts "${ELASTICSEARCH_ENDPOINT}"
+npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts

@@ -29,7 +29,10 @@ export const getSourceTableVersion = async (): Promise<'alpha' | 'beta'> => {
   }
 };
 
-export const getDestinationTableName = async (): Promise<string> => {
+export const getDestinationTableName = async (): Promise<{
+  tableName: string;
+  version: string;
+}> => {
   requireEnvVars(['ENV']);
 
   const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
@@ -46,7 +49,7 @@ export const getDestinationTableName = async (): Promise<string> => {
 
   const version = result?.Item?.current;
   if (version) {
-    return `efcms-${ENV}-${version}`;
+    return { tableName: `efcms-${ENV}-${version}`, version };
   } else {
     throw 'Could not determine the current version';
   }

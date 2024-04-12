@@ -165,9 +165,9 @@ const setupPractitioners = async (
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const userPoolId = await getUserPoolId();
-  const destinationTable = await getDestinationTableName();
+  const { tableName } = await getDestinationTableName();
   environment.userPoolId = userPoolId;
-  environment.dynamoDbTableName = destinationTable;
+  environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   console.log('== Creating Court Users');

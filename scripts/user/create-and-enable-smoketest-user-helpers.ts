@@ -39,9 +39,9 @@ const user = {
 
 export const createAndEnableSmoketestUser = async () => {
   const userPoolId = await getUserPoolId();
-  const destinationTable = await getDestinationTableName();
+  const { tableName } = await getDestinationTableName();
   environment.userPoolId = userPoolId;
-  environment.dynamoDbTableName = destinationTable;
+  environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   try {

@@ -373,7 +373,10 @@ jobs:
           command: npx ts-node --transpile-only ./scripts/user/disable-smoketest-user.ts
       - run:
           name: Kill Build if Smoketests Failed
-          command: ./scripts/kill-circle-build.sh
+          command: |
+            if [ "${READONLY_SMOKETESTS_RESULT}" -ne 0 ]; then 
+              exit 1
+            fi
       - run:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
