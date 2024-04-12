@@ -3,7 +3,7 @@
 To import judge users into the system in bulk:
 
 ```
-ENV=[ENV] ./scripts/circleci/judge/bulk-import-judge-users.sh
+ENV=[ENV] npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
 ```
 
 Locally:

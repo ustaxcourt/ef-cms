@@ -29,8 +29,13 @@ const { DEFAULT_ACCOUNT_PASS } = process.env;
 export const init = async () => {
   const filePath = './scripts/circleci/judge/judge_users.csv';
   const csvOptions = getCsvOptions(CSV_HEADERS);
-  let output: RawUser[] = [];
+  const userPoolId = await getUserPoolId();
+  const destinationTable = await getDestinationTableName();
+  environment.userPoolId = userPoolId;
+  environment.dynamoDbTableName = destinationTable;
+  const applicationContext = createApplicationContext({});
 
+  const output: RawUser[] = [];
   const data = readCsvFile(filePath);
   const stream = parse(data, csvOptions);
 
@@ -43,13 +48,6 @@ export const init = async () => {
         await Promise.all(
           currentChunk.map(async row => {
             try {
-              const userPoolId = await getUserPoolId();
-              const destinationTable = await getDestinationTableName();
-              environment.userPoolId = userPoolId;
-              environment.dynamoDbTableName = destinationTable;
-
-              const applicationContext = createApplicationContext({});
-
               const { userId } = await createOrUpdateUser(applicationContext, {
                 password: DEFAULT_ACCOUNT_PASS!,
                 user: row,
