@@ -6,8 +6,7 @@ import readline from 'readline';
 const { ENV } = process.env;
 const UserPoolCache: Record<string, string> = {};
 
-// Look up the current version so that we can perform searches against it
-export const getVersion = async (): Promise<string> => {
+export const getSourceTableVersion = async (): Promise<'alpha' | 'beta'> => {
   requireEnvVars(['ENV']);
 
   const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
@@ -22,15 +21,12 @@ export const getVersion = async (): Promise<string> => {
     TableName: `efcms-deploy-${ENV}`,
   });
 
-  if (
-    !result ||
-    !result.Item ||
-    !('current' in result.Item) ||
-    typeof result.Item.current === 'undefined'
-  ) {
+  const version = result?.Item?.current;
+  if (version) {
+    return version;
+  } else {
     throw 'Could not determine the current version';
   }
-  return result.Item.current;
 };
 
 export const getDestinationTableName = async (): Promise<string> => {
@@ -108,56 +104,6 @@ export const getClientId = async (
   }
 
   return undefined;
-};
-
-// Generate a strong password that makes Cognito happy
-export const generatePassword = (numChars: number): string => {
-  const pickRandomChar = (src: string): string => {
-    const rand = Math.floor(Math.random() * chars[src].length);
-    return chars[src][rand];
-  };
-  const pickRandomType = (): string => {
-    const rand = Math.floor(Math.random() * Object.keys(chars).length);
-    return Object.keys(chars)[rand];
-  };
-
-  const chars = {
-    lower: 'abcdefghijklmnopqrstuvwxyz',
-    numbers: '0123456789',
-    special: '!@#$%^&*()',
-    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  };
-  const pass: string[] = [];
-
-  for (const k of Object.keys(chars)) {
-    pass.push(pickRandomChar(k));
-  }
-
-  for (let i = pass.length; i < numChars; i++) {
-    const k = pickRandomType();
-    pass.push(pickRandomChar(k));
-  }
-  return shuffle(pass).join('');
-};
-
-const shuffle = (arr: Array<string>): Array<string> => {
-  let currentIndex = arr.length,
-    temporaryValue,
-    randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = arr[currentIndex];
-    arr[currentIndex] = arr[randomIndex];
-    arr[randomIndex] = temporaryValue;
-  }
-
-  return arr;
 };
 
 export const askQuestion = (query: string): Promise<string> => {
