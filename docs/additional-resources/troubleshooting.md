@@ -252,7 +252,7 @@ Solution:
 - This solution should only be used on non-prod environments. Clear the dynamo tables and recreate the users and judges.
 
   ```bash
-  . ./scripts/user/setup-test-users.sh "${ENV}"
+  npx ts-node --transpile-only scripts/user/setup-test-users.ts
   ```
 
   ```bash

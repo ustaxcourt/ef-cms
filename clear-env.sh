@@ -91,6 +91,6 @@ echo "clearing dynamo"
 npx ts-node --transpile-only ./web-api/clear-dynamodb-table.ts "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
 # shellcheck disable=SC1091
-. ./scripts/user/setup-test-users.sh "${ENV}"
+npx ts-node --transpile-only scripts/user/setup-test-users.ts "${ENV}"
 echo "importing judge users"
 npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts

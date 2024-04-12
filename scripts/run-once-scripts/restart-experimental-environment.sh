@@ -41,7 +41,7 @@ npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DESTINATIO
 
 # Setting up users
 # shellcheck disable=SC1091
-. ./scripts/user/setup-test-users.sh "${ENV}"
+npx ts-node --transpile-only scripts/user/setup-test-users.ts
 
 # Setting up Judge users
 npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
