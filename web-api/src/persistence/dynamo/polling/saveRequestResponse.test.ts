@@ -1,5 +1,5 @@
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { saveRequestResponse } from '@shared/notifications/saveRequestResponse';
+import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 
 describe('saveRequestResponse', () => {
   const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
