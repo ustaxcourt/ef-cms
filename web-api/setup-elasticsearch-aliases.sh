@@ -5,7 +5,6 @@
 
 [ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 
-ENV=$1
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --domain-name "${DESTINATION_DOMAIN}" \

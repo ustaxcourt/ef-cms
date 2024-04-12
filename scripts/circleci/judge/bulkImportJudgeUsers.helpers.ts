@@ -30,9 +30,9 @@ export const init = async () => {
   const filePath = './scripts/circleci/judge/judge_users.csv';
   const csvOptions = getCsvOptions(CSV_HEADERS);
   const userPoolId = await getUserPoolId();
-  const destinationTable = await getDestinationTableName();
+  const { tableName } = await getDestinationTableName();
   environment.userPoolId = userPoolId;
-  environment.dynamoDbTableName = destinationTable;
+  environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   const output: RawUser[] = [];

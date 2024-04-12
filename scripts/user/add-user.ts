@@ -141,7 +141,8 @@ const sendWelcomeEmail = async ({ email }) => {
   };
   checkParams(params);
   environment.userPoolId = await getUserPoolId();
-  environment.dynamoDbTableName = await getDestinationTableName();
+  const { tableName } = await getDestinationTableName();
+  environment.dynamoDbTableName = tableName;
   await createOrUpdateUser(applicationContext, {
     password: environment.defaultAccountPass,
     user: params,
