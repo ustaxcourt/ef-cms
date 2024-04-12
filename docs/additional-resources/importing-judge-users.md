@@ -3,13 +3,13 @@
 To import judge users into the system in bulk:
 
 ```
-ENV=[ENV] FILE_NAME=[csv file path] ./scripts/circleci/judge/bulk-import-judge-users.sh
+ENV=[ENV] ./scripts/circleci/judge/bulk-import-judge-users.sh
 ```
 
 Locally:
 
 ```
-ENV=local FILE_NAME=[csv file name] ts-node ./scripts/circleci/judge/bulkImportJudgeUsers.ts
+ENV=local ts-node ./scripts/circleci/judge/bulkImportJudgeUsers.ts
 ```
 
 A CSV file is included in the repo: judge_users.csv. The data fields should be in the same order as the provided CSV file.

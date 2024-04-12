@@ -15,7 +15,6 @@ DEPLOYING_COLOR=$(aws dynamodb get-item \
  --region us-east-1 \
  --table-name "efcms-deploy-${ENV}" \
  --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
-export FILE_NAME=./scripts/circleci/judge/judge_users.csv
 export DESTINATION_TABLE
 export DEPLOYING_COLOR
 
@@ -25,7 +24,6 @@ export DEPLOYING_COLOR
   "USTC_ADMIN_PASS" \
   "USTC_ADMIN_USER" \
   "REGION" \
-  "FILE_NAME" \
   "DEFAULT_ACCOUNT_PASS" \
   "DEPLOYING_COLOR" \
 

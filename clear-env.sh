@@ -80,7 +80,6 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
 export SOURCE_TABLE_VERSION
 export ELASTICSEARCH_ENDPOINT
 export DEPLOYING_COLOR
-export FILE_NAME=./scripts/circleci/judge/judge_users.csv
 
 echo "clearing elasticsearch"
 ./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
