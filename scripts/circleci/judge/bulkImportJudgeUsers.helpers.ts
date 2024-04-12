@@ -12,7 +12,6 @@ import {
 } from 'shared/admin-tools/util';
 import { parse } from 'csv-parse';
 import { readCsvFile } from '../../../web-api/importHelpers';
-import { result } from 'lodash';
 
 export const CSV_HEADERS = [
   'name',
@@ -26,7 +25,7 @@ export const CSV_HEADERS = [
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;
 
-export const init = async (csvFile, outputMap) => {
+export const init = async (csvFile: string) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
   let output: RawUser[] = [];
 
@@ -36,29 +35,29 @@ export const init = async (csvFile, outputMap) => {
   const processCsv = new Promise<void>(resolve => {
     stream.on('readable', gatherRecords(CSV_HEADERS, output));
     stream.on('end', async () => {
-      for (let row of output) {
-        try {
-          const userPoolId = await getUserPoolId();
-          const destinationTable = await getDestinationTableName();
-          environment.userPoolId = userPoolId;
-          environment.dynamoDbTableName = destinationTable;
+      // const requestChunks =
+      await Promise.all(
+        output.map(async row => {
+          try {
+            const userPoolId = await getUserPoolId();
+            const destinationTable = await getDestinationTableName();
+            environment.userPoolId = userPoolId;
+            environment.dynamoDbTableName = destinationTable;
 
-          const applicationContext = createApplicationContext({});
+            const applicationContext = createApplicationContext({});
 
-          await createOrUpdateUser(applicationContext, {
-            password: DEFAULT_ACCOUNT_PASS!,
-            user: row,
-          });
+            await createOrUpdateUser(applicationContext, {
+              password: DEFAULT_ACCOUNT_PASS!,
+              user: row,
+            });
 
-          console.log(`SUCCESS ${row.name}`);
-          const lowerCaseName = row.name.toLowerCase();
-          const { userId } = result.data;
-          outputMap[lowerCaseName] = userId;
-        } catch (err) {
-          console.log(`ERROR ${row.name}`);
-          console.log(err);
-        }
-      }
+            console.log(`SUCCESS ${row.name}`);
+          } catch (err) {
+            console.log(`ERROR ${row.name}`);
+            console.log(err);
+          }
+        }),
+      );
       resolve();
     });
   });

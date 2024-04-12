@@ -31,10 +31,10 @@ export const getDynamoClient = (
         requestTimeout: 5000,
       }),
     });
-    dynamoCache[type] =
-      applicationContext.environment.stage === 'local'
-        ? dynamoClient
-        : AWSXRay.captureAWSv3Client(dynamoClient);
+
+    dynamoCache[type] = applicationContext.environment.isRunningOnLambda
+      ? AWSXRay.captureAWSv3Client(dynamoClient)
+      : dynamoClient;
   }
   return dynamoCache[type];
 };
