@@ -6,9 +6,12 @@ export const removeFactOrReasonAction = ({
   store,
 }: ActionProps) => {
   const { index, key } = props;
-  let factsOrReasons = get(state.form[key]);
 
-  factsOrReasons.splice(index, 1);
+  if (index > 0) {
+    let factsOrReasons = get(state.form[key]);
 
-  store.set(state.form[key], factsOrReasons);
+    factsOrReasons.splice(index, 1);
+
+    store.set(state.form[key], factsOrReasons);
+  }
 };

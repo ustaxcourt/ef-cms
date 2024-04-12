@@ -49,10 +49,11 @@ export const PetitionFormResponse = connect(
               // style={{ verticalAlign: 'top' }}
               value={form[textName][count] || ''}
               onChange={e => {
+                // consider using custom sequence instead
                 updateFormValueSequence({
                   index: count,
                   key: e.target.name,
-                  value: e.target.value,
+                  value: e.target.value !== '' ? e.target.value : ' ',
                 });
               }}
             />
