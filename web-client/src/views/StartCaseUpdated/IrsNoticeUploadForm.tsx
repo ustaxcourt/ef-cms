@@ -25,7 +25,7 @@ export const IrsNoticeUploadForm = connect(
     taxYear: props.taxYear,
     updateIrsNoticeIndexPropertySequence:
       sequences.updateIrsNoticeIndexPropertySequence,
-    validationErrors: state.validationErrors,
+    validationError: props.validationError,
   },
   function IrsNoticeUploadForm({
     attachmentToPetitionFile,
@@ -39,17 +39,13 @@ export const IrsNoticeUploadForm = connect(
     removeIrsNoticeFromFormSequence,
     taxYear,
     updateIrsNoticeIndexPropertySequence,
-    validationErrors,
+    validationError,
   }) {
+    console.log('validationError', validationError);
     return (
       <>
         <div className="usa-form-group john	">
-          <FormGroup
-            errorText={[
-              validationErrors.attachmentToPetitionFile,
-              validationErrors.attachmentToPetitionFileSize,
-            ]}
-          >
+          <FormGroup errorText={[validationError.file, validationError.size]}>
             <label
               className={classNames(
                 'usa-label ustc-upload-atp with-hint',
@@ -73,7 +69,6 @@ export const IrsNoticeUploadForm = connect(
               ignoreSizeKey={true}
               name={index}
               updateFormValueSequence="updateIrsNoticeIndexPropertySequence"
-              validationSequence="validateStartCaseWizardSequence"
             />
           </FormGroup>
 
@@ -99,13 +94,16 @@ export const IrsNoticeUploadForm = connect(
             hint="(required)"
             legend="Type of notice/case"
             name={index.toString()}
-            validation="validateStartCaseWizardSequence"
+            validationError={validationError}
             value={caseType}
             onChange="updateIrsNoticeIndexPropertySequence"
           />
 
           <div className="grid-row grid-gap">
-            <FormGroup className="grid-col-7">
+            <FormGroup
+              className="grid-col-7"
+              errorText={validationError.taxYear}
+            >
               <label className="usa-label" htmlFor="noticeIssuesTaxYear">
                 Tax year or period for which the notice was issued
               </label>
@@ -128,7 +126,7 @@ export const IrsNoticeUploadForm = connect(
             <DateSelector
               className="grid-col-5"
               defaultValue={lastDateOfPeriod}
-              errorText={validationErrors.lastDateOfPeriod}
+              errorText={validationError.lastDateOfPeriod}
               id="last-date-of-period"
               label="Last date of period"
               onChange={e => {

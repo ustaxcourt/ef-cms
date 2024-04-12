@@ -1,5 +1,6 @@
 import { CreateCaseIrsForm } from '@web-client/presenter/state';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { omit } from 'lodash';
 import joi from 'joi';
@@ -7,6 +8,7 @@ import joi from 'joi';
 export class UploadPetitionStep3 extends JoiValidationEntity {
   public hasIrsNotice: boolean;
   public irsNotices: CreateCaseIrsForm[];
+  public caseType: string;
 
   constructor(rawProps) {
     super('UploadPetitionStep3');
@@ -14,10 +16,22 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
     this.irsNotices = rawProps.hasIrsNotice
       ? rawProps.irsNotices.map(irsN => new IrsNoticeForm(irsN))
       : undefined;
+    this.caseType = rawProps.caseType;
   }
 
   static VALIDATION_RULES = {
-    hasIrsNotice: joi.boolean().required().valid(true, false),
+    caseType: joi.when('hasIrsNotice', {
+      is: false,
+      otherwise: joi.string().optional(),
+      then: JoiValidationConstants.STRING.required().valid(
+        'tests',
+        '1111',
+        '2222',
+      ),
+    }),
+    hasIrsNotice: joi.boolean().required().valid(true, false).messages({
+      '*': 'Indicate whether you received an IRS notice',
+    }),
     irsNotices: joi.when('hasIrsNotice', {
       is: true,
       otherwise: joi.array().optional(),
