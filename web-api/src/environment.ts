@@ -12,6 +12,7 @@ export const environment = {
   emailFromAddress:
     process.env.EMAIL_SOURCE ||
     `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`,
+  isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
