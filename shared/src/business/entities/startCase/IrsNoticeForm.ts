@@ -1,4 +1,8 @@
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import {
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+} from '@shared/business/entities/EntityConstants';
 import joi from 'joi';
 
 export class IrsNoticeForm extends JoiValidationEntity {
@@ -20,12 +24,23 @@ export class IrsNoticeForm extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    caseType: joi.string().required(),
-    file: joi.required(),
+    caseType: joi.string().required(), //specific strings
+    file: joi.required().messages({
+      //optional
+      '*': 'Upload a Petition',
+    }),
     key: joi.string().required(),
-    lastDateOfPeriod: joi.string().required(),
-    size: joi.number().required(),
-    taxYear: joi.number().required(),
+    lastDateOfPeriod: joi.string().required(), //if provided make sure correct format
+    size: joi //when file provided make sure under max size if not its optional
+      .number()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .required()
+      .messages({
+        '*': 'Your Petition file size is empty',
+        'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      }),
+    taxYear: joi.number().required(), //not a number, can be string optional
   };
 
   getValidationRules() {

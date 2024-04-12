@@ -68,7 +68,7 @@ export const StateDrivenFileInput = connect(
                     property: 'size',
                     value: clonedFile.size,
                   });
-                  return validationSequence();
+                  return validationSequence ? validationSequence() : null;
                 })
                 .catch(() => {
                   /* no-op */
