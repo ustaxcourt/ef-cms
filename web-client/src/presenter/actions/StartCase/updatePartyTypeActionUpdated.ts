@@ -82,6 +82,11 @@ export const updatePartyTypeActionUpdated = ({
     updatePartyType(props.value);
   };
 
+  const handleBusinessType = () => {
+    const partyType = getBusinessPartyType(props.value, PARTY_TYPES);
+    updatePartyType(partyType);
+  };
+
   switch (props.key) {
     case 'filingType':
       handleFilingType();
@@ -93,7 +98,7 @@ export const updatePartyTypeActionUpdated = ({
       handleOtherType();
       break;
     case 'businessType':
-      updatePartyType(props.value);
+      handleBusinessType();
       break;
     case 'estateType':
       handleEstateType();
@@ -103,3 +108,22 @@ export const updatePartyTypeActionUpdated = ({
       break;
   }
 };
+
+function getBusinessPartyType(businessType, PARTY_TYPES) {
+  if (businessType === 'Corporation') {
+    return PARTY_TYPES.corporation;
+  }
+  if (businessType === 'Partnership (as the Tax Matters Partner)') {
+    return PARTY_TYPES.partnershipAsTaxMattersPartner;
+  }
+  if (
+    businessType === 'Partnership (as a partner other than Tax Matters Partner)'
+  ) {
+    return PARTY_TYPES.partnershipOtherThanTaxMatters;
+  }
+  if (
+    businessType === 'Partnership (as a partnership representative under BBA)'
+  ) {
+    return PARTY_TYPES.partnershipBBA;
+  }
+}

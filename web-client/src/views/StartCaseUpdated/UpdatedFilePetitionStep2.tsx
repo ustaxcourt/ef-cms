@@ -12,6 +12,7 @@ import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep2 = connect(
   {
+    constants: state.constants,
     form: state.form,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
@@ -19,6 +20,7 @@ export const UpdatedFilePetitionStep2 = connect(
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
   function UpdatedFilePetitionStep2({
+    constants,
     form,
     resetSecondaryAddressSequence,
     updatedFilePetitionHelper,
@@ -93,8 +95,14 @@ export const UpdatedFilePetitionStep2 = connect(
             />
           </>
         )}
-        {form.filingType === 'aBusiness' && (
-          <BusinessInfo filingOption={form.filingType} />
+        {form.filingType === 'A business' && (
+          <BusinessInfo
+            businessFieldNames={updatedFilePetitionHelper.businessFieldNames}
+            businessTypes={constants.BUSINESS_TYPES}
+            selectedBusinessType={form.businessType}
+            showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+            updateFilingTypeSequence={updateFilingTypeSequence}
+          />
         )}
         {form.filingType === 'other' && (
           <OtherInfo filingOption={form.filingType} />
@@ -224,8 +232,69 @@ function DeceasedSpouse() {
   );
 }
 
-function BusinessInfo({ filingOption }) {
-  return <div>{filingOption}</div>;
+function BusinessInfo({
+  businessFieldNames,
+  businessTypes,
+  selectedBusinessType,
+  showPlaceOfLegalResidence,
+  updateFilingTypeSequence,
+}) {
+  return (
+    <div
+      className={classNames(
+        'ustc-secondary-question',
+        // validationErrors.partyType && 'usa-form-group--error',
+      )}
+    >
+      <fieldset className="usa-fieldset" id="business-type-radios">
+        <legend id="business-type-legend">
+          What type of business are you filing for?
+        </legend>
+        {[
+          businessTypes.corporation,
+          businessTypes.partnershipAsTaxMattersPartner,
+          businessTypes.partnershipOtherThanTaxMatters,
+          businessTypes.partnershipBBA,
+        ].map((businessType, idx) => (
+          <div className="usa-radio" key={businessType}>
+            <input
+              aria-describedby="business-type-legend"
+              checked={selectedBusinessType === businessType}
+              className="usa-radio__input"
+              id={`businessType-${businessType}`}
+              name="businessType"
+              type="radio"
+              value={businessType}
+              onChange={e => {
+                updateFilingTypeSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                // validateStartCaseWizardSequence();
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              htmlFor={`businessType-${businessType}`}
+              id={`is-business-type-${idx}`}
+            >
+              {businessType}
+            </label>
+          </div>
+        ))}
+      </fieldset>
+      {selectedBusinessType && (
+        <ContactPrimaryUpdated
+          bind="form"
+          isSecondaryFieldOptional={businessFieldNames.isOptional}
+          nameLabel={businessFieldNames.primary}
+          secondaryLabel={businessFieldNames.secondary}
+          showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+          onChange="updateFormValueSequence"
+        />
+      )}
+    </div>
+  );
 }
 
 function OtherInfo({ filingOption }) {
