@@ -269,7 +269,7 @@ export const BeforeStartingCase = connect(
                 <Button
                   link
                   className="usa-link--external text-left mobile-text-wrap"
-                  href="https://ustaxcourt.gov/rules.html"
+                  href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
                   overrideMargin="margin-right-0"
                   rel="noopener noreferrer"
                   target="_blank"
