@@ -1,4 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -13,6 +14,7 @@ export const PetitionFormResponse = connect(
     removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
     textName: props.textName,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
   function PetitionFormResponse({
     count,
@@ -21,51 +23,58 @@ export const PetitionFormResponse = connect(
     removeFactOrReasonSequence,
     textName,
     updateFormValueSequence,
+    validationErrors,
   }) {
     return (
-      <div className="fact-or-reason">
-        {/* TODO: move to scss */}
-        <li
-          style={{
-            fontWeight: 'bold',
-            height: '5rem',
-            listStyleType: 'lower-alpha',
-            verticalAlign: 'top',
-            // marginRight: '1rem',
-          }}
-        >
-          <textarea
-            aria-describedby={`${id}-label`}
-            className="usa-textarea max-width-unset"
-            id={id}
-            name={textName}
-            // style={{ verticalAlign: 'top' }}
-            value={form[textName][count] || ''}
-            onChange={e => {
-              updateFormValueSequence({
-                index: count,
-                key: e.target.name,
-                value: e.target.value,
-              });
+      <FormGroup
+        className="autogenerate-petition-form"
+        errorText={validationErrors[`${textName}[0]`]}
+      >
+        <div className="fact-or-reason">
+          {/* TODO: move to scss */}
+          <li
+            style={{
+              fontWeight: 'bold',
+              height: '5rem',
+              listStyleType: 'lower-alpha',
+              verticalAlign: 'top',
+              // marginRight: '1rem',
             }}
-          />
-          {count > 0 && (
-            <Button
-              link
-              className="reason-button"
-              icon="times"
-              onClick={() =>
-                removeFactOrReasonSequence({
+          >
+            <textarea
+              aria-describedby={`${id}-label`}
+              className="usa-textarea max-width-unset"
+              id={id}
+              name={textName}
+              // style={{ verticalAlign: 'top' }}
+              value={form[textName][count] || ''}
+              onChange={e => {
+                updateFormValueSequence({
                   index: count,
-                  key: 'petitionReasons',
-                })
-              }
-            >
-              Remove
-            </Button>
-          )}
-        </li>
-      </div>
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+
+            {count > 0 && (
+              <Button
+                link
+                className="reason-button"
+                icon="times"
+                onClick={() =>
+                  removeFactOrReasonSequence({
+                    index: count,
+                    key: textName,
+                  })
+                }
+              >
+                Remove
+              </Button>
+            )}
+          </li>
+        </div>
+      </FormGroup>
     );
   },
 );

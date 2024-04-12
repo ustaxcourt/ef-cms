@@ -14,7 +14,7 @@ export const AutoGeneratePetitionForm = connect(
   function AutoGeneratePetitionForm({ addFactOrReasonSequence, form }) {
     return (
       <>
-        <FormGroup className="autogenerate-petition-form" errorText={undefined}>
+        <FormGroup className="autogenerate-petition-form">
           <label
             className="usa-label"
             htmlFor="petitionReasons"

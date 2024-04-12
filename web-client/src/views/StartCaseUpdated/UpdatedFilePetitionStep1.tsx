@@ -1,15 +1,13 @@
+import { AutoGeneratePetitionForm } from '@web-client/views/StartCaseUpdated/AutoGeneratePetitionForm';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
-import { AutoGeneratePetitionForm } from '@web-client/views/StartCaseUpdated/AutoGeneratePetitionForm';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep1 = connect(
@@ -30,7 +28,7 @@ export const UpdatedFilePetitionStep1 = connect(
   }) {
     return (
       <>
-        <ErrorNotification />
+        {/* <ErrorNotification /> */}
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required
         </p>
