@@ -147,7 +147,7 @@ jobs:
           name: Test Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              ./scripts/user/setup-test-users.sh $ENV
+              npx ts-node --transpile-only scripts/user/setup-test-users.ts
             else
               echo "skipping…"
             fi
