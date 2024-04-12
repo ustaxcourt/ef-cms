@@ -16,7 +16,8 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
   alertInfo: {
     title?: string;
     linkUrl?: string;
-    linkText?: string;
+    inlineLinkUrl?: string;
+    inlineLinkText?: string;
     message?: string | React.ReactNode;
     dismissText?: string;
     dismissIcon?: string;
@@ -44,6 +45,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
           aria-live="polite"
           className={classNames(
             'usa-alert',
+            'info-alert',
             'usa-alert--info',
             isMessageOnly && 'usa-alert-info-message-only',
           )}
@@ -59,20 +61,18 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
           >
             <div className="grid-container padding-x-0">
               <div className="grid-row">
-                <div className="tablet:grid-col-10">
+                <div className={dismissible ? 'tablet:grid-col-10' : ''}>
                   {alertInfo.title && (
                     <p className="usa-alert__heading padding-top-0">
                       {alertInfo.title}
                     </p>
                   )}
-                  <p
-                    className={classNames(
-                      'usa-alert__text',
-                      messageNotBold && 'font-weight-normal',
-                    )}
-                  >
-                    {alertInfo.message}
-                  </p>
+                  <Message
+                    inlineLinkText={alertInfo.inlineLinkText}
+                    inlineLinkUrl={alertInfo.inlineLinkUrl}
+                    message={alertInfo.message}
+                    messageNotBold={messageNotBold}
+                  />
                   {alertInfo.linkUrl && (
                     <Button
                       link
@@ -85,8 +85,8 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
                     </Button>
                   )}
                 </div>
-                <div className="tablet:grid-col-2 usa-alert__action">
-                  {dismissible && (
+                {dismissible && (
+                  <div className="tablet:grid-col-2 usa-alert__action">
                     <Button
                       link
                       className="no-underline padding-0"
@@ -96,8 +96,8 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
                     >
                       {alertInfo.dismissText || 'Clear'}
                     </Button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -106,6 +106,31 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
     </>
   );
 };
+
+function Message({ inlineLinkText, inlineLinkUrl, message, messageNotBold }) {
+  if (!inlineLinkText && !inlineLinkUrl) {
+    return (
+      <p
+        className={classNames(
+          'usa-alert__text',
+          messageNotBold && 'font-weight-normal',
+        )}
+      >
+        {message}
+      </p>
+    );
+  }
+  const standardTexts = message.split(inlineLinkText);
+  return (
+    <div>
+      {standardTexts[0]}
+      <a href={inlineLinkUrl} rel="noreferrer" target="_blank">
+        {inlineLinkText}
+      </a>
+      {standardTexts[1]}
+    </div>
+  );
+}
 
 type InfoNotificationProps = {
   isDismissible?: boolean;
