@@ -1,3 +1,4 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ContactPrimaryUpdated } from '@web-client/views/StartCase/ContactPrimaryUpdated';
 import { ContactSecondaryUpdated } from '@web-client/views/StartCase/ContactSecondaryUpdated';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
@@ -16,11 +17,17 @@ export const UpdatedFilePetitionStep2 = connect(
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionCompleteStep2Sequence:
+      sequences.updatedFilePetitionCompleteStep2Sequence,
+    updatedFilePetitionGoBackAStepSequence:
+      sequences.updatedFilePetitionGoBackAStepSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
   function UpdatedFilePetitionStep2({
     form,
     resetSecondaryAddressSequence,
+    updatedFilePetitionCompleteStep2Sequence,
+    updatedFilePetitionGoBackAStepSequence,
     updatedFilePetitionHelper,
     updateFilingTypeSequence,
     updateFormValueSequence,
@@ -99,6 +106,26 @@ export const UpdatedFilePetitionStep2 = connect(
         {form.filingType === 'other' && (
           <OtherInfo filingOption={form.filingType} />
         )}
+
+        <Button
+          onClick={() => {
+            console.log('complete step 2');
+            updatedFilePetitionCompleteStep2Sequence();
+          }}
+        >
+          Next
+        </Button>
+        <Button
+          secondary
+          onClick={() => {
+            updatedFilePetitionGoBackAStepSequence();
+          }}
+        >
+          Back
+        </Button>
+        <Button link onClick={() => console.log('Cancel')}>
+          Cancel
+        </Button>
       </>
     );
   },
