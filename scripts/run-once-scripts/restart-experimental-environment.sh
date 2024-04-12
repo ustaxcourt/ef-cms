@@ -44,7 +44,7 @@ npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DESTINATIO
 . ./scripts/user/setup-test-users.sh "${ENV}"
 
 # Setting up Judge users
-./scripts/circleci/judge/bulk-import-judge-users.sh
+npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
 
 unset CI
 unset SECRETS_LOADED

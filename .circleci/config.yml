@@ -168,7 +168,7 @@ jobs:
               export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
               npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
             else
-              ./scripts/circleci/judge/bulk-import-judge-users.sh
+              npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
           name: 'Deploy - Web Client - S3'

@@ -93,4 +93,4 @@ echo "setting up test users"
 # shellcheck disable=SC1091
 . ./scripts/user/setup-test-users.sh "${ENV}"
 echo "importing judge users"
-./scripts/circleci/judge/bulk-import-judge-users.sh
+npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts

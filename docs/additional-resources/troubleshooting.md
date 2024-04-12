@@ -256,7 +256,7 @@ Solution:
   ```
 
   ```bash
-  ENV=exp5 ./scripts/circleci/judge/bulk-import-judge-users.sh
+  ENV=exp5 npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
   ```
 
 ## AxiosError: Request failed with status code 403 on Test Users Setup
