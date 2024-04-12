@@ -134,20 +134,12 @@ export const asyncSyncHandler = (
 
   return new Promise((resolve, reject) => {
     const callback = results => {
-      applicationContext
-        .getAsynSyncUtil()
-        .removeAsyncSyncCompleter(asyncSyncId);
-
       if (+results.statusCode === 200) {
         resolve(results.body);
       } else {
         reject(results);
       }
     };
-
-    applicationContext
-      .getAsynSyncUtil()
-      .setAsyncSyncCompleter(asyncSyncId, callback);
 
     request(asyncSyncId);
 
@@ -158,6 +150,7 @@ export const asyncSyncHandler = (
         applicationContext,
         asyncSyncId,
         expirationTimestamp,
+        callback,
       );
   });
 };
