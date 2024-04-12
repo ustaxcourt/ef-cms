@@ -1,14 +1,18 @@
+import { RawUser } from '@shared/business/entities/User';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { createOrUpdateUser } from 'scripts/user/setup-test-users';
+import { environment } from '@web-api/environment';
 import {
   gatherRecords,
   getCsvOptions,
 } from '../../../shared/src/tools/helpers';
 import {
-  getServices,
-  getToken,
-  readCsvFile,
-} from '../../../web-api/importHelpers';
+  getDestinationTableName,
+  getUserPoolId,
+} from 'shared/admin-tools/util';
 import { parse } from 'csv-parse';
-import axios from 'axios';
+import { readCsvFile } from '../../../web-api/importHelpers';
+import { result } from 'lodash';
 
 export const CSV_HEADERS = [
   'name',
@@ -20,11 +24,12 @@ export const CSV_HEADERS = [
   'isSeniorJudge',
 ];
 
+const { DEFAULT_ACCOUNT_PASS } = process.env;
+
 export const init = async (csvFile, outputMap) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
-  let output = [];
+  let output: RawUser[] = [];
 
-  const token = await getToken();
   const data = readCsvFile(csvFile);
   const stream = parse(data, csvOptions);
 
@@ -33,26 +38,18 @@ export const init = async (csvFile, outputMap) => {
     stream.on('end', async () => {
       for (let row of output) {
         try {
-          let endpoint;
+          const userPoolId = await getUserPoolId();
+          const destinationTable = await getDestinationTableName();
+          environment.userPoolId = userPoolId;
+          environment.dynamoDbTableName = destinationTable;
 
-          if (process.env.ENV === 'local') {
-            endpoint = 'http://localhost:4000/users';
-          } else {
-            const services = await getServices();
-            endpoint = `${
-              services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
-            }/users`;
-          }
+          const applicationContext = createApplicationContext({});
 
-          const result = await axios.post(
-            endpoint,
-            { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
+          await createOrUpdateUser(applicationContext, {
+            password: DEFAULT_ACCOUNT_PASS!,
+            user: row,
+          });
+
           console.log(`SUCCESS ${row.name}`);
           const lowerCaseName = row.name.toLowerCase();
           const { userId } = result.data;

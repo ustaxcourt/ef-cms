@@ -8,19 +8,14 @@ import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { environment } from '@web-api/environment';
 import {
-  activateAdminAccount,
-  deactivateAdminAccount,
-} from '../../shared/admin-tools/user/admin';
-import { requireEnvVars } from '../../shared/admin-tools/util';
+  getDestinationTableName,
+  getUserPoolId,
+  requireEnvVars,
+} from '../../shared/admin-tools/util';
 
-requireEnvVars([
-  'DEFAULT_ACCOUNT_PASS',
-  // 'DEPLOYING_COLOR',
-  // 'EFCMS_DOMAIN',
-  'USTC_ADMIN_PASS',
-  'USTC_ADMIN_USER',
-]);
+requireEnvVars(['DEFAULT_ACCOUNT_PASS', 'USTC_ADMIN_PASS', 'USTC_ADMIN_USER']);
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;
 
@@ -172,7 +167,7 @@ const setupPractitioners = async (
   }
 };
 
-async function createOrUpdateUser(
+export async function createOrUpdateUser(
   applicationContext: ServerApplicationContext,
   {
     password,
@@ -255,10 +250,11 @@ async function createOrUpdateUser(
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
+  const userPoolId = await getUserPoolId();
+  const destinationTable = await getDestinationTableName();
+  environment.userPoolId = userPoolId;
+  environment.dynamoDbTableName = destinationTable;
   const applicationContext = createApplicationContext({});
-
-  console.log('== Activating Admin Account');
-  await activateAdminAccount();
 
   console.log('== Creating Court Users');
   await setupCourtUsers(applicationContext);
@@ -268,9 +264,6 @@ async function createOrUpdateUser(
 
   console.log('== Creating Practitioners');
   await setupPractitioners(applicationContext);
-
-  console.log('== Deactivating Admin Account');
-  await deactivateAdminAccount();
 
   console.log('== Done!');
 })();

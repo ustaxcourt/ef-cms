@@ -1,9 +1,5 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import {
-  activateAdminAccount,
-  createDawsonUser,
-  deactivateAdminAccount,
-} from '../../shared/admin-tools/user/admin';
+import { createDawsonUser } from '../../shared/admin-tools/user/admin';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 import joi from 'joi';
 
@@ -152,11 +148,9 @@ const sendWelcomeEmail = async email => {
     section: process.argv[5],
   };
   checkParams(params);
-  await activateAdminAccount();
   await createDawsonUser({
     deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
     user: params,
   }); // Need to pass in the api url
-  await deactivateAdminAccount();
   await sendWelcomeEmail(params.email);
 })();
