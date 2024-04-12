@@ -3,15 +3,22 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateUploadPetitionStep3Action = ({
   get,
+  path,
 }: ActionProps<{ selectedPage: number }>) => {
-  const { hasIrsNotice } = get(state.form);
+  const { caseType, hasIrsNotice } = get(state.form);
   const irsNotices = get(state.irsNoticeUploadFormInfo);
-  console.log('irsNotices', irsNotices);
 
+  console.log('hasIrsNotice', hasIrsNotice);
+  console.log('caseType', caseType);
   const errors = new UploadPetitionStep3({
+    caseType,
     hasIrsNotice,
     irsNotices,
   }).getFormattedValidationErrors();
 
-  console.log('errors', errors);
+  return errors
+    ? path.error({
+        errors,
+      })
+    : path.success();
 };
