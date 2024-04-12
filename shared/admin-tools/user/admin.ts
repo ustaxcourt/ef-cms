@@ -86,7 +86,7 @@ export async function createOrUpdateUser(
   const userPoolId =
     user.role === ROLES.irsSuperuser
       ? process.env.USER_POOL_IRS_ID
-      : process.env.USER_POOL_ID;
+      : applicationContext.environment.userPoolId;
 
   const userExists = await applicationContext
     .getUserGateway()
