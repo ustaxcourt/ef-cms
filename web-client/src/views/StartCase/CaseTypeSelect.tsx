@@ -16,6 +16,7 @@ export const CaseTypeSelect = connect(
     onChange: sequences[props.onChange],
     onChangePreValidation: sequences[props.onChangePreValidation],
     validation: sequences[props.validation],
+    validationError: props.validationError,
     validationErrors: state.validationErrors,
     value: props.value,
   },
@@ -29,6 +30,7 @@ export const CaseTypeSelect = connect(
     onChange,
     onChangePreValidation,
     validation,
+    validationError,
     validationErrors,
     value,
   }) {
@@ -36,7 +38,7 @@ export const CaseTypeSelect = connect(
       <div className={classNames('subsection', className)}>
         <FormGroup
           className="case-type-select"
-          errorText={validationErrors.caseType}
+          errorText={(validationError || validationErrors).caseType}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="case-type-select-legend">
@@ -56,7 +58,7 @@ export const CaseTypeSelect = connect(
                   value: e.target.value,
                 });
                 if (onChangePreValidation) onChangePreValidation();
-                validation();
+                if (validation) validation();
               }}
             >
               {allowDefaultOption && <option value="">-- Select --</option>}

@@ -19,6 +19,8 @@ export const UpdatedFilePetitionStep3 = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep3Sequence:
       sequences.updatedFilePetitionCompleteStep3Sequence,
+    updatedFilePetitionGoBackAStepSequence:
+      sequences.updatedFilePetitionGoBackAStepSequence,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep3({
@@ -28,16 +30,19 @@ export const UpdatedFilePetitionStep3 = connect(
     irsNoticeUploadFormInfo,
     startCaseHelper,
     updatedFilePetitionCompleteStep3Sequence,
+    updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
-    console.log('irsNoticeUploadFormInfo', irsNoticeUploadFormInfo);
     return (
       <>
         <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
             <FormGroup errorText={validationErrors.hasIrsNotice}>
-              <fieldset className="usa-fieldset" id="irs-notice-radios">
+              <fieldset
+                className="usa-fieldset margin-bottom-0"
+                id="irs-notice-radios"
+              >
                 <legend className="usa-legend" id="notice-legend">
                   {startCaseHelper.noticeLegend}
                 </legend>
@@ -57,6 +62,7 @@ export const UpdatedFilePetitionStep3 = connect(
                             key: e.target.name,
                             value: e.target.value === 'true',
                           });
+                          validationErrors.hasIrsNotice = '';
                         }}
                       />
                       <label
@@ -76,6 +82,16 @@ export const UpdatedFilePetitionStep3 = connect(
             {startCaseHelper.showHasIrsNoticeOptions && (
               <>
                 {irsNoticeUploadFormInfo.map((info, index) => {
+                  const irsNotices =
+                    (validationErrors.irsNotices as unknown as any[]) || [];
+                  console.log('irsNotices', irsNotices);
+                  const validationError = irsNotices
+                    ? irsNotices.find(errors => errors.index === index) || {}
+                    : {};
+                  console.log(
+                    'validationErrorvalidationErrorvalidationError',
+                    validationError,
+                  );
                   return (
                     <>
                       <IrsNoticeUploadForm
@@ -85,6 +101,7 @@ export const UpdatedFilePetitionStep3 = connect(
                         key={info.key}
                         lastDateOfPeriod={info.lastDateOfPeriod}
                         taxYear={info.taxYear}
+                        validationError={validationError}
                       />
                     </>
                   );
@@ -120,12 +137,18 @@ export const UpdatedFilePetitionStep3 = connect(
 
         <Button
           onClick={() => {
+            console.log('updatedFilePetitionCompleteStep3Sequence	');
             updatedFilePetitionCompleteStep3Sequence();
           }}
         >
           Next
         </Button>
-        <Button secondary onClick={() => console.log('back')}>
+        <Button
+          secondary
+          onClick={() => {
+            updatedFilePetitionGoBackAStepSequence();
+          }}
+        >
           Back
         </Button>
         <Button link onClick={() => console.log('Cancel')}>
