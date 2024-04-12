@@ -256,7 +256,7 @@ Solution:
   ```
 
   ```bash
-  ENV=exp5 FILE_NAME=judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
+  ENV=exp5 ./scripts/circleci/judge/bulk-import-judge-users.sh
   ```
 
 ## AxiosError: Request failed with status code 403 on Test Users Setup

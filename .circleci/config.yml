@@ -153,8 +153,6 @@ jobs:
             fi
       - run:
           name: Judge Users Setup
-          environment:
-            FILE_NAME: ./scripts/circleci/judge/judge_users.csv
           command: |
             if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
               echo "skipping…"

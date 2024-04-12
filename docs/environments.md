@@ -168,7 +168,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     . ./scripts/user/setup-test-users.sh "${ENV}"
     ```
     ```bash
-    ENV=exp5 FILE_NAME=./scripts/circleci/judge/judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
+    ENV=exp5 ./scripts/circleci/judge/bulk-import-judge-users.sh
     ```
 
 See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during this deploy process.

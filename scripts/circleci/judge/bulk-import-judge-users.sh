@@ -2,8 +2,7 @@
 #
 # This script is used for importing a list of judge users from a provided .csv file
 #
-# usage: 
-#   FILE_NAME=./scripts/circleci/judge/judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
+# usage: ./scripts/circleci/judge/bulk-import-judge-users.sh
 #
 
 # Getting the account-wide deployment settings and injecting them into the shell environment
@@ -18,7 +17,6 @@ if [ -z "${CI}" ]; then
     "USTC_ADMIN_PASS" \
     "USTC_ADMIN_USER" \
     "REGION" \
-    "FILE_NAME" \
     "DEFAULT_ACCOUNT_PASS" \
     "DEPLOYING_COLOR" \
     "AWS_SECRET_ACCESS_KEY" \
@@ -31,7 +29,6 @@ export ENV
 export REGION
 export DEPLOYING_COLOR
 export USER_POOL_ID
-export FILE_NAME
 
 STAGE=${ENV} \
   S3_ENDPOINT="s3.${REGION}.amazonaws.com" \

@@ -1,5 +1,5 @@
 import { createApplicationContext } from '@web-api/applicationContext';
-import { createOrUpdateUser } from 'scripts/user/setup-test-users';
+import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
   getDestinationTableName,

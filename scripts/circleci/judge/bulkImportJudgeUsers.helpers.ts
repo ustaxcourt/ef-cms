@@ -1,6 +1,7 @@
 import { RawUser } from '@shared/business/entities/User';
+import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { createOrUpdateUser } from 'scripts/user/setup-test-users';
+import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
   gatherRecords,
@@ -25,39 +26,43 @@ export const CSV_HEADERS = [
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;
 
-export const init = async (csvFile: string) => {
+export const init = async () => {
+  const filePath = './scripts/circleci/judge/judge_users.csv';
   const csvOptions = getCsvOptions(CSV_HEADERS);
   let output: RawUser[] = [];
 
-  const data = readCsvFile(csvFile);
+  const data = readCsvFile(filePath);
   const stream = parse(data, csvOptions);
 
   const processCsv = new Promise<void>(resolve => {
     stream.on('readable', gatherRecords(CSV_HEADERS, output));
     stream.on('end', async () => {
-      // const requestChunks =
-      await Promise.all(
-        output.map(async row => {
-          try {
-            const userPoolId = await getUserPoolId();
-            const destinationTable = await getDestinationTableName();
-            environment.userPoolId = userPoolId;
-            environment.dynamoDbTableName = destinationTable;
+      const requestChunks = chunk(output, 20); // Chunk in batches of 20 to avoid throttling by cognito.
+      for (let index = 0; index < requestChunks.length; index++) {
+        const currentChunk = requestChunks[index];
+        await Promise.all(
+          currentChunk.map(async row => {
+            try {
+              const userPoolId = await getUserPoolId();
+              const destinationTable = await getDestinationTableName();
+              environment.userPoolId = userPoolId;
+              environment.dynamoDbTableName = destinationTable;
 
-            const applicationContext = createApplicationContext({});
+              const applicationContext = createApplicationContext({});
 
-            await createOrUpdateUser(applicationContext, {
-              password: DEFAULT_ACCOUNT_PASS!,
-              user: row,
-            });
+              const { userId } = await createOrUpdateUser(applicationContext, {
+                password: DEFAULT_ACCOUNT_PASS!,
+                user: row,
+              });
 
-            console.log(`SUCCESS ${row.name}`);
-          } catch (err) {
-            console.log(`ERROR ${row.name}`);
-            console.log(err);
-          }
-        }),
-      );
+              console.log(`SUCCESS, ${row.name}, ${row.email}, ${userId}`);
+            } catch (err) {
+              console.log(`ERROR ${row.name}`);
+              console.log(err);
+            }
+          }),
+        );
+      }
       resolve();
     });
   });
