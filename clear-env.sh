@@ -82,10 +82,11 @@ export ELASTICSEARCH_ENDPOINT
 export DEPLOYING_COLOR
 
 echo "clearing elasticsearch"
-./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
+npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.ts
+
 echo "setting up elasticsearch"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
-./web-api/setup-elasticsearch-aliases.sh "${ENV}"
+npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
 
 echo "clearing dynamo"
 npx ts-node --transpile-only ./web-api/clear-dynamodb-table.ts "efcms-${ENV}-${SOURCE_TABLE_VERSION}"

@@ -526,7 +526,7 @@ jobs:
       - run:
           name: Setup Elasticsearch Aliases
           command: |
-            ./web-api/setup-elasticsearch-aliases.sh $ENV
+            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
       - run:
           name: Delete Source Elasticsearch Indices After Reindex
           command: |
