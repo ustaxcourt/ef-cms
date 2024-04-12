@@ -188,7 +188,7 @@
     "reset-cases": "./clear-env.sh",
     "secrets:rotate-circleci": "scripts/user/rotate-circleci-secrets.sh",
     "secrets:rotate-environment": "npx ts-node --transpile-only scripts/user/rotate-environment-secrets.ts",
-    "seed:db": "./seed-dynamo.sh",
+    "seed:db": "npx ts-node --transpile-only ./web-api/create-dynamo-tables.ts && npx ts-node --transpile-only ./web-api/seed-dynamo.ts",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed": "run-p seed:db seed:s3",
