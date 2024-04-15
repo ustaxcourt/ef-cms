@@ -2,7 +2,7 @@ import { createApplicationContext } from '@web-api/applicationContext';
 import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
-  getDestinationTableName,
+  getDestinationTableInfo,
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
@@ -141,7 +141,7 @@ const sendWelcomeEmail = async ({ email }) => {
   };
   checkParams(params);
   environment.userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableName();
+  const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
   await createOrUpdateUser(applicationContext, {
     password: environment.defaultAccountPass,

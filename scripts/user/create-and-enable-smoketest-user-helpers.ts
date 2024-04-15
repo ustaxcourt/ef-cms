@@ -5,7 +5,7 @@ import {
 } from '../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
-  getDestinationTableName,
+  getDestinationTableInfo,
   getUserPoolId,
 } from 'shared/admin-tools/util';
 
@@ -39,7 +39,7 @@ const user = {
 
 export const createAndEnableSmoketestUser = async () => {
   const userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableName();
+  const { tableName } = await getDestinationTableInfo();
   environment.userPoolId = userPoolId;
   environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
