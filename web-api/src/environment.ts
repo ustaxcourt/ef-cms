@@ -19,7 +19,7 @@ export const environment = {
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region,
-  s3Endpoint: stage === 'local' ? 'localhost' : `s3.${region}.amazonaws.com`,
+  s3Endpoint: stage === 'local' ? 'localhost' : 's3.us-east-1.amazonaws.com',
   stage,
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',

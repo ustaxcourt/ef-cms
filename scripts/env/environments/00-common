@@ -56,7 +56,6 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "MASTER_REGION='${REGION}'"
   echo "QUARANTINE_BUCKET_NAME='${EFCMS_DOMAIN}-quarantine-${ENV}-${REGION}'"
   echo "REGION='${REGION}'"
-  echo "S3_ENDPOINT='s3.${REGION}.amazonaws.com'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE_VERSION}'"
   echo "STAGE='${ENV}'"

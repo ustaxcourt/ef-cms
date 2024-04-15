@@ -23,7 +23,6 @@ data "null_data_source" "locals" {
     NODE_ENV                           = "production"
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
     QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
-    S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
     SCANNER_RESOURCE_URI               = var.scanner_resource_uri
     SLACK_WEBHOOK_URL                  = var.slack_webhook_url
     STAGE                              = var.environment
