@@ -12,8 +12,8 @@ export const getDownloadPolicyUrl = ({
   useTempBucket?: boolean;
 }): Promise<{ url: string }> => {
   const bucketName = useTempBucket
-    ? applicationContext.getTempDocumentsBucketName()
-    : applicationContext.getDocumentsBucketName();
+    ? applicationContext.environment.tempDocumentsBucketName
+    : applicationContext.environment.documentsBucketName;
 
   return new Promise((resolve, reject) => {
     applicationContext.getStorageClient().getSignedUrl(

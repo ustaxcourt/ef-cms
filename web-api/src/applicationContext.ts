@@ -184,9 +184,6 @@ export const createApplicationContext = (
     }),
     getDocumentClient,
     getDocumentGenerators,
-    getDocumentsBucketName: () => {
-      return environment.documentsBucketName;
-    },
     getDynamoClient,
     getEmailClient: () => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
@@ -380,9 +377,6 @@ export const createApplicationContext = (
         });
       }
       return s3Cache;
-    },
-    getTempDocumentsBucketName: () => {
-      return environment.tempDocumentsBucketName;
     },
     getUniqueId,
     getUseCaseHelpers,

@@ -1,5 +1,6 @@
 const stage = process.env.STAGE || 'local';
 const region = process.env.AWS_REGION || 'us-east-1';
+const isLocal = stage === 'local';
 
 export const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -8,7 +9,9 @@ export const environment = {
   cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
   currentColor: process.env.CURRENT_COLOR || 'green',
   defaultAccountPass: process.env.DEFAULT_ACCOUNT_PASS || 'Testing1234$',
-  documentsBucketName: `${process.env.EFCMS_DOMAIN}-documents-${stage}-${region}`,
+  documentsBucketName: isLocal
+    ? 'noop-documents-local-us-east-1'
+    : `${process.env.EFCMS_DOMAIN}-documents-${stage}-us-east-1`,
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
@@ -19,7 +22,7 @@ export const environment = {
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region,
-  s3Endpoint: stage === 'local' ? 'localhost' : 's3.us-east-1.amazonaws.com',
+  s3Endpoint: isLocal ? 'localhost' : 's3.us-east-1.amazonaws.com',
   stage,
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',

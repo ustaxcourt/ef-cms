@@ -9,7 +9,6 @@ data "null_data_source" "locals" {
     COGNITO_CLIENT_ID                  = aws_cognito_user_pool_client.client.id
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
-    DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
     DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
     EFCMS_DOMAIN                       = var.dns_domain
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
