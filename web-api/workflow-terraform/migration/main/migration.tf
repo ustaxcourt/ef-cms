@@ -3,7 +3,7 @@ data "archive_file" "migration_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/migration.js.zip"
   source_dir  = "${path.module}/lambdas/dist/"
-  excludes = ["migration-segments.js"]
+  excludes    = ["migration-segments.js"]
 }
 
 resource "aws_lambda_function" "migration_lambda" {
@@ -24,7 +24,6 @@ resource "aws_lambda_function" "migration_lambda" {
       NODE_ENV               = "production"
       SOURCE_TABLE           = var.source_table
       ACCOUNT_ID             = data.aws_caller_identity.current.account_id
-      DOCUMENTS_BUCKET_NAME  = var.documents_bucket_name
       ELASTICSEARCH_ENDPOINT = var.elasticsearch_domain
     }
   }
