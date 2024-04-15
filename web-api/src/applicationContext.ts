@@ -35,7 +35,6 @@ import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { environment } from '@web-api/environment';
-import { exec } from 'child_process';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
@@ -70,9 +69,6 @@ import AWS, { S3, SES, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
-import util from 'util';
-
-const execPromise = util.promisify(exec);
 
 let s3Cache: AWS.S3 | undefined;
 let sesCache;
@@ -398,9 +394,6 @@ export const createApplicationContext = (
       error: (message, context?) => logger.error(message, { context }),
       info: (message, context?) => logger.info(message, { context }),
       warn: (message, context?) => logger.warn(message, { context }),
-    },
-    runVirusScan: async ({ filePath }) => {
-      return await execPromise(`clamdscan ${filePath}`);
     },
     setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };

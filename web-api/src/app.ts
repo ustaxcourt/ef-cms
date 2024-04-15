@@ -108,7 +108,6 @@ import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPracti
 import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPractitionerDocumentsLambda';
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
-import { getStatusOfVirusScanLambda } from './lambdas/documents/getStatusOfVirusScanLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
@@ -664,11 +663,6 @@ app.delete(
     lambdaWrapper(generatePrintableFilingReceiptLambda),
   );
 }
-
-app.get(
-  '/documents/:key/virus-scan',
-  lambdaWrapper(getStatusOfVirusScanLambda),
-);
 
 /**
  * messages

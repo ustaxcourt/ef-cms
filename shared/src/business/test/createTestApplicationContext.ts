@@ -696,7 +696,6 @@ export const createTestApplicationContext = ({
       info: jest.fn(),
       warn: jest.fn(),
     },
-    runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
     setTimeout: jest.fn().mockImplementation(callback => callback()),
