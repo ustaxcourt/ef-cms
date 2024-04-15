@@ -5,8 +5,6 @@
 mkdir /tmp/web-client/
 
 CI=true \
-TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
-QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
 AWS_ACCESS_KEY_ID=S3RVER \
 AWS_SECRET_ACCESS_KEY=S3RVER \
 npm run start:api:ci > /tmp/web-client/server-output.txt &

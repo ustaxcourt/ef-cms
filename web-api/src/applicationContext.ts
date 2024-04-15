@@ -327,9 +327,6 @@ export const createApplicationContext = (
     getPug: () => {
       return pug;
     },
-    getQuarantineBucketName: () => {
-      return environment.quarantineBucketName;
-    },
     getScannerResourceUri: () => {
       return (
         process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'

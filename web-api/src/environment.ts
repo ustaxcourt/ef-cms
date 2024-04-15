@@ -20,11 +20,12 @@ export const environment = {
     `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`,
   isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
-  quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region,
-  s3Endpoint: isLocal ? 'localhost' : 's3.us-east-1.amazonaws.com',
+  s3Endpoint: isLocal ? 'http://0.0.0.0:9000' : 's3.us-east-1.amazonaws.com',
   stage,
-  tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  tempDocumentsBucketName: isLocal
+    ? 'noop-temp-documents-local-us-east-1'
+    : `${process.env.EFCMS_DOMAIN}-temp-documents-${stage}-us-east-1`,
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
   workerQueueUrl:
