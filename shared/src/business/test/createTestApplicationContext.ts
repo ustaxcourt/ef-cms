@@ -643,7 +643,6 @@ export const createTestApplicationContext = ({
     getDocumentGenerators: jest
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),
-    getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
     getEnvironment: jest.fn().mockReturnValue({
@@ -680,7 +679,6 @@ export const createTestApplicationContext = ({
     getSearchClient: emptyAppContextProxy,
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
-    getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
