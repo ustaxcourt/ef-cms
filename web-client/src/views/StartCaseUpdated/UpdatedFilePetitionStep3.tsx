@@ -127,9 +127,11 @@ export const UpdatedFilePetitionStep3 = connect(
                 className="margin-bottom-0"
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
-                validation="validateStartCaseWizardSequence"
                 value={form.caseType}
-                onChange="updateFormValueSequence"
+                onChange={info => {
+                  updateFormValueSequence(info);
+                  delete validationErrors.caseType;
+                }}
               />
             )}
           </div>
