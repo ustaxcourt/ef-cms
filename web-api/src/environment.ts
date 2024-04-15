@@ -21,7 +21,7 @@ export const environment = {
   isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   region,
-  s3Endpoint: isLocal ? 'http://0.0.0.0:9000' : 's3.us-east-1.amazonaws.com',
+  s3Endpoint: isLocal ? 'http://0.0.0.0:9001' : 's3.us-east-1.amazonaws.com',
   stage,
   tempDocumentsBucketName: isLocal
     ? 'noop-temp-documents-local-us-east-1'

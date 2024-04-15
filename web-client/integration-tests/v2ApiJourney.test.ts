@@ -129,7 +129,7 @@ describe('View and manage the deadlines of a case', () => {
     );
 
     expect(response.url).toContain(
-      `http://0.0.0.0:9000/noop-documents-local-us-east-1/${cerebralTest.docketEntryId}`,
+      `http://0.0.0.0:9001/noop-documents-local-us-east-1/${cerebralTest.docketEntryId}`,
     );
   });
 

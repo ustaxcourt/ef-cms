@@ -209,7 +209,7 @@
     "start:public:ci": "npm run clean:public && CI=true npm run start:public",
     "start:public-host": "servor dist-public index.html 5678 &",
     "start:public": "npm run start:public-host && CHECK_DEPLOY_DATE_INTERVAL=5000 WATCH=true USTC_ENV=dev ENV=local node esbuild.public.config.mjs",
-    "start:s3rver": "s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9000 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml",
+    "start:s3rver": "s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml",
     "switch-colors": "./web-client/switch-colors.sh",
     "test:_client:parallel": "NO_SCANNER=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --maxWorkers=50% --config web-client/jest-unit.config.ts",
     "test:_client": "NO_SCANNER=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --config web-client/jest.config.ts",
