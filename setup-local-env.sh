@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=S3RVER
 export AWS_SECRET_ACCESS_KEY=S3RVER
 export AWS_REGION=us-east-1

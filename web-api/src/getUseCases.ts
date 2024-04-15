@@ -121,7 +121,6 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/b
 import { getPublicCaseInteractor } from '../../shared/src/business/useCases/public/getPublicCaseInteractor';
 import { getPublicDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
-import { getStatusOfVirusScanInteractor } from '../../shared/src/business/useCases/document/getStatusOfVirusScanInteractor';
 import { getTodaysOpinionsInteractor } from '../../shared/src/business/useCases/public/getTodaysOpinionsInteractor';
 import { getTodaysOrdersInteractor } from '../../shared/src/business/useCases/public/getTodaysOrdersInteractor';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor';
@@ -211,7 +210,6 @@ import { updateUserPendingEmailInteractor } from '../../shared/src/business/useC
 import { validatePdfInteractor } from '../../shared/src/business/useCases/pdf/validatePdfInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
 import { verifyUserPendingEmailInteractor } from './business/useCases/user/verifyUserPendingEmailInteractor';
-import { virusScanPdfInteractor } from '../../shared/src/business/useCases/pdf/virusScanPdfInteractor';
 
 const useCases = {
   addCaseToTrialSessionInteractor,
@@ -335,7 +333,6 @@ const useCases = {
   getPublicCaseInteractor,
   getPublicDownloadPolicyUrlInteractor,
   getReconciliationReportInteractor,
-  getStatusOfVirusScanInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,
@@ -425,10 +422,6 @@ const useCases = {
   validatePdfInteractor,
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
-  virusScanPdfInteractor: (applicationContext, args) =>
-    process.env.SKIP_VIRUS_SCAN
-      ? null
-      : virusScanPdfInteractor(applicationContext, args),
 };
 
 export const getUseCases = () => useCases;

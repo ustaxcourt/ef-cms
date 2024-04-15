@@ -224,7 +224,6 @@ import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
-import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/getTrialSessionsForJudgeActivityReportProxy';
@@ -503,10 +502,6 @@ const allUseCases = {
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getStatusOfVirusScanInteractor: (applicationContext, args) =>
-    process.env.SKIP_VIRUS_SCAN
-      ? null
-      : getStatusOfVirusScanInteractor(applicationContext, args),
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
