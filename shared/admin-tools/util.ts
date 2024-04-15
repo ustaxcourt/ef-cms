@@ -6,7 +6,10 @@ import readline from 'readline';
 const { ENV } = process.env;
 const UserPoolCache: Record<string, string> = {};
 
-export const getSourceTableVersion = async (): Promise<'alpha' | 'beta'> => {
+export const getSourceTableInfo = async (): Promise<{
+  tableName: string;
+  version: 'alpha' | 'beta';
+}> => {
   requireEnvVars(['ENV']);
 
   const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
@@ -23,15 +26,15 @@ export const getSourceTableVersion = async (): Promise<'alpha' | 'beta'> => {
 
   const version = result?.Item?.current;
   if (version) {
-    return version;
+    return { tableName: `efcms-${ENV}-${version}`, version };
   } else {
     throw 'Could not determine the current version';
   }
 };
 
-export const getDestinationTableName = async (): Promise<{
+export const getDestinationTableInfo = async (): Promise<{
   tableName: string;
-  version: string;
+  version: 'alpha' | 'beta';
 }> => {
   requireEnvVars(['ENV']);
 

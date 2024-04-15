@@ -5,7 +5,7 @@ import {
 import { createOrUpdateUser } from '../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
-  getDestinationTableName,
+  getDestinationTableInfo,
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
@@ -165,7 +165,7 @@ const setupPractitioners = async (
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableName();
+  const { tableName } = await getDestinationTableInfo();
   environment.userPoolId = userPoolId;
   environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});

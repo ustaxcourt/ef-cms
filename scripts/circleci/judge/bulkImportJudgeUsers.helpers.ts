@@ -1,16 +1,16 @@
 import { RawUser } from '@shared/business/entities/User';
 import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
+import { createOrUpdateUser } from '../../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
   gatherRecords,
   getCsvOptions,
 } from '../../../shared/src/tools/helpers';
 import {
-  getDestinationTableName,
+  getDestinationTableInfo,
   getUserPoolId,
-} from 'shared/admin-tools/util';
+} from '../../../shared/admin-tools/util';
 import { parse } from 'csv-parse';
 import { readCsvFile } from '../../../web-api/importHelpers';
 
@@ -30,7 +30,7 @@ export const init = async () => {
   const filePath = './scripts/circleci/judge/judge_users.csv';
   const csvOptions = getCsvOptions(CSV_HEADERS);
   const userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableName();
+  const { tableName } = await getDestinationTableInfo();
   environment.userPoolId = userPoolId;
   environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
