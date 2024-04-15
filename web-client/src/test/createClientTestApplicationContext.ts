@@ -633,7 +633,6 @@ const createTestApplicationContext = () => {
     getPrivateUrl: jest.fn(),
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
-    getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),

@@ -44,7 +44,6 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "COLOR='${CURRENT_COLOR}'"
   echo "CURRENT_COLOR='${CURRENT_COLOR}'"
   echo "DAWSON_ENV='${ENV}'"
-  echo "DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-documents-${ENV}-${REGION}'"
   echo "DYNAMODB_TABLE_NAME='${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
   echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
@@ -54,12 +53,10 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "ENVIRONMENT='${ENV}'"
   echo "IRS_CLIENT_ID='${IRS_CLIENT_ID}'"
   echo "MASTER_REGION='${REGION}'"
-  echo "QUARANTINE_BUCKET_NAME='${EFCMS_DOMAIN}-quarantine-${ENV}-${REGION}'"
   echo "REGION='${REGION}'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE_VERSION}'"
   echo "STAGE='${ENV}'"
-  echo "TEMP_DOCUMENTS_BUCKET_NAME='${EFCMS_DOMAIN}-temp-documents-${ENV}-${REGION}'"
   echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
 } >> .env
 
