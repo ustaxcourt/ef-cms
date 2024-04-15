@@ -7839,10 +7839,6 @@
     "health": {
       "type": "object",
       "properties": {
-        "clamAV": {
-          "type": "boolean",
-          "description": "the status of clamav"
-        },
         "cognito": {
           "type": "boolean",
           "description": "the status of cognito ui"
