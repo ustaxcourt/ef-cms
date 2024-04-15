@@ -1,24 +1,21 @@
+import { AuthFlowType } from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const renewIdToken = async (
+export async function renewIdToken(
   applicationContext: ServerApplicationContext,
   { refreshToken }: { refreshToken: string },
-): Promise<{ idToken: string }> => {
-  const clientId = applicationContext.environment.cognitoClientId;
-
+): Promise<string> {
   const result = await applicationContext.getCognito().initiateAuth({
-    AuthFlow: 'REFRESH_TOKEN_AUTH',
+    AuthFlow: AuthFlowType.REFRESH_TOKEN_AUTH,
     AuthParameters: {
       REFRESH_TOKEN: refreshToken,
     },
-    ClientId: clientId,
+    ClientId: applicationContext.environment.cognitoClientId,
   });
 
   if (!result.AuthenticationResult?.IdToken) {
     throw new Error('Id token not present on initiateAuth response');
   }
 
-  return {
-    idToken: result.AuthenticationResult.IdToken,
-  };
-};
+  return result.AuthenticationResult.IdToken;
+}
