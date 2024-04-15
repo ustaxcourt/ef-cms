@@ -15,12 +15,10 @@ type S3BucketsStatus = {
   app: boolean;
   appFailover: boolean;
   eastDocuments: boolean;
-  eastQuarantine: boolean;
   eastTempDocuments: boolean;
   public: boolean;
   publicFailover: boolean;
   westDocuments: boolean;
-  westQuarantine: boolean;
   westTempDocuments: boolean;
 };
 
@@ -169,12 +167,10 @@ const getS3BucketStatus = async ({
     app: false,
     appFailover: false,
     eastDocuments: false,
-    eastQuarantine: false,
     eastTempDocuments: false,
     public: false,
     publicFailover: false,
     westDocuments: false,
-    westQuarantine: false,
     westTempDocuments: false,
   };
 
