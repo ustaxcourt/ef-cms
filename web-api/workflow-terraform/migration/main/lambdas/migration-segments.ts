@@ -88,7 +88,7 @@ export const migrateRecords = async (
   },
 ) => {
   for (let { key, script } of migrationsToRun) {
-    if (!ranMigrations?.[key]) {
+    if (!ranMigrations || !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, applicationContext);
     }
