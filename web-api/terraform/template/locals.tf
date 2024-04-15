@@ -4,7 +4,6 @@ data "null_data_source" "locals" {
     BOUNCE_ALERT_RECIPIENTS            = var.bounce_alert_recipients
     BOUNCE_ALERT_TEMPLATE              = "bounce_alert_${var.environment}"
     BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
-    CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
     COGNITO_SUFFIX                     = var.cognito_suffix
     COGNITO_CLIENT_ID                  = aws_cognito_user_pool_client.client.id
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass

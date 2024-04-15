@@ -4,7 +4,6 @@ import { setHealthCheckAction } from './setHealthCheckAction';
 describe('setHealthCheckAction', () => {
   it('sets the state.health to the passed in props.health', async () => {
     const mockHealth = {
-      clamAV: false,
       cognito: false,
       dynamo: { efcms: true, efcmsDeploy: false },
       dynamsoft: false,

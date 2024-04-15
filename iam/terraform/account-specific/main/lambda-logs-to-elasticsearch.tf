@@ -1,7 +1,7 @@
 data "archive_file" "zip_logs_to_es_lambda" {
   type        = "zip"
   output_path = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info.zip"
-  source_dir = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info/"
+  source_dir  = "${path.cwd}/../../../../aws/lambdas/LogsToElasticSearch_info/"
 }
 
 resource "aws_lambda_function" "logs_to_es" {
@@ -59,12 +59,4 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   filter_pattern  = ""
   name            = "cognito_authorizer_${element(var.log_group_environments, count.index)}_lambda_filter"
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "clamav_fargate_filter" {
-  count           = length(var.log_group_environments)
-  destination_arn = aws_lambda_function.logs_to_es.arn
-  filter_pattern  = ""
-  name            = "clamav_fargate_${element(var.log_group_environments, count.index)}_filter"
-  log_group_name  = "/aws/ecs/clamav_fargate_${element(var.log_group_environments, count.index)}"
 }
