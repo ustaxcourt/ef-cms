@@ -10,20 +10,10 @@ export const updatePartyTypeActionUpdated = ({
 }>) => {
   const { PARTY_TYPES } = applicationContext.getConstants();
 
-  const clearUnusedFormFields = () => {
-    if (
-      props.value === 'A business' ||
-      props.value === 'Other' ||
-      props.value === 'Myself and my spouse' ||
-      props.value === 'Petitioner and spouse'
-    ) {
-      store.unset(state.form.partyType);
-    }
-
-    if (props.value !== 'A business') {
-      store.unset(state.form.corporateDisclosureFile);
-      store.unset(state.form.businessType);
-    }
+  const resetFormFields = () => {
+    store.unset(state.form.partyType);
+    store.unset(state.form.corporateDisclosureFile);
+    store.unset(state.form.businessType);
     store.unset(state.form.otherType);
     store.unset(state.form.isSpouseDeceased);
     store.unset(state.form.estateType);
@@ -40,7 +30,7 @@ export const updatePartyTypeActionUpdated = ({
     if (value === 'Myself' || value === 'Individual petitioner') {
       updatePartyType(PARTY_TYPES.petitioner);
     }
-    clearUnusedFormFields();
+    resetFormFields();
   };
 
   const handleIsSpouseDeceased = () => {
@@ -55,36 +45,33 @@ export const updatePartyTypeActionUpdated = ({
   };
 
   const handleOtherType = () => {
+    store.unset(state.form.estateType);
+    store.unset(state.form.minorIncompetentType);
+    store.unset(state.form.partyType);
+
     const { value } = props;
     store.set(state.form.otherType, value);
 
-    switch (value) {
-      case PARTY_TYPES.donor:
-      case PARTY_TYPES.transferee:
-        updatePartyType(value);
-        break;
-      case 'Deceased Spouse':
-        updatePartyType(PARTY_TYPES.survivingSpouse);
-        break;
-      default:
-        store.unset(state.form.partyType);
-        break;
+    if (value === 'Deceased Spouse') {
+      updatePartyType(PARTY_TYPES.survivingSpouse);
+      return;
+    }
+
+    if (value === 'Donor' || value === 'Transferee') {
+      updatePartyType(value);
     }
   };
 
   const handleEstateType = () => {
-    store.set(state.form.otherType, 'An estate or trust');
     updatePartyType(props.value);
   };
 
   const handleMinorIncompetentType = () => {
-    store.set(state.form.otherType, 'A minor or legally incompetent person');
     updatePartyType(props.value);
   };
 
   const handleBusinessType = () => {
-    const partyType = getBusinessPartyType(props.value, PARTY_TYPES);
-    updatePartyType(partyType);
+    updatePartyType(props.value);
   };
 
   switch (props.key) {
@@ -108,22 +95,3 @@ export const updatePartyTypeActionUpdated = ({
       break;
   }
 };
-
-function getBusinessPartyType(businessType, PARTY_TYPES) {
-  if (businessType === 'Corporation') {
-    return PARTY_TYPES.corporation;
-  }
-  if (businessType === 'Partnership (as the Tax Matters Partner)') {
-    return PARTY_TYPES.partnershipAsTaxMattersPartner;
-  }
-  if (
-    businessType === 'Partnership (as a partner other than Tax Matters Partner)'
-  ) {
-    return PARTY_TYPES.partnershipOtherThanTaxMatters;
-  }
-  if (
-    businessType === 'Partnership (as a partnership representative under BBA)'
-  ) {
-    return PARTY_TYPES.partnershipBBA;
-  }
-}
