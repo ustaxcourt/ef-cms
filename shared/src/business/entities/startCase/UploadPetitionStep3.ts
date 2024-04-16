@@ -76,6 +76,6 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
   }
 }
 
-export type RawUploadPetitionStep1 = ExcludeMethods<
+export type RawUploadPetitionStep3 = ExcludeMethods<
   Omit<UploadPetitionStep3, 'entityName'>
 >;
