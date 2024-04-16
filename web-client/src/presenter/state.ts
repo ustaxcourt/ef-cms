@@ -790,9 +790,10 @@ export type ClientState = typeof initialState;
 
 export type CreateCaseIrsForm = {
   key: string;
-  file: File;
-  size: number;
-  caseType: string;
-  lastDateOfPeriod: string;
-  taxYear: number;
+  todayDate: string;
+  file?: File;
+  size?: number;
+  caseType?: string;
+  noticeIssuedDate?: string;
+  taxYear?: number;
 };

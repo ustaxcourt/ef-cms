@@ -84,14 +84,10 @@ export const UpdatedFilePetitionStep3 = connect(
                 {irsNoticeUploadFormInfo.map((info, index) => {
                   const irsNotices =
                     (validationErrors.irsNotices as unknown as any[]) || [];
-                  console.log('irsNotices', irsNotices);
+
                   const validationError = irsNotices
                     ? irsNotices.find(errors => errors.index === index) || {}
                     : {};
-                  console.log(
-                    'validationErrorvalidationErrorvalidationError',
-                    validationError,
-                  );
                   return (
                     <>
                       <IrsNoticeUploadForm
@@ -99,8 +95,9 @@ export const UpdatedFilePetitionStep3 = connect(
                         file={info.file}
                         index={index}
                         key={info.key}
-                        lastDateOfPeriod={info.lastDateOfPeriod}
+                        noticeIssuedDate={info.noticeIssuedDate}
                         taxYear={info.taxYear}
+                        todayDate={info.todayDate}
                         validationError={validationError}
                       />
                     </>
@@ -127,9 +124,11 @@ export const UpdatedFilePetitionStep3 = connect(
                 className="margin-bottom-0"
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
-                validation="validateStartCaseWizardSequence"
                 value={form.caseType}
-                onChange="updateFormValueSequence"
+                onChange={info => {
+                  updateFormValueSequence(info);
+                  delete validationErrors.caseType;
+                }}
               />
             )}
           </div>
@@ -137,7 +136,6 @@ export const UpdatedFilePetitionStep3 = connect(
 
         <Button
           onClick={() => {
-            console.log('updatedFilePetitionCompleteStep3Sequence	');
             updatedFilePetitionCompleteStep3Sequence();
           }}
         >

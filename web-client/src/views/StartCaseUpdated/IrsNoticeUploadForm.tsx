@@ -20,9 +20,10 @@ export const IrsNoticeUploadForm = connect(
     constants: state.constants,
     file: props.file,
     index: props.index,
-    lastDateOfPeriod: props.lastDateOfPeriod,
+    noticeIssuedDate: props.noticeIssuedDate,
     removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
     taxYear: props.taxYear,
+    todayDate: props.todayDate,
     updateIrsNoticeIndexPropertySequence:
       sequences.updateIrsNoticeIndexPropertySequence,
     validationError: props.validationError,
@@ -35,16 +36,16 @@ export const IrsNoticeUploadForm = connect(
     DATE_FORMATS,
     file,
     index,
-    lastDateOfPeriod,
+    noticeIssuedDate,
     removeIrsNoticeFromFormSequence,
     taxYear,
+    todayDate,
     updateIrsNoticeIndexPropertySequence,
     validationError,
   }) {
-    console.log('validationError', validationError);
     return (
       <>
-        <div className="usa-form-group john	">
+        <div className="usa-form-group">
           <FormGroup errorText={[validationError.file, validationError.size]}>
             <label
               className={classNames(
@@ -96,12 +97,15 @@ export const IrsNoticeUploadForm = connect(
             name={index.toString()}
             validationError={validationError}
             value={caseType}
-            onChange="updateIrsNoticeIndexPropertySequence"
+            onChange={info => {
+              updateIrsNoticeIndexPropertySequence(info);
+              delete validationError.caseType;
+            }}
           />
 
           <div className="grid-row grid-gap">
             <FormGroup
-              className="grid-col-7"
+              className="grid-col-8"
               errorText={validationError.taxYear}
             >
               <label className="usa-label" htmlFor="noticeIssuesTaxYear">
@@ -120,24 +124,29 @@ export const IrsNoticeUploadForm = connect(
                     property: 'taxYear',
                     value: e.target.value,
                   });
+                  delete validationError.taxYear;
                 }}
               />
             </FormGroup>{' '}
-            <DateSelector
-              className="grid-col-5"
-              defaultValue={lastDateOfPeriod}
-              errorText={validationError.lastDateOfPeriod}
-              id="last-date-of-period"
-              label="Last date of period"
-              onChange={e => {
-                updateIrsNoticeIndexPropertySequence({
-                  key: index.toString(),
-                  property: 'lastDateOfPeriod',
-                  toFormat: DATE_FORMATS.ISO,
-                  value: e.target.value,
-                });
-              }}
-            />
+            <div className="grid-col-4">
+              <DateSelector
+                defaultValue={noticeIssuedDate}
+                errorText={validationError.noticeIssuedDate}
+                id="notice-issued-date"
+                label="Date IRS issued the notice"
+                maxDate={todayDate}
+                onChange={e => {
+                  updateIrsNoticeIndexPropertySequence({
+                    key: index.toString(),
+                    property: 'noticeIssuedDate',
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
+                  });
+
+                  validationError.noticeIssuedDate = '';
+                }}
+              />
+            </div>
           </div>
         </div>
       </>

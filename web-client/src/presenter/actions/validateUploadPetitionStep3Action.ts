@@ -8,8 +8,6 @@ export const validateUploadPetitionStep3Action = ({
   const { caseType, hasIrsNotice } = get(state.form);
   const irsNotices = get(state.irsNoticeUploadFormInfo);
 
-  console.log('hasIrsNotice', hasIrsNotice);
-  console.log('caseType', caseType);
   const errors = new UploadPetitionStep3({
     caseType,
     hasIrsNotice,
