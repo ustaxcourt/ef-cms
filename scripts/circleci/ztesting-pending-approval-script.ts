@@ -13,5 +13,9 @@ const apiToken = process.env.CIRCLE_PERSONAL_TOKEN!;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await approvePendingJob({ apiToken, jobName, workflowId });
+  await approvePendingJob({
+    apiToken,
+    jobName: 'wait-for-reindex',
+    workflowId: '39a76170-4a42-409e-95e5-bfcf163e7f71',
+  });
 })();
