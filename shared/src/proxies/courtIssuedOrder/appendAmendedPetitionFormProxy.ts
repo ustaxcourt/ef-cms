@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncHandler, post } from '../requests';
 
 /**
  * appendAmendedPetitionFormProxy
@@ -12,8 +12,13 @@ export const appendAmendedPetitionFormInteractor = (
   applicationContext,
   { docketEntryId },
 ) => {
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    endpoint: `/case-documents/${docketEntryId}/append-pdf`,
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        endpoint: `/async/case-documents/${docketEntryId}/append-pdf`,
+      }),
+  );
 };
