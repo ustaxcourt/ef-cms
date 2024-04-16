@@ -891,56 +891,56 @@ workflows:
   build-and-deploy:
     when: << pipeline.parameters.run_build_and_deploy >>
     jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
-      - migrate:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
+      # - deploy:
+      #     <<: *only-deployed-lower-environments
+      # - migrate:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - deploy
       - wait-for-migration:
           <<: *only-deployed-lower-environments
           type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-migration
+          # requires:
+          #   - migrate
+      # - prepare-for-reindex:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-migration
       - wait-for-reindex:
           <<: *only-deployed-lower-environments
           type: approval
           requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
-      - smoketests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - loadtests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - smoketests-readonly:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - smoketests
-            - loadtests
-            - smoketests-readonly
-      - delete-api-mappings:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
-      - cleanup:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
+            - wait-for-migration
+      # - disable-reindex-cron:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-reindex
+      # - smoketests:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
+      # - loadtests:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
+      # - smoketests-readonly:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
+      # - switch-colors:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - smoketests
+      #       - loadtests
+      #       - smoketests-readonly
+      # - delete-api-mappings:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - switch-colors
+      # - cleanup:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - switch-colors
 
   build-and-deploy-with-context:
     when: << pipeline.parameters.run_build_and_deploy_with_context >>
