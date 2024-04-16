@@ -179,6 +179,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/
 import { setTrialSessionCalendarInteractor } from '../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor';
 import { setWorkItemAsReadInteractor } from '../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor';
 import { signUpUserInteractor } from './business/useCases/auth/signUpUserInteractor';
+import { startPollingForResultsInteractor } from '@web-api/business/useCases/polling/startPollingForResultsInteractor';
 import { strikeDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/strikeDocketEntryInteractor';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor';
@@ -394,6 +395,7 @@ const useCases = {
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
   signUpUserInteractor,
+  startPollingForResultsInteractor,
   strikeDocketEntryInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
