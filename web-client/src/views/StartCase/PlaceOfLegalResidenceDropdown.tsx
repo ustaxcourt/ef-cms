@@ -10,14 +10,15 @@ import React from 'react';
 const props = cerebralProps as unknown as {
   type: string;
   bind: string;
-  showPlaceOfLegalResidence: boolean;
   onBlur: string;
   onChange: string;
+  placeOfLegalResidenceTitle?: string;
 };
 
 export const PlaceOfLegalResidenceDropdown = connect(
   {
     data: state[props.bind],
+    placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
@@ -27,6 +28,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
   },
   function PlaceOfLegalResidenceDropdown({
     data,
+    placeOfLegalResidenceTitle,
     type,
     updateFormValueSequence,
     usStates,
@@ -65,7 +67,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
               className="usa-label"
               htmlFor={`${type}.placeOfLegalResidence`}
             >
-              Place of legal residence{' '}
+              {placeOfLegalResidenceTitle || 'Place of legal residence'}{' '}
               <span className="usa-hint">
                 (if different from mailing address)
               </span>
