@@ -4,6 +4,7 @@ import {
 } from '../../helpers/auth/generate-password';
 import { createAPetitioner } from '../../helpers/create-a-petitioner';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
+import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../helpers/auth/verify-password-requirements';
 import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
 
@@ -16,6 +17,10 @@ describe('Petitioner Account Creation', () => {
     special: 1,
     upper: 1,
   };
+
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
 
   after(() => {
     cy.task('deleteAllCypressTestAccounts');
@@ -117,6 +122,32 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="account-menu-button"]');
 
       petitionerCreatesElectronicCase();
+    });
+
+    it('should create an account using a mixed case email address, and then allow the user to login using any case email address', () => {
+      const mixedCaseEmail = `cYpREsS_TeSt_AcCOunT+${v4()}@example.com`;
+
+      createAPetitioner({
+        email: mixedCaseEmail,
+        name: TEST_NAME,
+        password: TEST_PASSWORD,
+      });
+
+      cy.get('[data-testid="email-address-verification-sent-message"]').should(
+        'exist',
+      );
+
+      verifyPetitionerAccount({ email: mixedCaseEmail });
+
+      cy.visit('/login');
+
+      cy.get('[data-testid="email-input"]').type(mixedCaseEmail.toUpperCase());
+
+      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD);
+
+      cy.get('[data-testid="login-button"]').click();
+
+      cy.get('[data-testid="account-menu-button"]');
     });
   });
 
