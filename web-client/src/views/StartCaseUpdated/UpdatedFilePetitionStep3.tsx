@@ -84,7 +84,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 {irsNoticeUploadFormInfo.map((info, index) => {
                   const irsNotices =
                     (validationErrors.irsNotices as unknown as any[]) || [];
-                  console.log('irsNotices', irsNotices);
+
                   const validationError = irsNotices
                     ? irsNotices.find(errors => errors.index === index) || {}
                     : {};
