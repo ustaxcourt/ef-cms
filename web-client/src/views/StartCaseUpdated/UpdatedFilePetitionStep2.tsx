@@ -115,13 +115,26 @@ export const UpdatedFilePetitionStep2 = connect(
             updateFilingTypeSequence={updateFilingTypeSequence}
           />
         )}
-        {form.filingType === 'other' && (
-          <OtherInfo filingOption={form.filingType} />
+        {form.filingType === 'Other' && (
+          <OtherInfo
+            estateTypes={constants.ESTATE_TYPES}
+            minorIncompetentTypes={constants.OTHER_TYPES}
+            otherContactNameLabel={
+              updatedFilePetitionHelper.otherContactNameLabel
+            }
+            selectedEstateType={form.estateType}
+            selectedMinorIncompetentType={form.minorIncompetentType}
+            selectedOtherType={form.otherType}
+            showContactInformationForOtherPartyType={
+              updatedFilePetitionHelper.showContactInformationForOtherPartyType
+            }
+            showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+            updateFilingTypeSequence={updateFilingTypeSequence}
+          />
         )}
 
         <Button
           onClick={() => {
-            console.log('complete step 2');
             updatedFilePetitionCompleteStep2Sequence();
           }}
         >
@@ -319,9 +332,10 @@ function BusinessInfo({
         <div>
           <ContactPrimaryUpdated
             bind="form"
-            isSecondaryFieldOptional={businessFieldNames.isOptional}
             nameLabel={businessFieldNames.primary}
+            placeOfLegalResidenceTitle="Place of business"
             secondaryLabel={businessFieldNames.secondary}
+            secondaryLabelNote={businessFieldNames.secondaryNote}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
             onChange="updateFormValueSequence"
           />
@@ -393,6 +407,205 @@ function CorporateDisclosureUpload({ maxFileSize }) {
   );
 }
 
-function OtherInfo({ filingOption }) {
-  return <div>{filingOption}</div>;
+function OtherInfo({
+  estateTypes,
+  minorIncompetentTypes,
+  otherContactNameLabel,
+  selectedEstateType,
+  selectedMinorIncompetentType,
+  selectedOtherType,
+  showContactInformationForOtherPartyType,
+  showPlaceOfLegalResidence,
+  updateFilingTypeSequence,
+}) {
+  return (
+    <div
+      className={classNames(
+        'ustc-secondary-question',
+        // validationErrors.partyType && 'usa-form-group--error',
+      )}
+    >
+      <fieldset className="usa-fieldset" id="other-type-radios">
+        <legend id="other-type-legend">
+          What other type of taxpayer are you filing for?
+        </legend>
+        {[
+          'An estate or trust',
+          'A minor or legally incompetent person',
+          'Donor',
+          'Transferee',
+          'Deceased Spouse',
+        ].map((otherType, idx) => (
+          <div className="usa-radio" key={otherType}>
+            <input
+              aria-describedby="other-type-legend"
+              checked={selectedOtherType === otherType}
+              className="usa-radio__input"
+              id={`otherType-${otherType}`}
+              name="otherType"
+              type="radio"
+              value={otherType}
+              onChange={e => {
+                updateFilingTypeSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              htmlFor={`otherType-${otherType}`}
+              id={`is-other-type-${idx}`}
+            >
+              {otherType}
+            </label>
+          </div>
+        ))}
+      </fieldset>
+      {selectedOtherType === 'An estate or trust' && (
+        <SecondaryEstateOptions
+          estateTypes={estateTypes}
+          selectedEstateType={selectedEstateType}
+          updateFilingTypeSequence={updateFilingTypeSequence}
+        />
+      )}
+      {selectedOtherType === 'A minor or legally incompetent person' && (
+        <SecondaryMinorIncompetentOptions
+          minorIncompetentTypes={minorIncompetentTypes}
+          selectedMinorIncompetentType={selectedMinorIncompetentType}
+          updateFilingTypeSequence={updateFilingTypeSequence}
+        />
+      )}
+      {showContactInformationForOtherPartyType && (
+        <OtherContactInformation
+          otherContactNameLabel={otherContactNameLabel}
+          showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+        />
+      )}
+    </div>
+  );
+}
+
+function OtherContactInformation({
+  otherContactNameLabel,
+  showPlaceOfLegalResidence,
+}) {
+  return (
+    <ContactPrimaryUpdated
+      additionalLabel={otherContactNameLabel.additionalLabel}
+      additionalLabelNote={otherContactNameLabel.additionalLabelNote}
+      bind="form"
+      nameLabel={otherContactNameLabel.primaryLabel}
+      secondaryLabel={otherContactNameLabel.secondaryLabel}
+      showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+      onChange="updateFormValueSequence"
+    />
+  );
+}
+
+function SecondaryEstateOptions({
+  estateTypes,
+  selectedEstateType,
+  updateFilingTypeSequence,
+}) {
+  return (
+    <div
+      className={classNames(
+        'ustc-secondary-question',
+        // validationErrors.partyType && 'usa-form-group--error',
+      )}
+    >
+      <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
+        <legend id="estate-type-legend">
+          What type of estate or trust are you filing for?
+        </legend>
+        {[
+          estateTypes.estate,
+          estateTypes.estateWithoutExecutor,
+          estateTypes.trust,
+        ].map((estateType, idx) => (
+          <div className="usa-radio" key={estateType}>
+            <input
+              aria-describedby="estate-type-legend"
+              checked={selectedEstateType === estateType}
+              className="usa-radio__input"
+              id={`estateType-${estateType}`}
+              name="estateType"
+              type="radio"
+              value={estateType}
+              onChange={e => {
+                updateFilingTypeSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                // validateStartCaseWizardSequence();
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              htmlFor={`estateType-${estateType}`}
+              id={`is-estate-type-${idx}`}
+            >
+              {estateType}
+            </label>
+          </div>
+        ))}
+      </fieldset>
+    </div>
+  );
+}
+
+function SecondaryMinorIncompetentOptions({
+  minorIncompetentTypes,
+  selectedMinorIncompetentType,
+  updateFilingTypeSequence,
+}) {
+  return (
+    <div
+      className={classNames(
+        'ustc-secondary-question',
+        // validationErrors.partyType && 'usa-form-group--error',
+      )}
+    >
+      <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
+        <legend id="estate-type-legend">
+          What is your role in filing for this minor or legally incompetent
+          person?
+        </legend>
+        {[
+          minorIncompetentTypes.conservator,
+          minorIncompetentTypes.guardian,
+          minorIncompetentTypes.custodian,
+          minorIncompetentTypes.nextFriendForMinor,
+          minorIncompetentTypes.nextFriendForIncompetentPerson,
+        ].map((minorIncompetentType, idx) => (
+          <div className="usa-radio" key={minorIncompetentType}>
+            <input
+              aria-describedby="minorIncompetent-type-legend"
+              checked={selectedMinorIncompetentType === minorIncompetentType}
+              className="usa-radio__input"
+              id={`minorIncompetentType-${minorIncompetentType}`}
+              name="minorIncompetentType"
+              type="radio"
+              value={minorIncompetentType}
+              onChange={e => {
+                updateFilingTypeSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                // validateStartCaseWizardSequence();
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+              id={`is-minorIncompetent-type-${idx}`}
+            >
+              {minorIncompetentType}
+            </label>
+          </div>
+        ))}
+      </fieldset>
+    </div>
+  );
 }
