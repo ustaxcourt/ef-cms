@@ -106,7 +106,10 @@ export const ContactPrimaryUpdated = connect(
               <label className="usa-label" htmlFor="inCareOf">
                 {secondaryLabel}
                 {secondaryLabelNote && (
-                  <span className="usa-hint">({secondaryLabelNote})</span>
+                  <>
+                    {' '}
+                    <span className="usa-hint">({secondaryLabelNote})</span>
+                  </>
                 )}
               </label>
               <input
@@ -139,7 +142,10 @@ export const ContactPrimaryUpdated = connect(
               <label className="usa-label" htmlFor="inCareOf">
                 {additionalLabel}
                 {additionalLabelNote && (
-                  <span className="usa-hint">({additionalLabel})</span>
+                  <>
+                    {' '}
+                    <span className="usa-hint">({additionalLabelNote})</span>
+                  </>
                 )}
               </label>
               <input
