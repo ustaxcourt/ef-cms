@@ -14,6 +14,8 @@ export const handler: Handler = async (_event, context) => {
   const isReindexFinished = await areAllReindexTasksFinished({
     environmentName,
   });
+
+  // TODO option 1: check for "isApprovable" -- if not approval, don't attempt approve.
   if (!isReindexFinished) {
     console.log('Reindex is not complete');
     return succeed({ context, results: { isReindexFinished, migrateFlag } });
