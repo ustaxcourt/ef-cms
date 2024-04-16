@@ -199,6 +199,18 @@ describe('handle', () => {
     });
   });
 
+  it('should not stringify the body if asyncsyncid header is present', async () => {
+    const response = await handle(
+      { headers: { asyncsyncid: '123' } },
+      () => 'string',
+    );
+    expect(response).toEqual({
+      body: 'string',
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
+    });
+  });
+
   it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
     const response = await handle({}, () => [
       {
