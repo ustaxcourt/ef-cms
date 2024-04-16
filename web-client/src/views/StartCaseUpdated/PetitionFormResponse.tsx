@@ -28,7 +28,7 @@ export const PetitionFormResponse = connect(
     return (
       <FormGroup
         className="autogenerate-petition-form"
-        errorText={validationErrors[`${textName}[0]`]}
+        errorText={validationErrors[`${textName}[${count}]`]}
       >
         <div className="fact-or-reason">
           {/* TODO: move to scss */}
@@ -49,8 +49,6 @@ export const PetitionFormResponse = connect(
               // style={{ verticalAlign: 'top' }}
               value={form[textName][count] || ''}
               onChange={e => {
-                // consider using custom sequence instead
-                // if (e.target.value !== '')
                 updatePetitionFormValueSequence({
                   index: count,
                   key: e.target.name,
