@@ -4,7 +4,7 @@ import {
   createApplicationContext,
 } from '../../web-api/src/applicationContext';
 
-const dryRun = true;
+const dryRun = false;
 
 async function main() {
   const applicationContext = createApplicationContext({});
@@ -15,16 +15,18 @@ async function main() {
 
     do {
       const data = await applicationContext.getCognito().listUsers({
-        Limit: 25,
+        Limit: 10,
         PaginationToken: paginationToken,
         UserPoolId: applicationContext.environment.userPoolId,
       });
 
+      await new Promise(resolve => setTimeout(resolve, 300));
       await assignCustomUserId(data, applicationContext);
+      await new Promise(resolve => setTimeout(resolve, 300));
       await lowerCaseUserEmail(data, applicationContext);
 
       paginationToken = data.PaginationToken;
-      completedUsers += 25;
+      completedUsers += 10;
 
       console.log(
         `********** COMPLETED BATCH, total users migrated ${completedUsers} **********`,
