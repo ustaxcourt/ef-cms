@@ -142,8 +142,8 @@ export class Practitioner extends User {
       .messages({ '*': 'Select an original bar state' }),
     practiceType: JoiValidationConstants.STRING.valid(...PRACTICE_TYPE_OPTIONS)
       .required()
-      .description('The practiceType designation for the practitioner.')
-      .messages({ '*': 'Select an practiceType' }),
+      .description('The practice type of the practitioner.')
+      .messages({ '*': 'Select a practice type' }),
     practitionerNotes: JoiValidationConstants.STRING.max(500)
       .optional()
       .allow(null, '')
