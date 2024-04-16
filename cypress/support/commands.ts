@@ -1,3 +1,4 @@
+import '../support/commands/keepAliases';
 import 'cypress-file-upload';
 import { getCypressEnv } from '../helpers/env/cypressEnvironment';
 

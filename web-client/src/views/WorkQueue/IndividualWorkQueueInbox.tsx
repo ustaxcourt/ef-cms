@@ -57,7 +57,10 @@ export const IndividualWorkQueueInbox = connect(
                       </span>
                     )}
                   </td>
-                  <td className="message-queue-row small">
+                  <td
+                    className="message-queue-row small"
+                    data-testid={`message-queue-docket-number-${item.docketNumber}`}
+                  >
                     <CaseLink formattedCase={item} />
                   </td>
                   <td className="message-queue-row small">
