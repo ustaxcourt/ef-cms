@@ -5,12 +5,12 @@ import { logout } from '../../helpers/auth/logout';
 import { v4 } from 'uuid';
 
 describe('login', () => {
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
-
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
+  });
+
+  after(() => {
+    cy.task('deleteAllCypressTestAccounts');
   });
 
   /*
@@ -105,5 +105,15 @@ describe('login', () => {
     cy.get('[data-testid="change-password-button"]').click();
 
     cy.get('[data-testid="my-cases-link"]');
+  });
+
+  it('should log the user in regardless of the casing used in their email address', () => {
+    cy.visit('/login');
+    cy.get('[data-testid="email-input"]').type('DoCKetCLERk1@eXaMPLE.Com');
+    cy.get('[data-testid="password-input"]').type(
+      getCypressEnv().defaultAccountPass,
+    );
+    cy.get('[data-testid="login-button"]').click();
+    cy.get('[data-testid="inbox-tab-content"]').should('exist');
   });
 });
