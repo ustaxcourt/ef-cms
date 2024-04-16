@@ -333,6 +333,7 @@ function BusinessInfo({
           <ContactPrimaryUpdated
             bind="form"
             nameLabel={businessFieldNames.primary}
+            placeOfLegalResidenceTitle="Place of business"
             secondaryLabel={businessFieldNames.secondary}
             secondaryLabelNote={businessFieldNames.secondaryNote}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}

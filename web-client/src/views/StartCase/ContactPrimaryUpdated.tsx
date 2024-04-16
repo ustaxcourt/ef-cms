@@ -20,6 +20,7 @@ const props = cerebralProps as unknown as {
   secondaryLabel?: string;
   additionalLabel?: string;
   additionalLabelNote?: string;
+  placeOfLegalResidenceTitle?: string;
 };
 
 export const ContactPrimaryUpdated = connect(
@@ -34,6 +35,7 @@ export const ContactPrimaryUpdated = connect(
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
+    placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
     secondaryLabel: props.secondaryLabel,
     secondaryLabelNote: props.secondaryLabelNote,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
@@ -52,6 +54,7 @@ export const ContactPrimaryUpdated = connect(
     onBlurSequence,
     onChange,
     onChangeSequence,
+    placeOfLegalResidenceTitle,
     secondaryLabel,
     secondaryLabelNote,
     showPlaceOfLegalResidence,
@@ -198,6 +201,7 @@ export const ContactPrimaryUpdated = connect(
           {showPlaceOfLegalResidence && (
             <PlaceOfLegalResidenceDropdown
               bind={bind}
+              placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
               type="contactPrimary"
               onChange={onChange}
             />
