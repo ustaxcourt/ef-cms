@@ -16,10 +16,17 @@ const props = cerebralProps as unknown as {
   nameLabel: string;
   displayInCareOf?: boolean;
   showPlaceOfLegalResidence?: boolean;
+  secondaryLabelNote?: string;
+  secondaryLabel?: string;
+  additionalLabel?: string;
+  additionalLabelNote?: string;
+  placeOfLegalResidenceTitle?: string;
 };
 
 export const ContactPrimaryUpdated = connect(
   {
+    additionalLabel: props.additionalLabel,
+    additionalLabelNote: props.additionalLabelNote,
     bind: props.bind,
     constants: state.constants,
     data: state[props.bind],
@@ -28,12 +35,17 @@ export const ContactPrimaryUpdated = connect(
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
+    placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
+    secondaryLabel: props.secondaryLabel,
+    secondaryLabelNote: props.secondaryLabelNote,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
   function ContactPrimaryUpdated({
+    additionalLabel,
+    additionalLabelNote,
     bind,
     constants,
     data,
@@ -42,6 +54,9 @@ export const ContactPrimaryUpdated = connect(
     onBlurSequence,
     onChange,
     onChangeSequence,
+    placeOfLegalResidenceTitle,
+    secondaryLabel,
+    secondaryLabelNote,
     showPlaceOfLegalResidence,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {} as {
@@ -57,10 +72,10 @@ export const ContactPrimaryUpdated = connect(
       <>
         <div>
           <FormGroup
-            errorText={
-              validationErrors.contactPrimary &&
-              validationErrors.contactPrimary.name
-            }
+          // errorText={
+          //   validationErrors.contactPrimary &&
+          //   validationErrors.contactPrimary.name
+          // }
           >
             <label className="usa-label" htmlFor="name">
               {nameLabel}
@@ -84,6 +99,78 @@ export const ContactPrimaryUpdated = connect(
               }}
             />
           </FormGroup>
+          {secondaryLabel && (
+            <FormGroup
+            // errorText={
+            //   validationErrors.contactPrimary &&
+            //   validationErrors.contactPrimary.inCareOf
+            // }
+            >
+              <label className="usa-label" htmlFor="inCareOf">
+                {secondaryLabel}
+                {secondaryLabelNote && (
+                  <>
+                    {' '}
+                    <span className="usa-hint">({secondaryLabelNote})</span>
+                  </>
+                )}
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="contact-primary-in-care-of"
+                id="inCareOf"
+                name="contactPrimary.inCareOf"
+                type="text"
+                value={data.contactPrimary.inCareOf || ''}
+                onBlur={() => {
+                  onBlurSequence();
+                }}
+                onChange={e => {
+                  onChangeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
+          )}
+          {additionalLabel && (
+            <FormGroup
+            // errorText={
+            //   validationErrors.contactPrimary &&
+            //   validationErrors.contactPrimary.inCareOf
+            // }
+            >
+              <label className="usa-label" htmlFor="inCareOf">
+                {additionalLabel}
+                {additionalLabelNote && (
+                  <>
+                    {' '}
+                    <span className="usa-hint">({additionalLabelNote})</span>
+                  </>
+                )}
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="contact-primary-title"
+                id="title"
+                name="contactPrimary.title"
+                type="text"
+                value={data.contactPrimary.title || ''}
+                onBlur={() => {
+                  onBlurSequence();
+                }}
+                onChange={e => {
+                  onChangeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
+          )}
 
           <Country
             bind={bind}
@@ -114,6 +201,7 @@ export const ContactPrimaryUpdated = connect(
           {showPlaceOfLegalResidence && (
             <PlaceOfLegalResidenceDropdown
               bind={bind}
+              placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
               type="contactPrimary"
               onChange={onChange}
             />
