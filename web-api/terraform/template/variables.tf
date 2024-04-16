@@ -164,6 +164,6 @@ variable "template_lambdas" {
       "trial-session.js",
       "websocket-authorizer.js",
       "websockets.js",
-       "worker-handler.js",
+      "worker-handler.js",
   ]
 }
