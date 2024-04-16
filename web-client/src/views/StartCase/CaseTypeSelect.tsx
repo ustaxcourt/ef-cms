@@ -15,6 +15,7 @@ export const CaseTypeSelect = connect(
     name: props.name,
     onChange: sequences[props.onChange],
     onChangePreValidation: sequences[props.onChangePreValidation],
+    rawOnChange: props.onChange,
     validation: sequences[props.validation],
     validationError: props.validationError,
     validationErrors: state.validationErrors,
@@ -29,6 +30,7 @@ export const CaseTypeSelect = connect(
     name,
     onChange,
     onChangePreValidation,
+    rawOnChange,
     validation,
     validationError,
     validationErrors,
@@ -52,7 +54,7 @@ export const CaseTypeSelect = connect(
               name={name || 'caseType'}
               value={value}
               onChange={e => {
-                onChange({
+                (onChange || rawOnChange)({
                   key: e.target.name,
                   property: 'caseType',
                   value: e.target.value,

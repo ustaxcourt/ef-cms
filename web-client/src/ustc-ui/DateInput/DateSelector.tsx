@@ -11,6 +11,7 @@ export const DateSelector = ({
   hintText = undefined,
   id,
   label,
+  maxDate,
   minDate,
   onChange,
   placeHolderText,
@@ -20,6 +21,7 @@ export const DateSelector = ({
   displayOptionalHintText?: boolean;
   placeHolderText?: string;
   errorText?: string;
+  maxDate?: string;
   disabled?: boolean;
   formGroupClassNames?: string;
   minDate?: string;
@@ -97,6 +99,7 @@ export const DateSelector = ({
       <div
         className="usa-date-picker"
         data-default-value={defaultValue}
+        data-max-date={maxDate}
         data-min-date={minDate}
       >
         <input
