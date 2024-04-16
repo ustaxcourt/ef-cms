@@ -1,4 +1,5 @@
 import { find } from 'lodash';
+import { sleep } from '@shared/tools/helpers';
 import axios from 'axios';
 
 const findPendingJob = async ({
@@ -46,7 +47,7 @@ export const approvePendingJob = async ({
   jobName: string;
   workflowId: string;
 }): Promise<void> => {
-  const approvalRequest = await findPendingJob({
+  let approvalRequest = await findPendingJob({
     apiToken,
     jobName,
     workflowId,
@@ -66,10 +67,17 @@ export const approvePendingJob = async ({
   // If job.status is "blocked", wait.
   // Keep waiting until job is no longer "blocked" (enters 'on hold', presumably)
 
-  // if (approvalRequest.status === 'blocked') {
-  //   console.log('Skipping approval. Job status is blocked.');
-  //   return;
-  // }
+  let counter = 0;
+  while (approvalRequest.status === 'blocked' && counter < 10) {
+    console.log('Skipping approval. Job status is blocked.');
+    await sleep(2000);
+    approvalRequest = await findPendingJob({
+      apiToken,
+      jobName,
+      workflowId,
+    });
+    ++counter;
+  }
 
   try {
     await axios.post(approveJobRequest.url, {}, approveJobRequest);
