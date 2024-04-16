@@ -15,10 +15,6 @@ Before diving into the technical aspects of the backend, it might be useful just
 ├── performance-testing
 │   └── find-judge.js
 ├── runtimes // used to build up the lambda layers
-│   ├── clamav // clamav layer used for virus scanning
-│   │   ├── Dockerfile
-│   │   ├── build.sh
-│   │   └── freshclam.conf
 │   └── puppeteer // puppeteer layer used for generating coversheets
 │       ├── Dockerfile
 │       ├── build.sh

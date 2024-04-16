@@ -1,21 +1,14 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
+import { environment } from '@web-api/environment';
 import {
-  activateAdminAccount,
-  createDawsonUser,
-  deactivateAdminAccount,
-} from '../../shared/admin-tools/user/admin';
-import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
+  getDestinationTableInfo,
+  getUserPoolId,
+  requireEnvVars,
+} from '../../shared/admin-tools/util';
 import joi from 'joi';
 
-requireEnvVars([
-  'DEPLOYING_COLOR',
-  'EFCMS_DOMAIN',
-  'ENV',
-  'USTC_ADMIN_PASS',
-  'USTC_ADMIN_USER',
-]);
-
-const { DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
+requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
 
 const usage = error => {
   if (error) {
@@ -44,6 +37,8 @@ const usage = error => {
     - USTC_ADMIN_PASS: The password of the user we use to perform administrative actions\n`);
   process.exit();
 };
+
+const applicationContext = createApplicationContext({});
 
 const checkParams = params => {
   const schema = joi.object().keys({
@@ -124,19 +119,12 @@ const checkParams = params => {
   return value;
 };
 
-/**
- * Send the welcome email to the email address specified
- *
- * @param {String} email The email we wish to send the welcome email
- */
-const sendWelcomeEmail = async email => {
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId();
+const sendWelcomeEmail = async ({ email }) => {
   try {
-    await cognito.adminCreateUser({
+    await applicationContext.getCognito().adminCreateUser({
       MessageAction: 'RESEND',
-      UserPoolId,
-      Username: email,
+      UserPoolId: environment.userPoolId,
+      Username: email.toLowerCase(),
     });
   } catch (err) {
     console.error('Error sending welcome email', err);
@@ -152,11 +140,12 @@ const sendWelcomeEmail = async email => {
     section: process.argv[5],
   };
   checkParams(params);
-  await activateAdminAccount();
-  await createDawsonUser({
-    deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+  environment.userPoolId = await getUserPoolId();
+  const { tableName } = await getDestinationTableInfo();
+  environment.dynamoDbTableName = tableName;
+  await createOrUpdateUser(applicationContext, {
+    password: environment.defaultAccountPass,
     user: params,
-  }); // Need to pass in the api url
-  await deactivateAdminAccount();
-  await sendWelcomeEmail(params.email);
+  });
+  await sendWelcomeEmail({ email: params.email });
 })();

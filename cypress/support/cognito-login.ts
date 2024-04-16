@@ -73,10 +73,9 @@ export const getCognitoUserIdByEmail = async (
     Username: email,
   });
 
-  const userId =
-    foundUser.UserAttributes?.find(element => element.Name === 'custom:userId')
-      ?.Value! ||
-    foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
+  const userId = foundUser.UserAttributes?.find(
+    element => element.Name === 'custom:userId',
+  )?.Value!;
 
   return userId;
 };
@@ -195,10 +194,9 @@ const getAllCypressTestAccounts = async (
   if (!result || !result.Users) return [];
 
   const usernames = result.Users.map(user => {
-    const userId =
-      user.Attributes?.find(element => element.Name === 'custom:userId')
-        ?.Value! ||
-      user.Attributes?.find(element => element.Name === 'sub')?.Value!;
+    const userId = user.Attributes?.find(
+      element => element.Name === 'custom:userId',
+    )?.Value!;
     const email = user.Attributes?.find(
       element => element.Name === 'email',
     )?.Value!;
