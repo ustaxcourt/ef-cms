@@ -13,7 +13,7 @@ export const PetitionFormResponse = connect(
     id: props.id,
     removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
     textName: props.textName,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updatePetitionFormValueSequence: sequences.updatePetitionFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function PetitionFormResponse({
@@ -22,13 +22,13 @@ export const PetitionFormResponse = connect(
     id,
     removeFactOrReasonSequence,
     textName,
-    updateFormValueSequence,
+    updatePetitionFormValueSequence,
     validationErrors,
   }) {
     return (
       <FormGroup
         className="autogenerate-petition-form"
-        errorText={validationErrors[`${textName}[0]`]}
+        errorText={validationErrors[`${textName}[${count}]`]}
       >
         <div className="fact-or-reason">
           {/* TODO: move to scss */}
@@ -49,11 +49,10 @@ export const PetitionFormResponse = connect(
               // style={{ verticalAlign: 'top' }}
               value={form[textName][count] || ''}
               onChange={e => {
-                // consider using custom sequence instead
-                updateFormValueSequence({
+                updatePetitionFormValueSequence({
                   index: count,
                   key: e.target.name,
-                  value: e.target.value !== '' ? e.target.value : ' ',
+                  value: e.target.value,
                 });
               }}
             />
