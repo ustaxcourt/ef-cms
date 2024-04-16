@@ -31,8 +31,9 @@ describe('getUserByEmail', () => {
     ).rejects.toThrow(mockError);
   });
 
-  it('should return the user when found by custom:userId', async () => {
-    const mockEmail = 'exists@example.com';
+  it('should return the user when found by email, lowercased', async () => {
+    const mockEmail = 'EXiSTS@example.com';
+    const lowerCasedMockEmail = 'exists@example.com';
     const mockAccountStatus = UserStatusType.CONFIRMED;
     const mockUserCustomId = 'b5f6bab7-0de1-4b85-8564-9430c22220d4';
     const mockUserName = 'Oran Muller';
@@ -49,7 +50,7 @@ describe('getUserByEmail', () => {
         },
         {
           Name: 'email',
-          Value: mockEmail,
+          Value: lowerCasedMockEmail,
         },
         {
           Name: 'name',
@@ -70,6 +71,10 @@ describe('getUserByEmail', () => {
       email: mockEmail,
     });
 
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalledWith({
+      UserPoolId: expect.anything(),
+      Username: lowerCasedMockEmail,
+    });
     expect(result).toEqual({
       accountStatus: mockAccountStatus,
       email: mockEmail,

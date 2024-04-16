@@ -7,8 +7,10 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { createUser } from '@web-api/gateways/user/createUser';
 
 describe('createUser', () => {
+  const userEmail = 'PetiTioneR@example.com';
+  const lowerCasedEmail = 'petitioner@example.com';
   const mockUser = {
-    email: 'petitioner@example.com',
+    email: userEmail,
     entityName: 'User',
     name: 'Bob Ross',
     role: ROLES.petitioner,
@@ -16,7 +18,7 @@ describe('createUser', () => {
     userId: '2f92447e-3a0b-4cfe-95cb-810aef270c03',
   };
 
-  it('should make a call to persistence to create a user with the provided attributes', async () => {
+  it('should make a call to persistence to create a user with the provided attributes, and the email lowercased', async () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
@@ -50,7 +52,7 @@ describe('createUser', () => {
         },
         {
           Name: 'email',
-          Value: mockUser.email,
+          Value: lowerCasedEmail,
         },
         {
           Name: 'email_verified',
@@ -58,11 +60,11 @@ describe('createUser', () => {
         },
       ],
       UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockUser.email,
+      Username: lowerCasedEmail,
     });
   });
 
-  it('should resend an invitation email to the user when resendInvitationEmail is true', async () => {
+  it('should resend an invitation email to the user when resendInvitationEmail is true, and lowercase their email', async () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
@@ -96,7 +98,7 @@ describe('createUser', () => {
         },
         {
           Name: 'email',
-          Value: mockUser.email,
+          Value: lowerCasedEmail,
         },
         {
           Name: 'email_verified',
@@ -104,7 +106,7 @@ describe('createUser', () => {
         },
       ],
       UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockUser.email,
+      Username: lowerCasedEmail,
     });
   });
 

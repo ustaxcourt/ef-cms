@@ -9,6 +9,11 @@ import { renewIdToken } from '@web-api/gateways/user/renewIdToken';
 import { signUp } from '@web-api/gateways/user/signUp';
 import { updateUser } from '@web-api/gateways/user/updateUser';
 
+/*
+####################### WARNING! ##########################
+Every call into the userGateway (cognito) must lowercase the user's email address if it is an input to the function.
+We need to lowercase the email address as we currently have a case SENSITIVE User pool in cognito and we store all email addresses in lowercase.
+*/
 export const getUserGateway = () => ({
   changePassword,
   confirmSignUp,

@@ -2,8 +2,8 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { disableUser } from '@web-api/gateways/user/disableUser';
 
 describe('disableUser', () => {
-  it('should make a call to disable the user with the provided email', async () => {
-    const mockEmail = 'test@example.com';
+  it('should make a call to disable the user with the provided email, lowercased', async () => {
+    const mockEmail = 'TeST@example.com';
     const mockUserPoolId = 'test';
     applicationContext.environment.userPoolId = mockUserPoolId;
 
@@ -15,7 +15,7 @@ describe('disableUser', () => {
       applicationContext.getCognito().adminDisableUser,
     ).toHaveBeenCalledWith({
       UserPoolId: mockUserPoolId,
-      Username: mockEmail,
+      Username: 'test@example.com',
     });
   });
 });
