@@ -140,7 +140,7 @@
     "destroy:api": "cd web-api/terraform/main && ../bin/destroy-app.sh",
     "destroy:client": "cd web-client/terraform/main && ../bin/destroy-app.sh",
     "destroy:env": "npx ts-node --transpile-only env-destroy-utils/destroyEnvironment.js",
-    "destroy:glue-cron": "cd web-api/workflow-terraform/glue-cron/main && ../bin/destroy-app.sh",
+    "destroy:glue-cron": "cd web-api/terraform/applyables/glue-cron && ../../bin/destroy-glue-cron.sh",
     "destroy:migration": "cd web-api/workflow-terraform/migration/main && ../bin/destroy-app.sh",
     "destroy:migration-cron": "cd web-api/workflow-terraform/migration-cron/main && ../bin/destroy-app.sh",
     "destroy:reindex-cron": "cd web-api/workflow-terraform/reindex-cron/main && ../bin/destroy-app.sh",
