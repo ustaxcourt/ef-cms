@@ -910,7 +910,7 @@ workflows:
           <<: *only-deployed-lower-environments
           type: approval
           requires:
-            - wait-for-migration
+            - prepare-for-reindex
       - disable-reindex-cron:
           <<: *only-deployed-lower-environments
           requires:

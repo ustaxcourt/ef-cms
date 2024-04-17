@@ -45,19 +45,19 @@ export const approvePendingJob = async ({
   jobName: string;
   workflowId: string;
 }): Promise<void> => {
-  let approvalRequest = await findPendingJob({
+  const approvalRequestId = await findPendingJob({
     apiToken,
     jobName,
     workflowId,
   });
-  if (!approvalRequest.length) {
+  if (!approvalRequestId.length) {
     return;
   }
 
   const approveJobRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
-    url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequest}`,
+    url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequestId}`,
   };
 
   try {
