@@ -17,7 +17,7 @@
 * Options are Attorney or Non-attorney
 * Non-attorney = Tax Court allows individuals who are not attorneys to practice if they have passed the Tax Court Non-Attorney Exam; in the ef-cms, they are treated the same as attorneys
 
-**Practice Type**
+**Practice type**
 * Options are Private, IRS, or DOJ
 
 **Firm name**
