@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncHandler, post } from '../requests';
 
 /**
  * validatePdfInteractor
@@ -9,8 +9,13 @@ import { post } from '../requests';
  * @returns {Promise<*>} the promise of the api call
  */
 export const validatePdfInteractor = (applicationContext, { key }) => {
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    endpoint: `/documents/${key}/validate`,
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        endpoint: `/async/documents/${key}/validate`,
+      }),
+  );
 };
