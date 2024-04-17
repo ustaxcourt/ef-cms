@@ -36,7 +36,7 @@ note: we have 2 package.json files, be sure to update them all
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
      - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
-     - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
+     - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
