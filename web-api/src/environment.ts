@@ -1,4 +1,4 @@
-const stage = process.env.STAGE || 'local';
+const stage = process.env.STAGE || process.env.ENV || 'local';
 const region = process.env.AWS_REGION || 'us-east-1';
 const isLocal = stage === 'local';
 
