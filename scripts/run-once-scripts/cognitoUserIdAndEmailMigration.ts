@@ -8,6 +8,7 @@ const dryRun = false;
 
 async function main() {
   const applicationContext = createApplicationContext({});
+  const start = Date.now();
 
   try {
     let paginationToken;
@@ -35,6 +36,7 @@ async function main() {
   } catch (error) {
     console.error('Error updating users:', error);
   }
+  console.log('Time to run: ', (Date.now() - start) / 1000, 's');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -69,7 +71,7 @@ async function assignCustomUserId(
             },
           ],
           UserPoolId: applicationContext.environment.userPoolId,
-          Username: userEmail,
+          Username: userSub,
         });
       }
     }),
@@ -93,6 +95,9 @@ async function lowerCaseUserEmail(
       const userEmail = user.Attributes?.find(attr => {
         return attr.Name === 'email';
       })?.Value;
+      const userSub = user.Attributes?.find(attr => {
+        return attr.Name === 'sub';
+      })?.Value;
 
       console.log('Email to update: ', userEmail, userEmail?.toLowerCase());
 
@@ -105,7 +110,7 @@ async function lowerCaseUserEmail(
             },
           ],
           UserPoolId: applicationContext.environment.userPoolId,
-          Username: userEmail,
+          Username: userSub,
         });
       }
     }),
