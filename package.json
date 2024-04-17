@@ -128,7 +128,7 @@
     "deploy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/deploy-app-color.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",
     "deploy:environment-specific": "cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh",
-    "deploy:glue-cron": "cd web-api/workflow-terraform/glue-cron/main && ../bin/deploy-app.sh",
+    "deploy:glue-cron": "cd web-api/terraform/applyables/glue-cron && ../../bin/deploy-glue-cron.sh",
     "deploy:migration": "cd web-api/workflow-terraform/migration/main && ../bin/deploy-app.sh",
     "deploy:migration-cron": "cd web-api/workflow-terraform/migration-cron/main && ../bin/deploy-app.sh",
     "deploy:public-ui:files": "./web-client/deploy-public.sh",

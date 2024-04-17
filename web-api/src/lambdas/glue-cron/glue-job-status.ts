@@ -1,8 +1,8 @@
 import {
   approvePendingJob,
   cancelWorkflow,
-} from '../../../../../shared/admin-tools/circleci/circleci-helper';
-import { getRunStateOfMostRecentJobRun } from '../../../../../shared/admin-tools/aws/glueHelper';
+} from '../../../../shared/admin-tools/circleci/circleci-helper';
+import { getRunStateOfMostRecentJobRun } from '../../../../shared/admin-tools/aws/glueHelper';
 import type { Handler } from 'aws-lambda';
 
 const FAILURE_STATES = ['ERROR', 'FAILED', 'STOPPED', 'TIMEOUT'];
