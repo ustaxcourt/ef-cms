@@ -153,10 +153,6 @@ resource "aws_cognito_user_pool" "pool" {
 
   lifecycle {
     prevent_destroy = true
-
-    # the lambda_config isn't specified in this block because we only want to change its configuration during the color-change step of a deployment
-    # but we also don't want the lambda_config to be deleted, so we need to ignore its configuration
-    ignore_changes = [lambda_config]
   }
 }
 
@@ -183,23 +179,18 @@ resource "aws_cognito_user_pool_client" "client" {
   access_token_validity  = 1
   id_token_validity      = 1
 
-  # TODO 10007 Cleanup: remove when triggers are removed 
-  callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
-  ]
-
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.pool.id
 
+  # WARNING: Do NOT add custom:userId or custom:role to this list. Adding those
+  # attributes to this list will allow anyone with a valid access/id token to 
+  # update their role or userId directly in Cognito.
   write_attributes = [
     "address",
     "birthdate",
-    "custom:userId",
-    "custom:role",
     "email",
     "family_name",
     "gender",
@@ -360,12 +351,6 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   refresh_token_validity = 30 # irs app expects 30 days
   access_token_validity  = 1
   id_token_validity      = 1
-
-  # TODO 10007 Cleanup: remove when triggers are removed 
-  callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
-  ]
 
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
