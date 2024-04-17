@@ -2,7 +2,7 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getMigrationFiles } from './migrationFilesHelper';
-import { requireEnvVars } from '../../../../shared/admin-tools/util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['DESTINATION_TABLE']);
 

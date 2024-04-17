@@ -7,7 +7,7 @@ import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createUsers } from './createUsers';
 import { seedEntries } from '../fixtures/seed';
-import { migrateItems as validationMigration } from '../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items';
+import { migrateItems as validationMigration } from '../../src/lambdas/migration/migrations/0000-validate-all-items';
 
 Error.stackTraceLimit = Infinity;
 const applicationContext = createApplicationContext({});
