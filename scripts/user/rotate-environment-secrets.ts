@@ -103,6 +103,6 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
 (async () => {
   await rotateSecrets(ENV!);
   console.log(
-    '🏁 All done. Be sure to run setup-test-users.sh or wait for the next deploy',
+    '🏁 All done. Be sure to run setup-test-users.ts or wait for the next deploy',
   );
 })();

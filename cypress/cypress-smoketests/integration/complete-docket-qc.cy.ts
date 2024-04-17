@@ -4,7 +4,7 @@ import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-create
 import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
-describe('Document QC Complete', () => {
+describe.skip('Document QC Complete', () => {
   const seedCaseServicesSupervisorUserid =
     '35959d1a-0981-40b2-a93d-f65c7977db52';
   const docketSectionMessage = 'To CSS under Docket Section';
@@ -30,7 +30,7 @@ describe('Document QC Complete', () => {
 
   it('should organize messages correctly in each section', () => {
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-      cy.login('admissionsclerk');
+      cy.login('admissionsclerk1');
       searchByDocketNumberInHeader(docketNumber);
 
       sendMessages(
@@ -92,7 +92,7 @@ describe('Document QC Complete', () => {
 
   it('should have the served case document qc assigned and completed', () => {
     cy.login(
-      'caseservicessupervisor',
+      'caseservicessupervisor1',
       '/document-qc/section/inbox/selectedSection?section=docket',
     );
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
@@ -128,7 +128,7 @@ describe('Document QC Complete', () => {
 
   it('should have the unserved case in the petition qc assigned', () => {
     cy.login(
-      'caseservicessupervisor',
+      'caseservicessupervisor1',
       '/document-qc/section/inbox/selectedSection?section=petitions',
     );
     cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {

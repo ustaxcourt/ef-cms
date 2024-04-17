@@ -15,7 +15,6 @@ DEPLOYING_COLOR=$(aws dynamodb get-item \
  --region us-east-1 \
  --table-name "efcms-deploy-${ENV}" \
  --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
-export FILE_NAME=./scripts/circleci/judge/judge_users.csv
 export DESTINATION_TABLE
 export DEPLOYING_COLOR
 
@@ -25,7 +24,6 @@ export DEPLOYING_COLOR
   "USTC_ADMIN_PASS" \
   "USTC_ADMIN_USER" \
   "REGION" \
-  "FILE_NAME" \
   "DEFAULT_ACCOUNT_PASS" \
   "DEPLOYING_COLOR" \
 
@@ -36,18 +34,17 @@ npm run deploy:api "${ENV}"
 
 # Setting up indices
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
-./web-api/setup-elasticsearch-aliases.sh "${ENV}"
+npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
 
 # Indexing data
 npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DESTINATION_TABLE}"
 
 # Setting up users
-npx ts-node --transpile-only scripts/user/setup-admin.ts
 # shellcheck disable=SC1091
-. ./scripts/user/setup-test-users.sh "${ENV}"
+npx ts-node --transpile-only scripts/user/setup-test-users.ts
 
 # Setting up Judge users
-./scripts/circleci/judge/bulk-import-judge-users.sh
+npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
 
 unset CI
 unset SECRETS_LOADED
