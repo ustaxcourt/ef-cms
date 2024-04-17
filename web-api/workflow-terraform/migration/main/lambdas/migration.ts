@@ -1,10 +1,9 @@
-import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
-  DeleteRequest,
-  DynamoDBClient,
-  PutRequest,
-} from '@aws-sdk/client-dynamodb';
-import { chunk } from 'lodash';
+  DeleteCommand,
+  DynamoDBDocument,
+  PutCommand,
+} from '@aws-sdk/lib-dynamodb';
+import { DeleteRequest, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
@@ -42,14 +41,21 @@ export const processItems = async (
     items: Record<string, any>[];
     migrateRecords: migrationsCallback;
   },
-): Promise<{ PutRequest: PutRequest }[]> => {
-  items = await migrateRecords(applicationContext, { items });
+): Promise<void> => {
+  const unmarshalledItems = items.map(item => unmarshall(item));
 
-  return items.map(item => ({
-    PutRequest: {
-      Item: unmarshall(item),
-    },
-  }));
+  items = await migrateRecords(applicationContext, {
+    items: unmarshalledItems,
+  });
+
+  for (const item of items) {
+    const putCommand = new PutCommand({
+      Item: item,
+      TableName: process.env.DESTINATION_TABLE,
+    });
+
+    await docClient.send(putCommand);
+  }
 };
 
 export const getFilteredGlobalEvents = (
@@ -93,30 +99,22 @@ export const handler: Handler = async (event, context) => {
     }),
   );
 
-  let requests: { DeleteRequest?: DeleteRequest; PutRequest?: PutRequest }[] =
-    [];
-
   const items = getFilteredGlobalEvents(event);
+
   if (items) {
-    requests = await processItems(applicationContext, {
+    await processItems(applicationContext, {
       items,
       migrateRecords: migrations,
     });
   }
 
-  requests = [...requests, ...generateDeleteRequests(event)];
+  const deleteRequests = generateDeleteRequests(event);
 
-  const requestChunks = chunk(requests, 25);
-  const commands: BatchWriteCommand[] = [];
-  for (const requestChunk of requestChunks) {
-    commands.push(
-      new BatchWriteCommand({
-        RequestItems: {
-          [process.env.DESTINATION_TABLE!]: requestChunk,
-        },
-      }),
-    );
+  for (const deleteRequest of deleteRequests) {
+    const deleteCommand = new DeleteCommand({
+      Key: deleteRequest.DeleteRequest.Key,
+      TableName: process.env.DESTINATION_TABLE!,
+    });
+    await docClient.send(deleteCommand);
   }
-
-  await Promise.all(commands.map(command => docClient.send(command)));
 };
