@@ -23,7 +23,7 @@ describe('Document QC Complete', () => {
       });
     });
 
-    cy.login('caseServicesSupervisor1');
+    cy.login('caseservicessupervisor1');
 
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
@@ -59,7 +59,7 @@ describe('Document QC Complete', () => {
         'petitions',
       );
 
-      cy.login('caseServicesSupervisor1', '/messages/my/inbox');
+      cy.login('caseservicessupervisor1', '/messages/my/inbox');
 
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
@@ -106,7 +106,7 @@ describe('Document QC Complete', () => {
 
   it('should have the served case document qc assigned and completed', () => {
     cy.login(
-      'caseServicesSupervisor1',
+      'caseservicessupervisor1',
       '/document-qc/section/inbox/selectedSection?section=docket',
     );
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
@@ -142,7 +142,7 @@ describe('Document QC Complete', () => {
 
   it('should have the unserved case in the petition qc assigned', () => {
     cy.login(
-      'caseServicesSupervisor1',
+      'caseservicessupervisor1',
       '/document-qc/section/inbox/selectedSection?section=petitions',
     );
     cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
