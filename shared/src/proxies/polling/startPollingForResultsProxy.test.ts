@@ -19,11 +19,6 @@ describe('startPollingForResultsProxy', () => {
       iteration += 1;
       return new Promise(resolve => resolve(results));
     });
-
-    applicationContext.getAsynSyncUtil().getAsyncSyncCompleter = jest
-      .fn()
-      .mockReturnValue(RESOLVER_MOCK);
-    applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter = jest.fn();
     applicationContext.getUtilities().sleep = jest
       .fn()
       .mockImplementation(() => {});
@@ -43,12 +38,10 @@ describe('startPollingForResultsProxy', () => {
       applicationContext,
       TEST_REQUEST_ID,
       TEST_EXP_DATE,
+      RESOLVER_MOCK,
     );
 
     expect(RESOLVER_MOCK).toHaveBeenCalledWith(responseObj);
-    expect(
-      applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter,
-    ).toHaveBeenCalledWith(TEST_REQUEST_ID);
     expect(get).toHaveBeenCalledTimes(1);
   });
 
@@ -68,12 +61,10 @@ describe('startPollingForResultsProxy', () => {
       applicationContext,
       TEST_REQUEST_ID,
       TEST_EXP_DATE,
+      RESOLVER_MOCK,
     );
 
     expect(RESOLVER_MOCK).toHaveBeenCalledWith(responseObj);
-    expect(
-      applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter,
-    ).toHaveBeenCalledWith(TEST_REQUEST_ID);
     expect(get).toHaveBeenCalledTimes(3);
   });
 
@@ -97,12 +88,10 @@ describe('startPollingForResultsProxy', () => {
       applicationContext,
       TEST_REQUEST_ID,
       TEST_EXP_DATE,
+      RESOLVER_MOCK,
     );
 
     expect(RESOLVER_MOCK).toHaveBeenCalledWith(responseObj);
-    expect(
-      applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter,
-    ).toHaveBeenCalledWith(TEST_REQUEST_ID);
     expect(get).toHaveBeenCalledTimes(3);
   });
 
@@ -115,12 +104,10 @@ describe('startPollingForResultsProxy', () => {
       applicationContext,
       TEST_REQUEST_ID,
       0,
+      RESOLVER_MOCK,
     );
 
     expect(RESOLVER_MOCK).toHaveBeenCalledWith(responseObj);
-    expect(
-      applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter,
-    ).toHaveBeenCalledWith(TEST_REQUEST_ID);
     expect(get).toHaveBeenCalledTimes(1);
   });
 });
