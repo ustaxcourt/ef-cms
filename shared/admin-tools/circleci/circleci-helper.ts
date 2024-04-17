@@ -1,5 +1,4 @@
 import { find } from 'lodash';
-import { sleep } from '@shared/tools/helpers';
 import axios from 'axios';
 
 const findPendingJob = async ({
@@ -10,7 +9,7 @@ const findPendingJob = async ({
   apiToken: string;
   jobName: string;
   workflowId: string;
-}): Promise<any> => {
+}): Promise<string> => {
   const getAllJobsRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'GET',
@@ -26,8 +25,7 @@ const findPendingJob = async ({
     const jobWithApprovalNeeded = find(allJobsInWorkflow.data.items, o => {
       return o.name === jobName;
     });
-    // approvalRequestId = jobWithApprovalNeeded.approval_request_id;
-    approvalRequestId = jobWithApprovalNeeded;
+    approvalRequestId = jobWithApprovalNeeded.approval_request_id;
   } catch (err) {
     console.error(
       `Unable to determine approval id of pending job ${jobName}`,
@@ -52,32 +50,15 @@ export const approvePendingJob = async ({
     jobName,
     workflowId,
   });
-  if (!approvalRequest.approval_request_id.length) {
+  if (!approvalRequest.length) {
     return;
   }
 
   const approveJobRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
-    url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequest.approval_request_id}`,
+    url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequest}`,
   };
-
-  // Get the wait-for-reindex job (we have access to this inside findPendingJobs right now)
-  // Check job.status on wait-for-reindex job
-  // If job.status is "blocked", wait.
-  // Keep waiting until job is no longer "blocked" (enters 'on hold', presumably)
-
-  let counter = 0;
-  while (approvalRequest.status === 'blocked' && counter < 10) {
-    console.log('Skipping approval. Job status is blocked.');
-    await sleep(2000);
-    approvalRequest = await findPendingJob({
-      apiToken,
-      jobName,
-      workflowId,
-    });
-    ++counter;
-  }
 
   try {
     await axios.post(approveJobRequest.url, {}, approveJobRequest);
