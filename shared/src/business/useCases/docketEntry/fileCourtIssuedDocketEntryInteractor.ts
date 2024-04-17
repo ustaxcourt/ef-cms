@@ -1,8 +1,5 @@
 import { Case } from '../../entities/cases/Case';
-import {
-  DOCKET_SECTION,
-  UNSERVABLE_EVENT_CODES,
-} from '../../entities/EntityConstants';
+import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -75,7 +72,7 @@ export const fileCourtIssuedDocketEntry = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
+  const isUnservable = DocketEntry.isUnservable(documentMeta);
 
   await Promise.all(
     [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {

@@ -37,9 +37,10 @@ const createManyAccounts = async (
         state: 'IL',
       },
       email,
-      employer: '',
       lastName: 'Test',
       name: `Test ${role}${i}`,
+      password: DEFAULT_ACCOUNT_PASS,
+      practiceType: '',
       role,
       section,
       suffix: '',
@@ -121,7 +122,7 @@ const setupPractitioners = async (
 
   for (let role in practitioners) {
     const promises = practitioners[role].map((barNumber, i) => {
-      const employer = role === 'privatePractitioner' ? 'Private' : 'IRS';
+      const practiceType = role === 'privatePractitioner' ? 'Private' : 'IRS';
       const email = `${role}${i + 1}@example.com`;
       const user = {
         admissionsDate: '2019-03-01',
@@ -139,13 +140,13 @@ const setupPractitioners = async (
           state: 'IL',
         },
         email,
-        employer,
         firmName: 'Some Firm',
         firstName: `${role} ${i + 1}`,
         lastName: 'Test',
         name: `Test ${role}${i + 1}`,
         originalBarState: 'WA',
         password: DEFAULT_ACCOUNT_PASS,
+        practiceType,
         practitionerType: 'Attorney',
         role,
         section: role,
