@@ -224,7 +224,6 @@ import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
-import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/getTrialSessionsForJudgeActivityReportProxy';
@@ -389,19 +388,6 @@ const setCurrentUserToken = newToken => {
   token = newToken;
 };
 
-const asyncSyncCompleterDict = {};
-const setAsyncSyncCompleter = (id: string, callback: any) => {
-  asyncSyncCompleterDict[id] = callback;
-};
-
-const removeAsyncSyncCompleter = (id: string) => {
-  delete asyncSyncCompleterDict[id];
-};
-
-const getAsyncSyncCompleter = (id: string) => {
-  return asyncSyncCompleterDict[id];
-};
-
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
@@ -517,10 +503,6 @@ const allUseCases = {
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getStatusOfVirusScanInteractor: (applicationContext, args) =>
-    process.env.SKIP_VIRUS_SCAN
-      ? null
-      : getStatusOfVirusScanInteractor(applicationContext, args),
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
@@ -657,11 +639,6 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
-  getAsynSyncUtil: () => ({
-    getAsyncSyncCompleter,
-    removeAsyncSyncCompleter,
-    setAsyncSyncCompleter,
-  }),
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },

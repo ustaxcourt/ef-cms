@@ -62,7 +62,6 @@ for ENV in "${ENVIRONMENTS[@]}"; do
     process_group "/aws/lambda/set_trial_session_${ENV}_${COLOR}"
   done
 
-  process_group "/aws/ecs/clamav_fargate_${ENV}"
   process_group "/aws/lambda/legacy_documents_migration_lambda_${ENV}"
 done
 

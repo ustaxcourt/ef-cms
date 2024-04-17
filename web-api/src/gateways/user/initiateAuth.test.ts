@@ -1,4 +1,5 @@
 import {
+  AuthFlowType,
   ChallengeNameType,
   InitiateAuthCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -37,7 +38,7 @@ describe('initiateAuth', () => {
     ).rejects.toThrow('InitiateAuthError');
   });
 
-  it('should return the user`s tokens when they are successfully authenticated', async () => {
+  it('should lowercase the users email and return the user`s tokens when they are successfully authenticated', async () => {
     const mockAccessToken = 'c39d1dea-ca08-47ba-9935-0bfc354b68dc';
     const mockRefreshToken = 'e4216a49-aa21-4e37-93d6-23374c0ac126';
     const mockIdToken = '7120b318-153d-454e-8c24-c710ea4ff4ab';
@@ -49,13 +50,22 @@ describe('initiateAuth', () => {
         RefreshToken: mockRefreshToken,
       },
     };
+    const mockPassword = 'P@ssw0rd';
     applicationContext.getCognito().initiateAuth.mockResolvedValue(mockOutput);
 
     const result = await initiateAuth(applicationContext, {
-      email: 'test@example.com',
-      password: 'P@ssw0rd',
+      email: 'tESt@example.com',
+      password: mockPassword,
     });
 
+    expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith({
+      AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+      AuthParameters: {
+        PASSWORD: mockPassword,
+        USERNAME: 'test@example.com',
+      },
+      ClientId: applicationContext.environment.cognitoClientId,
+    });
     expect(result).toEqual({
       accessToken: mockAccessToken,
       idToken: mockIdToken,

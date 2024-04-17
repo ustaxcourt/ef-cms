@@ -4,6 +4,7 @@ export const startPollingForResultsInteractor = async (
   applicationContext,
   requestId: string,
   expirationTimestamp: number,
+  resolver,
   attemptNumber = 1,
 ) => {
   const WAIT_TIME = attemptNumber < 10 ? 1500 : 5000;
@@ -12,13 +13,8 @@ export const startPollingForResultsInteractor = async (
     applicationContext,
     endpoint: `/results/fetch/${requestId}`,
   }).then(async (results: { response: any }) => {
-    const resolver = applicationContext
-      .getAsynSyncUtil()
-      .getAsyncSyncCompleter(requestId);
-
     const nowUnixTimeInSeconds = Math.floor(Date.now() / 1000);
     if (expirationTimestamp < nowUnixTimeInSeconds) {
-      applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter(requestId);
       return resolver({ statusCode: 504 });
     }
 
@@ -27,6 +23,7 @@ export const startPollingForResultsInteractor = async (
         applicationContext,
         requestId,
         expirationTimestamp,
+        resolver,
         attemptNumber + 1,
       );
     }
@@ -38,10 +35,10 @@ export const startPollingForResultsInteractor = async (
         applicationContext,
         requestId,
         expirationTimestamp,
+        resolver,
         attemptNumber + 1,
       );
 
     if (resolver) resolver(responseObj);
-    applicationContext.getAsynSyncUtil().removeAsyncSyncCompleter(requestId);
   });
 };
