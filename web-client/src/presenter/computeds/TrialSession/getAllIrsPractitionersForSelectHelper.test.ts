@@ -28,8 +28,8 @@ describe('getAllIrsPractitionersForSelectHelper', () => {
         state: 'TEST_STATE',
       },
       email: 'TEST_EMAIL',
-      employer: 'IRS',
       name: 'TEST_NAME',
+      practiceType: 'IRS',
     });
     const result = runCompute(getAllIrsPractitionersForSelectHelper, {
       state: {
@@ -64,8 +64,8 @@ describe('getAllIrsPractitionersForSelectHelper', () => {
         state: 'TEST_STATE',
       },
       email: 'TEST_EMAIL',
-      employer: 'IRS',
       name: 'TEST_NAME',
+      practiceType: 'IRS',
     });
 
     TEST_IRS_PRACTITIONERS.push({
@@ -79,8 +79,8 @@ describe('getAllIrsPractitionersForSelectHelper', () => {
         state: 'ACTIVE_TEST_STATE',
       },
       email: 'ACTIVE_TEST_EMAIL',
-      employer: 'IRS',
       name: 'ACTIVE_TEST_NAME',
+      practiceType: 'IRS',
     });
 
     const result = runCompute(getAllIrsPractitionersForSelectHelper, {
@@ -117,8 +117,8 @@ describe('getAllIrsPractitionersForSelectHelper', () => {
         state: 'TEST_STATE',
       },
       email: 'TEST_EMAIL',
-      employer: 'DOJ',
       name: 'TEST_NAME',
+      practiceType: 'DOJ',
     });
 
     TEST_IRS_PRACTITIONERS.push({
@@ -132,8 +132,8 @@ describe('getAllIrsPractitionersForSelectHelper', () => {
         state: 'IRS_TEST_STATE',
       },
       email: 'IRS_TEST_EMAIL',
-      employer: 'IRS',
       name: 'IRS_TEST_NAME',
+      practiceType: 'IRS',
     });
 
     const result = runCompute(getAllIrsPractitionersForSelectHelper, {

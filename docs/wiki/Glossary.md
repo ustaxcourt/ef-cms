@@ -100,7 +100,7 @@ Court's Glossary of USTC Terminology: https://www.ustaxcourt.gov/taxpayer_info_g
 
 * **Eligible Cases** - list of cases that are ready to be set for trial for a certain trial session; these cases have satisfied all the required criteria for eligibility and are in the case status of General Docket (At Issue) - Ready for Trial  
 
-* **employer** - The employer designation for the practitioner.
+* **Practice Type** - The practice type designation for the practitioner.
 
 * **Event Code** - alphanumeric Code associated with the event that resulted in this item being added to the Docket Record; each document type has a unique Event Code for reporting purposes
 
