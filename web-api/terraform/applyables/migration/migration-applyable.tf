@@ -10,5 +10,3 @@ terraform {
     aws = "5.44.0"
   }
 }
-
-data "aws_caller_identity" "current" {}
