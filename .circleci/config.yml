@@ -838,7 +838,7 @@ jobs:
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |
-            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
+            ./scripts/glue/enable-glue-cron.sh
 
   finish-glue-job:
     docker:
@@ -857,7 +857,7 @@ jobs:
       - run:
           name: Disable Check Glue Job Run State Cron
           command: |
-            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
+            ./scripts/glue/disable-glue-cron.sh
       - run:
           name: Destroy Check Glue Job Run State Cron Lambda
           command: |
