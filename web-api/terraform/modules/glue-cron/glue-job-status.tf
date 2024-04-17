@@ -1,6 +1,8 @@
+data "aws_caller_identity" "current" {}
+
 module "glue_job_status_lambda" {
-  source         = "../../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-api/workflow-terraform/glue-cron/main/lambdas/glue-job-status.ts"
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/glue-cron/glue-job-status.ts"
   handler_method = "handler"
   lambda_name    = "glue_job_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_role_${var.environment}"

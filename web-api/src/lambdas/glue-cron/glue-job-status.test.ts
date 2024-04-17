@@ -1,5 +1,5 @@
-import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
-import * as glueHelper from '../../../../../shared/admin-tools/aws/glueHelper';
+import * as circleHelper from '../../../../shared/admin-tools/circleci/circleci-helper';
+import * as glueHelper from '../../../../shared/admin-tools/aws/glueHelper';
 import { handler } from './glue-job-status';
 import type { Context } from 'aws-lambda';
 
