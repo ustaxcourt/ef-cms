@@ -1,7 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { createApplicationContext } from './src/applicationContext';
-import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
+import { processItems } from './src/lambdas/migration/migration-segments';
 import { scanFull } from './utilities/scanFull';
 
 const applicationContext = createApplicationContext({});

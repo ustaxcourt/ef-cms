@@ -1,7 +1,7 @@
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { getMigrationFiles } from './migrationFilesHelper';
-import { requireEnvVars } from '../../../../shared/admin-tools/util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
 requireEnvVars(['SOURCE_TABLE']);
 

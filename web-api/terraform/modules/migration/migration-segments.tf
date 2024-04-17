@@ -1,8 +1,8 @@
-
+data "aws_caller_identity" "current" {}
 
 module "migration_segments_lambda" {
-  source         = "../../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-api/workflow-terraform/migration/main/lambdas/migration-segments.ts"
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/migration/migration-segments.ts"
   handler_method = "handler"
   lambda_name    = "migration_segments_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_role_${var.environment}"
@@ -17,7 +17,7 @@ module "migration_segments_lambda" {
     S3_ENDPOINT            = "s3.us-east-1.amazonaws.com"
     ELASTICSEARCH_ENDPOINT = var.elasticsearch_domain
   }
-  timeout     = "900"
+  timeout = "900"
 }
 
 
