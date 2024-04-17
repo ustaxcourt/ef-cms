@@ -165,13 +165,10 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 20. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
-    ts-node --transpile-only scripts/user/setup-admin.ts
+    npx ts-node --transpile-only scripts/user/setup-test-users.ts
     ```
     ```bash
-    . ./scripts/user/setup-test-users.sh "${ENV}"
-    ```
-    ```bash
-    ENV=exp5 FILE_NAME=./scripts/circleci/judge/judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
+    ENV=exp5 npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
     ```
 
 See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during this deploy process.

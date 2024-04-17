@@ -11,7 +11,7 @@ interface UserAttributes {
   role?: Role;
   email?: string;
   name?: string;
-  userId?: string;
+  userId: string;
 }
 
 export async function createUser(
@@ -19,14 +19,22 @@ export async function createUser(
   {
     attributesToUpdate,
     email,
-    resendInvitationEmail,
+    poolId,
+    resendInvitationEmail = false,
   }: {
     email: string;
+    poolId?: string;
     attributesToUpdate: UserAttributes;
-    resendInvitationEmail: boolean;
+    resendInvitationEmail?: boolean;
   },
 ): Promise<void> {
-  const formattedAttributesToUpdate: AttributeType[] = [];
+  const formattedAttributesToUpdate: AttributeType[] = [
+    {
+      Name: 'custom:userId',
+      Value: attributesToUpdate.userId,
+    },
+  ];
+
   if (attributesToUpdate.role) {
     formattedAttributesToUpdate.push({
       Name: 'custom:role',
@@ -41,17 +49,10 @@ export async function createUser(
     });
   }
 
-  if (attributesToUpdate.userId) {
-    formattedAttributesToUpdate.push({
-      Name: 'custom:userId',
-      Value: attributesToUpdate.userId,
-    });
-  }
-
   if (attributesToUpdate.email) {
     formattedAttributesToUpdate.push({
       Name: 'email',
-      Value: attributesToUpdate.email,
+      Value: attributesToUpdate.email.toLowerCase(),
     });
     formattedAttributesToUpdate.push({
       Name: 'email_verified',
@@ -67,12 +68,13 @@ export async function createUser(
     DesiredDeliveryMediums: [DeliveryMediumType.EMAIL],
     MessageAction: messageAction,
     UserAttributes: formattedAttributesToUpdate,
-    UserPoolId: applicationContext.environment.userPoolId,
-    Username: email,
+    UserPoolId: poolId ?? applicationContext.environment.userPoolId,
+    Username: email.toLowerCase(),
   };
 
-  if (process.env.STAGE !== 'prod') {
-    createUserArgs.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  if (applicationContext.environment.stage !== 'prod') {
+    createUserArgs.TemporaryPassword =
+      applicationContext.environment.defaultAccountPass;
   }
 
   await applicationContext.getCognito().adminCreateUser(createUserArgs);
