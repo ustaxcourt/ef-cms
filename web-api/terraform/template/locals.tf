@@ -4,12 +4,10 @@ data "null_data_source" "locals" {
     BOUNCE_ALERT_RECIPIENTS            = var.bounce_alert_recipients
     BOUNCE_ALERT_TEMPLATE              = "bounce_alert_${var.environment}"
     BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
-    CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
     COGNITO_SUFFIX                     = var.cognito_suffix
     COGNITO_CLIENT_ID                  = aws_cognito_user_pool_client.client.id
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
-    DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
     DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
     EFCMS_DOMAIN                       = var.dns_domain
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
@@ -22,12 +20,9 @@ data "null_data_source" "locals" {
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
-    QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
-    S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
     SCANNER_RESOURCE_URI               = var.scanner_resource_uri
     SLACK_WEBHOOK_URL                  = var.slack_webhook_url
     STAGE                              = var.environment
-    TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
     USER_POOL_ID                       = aws_cognito_user_pool.pool.id
     USER_POOL_IRS_ID                   = aws_cognito_user_pool.irs_pool.id
   }

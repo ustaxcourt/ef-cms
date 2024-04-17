@@ -3036,55 +3036,6 @@
         }
       }
     },
-    "/documents/{key}/virus-scan": {
-      "parameters": [
-        {
-          "name": "key",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["documents"],
-        "summary": "gets the status of the virus scan for the document",
-        "description": "Endpoint that the status of the virus scan for the document.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response"
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/documents/{key}/validate": {
       "parameters": [
         {
@@ -7888,10 +7839,6 @@
     "health": {
       "type": "object",
       "properties": {
-        "clamAV": {
-          "type": "boolean",
-          "description": "the status of clamav"
-        },
         "cognito": {
           "type": "boolean",
           "description": "the status of cognito ui"
@@ -7940,10 +7887,6 @@
               "type": "boolean",
               "description": "the status of east temp documents bucket"
             },
-            "eastQuarantine": {
-              "type": "boolean",
-              "description": "the status of east quarantine bucket"
-            },
             "public": {
               "type": "boolean",
               "description": "the status of public ui bucket"
@@ -7959,10 +7902,6 @@
             "westTempDocuments": {
               "type": "boolean",
               "description": "the status of west temp documents bucket"
-            },
-            "westQuarantine": {
-              "type": "boolean",
-              "description": "the status of west quarantine bucket"
             }
           }
         }
@@ -8589,10 +8528,6 @@
         "isFileAttached": {
           "type": "boolean",
           "description": "used to know if a file is attached to the docket entry"
-        },
-        "isMinuteEntry": {
-          "type": "boolean",
-          "description": "used to know if the docket entry is a minute entry"
         },
         "isOnDocketRecord": {
           "type": "boolean",

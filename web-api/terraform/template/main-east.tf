@@ -50,7 +50,6 @@ data "archive_file" "zip_worker" {
   excludes = setsubtract(var.template_lambdas, ["worker-handler.js"])
 }
 
-
 data "archive_file" "pdf_generation" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/pdf-generation.js.zip"

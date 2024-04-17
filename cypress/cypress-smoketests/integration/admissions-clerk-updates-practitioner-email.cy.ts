@@ -23,7 +23,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="last-name-input"]').type(faker.person.lastName());
     cy.get('[data-testid="birth-year-input"]').type('1989');
     cy.get('[data-testid="practitioner-type-Attorney-radio"]').click();
-    cy.get('[data-testid="employer-Private-radio"]').click();
+    cy.get('[data-testid="practiceType-Private-radio"]').click();
     cy.get('[data-testid="contact.address1"]').type(
       faker.location.streetAddress(),
     );
@@ -107,7 +107,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="last-name-input"]').type(faker.person.lastName());
     cy.get('[data-testid="birth-year-input"]').type('1989');
     cy.get('[data-testid="practitioner-type-Attorney-radio"]').click();
-    cy.get('[data-testid="employer-Private-radio"]').click();
+    cy.get('[data-testid="practiceType-Private-radio"]').click();
     cy.get('[data-testid="contact.address1"]').type(
       faker.location.streetAddress(),
     );

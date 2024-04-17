@@ -17,10 +17,10 @@ export const admissionsClerkAddsNewPractitioner = (
       'email',
       'admissionsDate',
       'birthYear',
-      'employer',
       'firstName',
       'lastName',
       'originalBarState',
+      'practiceType',
       'practitionerType',
       'contact',
     ]);
@@ -48,7 +48,7 @@ export const admissionsClerkAddsNewPractitioner = (
       value: '1922',
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'employer',
+      key: 'practiceType',
       value: 'Private',
     });
     await cerebralTest.runSequence('updateFormValueSequence', {

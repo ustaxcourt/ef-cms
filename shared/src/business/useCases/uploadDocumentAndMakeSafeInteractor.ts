@@ -21,12 +21,6 @@ export const uploadDocumentAndMakeSafeInteractor = async (
 
   await applicationContext
     .getUseCases()
-    .getStatusOfVirusScanInteractor(applicationContext, {
-      key: uploadedKey,
-    });
-
-  await applicationContext
-    .getUseCases()
     .validatePdfInteractor(applicationContext, {
       key: uploadedKey,
     });

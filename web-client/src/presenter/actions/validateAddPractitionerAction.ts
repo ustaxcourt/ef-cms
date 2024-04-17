@@ -53,7 +53,7 @@ export const validateAddPractitionerAction = ({
       'lastName',
       'birthYear',
       'practitionerType',
-      'employer',
+      'practiceType',
       'contact.country',
       'contact.address1',
       'contact.city',
