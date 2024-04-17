@@ -196,7 +196,7 @@ describe('websocket-authorizer', () => {
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized', async () => {
-    setupHappyPath({ sub: 'test-sub' });
+    setupHappyPath({ 'custom:userId': 'test-custom:userId' });
 
     const policy = await handler(event, context);
 
@@ -213,7 +213,7 @@ describe('websocket-authorizer', () => {
           ],
           Version: '2012-10-17',
         },
-        principalId: 'test-sub',
+        principalId: 'test-custom:userId',
       }),
     );
 
@@ -227,7 +227,7 @@ describe('websocket-authorizer', () => {
     );
   });
 
-  it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId instead of sub', async () => {
+  it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId', async () => {
     setupHappyPath({ 'custom:userId': 'test-custom:userId' });
 
     const policy = await handler(event, context);
@@ -276,7 +276,7 @@ describe('websocket-authorizer', () => {
     jwkToPem.mockImplementation(() => 'test-pem');
 
     jwk.verify.mockImplementation((token, pem, options, callback) => {
-      callback(null, { sub: 'test-sub' });
+      callback(null, { 'custom:userId': 'test-custom:userId' });
     });
 
     await handler(event, context);
@@ -310,7 +310,7 @@ describe('websocket-authorizer', () => {
   });
 
   it('should return a policy if the token is provided in the query string', async () => {
-    setupHappyPath({ sub: 'test-sub' });
+    setupHappyPath({ 'custom:userId': 'test-custom:userId' });
 
     event = {
       methodArn: 'a/b/c',

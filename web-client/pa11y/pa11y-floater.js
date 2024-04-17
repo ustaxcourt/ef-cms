@@ -2,10 +2,7 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
-    actions: [
-      ...loginAs({ username: 'floater@example.com' }),
-      'navigate to http://localhost:1234/',
-    ],
+    actions: [...loginAs({ username: 'floater@example.com' })],
     url: 'http://localhost:1234/',
   },
 ];

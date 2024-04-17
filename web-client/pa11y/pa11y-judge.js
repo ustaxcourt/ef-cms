@@ -2,10 +2,7 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
-    actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
-      'navigate to http://localhost:1234/',
-    ],
+    actions: [...loginAs({ username: 'judgecolvin@example.com' })],
     url: 'http://localhost:1234/',
   },
   {
@@ -112,7 +109,6 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'judgecolvin@example.com' }),
-      'navigate to http://localhost:1234/',
       'wait for [data-testid="tab-case-worksheets"] to be visible',
       'click element [data-testid="tab-case-worksheets"]',
       'wait for button[data-testid="add-edit-case-worksheet"] to be visible',
@@ -127,7 +123,6 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'judgecolvin@example.com' }),
-      'navigate to http://localhost:1234/',
       'wait for [data-testid="tab-pending-motions"] to be visible',
       'click element [data-testid="tab-pending-motions"]',
       'wait for button[data-testid="add-edit-pending-motion-worksheet"] to be visible',

@@ -6,9 +6,7 @@ describe('getDocument', () => {
 
   it('should retrieve the specified document from the temp bucket when useTempBucket is true', async () => {
     const tempBucketName = 'tempBucket';
-    applicationContext.getTempDocumentsBucketName.mockReturnValue(
-      tempBucketName,
-    );
+    applicationContext.environment.tempDocumentsBucketName = tempBucketName;
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () =>
         Promise.resolve({
@@ -27,7 +25,9 @@ describe('getDocument', () => {
     ).toHaveBeenCalledWith({ Bucket: tempBucketName, Key: key });
   });
 
-  it('should retrieves the specified document from the documents bucket by default', async () => {
+  it('should retrieve the specified document from the documents bucket by default', async () => {
+    const documentsBucketName = 'regularDocumentBucket';
+    applicationContext.environment.documentsBucketName = documentsBucketName;
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () =>
         Promise.resolve({
@@ -42,6 +42,6 @@ describe('getDocument', () => {
 
     expect(
       applicationContext.getStorageClient().getObject,
-    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName', Key: key });
+    ).toHaveBeenCalledWith({ Bucket: documentsBucketName, Key: key });
   });
 });

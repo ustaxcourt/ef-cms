@@ -16,7 +16,7 @@ export const confirmUser = async ({ email }: { email: string }) => {
     AuthFlow: 'ADMIN_NO_SRP_AUTH',
     AuthParameters: {
       PASSWORD: getCypressEnv().defaultAccountPass,
-      USERNAME: email,
+      USERNAME: email.toLowerCase(),
     },
     ClientId: clientId,
     UserPoolId: userPoolId,
@@ -27,7 +27,7 @@ export const confirmUser = async ({ email }: { email: string }) => {
       ChallengeName: 'NEW_PASSWORD_REQUIRED',
       ChallengeResponses: {
         NEW_PASSWORD: getCypressEnv().defaultAccountPass,
-        USERNAME: email,
+        USERNAME: email.toLowerCase(),
       },
       ClientId: clientId,
       Session: initAuthResponse.Session,
@@ -70,13 +70,12 @@ export const getCognitoUserIdByEmail = async (
   const userPoolId = await getUserPoolId();
   const foundUser = await getCognito().adminGetUser({
     UserPoolId: userPoolId,
-    Username: email,
+    Username: email.toLowerCase(),
   });
 
-  const userId =
-    foundUser.UserAttributes?.find(element => element.Name === 'custom:userId')
-      ?.Value! ||
-    foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
+  const userId = foundUser.UserAttributes?.find(
+    element => element.Name === 'custom:userId',
+  )?.Value!;
 
   return userId;
 };
@@ -121,7 +120,7 @@ const deleteAccount = async (
 ): Promise<void> => {
   const params = {
     UserPoolId: userPoolId,
-    Username: user.email,
+    Username: user.email.toLowerCase(),
   };
   await getCognito().adminDeleteUser(params);
 
@@ -195,10 +194,9 @@ const getAllCypressTestAccounts = async (
   if (!result || !result.Users) return [];
 
   const usernames = result.Users.map(user => {
-    const userId =
-      user.Attributes?.find(element => element.Name === 'custom:userId')
-        ?.Value! ||
-      user.Attributes?.find(element => element.Name === 'sub')?.Value!;
+    const userId = user.Attributes?.find(
+      element => element.Name === 'custom:userId',
+    )?.Value!;
     const email = user.Attributes?.find(
       element => element.Name === 'email',
     )?.Value!;

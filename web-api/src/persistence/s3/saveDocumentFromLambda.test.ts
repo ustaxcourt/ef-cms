@@ -9,11 +9,11 @@ describe('saveDocumentFromLambda', () => {
   const expectedDocketEntryId = 'abc';
   const expectedArray = new Uint8Array([123]);
   const defaultBucketName = 'aBucket';
+  const tempBucketName = 'aTempBucket';
 
   beforeEach(() => {
-    applicationContext.getDocumentsBucketName.mockReturnValue(
-      defaultBucketName,
-    );
+    applicationContext.environment.documentsBucketName = defaultBucketName;
+    applicationContext.environment.tempDocumentsBucketName = tempBucketName;
   });
 
   it('saves the document', async () => {
@@ -39,9 +39,6 @@ describe('saveDocumentFromLambda', () => {
     applicationContext.getStorageClient = () => ({
       putObject: putObjectStub,
     });
-    applicationContext.getTempDocumentsBucketName.mockReturnValue(
-      'aTempBucket',
-    );
 
     await saveDocumentFromLambda({
       applicationContext,
@@ -52,7 +49,7 @@ describe('saveDocumentFromLambda', () => {
 
     expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
-      Bucket: 'aTempBucket',
+      Bucket: tempBucketName,
       ContentType: 'application/pdf',
       Key: expectedDocketEntryId,
     });

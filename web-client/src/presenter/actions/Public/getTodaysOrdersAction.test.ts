@@ -44,7 +44,7 @@ describe('getTodaysOrdersAction', () => {
     });
 
     const todaysOrdersSort =
-      applicationContext.getConstants().TODAYS_ORDER_SORT;
+      applicationContext.getConstants().TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
     expect(
       applicationContext.getUseCases().getTodaysOrdersInteractor.mock
         .calls[0][1],

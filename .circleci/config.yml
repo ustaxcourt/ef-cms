@@ -153,25 +153,15 @@ jobs:
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
-          name: Admin User Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only scripts/user/setup-admin.ts
-            else
-              echo "skipping…"
-            fi
-      - run:
           name: Test Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              ./scripts/user/setup-test-users.sh $ENV
+              npx ts-node --transpile-only scripts/user/setup-test-users.ts
             else
               echo "skipping…"
             fi
       - run:
           name: Judge Users Setup
-          environment:
-            FILE_NAME: ./scripts/circleci/judge/judge_users.csv
           command: |
             if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
               echo "skipping…"
@@ -187,7 +177,7 @@ jobs:
               export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
               npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
             else
-              ./scripts/circleci/judge/bulk-import-judge-users.sh
+              npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
           name: 'Deploy - Web Client - S3'
@@ -209,14 +199,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Verify USTC Admin User Disabled'
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only scripts/user/verify-ustc-admin-user-disabled.ts
-            else
-              echo "skipping…"
-            fi
       - run:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
@@ -397,7 +379,10 @@ jobs:
           command: npx ts-node --transpile-only ./scripts/user/disable-smoketest-user.ts
       - run:
           name: Kill Build if Smoketests Failed
-          command: ./scripts/kill-circle-build.sh
+          command: |
+            if [ "${READONLY_SMOKETESTS_RESULT}" -ne 0 ]; then 
+              exit 1
+            fi
       - run:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
@@ -547,7 +532,7 @@ jobs:
       - run:
           name: Setup Elasticsearch Aliases
           command: |
-            ./web-api/setup-elasticsearch-aliases.sh $ENV
+            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
       - run:
           name: Delete Source Elasticsearch Indices After Reindex
           command: |
