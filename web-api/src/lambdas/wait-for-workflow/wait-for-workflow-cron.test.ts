@@ -1,5 +1,5 @@
-import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
-import { handler } from './wait-for-workflow';
+import * as circleHelper from '../../../../shared/admin-tools/circleci/circleci-helper';
+import { handler } from './wait-for-workflow-cron';
 import type { Context } from 'aws-lambda';
 
 jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');

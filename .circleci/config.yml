@@ -632,7 +632,7 @@ jobs:
       - run:
           name: Enable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
 
   initiate-glue-job:
     docker:
@@ -661,7 +661,7 @@ jobs:
       - run:
           name: Disable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
       - run:
           name: Destroy Wait for Workflow Lambda
           command: |
@@ -692,7 +692,7 @@ jobs:
       - run:
           name: Enable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
@@ -724,7 +724,7 @@ jobs:
       - run:
           name: Disable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
       - run:
           name: Destroy Wait for Workflow Lambda
           command: |
