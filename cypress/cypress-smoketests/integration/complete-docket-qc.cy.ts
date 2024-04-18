@@ -10,6 +10,8 @@ import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-num
 describe('Document QC Complete', () => {
   let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
     undefined as unknown as { userId: string; name: string };
+  let DOCKET_CLERK_INFO: { userId: string; name: string } =
+    undefined as unknown as { userId: string; name: string };
 
   const docketSectionMessage = 'To CSS under Docket Section';
   const petitionsSectionMessage = 'To CSS under Petitions Section';
@@ -24,6 +26,16 @@ describe('Document QC Complete', () => {
     });
 
     cy.login('caseServicesSupervisor1');
+
+    cy.intercept('GET', '**/users', req => {
+      req.continue(res => {
+        if (!DOCKET_CLERK_INFO) {
+          DOCKET_CLERK_INFO = res.body;
+        }
+      });
+    });
+
+    cy.login('docketclerk1');
 
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
@@ -117,12 +129,12 @@ describe('Document QC Complete', () => {
         .click();
 
       cy.get('[data-testid="dropdown-select-assignee"]').select(
-        'Test Docketclerk',
+        DOCKET_CLERK_INFO.name,
       );
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="table-column-work-item-assigned-to"]')
-        .should('have.text', 'Test Docketclerk');
+        .should('have.text', DOCKET_CLERK_INFO.name);
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('.message-document-title')
