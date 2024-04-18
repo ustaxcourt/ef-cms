@@ -14,7 +14,7 @@ export const setStepIndicatorInfoForPetitionGeneratorAction = ({
   ];
 
   store.set(state.stepIndicatorInfo, {
-    currentStep: 0,
+    currentStep: 3,
     steps: stepTitles,
   });
 };
