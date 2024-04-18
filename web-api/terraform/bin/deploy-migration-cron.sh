@@ -20,6 +20,8 @@ export TF_VAR_migrate_flag=$MIGRATE_FLAG
 
 ../../../../scripts/verify-terraform-version.sh
 
+npm run build:assets
+
 terraform init -upgrade -backend=true \
  -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
  -backend-config=key="migration-cron-${ENVIRONMENT}.tfstate" \
