@@ -1,3 +1,4 @@
+import { assertExists, retry } from '../../helpers/retry';
 import { attachDummyFile } from '../../helpers/attach-file';
 import {
   loginAsAdmissionsClerk,
@@ -115,7 +116,10 @@ describe('Document QC Complete', () => {
       '/document-qc/section/inbox/selectedSection?section=docket',
     );
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-      cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
+      retry(() => {
+        cy.reload(true);
+        return assertExists(`[data-testid="work-item-${docketNumber}"]`);
+      });
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
