@@ -1,4 +1,4 @@
-import { assertExists, retry } from '../../helpers/retry';
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { attachDummyFile } from '../../helpers/attach-file';
 import {
   loginAsAdmissionsClerk,
@@ -20,9 +20,10 @@ describe('Document QC Complete', () => {
   before(() => {
     cy.intercept('GET', '**/users', req => {
       req.on('before:response', res => {
-        if (!CASE_SERVICE_SUPERVISOR_INFO) {
+        if (res.body.role === ROLES.caseServicesSupervisor) {
           CASE_SERVICE_SUPERVISOR_INFO = res.body;
-        } else if (!DOCKET_CLERK_INFO) {
+        }
+        if (res.body.role === ROLES.docketClerk) {
           DOCKET_CLERK_INFO = res.body;
         }
       });
