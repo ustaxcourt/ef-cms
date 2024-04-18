@@ -294,7 +294,7 @@ jobs:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npx ts-node --transpile-only ./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts
+              npx ts-node --transpile-only ./scripts/dynamo/track-successful-migrations.ts
             fi
       - run:
           name: Set Marker to Indicate Migration is Complete

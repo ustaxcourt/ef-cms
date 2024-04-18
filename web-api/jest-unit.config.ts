@@ -9,7 +9,6 @@ const config: Config = {
     'switch-environment-color.{js,ts}',
     'elasticsearch/*.test.{js,ts}',
     'src/**/*.{js,ts}',
-    'workflow-terraform/migration/main/lambdas/migrations/*.{js,ts}',
     '!src/applicationContext.{js,ts}',
     '!src/gateways/worker/workerLocal.ts',
     '!src/getPersistenceGateway.{js,ts}',

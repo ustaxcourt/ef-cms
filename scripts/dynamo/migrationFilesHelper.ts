@@ -13,6 +13,6 @@ const getFilesInDirectory = dir => {
 
 export const getMigrationFiles = (): string[] => {
   return getFilesInDirectory(
-    path.join(__dirname, '../main/lambdas/migrations'),
+    path.join(__dirname, '../../web-api/src/lambdas/migration/migrations'),
   );
 };
