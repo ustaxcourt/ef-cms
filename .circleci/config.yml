@@ -260,7 +260,7 @@ jobs:
       - run:
           name: Enable Check Migration Status Cron
           command: |
-            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
+            ./scripts/migration/enable-migration-cron.sh
 
   prepare-for-reindex:
     docker:
@@ -289,7 +289,7 @@ jobs:
       - run:
           name: Disable Check Migration Status Cron
           command: |
-            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
+            ./scripts/migration/disable-migration-cron.sh
       - run:
           name: Track successful migrations
           command: |

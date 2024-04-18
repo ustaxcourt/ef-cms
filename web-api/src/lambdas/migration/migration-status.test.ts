@@ -1,5 +1,5 @@
-import * as circleHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
-import * as migrationWaitHelper from '../../../../../shared/admin-tools/aws/migrationWaitHelper';
+import * as circleHelper from '../../../../shared/admin-tools/circleci/circleci-helper';
+import * as migrationWaitHelper from '../../../../shared/admin-tools/aws/migrationWaitHelper';
 import { handler } from './migration-status';
 import type { Context } from 'aws-lambda';
 import type { GetMetricStatisticsOutput } from '@aws-sdk/client-cloudwatch';

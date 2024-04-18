@@ -1,6 +1,8 @@
+data "aws_caller_identity" "current" {}
+
 module "migration_status_lambda" {
-  source         = "../../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-api/workflow-terraform/migration-cron/main/lambdas/migration-status.ts"
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/migration/migration-status.ts"
   handler_method = "handler"
   lambda_name    = "migration_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_role_${var.environment}"

@@ -1,13 +1,13 @@
 import {
   approvePendingJob,
   cancelWorkflow,
-} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+} from '../../../../shared/admin-tools/circleci/circleci-helper';
 import {
   getMetricStatistics,
   getMigrationQueueIsEmptyFlag,
   getSqsQueueCount,
   putMigrationQueueIsEmptyFlag,
-} from '../../../../../shared/admin-tools/aws/migrationWaitHelper';
+} from '../../../../shared/admin-tools/aws/migrationWaitHelper';
 import type { GetMetricStatisticsOutput } from '@aws-sdk/client-cloudwatch';
 import type { Handler } from 'aws-lambda';
 
