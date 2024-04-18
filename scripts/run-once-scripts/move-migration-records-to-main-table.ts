@@ -1,9 +1,13 @@
 // usage: npx ts-node --transpile-only scripts/run-once-scripts/move-migration-records-to-main-table.ts
 
-import { AttributeValue, DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+import {
+  AttributeValue,
+  DynamoDBClient,
+  ScanCommand,
+} from '@aws-sdk/client-dynamodb';
 import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { chunk } from 'lodash';
-import { getMigrationFiles } from '../../web-api/workflow-terraform/migration/bin/migrationFilesHelper';
+import { getMigrationFiles } from '../../scripts/dynamo/migrationFilesHelper.ts';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
@@ -24,7 +28,10 @@ const scanFull = async ({ TableName }: { TableName: string }) => {
 
   while (hasMoreResults) {
     hasMoreResults = false;
-    const nextScanCommand = new ScanCommand({ ExclusiveStartKey: lastKey, TableName });
+    const nextScanCommand = new ScanCommand({
+      ExclusiveStartKey: lastKey,
+      TableName,
+    });
     const results = await documentClient.send(nextScanCommand);
     hasMoreResults = !!results.LastEvaluatedKey;
     lastKey = results.LastEvaluatedKey;
@@ -68,11 +75,13 @@ const scanFull = async ({ TableName }: { TableName: string }) => {
       },
     }));
     if (putRequests.length > 0) {
-      commands.push(new BatchWriteCommand({
-        RequestItems: {
-          [mainTable]: putRequests,
-        },
-      }));
+      commands.push(
+        new BatchWriteCommand({
+          RequestItems: {
+            [mainTable]: putRequests,
+          },
+        }),
+      );
     }
 
     const deleteRequests = mrChunk.map(record => ({
@@ -82,11 +91,13 @@ const scanFull = async ({ TableName }: { TableName: string }) => {
     }));
     deleted += mrChunk.length;
     if (deleteRequests.length > 0) {
-      commands.push(new BatchWriteCommand({
-        RequestItems: {
-          [deployTable]: deleteRequests,
-        },
-      }));
+      commands.push(
+        new BatchWriteCommand({
+          RequestItems: {
+            [deployTable]: deleteRequests,
+          },
+        }),
+      );
     }
   }
 
