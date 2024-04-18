@@ -315,7 +315,7 @@ jobs:
       - run:
           name: Enable Check Reindex Status Cron
           command: |
-            ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
+            ./scripts/reindex/enable-reindex-cron.sh
       - run:
           name: Enable Destination Table Stream
           command: |
@@ -340,7 +340,7 @@ jobs:
       - run:
           name: Disable Check Reindex Status Cron
           command: |
-            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
+            ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
     docker:

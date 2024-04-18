@@ -1,6 +1,8 @@
+data "aws_caller_identity" "current" {}
+
 module "reindex_status_lambda" {
-  source         = "../../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.ts"
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/reindex/reindex-status.ts"
   handler_method = "handler"
   lambda_name    = "reindex_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_role_${var.environment}"
