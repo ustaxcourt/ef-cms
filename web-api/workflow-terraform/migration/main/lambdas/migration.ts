@@ -3,7 +3,7 @@ import {
   DynamoDBDocument,
   PutCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { DeleteRequest, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
@@ -58,33 +58,7 @@ export const processItems = async (
   }
 };
 
-export const getFilteredGlobalEvents = (
-  event: DynamoDBStreamEvent,
-): Record<string, any>[] | undefined => {
-  const { Records } = event;
-  return Records.filter(
-    item => item.eventName !== 'REMOVE' && !!item.dynamodb?.NewImage,
-  ).map(item => item.dynamodb!.NewImage!);
-};
-
-const generateDeleteRequests = (
-  event: DynamoDBStreamEvent,
-): { DeleteRequest: DeleteRequest }[] => {
-  const { Records } = event;
-  if (!Records) {
-    return [];
-  }
-  const removedItems = Records.filter(
-    item => item.eventName === 'REMOVE' && !!item.dynamodb?.OldImage,
-  ).map(item => item.dynamodb!.OldImage!);
-  return removedItems.map(item => ({
-    DeleteRequest: {
-      Key: { pk: item.pk.S, sk: item.sk.S } as Record<string, any>,
-    },
-  }));
-};
-
-export const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
   const applicationContext = createApplicationContext(
     {},
     createLogger({
@@ -99,22 +73,25 @@ export const handler: Handler = async (event, context) => {
     }),
   );
 
-  const items = getFilteredGlobalEvents(event);
+  const { Records } = event;
 
-  if (items) {
-    await processItems(applicationContext, {
-      items,
-      migrateRecords: migrations,
-    });
-  }
-
-  const deleteRequests = generateDeleteRequests(event);
-
-  for (const deleteRequest of deleteRequests) {
-    const deleteCommand = new DeleteCommand({
-      Key: deleteRequest.DeleteRequest.Key,
-      TableName: process.env.DESTINATION_TABLE!,
-    });
-    await docClient.send(deleteCommand);
+  for (const item of Records) {
+    if (item.dynamodb?.OldImage && item.eventName === 'REMOVE') {
+      const deleteCommand = new DeleteCommand({
+        Key: {
+          pk: item.dynamodb.OldImage.pk.S,
+          sk: item.dynamodb.OldImage.sk.S,
+        },
+        TableName: process.env.DESTINATION_TABLE!,
+      });
+      await docClient.send(deleteCommand);
+    } else if (item.dynamodb?.NewImage) {
+      // REMOVE events only have OldImage, not NewImage;
+      // we need to migrate this item
+      await processItems(applicationContext, {
+        items: [item.dynamodb.NewImage],
+        migrateRecords: migrations,
+      });
+    }
   }
 };
