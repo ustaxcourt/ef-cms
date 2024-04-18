@@ -1,7 +1,8 @@
+data "aws_caller_identity" "current" {}
 
 module "switch_colors_status_lambda" {
-  source         = "../../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-api/workflow-terraform/switch-colors-cron/main/lambdas/switch-colors.ts"
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/switch-colors/switch-colors-cron.ts"
   handler_method = "handler"
   lambda_name    = "switch_colors_status_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
