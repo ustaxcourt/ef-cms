@@ -32,6 +32,8 @@ export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
 
 ../../../../scripts/verify-terraform-version.sh
 
+npm run build:assets
+
 terraform init -upgrade -backend=true \
  -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
  -backend-config=key="migration-${ENVIRONMENT}.tfstate" \

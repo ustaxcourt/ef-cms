@@ -24,6 +24,8 @@ export TF_VAR_environment=$ENVIRONMENT
 
 ../../../../scripts/verify-terraform-version.sh
 
+npm run build:assets
+
 terraform init -upgrade -backend=true \
  -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
  -backend-config=key="wait-for-workflow-cron-${ENVIRONMENT}.tfstate" \
