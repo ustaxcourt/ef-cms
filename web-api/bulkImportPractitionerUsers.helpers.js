@@ -31,13 +31,13 @@ const formatRecord = record => {
     parseInt(record.birthYear) || DEFAULT_PRACTITIONER_BIRTH_YEAR;
 
   if (record.isIrsEmployee === 'Y') {
-    returnData.employer = 'IRS';
+    returnData.practiceType = 'IRS';
     returnData.role = ROLES.irsPractitioner;
   } else if (record.isDojEmployee === 'Y') {
-    returnData.employer = 'DOJ';
+    returnData.practiceType = 'DOJ';
     returnData.role = ROLES.irsPractitioner;
   } else {
-    returnData.employer = 'Private';
+    returnData.practiceType = 'Private';
     returnData.role = ROLES.privatePractitioner;
   }
 
