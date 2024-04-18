@@ -63,7 +63,7 @@ resource "aws_cognito_user_pool" "pool" {
         </div>
         <div style="margin-top: 20px;">NOTE:</div>
         <div>
-          1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.
+          1. Make sure your password is entered exactly as it appears in the welcome email -- it is case sensitive.
         </div>
         <div>
           2. Please copy and paste the temporary password versus trying to retype it.
@@ -255,7 +255,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
         </div>
         <div style="margin-top: 20px;">NOTE:</div>
         <div>
-          1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.
+          1. Make sure your password is entered exactly as it appears in the welcome email -- it is case sensitive.
         </div>
         <div>
           2. Please copy and paste the temporary password versus trying to retype it.

@@ -173,7 +173,6 @@ Here is an overview of the files associated with this terraform directory:
 │   ├── ... same scripts as web-api, but with tweak for support different variables
 └── main
     ├── api-gateway-authorizer.tf // code for creating the api authorizer
-    ├── clamav.tf // permissions related to clamav ec2 instance
     ├── cognito-authorizer.tf // permissions related to cognito authorizer
     ├── header-security.tf // permissions related to header security
     ├── lambda.tf // permissions related to all our lambdas (they share permissions)

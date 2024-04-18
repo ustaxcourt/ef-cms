@@ -78,12 +78,6 @@ export const HealthCheck = connect(
           item={health.s3.eastDocuments}
         />
       ),
-      s3EastQuarantine: (
-        <RenderHealthStatus
-          id="s3-east-quarantine"
-          item={health.s3.eastQuarantine}
-        />
-      ),
       s3EastTempDocuments: (
         <RenderHealthStatus
           id="s3-east-temp-documents"
@@ -98,12 +92,6 @@ export const HealthCheck = connect(
         <RenderHealthStatus
           id="s3-west-documents"
           item={health.s3.westDocuments}
-        />
-      ),
-      s3WestQuarantine: (
-        <RenderHealthStatus
-          id="s3-west-quarantine"
-          item={health.s3.westQuarantine}
         />
       ),
       s3WestTempDocuments: (
@@ -206,12 +194,6 @@ export const HealthCheck = connect(
                     </div>
                     {components.s3EastTempDocuments}
                   </div>
-                  <div className="margin-left-205 margin-bottom-205 grid-row">
-                    <div className="health-check-text  grid-col-9">
-                      quarantine
-                    </div>
-                    {components.s3EastQuarantine}
-                  </div>
                 </div>
                 <div className="card">
                   <h2 className="margin-top-2 margin-left-205">s3 West</h2>
@@ -227,12 +209,6 @@ export const HealthCheck = connect(
                       tempDocuments
                     </div>
                     {components.s3WestTempDocuments}
-                  </div>
-                  <div className="margin-left-205 margin-bottom-205 grid-row">
-                    <div className="health-check-text grid-col-9">
-                      quarantine
-                    </div>
-                    {components.s3WestQuarantine}
                   </div>
                 </div>
               </div>
@@ -310,10 +286,6 @@ export const HealthCheck = connect(
                   </div>
                   {components.s3EastTempDocuments}
                 </div>
-                <div className="margin-left-205 margin-bottom-205 grid-row">
-                  <div className="health-check-text grid-col-9">quarantine</div>
-                  {components.s3EastQuarantine}
-                </div>
               </div>
             </div>
             <div className="grid-row">
@@ -343,10 +315,6 @@ export const HealthCheck = connect(
                     tempDocuments
                   </div>
                   {components.s3WestTempDocuments}
-                </div>
-                <div className="margin-left-205 margin-bottom-205 grid-row">
-                  <div className="health-check-text grid-col-9">quarantine</div>
-                  {components.s3WestQuarantine}
                 </div>
               </div>
             </div>

@@ -102,13 +102,8 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when the provided email already exists for an account in the system and it has been confirmed', async () => {
-    applicationContext.getCognito().listUsers.mockResolvedValue({
-      Users: [
-        {
-          UserStatus: UserStatusType.CONFIRMED,
-          userId: mockUserId,
-        },
-      ],
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.CONFIRMED,
     });
 
     await expect(
@@ -121,13 +116,8 @@ describe('signUpUserInteractor', () => {
   });
 
   it('should throw an error when the provided email already exists for an account in the system and the account has not yet been confirmed', async () => {
-    applicationContext.getCognito().listUsers.mockResolvedValue({
-      Users: [
-        {
-          UserStatus: UserStatusType.UNCONFIRMED,
-          userId: mockUserId,
-        },
-      ],
+    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
+      accountStatus: UserStatusType.UNCONFIRMED,
     });
 
     await expect(
