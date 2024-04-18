@@ -23,21 +23,14 @@ type migrationsCallback = {
   ): Promise<any>;
 };
 
-const dynamodb = new DynamoDBClient({
-  maxAttempts: 10,
-  region: 'us-east-1',
-});
-
-const docClient = DynamoDBDocument.from(dynamodb, {
-  marshallOptions: { removeUndefinedValues: true },
-});
-
 export const processItems = async (
   applicationContext: IApplicationContext,
   {
+    docClient,
     items,
     migrateRecords,
   }: {
+    docClient: DynamoDBDocument;
     items: Record<string, any>[];
     migrateRecords: migrationsCallback;
   },
@@ -59,6 +52,15 @@ export const processItems = async (
 };
 
 export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
+  const dynamodb = new DynamoDBClient({
+    maxAttempts: 10,
+    region: 'us-east-1',
+  });
+
+  const docClient = DynamoDBDocument.from(dynamodb, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
+
   const applicationContext = createApplicationContext(
     {},
     createLogger({
@@ -89,6 +91,7 @@ export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
       // REMOVE events only have OldImage, not NewImage;
       // we need to migrate this item
       await processItems(applicationContext, {
+        docClient,
         items: [item.dynamodb.NewImage],
         migrateRecords: migrations,
       });
