@@ -1,4 +1,4 @@
-import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import { approvePendingJob } from '../../../../shared/admin-tools/circleci/circleci-helper';
 import type { Handler } from 'aws-lambda';
 
 export const handler: Handler = async () => {
