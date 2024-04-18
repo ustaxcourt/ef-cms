@@ -37,11 +37,14 @@ export const getPractitionersByNameInteractor = async (
   ).slice(0, MAX_SEARCH_RESULTS);
 
   return foundUsers.map(foundUser => ({
+    admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
     contact: {
       state: foundUser.contact.state,
     },
     name: foundUser.name,
+    practiceType: foundUser.practiceType,
+    practitionerType: foundUser.practitionerType,
   }));
 };

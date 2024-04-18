@@ -13,7 +13,15 @@ import { search } from './searchClient';
 export const getPractitionersByName = async ({ applicationContext, name }) => {
   const searchParameters = {
     body: {
-      _source: ['admissionsStatus', 'barNumber', 'contact', 'name'],
+      _source: [
+        'admissionsStatus',
+        'barNumber',
+        'contact',
+        'name',
+        'practitionerType',
+        'practiceType',
+        'admissionsDate',
+      ],
       query: {
         bool: {
           must: [

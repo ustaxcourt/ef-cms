@@ -58,6 +58,16 @@ export const advancedSearchHelper = (
         paginatedResults.searchResults.map(searchResult =>
           formatSearchResultRecord(searchResult, { applicationContext }),
         );
+    } else if (advancedSearchTab === 'practitioner') {
+      paginatedResults.formattedSearchResults =
+        paginatedResults.searchResults.map(searchResult => {
+          return {
+            ...searchResult,
+            admissionsDate: applicationContext
+              .getUtilities()
+              .formatDateString(searchResult.admissionsDate, 'MMDDYYYY'),
+          };
+        });
     } else {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }

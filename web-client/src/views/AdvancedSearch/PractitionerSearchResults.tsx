@@ -1,9 +1,12 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 export const PractitionerSearchResults = connect(
   {
@@ -16,6 +19,9 @@ export const PractitionerSearchResults = connect(
     MAX_SEARCH_RESULTS,
     showMoreResultsSequence,
   }) {
+    const [activePage, setActivePage] = useState(0);
+    const paginatorTop = useRef(null);
+
     return (
       <>
         {advancedSearchHelper.showSearchResults && (
@@ -31,6 +37,32 @@ export const PractitionerSearchResults = connect(
                 scrollToTop={false}
               />
             )}
+            <div ref={paginatorTop}>
+              {advancedSearchHelper.numberOfResults > 1 && (
+                <Paginator
+                  breakClassName="hide"
+                  forcePage={activePage}
+                  marginPagesDisplayed={0}
+                  pageCount={advancedSearchHelper.numberOfResults}
+                  pageRangeDisplayed={0}
+                  onPageChange={async pageChange => {
+                    setActivePage(pageChange.selected);
+                    // await getCustomCaseReportSequence({
+                    //   selectedPage: pageChange.selected,
+                    // });
+                    focusPaginatorTop(paginatorTop);
+                  }}
+                />
+              )}
+            </div>
+            <div className="text-right margin-bottom-2">
+              <span className="text-bold" id="custom-case-result-count">
+                Count: &nbsp;
+              </span>
+              <span data-testid="custom-case-report-count">
+                {formatPositiveNumber(advancedSearchHelper.numberOfResults)}
+              </span>
+            </div>
             <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
@@ -38,6 +70,9 @@ export const PractitionerSearchResults = connect(
                   <th>Name</th>
                   <th>State</th>
                   <th>Admissions Status</th>
+                  <th>Admissions Date</th>
+                  <th>Practitioner Type</th>
+                  <th>Practice Type</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +90,9 @@ export const PractitionerSearchResults = connect(
                     <td>{result.name}</td>
                     <td>{result.contact.state}</td>
                     <td>{result.admissionsStatus}</td>
+                    <td>{result.admissionsDate}</td>
+                    <td>{result.practitionerType}</td>
+                    <td>{result.practiceType}</td>
                   </tr>
                 ))}
               </tbody>
