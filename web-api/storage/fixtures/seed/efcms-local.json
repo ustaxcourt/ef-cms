@@ -55926,7 +55926,7 @@
   },
   {
     "entityName": "User",
-    "email": "caseservicessupervisor1@example.com",
+    "email": "caseServicesSupervisor1@example.com",
     "name": "Test caseServicesSupervisor1",
     "role": "caseServicesSupervisor",
     "userId": "91bae3e8-3079-43a6-920d-b74ed9c649d4",

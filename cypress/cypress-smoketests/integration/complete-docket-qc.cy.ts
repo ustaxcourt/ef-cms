@@ -1,3 +1,4 @@
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { attachDummyFile } from '../../helpers/attach-file';
 import {
   loginAsAdmissionsClerk,
@@ -10,20 +11,26 @@ import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-num
 describe('Document QC Complete', () => {
   let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
     undefined as unknown as { userId: string; name: string };
+  let DOCKET_CLERK_INFO: { userId: string; name: string } =
+    undefined as unknown as { userId: string; name: string };
 
   const docketSectionMessage = 'To CSS under Docket Section';
   const petitionsSectionMessage = 'To CSS under Petitions Section';
 
   before(() => {
     cy.intercept('GET', '**/users', req => {
-      req.continue(res => {
-        if (!CASE_SERVICE_SUPERVISOR_INFO) {
+      req.on('before:response', res => {
+        if (res.body.role === ROLES.caseServicesSupervisor) {
           CASE_SERVICE_SUPERVISOR_INFO = res.body;
+        }
+        if (res.body.role === ROLES.docketClerk) {
+          DOCKET_CLERK_INFO = res.body;
         }
       });
     });
 
-    cy.login('caseservicessupervisor1');
+    cy.login('caseServicesSupervisor1');
+    cy.login('docketclerk1');
 
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
@@ -110,19 +117,17 @@ describe('Document QC Complete', () => {
       '/document-qc/section/inbox/selectedSection?section=docket',
     );
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-      cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
-
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
 
       cy.get('[data-testid="dropdown-select-assignee"]').select(
-        'Test Docketclerk',
+        DOCKET_CLERK_INFO.name,
       );
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="table-column-work-item-assigned-to"]')
-        .should('have.text', 'Test Docketclerk');
+        .should('have.text', DOCKET_CLERK_INFO.name);
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('.message-document-title')
