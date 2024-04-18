@@ -77,6 +77,10 @@ export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
 
   const { Records } = event;
 
+  // processItems (appContext, {docClient, Records})
+
+  // processItems (appContext, {docClient, Records}) {
+
   for (const item of Records) {
     if (item.dynamodb?.OldImage && item.eventName === 'REMOVE') {
       const deleteCommand = new DeleteCommand({
@@ -97,4 +101,6 @@ export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
       });
     }
   }
+
+  // }
 };

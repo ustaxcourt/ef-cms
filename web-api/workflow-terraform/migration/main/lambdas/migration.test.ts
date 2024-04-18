@@ -1,18 +1,86 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Context } from 'aws-lambda';
 import {
+  DeleteCommand,
   DynamoDBDocument,
   DynamoDBDocumentClient,
   PutCommand,
 } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { handler, processItems } from './migration';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
-import { processItems } from './migration';
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
 describe('migration', () => {
+  const mockContext = {
+    fail: jest.fn(),
+    succeed: jest.fn(),
+  } as unknown as Context;
+
+  describe('handler', () => {
+    beforeEach(() => {
+      ddbMock.reset();
+      ddbMock.on(DeleteCommand).resolves({});
+    });
+
+    it('deletes records that have an eventName of REMOVE', async () => {
+      const deleteItem = {
+        dynamodb: {
+          OldImage: {
+            pk: {
+              S: 'case|123',
+            },
+            sk: {
+              S: 'user|456',
+            },
+          },
+        },
+        eventName: 'REMOVE',
+      };
+
+      const putItem = {
+        dynamodb: {
+          NewImage: {
+            pk: {
+              S: 'case|123',
+            },
+            sk: {
+              S: 'user|456',
+            },
+            value: {
+              S: 'new',
+            },
+          },
+          OldImage: {
+            pk: {
+              S: 'case|123',
+            },
+            sk: {
+              S: 'user|456',
+            },
+            value: { S: 'old' },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
+      const mockRecords = [deleteItem, putItem];
+
+      await handler(
+        {
+          Records: mockRecords,
+        },
+        mockContext,
+        () => {},
+      );
+
+      expect(ddbMock.commandCalls(DeleteCommand).length).toBe(1);
+    });
+  });
+
   describe('processItems', () => {
     beforeEach(() => {
       ddbMock.reset();
