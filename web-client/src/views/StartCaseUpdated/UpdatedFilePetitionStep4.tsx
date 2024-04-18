@@ -39,7 +39,7 @@ export const UpdatedFilePetitionStep4 = connect(
           <Button
             link
             className="usa-link--external text-left mobile-text-wrap"
-            href="https://www.test.com/"
+            href="https://ustaxcourt.gov/case_procedure.html"
             overrideMargin="margin-right-1"
             rel="noopener noreferrer"
             target="_blank"
