@@ -1,4 +1,4 @@
-import * as checkReindexComplete from '../../../../../scripts/elasticsearch/check-reindex-complete';
+import * as checkReindexComplete from '../../../../scripts/elasticsearch/check-reindex-complete';
 import { handler } from './reindex-status';
 import axios from 'axios';
 import type { Context } from 'aws-lambda';
