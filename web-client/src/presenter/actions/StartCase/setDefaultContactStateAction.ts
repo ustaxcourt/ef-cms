@@ -34,12 +34,13 @@ export const setDefaultContactStateAction = ({
     // spouse deceased
     store.set(state.form.contactSecondary, {});
     store.set(state.form.useSameAsPrimary, true);
-    store.unset(state.form.hasSpouseConsent);
+    store.set(state.form.hasSpouseConsent, false);
   } else if (showContactPrimary) {
     store.set(state.form.contactPrimary, defaultContact);
   } else {
     // spouse live
-    store.unset(state.form.contactSecondary);
+    store.set(state.form.contactSecondary, {});
+    store.set(state.form.hasSpouseConsent, false);
     store.unset(state.form.hasSpouseConsent);
     store.unset(state.form.useSameAsPrimary);
   }
