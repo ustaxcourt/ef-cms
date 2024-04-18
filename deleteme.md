@@ -1,0 +1,4 @@
+- Move files from scripts/dynamo to scripts/migration
+- Update documentation around anything having to do with workflow-terraform/ directory
+- Add blue green migrations for UI
+- Delete environment specific terraform.
