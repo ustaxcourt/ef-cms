@@ -21,20 +21,13 @@ describe('Document QC Complete', () => {
       req.continue(res => {
         if (!CASE_SERVICE_SUPERVISOR_INFO) {
           CASE_SERVICE_SUPERVISOR_INFO = res.body;
-        }
-      });
-    });
-
-    cy.login('caseServicesSupervisor1');
-
-    cy.intercept('GET', '**/users', req => {
-      req.continue(res => {
-        if (!DOCKET_CLERK_INFO) {
+        } else if (!DOCKET_CLERK_INFO) {
           DOCKET_CLERK_INFO = res.body;
         }
       });
     });
 
+    cy.login('caseServicesSupervisor1');
     cy.login('docketclerk1');
 
     loginAsPetitioner();
