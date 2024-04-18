@@ -1,8 +1,8 @@
-
+data "aws_caller_identity" "current" {}
 
 module "wait_for_workflow_lambda" {
-  source         = "../../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-api/workflow-terraform/wait-for-workflow-cron/main/lambdas/wait-for-workflow.ts"
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/wait-for-workflow/wait-for-workflow-cron.ts"
   handler_method = "handler"
   lambda_name    = "wait_for_workflow_lambda_${var.environment}"
   role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_role_${var.environment}"

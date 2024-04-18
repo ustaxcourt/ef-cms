@@ -2,7 +2,7 @@ import {
   approvePendingJob,
   cancelWorkflow,
   getPipelineStatus,
-} from '../../../../../shared/admin-tools/circleci/circleci-helper';
+} from '../../../../shared/admin-tools/circleci/circleci-helper';
 import type { Handler } from 'aws-lambda';
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN!;
