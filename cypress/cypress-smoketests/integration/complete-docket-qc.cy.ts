@@ -19,7 +19,7 @@ describe('Document QC Complete', () => {
 
   before(() => {
     cy.intercept('GET', '**/users', req => {
-      req.continue(res => {
+      req.on('before:response', res => {
         if (!CASE_SERVICE_SUPERVISOR_INFO) {
           CASE_SERVICE_SUPERVISOR_INFO = res.body;
         } else if (!DOCKET_CLERK_INFO) {
@@ -116,11 +116,6 @@ describe('Document QC Complete', () => {
       '/document-qc/section/inbox/selectedSection?section=docket',
     );
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-      retry(() => {
-        cy.reload(true);
-        return assertExists(`[data-testid="work-item-${docketNumber}"]`);
-      });
-
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
