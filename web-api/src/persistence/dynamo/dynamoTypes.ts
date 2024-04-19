@@ -13,6 +13,7 @@ export type TDynamoRecord<T = Record<string, any>> = {
   pk: string;
   sk: string;
   gsi1pk?: string;
+  gsi2pk?: string; // deprecated; can remove after #10252 is deployed
   gsiUserBox?: string;
   gsiSectionBox?: string;
   ttl?: number;
