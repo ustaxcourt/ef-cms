@@ -1,5 +1,42 @@
 data "aws_caller_identity" "current" {}
 
+resource "aws_iam_role" "s3_replication_role" {
+  name = "s3_replication_role_${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "s3_replication_policy" {
+  name = "s3_replication_policy_${var.environment}"
+  role = aws_iam_role.s3_replication_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:*",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_s3_bucket" "documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
@@ -30,7 +67,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   }
 
   replication_configuration {
-    role = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_${var.environment}"
+    role = aws_iam_role.s3_replication_role.arn
 
     rules {
       status = "Enabled"
