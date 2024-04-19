@@ -1,5 +1,5 @@
 resource "aws_iam_role" "strip_basepath_lambda_role" {
-  name = "strip_basepath_lambda_role_${var.environment}"
+  name = "strip_basepath_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

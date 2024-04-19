@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "reindex_status_role" {
-  name = "reindex_status_role_${var.environment}"
+  name = "reindex_status_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

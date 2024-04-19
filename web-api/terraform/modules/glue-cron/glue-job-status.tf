@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "glue_job_status_role" {
-  name = "glue_job_status_role_${var.environment}"
+  name = "glue_job_status_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

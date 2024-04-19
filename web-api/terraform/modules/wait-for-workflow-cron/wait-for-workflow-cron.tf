@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "wait_for_workflow_role" {
-  name = "wait_for_workflow_role_${var.environment}"
+  name = "wait_for_workflow_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
