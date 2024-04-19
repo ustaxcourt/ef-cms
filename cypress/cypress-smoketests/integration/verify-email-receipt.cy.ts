@@ -7,7 +7,11 @@ import {
 } from '../../cypress-integration/support/pages/my-account';
 import { navigateTo } from '../../cypress-integration/support/pages/maintenance';
 
-if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
+if (
+  !Cypress.env('SMOKETESTS_LOCAL') &&
+  !Cypress.env('MIGRATE') &&
+  !Cypress.env('DISABLE_EMAILS')
+) {
   describe('Verify verification email', () => {
     const bucketName = Cypress.env('SMOKETEST_BUCKET');
     const emailDomain = Cypress.env('EFCMS_DOMAIN');
@@ -45,7 +49,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
     });
   });
 } else {
-  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
+  describe('we do not want this test to run locally or in environments with emails disabled, so we mock out a test to make it skip', () => {
     it('should skip', () => {
       expect(true).to.equal(true);
     });
