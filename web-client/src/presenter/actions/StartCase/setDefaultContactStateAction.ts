@@ -15,6 +15,7 @@ export const setDefaultContactStateAction = ({
 
   const { showContactPrimary, showContactSecondary } =
     showContactsHelperUpdated(partyType, PARTY_TYPES, props);
+
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   const defaultContact = showContactPrimary
@@ -35,13 +36,9 @@ export const setDefaultContactStateAction = ({
     store.set(state.form.contactSecondary, {});
     store.set(state.form.useSameAsPrimary, true);
     store.set(state.form.hasSpouseConsent, false);
-  } else if (showContactPrimary) {
-    store.set(state.form.contactPrimary, defaultContact);
   } else {
-    // spouse live
     store.set(state.form.contactSecondary, {});
     store.set(state.form.hasSpouseConsent, false);
-    store.unset(state.form.hasSpouseConsent);
-    store.unset(state.form.useSameAsPrimary);
+    store.set(state.form.useSameAsPrimary, false);
   }
 };

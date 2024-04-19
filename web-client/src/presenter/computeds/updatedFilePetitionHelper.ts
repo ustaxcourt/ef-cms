@@ -13,6 +13,10 @@ interface IOtherContactNameLabel {
   primaryLabel: string;
   secondaryLabel?: string;
   secondaryLabelNote?: string;
+  showInCareOf?: boolean;
+  showInCareOfOptional?: boolean;
+  titleLabel?: string;
+  titleLabelNote?: string;
 }
 
 type UpdatedFilePetitionHelper = {
@@ -88,16 +92,16 @@ function getOtherContactNameLabel(
       };
     case PARTY_TYPES.estate:
       return {
-        additionalLabel: 'Title',
-        additionalLabelNote: 'For example: executor, PR, etc.',
         primaryLabel: 'Full name of decedent',
         secondaryLabel: 'Full name of executor/personal representative, etc.',
+        titleLabel: 'Title',
+        titleLabelNote: 'For example: executor, PR, etc.',
       };
     case PARTY_TYPES.estateWithoutExecutor:
       return {
         primaryLabel: 'Full name of decedent',
-        secondaryLabel: 'In care of',
-        secondaryLabelNote: 'optional',
+        showInCareOf: true,
+        showInCareOfOptional: true,
       };
     case PARTY_TYPES.trust:
       return {

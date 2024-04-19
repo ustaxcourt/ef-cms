@@ -1,6 +1,7 @@
 import { Address } from './Address';
 import { Country } from './Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { InCareOf } from '@web-client/views/StartCase/ContactSecondaryUpdated';
 import { InternationalAddress } from './InternationalAddress';
 import { PlaceOfLegalResidenceDropdown } from '@web-client/views/StartCase/PlaceOfLegalResidenceDropdown';
 import { props as cerebralProps } from 'cerebral';
@@ -14,19 +15,18 @@ const props = cerebralProps as unknown as {
   onBlur: string;
   onChange: string;
   nameLabel: string;
-  displayInCareOf?: boolean;
   showPlaceOfLegalResidence?: boolean;
   secondaryLabelNote?: string;
   secondaryLabel?: string;
-  additionalLabel?: string;
-  additionalLabelNote?: string;
+  titleLabel?: string;
+  titleLabelNote?: string;
   placeOfLegalResidenceTitle?: string;
+  showInCareOf?: boolean;
+  showInCareOfOptional?: boolean;
 };
 
 export const ContactPrimaryUpdated = connect(
   {
-    additionalLabel: props.additionalLabel,
-    additionalLabelNote: props.additionalLabelNote,
     bind: props.bind,
     constants: state.constants,
     data: state[props.bind],
@@ -38,14 +38,16 @@ export const ContactPrimaryUpdated = connect(
     placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
     secondaryLabel: props.secondaryLabel,
     secondaryLabelNote: props.secondaryLabelNote,
+    showInCareOf: props.showInCareOf,
+    showInCareOfOptional: props.showInCareOfOptional,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
+    titleLabel: props.titleLabel,
+    titleLabelNote: props.titleLabelNote,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
   function ContactPrimaryUpdated({
-    additionalLabel,
-    additionalLabelNote,
     bind,
     constants,
     data,
@@ -57,7 +59,11 @@ export const ContactPrimaryUpdated = connect(
     placeOfLegalResidenceTitle,
     secondaryLabel,
     secondaryLabelNote,
+    showInCareOf,
+    showInCareOfOptional,
     showPlaceOfLegalResidence,
+    titleLabel,
+    titleLabelNote,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {} as {
       contactPrimary?: {
@@ -135,14 +141,25 @@ export const ContactPrimaryUpdated = connect(
               />
             </FormGroup>
           )}
-          {additionalLabel && (
+
+          {showInCareOf && (
+            <InCareOf
+              inCareOf={data.contactPrimary.inCareOf}
+              isOptional={showInCareOfOptional}
+              type="contactPrimary"
+              validationErrors={validationErrors}
+              onChangeSequence={onChangeSequence}
+            />
+          )}
+
+          {titleLabel && (
             <FormGroup>
-              <label className="usa-label" htmlFor="inCareOf">
-                {additionalLabel}
-                {additionalLabelNote && (
+              <label className="usa-label" htmlFor="title">
+                {titleLabel}
+                {titleLabelNote && (
                   <>
                     {' '}
-                    <span className="usa-hint">({additionalLabelNote})</span>
+                    <span className="usa-hint">({titleLabelNote})</span>
                   </>
                 )}
               </label>
