@@ -27,10 +27,11 @@ export const getPractitionersByName = async ({ applicationContext, name }) => {
           must: [
             ...IS_PRACTITIONER,
             {
-              simple_query_string: {
-                default_operator: 'and',
-                fields: ['name.S'],
-                query: name,
+              match: {
+                'name.S': {
+                  fuzziness: 'AUTO',
+                  query: name,
+                },
               },
             },
           ],
