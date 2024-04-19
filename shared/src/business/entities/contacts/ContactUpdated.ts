@@ -25,6 +25,8 @@ export class ContactUpdated extends JoiValidationEntity {
   public petitionType: string;
   public partyType: string;
   public hasConsentedToEService?: boolean;
+  public secondaryName?: string;
+  public title?: string;
 
   constructor(
     rawContact,
@@ -47,6 +49,8 @@ export class ContactUpdated extends JoiValidationEntity {
     this.petitionType = petitionType;
     this.partyType = partyType;
     this.hasConsentedToEService = rawContact.hasConsentedToEService;
+    this.secondaryName = rawContact.secondaryName;
+    this.title = rawContact.title;
   }
 
   static SHARED_VALIDATION_RULES = {
@@ -110,7 +114,6 @@ export class ContactUpdated extends JoiValidationEntity {
   } as const;
 
   getValidationRules() {
-    console.log('in get validation rules', this.countryType);
     return this.countryType === COUNTRY_TYPES.INTERNATIONAL
       ? ContactUpdated.INTERNATIONAL_VALIDATION_RULES
       : ContactUpdated.DOMESTIC_VALIDATION_RULES;

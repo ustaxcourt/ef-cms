@@ -28,8 +28,8 @@ export const ContactSecondaryUpdated = connect(
     data: state[props.bind],
     displayInCareOf: props.displayInCareOf,
     nameLabel: props.nameLabel,
-    //   onBlur: props.onBlur,
-    //   onBlurSequence: sequences[props.onBlur],
+    // onBlur: props.onBlur,
+    // onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
 
     onChangeSequence: sequences[props.onChange],
@@ -93,6 +93,7 @@ export const ContactSecondaryUpdated = connect(
           {displayInCareOf && (
             <InCareOf
               inCareOf={data.contactSecondary.inCareOf}
+              type="contactSecondary"
               validationErrors={validationErrors}
               onChangeSequence={onChangeSequence}
             />
@@ -108,7 +109,7 @@ export const ContactSecondaryUpdated = connect(
               <Country
                 bind={bind}
                 type="contactSecondary"
-                // onBlur={onBlur}
+                // onBlur={onBlurSequence}
                 onChange={onChangeSequence}
               />
               {data.contactSecondary.countryType ===
@@ -116,7 +117,7 @@ export const ContactSecondaryUpdated = connect(
                 <Address
                   bind={bind}
                   type="contactSecondary"
-                  // onBlur={onBlur}
+                  // onBlur={onBlurSequence}
                   onChange={onChange}
                 />
               )}
@@ -125,7 +126,7 @@ export const ContactSecondaryUpdated = connect(
                 <InternationalAddress
                   bind={bind}
                   type="contactSecondary"
-                  // onBlur={onBlur}
+                  // onBlur={onBlurSequence}
                   onChange={onChange}
                 />
               )}
@@ -133,6 +134,7 @@ export const ContactSecondaryUpdated = connect(
                 <PlaceOfLegalResidenceDropdown
                   bind={bind}
                   type="contactSecondary"
+                  // onBlur={onBlurSequence}
                   onChange={onChange}
                 />
               )}
@@ -246,22 +248,31 @@ function SameAddressCheckbox({
   );
 }
 
-function InCareOf({ inCareOf, onChangeSequence, validationErrors }) {
+export function InCareOf({
+  inCareOf,
+  isOptional = false,
+  onChangeSequence,
+  type,
+  validationErrors,
+}) {
   return (
     <FormGroup
-      errorText={
-        validationErrors.contactSecondary &&
-        validationErrors.contactSecondary.inCareOf
-      }
+      errorText={validationErrors[type] && validationErrors[type].inCareOf}
     >
       <label className="usa-label" htmlFor="inCareOf">
         <span>In care of</span>
+        {isOptional && (
+          <>
+            {' '}
+            <span className="usa-hint">(optional)</span>
+          </>
+        )}
       </label>
       <input
         autoCapitalize="none"
         className="usa-input"
         id="inCareOf"
-        name="contactSecondary.inCareOf"
+        name={`${type}.inCareOf`}
         type="text"
         value={inCareOf || ''}
         onBlur={() => {

@@ -2,23 +2,8 @@ import { BusinessContact } from './BusinessContact';
 import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
 import { ContactUpdated } from '@shared/business/entities/contacts/ContactUpdated';
 import { DeceasedSpouseContact } from '@shared/business/entities/contacts/DeceasedSpouseContact';
+import { OtherContact } from '@shared/business/entities/contacts/OtherContact';
 import { SpouseContact } from '@shared/business/entities/contacts/SpouseContact';
-// import { NextFriendForIncompetentPersonContact } from './NextFriendForIncompetentPersonContact';
-// import { NextFriendForMinorContact } from './NextFriendForMinorContact';
-// import { PartnershipAsTaxMattersPartnerPrimaryContact } from './PartnershipAsTaxMattersPartnerContact';
-// import { PartnershipBBAPrimaryContact } from './PartnershipBBAContact';
-// import { PartnershipOtherThanTaxMattersPrimaryContact } from './PartnershipOtherThanTaxMattersContact';
-// import { PetitionerConservatorContact } from './PetitionerConservatorContact';
-// import { PetitionerCorporationContact } from './PetitionerCorporationContact';
-// import { PetitionerCustodianContact } from './PetitionerCustodianContact';
-// import { PetitionerDeceasedSpouseContact } from './PetitionerDeceasedSpouseContact';
-// import { PetitionerEstateWithExecutorPrimaryContact } from './PetitionerEstateWithExecutorPrimaryContact';
-// import { PetitionerGuardianContact } from './PetitionerGuardianContact';
-// import { PetitionerIntermediaryContact } from './PetitionerIntermediaryContact';
-// import { PetitionerPrimaryContact } from './PetitionerPrimaryContact';
-// import { PetitionerSpouseContact } from './PetitionerSpouseContact';
-// import { PetitionerTrustContact } from './PetitionerTrustContact';
-// import { SurvivingSpouseContact } from './SurvivingSpouseContact';
 
 export function ContactFactoryUpdated({
   contactInfo,
@@ -62,16 +47,6 @@ export function ContactFactoryUpdated({
         partyType,
       ),
     };
-    // {
-    //   primary: new PetitionerPrimaryContact(
-    //     { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-    //     { applicationContext },
-    //   ),
-    //   secondary: new PetitionerDeceasedSpouseContact(
-    //     { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
-    //     { applicationContext },
-    //   ),
-    // };
   }
 
   if (PARTY_TYPES.petitionerSpouse) {
@@ -89,6 +64,25 @@ export function ContactFactoryUpdated({
     };
   }
 
+  if (
+    [
+      PARTY_TYPES.estate,
+      PARTY_TYPES.estateWithoutExecutor,
+      PARTY_TYPES.trust,
+      PARTY_TYPES.conservator,
+      PARTY_TYPES.guardian,
+      PARTY_TYPES.custodian,
+      PARTY_TYPES.nextFriendForMinor,
+      PARTY_TYPES.nextFriendForIncompetentPerson,
+      PARTY_TYPES.survivingSpouse,
+    ].includes(partyType)
+  ) {
+    return {
+      primary: new OtherContact(contactInfo, petitionType, partyType),
+      secondary: null,
+    };
+  }
+
   return {
     primary: new ContactUpdated(
       contactInfo,
@@ -98,154 +92,4 @@ export function ContactFactoryUpdated({
     ),
     secondary: null,
   };
-  // primary: new PetitionerPrimaryContact(
-  //   { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //   { applicationContext },
-  // ),
-
-  // switch (partyType) {
-  //   case PARTY_TYPES.donor:
-  //   case PARTY_TYPES.transferee:
-  //   case PARTY_TYPES.petitioner:
-  //     return {
-  //       primary: new PetitionerPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.conservator:
-  //     return {
-  //       primary: new PetitionerConservatorContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //     };
-  //   case PARTY_TYPES.corporation:
-  //     return {
-  //       primary: new PetitionerCorporationContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.custodian:
-  //     return {
-  //       primary: new PetitionerCustodianContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.estate:
-  //     return {
-  //       primary: new PetitionerEstateWithExecutorPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.estateWithoutExecutor:
-  //     return {
-  //       primary: new PetitionerIntermediaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.guardian:
-  //     return {
-  //       primary: new PetitionerGuardianContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.nextFriendForIncompetentPerson:
-  //     return {
-  //       primary: new NextFriendForIncompetentPersonContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.nextFriendForMinor:
-  //     return {
-  //       primary: new NextFriendForMinorContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.partnershipAsTaxMattersPartner:
-  //     return {
-  //       primary: new PartnershipAsTaxMattersPartnerPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.partnershipBBA:
-  //     return {
-  //       primary: new PartnershipBBAPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.partnershipOtherThanTaxMatters:
-  //     return {
-  //       primary: new PartnershipOtherThanTaxMattersPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.petitionerDeceasedSpouse:
-  //     return {
-  //       primary: new PetitionerPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: new PetitionerDeceasedSpouseContact(
-  //         { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
-  //         { applicationContext },
-  //       ),
-  //     };
-  //   case PARTY_TYPES.petitionerSpouse:
-  //     return {
-  //       primary: new PetitionerPrimaryContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: new PetitionerSpouseContact(
-  //         { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
-  //         { applicationContext },
-  //       ),
-  //     };
-  //   case PARTY_TYPES.survivingSpouse:
-  //     return {
-  //       primary: new SurvivingSpouseContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   case PARTY_TYPES.trust:
-  //     return {
-  //       primary: new PetitionerTrustContact(
-  //         { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
-  //         { applicationContext },
-  //       ),
-  //       secondary: null,
-  //     };
-  //   default:
-  //     if (partyType) {
-  //       throw new Error(`Unrecognized party type "${partyType}"`);
-  //     }
-  //     return {
-  //       primary: {},
-  //       secondary: null,
-  //     };
-  // }
 }

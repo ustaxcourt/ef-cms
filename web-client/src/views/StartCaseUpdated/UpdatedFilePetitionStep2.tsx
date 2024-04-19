@@ -502,12 +502,15 @@ function OtherContactInformation({
 }) {
   return (
     <ContactPrimaryUpdated
-      additionalLabel={otherContactNameLabel.additionalLabel}
-      additionalLabelNote={otherContactNameLabel.additionalLabelNote}
       bind="form"
       nameLabel={otherContactNameLabel.primaryLabel}
       secondaryLabel={otherContactNameLabel.secondaryLabel}
+      showInCareOf={otherContactNameLabel.showInCareOf}
+      showInCareOfOptional={otherContactNameLabel.showInCareOfOptional}
       showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+      titleLabel={otherContactNameLabel.titleLabel}
+      titleLabelNote={otherContactNameLabel.titleLabelNote}
+      onBlur="clearFormValidationErrorSequence"
       onChange="updateFormValueSequence"
     />
   );
@@ -519,12 +522,7 @@ function SecondaryEstateOptions({
   updateFilingTypeSequence,
 }) {
   return (
-    <div
-      className={classNames(
-        'ustc-secondary-question',
-        // validationErrors.partyType && 'usa-form-group--error',
-      )}
-    >
+    <div className="ustc-secondary-question">
       <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
         <legend id="estate-type-legend">
           What type of estate or trust are you filing for?
@@ -571,12 +569,7 @@ function SecondaryMinorIncompetentOptions({
   updateFilingTypeSequence,
 }) {
   return (
-    <div
-      className={classNames(
-        'ustc-secondary-question',
-        // validationErrors.partyType && 'usa-form-group--error',
-      )}
-    >
+    <div className="ustc-secondary-question">
       <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
         <legend id="estate-type-legend">
           What is your role in filing for this minor or legally incompetent
