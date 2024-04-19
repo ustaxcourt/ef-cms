@@ -1,11 +1,58 @@
 data "aws_caller_identity" "current" {}
 
+resource "aws_iam_role" "wait_for_workflow_role" {
+  name = "wait_for_workflow_role_${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+
+resource "aws_iam_role_policy" "wait_for_workflow_policy" {
+  name = "wait_for_workflow_policy_${var.environment}"
+  role = aws_iam_role.wait_for_workflow_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+
 module "wait_for_workflow_lambda" {
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/wait-for-workflow/wait-for-workflow-cron.ts"
   handler_method = "handler"
   lambda_name    = "wait_for_workflow_lambda_${var.environment}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_role_${var.environment}"
+  role           = aws_iam_role.wait_for_workflow_role.arn
   environment = {
     STAGE                     = var.environment
     NODE_ENV                  = "production"
