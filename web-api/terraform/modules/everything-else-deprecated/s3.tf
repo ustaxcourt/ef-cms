@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "s3_replication_role" {
-  name = "s3_replication_role_${var.environment}"
+  name = "s3_bucket_replication_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

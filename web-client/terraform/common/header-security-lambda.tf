@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_iam_role" "header_security_lambda_role" {
-  name = "header_security_lambda_role_${var.environment}"
+  name = "header_security_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

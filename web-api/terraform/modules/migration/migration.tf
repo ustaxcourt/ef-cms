@@ -1,5 +1,5 @@
 resource "aws_iam_role" "migration_role" {
-  name = "migration_role_${var.environment}"
+  name = "migration_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
