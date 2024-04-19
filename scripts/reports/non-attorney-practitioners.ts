@@ -3,10 +3,13 @@
 // npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
 
 import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import {
   calculateDifferenceInDays,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { pick, sortBy } from 'lodash';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
@@ -100,7 +103,7 @@ const formatNonAttorneys = ({
 const retrieveNonAttorneys = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }): Promise<{
   [key: string]: tNonAttorney;
 }> => {
@@ -163,7 +166,7 @@ const retrieveCases = async ({
   applicationContext,
   userIds,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   userIds: string[];
 }): Promise<tCase[]> => {
   const searchParameters = {
@@ -229,7 +232,7 @@ const retrieveDocketEntries = async ({
   applicationContext,
   docketNumbers,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumbers: string[];
 }): Promise<tDocketEntry[]> => {
   const searchParameters = {
@@ -519,7 +522,9 @@ const outputStatsRow = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
+  const applicationContext: ServerApplicationContext = createApplicationContext(
+    {},
+  );
   const nonAttorneys = await retrieveNonAttorneys({ applicationContext });
   const cases = await retrieveCases({
     applicationContext,
