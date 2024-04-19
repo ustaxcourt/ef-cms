@@ -1,18 +1,14 @@
 import { UploadPetitionStep3 } from '@shared/business/entities/startCase/UploadPetitionStep3';
-import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateUploadPetitionStep3Action = ({
-  get,
   path,
-}: ActionProps<{ selectedPage: number }>) => {
-  const { caseType, hasIrsNotice } = get(state.form);
-  const irsNotices = get(state.irsNoticeUploadFormInfo);
+  props,
+}: ActionProps<{ step3Data: any }>) => {
+  const { step3Data } = props;
 
-  const errors = new UploadPetitionStep3({
-    caseType,
-    hasIrsNotice,
-    irsNotices,
-  }).getFormattedValidationErrors();
+  const errors = new UploadPetitionStep3(
+    step3Data,
+  ).getFormattedValidationErrors();
 
   return errors
     ? path.error({
