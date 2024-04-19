@@ -5,7 +5,7 @@ module "worker_lambda" {
   handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/worker-handler.ts"
   handler_method = "workerHandler"
   lambda_name    = "worker_lambda_${var.environment}_${var.color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "900"
   memory_size    = "3008"

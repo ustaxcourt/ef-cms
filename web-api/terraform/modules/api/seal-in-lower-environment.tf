@@ -4,7 +4,7 @@ module "zip_seal" {
   handler_file   = "./web-api/src/lambdas/cases/sealInLowerEnvironmentLambda.ts"
   handler_method = "sealInLowerEnvironmentLambda"
   lambda_name    = "seal_in_lower_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "60"
 }

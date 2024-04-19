@@ -88,7 +88,15 @@ data "null_data_source" "locals" {
   }
 }
 
+module "lambda_role_green" {
+  source      = "../../modules/lambda-role"
+  role_name   = "lambda_role_${var.environment}_green"
+  environment = var.environment
+  dns_domain  = var.dns_domain
+}
+
 module "api-east-green" {
+  lambda_role_arn     = module.lambda_role_green.role_arn
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   environment         = var.environment
@@ -126,6 +134,7 @@ module "api-east-green" {
 }
 module "api-west-green" {
   source              = "../../modules/api"
+  lambda_role_arn     = module.lambda_role_green.role_arn
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
   environment         = var.environment
   dns_domain          = var.dns_domain
@@ -165,6 +174,7 @@ module "api-west-green" {
 
 module "worker-east-green" {
   source              = "../../modules/worker"
+  lambda_role_arn     = module.lambda_role_green.role_arn
   color               = "green"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
@@ -181,6 +191,7 @@ module "worker-east-green" {
 
 module "worker-west-green" {
   source              = "../../modules/worker"
+  lambda_role_arn     = module.lambda_role_green.role_arn
   color               = "green"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
