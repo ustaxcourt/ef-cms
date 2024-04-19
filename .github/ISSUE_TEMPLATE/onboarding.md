@@ -17,6 +17,7 @@ Welcome to the team! 🎉 😎
 - [ ] Zoom — speak with your team lead to get access to Zoom if you will be hosting meetings.
 - [ ] Zendesk — get access only if you will be providing customer support.
 - [ ] Trello — used for some backlogs (see the [README](https://github.com/ustaxcourt/ef-cms/blob/staging/README.md)). Work with your team lead to gain access.
+- [ ] Zenhub — used for story, bug, and Devex/Opex backlogs (see the [Zenhub docs](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/zenhub.md)). 
 
 #### Access to application data
 
