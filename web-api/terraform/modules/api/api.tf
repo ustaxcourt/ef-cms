@@ -134,7 +134,7 @@ module "cognito_authorizer_lambda" {
   handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/cognito-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "cognito_authorizer_lambda_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
+  role           = aws_iam_role.authorizer_lambda.arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
