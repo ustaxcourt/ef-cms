@@ -36,7 +36,7 @@ export const ContactSecondaryUpdated = connect(
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
-    //   validationErrors: state.validationErrors,
+    validationErrors: state.validationErrors,
   },
   function ContactSecondaryUpdated({
     bind,
@@ -50,23 +50,23 @@ export const ContactSecondaryUpdated = connect(
     resetSecondaryAddressSequence,
     showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox,
-    // validationErrors = {} as {
-    //   contactSecondary?: {
-    //     secondaryName: string;
-    //     inCareOf: string;
-    //     name: string;
-    //     phone: string;
-    //   };
-    // },
+    validationErrors = {} as {
+      contactSecondary?: {
+        secondaryName: string;
+        inCareOf: string;
+        name: string;
+        phone: string;
+      };
+    },
   }) {
     return (
       <>
         <div>
           <FormGroup
-          // errorText={
-          //   validationErrors.contactSecondary &&
-          //   validationErrors.contactSecondary.name
-          // }
+            errorText={
+              validationErrors.contactSecondary &&
+              validationErrors.contactSecondary.name
+            }
           >
             <label className="usa-label" htmlFor="name">
               {nameLabel}
@@ -93,6 +93,7 @@ export const ContactSecondaryUpdated = connect(
           {displayInCareOf && (
             <InCareOf
               inCareOf={data.contactSecondary.inCareOf}
+              validationErrors={validationErrors}
               onChangeSequence={onChangeSequence}
             />
           )}
@@ -139,10 +140,10 @@ export const ContactSecondaryUpdated = connect(
           )}
           <FormGroup
             className="phone-input"
-            // errorText={
-            //   validationErrors.contactSecondary &&
-            //   validationErrors.contactSecondary.phone
-            // }
+            errorText={
+              validationErrors.contactSecondary &&
+              validationErrors.contactSecondary.phone
+            }
           >
             <label className="usa-label" htmlFor="phone">
               Phone number <span className="usa-hint">(Optional)</span>
@@ -167,10 +168,10 @@ export const ContactSecondaryUpdated = connect(
             />
           </FormGroup>
           <FormGroup
-          // errorText={
-          //   validationErrors.contactSecondary &&
-          //   validationErrors.contactSecondary.email
-          // }
+            errorText={
+              validationErrors.contactSecondary &&
+              validationErrors.contactSecondary.email
+            }
           >
             <label className="usa-label" htmlFor="email">
               Email address <span className="usa-hint">(Optional)</span>
@@ -245,13 +246,13 @@ function SameAddressCheckbox({
   );
 }
 
-function InCareOf({ inCareOf, onChangeSequence }) {
+function InCareOf({ inCareOf, onChangeSequence, validationErrors }) {
   return (
     <FormGroup
-    // errorText={
-    //   validationErrors.contactSecondary &&
-    //   validationErrors.contactSecondary.inCareOf
-    // }
+      errorText={
+        validationErrors.contactSecondary &&
+        validationErrors.contactSecondary.inCareOf
+      }
     >
       <label className="usa-label" htmlFor="inCareOf">
         <span>In care of</span>

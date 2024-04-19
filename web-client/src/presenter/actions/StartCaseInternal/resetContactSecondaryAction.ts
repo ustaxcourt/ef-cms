@@ -13,8 +13,8 @@ export const resetContactSecondaryAction = ({
       store.set(state.form.contactSecondary, {});
       store.set(state.form.useSameAsPrimary, true);
     } else {
-      store.unset(state.form.contactSecondary);
-      store.unset(state.form.useSameAsPrimary);
+      store.set(state.form.contactSecondary, {});
+      store.set(state.form.useSameAsPrimary, false);
     }
   }
   if (props.key === 'useSameAsPrimary') {

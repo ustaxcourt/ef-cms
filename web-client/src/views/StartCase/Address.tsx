@@ -111,6 +111,13 @@ export const Address = connect(
                   usStatesOther={usStatesOther}
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
+                <div>
+                  {validationErrors?.[type]?.state && (
+                    <span className="usa-error-message">
+                      {validationErrors[type].state}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="grid-col-7">
                 <label
@@ -139,22 +146,13 @@ export const Address = connect(
                     });
                   }}
                 />
-              </div>
-            </div>
-            <div className="grid-row grid-gap">
-              <div className="grid-col-8">
-                {validationErrors?.[type]?.state && (
-                  <span className="usa-error-message">
-                    {validationErrors[type].state}
-                  </span>
-                )}
-              </div>
-              <div className="grid-col-4">
-                {validationErrors?.[type]?.postalCode && (
-                  <span className="usa-error-message">
-                    {validationErrors[type].postalCode}
-                  </span>
-                )}
+                <div>
+                  {validationErrors?.[type]?.postalCode && (
+                    <span className="usa-error-message">
+                      {validationErrors[type].postalCode}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

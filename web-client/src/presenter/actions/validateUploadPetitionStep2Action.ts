@@ -7,30 +7,38 @@ export const validateUploadPetitionStep2Action = ({
 }: ActionProps<{ selectedPage: number }>) => {
   const {
     businessType,
+    contactPrimary,
+    contactSecondary,
     corporateDisclosureFile,
     corporateDisclosureFileSize,
     countryType,
     estateType,
     filingType,
     hasSpouseConsent,
+    inCareOf,
     isSpouseDeceased,
     minorIncompetentType,
     otherType,
     partyType,
+    petitionType,
   } = get(state.form);
 
   const errors = new UploadPetitionStep2({
     businessType,
+    contactPrimary,
+    contactSecondary,
     corporateDisclosureFile,
     corporateDisclosureFileSize,
     countryType,
     estateType,
     filingType,
     hasSpouseConsent,
+    inCareOf,
     isSpouseDeceased,
     minorIncompetentType,
     otherType,
     partyType,
+    petitionType,
   }).getFormattedValidationErrors();
   console.log('errors', errors);
 

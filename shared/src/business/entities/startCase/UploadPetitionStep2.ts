@@ -7,6 +7,7 @@ import {
   // PARTY_TYPES,
   ROLES,
 } from '../EntityConstants';
+import { ContactFactoryUpdated } from '../contacts/ContactFactoryUpdated';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
@@ -23,6 +24,8 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
   public hasSpouseConsent: boolean;
   public estateType: string;
   public minorIncompetentType: string;
+  public contactPrimary: {};
+  public contactSecondary?: {};
 
   constructor(rawProps) {
     super('UploadPetitionStep2');
@@ -38,6 +41,24 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
     this.hasSpouseConsent = rawProps.hasSpouseConsent;
     this.estateType = rawProps.estateType;
     this.minorIncompetentType = rawProps.minorIncompetentType;
+
+    this.contactPrimary = ContactFactoryUpdated({
+      contactInfo: rawProps.contactPrimary,
+      hasSpouseConsent: rawProps.hasSpouseConsent,
+      partyType: rawProps.partyType,
+      petitionType: rawProps.petitionType,
+    }).primary;
+
+    const secondaryContact = ContactFactoryUpdated({
+      contactInfo: rawProps.contactSecondary,
+      hasSpouseConsent: rawProps.hasSpouseConsent,
+      partyType: rawProps.partyType,
+      petitionType: rawProps.petitionType,
+    }).secondary;
+
+    if (secondaryContact) {
+      this.contactSecondary = secondaryContact;
+    }
   }
 
   static VALIDATION_RULES = {
@@ -130,11 +151,6 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({ '*': 'Select an other type of taxpayer' }),
-    // partyType: JoiValidationConstants.STRING.valid(
-    //   ...Object.values(PARTY_TYPES),
-    // )
-    //   .required()
-    //   .messages({ '*': 'Select a party type' }),
   };
 
   getValidationRules() {
