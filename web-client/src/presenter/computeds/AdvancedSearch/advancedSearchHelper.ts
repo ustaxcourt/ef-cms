@@ -26,6 +26,23 @@ export const formatSearchResultRecord = (
   return result;
 };
 
+export const formatPractitionerSearchResultRecord = (
+  result,
+  { applicationContext }: { applicationContext: ClientApplicationContext },
+) => {
+  if (result.contact?.state) {
+    const { US_STATES } = applicationContext.getConstants();
+    result.contact.stateFullName =
+      US_STATES[result.contact.state] || result.contact.state;
+  }
+
+  result.formattedAdmissionsDate = applicationContext
+    .getUtilities()
+    .formatDateString(result.admissionsDate, 'MMDDYYYY');
+
+  return result;
+};
+
 export const advancedSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -60,14 +77,11 @@ export const advancedSearchHelper = (
         );
     } else if (advancedSearchTab === 'practitioner') {
       paginatedResults.formattedSearchResults =
-        paginatedResults.searchResults.map(searchResult => {
-          return {
-            ...searchResult,
-            admissionsDate: applicationContext
-              .getUtilities()
-              .formatDateString(searchResult.admissionsDate, 'MMDDYYYY'),
-          };
-        });
+        paginatedResults.searchResults.map(searchResult =>
+          formatPractitionerSearchResultRecord(searchResult, {
+            applicationContext,
+          }),
+        );
     } else {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
