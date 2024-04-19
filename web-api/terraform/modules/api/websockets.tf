@@ -41,7 +41,7 @@ module "websockets_connect_lambda" {
   handler_file   = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "connectHandler"
   lambda_name    = "websockets_connect_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
@@ -52,7 +52,7 @@ module "websockets_default_lambda" {
   handler_file   = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "defaultHandler"
   lambda_name    = "websockets_default_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
@@ -63,7 +63,7 @@ module "websockets_disconnect_lambda" {
   handler_file   = "./web-api/src/lambdas/websockets/websockets.ts"
   handler_method = "disconnectHandler"
   lambda_name    = "websockets_disconnect_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"

@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "lambda_role" {
-  name = "lambda_role_${var.environment}"
+  name = var.role_name
 
   assume_role_policy = <<EOF
 {
