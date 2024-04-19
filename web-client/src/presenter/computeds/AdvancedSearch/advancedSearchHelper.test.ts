@@ -419,7 +419,7 @@ describe('advancedSearchHelper', () => {
     ]);
   });
 
-  it('does not attempt to format results but only returns results that should be currently shown based on form.currentPage for a practitioner search', () => {
+  it('formats results that should be currently shown based on form.currentPage for a practitioner search', () => {
     pageSizeOverride = 1;
 
     let result = runCompute(advancedSearchHelper, {
@@ -428,7 +428,14 @@ describe('advancedSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab: 'practitioner',
         searchResults: {
-          practitioner: [{ barNumber: '1111' }, { barNumber: '2222' }],
+          practitioner: [
+            {
+              admissionsDate: '2012-03-13',
+              barNumber: '1111',
+              contact: { state: 'WA' },
+            },
+            { barNumber: '2222' },
+          ],
         },
       },
     });
@@ -436,7 +443,11 @@ describe('advancedSearchHelper', () => {
     expect(result.showLoadMore).toEqual(true);
     expect(result.formattedSearchResults.length).toEqual(1);
     expect(result.formattedSearchResults).toMatchObject([
-      { barNumber: '1111' },
+      {
+        barNumber: '1111',
+        contact: { state: 'WA', stateFullName: 'Washington' },
+        formattedAdmissionsDate: '03/13/2012',
+      },
     ]);
 
     pageSizeOverride = 3;

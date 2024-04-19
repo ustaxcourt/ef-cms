@@ -88,9 +88,9 @@ export const PractitionerSearchResults = connect(
                       </a>
                     </td>
                     <td>{result.name}</td>
-                    <td>{result.contact.state}</td>
+                    <td>{result.contact.stateFullName}</td>
                     <td>{result.admissionsStatus}</td>
-                    <td>{result.admissionsDate}</td>
+                    <td>{result.formattedAdmissionsDate}</td>
                     <td>{result.practitionerType}</td>
                     <td>{result.practiceType}</td>
                   </tr>
