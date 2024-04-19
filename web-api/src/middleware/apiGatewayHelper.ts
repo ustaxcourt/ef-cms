@@ -33,7 +33,12 @@ export const handle = async (event, fun) => {
       response.headers
     ) {
       // the lambda function is more advanced and wants to control more aspects of the response
-      return sendOk(response.body, response.statusCode, response.headers);
+      return sendOk(
+        event,
+        response.body,
+        response.statusCode,
+        response.headers,
+      );
     } else if (isPdfBuffer) {
       return {
         body: response.toString('base64'),
@@ -62,7 +67,7 @@ export const handle = async (event, fun) => {
         }
       }
 
-      return sendOk(response);
+      return sendOk(event, response);
     }
   } catch (err) {
     if (!process.env.CI && !err.skipLogging) {
@@ -122,9 +127,9 @@ export const sendError = err => {
  * @param {object} headers any headers that you want to add to the response.  Defaults to no additional headers.
  * @returns {object} an api gateway response object
  */
-export const sendOk = (response, statusCode = '200', headers = {}) => {
+export const sendOk = (event, response, statusCode = '200', headers = {}) => {
   return {
-    body: JSON.stringify(response),
+    body: event.headers?.asyncsyncid ? response : JSON.stringify(response),
     headers: {
       ...headers,
       ...headerOverride,

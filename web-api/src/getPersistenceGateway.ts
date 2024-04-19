@@ -107,6 +107,7 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getPublicDownloadPolicyUrl } from './persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
+import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSectionCompletedMessages } from './persistence/dynamo/messages/getSectionCompletedMessages';
 import { getSectionInboxMessages } from './persistence/dynamo/messages/getSectionInboxMessages';
 import { getSectionOutboxMessages } from './persistence/dynamo/messages/getSectionOutboxMessages';
@@ -145,7 +146,6 @@ import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
-import { renewIdToken } from './persistence/cognito/renewIdToken';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
@@ -350,6 +350,7 @@ const gatewayMethods = {
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
+  getRequestResults,
   getSectionCompletedMessages,
   getSectionInboxMessages,
   getSectionOutboxMessages,
@@ -382,7 +383,6 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,
-  renewIdToken,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   verifyCaseForUser,
