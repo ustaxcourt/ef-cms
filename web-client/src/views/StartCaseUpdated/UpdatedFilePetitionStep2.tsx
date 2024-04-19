@@ -408,7 +408,7 @@ function CorporateDisclosureUpload({ maxFileSize }) {
             aria-describedby="corporate-disclosure-file-label"
             id="corporate-disclosure-file"
             name="corporateDisclosureFile"
-            // updateFormValueSequence="updateStartCaseFormValueSequence"
+            updateFormValueSequence="updateFormValueSequence"
             // validationSequence="validateStartCaseWizardSequence"
           />
         </FormGroup>
