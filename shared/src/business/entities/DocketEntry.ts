@@ -792,8 +792,8 @@ export class DocketEntry extends JoiValidationEntity {
       return !isFileAttached;
     }
 
-    const MINUTE_ENTRIES_EVENT_CODES = Object.values(MINUTE_ENTRIES_MAP).map(v => v.eventCode);
-      key => MINUTE_ENTRIES_MAP[key].eventCode,
+    const MINUTE_ENTRIES_EVENT_CODES = Object.values(MINUTE_ENTRIES_MAP).map(
+      v => v.eventCode,
     );
 
     return MINUTE_ENTRIES_EVENT_CODES.includes(eventCode);
