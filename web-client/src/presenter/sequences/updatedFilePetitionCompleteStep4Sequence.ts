@@ -1,16 +1,16 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAction';
+import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { validateUploadPetitionStep3Action } from '@web-client/presenter/actions/validateUploadPetitionStep3Action';
+import { validateUploadPetitionStep4Action } from '@web-client/presenter/actions/validateUploadPetitionStep4Action';
 
-export const updatedFilePetitionCompleteStep3Sequence = [
+export const updatedFilePetitionCompleteStep4Sequence = [
   startShowValidationAction,
-  getStep3DataAction,
-  validateUploadPetitionStep3Action,
+  getStep4DataAction,
+  validateUploadPetitionStep4Action,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
