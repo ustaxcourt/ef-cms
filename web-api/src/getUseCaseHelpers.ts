@@ -29,6 +29,7 @@ import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUse
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
+import { resendTemporaryPassword } from '@web-api/business/useCaseHelper/auth/resendTemporaryPassword';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
 import { sendEmailVerificationLink } from '../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink';
@@ -77,6 +78,7 @@ const useCaseHelpers = {
   parseAndScrapePdfContents,
   removeCounselFromRemovedPetitioner,
   removeCoversheet,
+  resendTemporaryPassword,
   saveFileAndGenerateUrl,
   sealInLowerEnvironment,
   sendEmailVerificationLink,

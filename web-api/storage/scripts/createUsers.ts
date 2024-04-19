@@ -1,4 +1,7 @@
-import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  Role,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserRecords as createPractitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createOrUpdatePractitionerUser';
@@ -27,13 +30,12 @@ export const createUsers = async () => {
 
       const { userId } = userRecord;
 
-      if (
-        [
-          ROLES.irsPractitioner,
-          ROLES.privatePractitioner,
-          ROLES.inactivePractitioner,
-        ].includes(userRecord.role)
-      ) {
+      const practitionerRoles: Role[] = [
+        ROLES.irsPractitioner,
+        ROLES.privatePractitioner,
+        ROLES.inactivePractitioner,
+      ];
+      if (practitionerRoles.includes(userRecord.role as Role)) {
         return createPractitionerUserRecords({
           applicationContext,
           user: omit(userRecord, EXCLUDE_PROPS),
