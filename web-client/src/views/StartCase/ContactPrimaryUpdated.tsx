@@ -72,10 +72,10 @@ export const ContactPrimaryUpdated = connect(
       <>
         <div>
           <FormGroup
-          // errorText={
-          //   validationErrors.contactPrimary &&
-          //   validationErrors.contactPrimary.name
-          // }
+            errorText={
+              validationErrors.contactPrimary &&
+              validationErrors.contactPrimary.name
+            }
           >
             <label className="usa-label" htmlFor="name">
               {nameLabel}
@@ -101,12 +101,12 @@ export const ContactPrimaryUpdated = connect(
           </FormGroup>
           {secondaryLabel && (
             <FormGroup
-            // errorText={
-            //   validationErrors.contactPrimary &&
-            //   validationErrors.contactPrimary.inCareOf
-            // }
+              errorText={
+                validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.secondaryName
+              }
             >
-              <label className="usa-label" htmlFor="inCareOf">
+              <label className="usa-label" htmlFor="secondaryName">
                 {secondaryLabel}
                 {secondaryLabelNote && (
                   <>
@@ -118,11 +118,11 @@ export const ContactPrimaryUpdated = connect(
               <input
                 autoCapitalize="none"
                 className="usa-input"
-                data-testid="contact-primary-in-care-of"
-                id="inCareOf"
-                name="contactPrimary.inCareOf"
+                data-testid="contact-primary-secondary-name"
+                id="secondaryName"
+                name="contactPrimary.secondaryName"
                 type="text"
-                value={data.contactPrimary.inCareOf || ''}
+                value={data.contactPrimary.secondaryName || ''}
                 onBlur={() => {
                   onBlurSequence();
                 }}
@@ -136,12 +136,7 @@ export const ContactPrimaryUpdated = connect(
             </FormGroup>
           )}
           {additionalLabel && (
-            <FormGroup
-            // errorText={
-            //   validationErrors.contactPrimary &&
-            //   validationErrors.contactPrimary.inCareOf
-            // }
-            >
+            <FormGroup>
               <label className="usa-label" htmlFor="inCareOf">
                 {additionalLabel}
                 {additionalLabelNote && (

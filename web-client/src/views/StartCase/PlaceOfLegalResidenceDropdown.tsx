@@ -34,12 +34,14 @@ export const PlaceOfLegalResidenceDropdown = connect(
     usStates,
     usStatesOther,
     // validateStartCaseSequence,
-    // validationErrors,
+    validationErrors,
   }) {
     return (
       <div className="address-info">
         <Mobile>
-          <FormGroup>
+          <FormGroup
+            errorText={validationErrors?.[type]?.placeOfLegalResidence}
+          >
             <label
               aria-hidden
               className="usa-label"
@@ -61,7 +63,9 @@ export const PlaceOfLegalResidenceDropdown = connect(
           </FormGroup>
         </Mobile>
         <NonMobile>
-          <FormGroup>
+          <FormGroup
+            errorText={validationErrors?.[type]?.placeOfLegalResidence}
+          >
             <label
               aria-hidden
               className="usa-label"
