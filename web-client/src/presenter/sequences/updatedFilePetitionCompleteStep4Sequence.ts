@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
+import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -15,7 +16,7 @@ export const updatedFilePetitionCompleteStep4Sequence = [
     success: [
       clearAlertsAction,
       stopShowValidationAction,
-      // incrementCurrentStepIndicatorAction,
+      incrementCurrentStepIndicatorAction,
     ],
   },
 ];
