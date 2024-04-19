@@ -40,7 +40,6 @@ export const validateUploadPetitionStep2Action = ({
     partyType,
     petitionType,
   }).getFormattedValidationErrors();
-  console.log('errors', errors);
 
   return errors
     ? path.error({
