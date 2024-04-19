@@ -10,8 +10,6 @@ export const validateUploadPetitionStep4Action = ({
     step4Data,
   ).getFormattedValidationErrors();
 
-  console.log('errors', errors);
-
   return errors
     ? path.error({
         errors,
