@@ -21,7 +21,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.40.0"
+    aws = "5.44.0"
     opensearch = {
       source  = "opensearch-project/opensearch"
       version = "2.2.0"
