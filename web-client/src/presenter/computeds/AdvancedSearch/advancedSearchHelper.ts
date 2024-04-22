@@ -3,6 +3,19 @@ import { Get } from 'cerebral';
 import { compareStrings } from '../../../../../shared/src/business/utilities/sortFunctions';
 import { state } from '@web-client/presenter/app.cerebral';
 
+export type PractitionerSearchResultType = {
+  admissionsStatus: string;
+  admissionsDate: string;
+  barNumber: string;
+  contact?: { state: string };
+  formattedAdmissionsDate: string;
+  name: string;
+  practiceType: string;
+  practitionerType: string;
+  state?: string;
+  stateFullName?: string;
+};
+
 export const formatSearchResultRecord = (
   result,
   { applicationContext }: { applicationContext: ClientApplicationContext },
@@ -30,7 +43,7 @@ export const formatSearchResultRecord = (
 export const formatPractitionerSearchResultRecord = (
   result,
   { applicationContext }: { applicationContext: ClientApplicationContext },
-) => {
+): PractitionerSearchResultType => {
   if (result.contact?.state) {
     const { US_STATES } = applicationContext.getConstants();
     result.contact.stateFullName =
@@ -77,21 +90,34 @@ export const advancedSearchHelper = (
           formatSearchResultRecord(searchResult, { applicationContext }),
         );
     } else if (advancedSearchTab === 'practitioner') {
+      // extract this to a separate function?
       paginatedResults.formattedSearchResults =
         paginatedResults.searchResults.map(searchResult =>
           formatPractitionerSearchResultRecord(searchResult, {
             applicationContext,
           }),
         );
+
+      if (paginatedResults.formattedSearchResults!.length > 1) {
+        paginatedResults.formattedSearchResults!.sort(
+          (
+            a: PractitionerSearchResultType,
+            b: PractitionerSearchResultType,
+          ) => {
+            const val = compareStrings(
+              a['name'].toLowerCase(),
+              b['name'].toLowerCase(),
+            );
+            //secondary sort
+            if (val === 0)
+              return compareStrings(a['barNumber'], b['barNumber']);
+            return val;
+          },
+        );
+      }
     } else {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
-
-    paginatedResults.formattedSearchResults.sort((a, b) => {
-      const val = compareStrings(a.name.toLowerCase(), b.name.toLowerCase());
-      if (val === 0) return compareStrings(a.barNumber, b.barNumber); //secondary sort
-      return val;
-    });
 
     const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
 
@@ -113,6 +139,7 @@ export const paginationHelper = (searchResults, currentPage, pageSize) => {
   }
 
   return {
+    formattedSearchResults: [],
     numberOfResults: searchResults.length,
     searchResults: searchResults.slice(0, currentPage * pageSize),
     searchResultsCount: searchResults.length,

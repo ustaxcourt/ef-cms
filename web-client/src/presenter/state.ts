@@ -730,6 +730,7 @@ export const baseState = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {} as any,
+  searchResults: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
