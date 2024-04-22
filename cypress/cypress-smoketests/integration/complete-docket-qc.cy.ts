@@ -49,160 +49,124 @@ describe('Document QC Complete', () => {
     cy.keepAliases();
   });
 
-  // it('should organize messages correctly in each section', () => {
-  //   cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-  //     loginAsAdmissionsClerk();
-  //     searchByDocketNumberInHeader(docketNumber);
+  it('should organize messages correctly in each section', () => {
+    cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
+      loginAsAdmissionsClerk();
+      searchByDocketNumberInHeader(docketNumber);
 
-  //     sendMessages(
-  //       CASE_SERVICE_SUPERVISOR_INFO.userId,
-  //       docketSectionMessage,
-  //       'docket',
-  //     );
-
-  //     sendMessages(
-  //       CASE_SERVICE_SUPERVISOR_INFO.userId,
-  //       petitionsSectionMessage,
-  //       'petitions',
-  //     );
-
-  //     cy.login('caseServicesSupervisor1', '/messages/my/inbox');
-
-  //     assertMessageRecordCountForDocketNumberAndSubject(
-  //       docketNumber,
-  //       docketSectionMessage,
-  //       1,
-  //       'individual',
-  //     );
-  //     assertMessageRecordCountForDocketNumberAndSubject(
-  //       docketNumber,
-  //       petitionsSectionMessage,
-  //       1,
-  //       'individual',
-  //     );
-
-  //     cy.visit('/messages/section/inbox/selectedSection?section=docket');
-  //     assertMessageRecordCountForDocketNumberAndSubject(
-  //       docketNumber,
-  //       docketSectionMessage,
-  //       1,
-  //       'section',
-  //     );
-  //     assertMessageRecordCountForDocketNumberAndSubject(
-  //       docketNumber,
-  //       petitionsSectionMessage,
-  //       0,
-  //       'section',
-  //     );
-
-  //     cy.visit('/messages/section/inbox/selectedSection?section=petitions');
-  //     assertMessageRecordCountForDocketNumberAndSubject(
-  //       docketNumber,
-  //       docketSectionMessage,
-  //       0,
-  //       'section',
-  //     );
-  //     assertMessageRecordCountForDocketNumberAndSubject(
-  //       docketNumber,
-  //       petitionsSectionMessage,
-  //       1,
-  //       'section',
-  //     );
-  //   });
-  // });
-
-  // it('should have the served case document qc assigned and completed', () => {
-  //   cy.login(
-  //     'caseServicesSupervisor1',
-  //     '/document-qc/section/inbox/selectedSection?section=docket',
-  //   );
-  //   cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-  //     cy.get(`[data-testid="work-item-${docketNumber}"]`)
-  //       .find('[data-testid="checkbox-assign-work-item"]')
-  //       .click();
-
-  //     cy.get('[data-testid="dropdown-select-assignee"]').select(
-  //       DOCKET_CLERK_INFO.name,
-  //     );
-
-  //     cy.get(`[data-testid="work-item-${docketNumber}"]`)
-  //       .find('[data-testid="table-column-work-item-assigned-to"]')
-  //       .should('have.text', DOCKET_CLERK_INFO.name);
-
-  //     cy.get(`[data-testid="work-item-${docketNumber}"]`)
-  //       .find('.message-document-title')
-  //       .find('a')
-  //       .click();
-
-  //     cy.get('#save-and-finish').click();
-
-  //     cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
-
-  //     cy.visit('/document-qc/my/outbox');
-  //     cy.get(`[data-testid="section-work-item-outbox-${docketNumber}"]`).should(
-  //       'exist',
-  //     );
-  //   });
-  // });
-
-  // it('should have the unserved case in the petition qc assigned', () => {
-  //   cy.login(
-  //     'caseServicesSupervisor1',
-  //     '/document-qc/section/inbox/selectedSection?section=petitions',
-  //   );
-  //   cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
-  //     cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`).should(
-  //       'exist',
-  //     );
-
-  //     cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`)
-  //       .find('[data-testid="checkbox-assign-work-item"]')
-  //       .click();
-
-  //     cy.get('[data-testid="dropdown-select-assignee"]').select(
-  //       CASE_SERVICE_SUPERVISOR_INFO.name,
-  //     );
-
-  //     cy.visit('/document-qc/my/inbox');
-  //     cy.get(
-  //       `[data-testid="message-queue-docket-number-${unservedDocketNumber}"]`,
-  //     ).should('be.visible');
-  //   });
-  // });
-
-  describe('complete qc on large case', () => {
-    before(() => {
-      loginAsPetitioner();
-      petitionerCreatesElectronicCase().then(docketNumber => {
-        cy.wrap(docketNumber).as('LARGE_CASE_DOCKET_NUMBER');
-        petitionsClerkServesPetition(docketNumber);
-
-        for (let index = 0; index < 15; index++) {
-          petitionerFilesADocument(docketNumber);
-        }
-      });
-    });
-
-    it('should be able to Complete QC on the large case', () => {
-      cy.login(
-        'caseServicesSupervisor1',
-        '/document-qc/section/inbox/selectedSection?section=docket',
+      sendMessages(
+        CASE_SERVICE_SUPERVISOR_INFO.userId,
+        docketSectionMessage,
+        'docket',
       );
 
-      cy.get<string>('@LARGE_CASE_DOCKET_NUMBER').then(docketNumber => {
-        cy.get(`[data-testid="work-item-${docketNumber}"]`)
-          .first()
-          .find('.message-document-title')
-          .find('a')
-          .click();
+      sendMessages(
+        CASE_SERVICE_SUPERVISOR_INFO.userId,
+        petitionsSectionMessage,
+        'petitions',
+      );
 
-        cy.get('#save-and-finish').click();
+      cy.login('caseServicesSupervisor1', '/messages/my/inbox');
 
-        cy.get('[data-testid="success-alert"]').should(
-          'contain',
-          'QC Completed',
-        );
-      });
+      assertMessageRecordCountForDocketNumberAndSubject(
+        docketNumber,
+        docketSectionMessage,
+        1,
+        'individual',
+      );
+      assertMessageRecordCountForDocketNumberAndSubject(
+        docketNumber,
+        petitionsSectionMessage,
+        1,
+        'individual',
+      );
+
+      cy.visit('/messages/section/inbox/selectedSection?section=docket');
+      assertMessageRecordCountForDocketNumberAndSubject(
+        docketNumber,
+        docketSectionMessage,
+        1,
+        'section',
+      );
+      assertMessageRecordCountForDocketNumberAndSubject(
+        docketNumber,
+        petitionsSectionMessage,
+        0,
+        'section',
+      );
+
+      cy.visit('/messages/section/inbox/selectedSection?section=petitions');
+      assertMessageRecordCountForDocketNumberAndSubject(
+        docketNumber,
+        docketSectionMessage,
+        0,
+        'section',
+      );
+      assertMessageRecordCountForDocketNumberAndSubject(
+        docketNumber,
+        petitionsSectionMessage,
+        1,
+        'section',
+      );
+    });
+  });
+
+  it('should have the served case document qc assigned and completed', () => {
+    cy.login(
+      'caseServicesSupervisor1',
+      '/document-qc/section/inbox/selectedSection?section=docket',
+    );
+    cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('[data-testid="checkbox-assign-work-item"]')
+        .click();
+
+      cy.get('[data-testid="dropdown-select-assignee"]').select(
+        DOCKET_CLERK_INFO.name,
+      );
+
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('[data-testid="table-column-work-item-assigned-to"]')
+        .should('have.text', DOCKET_CLERK_INFO.name);
+
+      cy.get(`[data-testid="work-item-${docketNumber}"]`)
+        .find('.message-document-title')
+        .find('a')
+        .click();
+
+      cy.get('#save-and-finish').click();
+
+      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
+
+      cy.visit('/document-qc/my/outbox');
+      cy.get(`[data-testid="section-work-item-outbox-${docketNumber}"]`).should(
+        'exist',
+      );
+    });
+  });
+
+  it('should have the unserved case in the petition qc assigned', () => {
+    cy.login(
+      'caseServicesSupervisor1',
+      '/document-qc/section/inbox/selectedSection?section=petitions',
+    );
+    cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
+      cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`).should(
+        'exist',
+      );
+
+      cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`)
+        .find('[data-testid="checkbox-assign-work-item"]')
+        .click();
+
+      cy.get('[data-testid="dropdown-select-assignee"]').select(
+        CASE_SERVICE_SUPERVISOR_INFO.name,
+      );
+
+      cy.visit('/document-qc/my/inbox');
+      cy.get(
+        `[data-testid="message-queue-docket-number-${unservedDocketNumber}"]`,
+      ).should('be.visible');
     });
   });
 });
