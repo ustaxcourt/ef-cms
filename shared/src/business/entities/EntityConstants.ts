@@ -203,7 +203,7 @@ export const DOCUMENT_SERVED_MESSAGES = {
   EXTERNAL_ENTRY_ADDED:
     'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
-  SELECTED_CASES: 'Document served to selected cases in group.',
+  SELECTED_CASES: 'Document filed and is accessible from the Docket Record.',
 };
 
 export const DOCUMENT_SEARCH_SORT = {
