@@ -9,6 +9,8 @@ const apiConfig: webpack.Configuration = {
     'api-public': './web-api/terraform/template/lambdas/api-public.ts',
     'cognito-authorizer':
       './web-api/terraform/template/lambdas/cognito-authorizer.ts',
+    'cognito-triggers':
+      './web-api/terraform/template/lambdas/cognito-triggers.ts',
     cron: './web-api/terraform/template/lambdas/cron.ts',
     'handle-bounced-service-email':
       './web-api/terraform/template/lambdas/handle-bounced-service-email.ts',

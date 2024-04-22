@@ -49315,10 +49315,6 @@
     "pk": "section|caseServicesSupervisor"
   },
   {
-    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
-    "pk": "section|caseServicesSupervisor"
-  },
-  {
     "sk": "user|23dd8806-c0c7-4265-81f0-5f264ef78248",
     "pk": "section|clerkofcourt"
   },
@@ -49348,10 +49344,6 @@
   },
   {
     "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
-    "pk": "section|docket"
-  },
-  {
-    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
     "pk": "section|docket"
   },
   {
@@ -49440,10 +49432,6 @@
   },
   {
     "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
-    "pk": "section|petitions"
-  },
-  {
-    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
     "pk": "section|petitions"
   },
   {
@@ -50434,6 +50422,11 @@
     "sk": "updated-trial-status-types",
     "current": true,
     "pk": "updated-trial-status-types"
+  },
+  {
+    "sk": "use-external-pdf-generation",
+    "current": false,
+    "pk": "use-external-pdf-generation"
   },
   {
     "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -56608,26 +56601,6 @@
     "pk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
     "userId": "35959d1a-0981-40b2-a93d-f65c7977db52",
     "email": "caseservicessupervisor@example.com"
-  },
-  {
-    "entityName": "User",
-    "email": "caseServicesSupervisor1@example.com",
-    "name": "Test caseServicesSupervisor1",
-    "role": "caseServicesSupervisor",
-    "userId": "91bae3e8-3079-43a6-920d-b74ed9c649d4",
-    "contact": {
-      "address1": "234 Main St",
-      "address2": "Apartment 4",
-      "address3": "Under the stairs",
-      "city": "Chicago",
-      "countryType": "domestic",
-      "phone": "+1 (555) 555-5555",
-      "postalCode": "61234",
-      "state": "IL"
-    },
-    "pk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
-    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
-    "section": "caseServicesSupervisor"
   },
   {
     "role": "petitionsclerk",

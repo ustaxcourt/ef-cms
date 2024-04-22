@@ -19,7 +19,7 @@ ITEM=$(cat <<-END
         "S": "clerk-of-court-configuration"
     },
     "current": {
-        "M": {"name": {"S": "Charles G. Jeane"}, "title": {"S": "Clerk of the Court"}} 
+        "M": {"name": {"S": "Stephanie A. Servoss"}, "title": {"S": "Clerk of the Court"}} 
     }
 }
 END

@@ -1714,18 +1714,6 @@
       "allowStamp": true
     },
     {
-      "documentTitle": "Motion to Lift Stay of Proceedings",
-      "documentType": "Motion to Lift Stay of Proceedings",
-      "category": "Motion",
-      "eventCode": "MLSP",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": "",
-      "allowStamp": true
-    },
-    {
       "documentTitle": "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262",
       "documentType": "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262",
       "category": "Motion",

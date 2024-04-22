@@ -3,6 +3,7 @@ import {
   ChallengeNameType,
   CodeMismatchException,
   ExpiredCodeException,
+  InitiateAuthResponse,
   RespondToAuthChallengeResponse,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -36,7 +37,7 @@ describe('changePasswordInteractor', () => {
   });
 
   describe('when the user is attempting to log in with a temporary password', () => {
-    let mockInitiateAuthResponse;
+    let mockInitiateAuthResponse: InitiateAuthResponse;
     let mockRespondToAuthChallengeResponse: RespondToAuthChallengeResponse;
     let mockUserWithPendingEmail: UserRecord;
 
@@ -65,7 +66,7 @@ describe('changePasswordInteractor', () => {
       };
 
       applicationContext
-        .getUserGateway()
+        .getCognito()
         .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
 
       applicationContext
@@ -103,16 +104,12 @@ describe('changePasswordInteractor', () => {
             PASSWORD: mockPassword,
             USERNAME: mockEmail,
           },
-          ClientId: expect.anything(),
+          ClientId: applicationContext.environment.cognitoClientId,
         },
       );
     });
 
     it('should update the user`s password in persistence when they are in NEW_PASSWORD_REQUIRED state and their change password request is valid', async () => {
-      applicationContext
-        .getCognito()
-        .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
-
       await changePasswordInteractor(applicationContext, {
         confirmPassword: mockPassword,
         email: mockEmail,
@@ -245,7 +242,7 @@ describe('changePasswordInteractor', () => {
   });
 
   describe('when the user is attempting to log in with a forgot password code', () => {
-    let mockInitiateAuthResponse;
+    let mockInitiateAuthResponse: InitiateAuthResponse;
     let mockUser: {
       userId: string;
       email: string;
@@ -266,9 +263,11 @@ describe('changePasswordInteractor', () => {
       };
 
       mockInitiateAuthResponse = {
-        accessToken: mockToken,
-        idToken: mockToken,
-        refreshToken: mockToken,
+        AuthenticationResult: {
+          AccessToken: mockToken,
+          IdToken: mockToken,
+          RefreshToken: mockToken,
+        },
       };
 
       applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
@@ -280,7 +279,7 @@ describe('changePasswordInteractor', () => {
       });
 
       applicationContext
-        .getUserGateway()
+        .getCognito()
         .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
     });
 
@@ -308,18 +307,23 @@ describe('changePasswordInteractor', () => {
       });
 
       expect(
-        applicationContext.getUserGateway().changePassword,
-      ).toHaveBeenCalledWith(applicationContext, {
-        code: mockCode,
-        email: mockEmail,
-        newPassword: mockPassword,
+        applicationContext.getCognito().confirmForgotPassword,
+      ).toHaveBeenCalledWith({
+        ClientId: applicationContext.environment.cognitoClientId,
+        ConfirmationCode: mockCode,
+        Password: mockPassword,
+        Username: mockEmail,
       });
-      expect(
-        applicationContext.getUserGateway().initiateAuth,
-      ).toHaveBeenCalledWith(applicationContext, {
-        email: mockEmail,
-        password: mockPassword,
-      });
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
       expect(result).toEqual({
         accessToken: mockToken,
         idToken: mockToken,
@@ -327,12 +331,8 @@ describe('changePasswordInteractor', () => {
       });
     });
 
-    it('should throw an error when initiate auth does not return the correct tokens', async () => {
-      const initiateAuthError = new Error('InitiateAuthError');
-      initiateAuthError.name = 'InitiateAuthError';
-      applicationContext
-        .getUserGateway()
-        .initiateAuth.mockRejectedValue(initiateAuthError);
+    it('should throw an error if initiate auth does not return the correct tokens', async () => {
+      applicationContext.getCognito().initiateAuth.mockResolvedValue({});
 
       await expect(
         changePasswordInteractor(applicationContext, {
@@ -343,17 +343,21 @@ describe('changePasswordInteractor', () => {
         }),
       ).rejects.toThrow(`Unable to change password for email: ${mockEmail}`);
 
-      expect(
-        applicationContext.getUserGateway().initiateAuth,
-      ).toHaveBeenCalledWith(applicationContext, {
-        email: mockEmail,
-        password: mockPassword,
-      });
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
     });
 
-    it('should throw an InvalidRequest error when initiateAuth returns a CodeMismatchException', async () => {
+    it('should throw an InvalidRequest error if initiateAuth returns a CodeMismatchException', async () => {
       applicationContext
-        .getUserGateway()
+        .getCognito()
         .initiateAuth.mockRejectedValueOnce(
           new CodeMismatchException({ $metadata: {}, message: '' }),
         );
@@ -367,17 +371,21 @@ describe('changePasswordInteractor', () => {
         }),
       ).rejects.toThrow('Forgot password code is expired or incorrect');
 
-      expect(
-        applicationContext.getUserGateway().initiateAuth,
-      ).toHaveBeenCalledWith(applicationContext, {
-        email: mockEmail,
-        password: mockPassword,
-      });
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
     });
 
-    it('should throw an InvalidRequest error when initiateAuth returns a ExpiredCodeException', async () => {
+    it('should throw an InvalidRequest error if initiateAuth returns a ExpiredCodeException', async () => {
       applicationContext
-        .getUserGateway()
+        .getCognito()
         .initiateAuth.mockRejectedValueOnce(
           new ExpiredCodeException({ $metadata: {}, message: '' }),
         );
@@ -391,12 +399,16 @@ describe('changePasswordInteractor', () => {
         }),
       ).rejects.toThrow('Forgot password code is expired or incorrect');
 
-      expect(
-        applicationContext.getUserGateway().initiateAuth,
-      ).toHaveBeenCalledWith(applicationContext, {
-        email: mockEmail,
-        password: mockPassword,
-      });
+      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
+        {
+          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+          AuthParameters: {
+            PASSWORD: mockPassword,
+            USERNAME: mockEmail,
+          },
+          ClientId: applicationContext.environment.cognitoClientId,
+        },
+      );
     });
   });
 });

@@ -21,8 +21,10 @@ This includes both successful and unsuccessful attempts of a user elevating thei
   - AWS: User and processes assuming roles (and role assumption failures) — [CloudTrail][cloudtrail] with event source: `iam.amazonaws.com`
 - Application
   - AWS: Cognito user login (and login failure) — ❌
+    - [Logs are not available when using Cognito Hosted UI](https://docs.aws.amazon.com/cognito/latest/developerguide/logging-using-cloudtrail.html)
   - AWS: IAM policy granted to user from Cognito authorizer — [Kibana][kibana] with message: `Request authorized`
   - EF-CMS: Exchanging authorization codes for tokens (and failed exchanges) — ❌
+    - [Logs are not available when using Cognito Hosted UI](https://docs.aws.amazon.com/cognito/latest/developerguide/logging-using-cloudtrail.html)
 
 ### All administrator activity
 

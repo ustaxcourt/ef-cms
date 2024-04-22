@@ -109,12 +109,11 @@ export const PretrialMemorandum = ({ trialInfo }) => {
           In Progress
         </label>
       </p>
-
-      <div style={{ pageBreakAfter: 'always' }}></div>
-
-      <p style={{ marginBottom: '97px' }}>
+      <p>
         <strong className="text-underline">ISSUES</strong>:
       </p>
+
+      <div style={{ pageBreakAfter: 'always' }}></div>
 
       <p style={{ marginBottom: '88px' }}>
         <strong className="text-underline">
@@ -143,7 +142,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         <strong className="text-underline">EVIDENTIARY PROBLEMS</strong>:
       </p>
 
-      <div style={{ marginBottom: '10px' }}>
+      <div style={{ marginBottom: '61px' }}>
         <p style={{ float: 'left', width: '40%' }}>
           <span className="text-bold">Date:</span> _________________________
         </p>

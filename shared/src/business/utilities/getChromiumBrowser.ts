@@ -11,6 +11,7 @@ export const getChromiumBrowserAWS = async () => {
   const { default: chromium } = await import('@sparticuz/chromium');
   const { default: puppeteerCore } = await import('puppeteer-core');
 
+  chromium.setGraphicsMode = false;
   return await puppeteerCore.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,

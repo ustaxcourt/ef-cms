@@ -1,7 +1,10 @@
 import * as client from '../../dynamodbClientService';
+import {
+  AdminCreateUserCommandInput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -32,27 +35,52 @@ export const createNewPetitionerUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
+  applicationContext: IApplicationContext;
   user: RawUser;
-}): Promise<void> => {
-  const createUserPromise = applicationContext
-    .getUserGateway()
-    .createUser(applicationContext, {
-      attributesToUpdate: {
-        email: user.pendingEmail,
-        name: user.name,
-        role: ROLES.petitioner,
-        userId: user.userId,
-      },
-      email: user.pendingEmail!,
-      resendInvitationEmail: false,
-    });
+}) => {
+  const { userId } = user;
 
-  const createUserRecordsPromise = createUserRecords({
+  const input: AdminCreateUserCommandInput = {
+    DesiredDeliveryMediums: ['EMAIL'],
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'email',
+        Value: user.pendingEmail,
+      },
+      {
+        Name: 'custom:role',
+        Value: ROLES.petitioner,
+      },
+      {
+        Name: 'name',
+        Value: user.name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: user.userId,
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID!,
+    Username: user.pendingEmail!,
+  };
+
+  if (process.env.STAGE !== 'prod') {
+    input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  }
+
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  await cognito.adminCreateUser(input);
+
+  const newUser: RawUser = await createUserRecords({
     applicationContext,
     newUser: user,
-    userId: user.userId,
+    userId,
   });
 
-  await Promise.all([createUserPromise, createUserRecordsPromise]);
+  return newUser;
 };

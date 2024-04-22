@@ -7,18 +7,21 @@ export const createPractitionerUserAction = async ({
 }: ActionProps) => {
   const practitioner = get(state.form);
 
+  practitioner.confirmEmail = undefined;
+
   try {
-    const { barNumber } = await applicationContext
+    const practitionerUser = await applicationContext
       .getUseCases()
       .createPractitionerUserInteractor(applicationContext, {
-        user: { ...practitioner, confirmEmail: undefined },
+        user: practitioner,
       });
 
     return path.success({
       alertSuccess: {
         message: 'Practitioner added.',
       },
-      barNumber,
+      barNumber: practitionerUser.barNumber,
+      practitionerUser,
     });
   } catch (err) {
     return path.error({

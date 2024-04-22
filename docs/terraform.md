@@ -175,6 +175,8 @@ Here is an overview of the files associated with this terraform directory:
     ├── api-gateway-authorizer.tf // code for creating the api authorizer
     ├── clamav.tf // permissions related to clamav ec2 instance
     ├── cognito-authorizer.tf // permissions related to cognito authorizer
+    ├── cognito-post-authentication.tf // permissions related to cognito post authentication
+    ├── cognito-post-confirmation.tf // permissions related to cognito post confirmation
     ├── header-security.tf // permissions related to header security
     ├── lambda.tf // permissions related to all our lambdas (they share permissions)
     ├── main.tf // main entry file

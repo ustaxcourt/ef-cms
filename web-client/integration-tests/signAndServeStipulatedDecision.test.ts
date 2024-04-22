@@ -8,7 +8,15 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
 
 describe('a user signs and serves a stipulated decision', () => {
-  const cerebralTest = setupTest();
+  const cerebralTest = setupTest({
+    useCases: {
+      loadPDFForSigningInteractor: () => {
+        return new Promise(resolve => {
+          resolve(null);
+        });
+      },
+    },
+  });
 
   afterAll(() => {
     cerebralTest.closeSocket();

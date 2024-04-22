@@ -66,12 +66,22 @@ describe('createOrUpdatePractitionerUser', () => {
   };
 
   beforeAll(() => {
-    applicationContext.getCognito().adminGetUser.mockResolvedValue({
-      Username: 'f7bea269-fa95-424d-aed8-2cb988df2073',
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Username: 'f7bea269-fa95-424d-aed8-2cb988df2073',
+        }),
     });
 
-    applicationContext.getCognito().adminCreateUser.mockResolvedValue({
-      User: { Username: userId },
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          User: { Username: userId },
+        }),
+    });
+
+    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
+      promise: () => Promise.resolve(),
     });
 
     applicationContext.getDocumentClient().put.mockResolvedValue(null);
@@ -138,7 +148,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).not.toHaveBeenCalled();
     expect(applicationContext.getCognito().adminGetUser).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUserGateway().updateUser,
+      applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toHaveBeenCalled();
   });
 
@@ -154,7 +164,7 @@ describe('createOrUpdatePractitionerUser', () => {
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
     ).toBe(privatePractitionerUserWithSection.email);
     expect(
-      applicationContext.getUserGateway().updateUser,
+      applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toHaveBeenCalled();
   });
 
@@ -186,7 +196,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getUserGateway().updateUser,
+      applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toHaveBeenCalled();
   });
 
@@ -200,7 +210,7 @@ describe('createOrUpdatePractitionerUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getUserGateway().updateUser,
+      applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toHaveBeenCalled();
   });
 
@@ -219,8 +229,34 @@ describe('createOrUpdatePractitionerUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getUserGateway().updateUser,
+      applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should call cognito adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({
+      promise: () => Promise.reject(new Error('bad!')),
+    });
+
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Username: '562d6260-aa9b-4010-af99-536d3872c752',
+        }),
+    });
+
+    await createOrUpdatePractitionerUser({
+      applicationContext,
+      user: privatePractitionerUserWithSection as any,
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalled();
   });
 
   it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {
@@ -236,7 +272,10 @@ describe('createOrUpdatePractitionerUser', () => {
 
   it('should call adminCreateUser with the correct UserAttributes', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      User: { Username: '123' },
+      promise: () =>
+        Promise.resolve({
+          User: { Username: '123' },
+        }),
     });
 
     setupNonExistingUserMock();

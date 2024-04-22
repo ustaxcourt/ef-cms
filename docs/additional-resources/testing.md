@@ -60,6 +60,12 @@ The above tests run before code is introduced into the production environment to
 
 At the end of a sprint PR, we'd like to run manual smoke tests over our system in an attempt to reduce bugs sent to the court's system.  The following manual tests can be ran by following the steps provided:
 
+#### Verify Cognito Registration
+- go to the cognito UI
+- create a new user with your email, i.e. cseibert+petitioner1@flexion.us
+- verify you received a verify email
+- login to your petitioner account
+
 #### Verify Email Notifications
 - If you already have a petitioner account, login and create a case
 - keep track of that docket number

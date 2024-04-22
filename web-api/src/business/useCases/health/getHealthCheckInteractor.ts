@@ -198,7 +198,9 @@ const getCognitoStatus = async ({
   applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   try {
-    await applicationContext.getCognito().describeUserPool({
+    const cognito = applicationContext.getCognito();
+
+    await cognito.describeUserPool({
       UserPoolId: applicationContext.environment.userPoolId,
     });
     return true;

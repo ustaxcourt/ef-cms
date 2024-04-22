@@ -100,7 +100,7 @@ describe('verifyUserPendingEmailInteractor', () => {
 
     await expect(
       verifyUserPendingEmailInteractor(applicationContext, {
-        token: undefined as any,
+        token: undefined,
       }),
     ).rejects.toThrow('Tokens do not match');
   });
@@ -118,19 +118,23 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   it('should update the cognito email when tokens match', async () => {
-    await verifyUserPendingEmailInteractor(applicationContext, {
-      token: TOKEN,
-    });
+    await expect(
+      verifyUserPendingEmailInteractor(applicationContext, {
+        token: TOKEN,
+      }),
+    ).resolves.not.toThrow();
 
-    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
-      applicationContext,
-      {
-        attributesToUpdate: {
-          email: 'other@example.com',
-        },
-        email: 'test@example.com',
-      },
-    );
+    const adminUpdateUserAttributesResult =
+      applicationContext.getCognito().adminUpdateUserAttributes.mock
+        .calls[0][0];
+
+    expect(adminUpdateUserAttributesResult.UserAttributes[0]).toMatchObject({
+      Name: 'email',
+      Value: 'other@example.com',
+    });
+    expect(adminUpdateUserAttributesResult).toMatchObject({
+      Username: 'test@example.com',
+    });
   });
 
   it('should update the dynamo record with the new info', async () => {

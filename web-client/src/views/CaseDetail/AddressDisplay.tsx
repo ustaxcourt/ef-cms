@@ -51,9 +51,7 @@ export const AddressDisplay = connect<
           {contact.state} {contact.postalCode}
         </span>
         {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <span className="address-line" data-testid="contact-country-line">
-            {contact.country}
-          </span>
+          <span className="address-line">{contact.country}</span>
         )}
         {contact.phone && (
           <span

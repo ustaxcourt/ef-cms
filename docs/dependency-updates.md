@@ -27,7 +27,7 @@ note: we have 2 package.json files, be sure to update them all
       - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
       - Change the version in `scripts/verify-terraform-version.sh`
     - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-20) if an update is available for the current node version the project is using.
+    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-18) if an update is available for the current node version the project is using.
 
    To publish a new ECR docker image:
 
@@ -73,6 +73,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### puppeteer and @sparticuz/chromium
 
+- Keep `@sparticuz/chromium` locked to 112.0.2 and `puppeteer` locked to 19.8.5 as 114+ and 20+ were causing pdf generation timeout bugs. (https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10087).
+
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
 
 ### pdfjs-dist
@@ -82,8 +84,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### s3-files (3.0.1)
 - (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
 
-### @uswds/uswds
-- Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues). 
+### @aws-sdk/client-dynamodb and @aws-sdk/client-cognito-identity-provider
+
+- Left locked to 3.490.0 because they are causing websocket and cognito credential issues, respectively. Further investigation pending, maybe be related to this [urgent issue](https://github.com/aws/aws-sdk-js-v3/issues/5749)
 
 ## Incrementing the Node Cache Key Version
 

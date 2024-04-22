@@ -1,11 +1,11 @@
 import * as client from '../../dynamodbClientService';
-import { AdminCreateUserCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import {
-  ROLES,
-  Role,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+  AdminCreateUserCommandInput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { isUserAlreadyCreated } from './createOrUpdateUser';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -61,11 +61,11 @@ export const createOrUpdatePractitionerUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
+  applicationContext: IApplicationContext;
   user: RawUser;
 }) => {
   let userId = applicationContext.getUniqueId();
-  const practitionerRoleTypes: Role[] = [
+  const practitionerRoleTypes = [
     ROLES.privatePractitioner,
     ROLES.irsPractitioner,
     ROLES.inactivePractitioner,
@@ -87,13 +87,15 @@ export const createOrUpdatePractitionerUser = async ({
     });
   }
 
-  const existingUser = await applicationContext
-    .getUserGateway()
-    .getUserByEmail(applicationContext, {
-      email: userEmail,
-    });
+  const userExists = await isUserAlreadyCreated({
+    applicationContext,
+    email: userEmail,
+    userPoolId: process.env.USER_POOL_ID as string,
+  });
 
-  if (!existingUser) {
+  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
+
+  if (!userExists) {
     let params: AdminCreateUserCommandInput = {
       DesiredDeliveryMediums: ['EMAIL'],
       UserAttributes: [
@@ -122,9 +124,7 @@ export const createOrUpdatePractitionerUser = async ({
       params.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
     }
 
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser(params);
+    const response = await cognito.adminCreateUser(params);
 
     if (response?.User?.Username) {
       const userIdAttribute =
@@ -141,17 +141,33 @@ export const createOrUpdatePractitionerUser = async ({
       userId = userIdAttribute?.Value!;
     }
   } else {
-    await applicationContext.getUserGateway().updateUser(applicationContext, {
-      attributesToUpdate: {
-        role: user.role,
-      },
-      email: userEmail,
+    const response = await cognito.adminGetUser({
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: userEmail,
     });
 
-    // eslint-disable-next-line prefer-destructuring
-    userId = existingUser.userId;
+    await cognito.adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'custom:role',
+          Value: user.role,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: userEmail,
+    });
+    userId =
+      response.UserAttributes?.find(element => {
+        if (element.Name === 'custom:userId') {
+          return element;
+        }
+      }) ||
+      response.UserAttributes?.find(element => {
+        if (element.Name === 'sub') {
+          return element;
+        }
+      });
   }
-
   return await createUserRecords({
     applicationContext,
     user,

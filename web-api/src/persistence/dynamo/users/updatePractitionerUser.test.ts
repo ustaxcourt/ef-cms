@@ -29,13 +29,17 @@ describe('updatePractitionerUser', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getUserGateway().updateUser.mockResolvedValue();
+    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
+      promise: () => null,
+    });
   });
 
   it("should log an error when an error occurs while updating the user's cognito attributes", async () => {
     applicationContext
-      .getUserGateway()
-      .updateUser.mockRejectedValue(new Error('User not found'));
+      .getCognito()
+      .adminUpdateUserAttributes.mockReturnValue(
+        Promise.reject(new Error('User not found')),
+      );
 
     await expect(
       updatePractitionerUser({
@@ -43,7 +47,6 @@ describe('updatePractitionerUser', () => {
         user: updatedUser as any,
       }),
     ).rejects.toThrow('User not found');
-
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 
@@ -73,19 +76,17 @@ describe('updatePractitionerUser', () => {
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
-    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
-      applicationContext,
-      {
-        attributesToUpdate: {
-          role: updatedUser.role,
-        },
-        email: updatedEmail,
-      },
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        Username: updatedEmail,
+      }),
     );
   });
 
   it("should update an existing practitioner user's Cognito attributes using the users pending email", async () => {
-    updatedUser.email = undefined as any;
+    updatedUser.email = undefined;
     updatedUser.pendingEmail = pendingEmail;
     updateUserRecordsMock.mockImplementation(() => updatedUser);
 
@@ -95,14 +96,12 @@ describe('updatePractitionerUser', () => {
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
-    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
-      applicationContext,
-      {
-        attributesToUpdate: {
-          role: updatedUser.role,
-        },
-        email: pendingEmail,
-      },
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        Username: pendingEmail,
+      }),
     );
   });
 });

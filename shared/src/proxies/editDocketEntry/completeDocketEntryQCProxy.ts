@@ -1,4 +1,4 @@
-import { asyncSyncHandler, put } from '../requests';
+import { put } from '../requests';
 
 /**
  * completeDocketEntryQCInteractorProxy
@@ -13,16 +13,11 @@ export const completeDocketEntryQCInteractor = (
   { entryMetadata },
 ) => {
   const { docketNumber } = entryMetadata;
-  return asyncSyncHandler(
+  return put({
     applicationContext,
-    async asyncSyncId =>
-      await put({
-        applicationContext,
-        asyncSyncId,
-        body: {
-          entryMetadata,
-        },
-        endpoint: `/async/case-documents/${docketNumber}/docket-entry-complete`,
-      }),
-  );
+    body: {
+      entryMetadata,
+    },
+    endpoint: `/case-documents/${docketNumber}/docket-entry-complete`,
+  });
 };

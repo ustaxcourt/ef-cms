@@ -88,8 +88,7 @@ export const get = process.env.CI ? internalGet : getMemoized;
  */
 export const post = async ({
   applicationContext,
-  asyncSyncId = undefined,
-  body = {},
+  body,
   endpoint,
   headers = {},
   options = {},
@@ -103,7 +102,6 @@ export const post = async ({
         headers: {
           ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
           ...headers,
-          Asyncsyncid: asyncSyncId,
         },
         ...options,
       })
@@ -115,7 +113,6 @@ export const post = async ({
         .sleep(err.response?.headers['Retry-After'] || 5000);
       return post({
         applicationContext,
-        asyncSyncId,
         body,
         endpoint,
         retry: retry + 1,
@@ -123,36 +120,6 @@ export const post = async ({
     }
     throw err;
   }
-};
-
-export const asyncSyncHandler = (
-  applicationContext,
-  request,
-  asyncSyncId = applicationContext.getUniqueId(),
-) => {
-  getMemoized.clear();
-
-  return new Promise((resolve, reject) => {
-    const callback = results => {
-      if (+results.statusCode === 200) {
-        resolve(results.body);
-      } else {
-        reject(results);
-      }
-    };
-
-    request(asyncSyncId);
-
-    const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
-    applicationContext
-      .getUseCases()
-      .startPollingForResultsInteractor(
-        applicationContext,
-        asyncSyncId,
-        expirationTimestamp,
-        callback,
-      );
-  });
 };
 
 /**
@@ -167,7 +134,6 @@ export const asyncSyncHandler = (
 
 export const put = async ({
   applicationContext,
-  asyncSyncId = undefined,
   body,
   endpoint,
   retry = 0,
@@ -177,10 +143,7 @@ export const put = async ({
     const res = await applicationContext
       .getHttpClient()
       .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-        headers: {
-          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
-          Asyncsyncid: asyncSyncId,
-        },
+        headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       })
       .then(response => response.data);
 
@@ -192,7 +155,6 @@ export const put = async ({
         .sleep(err.response?.headers['Retry-After'] || 5000);
       return put({
         applicationContext,
-        asyncSyncId,
         body,
         endpoint,
         retry: retry + 1,

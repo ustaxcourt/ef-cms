@@ -25,6 +25,10 @@ variable "zone_id" {
   type = string
 }
 
+variable "pool_arn" {
+  type = string
+}
+
 variable "lambda_environment" {
   type = map(any)
 }
@@ -149,7 +153,20 @@ variable "stream_arn" {
   type = string
 }
 
+variable "create_triggers" {
+  type    = number
+  default = 1
+}
+
 variable "web_acl_arn" {
+  type = string
+}
+
+variable "triggers_object" {
+  type = any
+}
+
+variable "triggers_object_hash" {
   type = string
 }
 

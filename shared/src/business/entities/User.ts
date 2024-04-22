@@ -3,7 +3,6 @@ import {
   COUNTRY_TYPES,
   JudgeTitle,
   ROLES,
-  Role,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -18,7 +17,7 @@ export class User extends JoiValidationEntity {
   public email?: string;
   public name: string;
   public pendingEmail?: string;
-  public role: Role;
+  public role: string;
   public token?: string;
   public userId: string;
   public isUpdatingInformation?: boolean;
@@ -165,8 +164,8 @@ export class User extends JoiValidationEntity {
     return this.role === ROLES.judge;
   }
 
-  static isExternalUser(role: Role): boolean {
-    const externalRoles: Role[] = [
+  static isExternalUser(role: string): boolean {
+    const externalRoles = [
       ROLES.petitioner,
       ROLES.privatePractitioner,
       ROLES.irsPractitioner,
@@ -176,8 +175,8 @@ export class User extends JoiValidationEntity {
     return externalRoles.includes(role);
   }
 
-  static isInternalUser(role: Role): boolean {
-    const internalRoles: Role[] = [
+  static isInternalUser(role: string): boolean {
+    const internalRoles = [
       ROLES.adc,
       ROLES.admissionsClerk,
       ROLES.chambers,

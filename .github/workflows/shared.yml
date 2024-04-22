@@ -15,12 +15,12 @@ jobs:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '20.12.0'
+          node-version: '18.16.1'
       - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
+        uses: runforesight/workflow-telemetry-action@v1
         with:
           comment_on_pr: false
       - name: Install Node Dependencies
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [Shared]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
           name: coverage-artifacts

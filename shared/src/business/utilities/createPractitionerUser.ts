@@ -1,10 +1,14 @@
-import { Practitioner, RawPractitioner } from '../entities/Practitioner';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { Practitioner } from '../entities/Practitioner';
 
-export const createPractitionerUser = async (
-  applicationContext: ServerApplicationContext,
-  { user }: { user: RawPractitioner },
-): Promise<RawPractitioner> => {
+/**
+ * Create a new practitioner
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.user the user data
+ * @returns {object} new practitioner user
+ */
+export const createPractitionerUser = async ({ applicationContext, user }) => {
   const barNumber =
     user.barNumber ||
     (await applicationContext.barNumberGenerator.createBarNumber({

@@ -97,6 +97,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
+  USE_EXTERNAL_PDF_GENERATION: {
+    disabledMessage:
+      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
+    key: 'use-external-pdf-generation',
+  },
 };
 
 export const CONFIGURATION_ITEM_KEYS = {
@@ -203,7 +208,7 @@ export const DOCUMENT_SERVED_MESSAGES = {
   EXTERNAL_ENTRY_ADDED:
     'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
-  SELECTED_CASES: 'Document filed and is accessible from the Docket Record.',
+  SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
 export const DOCUMENT_SEARCH_SORT = {

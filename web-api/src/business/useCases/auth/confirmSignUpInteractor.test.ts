@@ -41,11 +41,10 @@ describe('confirmSignUpInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getAccountConfirmationCode.mockResolvedValue(mockConfirmationCode);
-    applicationContext.getUserGateway().confirmSignUp.mockResolvedValue({});
-    applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
-      email: mockEmail,
-      name: 'Test Petitioner',
-    });
+    applicationContext.getCognito().adminConfirmSignUp.mockResolvedValue({});
+    applicationContext
+      .getUserGateway()
+      .getUserByEmail.mockResolvedValue({ email: mockEmail });
 
     await confirmSignUpInteractor(applicationContext, {
       confirmationCode: mockConfirmationCode,
@@ -54,11 +53,13 @@ describe('confirmSignUpInteractor', () => {
     });
 
     expect(
-      applicationContext.getUserGateway().confirmSignUp,
+      applicationContext.getCognito().adminConfirmSignUp,
     ).toHaveBeenCalled();
-    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().persistUser,
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().createPetitionerAccountInteractor,
     ).toHaveBeenCalled();
   });
 });

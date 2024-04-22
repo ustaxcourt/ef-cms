@@ -20,9 +20,7 @@ describe('forgotPasswordInteractor', () => {
     userId,
   };
 
-  beforeEach(() => {
-    process.env.STAGE = 'local';
-
+  beforeAll(() => {
     applicationContext
       .getUserGateway()
       .getUserByEmail.mockResolvedValue(mockUser);
@@ -34,22 +32,28 @@ describe('forgotPasswordInteractor', () => {
       });
   });
 
+  beforeEach(() => {
+    process.env.DEFAULT_ACCOUNT_PASS = 'password';
+    process.env.STAGE = 'local';
+  });
+
   afterEach(() => {
+    applicationContext.environment.stage = 'local';
     process.env = OLD_ENV;
   });
 
   it('should return early when user account does not exist', async () => {
     applicationContext
       .getUserGateway()
-      .getUserByEmail.mockResolvedValue(undefined);
+      .getUserByEmail.mockResolvedValueOnce(undefined);
 
-    await forgotPasswordInteractor(applicationContext, {
+    const result = await forgotPasswordInteractor(applicationContext, {
       email,
     });
 
     expect(
-      applicationContext.getUserGateway().getUserByEmail,
-    ).toHaveBeenCalledWith(applicationContext, { email });
+      applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
+    ).toEqual({ email });
     expect(
       applicationContext.getUseCaseHelpers().createUserConfirmation,
     ).not.toHaveBeenCalled();
@@ -59,9 +63,11 @@ describe('forgotPasswordInteractor', () => {
     expect(
       applicationContext.getMessageGateway().sendEmailToUser,
     ).not.toHaveBeenCalled();
+
+    expect(result).toBeUndefined();
   });
 
-  it('should throw an UnauthorizedError and resend an account confirmation email when the user`s account is unconfirmed', async () => {
+  it('should throw an UnauthorizedError and call createUserConfirmation when user account is unconfirmed', async () => {
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValueOnce({
       ...mockUser,
       accountStatus: UserStatusType.UNCONFIRMED,
@@ -74,17 +80,16 @@ describe('forgotPasswordInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('User is unconfirmed'));
 
     expect(
-      applicationContext.getUserGateway().getUserByEmail,
-    ).toHaveBeenCalledWith(applicationContext, { email });
+      applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
+    ).toEqual({ email });
+
     expect(
-      applicationContext.getUseCaseHelpers().createUserConfirmation,
-    ).toHaveBeenCalledWith(applicationContext, {
-      email,
-      userId: mockUser.userId,
-    });
+      applicationContext.getUseCaseHelpers().createUserConfirmation.mock
+        .calls[0][1],
+    ).toEqual({ email, userId: mockUser.userId });
   });
 
-  it('should throw an UnauthorizedError and resend a password change email when user`s account is in a force change password state', async () => {
+  it('should throw an UnauthorizedError and call adminCreateUser (without TemporaryPassword on prod) when user account is in FORCE_CHANGE_PASSWORD status', async () => {
     process.env.STAGE = 'prod';
 
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValueOnce({
@@ -99,13 +104,12 @@ describe('forgotPasswordInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('User is unconfirmed'));
 
     expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).not.toHaveBeenCalledWith({
-      TemporaryPassword: undefined,
-    });
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
+        .TemporaryPassword,
+    ).toBeUndefined();
   });
 
-  it('should throw an UnauthorizedErrorr and resend a password change email when user`s account is in a force change password state (with TemporaryPassword on non-prod environments)', async () => {
+  it('should throw an UnauthorizedError and call adminCreateUser (with TemporaryPassword on non-prod environments) when user account is in FORCE_CHANGE_PASSWORD status', async () => {
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValueOnce({
       ...mockUser,
       accountStatus: UserStatusType.FORCE_CHANGE_PASSWORD,
@@ -118,27 +122,43 @@ describe('forgotPasswordInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('User is unconfirmed'));
 
     expect(
-      applicationContext.getUserGateway().getUserByEmail,
-    ).toHaveBeenCalledWith(applicationContext, { email });
+      applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
+    ).toEqual({ email });
     expect(
-      applicationContext.getUseCaseHelpers().resendTemporaryPassword,
-    ).toHaveBeenCalledWith(applicationContext, {
-      email,
+      applicationContext.getUseCaseHelpers().createUserConfirmation,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
+    ).toEqual({
+      DesiredDeliveryMediums: ['EMAIL'],
+      MessageAction: 'RESEND',
+      TemporaryPassword: process.env.DEFAULT_ACCOUNT_PASS,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: email,
     });
   });
 
   it('should call forgotPassword when user account has a valid status', async () => {
-    await forgotPasswordInteractor(applicationContext, {
+    const result = await forgotPasswordInteractor(applicationContext, {
       email,
     });
 
     expect(
-      applicationContext.getUserGateway().getUserByEmail,
-    ).toHaveBeenCalledWith(applicationContext, { email });
+      applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
+    ).toEqual({ email });
     expect(
-      applicationContext.getUserGateway().forgotPassword,
-    ).toHaveBeenCalledWith(applicationContext, {
-      email,
+      applicationContext.getUseCaseHelpers().createUserConfirmation,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().forgotPassword.mock.calls[0][0],
+    ).toEqual({
+      ClientId: applicationContext.environment.cognitoClientId,
+      Username: email,
     });
+
+    expect(result).toBeUndefined();
   });
 });

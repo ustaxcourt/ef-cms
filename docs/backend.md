@@ -8,6 +8,7 @@ Before diving into the technical aspects of the backend, it might be useful just
 
 ```
 .
+├── cognito // custom styling for the cognito ui
 ├── elasticsearch // scripts for setting up the elasticsearch cluster
 │   ├── elasticsearch-indexes.js // all of the indices on the cluster
 │   ├── elasticsearch-settings.js // the main settings
@@ -93,7 +94,7 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   │   │       ├── lambdas // the lambda containing the node logic
 │   │   │       ├── main.tf // the main terraform entrypoint
 ├── swagger.json // the swagger .json we update when api endpoints are changed or added
-├── track-successful-migrations.js // tracks which migration scripts have run after doing a migration
+├── switch-cognito-triggers-color.js // used to switch the color of the cognito triggers
 ├── verify-ses-email.sh // used to verify SES 
 ```
 

@@ -57,10 +57,7 @@ export const IndividualWorkQueueOutbox = connect(
                     </span>
                   )}
                 </td>
-                <td
-                  className="message-queue-row small"
-                  data-testid={`section-work-item-outbox-${item.docketNumber}`}
-                >
+                <td className="message-queue-row small">
                   <CaseLink formattedCase={item} />
                 </td>
                 <td className="message-queue-row message-queue-case-title">

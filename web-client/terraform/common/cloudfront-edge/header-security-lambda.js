@@ -30,6 +30,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   ];
   const applicationUrl = `https://${allowedDomainString}`;
   const subdomainsUrl = `https://*.${allowedDomainString}`;
+  const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
   const dynamsoftUrlStaging = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
   const dynamsoftUrlTest = 'https://dynamsoft-lib.test.ef-cms.ustaxcourt.gov';
   const dynamsoftUrlProd = 'https://dynamsoft-lib.dawson.ustaxcourt.gov';
@@ -41,7 +42,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const pdfjsExpressUrl = 'https://*.pdfjs.express';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
+    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,

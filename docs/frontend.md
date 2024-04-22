@@ -130,7 +130,7 @@ export const signOutSequence = [
 ];
 ```
 
-This sequence basically shows a spinner, stops any web socket connections, deletes auth cookies, clears some state, and navigates the user to the login page.  The beautify of this declarative approach is that it is very easy to get a high level overview of what is going on when a sequence executes.  You really don't need to know the internals of how these actions work to understand the sequence.
+This sequence basically shows a spinner, stops any web socket connections, deletes auth cookies, clears some state, and navigates the user to cognito.  The beautify of this declarative approach is that it is very easy to get a high level overview of what is going on when a sequence executes.  You really don't need to know the internals of how these actions work to understand the sequence.
 
 ### Actions
 

@@ -1,5 +1,5 @@
+import * as client from '../../dynamodbClientService';
 import { RawUser } from '@shared/business/entities/User';
-import { put } from '../../dynamodbClientService';
 
 export const persistUser = async ({
   applicationContext,
@@ -7,8 +7,8 @@ export const persistUser = async ({
 }: {
   applicationContext: IApplicationContext;
   user: RawUser;
-}): Promise<void> => {
-  await put({
+}) => {
+  await client.put({
     Item: {
       ...user,
       pk: `user|${user.userId}`,

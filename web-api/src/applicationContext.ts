@@ -55,7 +55,6 @@ import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
-import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
@@ -162,13 +161,10 @@ export const createApplicationContext = (
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser: async () => {
-      if (environment.stage === 'local') {
-        return await getChromiumBrowser();
-      } else {
-        return await getChromiumBrowserAWS();
-      }
-    },
+    getChromiumBrowser:
+      process.env.NODE_ENV === 'production'
+        ? getChromiumBrowserAWS
+        : getChromiumBrowser,
     getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();
@@ -320,7 +316,6 @@ export const createApplicationContext = (
     },
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
-      saveRequestResponse,
       sendNotificationToConnection,
       sendNotificationToUser,
     }),

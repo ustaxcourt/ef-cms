@@ -1,15 +1,15 @@
 import { createApplicationContext } from '../../../src/applicationContext';
 
+/**
+ * handler
+ * @returns {string} id for the temporary stored pdf
+ */
 export const handler = async event => {
-  const applicationContext = createApplicationContext({});
-
-  const browser = await applicationContext.getChromiumBrowser();
+  const applicationContext = createApplicationContext();
 
   const results = await applicationContext
     .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(applicationContext, event, browser);
-
-  await browser.close();
+    .generatePdfFromHtmlHelper(applicationContext, event);
 
   const tempId = applicationContext.getUniqueId();
 
@@ -23,6 +23,10 @@ export const handler = async event => {
   return tempId;
 };
 
+/**
+ * changeOfAddressHandler
+ * @returns {string} id for the temporary stored pdf
+ */
 export const changeOfAddressHandler = async event => {
   const { Records } = event;
   const { body } = Records[0];

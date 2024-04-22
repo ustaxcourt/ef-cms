@@ -41,10 +41,10 @@ jobs:
     env:
       CI: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '20.12.0'
+          node-version: '18.16.1'
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
@@ -56,7 +56,7 @@ jobs:
           port: 8000
           cors: '*'
       - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
+        uses: runforesight/workflow-telemetry-action@v1
         with:
           comment_on_pr: false
       - name: Install Node Dependencies

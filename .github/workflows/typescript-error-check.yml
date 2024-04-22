@@ -2,6 +2,9 @@ name: Typescript Reduce Type Errors
 
 on:
   pull_request:
+  push:
+    branches:
+      - dependency-updates
 
 jobs:
   ReduceTypeErrors:
@@ -9,18 +12,18 @@ jobs:
 
     steps:
       - name: Checkout USTC Staging
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           repository: ustaxcourt/ef-cms
           ref: staging
           path: stagingBranch
       - name: Checkout current branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           path: branchToBeCompared
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: '20.12.0'
+          node-version: '18.16.1'
       - name: NPM Install in your branch
         working-directory: ./branchToBeCompared
         run: npm ci
