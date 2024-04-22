@@ -532,12 +532,14 @@ export const uploadPetition = async (
   overrides: any = {},
   loginUsername = 'petitioner@example.com',
 ) => {
-  if (!userMap[loginUsername]) {
-    throw new Error(`Unable to log into test as ${loginUsername}`);
+  const loginUsernameLowercase = loginUsername.toLowerCase();
+
+  if (!userMap[loginUsernameLowercase]) {
+    throw new Error(`Unable to log into test as ${loginUsernameLowercase}`);
   }
   const user = {
-    ...userMap[loginUsername],
-    sub: userMap[loginUsername].userId,
+    ...userMap[loginUsernameLowercase],
+    'custom:userId': userMap[loginUsernameLowercase].userId,
   };
 
   const { COUNTRY_TYPES } = applicationContext.getConstants();

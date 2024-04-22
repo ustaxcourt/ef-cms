@@ -34,7 +34,7 @@ import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
-import { exec } from 'child_process';
+import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
@@ -68,38 +68,10 @@ import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import AWS, { S3, SES, SQS } from 'aws-sdk';
 import axios from 'axios';
+import http from 'http';
+import https from 'https';
 import pug from 'pug';
 import sass from 'sass';
-import util from 'util';
-
-const execPromise = util.promisify(exec);
-
-const environment = {
-  appEndpoint: process.env.EFCMS_DOMAIN
-    ? `app.${process.env.EFCMS_DOMAIN}`
-    : 'localhost:1234',
-  cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
-  currentColor: process.env.CURRENT_COLOR || 'green',
-  documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
-  elasticsearchEndpoint:
-    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
-  emailFromAddress:
-    process.env.EMAIL_SOURCE ||
-    `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`,
-  masterRegion: process.env.MASTER_REGION || 'us-east-1',
-  quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
-  region: process.env.AWS_REGION || 'us-east-1',
-  s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-  stage: process.env.STAGE || 'local',
-  tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
-  userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
-  virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
-  workerQueueUrl:
-    `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
-    '',
-  wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
-};
 
 let s3Cache: AWS.S3 | undefined;
 let sesCache;
@@ -211,9 +183,6 @@ export const createApplicationContext = (
     }),
     getDocumentClient,
     getDocumentGenerators,
-    getDocumentsBucketName: () => {
-      return environment.documentsBucketName;
-    },
     getDynamoClient,
     getEmailClient: () => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
@@ -358,9 +327,6 @@ export const createApplicationContext = (
     getPug: () => {
       return pug;
     },
-    getQuarantineBucketName: () => {
-      return environment.quarantineBucketName;
-    },
     getScannerResourceUri: () => {
       return (
         process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
@@ -395,22 +361,29 @@ export const createApplicationContext = (
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient: () => {
+      const agentConfig = {
+        keepAlive: true,
+        maxSockets: 75,
+      };
+      const agent =
+        environment.stage === 'local'
+          ? new http.Agent(agentConfig)
+          : new https.Agent(agentConfig);
+
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
           httpOptions: {
+            agent,
             connectTimeout: 3000,
             timeout: 5000,
           },
-          maxRetries: 3,
+          maxRetries: 5,
           region: 'us-east-1',
           s3ForcePathStyle: true,
         });
       }
       return s3Cache;
-    },
-    getTempDocumentsBucketName: () => {
-      return environment.tempDocumentsBucketName;
     },
     getUniqueId,
     getUseCaseHelpers,
@@ -435,9 +408,6 @@ export const createApplicationContext = (
       error: (message, context?) => logger.error(message, { context }),
       info: (message, context?) => logger.info(message, { context }),
       warn: (message, context?) => logger.warn(message, { context }),
-    },
-    runVirusScan: async ({ filePath }) => {
-      return await execPromise(`clamdscan ${filePath}`);
     },
     setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };

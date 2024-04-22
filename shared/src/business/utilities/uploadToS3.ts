@@ -7,7 +7,7 @@
 
 export const uploadToS3 = ({ applicationContext, pdfData, pdfName }) =>
   new Promise((resolve, reject) => {
-    const documentsBucket = applicationContext.getDocumentsBucketName();
+    const documentsBucket = applicationContext.environment.documentsBucketName;
     const s3Client = applicationContext.getStorageClient();
 
     const params = {

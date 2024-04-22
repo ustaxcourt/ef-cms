@@ -1,14 +1,18 @@
+import { RawUser } from '@shared/business/entities/User';
+import { chunk } from 'lodash';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { createOrUpdateUser } from '../../../shared/admin-tools/user/admin';
+import { environment } from '@web-api/environment';
 import {
   gatherRecords,
   getCsvOptions,
 } from '../../../shared/src/tools/helpers';
 import {
-  getServices,
-  getToken,
-  readCsvFile,
-} from '../../../web-api/importHelpers';
+  getDestinationTableInfo,
+  getUserPoolId,
+} from '../../../shared/admin-tools/util';
 import { parse } from 'csv-parse';
-import axios from 'axios';
+import { readCsvFile } from '../../../web-api/importHelpers';
 
 export const CSV_HEADERS = [
   'name',
@@ -20,47 +24,42 @@ export const CSV_HEADERS = [
   'isSeniorJudge',
 ];
 
-export const init = async (csvFile, outputMap) => {
-  const csvOptions = getCsvOptions(CSV_HEADERS);
-  let output = [];
+const { DEFAULT_ACCOUNT_PASS } = process.env;
 
-  const token = await getToken();
-  const data = readCsvFile(csvFile);
+export const init = async () => {
+  const filePath = './scripts/circleci/judge/judge_users.csv';
+  const csvOptions = getCsvOptions(CSV_HEADERS);
+  const userPoolId = await getUserPoolId();
+  const { tableName } = await getDestinationTableInfo();
+  environment.userPoolId = userPoolId;
+  environment.dynamoDbTableName = tableName;
+  const applicationContext = createApplicationContext({});
+
+  const output: RawUser[] = [];
+  const data = readCsvFile(filePath);
   const stream = parse(data, csvOptions);
 
   const processCsv = new Promise<void>(resolve => {
     stream.on('readable', gatherRecords(CSV_HEADERS, output));
     stream.on('end', async () => {
-      for (let row of output) {
-        try {
-          let endpoint;
+      const requestChunks = chunk(output, 20); // Chunk in batches of 20 to avoid throttling by cognito.
+      for (let index = 0; index < requestChunks.length; index++) {
+        const currentChunk = requestChunks[index];
+        await Promise.all(
+          currentChunk.map(async row => {
+            try {
+              const { userId } = await createOrUpdateUser(applicationContext, {
+                password: DEFAULT_ACCOUNT_PASS!,
+                user: row,
+              });
 
-          if (process.env.ENV === 'local') {
-            endpoint = 'http://localhost:4000/users';
-          } else {
-            const services = await getServices();
-            endpoint = `${
-              services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
-            }/users`;
-          }
-
-          const result = await axios.post(
-            endpoint,
-            { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-          console.log(`SUCCESS ${row.name}`);
-          const lowerCaseName = row.name.toLowerCase();
-          const { userId } = result.data;
-          outputMap[lowerCaseName] = userId;
-        } catch (err) {
-          console.log(`ERROR ${row.name}`);
-          console.log(err);
-        }
+              console.log(`SUCCESS, ${row.name}, ${row.email}, ${userId}`);
+            } catch (err) {
+              console.log(`ERROR ${row.name}`);
+              console.log(err);
+            }
+          }),
+        );
       }
       resolve();
     });
