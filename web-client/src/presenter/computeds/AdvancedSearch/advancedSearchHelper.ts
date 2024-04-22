@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { compareStrings } from '../../../../../shared/src/business/utilities/sortFunctions';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSearchResultRecord = (
@@ -85,6 +86,12 @@ export const advancedSearchHelper = (
     } else {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
+
+    paginatedResults.formattedSearchResults.sort((a, b) => {
+      const val = compareStrings(a.name.toLowerCase(), b.name.toLowerCase());
+      if (val === 0) return compareStrings(a.barNumber, b.barNumber); //secondary sort
+      return val;
+    });
 
     const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
 

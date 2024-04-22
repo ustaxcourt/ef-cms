@@ -69,8 +69,8 @@ export const PractitionerSearchResults = connect(
                   <th aria-label="bar number">Bar No.</th>
                   <th>Name</th>
                   <th>State</th>
-                  <th>Admissions Status</th>
-                  <th>Admissions Date</th>
+                  <th>Admission Status</th>
+                  <th>Admission Date</th>
                   <th>Practitioner Type</th>
                   <th>Practice Type</th>
                 </tr>
