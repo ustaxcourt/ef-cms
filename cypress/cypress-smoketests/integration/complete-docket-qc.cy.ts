@@ -169,6 +169,41 @@ describe('Document QC Complete', () => {
       ).should('be.visible');
     });
   });
+
+  describe('complete qc on large case', () => {
+    before(() => {
+      loginAsPetitioner();
+      petitionerCreatesElectronicCase().then(docketNumber => {
+        cy.wrap(docketNumber).as('LARGE_CASE_DOCKET_NUMBER');
+        petitionsClerkServesPetition(docketNumber);
+
+        for (let index = 0; index < 30; index++) {
+          petitionerFilesADocument(docketNumber);
+        }
+      });
+    });
+
+    it('should be able to Complete QC on the large case', () => {
+      cy.login(
+        'caseServicesSupervisor1',
+        '/document-qc/section/inbox/selectedSection?section=docket',
+      );
+
+      cy.get<string>('@LARGE_CASE_DOCKET_NUMBER').then(docketNumber => {
+        cy.get(`[data-testid="work-item-${docketNumber}"]`)
+          .find('.message-document-title')
+          .find('a')
+          .click();
+
+        cy.get('#save-and-finish').click();
+
+        cy.get('[data-testid="success-alert"]').should(
+          'contain',
+          'QC Completed',
+        );
+      });
+    });
+  });
 });
 
 function petitionerFilesADocument(docketNumber: string) {
