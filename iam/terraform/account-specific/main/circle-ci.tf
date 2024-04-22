@@ -137,7 +137,6 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "logs:*",
         "events:*",
         "sns:*",
-        "elasticloadbalancing:*",
         "es:*",
         "ec2:*",
         "ses:*",
@@ -189,52 +188,6 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
         "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-*",
         "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-*"
-      ]
-    },
-    {
-      "Sid": "IamGranular",
-      "Effect": "Allow",
-      "Action": [
-        "iam:GetRole",
-        "iam:PassRole",
-        "iam:GetRolePolicy",
-        "iam:GetInstanceProfile",
-        "iam:GetPolicy",
-        "iam:GetPolicyVersion",
-        "iam:ListPolicyVersions",
-        "iam:ListInstanceProfilesForRole",
-        "iam:AddRoleToInstanceProfile",
-        "iam:CreateServiceLinkedRole",
-        "iam:ListAttachedRolePolicies",
-        "iam:DeleteRolePolicy",
-        "iam:DeleteRole",
-        "iam:ListRolePolicies",
-        "iam:PutRolePolicy",
-        "iam:CreateRole"
-      ],
-      "Resource": [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dynamsoft_s3_download_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_elasticsearch_execution_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_bucket_replication_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*"
       ]
     },
     {
@@ -340,6 +293,73 @@ resource "aws_iam_policy" "circle_ci_route53_policy" {
         "route53:UpdateHealthCheck"
       ],
       "Resource": "*"
+    }
+  ]
+}
+
+EOF
+}
+
+resource "aws_iam_user_policy_attachment" "circle_ci_iam_policy_attachment" {
+  user       = aws_iam_user.circle_ci.name
+  policy_arn = aws_iam_policy.circle_ci_iam_policy.arn
+}
+
+# TODO 10345: s3_replication_role_* needs to be removed AFTER this story has been deployed to all environments on an account.
+# If it is removed before then, CircleCI will not have appropriate (backwards compatible) permission as it has been renamed.
+resource "aws_iam_policy" "circle_ci_iam_policy" {
+  name = "circle_ci_iam_policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "IamGranular",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:PassRole",
+        "iam:GetRolePolicy",
+        "iam:GetInstanceProfile",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion",
+        "iam:ListPolicyVersions",
+        "iam:ListInstanceProfilesForRole",
+        "iam:AddRoleToInstanceProfile",
+        "iam:CreateServiceLinkedRole",
+        "iam:ListAttachedRolePolicies",
+        "iam:DeleteRolePolicy",
+        "iam:DeleteRole",
+        "iam:ListRolePolicies",
+        "iam:PutRolePolicy",
+        "iam:CreateRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dynamsoft_s3_download_role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_elasticsearch_execution_role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_bucket_replication_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*"
+      ]
     }
   ]
 }
