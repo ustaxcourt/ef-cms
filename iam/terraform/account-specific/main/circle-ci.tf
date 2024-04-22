@@ -209,6 +209,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "iam:DeleteRolePolicy",
         "iam:DeleteRole",
         "iam:ListRolePolicies",
+        "iam:PutRolePolicy",
         "iam:CreateRole"
       ],
       "Resource": [
@@ -228,7 +229,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
