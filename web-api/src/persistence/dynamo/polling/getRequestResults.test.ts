@@ -5,13 +5,20 @@ describe('getRequestResults', () => {
   const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
   const TEST_USER_ID = 'TEST_USER_ID';
   const MOCK_GET_RESULTS = {
-    Item: {
-      testProp1: 'testProp1',
-    },
+    Items: [
+      {
+        chunk: 'something',
+        index: 0,
+        pk: 'test_pk',
+        requestId: TEST_REQUEST_ID,
+        sk: 'test_sk',
+        totalNumberOfChunks: 1,
+      },
+    ],
   };
 
   beforeEach(() => {
-    applicationContext.getDocumentClient().get = jest
+    applicationContext.getDocumentClient().query = jest
       .fn()
       .mockResolvedValue(MOCK_GET_RESULTS);
   });
@@ -23,15 +30,19 @@ describe('getRequestResults', () => {
       userId: TEST_USER_ID,
     });
 
-    const getCalls = applicationContext.getDocumentClient().get.mock.calls;
-    expect(getCalls.length).toEqual(1);
-    expect(getCalls[0][0].Key).toEqual({
-      pk: `user|${TEST_USER_ID}`,
-      sk: `request|${TEST_REQUEST_ID}`,
+    const queryCalls = applicationContext.getDocumentClient().query.mock.calls;
+
+    expect(queryCalls.length).toEqual(1);
+    expect(queryCalls[0][0]).toMatchObject({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `user|${TEST_USER_ID}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
     });
 
-    expect(results).toEqual({
-      testProp1: 'testProp1',
-    });
+    expect(results).toEqual(MOCK_GET_RESULTS.Items);
   });
 });
