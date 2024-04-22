@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "migration_segments_role" {
-  name = "migration_segments_role_${var.environment}"
+  name = "migration_segments_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {

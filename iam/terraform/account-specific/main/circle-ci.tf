@@ -227,7 +227,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_bucket_replication_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
