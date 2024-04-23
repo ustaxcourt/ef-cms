@@ -1,10 +1,12 @@
+import { IDynamoDBRecord } from '../../../../../types/IDynamoDBRecord';
 import { compact } from 'lodash';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processWorkItemEntries = async ({
   applicationContext,
   workItemRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   workItemRecords: any[];
 }) => {
   if (!workItemRecords.length) return;
@@ -40,11 +42,12 @@ export const processWorkItemEntries = async ({
           ...caseWorkItemMappingRecord,
         },
       },
-      eventName: 'MODIFY',
+      eventName: 'MODIFY' as 'MODIFY',
     };
   };
 
-  const indexRecords = workItemRecords.map(indexWorkItemEntry);
+  const indexRecords: IDynamoDBRecord[] =
+    workItemRecords.map(indexWorkItemEntry);
 
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()

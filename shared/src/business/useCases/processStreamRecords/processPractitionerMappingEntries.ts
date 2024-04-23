@@ -1,11 +1,16 @@
+import {
+  AttributeValueWithName,
+  IDynamoDBRecord,
+} from '../../../../../types/IDynamoDBRecord';
 import { flattenDeep } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
   practitionerMappingRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   practitionerMappingRecords: any[];
 }) => {
   if (!practitionerMappingRecords.length) return;
@@ -15,7 +20,7 @@ export const processPractitionerMappingEntries = async ({
       const practitionerMappingData =
         practitionerMappingRecord.dynamodb.NewImage ||
         practitionerMappingRecord.dynamodb.OldImage;
-      const caseRecords = [];
+      const caseRecords: IDynamoDBRecord[] = [];
 
       const caseMetadataWithCounsel = await applicationContext
         .getPersistenceGateway()
@@ -55,7 +60,7 @@ export const processPractitionerMappingEntries = async ({
               S: practitionerMappingData.sk.S,
             },
           },
-          NewImage: marshalledCase,
+          NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
         },
         eventName: 'MODIFY',
       });

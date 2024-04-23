@@ -1,17 +1,13 @@
-import { IDynamoDBRecord } from 'types/IDynamoDBRecord';
+import { AttributeValueWithName, IDynamoDBRecord } from 'types/IDynamoDBRecord';
 import { flattenDeep } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
- *
- * @param {array} caseEntityRecords all of the event stream records associated with case entities
- */
 export const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntityRecords: any[];
 }) => {
   if (!caseEntityRecords.length) return;
@@ -96,7 +92,7 @@ export const processCaseEntries = async ({
             S: caseNewImage.sk.S,
           },
         },
-        NewImage: marshalledCase,
+        NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
       },
       eventName: 'MODIFY',
     });

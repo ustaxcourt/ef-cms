@@ -3,6 +3,8 @@ import {
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import type { IDynamoDBRecord } from '../../../../../types/IDynamoDBRecord';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -13,7 +15,7 @@ export const processDocketEntries = async ({
   applicationContext,
   docketEntryRecords: records,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketEntryRecords: any[];
 }) => {
   if (!records.length) return;
@@ -22,9 +24,8 @@ export const processDocketEntries = async ({
     `going to index ${records.length} docketEntryRecords`,
   );
 
-  const newDocketEntryRecords = await Promise.all(
+  const newDocketEntryRecords: IDynamoDBRecord[] = await Promise.all(
     records.map(async record => {
-      // TODO: May need to remove the `case_relations` object and re-add later
       const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
       const isSearchable =
@@ -42,6 +43,7 @@ export const processDocketEntries = async ({
               key: fullDocketEntry.documentContentsId,
               useTempBucket: false,
             });
+          // @ts-ignore
           const { documentContents } = JSON.parse(buffer.toString());
 
           fullDocketEntry.documentContents = documentContents;

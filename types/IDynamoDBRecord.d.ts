@@ -1,6 +1,6 @@
 import type { AttributeValue, DynamoDBRecord, StreamRecord } from 'aws-lambda';
 
-interface AttributeValueWithName extends AttributeValue {
+export interface AttributeValueWithName extends AttributeValue {
   name?: string | undefined;
 }
 
