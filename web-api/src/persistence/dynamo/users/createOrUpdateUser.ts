@@ -5,6 +5,8 @@ import {
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserNotFoundException } from '@aws-sdk/client-cognito-identity-provider';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -113,21 +115,18 @@ export const isUserAlreadyCreated = async ({
   email,
   userPoolId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   email: string;
   userPoolId: string;
 }) => {
   try {
-    await applicationContext
-      .getCognito()
-      .adminGetUser({
-        UserPoolId: userPoolId,
-        Username: email,
-      })
-      .promise();
+    await applicationContext.getCognito().adminGetUser({
+      UserPoolId: userPoolId,
+      Username: email,
+    });
     return true;
   } catch (e) {
-    if (e.code.includes('UserNotFoundException')) {
+    if (e instanceof UserNotFoundException) {
       return false;
     } else {
       throw e;
@@ -137,12 +136,10 @@ export const isUserAlreadyCreated = async ({
 
 export const createOrUpdateUser = async ({
   applicationContext,
-  disableCognitoUser = false,
   password,
   user,
 }: {
-  applicationContext: IApplicationContext;
-  disableCognitoUser: boolean;
+  applicationContext: ServerApplicationContext;
   password: string;
   user: RawUser;
 }) => {
@@ -159,7 +156,8 @@ export const createOrUpdateUser = async ({
   });
 
   if (!userExists) {
-    const params = {
+    const response = await applicationContext.getCognito().adminCreateUser({
+      DesiredDeliveryMediums: ['EMAIL'],
       MessageAction: 'SUPPRESS',
       TemporaryPassword: password,
       UserAttributes: [
@@ -182,48 +180,23 @@ export const createOrUpdateUser = async ({
       ],
       UserPoolId: userPoolId,
       Username: user.email,
-    };
+    });
 
-    const response = await applicationContext
-      .getCognito()
-      .adminCreateUser(params)
-      .promise();
-
-    userId = response.User.Username;
+    userId = response.User!.Username;
   } else {
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
-        UserPoolId: userPoolId,
-        Username: user.email,
-      })
-      .promise();
+    const response = await applicationContext.getCognito().adminGetUser({
+      UserPoolId: userPoolId,
+      Username: user.email,
+    });
 
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-        ],
-        UserPoolId: userPoolId,
-        Username: response.Username,
-      })
-      .promise();
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
+      attributesToUpdate: {
+        role: user.role,
+      },
+      email: user.email,
+    });
 
     userId = response.Username;
-  }
-
-  if (disableCognitoUser) {
-    await applicationContext
-      .getCognito()
-      .adminDisableUser({
-        UserPoolId: userPoolId,
-        Username: userId,
-      })
-      .promise();
   }
 
   return await createUserRecords({

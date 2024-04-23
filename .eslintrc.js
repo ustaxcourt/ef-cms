@@ -20,11 +20,16 @@ module.exports = {
     'plugin:import/typescript',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
-  ignorePatterns: '**/*_.js',
+  ignorePatterns: ['**/*_.js', 'scripts/run-once-scripts/**/*'],
   overrides: [
     {
       extends: ['plugin:@typescript-eslint/disable-type-checked'], // Disables type information from needing to be output, and clashing tsconfig/eslint issues https://typescript-eslint.io/linting/typed-linting#how-can-i-disable-type-aware-linting-for-a-subset-of-files
-      files: ['*.js', 'cypress/**/*.ts', 'webpack.config**'],
+      files: [
+        '*.js',
+        'cypress/**/*.ts',
+        'webpack.config**',
+        './cypress*.config.ts',
+      ],
     },
     {
       files: ['cypress/**/*.ts'],
@@ -74,6 +79,7 @@ module.exports = {
     project: ['./tsconfig.json'],
     requireConfigFile: false,
     sourceType: 'module',
+    tsconfigRootDir: __dirname,
   },
   plugins: [
     'cypress',
@@ -389,6 +395,7 @@ module.exports = {
           'todays',
           'touchmove',
           'transferee',
+          'transpile',
           'truthy',
           'tubman',
           'uint',

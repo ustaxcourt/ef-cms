@@ -44,6 +44,7 @@ export const PetitionersAndCounsel = connect(
                       <Button
                         link
                         className="width-auto white-edit-link padding-0 margin-right-0 float-right edit-petitioner-button"
+                        data-testid="edit-petitioner-button"
                         href={petitioner.editPetitionerLink}
                         icon="edit"
                       >
@@ -58,7 +59,7 @@ export const PetitionersAndCounsel = connect(
                     }}
                     showEmail={false}
                   />
-                  <span className="address-line">
+                  <span className="address-line" data-testid="petitioner-email">
                     {petitioner.formattedEmail}
                     {petitioner.showEAccessFlag && (
                       <FontAwesomeIcon
@@ -69,8 +70,9 @@ export const PetitionersAndCounsel = connect(
                       />
                     )}
                   </span>
-                  {petitioner.formattedPendingEmail}
-
+                  <span data-testid="petitioner-pending-email">
+                    {petitioner.formattedPendingEmail}
+                  </span>
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">
@@ -101,7 +103,10 @@ export const PetitionersAndCounsel = connect(
                   )}
 
                   {petitioner.serviceIndicator && (
-                    <span className="margin-top-4">
+                    <span
+                      className="margin-top-4"
+                      data-testid="petitioner-service-indicator"
+                    >
                       <p className="semi-bold margin-bottom-0">
                         Service preference
                       </p>
@@ -109,58 +114,60 @@ export const PetitionersAndCounsel = connect(
                     </span>
                   )}
                   <h4 className="margin-top-3">Counsel</h4>
-                  {petitioner.hasCounsel &&
-                    petitioner.representingPractitioners.map(
-                      privatePractitioner => (
-                        <p key={privatePractitioner.userId}>
-                          <span className="grid-row">
-                            <span className="grid-col-9">
-                              {privatePractitioner.name}{' '}
-                              {`(${privatePractitioner.barNumber})`}{' '}
+                  <div data-testid="practitioner-contact-info">
+                    {petitioner.hasCounsel &&
+                      petitioner.representingPractitioners.map(
+                        privatePractitioner => (
+                          <p key={privatePractitioner.userId}>
+                            <span className="grid-row">
+                              <span className="grid-col-9">
+                                {privatePractitioner.name}{' '}
+                                {`(${privatePractitioner.barNumber})`}{' '}
+                              </span>
+                              <span className="grid-col-3">
+                                {caseInformationHelper.showEditPrivatePractitioners && (
+                                  <Button
+                                    link
+                                    className="margin-left-1 padding-0 height-3"
+                                    data-testid="edit-private-practitioner-counsel"
+                                    href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
+                                    icon="edit"
+                                    overrideMargin={true}
+                                  >
+                                    Edit
+                                  </Button>
+                                )}
+                                {caseInformationHelper.showViewCounselButton && (
+                                  <Button
+                                    link
+                                    className="width-auto margin-left-1 padding-0 height-3 view-privatePractitioners-button"
+                                    data-testid="view-counsel-info"
+                                    icon="eye"
+                                    overrideMargin={true}
+                                    onClick={() => {
+                                      showViewPetitionerCounselModalSequence({
+                                        privatePractitioner,
+                                      });
+                                    }}
+                                  >
+                                    View
+                                  </Button>
+                                )}
+                              </span>
                             </span>
-                            <span className="grid-col-3">
-                              {caseInformationHelper.showEditPrivatePractitioners && (
-                                <Button
-                                  link
-                                  className="margin-left-1 padding-0 height-3"
-                                  data-testid="edit-petitioner-counsel"
-                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
-                                  icon="edit"
-                                  overrideMargin={true}
-                                >
-                                  Edit
-                                </Button>
-                              )}
-                              {caseInformationHelper.showViewCounselButton && (
-                                <Button
-                                  link
-                                  className="width-auto margin-left-1 padding-0 height-3 view-privatePractitioners-button"
-                                  data-testid="view-counsel-info"
-                                  icon="eye"
-                                  overrideMargin={true}
-                                  onClick={() => {
-                                    showViewPetitionerCounselModalSequence({
-                                      privatePractitioner,
-                                    });
-                                  }}
-                                >
-                                  View
-                                </Button>
-                              )}
-                            </span>
-                          </span>
 
-                          <span className="address-line">
-                            {privatePractitioner.formattedEmail}
-                          </span>
-                          {privatePractitioner.formattedPendingEmail}
-                          <span className="address-line">
-                            {privatePractitioner.contact.phone}
-                          </span>
-                        </p>
-                      ),
-                    )}
-                  {!petitioner.hasCounsel && 'None'}
+                            <span className="address-line">
+                              {privatePractitioner.formattedEmail}
+                            </span>
+                            {privatePractitioner.formattedPendingEmail}
+                            <span className="address-line">
+                              {privatePractitioner.contact.phone}
+                            </span>
+                          </p>
+                        ),
+                      )}
+                    {!petitioner.hasCounsel && 'None'}
+                  </div>
                 </div>
               </div>
             </div>

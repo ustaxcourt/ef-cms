@@ -7,9 +7,7 @@ import { getJudgeForCurrentUserAction } from '@web-client/presenter/actions/getJ
 import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { getUsersInSectionAction } from '../../actions/getUsersInSectionAction';
-import { isLoggedInAction } from '../../actions/isLoggedInAction';
 import { parallel } from 'cerebral';
-import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultJudgeNameBasedOnUserAction } from '../../actions/JudgeActivityReport/setDefaultJudgeNameBasedOnUserAction';
@@ -19,34 +17,25 @@ import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 
-const gotoJudgeActivityReport = [
-  setupCurrentPageAction('Interstitial'),
-  closeMobileMenuAction,
-  stopShowValidationAction,
-  clearScreenMetadataAction,
-  clearErrorAlertsAction,
-  clearJudgeActivityReportStatisticsDataAction,
-  clearJudgeActivityReportStatisticsFiltersAction,
-  getJudgeForCurrentUserAction,
-  setJudgeUserAction,
-  setDefaultJudgeNameBasedOnUserAction,
-  getUsersInSectionAction({ section: 'judge' }),
-  setAllAndCurrentJudgesAction,
-  setupCurrentPageAction('JudgeActivityReport'),
-  parallel([
-    [getSubmittedAndCavCasesByJudgeAction],
-    [getPendingMotionDocketEntriesForCurrentJudgeAction],
-  ]),
-  setCavAndSubmittedCasesAction,
-  setPendingMotionDocketEntriesForCurrentJudgeAction,
-];
-
-export const gotoJudgeActivityReportSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
-      gotoJudgeActivityReport,
-    ),
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoJudgeActivityReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setupCurrentPageAction('Interstitial'),
+    closeMobileMenuAction,
+    stopShowValidationAction,
+    clearScreenMetadataAction,
+    clearErrorAlertsAction,
+    clearJudgeActivityReportStatisticsDataAction,
+    clearJudgeActivityReportStatisticsFiltersAction,
+    getJudgeForCurrentUserAction,
+    setJudgeUserAction,
+    setDefaultJudgeNameBasedOnUserAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    setAllAndCurrentJudgesAction,
+    setupCurrentPageAction('JudgeActivityReport'),
+    parallel([
+      [getSubmittedAndCavCasesByJudgeAction],
+      [getPendingMotionDocketEntriesForCurrentJudgeAction],
+    ]),
+    setCavAndSubmittedCasesAction,
+    setPendingMotionDocketEntriesForCurrentJudgeAction,
+  ]);

@@ -441,21 +441,27 @@ export const PetitionQcScanBatchPreviewer = connect(
               setDocumentForPreviewSequence();
             }}
           >
-            {documentTabsList.map(documentTab => (
-              <Tab
-                icon={
-                  scanHelper[`${documentTab.documentType}Completed`] && (
-                    <FontAwesomeIcon
-                      color="green"
-                      icon={['fas', 'check-circle']}
-                    />
-                  )
-                }
-                key={documentTab.documentType}
-                tabName={documentTab.documentType}
-                title={documentTab.title}
-              />
-            ))}
+            {documentTabsList.map(documentTab => {
+              const isFileUploaded =
+                scanHelper[`${documentTab.eventCode}FileCompleted`];
+
+              return (
+                <Tab
+                  data-testid={documentTab.documentType}
+                  icon={
+                    isFileUploaded && (
+                      <FontAwesomeIcon
+                        color="green"
+                        icon={['fas', 'check-circle']}
+                      />
+                    )
+                  }
+                  key={documentTab.documentType}
+                  tabName={documentTab.fileName}
+                  title={documentTab.tabTitle}
+                />
+              );
+            })}
           </Tabs>
         );
       }

@@ -34,17 +34,17 @@ export const HeaderPublic = connect(
   {
     headerPublicHelper: state.headerPublicHelper,
     isTerminalUser: state.isTerminalUser,
-    navigateToCognitoSequence: sequences.navigateToCognitoSequence,
-    navigateToCreatePetitionerAccountSequence:
-      sequences.navigateToCreatePetitionerAccountSequence,
+    redirectToCreatePetitionerAccountSequence:
+      sequences.redirectToCreatePetitionerAccountSequence,
+    redirectToLoginSequence: sequences.redirectToLoginSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
     headerPublicHelper,
     isTerminalUser,
-    navigateToCognitoSequence,
-    navigateToCreatePetitionerAccountSequence,
+    redirectToCreatePetitionerAccountSequence,
+    redirectToLoginSequence,
     showBetaBar,
     toggleBetaBarSequence,
   }) {
@@ -67,13 +67,13 @@ export const HeaderPublic = connect(
                   Welcome to DAWSON{' '}
                   {isTerminalUser && ': US Tax Court Terminal'}
                 </h1>
-                {!headerPublicHelper.onCreationPage && (
+                {headerPublicHelper && !headerPublicHelper.onCreationPage && (
                   <>
                     <div className="login-container">
                       <Button
                         className="usa-button--unstyled"
                         icon={['far', 'user']}
-                        onClick={() => navigateToCognitoSequence()}
+                        onClick={() => redirectToLoginSequence()}
                       >
                         Log In
                       </Button>
@@ -81,21 +81,23 @@ export const HeaderPublic = connect(
                     <div className="login-container mobile">
                       <button
                         className="usa-menu-btn"
-                        onClick={() => navigateToCognitoSequence()}
+                        onClick={() => redirectToLoginSequence()}
                       >
                         Log In
                       </button>
                     </div>
                   </>
                 )}
-                {!headerPublicHelper.onCreationPage &&
+                {headerPublicHelper &&
+                  !headerPublicHelper.onCreationPage &&
                   !headerPublicHelper.onVerificationSentPage && (
                     <>
                       <div className="create-container">
                         <Button
                           className="usa-button--unstyled"
+                          data-testid="create-account-button"
                           onClick={() =>
-                            navigateToCreatePetitionerAccountSequence()
+                            redirectToCreatePetitionerAccountSequence()
                           }
                         >
                           Create Account
@@ -105,7 +107,7 @@ export const HeaderPublic = connect(
                         <button
                           className="usa-menu-btn"
                           onClick={() =>
-                            navigateToCreatePetitionerAccountSequence()
+                            redirectToCreatePetitionerAccountSequence()
                           }
                         >
                           Create Account

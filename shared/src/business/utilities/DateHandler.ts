@@ -53,7 +53,7 @@ export const isStringISOFormatted = dateString => {
  * @param {string} inputFormat the format matching the incoming dateString
  * @returns {string} an ISO-8601 timestamp with GMT+0
  */
-export const prepareDateFromEST = (dateString, inputFormat) => {
+export const prepareDateFromEST = (dateString: string, inputFormat: string) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
   })

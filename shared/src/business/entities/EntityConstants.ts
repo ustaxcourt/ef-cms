@@ -97,11 +97,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
-  USE_EXTERNAL_PDF_GENERATION: {
-    disabledMessage:
-      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
-    key: 'use-external-pdf-generation',
-  },
 };
 
 export const CONFIGURATION_ITEM_KEYS = {
@@ -208,7 +203,7 @@ export const DOCUMENT_SERVED_MESSAGES = {
   EXTERNAL_ENTRY_ADDED:
     'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
-  SELECTED_CASES: 'Document served to selected cases in group.',
+  SELECTED_CASES: 'Document filed and is accessible from the Docket Record.',
 };
 
 export const DOCUMENT_SEARCH_SORT = {
@@ -228,6 +223,8 @@ export const TODAYS_ORDERS_SORT_DEFAULT = TODAYS_ORDERS_SORTS.FILING_DATE_DESC;
 export const STIN_DOCKET_ENTRY_TYPE = {
   documentType: 'Statement of Taxpayer Identification',
   eventCode: 'STIN',
+  sort: 1,
+  tabTitle: 'STIN',
 };
 
 const pickEventCode = (d: { eventCode: string }): string => d.eventCode;
@@ -589,30 +586,55 @@ export const FILTER_OPTIONS = Object.values(
 );
 export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
-// TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
+    tabTitle: 'APW',
+    sort: 5,
+    fileName: 'applicationForWaiverOfFilingFeeFile',
   },
   corporateDisclosure: {
     documentTitle: 'Corporate Disclosure Statement',
     documentType: 'Corporate Disclosure Statement',
     eventCode: 'DISC',
+    tabTitle: 'CDS',
+    sort: 4,
+    fileName: 'corporateDisclosureFile',
   },
   petition: {
     documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
+    tabTitle: 'Petition',
+    sort: 0,
+    fileName: 'petitionFile',
   },
   requestForPlaceOfTrial: {
     documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
+    tabTitle: 'RQT',
+    sort: 3,
+    fileName: 'requestForPlaceOfTrialFile',
   },
-  stin: STIN_DOCKET_ENTRY_TYPE,
-};
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+    sort: 1,
+    tabTitle: 'STIN',
+    fileName: 'stinFile',
+  },
+  attachmentToPetition: {
+    documentTitle: 'Attachment to Petition',
+    documentType: 'Attachment to Petition',
+    eventCode: 'ATP',
+    tabTitle: 'ATP',
+    sort: 2,
+    fileName: 'attachmentToPetitionFile',
+  },
+} as const;
 
 export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
@@ -620,11 +642,14 @@ export const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
   petition: 'petitionFile',
   requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
   stin: 'stinFile',
+  attachmentToPetition: 'attachmentToPetitionFile',
 };
 
 export const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  attachmentToPetitionFile:
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
   corporateDisclosureFile:
     INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
   petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -1015,7 +1040,9 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
-};
+} as const;
+const ROLES_TYPES = Object.values(ROLES);
+export type Role = (typeof ROLES_TYPES)[number];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
@@ -1039,8 +1066,7 @@ export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
 } as const;
-const CountryTypesArray = Object.values(COUNTRY_TYPES);
-export type CountryTypes = (typeof CountryTypesArray)[number];
+export type CountryTypes = (typeof COUNTRY_TYPES)[keyof typeof COUNTRY_TYPES];
 
 export const US_STATES = {
   AK: 'Alaska',
@@ -1545,8 +1571,8 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
   PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 
-export const ASCENDING = 'asc';
-export const DESCENDING = 'desc';
+export const ASCENDING: 'asc' = 'asc';
+export const DESCENDING: 'desc' = 'desc';
 
 export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
 export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
@@ -1596,3 +1622,51 @@ export const JUDGE_TITLES = [
   'Chief Judge',
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
+
+export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
+
+export type FileUploadProgressType = {
+  file: any;
+  uploadProgress: (progressEvent: any) => void;
+};
+
+export type CreatedCaseType = {
+  contactPrimary: {
+    address1: string;
+    address2: string;
+    address3: string;
+    city: string;
+    countryType: string;
+    name: string;
+    paperPetitionEmail: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+    email?: string;
+  };
+  caseType: string;
+  caseCaption: string;
+  attachmentToPetitionFileSize?: number;
+  attachmentToPetitionFile: Blob;
+  hasVerifiedIrsNotice: boolean;
+  isPaper: boolean;
+  mailingDate: string;
+  orderDesignatingPlaceOfTrial?: boolean;
+  orderForCds: boolean;
+  stinFile?: Blob;
+  stinFileSize?: number;
+  orderForFilingFee: boolean;
+  partyType: string;
+  petitionFile: Blob;
+  petitionFileSize: number;
+  petitionPaymentStatus: string;
+  procedureType: string;
+  receivedAt: string;
+  applicationForWaiverOfFilingFeeFile?: Blob;
+  corporateDisclosureFile?: Blob;
+  requestForPlaceOfTrialFile?: Blob;
+  status: string;
+  contactSecondary?: {
+    name: string;
+  };
+};

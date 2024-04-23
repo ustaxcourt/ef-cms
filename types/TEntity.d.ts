@@ -3,6 +3,7 @@
 */
 
 type TPetitioner = {
+  additionalName?: string;
   updatedEmail?: string;
   email?: string;
   confirmEmail?: string;
@@ -23,6 +24,7 @@ type TPetitioner = {
   serviceIndicator?: string;
   state: string;
   title?: string;
+  hasConsentedToEService?: boolean;
 };
 
 type TCaseNote = {

@@ -99,6 +99,10 @@ export const StateDrivenFileInput = connect(
                   key: 'existingFileName',
                   value: null,
                 });
+                updateFormValueSequence({
+                  key: `${fileInputName}Size`,
+                  value: null,
+                });
                 inputRef.value = null;
                 inputRef.click();
               }}

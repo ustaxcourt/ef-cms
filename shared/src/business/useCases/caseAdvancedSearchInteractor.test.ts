@@ -59,6 +59,32 @@ describe('caseAdvancedSearchInteractor', () => {
     ]);
   });
 
+  it('calls search function with correct params, taking startDate and endDate into account, and returns records for an exact match result', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .caseAdvancedSearch.mockResolvedValue([
+        {
+          docketNumber: '101-20',
+          petitioners: [],
+        },
+        {
+          docketNumber: '201-20',
+          petitioners: [],
+        },
+      ]);
+
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
+      endDate: '07/29/1993',
+      petitionerName: 'test person',
+      startDate: '05/18/1985',
+    } as any);
+
+    expect(results).toEqual([
+      { docketNumber: '101-20', petitioners: [] },
+      { docketNumber: '201-20', petitioners: [] },
+    ]);
+  });
+
   it('filters out sealed cases for non associated, non authorized users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsPractitioner,

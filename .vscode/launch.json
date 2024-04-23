@@ -6,7 +6,30 @@
       "request": "launch",
       "name": "Jest: unit test current file",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": ["${fileBasenameNoExtension}", "--config", "jest.config.ts", "--maxWorkers", "1"],
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--config",
+        "jest.config.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "console": "integratedTerminal",
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest: unit test current file (web-api config)",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": [
+        "${fileBasenameNoExtension}",
+        "--config",
+        "web-api/jest-unit.config.ts",
+        "--maxWorkers",
+        "1"
+      ],
       "console": "integratedTerminal",
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest"
@@ -17,9 +40,9 @@
       "request": "launch",
       "name": "Jest: integration test current file",
       "env": {
-        "IS_LOCAL": "true",
+        "STAGE": "local",
         "CI": "false",
-        "NO_SCANNER": "true", 
+        "NO_SCANNER": "true",
         "SKIP_VIRUS_SCAN": "true",
         "AWS_ACCESS_KEY_ID": "S3RVER",
         "AWS_SECRET_ACCESS_KEY": "S3RVER",

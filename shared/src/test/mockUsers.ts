@@ -13,7 +13,17 @@ import {
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
-import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
+import {
+  getJudgesChambers,
+  getJudgesChambersWithLegacy,
+} from '../../../web-client/src/business/chambers/getJudgesChambers';
+
+export const adminUser: RawUser = {
+  entityName: 'User',
+  name: 'Test admin',
+  role: ROLES.admin,
+  userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
+};
 
 export const adcUser = {
   name: 'ADC',
@@ -79,6 +89,14 @@ export const judgeUser: RawUser = {
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
 };
 
+export const legacyJudgeUser: RawUser = {
+  entityName: 'User',
+  name: 'Legacy Judge Ginsburg',
+  role: ROLES.legacyJudge,
+  section: getJudgesChambersWithLegacy().LEGACY_JUDGES_CHAMBERS_SECTION.section,
+  userId: 'dc67e189-cf3e-4ca3-a33f-91db111ec270',
+};
+
 export const judgeColvin: RawUser = {
   email: 'judgeColvin@example.com',
   entityName: 'User',
@@ -115,7 +133,7 @@ export const trialClerkUser: RawUser = {
 };
 
 export const caseServicesSupervisorUser = {
-  name: 'CaseServicesSupervisor',
+  name: 'Test Case Services Supervisor',
   role: ROLES.caseServicesSupervisor,
   section: CASE_SERVICES_SUPERVISOR_SECTION,
   userId: '4562df8a-5c98-49a0-9c53-d8e4ff3b76bb',
@@ -137,7 +155,9 @@ export const docketClerk1User: RawUser = {
   userId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const petitionsClerkUser = {
+export const petitionsClerkUser: RawUser = {
+  email: 'petitionsclerk1@example.com',
+  entityName: 'User',
   name: 'Petitionsclerk1',
   role: ROLES.petitionsClerk,
   section: PETITIONS_SECTION,

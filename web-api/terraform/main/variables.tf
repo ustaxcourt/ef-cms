@@ -2,6 +2,10 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "active_ses_ruleset" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -83,10 +87,6 @@ variable "slack_webhook_url" {
 }
 
 variable "scanner_resource_uri" {
-  type = string
-}
-
-variable "cognito_table_name" {
   type = string
 }
 

@@ -10,10 +10,11 @@ import { post } from '../requests';
  */
 export const serveCaseToIrsInteractor = (
   applicationContext,
-  { docketNumber },
+  { clientConnectionId, docketNumber },
 ) => {
   return post({
     applicationContext,
-    endpoint: `/cases/${docketNumber}/serve-to-irs`,
+    body: { clientConnectionId },
+    endpoint: `/async/cases/${docketNumber}/serve-to-irs`,
   });
 };

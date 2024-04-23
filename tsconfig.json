@@ -9,28 +9,41 @@
     "inlineSourceMap": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "types": ["jest", "node"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "types": [
+      "jest",
+      "node"
+    ],
     "target": "es6",
     "jsx": "react",
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@web-client/*": ["web-client/src/*"],
-      "@web-api/*": ["web-api/src/*"],
-      "@shared/*": ["shared/src/*"]
+      "@web-client/*": [
+        "web-client/src/*"
+      ],
+      "@web-api/*": [
+        "web-api/src/*"
+      ],
+      "@shared/*": [
+        "shared/src/*"
+      ]
     }
   },
   "ts-node": {
     "files": true,
-    "require": ["tsconfig-paths/register"]
+    "require": [
+      "tsconfig-paths/register"
+    ]
   },
   "include": ["./**/*.ts", "./**/*.tsx"],
   "exclude": [
     "node_modules",
     "targetBranch",
     "./scripts/run-once-scripts/**/*",
-    "./cognito-triggers-sls/node_modules/**/*",
     "./cypress/**/*",
     "./cypress.config.ts",
     "./cypress-smoketests.config.ts",

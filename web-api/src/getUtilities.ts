@@ -28,12 +28,14 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../../shared/src/business/utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
@@ -46,7 +48,7 @@ import { serveCaseDocument } from '../../shared/src/business/utilities/serveCase
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
-import { sleep } from '../../shared/src/business/utilities/sleep';
+import { sleep } from '@shared/tools/helpers';
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
@@ -68,9 +70,11 @@ const utilities = {
   formatNow,
   formatPendingItem,
   getAddressPhoneDiff,
+  getCaseDocumentsIdsFilteredByDocumentType,
   getCropBox,
   getDescriptionDisplay,
   getDocQcSectionForUser,
+  getDocketEntriesByFilter,
   getDocumentTitleWithAdditionalInfo,
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,

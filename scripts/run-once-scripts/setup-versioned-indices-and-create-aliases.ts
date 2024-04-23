@@ -1,5 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
-import { areAllReindexTasksFinished } from '../../shared/admin-tools/elasticsearch/check-reindex-complete';
+import { areAllReindexTasksFinished } from '../elasticsearch/check-reindex-complete';
 import { baseAliases } from '../../web-api/elasticsearch/elasticsearch-aliases';
 import { getClient } from '../../web-api/elasticsearch/client';
 import { reindexIfNecessary } from '../elasticsearch/reindex.helpers';
@@ -9,6 +9,7 @@ import { setupIndexes } from '../../web-api/elasticsearch/elasticsearch-index-se
 
 requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
   const environmentName = process.env.ENV!;

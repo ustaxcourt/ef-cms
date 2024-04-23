@@ -107,7 +107,7 @@ OUTPUT:
 }
 Clear elasticsearch:
 > ELASTICSEARCH_ENDPOINT=https://search-efcms-search-exp1-alpha-mfw3vraot22mobs7qpqpcb5tvm.us-east-1.es.amazonaws.com/ \
- node ./web-api/delete-elasticsearch-index.js
+ npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.ts
 Or, delete an entire domain:
 experimental domain name: snapshot-test-domain
 Then restore a domain:

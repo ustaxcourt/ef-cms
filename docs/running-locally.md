@@ -14,7 +14,7 @@ After installing git, be sure to clone the project locally:
 
 `git clone git@github.com:flexion/ef-cms.git`
 
-### Node v18.16.1
+### Node v20.12.1
 
 All of our application code is built using Javascript:
 
@@ -22,10 +22,10 @@ All of our application code is built using Javascript:
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v18.16.1
-    - npm v9.5.1
+    - Node v20.12.1
+    - npm v10.5.0
 
-As of May 2022, AWS Lambda only supports up to [`nodejs18.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+As of May 2022, AWS Lambda only supports up to [`nodejs20.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
 ### Java 11+
 
@@ -161,11 +161,11 @@ Now that your application is running locally, try to log in with some of the loc
 
 Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 
-?> There is no password required for logins during local development.
+?> Use the password `Testing1234$` for logins during local development.
 
 ```txt
 petitioner@example.com
-privatepractitioner@example.com
+privatePractitioner@example.com
 irspractitioner@example.com
 irssuperuser@example.com
 adc@example.com

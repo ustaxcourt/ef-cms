@@ -33,7 +33,7 @@ describe('external user views open and closed cases', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerViewsOpenAndClosedCases(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   privatePractitionerViewsOpenAndClosedCases(cerebralTest);
 
   loginAs(cerebralTest, 'irspractitioner@example.com');

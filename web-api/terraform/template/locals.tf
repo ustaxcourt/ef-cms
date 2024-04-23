@@ -15,7 +15,7 @@ data "null_data_source" "locals" {
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
     EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
-    EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
+    EMAIL_SOURCE                       = "U.S. Tax Court <noreply@${var.dns_domain}>"
     IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
     LOG_LEVEL                          = var.log_level
     MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
