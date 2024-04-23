@@ -200,7 +200,7 @@ describe('lambdaWrapper', () => {
 
   it('should save response to database when asyncsyncid is present', async () => {
     req.headers.asyncsyncid = 'some-id';
-    const response = { a: 'LAMBDA_RESULTS' };
+    const response = JSON.stringify({ a: 'LAMBDA_RESULTS' });
     await lambdaWrapper(
       () => response,
       { isAsyncSync: true },
@@ -210,7 +210,7 @@ describe('lambdaWrapper', () => {
       applicationContext.getNotificationGateway().saveRequestResponse,
     ).toHaveBeenCalledWith({
       applicationContext,
-      chunk: JSON.stringify(response),
+      chunk: response,
       index: 0,
       requestId: 'some-id',
       totalNumberOfChunks: 1,
