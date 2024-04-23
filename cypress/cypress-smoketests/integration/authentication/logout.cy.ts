@@ -1,4 +1,4 @@
-import { loginAsDocketClerk1 } from '../../helpers/auth/login-as-helpers';
+import { loginAsDocketClerk1 } from '../../../helpers/auth/login-as-helpers';
 
 describe('logout', () => {
   beforeEach(() => {

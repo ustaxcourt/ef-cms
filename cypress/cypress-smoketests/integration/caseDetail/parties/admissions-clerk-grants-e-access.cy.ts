@@ -1,8 +1,8 @@
-import { createAPetitioner } from '../../helpers/create-a-petitioner';
-import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { createAndServePaperPetitionMultipleParties } from '../../helpers/create-and-serve-paper-petition-petitioner-and-spouse';
-import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
-import { logout } from '../../helpers/auth/logout';
+import { createAPetitioner } from '../../../../helpers/create-a-petitioner';
+import { createAndServePaperPetition } from '../../../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetitionMultipleParties } from '../../../../helpers/create-and-serve-paper-petition-petitioner-and-spouse';
+import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
+import { logout } from '../../../../helpers/auth/logout';
 import { v4 } from 'uuid';
 
 describe('Admissions Clerk Grants E-Access', () => {

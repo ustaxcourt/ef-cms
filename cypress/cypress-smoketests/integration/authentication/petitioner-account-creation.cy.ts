@@ -1,11 +1,11 @@
 import {
   PasswordConfig,
   generatePassword,
-} from '../../helpers/auth/generate-password';
-import { createAPetitioner } from '../../helpers/create-a-petitioner';
-import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { verifyPasswordRequirements } from '../../helpers/auth/verify-password-requirements';
-import { verifyPetitionerAccount } from '../../helpers/verify-petitioner-account';
+} from '../../../helpers/auth/generate-password';
+import { createAPetitioner } from '../../../helpers/create-a-petitioner';
+import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
+import { verifyPasswordRequirements } from '../../../helpers/auth/verify-password-requirements';
+import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
 
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
