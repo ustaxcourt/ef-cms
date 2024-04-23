@@ -1,19 +1,19 @@
-import { addCaseToGroup } from '../../../helpers/add-case-to-group';
+import { addCaseToGroup } from '../../../helpers/caseDetail/add-case-to-group';
 import {
   assertDoesNotExist,
   assertExists,
   retry,
 } from '../../../helpers/retry';
-import { createAndServePaperFiling } from '../../../helpers/create-and-serve-paper-filing';
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
-import { createOrderAndDecision } from '../../../helpers/create-order-and-decision';
+import { createAndServePaperFiling } from '../../../helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
+import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { createOrderAndDecision } from '../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsColvin,
   loginAsDocketClerk1,
-} from '../../../helpers/auth/login-as-helpers';
-import { navigateToJudgeActivityReport } from '../../../helpers/navigate-to-judge-activity-report';
-import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
-import { updateCaseStatus } from '../../../helpers/update-case-status';
+} from '../../../helpers/authentication/login-as-helpers';
+import { navigateToJudgeActivityReport } from '../../../helpers/judgeActivityReport/navigate-to-judge-activity-report';
+import { updateCaseStatus } from '../../../helpers/caseDetail/caseInformation/update-case-status';
 
 describe('Verify the activity report', () => {
   describe('Statistics table', () => {
@@ -74,7 +74,7 @@ describe('Verify the activity report', () => {
     it('create a Submitted case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
 
         retry(() => {
@@ -88,7 +88,7 @@ describe('Verify the activity report', () => {
     it('create a CAV case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         updateCaseStatus('CAV', 'Colvin');
 
         retry(() => {
@@ -102,7 +102,7 @@ describe('Verify the activity report', () => {
     it('create a Submitted - Rule 122 case and verify it shows up in the Submitted/CAV table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         updateCaseStatus('Submitted - Rule 122', 'Colvin');
 
         retry(() => {
@@ -116,11 +116,11 @@ describe('Verify the activity report', () => {
     it('should not display a served decision type event code on the submitted and cav table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
 
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         createOrderAndDecision();
 
         retry(() => {
@@ -130,7 +130,7 @@ describe('Verify the activity report', () => {
         });
 
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
 
         cy.get('[data-testid="tab-drafts"]').click();
         cy.get('[data-testid="docket-entry-description-4"]').click(); // Order and Decision
@@ -151,7 +151,7 @@ describe('Verify the activity report', () => {
     it('should display a stricken decision type documents on the submitted and cav table', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
         createOrderAndDecision();
 
@@ -183,13 +183,13 @@ describe('Verify the activity report', () => {
       createAndServePaperPetition().then(
         ({ docketNumber: childDocketNumber }) => {
           loginAsDocketClerk1();
-          searchByDocketNumberInHeader(childDocketNumber);
+          goToCase(childDocketNumber);
           updateCaseStatus('Submitted', 'Colvin');
 
           createAndServePaperPetition({ yearReceived: '2019' }).then(
             ({ docketNumber: leadDocketNumber }) => {
               loginAsDocketClerk1();
-              searchByDocketNumberInHeader(leadDocketNumber);
+              goToCase(leadDocketNumber);
               updateCaseStatus('Submitted', 'Colvin');
               addCaseToGroup(childDocketNumber);
 
@@ -215,11 +215,11 @@ describe('Verify the activity report', () => {
     it('should display Pending Motions for judge in that report', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         updateCaseStatus('Submitted', 'Colvin');
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         createAndServePaperFiling('Motion for a New Trial', '01/01/2022');
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
 
         cy.get(
           '[data-testid="docket-record-table"] td:contains("Motion for a New Trial")',

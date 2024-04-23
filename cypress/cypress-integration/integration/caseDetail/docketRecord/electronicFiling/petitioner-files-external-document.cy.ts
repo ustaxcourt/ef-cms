@@ -1,8 +1,8 @@
-import { externalUserSearchesDocketNumber } from '../../../../../helpers/external-user-searches-docket-number';
-import { loginAsPetitioner } from '../../../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../../../helpers/petitionsclerk-serves-petition';
-import { selectTypeaheadInput } from '../../../../../helpers/select-typeahead-input';
+import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { loginAsPetitioner } from '../../../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe(
   'Petitioner files external document on case',

@@ -1,4 +1,4 @@
-import { createAndServePaperPetition } from '../../../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 
 describe('Public Docket Record', () => {

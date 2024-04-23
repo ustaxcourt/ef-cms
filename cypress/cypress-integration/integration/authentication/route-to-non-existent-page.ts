@@ -1,4 +1,4 @@
-import { loginAsPetitionsClerk1 } from '../../../helpers/auth/login-as-helpers';
+import { loginAsPetitionsClerk1 } from '../../../helpers/authentication/login-as-helpers';
 
 describe('Random unroutable URL', () => {
   it('should display the not found error page when routing to a random URL that cannot be otherwise fulfilled by the router', () => {

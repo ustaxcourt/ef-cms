@@ -9,9 +9,9 @@ import {
   navigateTo as navigateToDocumentQC,
 } from '../../support/pages/document-qc';
 
-import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../support/pages/unchecks-orders-and-notices-boxes-in-case';
 
 describe('Petition clerk creates a paper filing', function () {
@@ -93,7 +93,7 @@ describe('Petition clerk creates a paper filing', function () {
       createPaperPetition().then(({ docketNumber }) => {
         cy.get('[data-testid="save-case-for-later"]').click();
         cy.get('[data-testid="success-alert"]').should('exist');
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
 
         cy.get('[data-testid="document-viewer-link-ATP"]')
           .should('be.visible')
@@ -114,7 +114,7 @@ describe('Petition clerk creates a paper filing', function () {
   describe('Submit case to the IRS', () => {
     it('should display the docket record correctly when uploading an attachment to petition', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         cy.get('[data-testid="document-viewer-link-ATP"]')
           .should('be.visible')
           .parent('td')

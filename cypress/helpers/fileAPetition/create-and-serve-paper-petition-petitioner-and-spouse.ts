@@ -1,7 +1,7 @@
 import {
   CASE_TYPES_MAP,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '../../../shared/src/business/entities/EntityConstants';
 import { faker } from '@faker-js/faker';
 
 export function createAndServePaperPetitionMultipleParties(

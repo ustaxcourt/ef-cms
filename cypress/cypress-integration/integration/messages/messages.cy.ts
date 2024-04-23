@@ -1,5 +1,5 @@
 import { assertCountOfSelector, retry } from '../../../helpers/retry';
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import {
   createMessage,
   enterSubject,
@@ -16,11 +16,11 @@ import {
   messagesShouldBeFiltered,
   selectsCaseStatusFilterNew,
 } from '../../support/pages/dashboard';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
   loginAsPetitionsClerk,
-} from '../../../helpers/auth/login-as-helpers';
-import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
+} from '../../../helpers/authentication/login-as-helpers';
 
 describe('Messages', () => {
   describe('Message filtering', () => {
@@ -80,10 +80,10 @@ describe('Messages', () => {
     before(() => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         cy.wrap(docketNumber).as('DOCKET_NUMBER');
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         sendMessagesToCompletedTab(DOCKET_CLERK_ID, docketNumber);
         loginAsPetitionsClerk();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         sendMessages(DOCKET_CLERK_ID);
       });
     });
@@ -637,10 +637,13 @@ function sendMessagesToCompletedTab(
     retry(() => {
       cy.reload(true);
       cy.get('[data-testid="inbox-tab-content"]').should('exist');
-      return assertCountOfSelector(
-        `a[href^="/messages/${docketNumber}/message-detail"]`,
-        2 - i,
-      );
+      cy.get('body').then(body => {
+        return (
+          body.find(`a[href^="/messages/${docketNumber}/message-detail"]`)
+            .length ===
+          2 - i
+        );
+      });
     });
   }
 }

@@ -1,10 +1,10 @@
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
-} from '../../../../../helpers/auth/login-as-helpers';
-import { logout } from '../../../../../helpers/auth/logout';
-import { petitionerCreatesElectronicCase } from '../../../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../../../helpers/petitionsclerk-serves-petition';
+} from '../../../../../helpers/authentication/login-as-helpers';
+import { logout } from '../../../../../helpers/authentication/logout';
+import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 /**
  * Given a case

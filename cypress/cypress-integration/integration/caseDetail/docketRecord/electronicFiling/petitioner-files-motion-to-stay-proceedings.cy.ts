@@ -1,12 +1,12 @@
-import { externalUserSearchesDocketNumber } from '../../../../../helpers/external-user-searches-docket-number';
+import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
-} from '../../../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../../../helpers/petitionsclerk-serves-petition';
-import { searchByDocketNumberInHeader } from '../../../../../helpers/search-by-docket-number-in-header';
-import { selectTypeaheadInput } from '../../../../../helpers/select-typeahead-input';
+} from '../../../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 /**
  * Given a case
@@ -22,7 +22,7 @@ describe('Private Practitioner requests access to case', () => {
       petitionsClerkServesPetition(docketNumber);
 
       loginAsDocketClerk1();
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
 
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-add-paper-filing"]').click();

@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { loginAsAdmissionsClerk } from '../../../helpers/auth/login-as-helpers';
-import { logout } from '../../../helpers/auth/logout';
-import { petitionsClerkServesPetition } from '../../../helpers/petitionsclerk-serves-petition';
-import { practitionerCreatesElectronicCase } from '../../../helpers/practitioner-creates-electronic-case';
-import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
+import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
+import { logout } from '../../../helpers/authentication/logout';
+import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { practitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/practitioner-creates-electronic-case';
 
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
@@ -40,7 +40,7 @@ describe('change of address', () => {
       logout();
 
       loginAsAdmissionsClerk();
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
       cy.get('[data-testid="tab-case-information"] > .button-text').click();
       cy.get('[data-testid="tab-parties"] > .button-text').click();
       cy.get(
@@ -90,7 +90,7 @@ describe('change of address', () => {
       logout();
 
       loginAsAdmissionsClerk();
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
       cy.get('[data-testid="tab-case-information"] > .button-text').click();
       cy.get('[data-testid="tab-parties"] > .button-text').click();
       cy.get(

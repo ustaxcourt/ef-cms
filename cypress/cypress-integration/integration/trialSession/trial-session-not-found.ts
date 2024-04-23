@@ -1,4 +1,4 @@
-import { loginAsPetitionsClerk1 } from '../../../helpers/auth/login-as-helpers';
+import { loginAsPetitionsClerk1 } from '../../../helpers/authentication/login-as-helpers';
 
 describe('Trial session', () => {
   it('should display the not found error page when routing to a trial session that does not exist', () => {

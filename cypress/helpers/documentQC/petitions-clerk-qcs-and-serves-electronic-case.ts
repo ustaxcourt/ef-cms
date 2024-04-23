@@ -1,4 +1,4 @@
-import { navigateTo } from '../cypress-integration/support/pages/petition-qc';
+import { navigateTo } from '../../cypress-integration/support/pages/petition-qc';
 
 export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
   navigateTo('petitionsclerk1', docketNumber);

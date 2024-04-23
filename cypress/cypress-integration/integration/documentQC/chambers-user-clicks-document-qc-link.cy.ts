@@ -1,4 +1,4 @@
-import { loginAsColvinChambers } from '../../../helpers/auth/login-as-helpers';
+import { loginAsColvinChambers } from '../../../helpers/authentication/login-as-helpers';
 
 describe('A Colvins chambers user has the correct flow for QC documents', function () {
   it('login as chambers and check administrative record link exists', () => {

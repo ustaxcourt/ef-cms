@@ -1,5 +1,5 @@
-import { loginAsPrivatePractitioner } from '../../../helpers/auth/login-as-helpers';
-import { practitionerCreatesElectronicCase } from '../../../helpers/practitioner-creates-electronic-case';
+import { loginAsPrivatePractitioner } from '../../../helpers/authentication/login-as-helpers';
+import { practitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/practitioner-creates-electronic-case';
 
 describe('Private practitioner views dashboard', () => {
   it('should display filing fee column', () => {

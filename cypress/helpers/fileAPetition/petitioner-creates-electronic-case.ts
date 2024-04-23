@@ -1,4 +1,4 @@
-import { attachDummyFile } from './attach-file';
+import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
   primaryFilerName = 'John',
@@ -6,9 +6,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  attachDummyFile('stin-file');
+  uploadFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  attachDummyFile('petition-file');
+  uploadFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();
@@ -41,12 +41,12 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
 export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  attachDummyFile('stin-file');
+  uploadFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  attachDummyFile('petition-file');
+  uploadFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  attachDummyFile('atp-file-upload');
+  uploadFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();
@@ -83,10 +83,10 @@ export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="go-to-step-1"]').click();
   cy.get('[data-testid="stin-file"]').attachFile('../fixtures/corrupt-pdf.pdf');
   cy.get('[data-testid="complete-step-1"]').click();
-  attachDummyFile('petition-file');
+  uploadFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  attachDummyFile('atp-file-upload');
+  uploadFile('atp-file-upload');
 
   cy.get('[data-testid="complete-step-2"]').click();
   cy.get('[data-testid="filing-type-0"]').click();

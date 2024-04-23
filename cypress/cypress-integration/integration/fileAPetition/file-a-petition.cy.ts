@@ -1,5 +1,5 @@
-import { loginAsPetitioner } from '../../../helpers/auth/login-as-helpers';
-import { petitionerAttemptsToUploadCorruptPdf } from '../../../helpers/petitioner-creates-electronic-case';
+import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { petitionerAttemptsToUploadCorruptPdf } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 let createdDocketNumber;
 

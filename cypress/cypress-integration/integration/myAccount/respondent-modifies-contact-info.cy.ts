@@ -1,8 +1,8 @@
-import { loginAsPetitioner } from '../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../helpers/petitionsclerk-serves-petition';
-import { petitionsclerkAddsRespondentToCase } from '../../../helpers/petitionsclerk-adds-respondent-to-case';
-import { respondentModifiesContactInfo } from '../../../helpers/respondent-modifies-contact-info';
+import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { petitionsclerkAddsRespondentToCase } from '../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
+import { respondentModifiesContactInfo } from '../../../helpers/myAccount/respondent-modifies-contact-info';
 
 const BAR_NUMBER = 'WN7777';
 const USER = 'irspractitioner2';

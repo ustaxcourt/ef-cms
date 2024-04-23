@@ -1,12 +1,12 @@
 import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../../support/cognito-login';
-import { createAPetitioner } from '../../../helpers/create-a-petitioner';
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
+import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
+import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
-import { logout } from '../../../helpers/auth/logout';
+import { logout } from '../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
-import { verifyPasswordRequirements } from '../../../helpers/auth/verify-password-requirements';
-import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
+import { verifyPasswordRequirements } from '../../../helpers/authentication/verify-password-requirements';
+import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Forgot Password', () => {
   after(() => {

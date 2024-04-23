@@ -1,7 +1,8 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { getCypressEnv } from '../env/cypressEnvironment';
+import { getCypressEnv } from '../../env/cypressEnvironment';
 
 let cognitoCache: CognitoIdentityProvider;
+
 export const getCognito = (): CognitoIdentityProvider => {
   if (!cognitoCache) {
     cognitoCache = new CognitoIdentityProvider({

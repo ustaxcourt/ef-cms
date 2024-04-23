@@ -1,4 +1,4 @@
-import { selectTypeaheadInput } from './select-typeahead-input';
+import { selectTypeaheadInput } from '../../../components/typeAhead/select-typeahead-input';
 
 export function createAndServePaperFiling(
   documentType: string,

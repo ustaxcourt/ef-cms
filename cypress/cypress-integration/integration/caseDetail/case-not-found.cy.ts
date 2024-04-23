@@ -1,4 +1,4 @@
-import { loginAsPetitionsClerk1 } from '../../../helpers/auth/login-as-helpers';
+import { loginAsPetitionsClerk1 } from '../../../helpers/authentication/login-as-helpers';
 
 describe('Case detail', () => {
   it('should display the not found error page when routing to a case that does not exist', () => {

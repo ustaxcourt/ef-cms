@@ -1,6 +1,6 @@
-import { loginAsPetitioner } from '../../../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCaseWithDeceasedSpouse } from '../../../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../../../helpers/petitionsclerk-serves-petition';
+import { loginAsPetitioner } from '../../../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCaseWithDeceasedSpouse } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 describe('Judge`s chambers stamps an order', () => {
   it('should create an order, serve it, and apply a stamp to it', () => {
