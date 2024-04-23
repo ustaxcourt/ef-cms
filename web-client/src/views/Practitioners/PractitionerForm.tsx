@@ -207,7 +207,7 @@ export const PractitionerForm = connect(
                   </FormGroup>
                   <FormGroup errorText={validationErrors.practiceType}>
                     <fieldset className="usa-fieldset">
-                      <legend className="usa-legend">Practice Type</legend>
+                      <legend className="usa-legend">Practice type</legend>
                       {constants.PRACTICE_TYPE_OPTIONS.map(option => (
                         <div
                           className="usa-radio usa-radio__inline"
