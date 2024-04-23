@@ -36,11 +36,13 @@ describe('getRequestResults', () => {
     expect(queryCalls[0][0]).toMatchObject({
       ExpressionAttributeNames: {
         '#pk': 'pk',
+        '#sk': 'sk',
       },
       ExpressionAttributeValues: {
         ':pk': `user|${TEST_USER_ID}`,
+        ':prefix': `request|${TEST_REQUEST_ID}-`,
       },
-      KeyConditionExpression: '#pk = :pk',
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     });
 
     expect(results).toEqual(MOCK_GET_RESULTS.Items);

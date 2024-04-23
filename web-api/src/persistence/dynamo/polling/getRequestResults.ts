@@ -19,11 +19,13 @@ export const getRequestResults = async ({
   const results = await queryFull<ResponseChunk>({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':pk': `user|${userId}`,
+      ':prefix': `request|${requestId}-`,
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
 
