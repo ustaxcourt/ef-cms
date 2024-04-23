@@ -1,4 +1,4 @@
-import { compact } from 'lodash';
+import { cloneDeep, compact } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
@@ -30,7 +30,9 @@ export const processMessageEntries = async ({
       },
     };
 
-    // go get the latest message if we're indexing a message with isRepliedTo set to false - it might
+    let NewImage = cloneDeep(messageNewImage);
+
+    // go get the latest message - it might
     // have been updated in dynamo since this record was created to be processed
     if (!messageNewImage.isRepliedTo.BOOL) {
       const latestMessageData = await applicationContext
@@ -42,47 +44,26 @@ export const processMessageEntries = async ({
         });
 
       if (!latestMessageData.isRepliedTo) {
-        const marshalledMessage = marshall(latestMessageData);
-
-        return {
-          dynamodb: {
-            Keys: {
-              pk: {
-                S: messageNewImage.pk.S,
-              },
-              sk: {
-                S: messageNewImage.sk.S,
-              },
-            },
-            NewImage: {
-              ...marshalledMessage,
-              ...caseMessageMappingRecord,
-            },
-          },
-          eventName: 'MODIFY',
-        };
-      } else {
-        return {};
+        NewImage = marshall(latestMessageData);
       }
-    } else {
-      return {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: messageNewImage.pk.S,
-            },
-            sk: {
-              S: messageNewImage.sk.S,
-            },
+    }
+    return {
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: messageNewImage.pk.S,
           },
-          NewImage: {
-            ...messageNewImage,
-            ...caseMessageMappingRecord,
+          sk: {
+            S: messageNewImage.sk.S,
           },
         },
-        eventName: 'MODIFY',
-      };
-    }
+        NewImage: {
+          ...NewImage,
+          ...caseMessageMappingRecord,
+        },
+      },
+      eventName: 'MODIFY',
+    };
   };
 
   const indexRecords: IDynamoDBRecord[] = await Promise.all(
