@@ -9,8 +9,6 @@ const apiConfig: webpack.Configuration = {
     'api-public': './web-api/terraform/template/lambdas/api-public.ts',
     'cognito-authorizer':
       './web-api/terraform/template/lambdas/cognito-authorizer.ts',
-    'cognito-triggers':
-      './web-api/terraform/template/lambdas/cognito-triggers.ts',
     cron: './web-api/terraform/template/lambdas/cron.ts',
     'handle-bounced-service-email':
       './web-api/terraform/template/lambdas/handle-bounced-service-email.ts',
@@ -27,6 +25,7 @@ const apiConfig: webpack.Configuration = {
     'websocket-authorizer':
       './web-api/terraform/template/lambdas/websocket-authorizer.ts',
     websockets: './web-api/terraform/template/lambdas/websockets.ts',
+    'worker-handler': './web-api/terraform/template/lambdas/worker-handler.ts',
   },
   output: {
     clean: true,

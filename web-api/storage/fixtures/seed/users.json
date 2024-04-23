@@ -32,6 +32,14 @@
     "entityName": "User"
   },
   {
+    "role": "caseServicesSupervisor",
+    "name": "Test caseServicesSupervisor1",
+    "section": "caseServicesSupervisor",
+    "userId": "91bae3e8-3079-43a6-920d-b74ed9c649d4",
+    "email": "caseServicesSupervisor1@example.com",
+    "entityName": "User"
+  },
+  {
     "role": "legacyJudge",
     "name": "Fieri",
     "section": "legacyJudgesChambers",
@@ -190,7 +198,7 @@
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "entityName": "PrivatePractitioner",
-    "email": "privatepractitioner@example.com",
+    "email": "privatePractitioner@example.com",
     "firmName": "GW Law Offices",
     "additionalPhone": "111-111-1111",
     "originalBarState": "MD",
@@ -222,7 +230,7 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "entityName": "PrivatePractitioner",
     "firmName": "Bogus Barristers",
-    "email": "privatepractitioner1@example.com",
+    "email": "privatePractitioner1@example.com",
     "barNumber": "PT5432",
     "contact": {
       "address1": "234 Main St",
@@ -250,7 +258,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "email": "privatepractitioner2@example.com",
+    "email": "privatePractitioner2@example.com",
     "firmName": "Lilah, Lilah",
     "barNumber": "GL1111",
     "contact": {
@@ -280,7 +288,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
-    "email": "privatepractitioner3@example.com",
+    "email": "privatePractitioner3@example.com",
     "firmName": "Iron Law",
     "barNumber": "SC2222",
     "contact": {
@@ -310,7 +318,7 @@
     "suffix": "",
     "section": "privatePractitioner",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "email": "privatepractitioner4@example.com",
+    "email": "privatePractitioner4@example.com",
     "firmName": "Law Offices of Rivas and Kathy Gee",
     "barNumber": "RA3333",
     "contact": {
@@ -341,7 +349,7 @@
     "section": "privatePractitioner",
     "userId": "a6318a31-8aa4-4002-a7b0-1192af19dbb9",
     "entityName": "PrivatePractitioner",
-    "email": "privatepractitioner99@example.com",
+    "email": "privatePractitioner99@example.com",
     "firmName": "Bogus Barristers",
     "barNumber": "PT9999",
     "contact": {
@@ -561,15 +569,26 @@
     "entityName": "User"
   },
   {
-    "role": "petitioner",
-    "name": "Test Petitioner 9",
-    "section": "petitioner",
-    "userId": "b2d1941f-230a-47bb-80ec-6b561c1765cd",
-    "email": "petitioner9@example.com",
     "address1": "123 Domestic Bliss Lane",
     "address2": "Blandtowne, AK 90210",
+    "email": "petitioner8@example.com",
+    "entityName": "User",
+    "name": "Test Petitioner 8",
     "phone": "234-234-2345",
-    "entityName": "User"
+    "role": "petitioner",
+    "section": "petitioner",
+    "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd"
+  },
+  {
+    "address1": "123 Domestic Bliss Lane",
+    "address2": "Blandtowne, AK 90210",
+    "email": "petitioner9@example.com",
+    "entityName": "User",
+    "name": "Test Petitioner 9",
+    "phone": "234-234-2345",
+    "role": "petitioner",
+    "section": "petitioner",
+    "userId": "b2d1941f-230a-47bb-80ec-6b561c1765cd"
   },
   {
     "role": "admissionsclerk",

@@ -2,6 +2,10 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "active_ses_ruleset" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -80,6 +84,10 @@ variable "alert_sns_topic_arn" {
   type = string
 }
 
+variable "alert_sns_topic_west_arn" {
+  type = string
+}
+
 variable "bounced_email_recipient" {
   type = string
 }
@@ -93,10 +101,6 @@ variable "slack_webhook_url" {
 }
 
 variable "scanner_resource_uri" {
-  type = string
-}
-
-variable "cognito_table_name" {
   type = string
 }
 
@@ -140,4 +144,26 @@ variable "enable_health_checks" {
 
 variable "deployment_timestamp" {
   type = number
+}
+
+variable "template_lambdas" {
+  type = list(string)
+  default = [
+    "api-public.js",
+    "api.js",
+    "cognito-authorizer.js",
+    "cron.js",
+    "handle-bounced-service-email.js",
+    "maintenance-notify.js",
+    "pdf-generation.js",
+    "public-api-authorizer.js",
+    "report.html",
+    "seal-in-lower-environment.js",
+    "send-emails.js",
+    "streams.js",
+    "trial-session.js",
+    "websocket-authorizer.js",
+    "websockets.js",
+      "worker-handler.js",
+  ]
 }

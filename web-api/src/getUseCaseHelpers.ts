@@ -1,7 +1,7 @@
 import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
-import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
+import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from '../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from '../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
 import { associateIrsPractitionerToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
@@ -13,6 +13,7 @@ import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/co
 import { createAndServeNoticeDocketEntry } from '../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
 import { createCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createTrialSessionAndWorkingCopy } from '../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy';
+import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { createUserForContact } from '../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact';
 import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
@@ -28,6 +29,7 @@ import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUse
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { removeCounselFromRemovedPetitioner } from '../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
+import { resendTemporaryPassword } from '@web-api/business/useCaseHelper/auth/resendTemporaryPassword';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
 import { sendEmailVerificationLink } from '../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink';
@@ -60,6 +62,7 @@ const useCaseHelpers = {
   createAndServeNoticeDocketEntry,
   createCaseAndAssociations,
   createTrialSessionAndWorkingCopy,
+  createUserConfirmation,
   createUserForContact,
   fileAndServeDocumentOnOneCase,
   formatConsolidatedCaseCoversheetData,
@@ -75,6 +78,7 @@ const useCaseHelpers = {
   parseAndScrapePdfContents,
   removeCounselFromRemovedPetitioner,
   removeCoversheet,
+  resendTemporaryPassword,
   saveFileAndGenerateUrl,
   sealInLowerEnvironment,
   sendEmailVerificationLink,

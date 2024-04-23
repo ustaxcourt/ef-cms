@@ -27,7 +27,7 @@ export const getDocketNumbersByUser = async ({
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) => {
+}): Promise<string[]> => {
   const cases = await getCasesForUser({
     applicationContext,
     userId,

@@ -1,5 +1,5 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -12,6 +12,7 @@ const headerHelper = withAppContextDecorator(
 
 const getBaseState = user => {
   applicationContext.getCurrentUser = () => user;
+  applicationContext.getPublicSiteUrl = () => 'localhost:5678/';
   return {
     notifications: {
       unreadCount: 0,
@@ -348,6 +349,30 @@ describe('headerHelper', () => {
       });
 
       expect(result.showVerifyEmailWarningNotification).toBeFalsy();
+    });
+  });
+
+  describe('ustcSealLink', () => {
+    it('should be / when the current user is logged in', () => {
+      const result = runCompute(headerHelper, {
+        state: {
+          ...getBaseState({ role: ROLES.petitionsClerk }),
+          currentPage: 'Messages',
+        },
+      });
+
+      expect(result.ustcSealLink).toEqual('/');
+    });
+
+    it('should be the public site url when the current user is not logged in', () => {
+      const result = runCompute(headerHelper, {
+        state: {
+          ...getBaseState(undefined),
+          currentPage: 'Messages',
+        },
+      });
+
+      expect(result.ustcSealLink).toEqual('localhost:5678/');
     });
   });
 });

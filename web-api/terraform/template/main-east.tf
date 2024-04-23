@@ -26,89 +26,28 @@ data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "websockets.js",
-    "trial-session.js",
-    "send-emails.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes    = setsubtract(var.template_lambdas, ["api.js"])
 }
 
 data "archive_file" "zip_send_emails" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/send_emails.js.zip"
+  output_path = "${path.module}/../template/lambdas/send-emails.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "api.js",
-    "trial-session.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes    = setsubtract(var.template_lambdas, ["send-emails.js"])
 }
 
 data "archive_file" "zip_trial_session" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/trial_session.js.zip"
+  output_path = "${path.module}/../template/lambdas/trial-session.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api-public.js",
-    "api.js",
-    "websockets.js",
-    "send-emails.js",
-    "maintenance-notify.js",
-    "cron.js",
-    "streams.js",
-    "cognito-triggers.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "seal-in-lower-environment.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes    = setsubtract(var.template_lambdas, ["trial-session.js"])
 }
 
-data "archive_file" "zip_triggers" {
+data "archive_file" "zip_worker" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/cognito-triggers.js.zip"
+  output_path = "${path.module}/../template/lambdas/worker-handler.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "api-public.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "trial-session.js",
-    "send-emails.js",
-    "seal-in-lower-environment.js",
-    "cron.js",
-    "streams.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "pdf-generation.js",
-    "report.html"
-  ]
+  excludes = setsubtract(var.template_lambdas, ["worker-handler.js"])
 }
 
 
@@ -116,21 +55,7 @@ data "archive_file" "pdf_generation" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/pdf-generation.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = [
-    "api.js",
-    "api-public.js",
-    "websockets.js",
-    "maintenance-notify.js",
-    "trial-session.js",
-    "send-emails.js",
-    "seal-in-lower-environment.js",
-    "cron.js",
-    "streams.js",
-    "cognito-authorizer.js",
-    "public-api-authorizer.js",
-    "handle-bounced-service-email.js",
-    "report.html"
-  ]
+  excludes    = setsubtract(var.template_lambdas, ["pdf-generation.js"])
 }
 
 resource "null_resource" "pdf_generation_east_object" {
@@ -155,10 +80,10 @@ resource "null_resource" "api_east_object" {
   }
 }
 
-resource "null_resource" "triggers_east_object" {
+resource "null_resource" "worker_east_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
   provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.zip_triggers.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/triggers_${var.deploying_color}.js.zip"
+    command = "aws s3 cp ${data.archive_file.zip_worker.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/worker_${var.deploying_color}.js.zip"
   }
 
   triggers = {
@@ -192,7 +117,8 @@ resource "null_resource" "trial_session_east_object" {
 data "archive_file" "zip_websockets" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/websockets.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/websockets.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["websockets.js"])
 }
 
 resource "null_resource" "websockets_east_object" {
@@ -209,7 +135,8 @@ resource "null_resource" "websockets_east_object" {
 data "archive_file" "zip_maintenance_notify" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/maintenance-notify.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["maintenance-notify.js"])
 }
 
 resource "null_resource" "maintenance_notify_east_object" {
@@ -226,7 +153,8 @@ resource "null_resource" "maintenance_notify_east_object" {
 data "archive_file" "zip_api_public" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api-public.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/api-public.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["api-public.js"])
 }
 
 resource "null_resource" "api_public_east_object" {
@@ -255,7 +183,8 @@ resource "null_resource" "puppeteer_layer_east_object" {
 data "archive_file" "zip_cron" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/cron.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/cron.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["cron.js"])
 }
 
 resource "null_resource" "cron_east_object" {
@@ -272,7 +201,8 @@ resource "null_resource" "cron_east_object" {
 data "archive_file" "zip_streams" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/streams.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/streams.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["streams.js"])
 }
 
 resource "null_resource" "streams_east_object" {
@@ -289,7 +219,8 @@ resource "null_resource" "streams_east_object" {
 data "archive_file" "zip_seal_in_lower" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/seal-in-lower-environment.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/seal-in-lower-environment.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["seal-in-lower-environment.js"])
 }
 
 resource "null_resource" "seal_in_lower_east_object" {
@@ -306,7 +237,8 @@ resource "null_resource" "seal_in_lower_east_object" {
 data "archive_file" "zip_bounce_handler" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/handle-bounced-service-email.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/handle-bounced-service-email.js"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes    = setsubtract(var.template_lambdas, ["handle-bounced-service-email.js"])
 }
 
 resource "null_resource" "bounce_handler_east_object" {
@@ -466,10 +398,16 @@ data "aws_s3_bucket_object" "seal_in_lower_green_east_object" {
   key        = "seal_in_lower_green.js.zip"
 }
 
-data "aws_s3_bucket_object" "triggers_green_east_object" {
-  depends_on = [null_resource.triggers_east_object]
+data "aws_s3_object" "worker_green_east_object" {
+  depends_on = [null_resource.worker_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = "triggers_green.js.zip"
+  key        = "worker_green.js.zip"
+}
+
+data "aws_s3_object" "worker_blue_east_object" {
+  depends_on = [null_resource.worker_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "worker_blue.js.zip"
 }
 
 data "aws_s3_bucket_object" "send_emails_green_east_object" {
@@ -494,13 +432,6 @@ data "aws_s3_bucket_object" "trial_session_green_east_object" {
   depends_on = [null_resource.trial_session_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
   key        = "trial_session_green.js.zip"
-}
-
-
-data "aws_s3_bucket_object" "triggers_blue_east_object" {
-  depends_on = [null_resource.triggers_east_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = "triggers_blue.js.zip"
 }
 
 data "aws_s3_bucket_object" "bounce_handler_blue_east_object" {
@@ -594,27 +525,27 @@ module "api-east-waf" {
 }
 
 module "api-east-green" {
-  api_object                = null_resource.api_east_object
-  api_public_object         = null_resource.api_public_east_object
-  websockets_object         = null_resource.websockets_east_object
-  send_emails_object        = null_resource.send_emails_east_object
-  trial_session_object      = null_resource.trial_session_east_object
-  maintenance_notify_object = null_resource.maintenance_notify_east_object
-  pdf_generation_object     = null_resource.pdf_generation_east_object
-  puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
-  cron_object               = null_resource.cron_east_object
-  streams_object            = null_resource.streams_east_object
-  node_version              = var.green_node_version
-  create_maintenance_notify = 1
-  source                    = "../api/"
-  environment               = var.environment
-  dns_domain                = var.dns_domain
-  authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  websocket_authorizer_uri  = aws_lambda_function.websocket_authorizer_lambda.invoke_arn
-  public_authorizer_uri     = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
-  account_id                = data.aws_caller_identity.current.account_id
-  zone_id                   = data.aws_route53_zone.zone.id
-  pool_arn                  = aws_cognito_user_pool.pool.arn
+  alert_sns_topic_arn        = var.alert_sns_topic_arn
+  api_object                 = null_resource.api_east_object
+  api_public_object          = null_resource.api_public_east_object
+  websockets_object          = null_resource.websockets_east_object
+  send_emails_object         = null_resource.send_emails_east_object
+  trial_session_object       = null_resource.trial_session_east_object
+  maintenance_notify_object  = null_resource.maintenance_notify_east_object
+  pdf_generation_object      = null_resource.pdf_generation_east_object
+  puppeteer_layer_object     = null_resource.puppeteer_layer_east_object
+  cron_object                = null_resource.cron_east_object
+  streams_object             = null_resource.streams_east_object
+  node_version               = var.green_node_version
+  create_maintenance_notify  = 1
+  source                     = "../api/"
+  environment                = var.environment
+  dns_domain                 = var.dns_domain
+  authorizer_uri             = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  websocket_authorizer_uri   = aws_lambda_function.websocket_authorizer_lambda.invoke_arn
+  public_authorizer_uri      = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
+  account_id                 = data.aws_caller_identity.current.account_id
+  zone_id                    = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "green"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -626,7 +557,7 @@ module "api-east-green" {
   region   = "us-east-1"
   validate = 1
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
@@ -649,8 +580,8 @@ module "api-east-green" {
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
-  triggers_object                = null_resource.triggers_east_object
-  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  worker_object                  = null_resource.worker_east_object
+  worker_object_hash             = data.aws_s3_object.worker_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
@@ -669,27 +600,27 @@ module "api-east-green" {
 }
 
 module "api-east-blue" {
-  api_object                = null_resource.api_east_object
-  api_public_object         = null_resource.api_public_east_object
-  send_emails_object        = null_resource.send_emails_east_object
-  trial_session_object      = null_resource.trial_session_east_object
-  pdf_generation_object     = null_resource.pdf_generation_east_object
-  websockets_object         = null_resource.websockets_east_object
-  maintenance_notify_object = null_resource.maintenance_notify_east_object
-  puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
-  create_maintenance_notify = 1
-  cron_object               = null_resource.cron_east_object
-  streams_object            = null_resource.streams_east_object
-  pool_arn                  = aws_cognito_user_pool.pool.arn
-  node_version              = var.blue_node_version
-  source                    = "../api/"
-  environment               = var.environment
-  dns_domain                = var.dns_domain
-  authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  websocket_authorizer_uri  = aws_lambda_function.websocket_authorizer_lambda.invoke_arn
-  public_authorizer_uri     = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
-  account_id                = data.aws_caller_identity.current.account_id
-  zone_id                   = data.aws_route53_zone.zone.id
+  alert_sns_topic_arn        = var.alert_sns_topic_arn
+  api_object                 = null_resource.api_east_object
+  api_public_object          = null_resource.api_public_east_object
+  send_emails_object         = null_resource.send_emails_east_object
+  trial_session_object       = null_resource.trial_session_east_object
+  pdf_generation_object      = null_resource.pdf_generation_east_object
+  websockets_object          = null_resource.websockets_east_object
+  maintenance_notify_object  = null_resource.maintenance_notify_east_object
+  puppeteer_layer_object     = null_resource.puppeteer_layer_east_object
+  create_maintenance_notify  = 1
+  cron_object                = null_resource.cron_east_object
+  streams_object             = null_resource.streams_east_object
+  node_version               = var.blue_node_version
+  source                     = "../api/"
+  environment                = var.environment
+  dns_domain                 = var.dns_domain
+  authorizer_uri             = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  websocket_authorizer_uri   = aws_lambda_function.websocket_authorizer_lambda.invoke_arn
+  public_authorizer_uri      = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
+  account_id                 = data.aws_caller_identity.current.account_id
+  zone_id                    = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -701,7 +632,7 @@ module "api-east-blue" {
   region   = "us-east-1"
   validate = 1
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
@@ -724,8 +655,8 @@ module "api-east-blue" {
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
-  triggers_object                = null_resource.triggers_east_object
-  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  worker_object                  = null_resource.worker_east_object
+  worker_object_hash             = data.aws_s3_object.worker_blue_east_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 

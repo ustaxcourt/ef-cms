@@ -95,7 +95,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
   const onDocketRecordCreation = async ({
     docketNumber,
   }: {
-    docketNumber: string;
+    docketNumber?: string;
   }) => {
     if (docketNumber) {
       numberOfDocketRecordsGenerated += 1;

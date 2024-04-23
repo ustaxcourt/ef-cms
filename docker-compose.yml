@@ -59,7 +59,7 @@ services:
       - '3011:3011'
       - '4000:4000'
       - '5000:5000'
-      - '9000:9000'
+      - '9001:9001'
     volumes:
       - .:/home/app
       - node_modules:/home/app/node_modules

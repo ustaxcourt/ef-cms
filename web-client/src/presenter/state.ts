@@ -34,11 +34,13 @@ import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
+import { changePasswordHelper } from '@web-client/presenter/computeds/Login/changePasswordHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
+import { createAccountHelper } from '@web-client/presenter/computeds/CreatePetitionerAccount/createAccountHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
@@ -87,6 +89,7 @@ import { internalPetitionPartiesHelper } from './computeds/internalPetitionParti
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loadingHelper } from './computeds/loadingHelper';
+import { loginHelper } from '@web-client/presenter/computeds/Login/loginHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
@@ -235,6 +238,9 @@ export const computeds = {
   caseWorksheetsHelper: caseWorksheetsHelper as unknown as ReturnType<
     typeof caseWorksheetsHelper
   >,
+  changePasswordHelper: changePasswordHelper as unknown as ReturnType<
+    typeof changePasswordHelper
+  >,
   completeDocumentTypeSectionHelper:
     completeDocumentTypeSectionHelper as unknown as ReturnType<
       typeof completeDocumentTypeSectionHelper
@@ -250,6 +256,9 @@ export const computeds = {
     correspondenceViewerHelper as unknown as ReturnType<
       typeof correspondenceViewerHelper
     >,
+  createAccountHelper: createAccountHelper as unknown as ReturnType<
+    typeof createAccountHelper
+  >,
   createMessageModalHelper: createMessageModalHelper as unknown as ReturnType<
     typeof createMessageModalHelper
   >,
@@ -379,6 +388,7 @@ export const computeds = {
     typeof judgeActivityReportHelper
   >,
   loadingHelper: loadingHelper as unknown as ReturnType<typeof loadingHelper>,
+  loginHelper: loginHelper as unknown as ReturnType<typeof loginHelper>,
   menuHelper: menuHelper as unknown as ReturnType<typeof menuHelper>,
   messageDocumentHelper: messageDocumentHelper as unknown as ReturnType<
     typeof messageDocumentHelper
@@ -537,10 +547,12 @@ export const computeds = {
 };
 
 export const baseState = {
-  advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {} as any,
+  // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   alertError: undefined,
   alertSuccess: undefined,
+  alertWarning: undefined,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
@@ -549,7 +561,23 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
-  batchDownloads: {},
+  authentication: {
+    form: {
+      code: '',
+      confirmPassword: '',
+      email: '',
+      password: '',
+    },
+    tempPassword: '',
+  },
+  batchDownloadUrl: '',
+  batchDownloads: {} as {
+    allowRetry?: boolean;
+    zipInProgress?: boolean;
+    totalFiles?: number;
+    fileCount?: number;
+    title?: string;
+  },
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
@@ -567,11 +595,12 @@ export const baseState = {
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
-  cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
+  createOrderAddedDocketNumbers: undefined as unknown as string[],
+  createOrderSelectedCases: [] as any[],
   currentJudges: [],
-  currentPage: 'Interstitial',
+  currentPage: 'Loading',
   currentViewMetadata: {
     caseDetail: {
       caseDetailInternalTabs: {
@@ -601,9 +630,10 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
-    // used for the progress bar shown in modal when uploading files
+    isHavingSystemIssues: false,
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
@@ -636,6 +666,7 @@ export const baseState = {
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
+  maintenanceMode: false,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
@@ -687,6 +718,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
@@ -708,6 +740,8 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   setSelectedConsolidatedCasesToMultiDocketOn: false,
+  showConfirmPassword: false,
+  showPassword: false,
   showValidation: false,
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
@@ -716,6 +750,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  token: '',
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
     name: '',

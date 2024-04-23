@@ -17,13 +17,19 @@ terraform {
   }
 
   required_providers {
-    aws = "5.32.0"
+    aws = "5.45.0"
   }
 }
 
 data "aws_sns_topic" "system_health_alarms" {
   // account-level resource
   name = "system_health_alarms"
+}
+
+data "aws_sns_topic" "system_health_alarms_west" {
+  // account-level resource
+  name     = "system_health_alarms"
+  provider = aws.us-west-1
 }
 
 resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
@@ -47,6 +53,8 @@ resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
 
 module "ef-cms_apis" {
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
+  active_ses_ruleset         = var.active_ses_ruleset
+  alert_sns_topic_west_arn   = data.aws_sns_topic.system_health_alarms_west.arn
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   blue_node_version          = var.blue_node_version
   blue_table_name            = var.blue_table_name
@@ -54,7 +62,6 @@ module "ef-cms_apis" {
   bounce_alert_recipients    = var.bounce_alert_recipients
   bounced_email_recipient    = var.bounced_email_recipient
   cognito_suffix             = var.cognito_suffix
-  cognito_table_name         = var.cognito_table_name
   default_account_pass       = var.default_account_pass
   deploying_color            = var.deploying_color
   deployment_timestamp       = var.deployment_timestamp

@@ -40,6 +40,17 @@ resource "null_resource" "maintenance_notify_west_object" {
   }
 }
 
+resource "null_resource" "worker_west_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_worker.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/worker_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 
 resource "null_resource" "send_emails_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
@@ -291,6 +302,20 @@ data "aws_s3_bucket_object" "cron_green_west_object" {
   provider   = aws.us-west-1
 }
 
+data "aws_s3_object" "worker_green_west_object" {
+  depends_on = [null_resource.worker_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "worker_green.js.zip"
+  provider   = aws.us-west-1
+}
+
+data "aws_s3_object" "worker_blue_west_object" {
+  depends_on = [null_resource.worker_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "worker_blue.js.zip"
+  provider   = aws.us-west-1
+}
+
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   depends_on               = [aws_acm_certificate.api_gateway_cert_west]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
@@ -358,6 +383,7 @@ module "api-west-waf" {
 }
 
 module "api-west-green" {
+  alert_sns_topic_arn       = var.alert_sns_topic_west_arn
   api_object                = null_resource.api_west_object
   api_public_object         = null_resource.api_public_west_object
   send_emails_object        = null_resource.send_emails_west_object
@@ -387,7 +413,7 @@ module "api-west-green" {
   region   = "us-west-1"
   validate = 0
   providers = {
-    aws = aws.us-west-1
+    aws           = aws.us-west-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
@@ -406,16 +432,14 @@ module "api-west-green" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_green_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
-  pool_arn                       = aws_cognito_user_pool.pool.arn
   create_check_case_cron         = 0
   create_health_check_cron       = 1
   create_streams                 = 0
   create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
-  triggers_object                = ""
-  triggers_object_hash           = ""
-  create_triggers                = 0
+  worker_object                  = null_resource.worker_west_object
+  worker_object_hash             = data.aws_s3_object.worker_green_west_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
 
@@ -434,6 +458,7 @@ module "api-west-green" {
 }
 
 module "api-west-blue" {
+  alert_sns_topic_arn       = var.alert_sns_topic_west_arn
   api_object                = null_resource.api_west_object
   api_public_object         = null_resource.api_public_west_object
   pdf_generation_object     = null_resource.pdf_generation_west_object
@@ -463,7 +488,7 @@ module "api-west-blue" {
   region   = "us-west-1"
   validate = 0
   providers = {
-    aws = aws.us-west-1
+    aws           = aws.us-west-1
     aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
@@ -485,13 +510,11 @@ module "api-west-blue" {
   create_check_case_cron         = 0
   create_health_check_cron       = 1
   create_streams                 = 0
-  pool_arn                       = aws_cognito_user_pool.pool.arn
   create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
-  triggers_object                = ""
-  triggers_object_hash           = ""
-  create_triggers                = 0
+  worker_object                  = null_resource.worker_west_object
+  worker_object_hash             = data.aws_s3_object.worker_blue_west_object.etag
   enable_health_checks           = var.enable_health_checks
   health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
 

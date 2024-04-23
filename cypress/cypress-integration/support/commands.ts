@@ -1,5 +1,6 @@
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
+import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {
@@ -17,6 +18,13 @@ Cypress.Commands.add('showsSpinner', (shows = true) => {
   }
 });
 
+Cypress.Commands.add('listDownloadedFiles', directory => {
+  return cy
+    .exec(`ls ${directory}`)
+    .its('stdout')
+    .then(stdout => stdout.split('\n').filter(Boolean));
+});
+
 Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   if (shows) {
     cy.get('.usa-alert--success').should('exist');
@@ -26,12 +34,17 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 });
 
 Cypress.Commands.add('login', (username, route = '/') => {
-  const url = `/log-in?code=${username}@example.com&path=${route}`;
-  cy.visit(url);
-  cy.waitUntilSettled(50);
-  cy.url().should('include', route);
-  cy.showsErrorMessage(false);
-  cy.url().should('not.include', '/mock-login');
+  Cypress.session.clearCurrentSessionData();
+
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
+  cy.get('[data-testid="password-input"]').type(
+    getCypressEnv().defaultAccountPass,
+  );
+  cy.get('[data-testid="login-button"]').click();
+  cy.get('[data-testid="account-menu-button"]');
+  cy.visit(route);
+
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
@@ -42,6 +55,12 @@ Cypress.Commands.add('goToRoute', (...args) => {
   return cy.window().then(w => {
     // eslint-disable-next-line no-underscore-dangle
     w.__cy_route(...args);
+  });
+});
+
+Cypress.Commands.add('unzipFile', downloadPath => {
+  cy.task('unzipFile', downloadPath).then(unzippedFiles => {
+    return cy.wrap(unzippedFiles);
   });
 });
 
@@ -105,6 +124,11 @@ declare global {
       waitUntilSettled: (maxTries?: number) => void;
       showsErrorMessage: (shows?: boolean) => void;
       showsSuccessMessage: (shows?: boolean) => void;
+      listDownloadedFiles: (directory: string) => Chainable<string[]>;
+      unzipFile: (pathInfo: {
+        destinationPath: string;
+        filePath: string;
+      }) => Chainable<string[]>;
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;

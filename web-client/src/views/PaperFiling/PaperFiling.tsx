@@ -55,7 +55,7 @@ export const PaperFiling = connect(
                     message:
                       'Document cannot be served until the Petition is served.',
                   }}
-                  dismissable={false}
+                  dismissible={false}
                   scrollToTop={false}
                 />
               )}
@@ -97,7 +97,7 @@ export const PaperFiling = connect(
                   )}
                   <Button
                     secondary
-                    id="save-for-later"
+                    data-testid="save-for-later"
                     onClick={() => {
                       submitPaperFilingSequence({
                         isSavingForLater: true,
