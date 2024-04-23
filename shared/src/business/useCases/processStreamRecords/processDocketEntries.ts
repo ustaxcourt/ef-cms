@@ -2,7 +2,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import AWS from 'aws-sdk';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -25,9 +25,7 @@ export const processDocketEntries = async ({
   const newDocketEntryRecords = await Promise.all(
     records.map(async record => {
       // TODO: May need to remove the `case_relations` object and re-add later
-      const fullDocketEntry = AWS.DynamoDB.Converter.unmarshall(
-        record.dynamodb.NewImage,
-      );
+      const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
       const isSearchable =
         OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
