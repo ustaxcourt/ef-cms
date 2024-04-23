@@ -2,7 +2,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -66,7 +66,7 @@ export const processDocketEntries = async ({
             },
           },
           NewImage: {
-            ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
+            ...marshall(fullDocketEntry),
             case_relations: {
               name: 'document',
               parent: caseDocketEntryMappingRecordId,

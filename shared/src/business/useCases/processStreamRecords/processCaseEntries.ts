@@ -1,5 +1,5 @@
 import { flattenDeep } from 'lodash';
-import AWS from 'aws-sdk';
+import { marshall } from '@aws-sdk/util-dynamodb';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
@@ -26,9 +26,7 @@ export const processCaseEntries = async ({
         docketNumber: caseNewImage.docketNumber.S,
       });
 
-    const marshalledCase = AWS.DynamoDB.Converter.marshall(
-      caseMetadataWithCounsel,
-    );
+    const marshalledCase = marshall(caseMetadataWithCounsel);
 
     caseRecords.push({
       dynamodb: {
