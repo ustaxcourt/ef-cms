@@ -1,6 +1,6 @@
-import { createOrder } from '../../../../../helpers/create-order';
-import { loginAsDocketClerk1 } from '../../../../../helpers/auth/login-as-helpers';
-import { searchByDocketNumberInHeader } from '../../../../../helpers/search-by-docket-number-in-header';
+import { createOrder } from '../../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order';
+import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
+import { loginAsDocketClerk1 } from '../../../../../helpers/authentication/login-as-helpers';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
   it('should create an order with ALL cases selected', () => {
@@ -9,7 +9,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
     const leadCase = '111-19';
 
     loginAsDocketClerk1();
-    searchByDocketNumberInHeader(leadCase);
+    goToCase(leadCase);
 
     cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
       .invoke('attr', 'data-testid')
@@ -45,7 +45,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
     const expectedDocketNumberSelected = `${leadCase}L`;
 
     loginAsDocketClerk1();
-    searchByDocketNumberInHeader(leadCase);
+    goToCase(leadCase);
     createOrder();
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')

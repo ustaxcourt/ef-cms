@@ -1,7 +1,7 @@
-import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
-import { loginAsPetitionsClerk1 } from '../../../helpers/auth/login-as-helpers';
+import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
+import { loginAsPetitionsClerk1 } from '../../../helpers/authentication/login-as-helpers';
 import { retry } from '../../../helpers/retry';
-import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
 
 describe('search page functionality', () => {
   it('should be able to create a case and serve to IRS', () => {
@@ -65,7 +65,7 @@ describe('search page functionality', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       cy.login('docketclerk1');
       cy.get('[data-testid="inbox-tab-content"]').should('exist');
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
       cy.get('[data-testid="upload-description"]').clear();

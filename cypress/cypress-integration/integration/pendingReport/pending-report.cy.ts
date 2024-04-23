@@ -2,7 +2,7 @@ import {
   FORMATS,
   formatNow,
 } from '../../../../shared/src/business/utilities/DateHandler';
-import { loginAsDocketClerk1 } from '../../../helpers/auth/login-as-helpers';
+import { loginAsDocketClerk1 } from '../../../helpers/authentication/login-as-helpers';
 import path from 'path';
 
 describe('Pending report', () => {

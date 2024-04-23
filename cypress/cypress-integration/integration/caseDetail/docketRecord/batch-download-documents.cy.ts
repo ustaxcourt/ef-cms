@@ -1,14 +1,14 @@
-import { createAndServePaperPetition } from '../../../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { externalUserSearchesDocketNumber } from '../../../../helpers/external-user-searches-docket-number';
+import { externalUserSearchesDocketNumber } from '../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
   loginAsPetitioner,
-} from '../../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/petitions-clerk-qcs-and-serves-electronic-case';
+} from '../../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { retry } from '../../../../helpers/retry';
-import { searchByDocketNumberInHeader } from '../../../../helpers/search-by-docket-number-in-header';
 
 const confirmCountOfDocumentsToDownload = (documentsCreatedCount: number) => {
   const docketEntriesText = `${documentsCreatedCount} ${documentsCreatedCount === 1 ? 'docket entry' : 'docket entries'}`;
@@ -88,7 +88,7 @@ describe('Batch Download Documents', () => {
         let expectedFileCount = documentsCreated.length;
         const expectedSealedCount = 0;
         const expectedStrickenCount = 0;
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         includePrintableDocketRecord();
         expectedFileCount++;
@@ -121,7 +121,7 @@ describe('Batch Download Documents', () => {
         let expectedSealedCount = 0;
         let expectedStrickenCount = 0;
         loginAsDocketClerk();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
 
         // strike documents
         cy.get('[data-testid="edit-ATP"]').click();
@@ -175,7 +175,7 @@ describe('Batch Download Documents', () => {
         let expectedSealedCount = 0;
         let expectedStrickenCount = 0;
         loginAsDocketClerk();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
 
         // strike documents
         cy.get('[data-testid="edit-ATP"]').click();
@@ -230,7 +230,7 @@ describe('Batch Download Documents', () => {
       let expectedStrickenCount = 0;
       const today = createISODateString();
       loginAsDocketClerk();
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
       cy.get('[data-testid="tab-drafts"] > .button-text').click();
       cy.get('[data-testid="docket-entry-description-1"]').click();
       cy.get('#apply-signature').click();

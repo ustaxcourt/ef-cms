@@ -1,5 +1,5 @@
 import { navigateTo as loginAs } from '../../support/pages/maintenance';
-import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
+import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Petitioner views dashboard', () => {
   it('should display filing fee column', () => {

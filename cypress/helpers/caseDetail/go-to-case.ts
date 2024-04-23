@@ -1,4 +1,4 @@
-export function searchByDocketNumberInHeader(docketNumber: string) {
+export function goToCase(docketNumber: string) {
   cy.get('[data-testid="docket-number-search-input"]').scrollIntoView();
   cy.get('[data-testid="docket-number-search-input"]').clear();
   cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);

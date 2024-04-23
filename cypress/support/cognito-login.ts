@@ -1,8 +1,8 @@
 import {
   batchWrite,
   getDocumentClient,
-} from '../helpers/dynamo/getDynamoCypress';
-import { getCognito } from '../helpers/cognito/getCognitoCypress';
+} from '../helpers/cypressTasks/dynamo/getDynamoCypress';
+import { getCognito } from '../helpers/cypressTasks/cognito/getCognitoCypress';
 import { getCypressEnv } from '../helpers/env/cypressEnvironment';
 import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 

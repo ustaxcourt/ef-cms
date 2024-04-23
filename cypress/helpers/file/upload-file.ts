@@ -4,7 +4,7 @@
  *
  * @param testId the data-testid of the element
  */
-export function attachDummyFile(testId: string) {
+export function uploadFile(testId: string) {
   cy.get(`[data-testid="${testId}-label"]`).should(
     'not.have.class',
     'validated',

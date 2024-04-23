@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { loginAsPetitionsClerk1 } from '../../../helpers/auth/login-as-helpers';
-import { petitionsClerkCreatesTrialSession } from '../../../helpers/petitionsclerk-creates-trial-session';
+import { loginAsPetitionsClerk1 } from '../../../helpers/authentication/login-as-helpers';
+import { petitionsClerkCreatesTrialSession } from '../../../helpers/trialSession/petitionsclerk-creates-trial-session';
 
 faker.seed(faker.number.int());
 

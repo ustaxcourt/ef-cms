@@ -1,5 +1,5 @@
-import { loginAsPetitioner } from '../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
+import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Work item assignment', () => {
   it('petitionsClerk assigns a work item to themselves, docketClerk should NOT see that work item as unassigned', () => {

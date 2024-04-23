@@ -1,12 +1,12 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { attachDummyFile } from '../../../helpers/attach-file';
+import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
   loginAsPetitioner,
-} from '../../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../helpers/petitionsclerk-serves-petition';
-import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
+} from '../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { uploadFile } from '../../../helpers/file/upload-file';
 
 describe('Document QC Complete', () => {
   let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
@@ -52,7 +52,7 @@ describe('Document QC Complete', () => {
   it('should organize messages correctly in each section', () => {
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       loginAsAdmissionsClerk();
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
 
       sendMessages(
         CASE_SERVICE_SUPERVISOR_INFO.userId,
@@ -183,7 +183,7 @@ function petitionerFilesADocument(docketNumber: string) {
   cy.get('[data-testid="document-type"]').type('Exhibit(s)');
   cy.get('#react-select-2-option-0').click();
   cy.get('[data-testid="submit-document"]').click();
-  attachDummyFile('primary-document');
+  uploadFile('primary-document');
   cy.get('#submit-document').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();

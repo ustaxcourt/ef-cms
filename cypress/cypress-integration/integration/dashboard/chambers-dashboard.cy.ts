@@ -8,7 +8,7 @@ import {
   selectSection,
   sendMessage,
 } from '../../support/pages/document-qc';
-import { loginAsColvinChambers } from '../../../helpers/auth/login-as-helpers';
+import { loginAsColvinChambers } from '../../../helpers/authentication/login-as-helpers';
 
 describe('Message Count', () => {
   it("should display the message count on the Chamber's dashboard", () => {

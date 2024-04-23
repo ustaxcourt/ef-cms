@@ -1,4 +1,4 @@
-import { getCypressEnv } from './env/cypressEnvironment';
+import { getCypressEnv } from '../env/cypressEnvironment';
 import { getDocumentClient } from './dynamo/getDynamoCypress';
 
 export async function waitForNoce({

@@ -1,10 +1,10 @@
-import { attachDummyFile } from './attach-file';
+import { uploadFile } from '../file/upload-file';
 
 export function practitionerCreatesElectronicCase() {
   cy.get('[data-testid="file-a-petition"]').click();
-  attachDummyFile('stin-file');
+  uploadFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();
-  attachDummyFile('petition-file');
+  uploadFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
   cy.get('[data-testid="complete-step-2"]').click();

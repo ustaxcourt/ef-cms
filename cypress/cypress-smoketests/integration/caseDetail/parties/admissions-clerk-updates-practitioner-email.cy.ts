@@ -1,8 +1,8 @@
-import { createAndServePaperPetition } from '../../../../helpers/create-and-serve-paper-petition';
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
-import { loginAsAdmissionsClerk } from '../../../../helpers/auth/login-as-helpers';
-import { logout } from '../../../../helpers/auth/logout';
+import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
+import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 
 describe('Admissions Clerk Updates Practitioner Email', () => {

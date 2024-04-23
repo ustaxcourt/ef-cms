@@ -1,19 +1,19 @@
-import { addIntervenorAsPartyToCase } from '../../../../../helpers/addIntervenorToCase';
-import { attachDummyFile } from '../../../../../helpers/attach-file';
-import { externalUserSearchesDocketNumber } from '../../../../../helpers/external-user-searches-docket-number';
+import { addIntervenorAsPartyToCase } from '../../../../../helpers/caseDetail/caseInformation/add-intervenor-to-case';
+import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
-} from '../../../../../helpers/auth/login-as-helpers';
+} from '../../../../../helpers/authentication/login-as-helpers';
 import {
   petitionerCreatesElectronicCase,
   petitionerCreatesElectronicCaseWithDeceasedSpouse,
-} from '../../../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../../../helpers/petitionsclerk-serves-petition';
-import { searchByDocketNumberInHeader } from '../../../../../helpers/search-by-docket-number-in-header';
+} from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectRedactionAcknowledgement } from '../../../../../helpers/select-redaction-acknowledgement';
-import { selectTypeaheadInput } from '../../../../../helpers/select-typeahead-input';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
+import { uploadFile } from '../../../../../helpers/file/upload-file';
 
 describe('Private Practitioner requests access to case', () => {
   describe('Auto Generate Entry of Appearance', () => {
@@ -63,7 +63,7 @@ describe('Private Practitioner requests access to case', () => {
         petitionsClerkServesPetition(docketNumber);
 
         loginAsDocketClerk1();
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         addIntervenorAsPartyToCase();
 
         loginAsPrivatePractitioner();
@@ -112,10 +112,10 @@ describe('Private Practitioner requests access to case', () => {
         ).click();
 
         cy.get('[data-testid="manual-generation-label"]').click();
-        attachDummyFile('primary-document');
+        uploadFile('primary-document');
         cy.get('[data-testid="request-access-submit-document"]').click();
 
-        selectRedactionAcknowledgement();
+        cy.get('[data-testid="redaction-acknowledgement-label"]').click();
         cy.get('[data-testid="request-access-review-submit-document"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(

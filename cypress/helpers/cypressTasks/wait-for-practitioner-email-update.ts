@@ -1,5 +1,5 @@
-import { getCognitoUserIdByEmail } from '../support/cognito-login';
-import { getCypressEnv } from './env/cypressEnvironment';
+import { getCognitoUserIdByEmail } from '../../support/cognito-login';
+import { getCypressEnv } from '../env/cypressEnvironment';
 import { getDocumentClient } from './dynamo/getDynamoCypress';
 
 export async function waitForPractitionerEmailUpdate({

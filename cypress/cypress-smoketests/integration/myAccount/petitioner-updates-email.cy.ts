@@ -5,14 +5,14 @@ import {
   confirmEmailPendingAlert,
   goToMyAccount,
 } from '../../../cypress-integration/support/pages/my-account';
-import { createAPetitioner } from '../../../helpers/create-a-petitioner';
+import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
-import { logout } from '../../../helpers/auth/logout';
-import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../../helpers/petitionsclerk-serves-petition';
+import { logout } from '../../../helpers/authentication/logout';
+import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
-import { verifyPetitionerAccount } from '../../../helpers/verify-petitioner-account';
+import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Petitioner Updates e-mail', () => {
   after(() => {
