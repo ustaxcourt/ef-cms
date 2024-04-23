@@ -10,3 +10,7 @@
 
 ## TODO
 - Make login accept full email and password
+
+## Ideas
+- Could create multiple configuration files for different use cases
+- Could have a single generated configuration file
