@@ -1,14 +1,14 @@
-const {
+import {
   COUNTRY_TYPES,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
   ROLES,
-} = require('../shared/src/business/entities/EntityConstants');
-const {
-  formatDateString,
+} from '../shared/src/business/entities/EntityConstants';
+import {
   FORMATS,
-} = require('../shared/src/business/utilities/DateHandler');
+  formatDateString,
+} from '../shared/src/business/utilities/DateHandler';
 
-const formatRecord = record => {
+export const formatRecord = record => {
   const returnData = {};
 
   Object.keys(record).forEach(key => {
@@ -70,8 +70,4 @@ const formatRecord = record => {
   }
 
   return returnData;
-};
-
-module.exports = {
-  formatRecord,
 };
