@@ -1,5 +1,5 @@
 import { flattenDeep } from 'lodash';
-import AWS from 'aws-sdk';
+import { marshall } from '@aws-sdk/util-dynamodb';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -24,9 +24,7 @@ export const processPractitionerMappingEntries = async ({
           docketNumber: practitionerMappingData.pk.S.substring('case|'.length),
         });
 
-      const marshalledCase = AWS.DynamoDB.Converter.marshall(
-        caseMetadataWithCounsel,
-      );
+      const marshalledCase = marshall(caseMetadataWithCounsel);
 
       caseRecords.push({
         dynamodb: {
