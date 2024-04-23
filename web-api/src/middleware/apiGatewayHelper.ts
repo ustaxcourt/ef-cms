@@ -129,7 +129,7 @@ export const sendError = err => {
  */
 export const sendOk = (event, response, statusCode = '200', headers = {}) => {
   return {
-    body: event.headers?.asyncsyncid ? response : JSON.stringify(response),
+    body: JSON.stringify(response),
     headers: {
       ...headers,
       ...headerOverride,
