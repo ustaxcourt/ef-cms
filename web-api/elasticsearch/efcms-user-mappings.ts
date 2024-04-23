@@ -23,6 +23,9 @@ export const efcmsUserMappings = {
     'pk.S': {
       type: 'keyword',
     },
+    'practitionerType.S': {
+      type: 'keyword',
+    },
     'role.S': {
       type: 'keyword',
     },
