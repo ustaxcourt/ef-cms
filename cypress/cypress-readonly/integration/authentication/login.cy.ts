@@ -1,4 +1,4 @@
-import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 
 describe('Given a user with a DAWSON account', () => {
   beforeEach(() => {

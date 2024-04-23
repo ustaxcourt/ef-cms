@@ -1,5 +1,5 @@
-import { isValidRequest } from '../support/helpers';
-import { loginAsTestAdmissionsClerk } from '../../helpers/auth/login-as-helpers';
+import { isValidRequest } from '../../support/helpers';
+import { loginAsTestAdmissionsClerk } from '../../../helpers/auth/login-as-helpers';
 
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
