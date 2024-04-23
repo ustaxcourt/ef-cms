@@ -2,14 +2,13 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getDefaultAttachmentViewerDocumentToDisplayAction } from '../actions/getDefaultAttachmentViewerDocumentToDisplayAction';
-import { getJudgesCaseNoteForCaseAction } from '@web-client/presenter/actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { getShouldMarkMessageAsReadAction } from '../actions/getShouldMarkMessageAsReadAction';
+import { parallel } from 'cerebral';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
-import { setJudgesCaseNoteOnCaseDetailAction } from '@web-client/presenter/actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
@@ -25,13 +24,11 @@ export const gotoMessageDetailSequence =
       setupCurrentPageAction('Interstitial'),
       closeMobileMenuAction,
       clearErrorAlertsAction,
-      getCaseAction,
-      setCaseAction,
-      getJudgesCaseNoteForCaseAction,
-      setJudgesCaseNoteOnCaseDetailAction,
       setParentMessageIdAction,
-      getMessageThreadAction,
-      setMessageAction,
+      parallel([
+        [getCaseAction, setCaseAction],
+        [getMessageThreadAction, setMessageAction],
+      ]),
       getMostRecentMessageInThreadAction,
       getDefaultAttachmentViewerDocumentToDisplayAction,
       setMessageDetailViewerDocumentToDisplayAction,
