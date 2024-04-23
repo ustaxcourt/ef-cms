@@ -3,7 +3,7 @@ import {
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import type { IDynamoDBRecord } from '../../../../../types/IDynamoDBRecord';
+import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**

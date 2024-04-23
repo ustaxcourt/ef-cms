@@ -1,5 +1,5 @@
-import { IDynamoDBRecord } from '../../../../../types/IDynamoDBRecord';
 import { compact } from 'lodash';
+import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processWorkItemEntries = async ({

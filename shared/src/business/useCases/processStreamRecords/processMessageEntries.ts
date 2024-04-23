@@ -1,6 +1,6 @@
-import { IDynamoDBRecord } from '../../../../../types/IDynamoDBRecord';
 import { compact } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processMessageEntries = async ({

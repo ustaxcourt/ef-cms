@@ -1,6 +1,9 @@
-import { AttributeValueWithName, IDynamoDBRecord } from 'types/IDynamoDBRecord';
 import { flattenDeep } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import type {
+  AttributeValueWithName,
+  IDynamoDBRecord,
+} from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processCaseEntries = async ({

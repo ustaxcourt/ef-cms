@@ -1,6 +1,6 @@
 import { chunk } from 'lodash';
 import { getIndexNameForRecord } from './getIndexNameForRecord';
-import type { IDynamoDBRecord } from '../../../../types/IDynamoDBRecord';
+import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const bulkIndexRecords = async ({
