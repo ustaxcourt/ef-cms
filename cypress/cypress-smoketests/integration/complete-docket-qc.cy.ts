@@ -1,16 +1,37 @@
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { attachDummyFile } from '../../helpers/attach-file';
-import { loginAsPetitioner } from '../../helpers/auth/login-as-helpers';
+import {
+  loginAsAdmissionsClerk,
+  loginAsPetitioner,
+} from '../../helpers/auth/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
 import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
 
-describe.skip('Document QC Complete', () => {
-  const seedCaseServicesSupervisorUserid =
-    '35959d1a-0981-40b2-a93d-f65c7977db52';
+describe('Document QC Complete', () => {
+  let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
+    undefined as unknown as { userId: string; name: string };
+  let DOCKET_CLERK_INFO: { userId: string; name: string } =
+    undefined as unknown as { userId: string; name: string };
+
   const docketSectionMessage = 'To CSS under Docket Section';
   const petitionsSectionMessage = 'To CSS under Petitions Section';
 
   before(() => {
+    cy.intercept('GET', '**/users', req => {
+      req.on('before:response', res => {
+        if (res.body.role === ROLES.caseServicesSupervisor) {
+          CASE_SERVICE_SUPERVISOR_INFO = res.body;
+        }
+        if (res.body.role === ROLES.docketClerk) {
+          DOCKET_CLERK_INFO = res.body;
+        }
+      });
+    });
+
+    cy.login('caseServicesSupervisor1');
+    cy.login('docketclerk1');
+
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('DOCKET_NUMBER');
@@ -30,22 +51,22 @@ describe.skip('Document QC Complete', () => {
 
   it('should organize messages correctly in each section', () => {
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk();
       searchByDocketNumberInHeader(docketNumber);
 
       sendMessages(
-        seedCaseServicesSupervisorUserid,
+        CASE_SERVICE_SUPERVISOR_INFO.userId,
         docketSectionMessage,
         'docket',
       );
 
       sendMessages(
-        seedCaseServicesSupervisorUserid,
+        CASE_SERVICE_SUPERVISOR_INFO.userId,
         petitionsSectionMessage,
         'petitions',
       );
 
-      cy.login('caseservicessupervisor', '/messages/my/inbox');
+      cy.login('caseServicesSupervisor1', '/messages/my/inbox');
 
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
@@ -92,23 +113,21 @@ describe.skip('Document QC Complete', () => {
 
   it('should have the served case document qc assigned and completed', () => {
     cy.login(
-      'caseservicessupervisor1',
+      'caseServicesSupervisor1',
       '/document-qc/section/inbox/selectedSection?section=docket',
     );
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
-      cy.get(`[data-testid="work-item-${docketNumber}"]`).should('exist');
-
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
 
       cy.get('[data-testid="dropdown-select-assignee"]').select(
-        'Test Docketclerk',
+        DOCKET_CLERK_INFO.name,
       );
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="table-column-work-item-assigned-to"]')
-        .should('have.text', 'Test Docketclerk');
+        .should('have.text', DOCKET_CLERK_INFO.name);
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('.message-document-title')
@@ -128,7 +147,7 @@ describe.skip('Document QC Complete', () => {
 
   it('should have the unserved case in the petition qc assigned', () => {
     cy.login(
-      'caseservicessupervisor1',
+      'caseServicesSupervisor1',
       '/document-qc/section/inbox/selectedSection?section=petitions',
     );
     cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
@@ -141,7 +160,7 @@ describe.skip('Document QC Complete', () => {
         .click();
 
       cy.get('[data-testid="dropdown-select-assignee"]').select(
-        'Test Case Services Supervisor',
+        CASE_SERVICE_SUPERVISOR_INFO.name,
       );
 
       cy.visit('/document-qc/my/inbox');
