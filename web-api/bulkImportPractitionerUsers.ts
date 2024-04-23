@@ -48,10 +48,10 @@ import fs from 'fs';
   }
 
   const cognito = new CognitoIdentityProvider({
-    region: process.env.REGION,
+    region: process.env.REGION!,
   });
 
-  const services = getServices();
+  const services = getServices({});
 
   let token = await getUserToken({
     cognito,
