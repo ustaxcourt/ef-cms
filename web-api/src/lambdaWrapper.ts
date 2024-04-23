@@ -59,8 +59,7 @@ export const lambdaWrapper = (
 
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
       const user = getUserFromAuthHeader(event);
-      const responseString = JSON.stringify(response);
-      const chunks = chunkString(responseString);
+      const chunks = chunkString(response);
       const totalNumberOfChunks = chunks.length;
       for (let index = 0; index < totalNumberOfChunks; index++) {
         await applicationContext.getNotificationGateway().saveRequestResponse({
