@@ -1,7 +1,7 @@
 import {
   COUNTRY_TYPES,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
-} from '../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { formatRecord } from './bulkImportPractitionerUsers.helpers';
 
 describe('formatRecord', () => {
@@ -29,7 +29,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
+      birthYear: String(DEFAULT_PRACTITIONER_BIRTH_YEAR),
       contact: {
         address1: 'Somewhere over the rainbow',
         postalCode: 'N/A',
@@ -60,7 +60,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: 1999,
+      birthYear: '1999',
       employer: 'IRS',
       firstName: 'Bob',
       lastName: 'Builder',
@@ -87,7 +87,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Inactive',
-      birthYear: 1999,
+      birthYear: '1999',
       employer: 'DOJ',
       firstName: 'Mike',
       lastName: 'Wazowski',
@@ -98,7 +98,7 @@ describe('formatRecord', () => {
     const initialRecord = {
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: 'what',
+      birthYear: undefined,
       firstName: 'Rachael',
       isDojEmployee: 'N',
       isIrsEmployee: 'N',
@@ -112,7 +112,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
+      birthYear: String(DEFAULT_PRACTITIONER_BIRTH_YEAR),
       employer: 'Private',
       firstName: 'Rachael',
       lastName: 'Ray',
@@ -142,7 +142,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
+      birthYear: String(DEFAULT_PRACTITIONER_BIRTH_YEAR),
       contact: {
         address1: 'knows how to party',
         city: 'the city of Compton',
