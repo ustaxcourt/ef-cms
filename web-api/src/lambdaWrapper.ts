@@ -59,7 +59,10 @@ export const lambdaWrapper = (
 
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
       const user = getUserFromAuthHeader(event);
-      const fullResponse = { ...response, body: JSON.parse(response.body) };
+      const fullResponse = {
+        ...response,
+        body: JSON.parse(response.body),
+      };
       const responseString = JSON.stringify(fullResponse);
       const chunks = chunkString(responseString);
       const totalNumberOfChunks = chunks.length;
