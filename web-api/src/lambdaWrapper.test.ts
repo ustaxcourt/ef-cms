@@ -30,7 +30,9 @@ describe('lambdaWrapper', () => {
         send: jest.fn(),
       }),
     };
-    JSON.parse = jest.fn();
+
+    const orignalParse = JSON.parse;
+    JSON.parse = jest.fn().mockImplementation(json => orignalParse(json));
 
     (getUserFromAuthHeader as jest.Mock).mockReturnValue({ userId: 'user-id' });
   });
@@ -108,7 +110,7 @@ describe('lambdaWrapper', () => {
       };
     })(req, res);
     expect(JSON.parse).toHaveBeenCalled();
-    expect(res.send).toHaveBeenCalledWith(undefined);
+    expect(res.send).toHaveBeenCalledWith(null);
   });
 
   it('calls res.redirect if header Location is set', async () => {
@@ -200,17 +202,21 @@ describe('lambdaWrapper', () => {
 
   it('should save response to database when asyncsyncid is present', async () => {
     req.headers.asyncsyncid = 'some-id';
-    const response = JSON.stringify({ a: 'LAMBDA_RESULTS' });
+    const TEST_BODY = {
+      testBody: 'SOMETHING',
+    };
+    const response = { a: 'LAMBDA_RESULTS', body: JSON.stringify(TEST_BODY) };
     await lambdaWrapper(
       () => response,
       { isAsyncSync: true },
       applicationContext,
     )(req, res);
+
     expect(
       applicationContext.getNotificationGateway().saveRequestResponse,
     ).toHaveBeenCalledWith({
       applicationContext,
-      chunk: response,
+      chunk: JSON.stringify({ a: 'LAMBDA_RESULTS', body: TEST_BODY }),
       index: 0,
       requestId: 'some-id',
       totalNumberOfChunks: 1,
