@@ -1,10 +1,7 @@
-import {
-  batchWrite,
-  getDocumentClient,
-} from '../helpers/cypressTasks/dynamo/getDynamoCypress';
-import { getCognito } from '../helpers/cypressTasks/cognito/getCognitoCypress';
-import { getCypressEnv } from '../helpers/env/cypressEnvironment';
-import type { DeleteRequest } from '../../web-api/src/persistence/dynamo/dynamoTypes';
+import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { batchWrite, getDocumentClient } from '../dynamo/getDynamoCypress';
+import { getCognito } from './getCognitoCypress';
+import { getCypressEnv } from '../../env/cypressEnvironment';
 
 export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
 
@@ -79,40 +76,6 @@ export const getCognitoUserIdByEmail = async (
     foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
 
   return userId;
-};
-
-const getUserConfirmationCodeFromDynamo = async (
-  userId: string,
-): Promise<string> => {
-  const result = await getDocumentClient().get({
-    Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
-    TableName: getCypressEnv().dynamoDbTableName,
-  });
-
-  return result.Item!.confirmationCode;
-};
-
-export const getNewAccountVerificationCode = async ({
-  email,
-}: {
-  email: string;
-}): Promise<{
-  userId: string | undefined;
-  confirmationCode: string | undefined;
-}> => {
-  const userId = await getCognitoUserIdByEmail(email);
-  if (!userId)
-    return {
-      confirmationCode: undefined,
-      userId: undefined,
-    };
-
-  const confirmationCode = await getUserConfirmationCodeFromDynamo(userId);
-
-  return {
-    confirmationCode,
-    userId,
-  };
 };
 
 const deleteAccount = async (
@@ -218,36 +181,4 @@ export const deleteAllCypressTestAccounts = async (): Promise<null> => {
   const accounts = await getAllCypressTestAccounts(userPoolId);
   await Promise.all(accounts.map(user => deleteAccount(user, userPoolId)));
   return null;
-};
-
-export const expireUserConfirmationCode = async (
-  email: string,
-): Promise<null> => {
-  const userId = await getCognitoUserIdByEmail(email);
-  if (!userId) return null;
-
-  await getDocumentClient()
-    .delete({
-      Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
-      TableName: getCypressEnv().dynamoDbTableName,
-    })
-    .catch(error => console.error(error)); // if no confirmation code exists do not throw error.
-  return null;
-};
-
-export const getEmailVerificationToken = async ({
-  email,
-}: {
-  email: string;
-}): Promise<string> => {
-  const userId = await getCognitoUserIdByEmail(email);
-  const result = await getDocumentClient().get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-    },
-    TableName: getCypressEnv().dynamoDbTableName,
-  });
-
-  return result?.Item?.pendingEmailVerificationToken;
 };

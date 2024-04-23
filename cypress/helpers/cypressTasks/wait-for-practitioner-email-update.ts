@@ -1,4 +1,4 @@
-import { getCognitoUserIdByEmail } from '../../support/cognito-login';
+import { getCognitoUserIdByEmail } from './cognito/cognito-helpers';
 import { getCypressEnv } from '../env/cypressEnvironment';
 import { getDocumentClient } from './dynamo/getDynamoCypress';
 
