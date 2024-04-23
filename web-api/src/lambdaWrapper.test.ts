@@ -7,8 +7,10 @@ import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 describe('lambdaWrapper', () => {
   let req, res;
+  let orignalParse;
 
   beforeAll(() => {
+    orignalParse = JSON.parse;
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -31,10 +33,13 @@ describe('lambdaWrapper', () => {
       }),
     };
 
-    const orignalParse = JSON.parse;
     JSON.parse = jest.fn().mockImplementation(json => orignalParse(json));
 
     (getUserFromAuthHeader as jest.Mock).mockReturnValue({ userId: 'user-id' });
+  });
+
+  afterAll(() => {
+    JSON.parse = orignalParse;
   });
 
   it('sets res.headers', async () => {
