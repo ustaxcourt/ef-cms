@@ -1,11 +1,13 @@
+import { IDynamoDBRecord } from '../../../../../types/IDynamoDBRecord';
 import { compact } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processMessageEntries = async ({
   applicationContext,
   messageRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   messageRecords: any[];
 }) => {
   if (!messageRecords.length) return;
@@ -14,7 +16,9 @@ export const processMessageEntries = async ({
     `going to index ${messageRecords.length} message records`,
   );
 
-  const indexMessageEntry = async messageRecord => {
+  const indexMessageEntry = async (
+    messageRecord: any,
+  ): Promise<IDynamoDBRecord> => {
     const messageNewImage = messageRecord.dynamodb.NewImage;
 
     const caseMessageMappingRecordId = `${messageNewImage.pk.S}_${messageNewImage.pk.S}|mapping`;
@@ -57,6 +61,8 @@ export const processMessageEntries = async ({
           },
           eventName: 'MODIFY',
         };
+      } else {
+        return {};
       }
     } else {
       return {
@@ -79,7 +85,9 @@ export const processMessageEntries = async ({
     }
   };
 
-  const indexRecords = await Promise.all(messageRecords.map(indexMessageEntry));
+  const indexRecords: IDynamoDBRecord[] = await Promise.all(
+    messageRecords.map(indexMessageEntry),
+  );
 
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()
