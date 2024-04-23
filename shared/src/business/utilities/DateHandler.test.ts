@@ -804,5 +804,12 @@ describe('DateHandler', () => {
       const diff = calculateDifferenceInHours(dt2.toISO()!, dt.toISO()!);
       expect(diff).toBe(25);
     });
+
+    it('should calculate 23 hours on first day of daylight savings time', () => {
+      const dt = DateTime.fromISO('2024-03-10', { zone: USTC_TZ });
+      const dt2 = dt.plus({ days: 1 });
+      const diff = calculateDifferenceInHours(dt2.toISO()!, dt.toISO()!);
+      expect(diff).toBe(23);
+    });
   });
 });
