@@ -1,12 +1,12 @@
-import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
-import { attachDummyFile } from '../../helpers/attach-file';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { attachDummyFile } from '../../../helpers/attach-file';
 import {
   loginAsAdmissionsClerk,
   loginAsPetitioner,
-} from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
-import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
+} from '../../../helpers/auth/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../helpers/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../helpers/petitionsclerk-serves-petition';
+import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
 
 describe('Document QC Complete', () => {
   let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =

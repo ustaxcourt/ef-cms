@@ -4,8 +4,8 @@ import {
   clickConfirmModal,
   confirmEmailPendingAlert,
   goToMyAccount,
-} from '../../cypress-integration/support/pages/my-account';
-import { navigateTo } from '../../cypress-integration/support/pages/maintenance';
+} from '../../../cypress-integration/support/pages/my-account';
+import { navigateTo } from '../../../cypress-integration/support/pages/maintenance';
 
 if (
   !Cypress.env('SMOKETESTS_LOCAL') &&

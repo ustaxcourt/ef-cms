@@ -1,7 +1,7 @@
-import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { loginAsPetitionsClerk1 } from '../../helpers/auth/login-as-helpers';
-import { retry } from '../../helpers/retry';
-import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
+import { createAndServePaperPetition } from '../../../helpers/create-and-serve-paper-petition';
+import { loginAsPetitionsClerk1 } from '../../../helpers/auth/login-as-helpers';
+import { retry } from '../../../helpers/retry';
+import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
 
 describe('search page functionality', () => {
   it('should be able to create a case and serve to IRS', () => {

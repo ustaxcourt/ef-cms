@@ -1,5 +1,5 @@
-import { createAndServePaperPetition } from '../../helpers/create-and-serve-paper-petition';
-import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
+import { createAndServePaperPetition } from '../../../../helpers/create-and-serve-paper-petition';
+import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 
 describe('Public Docket Record', () => {
   it('should allow the user to generate and download a PDF of the docket record', () => {

@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { loginAsAdmissionsClerk } from '../../helpers/auth/login-as-helpers';
-import { logout } from '../../helpers/auth/logout';
-import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
-import { practitionerCreatesElectronicCase } from '../../helpers/practitioner-creates-electronic-case';
-import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
+import { loginAsAdmissionsClerk } from '../../../helpers/auth/login-as-helpers';
+import { logout } from '../../../helpers/auth/logout';
+import { petitionsClerkServesPetition } from '../../../helpers/petitionsclerk-serves-petition';
+import { practitionerCreatesElectronicCase } from '../../../helpers/practitioner-creates-electronic-case';
+import { searchByDocketNumberInHeader } from '../../../helpers/search-by-docket-number-in-header';
 
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
