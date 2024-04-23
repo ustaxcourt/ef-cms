@@ -1,3 +1,4 @@
+import { IDynamoDBRecord } from 'types/IDynamoDBRecord';
 import { flattenDeep } from 'lodash';
 import { marshall } from '@aws-sdk/util-dynamodb';
 
@@ -17,7 +18,7 @@ export const processCaseEntries = async ({
 
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
-    const caseRecords = [];
+    const caseRecords: IDynamoDBRecord[] = [];
 
     const caseMetadataWithCounsel = await applicationContext
       .getPersistenceGateway()
