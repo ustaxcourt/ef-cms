@@ -21,7 +21,7 @@ export const getToken = async () => {
   }
 
   const cognito = new CognitoIdentityProvider({
-    region: process.env.REGION,
+    region: process.env.REGION!,
   });
 
   return await getUserToken({
@@ -32,22 +32,37 @@ export const getToken = async () => {
   });
 };
 
-export const getServices = async () => {
-  const apigateway = new APIGatewayClient({
-    region: process.env.REGION,
+export const getServices = async ({
+  color,
+  environmentName,
+  region,
+}: {
+  color?: string;
+  environmentName?: string;
+  region?: string;
+}) => {
+  if (!color) {
+    color = process.env.DEPLOYING_COLOR!;
+  }
+  if (!environmentName) {
+    environmentName = process.env.ENV!;
+  }
+  if (!region) {
+    region = process.env.REGION!;
+  }
+  const apiGateway = new APIGatewayClient({
+    region,
   });
   const getRestApisCommand = new GetRestApisCommand({ limit: 200 });
-  const { items: apis } = await apigateway.send(getRestApisCommand);
+  const { items: apis } = await apiGateway.send(getRestApisCommand);
 
   return (apis ?? [])
     .filter(api =>
-      api.name?.includes(
-        `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
-      ),
+      api.name?.includes(`gateway_api_${environmentName}_${color}`),
     )
     .reduce((obj, api) => {
-      obj[api.name?.replace(`_${process.env.ENV}`, '')!] =
-        `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
+      obj[api.name?.replace(`_${environmentName}`, '')!] =
+        `https://${api.id}.execute-api.${region}.amazonaws.com/${environmentName}`;
       return obj;
     }, {});
 };

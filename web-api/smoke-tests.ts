@@ -3,12 +3,13 @@ import { getServices } from './importHelpers';
 import assert from 'assert';
 import axios from 'axios';
 
-const ENV = process.argv[2];
-const REGION = process.argv[3];
-// const DEPLOYING_COLOR = process.argv[4];
-const DEFAULT_ACCOUNT_PASS = process.argv[5];
+const ENV = process.argv[2] || process.env.ENV;
+const REGION = process.argv[3] || process.env.REGION;
+const DEPLOYING_COLOR = process.argv[4] || process.env.DEPLOYING_COLOR;
+const DEFAULT_ACCOUNT_PASS =
+  process.argv[5] || process.env.DEFAULT_ACCOUNT_PASS;
 
-if (!ENV || !REGION || !DEFAULT_ACCOUNT_PASS) {
+if (!ENV || !REGION || !DEPLOYING_COLOR || !DEFAULT_ACCOUNT_PASS) {
   console.error(
     "Missing required arguments: please invoke this script like so 'ts-node smoke-tests ${ENV} ${REGION} ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}'",
   );
@@ -85,7 +86,11 @@ const getUserToken = async (
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const services = getServices();
+  const services = getServices({
+    color: DEPLOYING_COLOR,
+    environmentName: ENV,
+    region: REGION,
+  });
 
   const token = await getUserToken(
     'petitionsclerk1@example.com',
