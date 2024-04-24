@@ -110,6 +110,7 @@ import { practitionerDocumentationFormHelper } from './computeds/practitionerDoc
 import { practitionerDocumentationHelper } from './computeds/practitionerDocumentationHelper';
 import { practitionerInformationHelper } from './computeds/practitionerInformationHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
+import { practitionerSearchResultHelper } from './computeds/AdvancedSearch/practitionerSearchResultHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
@@ -450,6 +451,10 @@ export const computeds = {
   practitionerSearchFormHelper:
     practitionerSearchFormHelper as unknown as ReturnType<
       typeof practitionerSearchFormHelper
+    >,
+  practitionerSearchResultHelper:
+    practitionerSearchResultHelper as unknown as ReturnType<
+      typeof practitionerSearchResultHelper
     >,
   printPaperServiceHelper: printPaperServiceHelper as unknown as ReturnType<
     typeof printPaperServiceHelper
