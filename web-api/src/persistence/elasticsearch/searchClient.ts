@@ -39,6 +39,7 @@ export const formatResults = <T>(body: Record<string, any>) => {
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
+    delete hit['_source']['case_relations'];
     const sourceUnmarshalled = unmarshall(hit['_source']);
     sourceUnmarshalled['_score'] = hit['_score'];
 
