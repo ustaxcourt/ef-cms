@@ -1,3 +1,4 @@
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -12,7 +13,7 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   const { docketEntries } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const entriesWithDocument = docketEntries.filter(
-    entry => !entry.isMinuteEntry && entry.isFileAttached,
+    entry => !DocketEntry.isMinuteEntry(entry) && entry.isFileAttached,
   );
   const viewerDocumentToDisplayInState = get(state.viewerDocumentToDisplay);
 
