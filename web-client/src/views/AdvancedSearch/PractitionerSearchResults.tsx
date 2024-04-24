@@ -1,49 +1,38 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
-import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef, useState } from 'react';
 
 export const PractitionerSearchResults = connect(
   {
-    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
+    PRACTITIONER_SEARCH_PAGE_SIZE:
+      state.constants.PRACTITIONER_SEARCH_PAGE_SIZE,
     advancedSearchHelper: state.advancedSearchHelper,
-    showMoreResultsSequence: sequences.showMoreResultsSequence,
+    practitionerSearchResultHelper: state.practitionerSearchResultHelper,
   },
   function PractitionerSearchResults({
     advancedSearchHelper,
-    MAX_SEARCH_RESULTS,
-    showMoreResultsSequence,
+    PRACTITIONER_SEARCH_PAGE_SIZE,
+    practitionerSearchResultHelper,
   }) {
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
 
     return (
       <>
-        {advancedSearchHelper.showSearchResults && (
+        {practitionerSearchResultHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">Search Results</h1>
-            {advancedSearchHelper.showManyResultsMessage && (
-              <WarningNotificationComponent
-                alertWarning={{
-                  message: 'Narrow your search by adding search terms.',
-                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
-                }}
-                dismissible={false}
-                scrollToTop={false}
-              />
-            )}
             <div ref={paginatorTop}>
-              {advancedSearchHelper.numberOfResults > 1 && (
+              {practitionerSearchResultHelper.numberOfResults >
+                PRACTITIONER_SEARCH_PAGE_SIZE && (
                 <Paginator
                   breakClassName="hide"
                   forcePage={activePage}
                   marginPagesDisplayed={0}
-                  pageCount={advancedSearchHelper.numberOfResults}
+                  pageCount={practitionerSearchResultHelper.numberOfResults}
                   pageRangeDisplayed={0}
                   onPageChange={async pageChange => {
                     setActivePage(pageChange.selected);
@@ -98,11 +87,6 @@ export const PractitionerSearchResults = connect(
               </tbody>
             </table>
           </>
-        )}
-        {advancedSearchHelper.showLoadMore && (
-          <Button secondary onClick={() => showMoreResultsSequence()}>
-            Load More
-          </Button>
         )}
         {advancedSearchHelper.showNoMatches && (
           <div id="no-search-results">

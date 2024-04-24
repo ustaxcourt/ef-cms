@@ -15,12 +15,12 @@ export const getPractitionersByName = async ({ applicationContext, name }) => {
     body: {
       _source: [
         'admissionsStatus',
+        'admissionsDate',
         'barNumber',
         'contact',
         'name',
         'practitionerType',
         'practiceType',
-        'admissionsDate',
       ],
       query: {
         bool: {
