@@ -60,7 +60,7 @@ export const changePasswordInteractor = async (
       if (
         userFromPersistence &&
         userFromPersistence.pendingEmail &&
-        userFromPersistence.pendingEmail === email
+        userFromPersistence.pendingEmail.toLowerCase() === email.toLowerCase()
       ) {
         const { updatedUser } = await updateUserPendingEmailRecord(
           applicationContext,
