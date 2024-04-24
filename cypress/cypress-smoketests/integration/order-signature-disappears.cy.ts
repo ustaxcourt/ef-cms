@@ -43,6 +43,11 @@ describe('BUG: order signature disappears', () => {
       cy.reload(true);
       cy.get('[data-testid="tab-drafts"]').click();
       cy.get('[data-testid="docket-entry-description-1"]').click();
+      cy.get('[data-testid="view-full-pdf-button"]').should('exist');
+      cy.get('[data-testid="signature-required-label"]').should('not.exist');
+
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(6000);
     });
   });
 });
