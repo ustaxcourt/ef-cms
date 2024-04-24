@@ -339,4 +339,15 @@ describe('searchClient', () => {
       expect(result).toBe(5);
     });
   });
+
+  describe('formatResults', () => {
+    it.todo('returns the total number of hits it found in the results');
+    it.todo('returns any aggregrations it found in the results');
+    it.todo('removes case_relations from any hit it found');
+    it.todo('unmarshalls the data it within each hit');
+    it.todo('includes the score');
+    it.todo(
+      'if calls helper functions that are docket entries, messages, or work items',
+    );
+  });
 });
