@@ -9,32 +9,32 @@ export const PractitionerSearchResults = connect(
   {
     PRACTITIONER_SEARCH_PAGE_SIZE:
       state.constants.PRACTITIONER_SEARCH_PAGE_SIZE,
-    advancedSearchHelper: state.advancedSearchHelper,
-    practitionerSearchResultHelper: state.practitionerSearchResultHelper,
+    practitionerSearchHelper: state.practitionerSearchHelper,
   },
   function PractitionerSearchResults({
-    advancedSearchHelper,
     PRACTITIONER_SEARCH_PAGE_SIZE,
-    practitionerSearchResultHelper,
+    practitionerSearchHelper,
   }) {
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
 
+    console.log('helper', practitionerSearchHelper);
+
     return (
       <>
-        {practitionerSearchResultHelper.showSearchResults && (
+        {practitionerSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">Search Results</h1>
             <div ref={paginatorTop}>
-              {practitionerSearchResultHelper.numberOfResults >
+              {practitionerSearchHelper.numberOfResults >
                 PRACTITIONER_SEARCH_PAGE_SIZE && (
                 <Paginator
                   breakClassName="hide"
                   forcePage={activePage}
                   marginPagesDisplayed={0}
-                  pageCount={practitionerSearchResultHelper.numberOfResults}
+                  pageCount={practitionerSearchHelper.numberOfResults}
                   pageRangeDisplayed={0}
-                  onPageChange={async pageChange => {
+                  onPageChange={pageChange => {
                     setActivePage(pageChange.selected);
                     // await getCustomCaseReportSequence({
                     //   selectedPage: pageChange.selected,
@@ -49,7 +49,7 @@ export const PractitionerSearchResults = connect(
                 Count: &nbsp;
               </span>
               <span data-testid="custom-case-report-count">
-                {formatPositiveNumber(advancedSearchHelper.numberOfResults)}
+                {formatPositiveNumber(practitionerSearchHelper.numberOfResults)}
               </span>
             </div>
             <table className="usa-table search-results ustc-table responsive-table">
@@ -65,7 +65,7 @@ export const PractitionerSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {advancedSearchHelper.formattedSearchResults.map(result => (
+                {practitionerSearchHelper.formattedSearchResults.map(result => (
                   <tr
                     className="search-result"
                     data-testid={`practitioner-row-${result.barNumber}`}
@@ -88,7 +88,7 @@ export const PractitionerSearchResults = connect(
             </table>
           </>
         )}
-        {advancedSearchHelper.showNoMatches && (
+        {practitionerSearchHelper.showNoMatches && (
           <div id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
