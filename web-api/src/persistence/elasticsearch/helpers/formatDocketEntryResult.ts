@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 export const formatDocketEntryResult = ({
   caseMap,
@@ -23,7 +23,7 @@ export const formatDocketEntryResult = ({
   }
 
   if (foundCase) {
-    const foundCaseUnmarshalled = AWS.DynamoDB.Converter.unmarshall(foundCase);
+    const foundCaseUnmarshalled = unmarshall(foundCase);
     return {
       isCaseSealed: !!foundCaseUnmarshalled.isSealed,
       isDocketEntrySealed: !!sourceUnmarshalled.isSealed,

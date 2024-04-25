@@ -1,23 +1,23 @@
 import { flattenDeep } from 'lodash';
-import AWS from 'aws-sdk';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import type {
+  AttributeValueWithName,
+  IDynamoDBRecord,
+} from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
- *
- * @param {array} caseEntityRecords all of the event stream records associated with case entities
- */
 export const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntityRecords: any[];
 }) => {
   if (!caseEntityRecords.length) return;
 
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
-    const caseRecords = [];
+    const caseRecords: IDynamoDBRecord[] = [];
 
     const caseMetadataWithCounsel = await applicationContext
       .getPersistenceGateway()
@@ -26,9 +26,7 @@ export const processCaseEntries = async ({
         docketNumber: caseNewImage.docketNumber.S,
       });
 
-    const marshalledCase = AWS.DynamoDB.Converter.marshall(
-      caseMetadataWithCounsel,
-    );
+    const marshalledCase = marshall(caseMetadataWithCounsel);
 
     caseRecords.push({
       dynamodb: {
@@ -97,7 +95,7 @@ export const processCaseEntries = async ({
             S: caseNewImage.sk.S,
           },
         },
-        NewImage: marshalledCase,
+        NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
       },
       eventName: 'MODIFY',
     });

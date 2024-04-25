@@ -1,7 +1,9 @@
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { count, search, searchAll } from './searchClient';
+import { efcmsUserIndex } from '../../../elasticsearch/efcms-user-mappings';
 import {
   emptyResults,
+  mockCaseSearchResult,
   mockDocketEntrySearchResult,
   mockMalformedQueryResult,
   mockMessageSearchResult,
@@ -11,6 +13,7 @@ import {
   mockOpenCasesReceivedOnJulyFourthSearchResult1,
   mockOpenCasesReceivedOnJulyFourthSearchResult2,
   mockOpenCasesReceivedOnJulyFourthSearchResults,
+  mockPractitionerRoleAggregationResult,
   mockWorkItemSearchResult,
   openCasesReceivedOnJulyFourthSearchParameters,
 } from './searchClient.test.constants';
@@ -65,54 +68,6 @@ describe('searchClient', () => {
         1,
       );
       expect(results).toMatchObject({ results: [], total: 0 });
-    });
-
-    it('search should format and return the list of results when the results are docket entry entities', async () => {
-      applicationContext
-        .getSearchClient()
-        .search.mockReturnValue(mockDocketEntrySearchResult);
-
-      await search({
-        applicationContext,
-        searchParameters: {},
-      });
-
-      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(formatDocketEntryResult).toHaveBeenCalledTimes(1);
-    });
-
-    it('search should format and return the list of results when they are message search results', async () => {
-      applicationContext
-        .getSearchClient()
-        .search.mockReturnValue(mockMessageSearchResult);
-
-      await search({
-        applicationContext,
-        searchParameters: {},
-      });
-
-      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(formatMessageResult).toHaveBeenCalledTimes(1);
-    });
-
-    it('should format and return the list of results when they are work item search results', async () => {
-      applicationContext
-        .getSearchClient()
-        .search.mockReturnValue(mockWorkItemSearchResult);
-
-      await search({
-        applicationContext,
-        searchParameters: {},
-      });
-
-      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(formatWorkItemResult).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -337,6 +292,154 @@ describe('searchClient', () => {
         1,
       );
       expect(result).toBe(5);
+    });
+  });
+
+  describe('formatResults', () => {
+    it('returns the total number of hits it found in the results', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockDocketEntrySearchResult);
+
+      const result = await search({ applicationContext, searchParameters: {} });
+      expect(result.total).toBe(1);
+    });
+
+    it('returns any aggregrations it found in the results', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockPractitionerRoleAggregationResult);
+
+      const result = await search({
+        applicationContext,
+        searchParameters: {
+          body: {
+            aggs: {
+              roles: {
+                terms: {
+                  field: 'role.S',
+                },
+              },
+            },
+            query: {
+              bool: {
+                filter: {
+                  exists: {
+                    field: 'barNumber.S',
+                  },
+                },
+                must: {
+                  term: {
+                    'admissionsStatus.S': 'Active',
+                  },
+                },
+              },
+            },
+            size: 0,
+          },
+          index: efcmsUserIndex,
+        },
+      });
+
+      expect(result.aggregations).toMatchObject({
+        roles: {
+          buckets: [
+            {
+              doc_count: 763,
+              key: 'privatePractitioner',
+            },
+            {
+              doc_count: 18,
+              key: 'irsPractitioner',
+            },
+          ],
+        },
+      });
+    });
+
+    it('removes case_relations from any hit it found', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockDocketEntrySearchResult);
+
+      const result = await search({ applicationContext, searchParameters: {} });
+      const stringifiedResults = JSON.stringify(result.results);
+      expect(stringifiedResults).not.toContain('case_relations');
+    });
+
+    it('unmarshalls the data within each hit', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockCaseSearchResult);
+
+      const result = await search({
+        applicationContext,
+        searchParameters: {},
+      });
+      expect(
+        mockCaseSearchResult.body.hits.hits[0]._source.docketNumber,
+      ).toEqual({ S: '101-23' });
+      expect(result.results[0].docketNumber).toEqual('101-23');
+    });
+
+    it('includes the score', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockCaseSearchResult);
+
+      const result = await search({
+        applicationContext,
+        searchParameters: {},
+      });
+      expect(result.results[0]._score).toBeDefined();
+    });
+
+    it('search should format and return the list of results when the results are docket entry entities', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockDocketEntrySearchResult);
+
+      await search({
+        applicationContext,
+        searchParameters: {},
+      });
+
+      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(formatDocketEntryResult).toHaveBeenCalledTimes(1);
+    });
+
+    it('search should format and return the list of results when they are message search results', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockMessageSearchResult);
+
+      await search({
+        applicationContext,
+        searchParameters: {},
+      });
+
+      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(formatMessageResult).toHaveBeenCalledTimes(1);
+    });
+
+    it('should format and return the list of results when they are work item search results', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockWorkItemSearchResult);
+
+      await search({
+        applicationContext,
+        searchParameters: {},
+      });
+
+      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(formatWorkItemResult).toHaveBeenCalledTimes(1);
     });
   });
 });

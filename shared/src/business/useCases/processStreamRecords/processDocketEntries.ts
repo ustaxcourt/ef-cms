@@ -2,7 +2,9 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import AWS from 'aws-sdk';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -13,7 +15,7 @@ export const processDocketEntries = async ({
   applicationContext,
   docketEntryRecords: records,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketEntryRecords: any[];
 }) => {
   if (!records.length) return;
@@ -22,12 +24,9 @@ export const processDocketEntries = async ({
     `going to index ${records.length} docketEntryRecords`,
   );
 
-  const newDocketEntryRecords = await Promise.all(
+  const newDocketEntryRecords: IDynamoDBRecord[] = await Promise.all(
     records.map(async record => {
-      // TODO: May need to remove the `case_relations` object and re-add later
-      const fullDocketEntry = AWS.DynamoDB.Converter.unmarshall(
-        record.dynamodb.NewImage,
-      );
+      const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
       const isSearchable =
         OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
@@ -44,6 +43,7 @@ export const processDocketEntries = async ({
               key: fullDocketEntry.documentContentsId,
               useTempBucket: false,
             });
+          // @ts-ignore
           const { documentContents } = JSON.parse(buffer.toString());
 
           fullDocketEntry.documentContents = documentContents;
@@ -68,7 +68,7 @@ export const processDocketEntries = async ({
             },
           },
           NewImage: {
-            ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
+            ...marshall(fullDocketEntry),
             case_relations: {
               name: 'document',
               parent: caseDocketEntryMappingRecordId,

@@ -4,8 +4,8 @@ import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
 import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
-import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
 export type SearchClientResultsType = {
@@ -39,9 +39,8 @@ export const formatResults = <T>(body: Record<string, any>) => {
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
-    const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
-      hit['_source'],
-    );
+    delete hit['_source']['case_relations'];
+    const sourceUnmarshalled = unmarshall(hit['_source']);
     sourceUnmarshalled['_score'] = hit['_score'];
 
     const isDocketEntryResultWithParentCaseMapping =
