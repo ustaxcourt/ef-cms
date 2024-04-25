@@ -15,7 +15,7 @@ describe('CaseQC entity', () => {
         caseCaption: 'Enter a case caption',
         caseType: 'Select a case type',
         docketNumber: 'Docket number is required',
-        hasVerifiedIrsNotice: 'Select an option',
+        hasVerifiedIrsNotice: 'Select an option for IRS Notice provided',
         partyType: 'Select a party type',
         procedureType: 'Select a case procedure',
         sortableDocketNumber: 'Sortable docket number is required',

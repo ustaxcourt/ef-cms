@@ -2,7 +2,7 @@ import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityC
 import { GetCasesByStatusAndByJudgeRequest } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
-import { judgeUser } from '@shared/test/mockUsers';
+import { judgeColvin, judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -65,6 +65,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         judgeActivityReport: {
           filters: judgeActivityReportStateFilters,
         },
+        judges: [judgeUser],
       },
     });
 
@@ -74,6 +75,38 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
           .getCaseWorksheetsByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
+    expect(result.output.cases).toBe(mockReturnedCases);
+  });
+
+  it('should retrieve cases with a status of submitted and cav for the judge viewing the report when a judge is not yet selected', async () => {
+    const result = await runAction(getSubmittedAndCavCasesByJudgeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: pageNumber,
+      },
+      state: {
+        judgeActivityReport: {
+          filters: {
+            ...judgeActivityReportStateFilters,
+            judgeName: judgeColvin.name,
+            judges: undefined,
+          },
+        },
+        judges: [judgeColvin],
+      },
+    });
+
+    expect(
+      (
+        applicationContext.getUseCases()
+          .getCaseWorksheetsByJudgeInteractor as jest.Mock
+      ).mock.calls[0][1],
+    ).toMatchObject({
+      judges: [judgeColvin.name],
+      statuses: CAV_AND_SUBMITTED_CASE_STATUS,
+    });
     expect(result.output.cases).toBe(mockReturnedCases);
   });
 });

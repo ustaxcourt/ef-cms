@@ -106,6 +106,7 @@ export const MessageDetail = connect(
             <div
               aria-live="polite"
               className="usa-alert usa-alert--warning"
+              data-testid="message-detail-warning-alert"
               role="alert"
             >
               <div className="usa-alert__body">
@@ -124,6 +125,7 @@ export const MessageDetail = connect(
                 <Button
                   link
                   className="action-button"
+                  data-testid="message-mark-as-complete"
                   icon="check-circle"
                   id="button-complete"
                   onClick={() => openCompleteMessageModalSequence()}

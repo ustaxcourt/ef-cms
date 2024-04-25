@@ -139,6 +139,23 @@ describe('messages table journey', () => {
     expect(orignalMessage).toBeDefined();
   });
 
+  it('petitions clerk 1 verify the message is also in section completed', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'completed',
+      queue: 'section',
+    });
+
+    const completedMessagesFormatted = runCompute(formattedMessages, {
+      state: cerebralTest.getState(),
+    });
+
+    const orignalMessage = completedMessagesFormatted.messages.find(
+      m => m.messageId === cerebralTest.messageId,
+    );
+
+    expect(orignalMessage).toBeDefined();
+  });
+
   userSendsMessage(
     cerebralTest,
     messageSubjectForJudge,

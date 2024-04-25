@@ -10,14 +10,12 @@ export const MessagesIndividualCompleted = connect(
   {
     constants: state.constants,
     formattedMessages: state.formattedMessages,
-    showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
   },
   function MessagesIndividualCompleted({
     constants,
     formattedMessages,
-    showSortableHeaders,
     sortTableSequence,
     tableSort,
   }) {
@@ -27,58 +25,48 @@ export const MessagesIndividualCompleted = connect(
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="docketNumber"
-                    title="Docket No."
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  Docket No.
-                </th>
-              )}
-              {showSortableHeaders && (
-                <th className="medium">
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="completedAt"
-                    title="Completed"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th className="medium">Completed</th>}
-              {showSortableHeaders && (
-                <th>
-                  <SortableColumn
-                    ascText={constants.ALPHABETICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="subject"
-                    title="Last Message"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th>Message</th>}
+              <th aria-label="Docket Number" className="small" colSpan={2}>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-docket-number-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="docketNumber"
+                  title="Docket No."
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th className="medium">
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-completed-at-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="completedAt"
+                  title="Completed"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-subject-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="subject"
+                  title="Last Message"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th>Comment</th>
               <th>Case Title</th>
             </tr>
@@ -96,10 +84,17 @@ export const MessagesIndividualCompleted = connect(
                       showLeadCaseIcon={message.isLeadCase}
                     />
                   </td>
-                  <td className="message-queue-row small" colSpan={2}>
+                  <td
+                    className="message-queue-row small"
+                    colSpan={2}
+                    data-testid="individual-message-completed-docket-number-cell"
+                  >
                     {message.docketNumberWithSuffix}
                   </td>
-                  <td className="message-queue-row small">
+                  <td
+                    className="message-queue-row small"
+                    data-testid="individual-message-completed-completed-at-cell"
+                  >
                     <span className="no-wrap">
                       {message.completedAtFormatted}
                     </span>
@@ -109,6 +104,7 @@ export const MessagesIndividualCompleted = connect(
                       <Button
                         link
                         className="padding-0"
+                        data-testid="individual-message-completed-subject-cell"
                         href={message.messageDetailLink}
                       >
                         {message.subject}

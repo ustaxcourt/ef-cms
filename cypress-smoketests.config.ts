@@ -1,11 +1,17 @@
 import {
   confirmUser,
-  getUserTokenWithRetry,
+  deleteAllCypressTestAccounts,
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
 } from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
-import { getUserToken as getUserTokenLocal } from './cypress/helpers/auth/local-login';
-import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
-const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
+import {
+  deleteAllItemsInEmailBucket,
+  readAllItemsInBucket,
+} from './cypress/cypress-smoketests/support/email-receipt';
+import { waitForNoce } from './cypress/helpers/wait-for-noce';
+import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -18,13 +24,50 @@ export default defineConfig({
         confirmUser({ email }) {
           return confirmUser({ email });
         },
-        getUserToken({ email, password }) {
-          return CYPRESS_SMOKETESTS_LOCAL
-            ? getUserTokenLocal(email)
-            : getUserTokenWithRetry(email, password);
+        deleteAllCypressTestAccounts() {
+          return deleteAllCypressTestAccounts();
+        },
+        deleteAllItemsInEmailBucket({
+          bucketName,
+          retries,
+        }: {
+          bucketName: string;
+          retries: number;
+        }) {
+          return deleteAllItemsInEmailBucket({ bucketName, retries });
+        },
+        expireUserConfirmationCode(email: string) {
+          return expireUserConfirmationCode(email);
+        },
+        getEmailVerificationToken({ email }) {
+          return getEmailVerificationToken({ email });
+        },
+        getNewAccountVerificationCode({ email }) {
+          return getNewAccountVerificationCode({ email });
+        },
+        readAllItemsInBucket({
+          bucketName,
+          retries,
+        }: {
+          bucketName: string;
+          retries: number;
+        }) {
+          return readAllItemsInBucket({ bucketName, retries });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
+        },
+        waitForPractitionerEmailUpdate({
+          docketNumber,
+          practitionerEmail,
+        }: {
+          docketNumber: string;
+          practitionerEmail: string;
+        }) {
+          return waitForPractitionerEmailUpdate({
+            docketNumber,
+            practitionerEmail,
+          });
         },
       });
     },
@@ -40,6 +83,7 @@ export default defineConfig({
   },
   requestTimeout: 60000,
   retries: 0,
+  screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,

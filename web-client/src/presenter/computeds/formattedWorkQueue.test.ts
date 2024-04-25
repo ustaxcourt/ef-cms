@@ -637,7 +637,7 @@ describe('formattedWorkQueue', () => {
 
       expect(result[0].inConsolidatedGroup).toBe(false);
       expect(result[0].inLeadCase).toBe(false);
-      expect(result[0].consolidatedIconTooltipText).toBeUndefined();
+      expect(result[0].consolidatedIconTooltipText).toEqual('');
     });
 
     it('should show the work item is on the lead case of a consolidated group and a tool tip "Lead Case"', () => {

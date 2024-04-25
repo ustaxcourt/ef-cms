@@ -119,6 +119,7 @@ export const EditPetitionerCounsel = connect(
 
           <div>
             <Button
+              data-testid="submit-edit-petitioner-information-button"
               id="submit-edit-petitioner-information"
               onClick={() => {
                 submitEditPetitionerCounselSequence();
@@ -138,6 +139,7 @@ export const EditPetitionerCounsel = connect(
             <Button
               link
               className="red-warning no-wrap float-right"
+              data-testid="remove-petitioner-btn"
               icon="trash"
               id="remove-petitioner-btn"
               onClick={() => {

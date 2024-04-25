@@ -9,7 +9,7 @@ export const setJudgeActivityReportFiltersAction = ({
   const selectedJudge: string = props.judgeName;
 
   if (selectedJudge) {
-    store.set(state.judgeActivityReport.judgeName, selectedJudge);
+    store.set(state.judgeActivityReport.filters.judgeName, selectedJudge);
   }
   if (filterStartDate || filterStartDate === '') {
     store.set(state.judgeActivityReport.filters.startDate, filterStartDate);

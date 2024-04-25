@@ -1,12 +1,14 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { createApplicationContext } from './src/applicationContext';
 import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
 import { scanFull } from './utilities/scanFull';
-import AWS from 'aws-sdk';
 
 const applicationContext = createApplicationContext({});
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const dynamo = new AWS.DynamoDB({
+  const dynamodb = new DynamoDBClient({
     credentials: {
       accessKeyId: 'S3RVER',
       secretAccessKey: 'S3RVER',
@@ -15,10 +17,8 @@ const applicationContext = createApplicationContext({});
     region: 'us-east-1',
   });
 
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    endpoint: 'http://localhost:8000',
-    region: 'us-east-1',
-    service: dynamo,
+  const documentClient = DynamoDBDocument.from(dynamodb, {
+    marshallOptions: { removeUndefinedValues: true },
   });
 
   const results = await scanFull(process.env.SOURCE_TABLE!, documentClient);
@@ -27,6 +27,5 @@ const applicationContext = createApplicationContext({});
     documentClient,
     items: results,
     ranMigrations: undefined,
-    segment: undefined,
   });
 })();

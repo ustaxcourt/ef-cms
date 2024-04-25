@@ -7,4 +7,5 @@ interface IApplicationContext {
   getUseCases: IGetUseCases;
   getUtilities: IGetUtilities;
   getDocumentGenerators: IGetDocumentGenerators;
+  getStorageClient: () => AWS.S3;
 }

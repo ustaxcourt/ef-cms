@@ -72,6 +72,10 @@ describe('Case deadline report journey', () => {
         key: 'associatedJudge',
         value: 'Buch',
       });
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'associatedJudgeId',
+        value: 'dabbad02-18d0-43ec-bafb-654e83405416',
+      });
 
       await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
@@ -79,6 +83,9 @@ describe('Case deadline report journey', () => {
 
       expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
         'Buch',
+      );
+      expect(cerebralTest.getState('caseDetail.associatedJudgeId')).toEqual(
+        'dabbad02-18d0-43ec-bafb-654e83405416',
       );
 
       await refreshElasticsearchIndex();

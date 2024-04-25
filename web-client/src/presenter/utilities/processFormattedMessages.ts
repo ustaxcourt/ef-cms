@@ -12,6 +12,7 @@ export const sortFormattedMessages = (
 ) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
     let sortNumber = 0;
+
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
     } else if (

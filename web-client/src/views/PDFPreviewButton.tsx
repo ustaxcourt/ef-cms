@@ -9,12 +9,23 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PDFPreviewButton = connect(
+const pdfPreviewButtonDeps = {
+  openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
+  pdfPreviewModalHelper: state.pdfPreviewModalHelper,
+  showModal: state.modal.showModal,
+};
+
+export const PDFPreviewButton = connect<
   {
-    openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
-    pdfPreviewModalHelper: state.pdfPreviewModalHelper,
-    showModal: state.modal.showModal,
+    file: any;
+    title: string;
+    id?: string;
+    shouldAbbreviateTitle?: boolean;
+    shouldWrapText?: boolean;
   },
+  typeof pdfPreviewButtonDeps
+>(
+  pdfPreviewButtonDeps,
   function PDFPreviewButton({
     file,
     id,
@@ -22,8 +33,10 @@ export const PDFPreviewButton = connect(
     pdfPreviewModalHelper,
     shouldAbbreviateTitle = true,
     shouldWrapText = false,
+    showIcon = true,
     showModal,
     title,
+    ...props
   }) {
     const modalId = `PDFPreviewModal-${title}`;
     const fullTitle = file.name || file.documentType || title;
@@ -43,8 +56,9 @@ export const PDFPreviewButton = connect(
           <Button
             link
             className="pdf-preview-btn padding-0"
-            icon={['fas', 'file-pdf']}
-            iconColor="blue"
+            data-testid={props['data-testid']}
+            icon={showIcon && ['fas', 'file-pdf']}
+            iconColor={showIcon && 'blue'}
             id={id}
             shouldWrapText={shouldWrapText}
             title={fullTitle}

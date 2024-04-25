@@ -5,6 +5,7 @@ export const getSectionInboxMessages = async ({
   applicationContext,
   section,
 }) => {
+  applicationContext.logger.info('getSectionInboxMessages start');
   const query = {
     body: {
       query: {
@@ -32,6 +33,8 @@ export const getSectionInboxMessages = async ({
     applicationContext,
     searchParameters: query,
   });
+
+  applicationContext.logger.info('getSectionInboxMessages end');
 
   return results;
 };

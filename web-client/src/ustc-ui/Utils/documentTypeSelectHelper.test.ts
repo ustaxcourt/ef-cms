@@ -60,6 +60,7 @@ describe('documentTypeSelectHelper', () => {
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
       fileDocumentPrimaryOnChange({
         action: 'clear',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -75,6 +76,7 @@ describe('documentTypeSelectHelper', () => {
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       fileDocumentPrimaryOnChange({
         action: 'something-else',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -128,6 +130,7 @@ describe('documentTypeSelectHelper', () => {
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
       fileDocumentSecondaryOnChange({
         action: 'clear',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -143,6 +146,7 @@ describe('documentTypeSelectHelper', () => {
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       fileDocumentSecondaryOnChange({
         action: 'something-else',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -178,6 +182,7 @@ describe('documentTypeSelectHelper', () => {
       docketEntryOnChange({
         action: 'clear',
         inputName: 'primaryDocument.eventCode',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -193,6 +198,8 @@ describe('documentTypeSelectHelper', () => {
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       docketEntryOnChange({
         action: 'something-else',
+        inputName: undefined,
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -241,6 +248,7 @@ describe('documentTypeSelectHelper', () => {
     it('should call update sequence multiple times followed by validate sequence if "action" is "clear"', () => {
       courtIssuedDocketEntryOnChange({
         action: 'clear',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -268,6 +276,7 @@ describe('documentTypeSelectHelper', () => {
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       courtIssuedDocketEntryOnChange({
         action: 'something-else',
+        inputValue: undefined,
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });

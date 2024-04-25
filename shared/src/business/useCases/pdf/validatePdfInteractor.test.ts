@@ -120,8 +120,8 @@ describe('validatePdfInteractor', () => {
   });
 
   describe('removePdf', () => {
-    it('calls the persistence method for removing a document from S3 based on the given key', () => {
-      removePdf({
+    it('calls the persistence method for removing a document from S3 based on the given key', async () => {
+      await removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         message: 'Test!',
@@ -135,8 +135,8 @@ describe('validatePdfInteractor', () => {
       });
     });
 
-    it('calls the debug method with the given key and message for context', () => {
-      removePdf({
+    it('calls the debug method with the given key and message for context', async () => {
+      await removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         message: 'Test Message',
@@ -151,8 +151,8 @@ describe('validatePdfInteractor', () => {
       );
     });
 
-    it('calls the debug method with a generic message when one is not given', () => {
-      removePdf({
+    it('calls the debug method with a generic message when one is not given', async () => {
+      await removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       });

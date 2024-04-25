@@ -8,6 +8,7 @@ describe('CaseDeadline', () => {
     const caseDeadline = new CaseDeadline(
       {
         associatedJudge: 'Judge Buch',
+        associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
         deadlineDate: '2019-03-01T21:42:29.073Z',
         description: 'One small step',
         docketNumber: DOCKET_NUMBER,
@@ -26,6 +27,7 @@ describe('CaseDeadline', () => {
           new CaseDeadline(
             {
               associatedJudge: 'Judge Buch',
+              associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
               deadlineDate: '2019-03-01T21:42:29.073Z',
               description: 'One small step',
               docketNumber: DOCKET_NUMBER,
@@ -43,6 +45,7 @@ describe('CaseDeadline', () => {
 
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         associatedJudge: 'Associated judge is required',
+        associatedJudgeId: '"associatedJudgeId" is required',
         deadlineDate: 'Enter a valid deadline date',
         description: 'Enter a description of this deadline',
         docketNumber: 'You must have a docket number.',
@@ -54,6 +57,7 @@ describe('CaseDeadline', () => {
       const caseDeadline = new CaseDeadline(
         {
           associatedJudge: 'Judge Buch',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
@@ -69,6 +73,7 @@ describe('CaseDeadline', () => {
       const caseDeadline = new CaseDeadline(
         {
           associatedJudge: 'Judge Buch',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
@@ -84,6 +89,7 @@ describe('CaseDeadline', () => {
       const caseDeadline = new CaseDeadline(
         {
           associatedJudge: 'Judge Buch',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: `I got the horses in the back
             Horse tack is attached

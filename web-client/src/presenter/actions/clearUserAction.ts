@@ -20,4 +20,5 @@ export const clearUserAction = async ({
     });
 
   applicationContext.setCurrentUser(null);
+  applicationContext.setCurrentUserToken(null);
 };

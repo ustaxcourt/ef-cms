@@ -28,10 +28,11 @@ describe('getCasesClosedByJudgeAction', () => {
         judgeActivityReport: {
           filters: {
             endDate: mockEndDate,
-            judges: [mockJudgeName],
+            judgeName: mockJudgeName,
             startDate: mockStartDate,
           },
         },
+        judges: [judgeUser],
       },
     });
 
@@ -40,7 +41,7 @@ describe('getCasesClosedByJudgeAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judges: [mockJudgeName],
+      judges: [judgeUser.name],
       startDate: mockStartDate,
     });
     expect(output.casesClosedByJudge).toMatchObject(mockCasesClosedByJudge);

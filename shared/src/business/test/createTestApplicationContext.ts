@@ -20,8 +20,6 @@ import {
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  getCognitoLoginUrl,
-  getCognitoRequestPasswordResetUrl,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
@@ -79,6 +77,7 @@ import { getAllFeatureFlagsInteractor } from '../useCases/featureFlag/getAllFeat
 import { getAllWebSocketConnections } from '../../../../web-api/src/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../../../web-api/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import {
   getChambersSections,
   getChambersSectionsLabels,
@@ -93,6 +92,7 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../utilities/getWorkQueueFilters';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
@@ -256,6 +256,9 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getCaseDocumentsIdsFilteredByDocumentType: jest
+      .fn()
+      .mockImplementation(getCaseDocumentsIdsFilteredByDocumentType),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
@@ -263,6 +266,9 @@ export const createTestApplicationContext = ({
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
+    getDocketEntriesByFilter: jest
+      .fn()
+      .mockImplementation(getDocketEntriesByFilter),
     getDocumentTitleWithAdditionalInfo: jest
       .fn()
       .mockImplementation(getDocumentTitleWithAdditionalInfo),
@@ -588,9 +594,12 @@ export const createTestApplicationContext = ({
     documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
       appEndpoint: 'localhost:1234',
+      cognitoClientId: 'bvjrggnd3co403c0aahscinne',
       dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
+      userPoolId: 'local_2pHzece7',
+      workerQueueUrl: 'sqs.aws',
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
@@ -602,21 +611,10 @@ export const createTestApplicationContext = ({
       return mockGetChromiumBrowserReturnValue;
     }),
     getCognito: appContextProxy({
-      adminCreateUser: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
-      adminUpdateUserAttributes: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
-      initiateAuth: jest.fn().mockReturnValue({
-        promise: jest.fn(),
-      }),
+      adminCreateUser: jest.fn(),
+      adminUpdateUserAttributes: jest.fn(),
+      initiateAuth: jest.fn(),
     }),
-    getCognitoClientId: jest.fn(),
-    getCognitoLoginUrl,
-    getCognitoRedirectUrl: jest.fn(),
-    getCognitoRequestPasswordResetUrl,
-    getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
@@ -661,7 +659,6 @@ export const createTestApplicationContext = ({
       sendCalendarSessionEvent: jest.fn(),
       sendEmailEventToQueue: jest.fn(),
       sendSetTrialSessionCalendarEvent: jest.fn(),
-      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
@@ -688,7 +685,11 @@ export const createTestApplicationContext = ({
     getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
+    getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
+    getWorkerGateway: appContextProxy({
+      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+    }),
     isFeatureEnabled: jest.fn(),
     logger: {
       debug: jest.fn(),
@@ -699,8 +700,9 @@ export const createTestApplicationContext = ({
     runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
+    setTimeout: jest.fn().mockImplementation(callback => callback()),
   };
   return applicationContext;
 };
 
-export const applicationContext = createTestApplicationContext();
+export const applicationContext = createTestApplicationContext() as any;

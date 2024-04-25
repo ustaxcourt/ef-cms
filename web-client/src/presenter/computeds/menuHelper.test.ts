@@ -3,11 +3,15 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('menuHelper', () => {
   it('should return false for each menu by default', () => {
-    const { isAccountMenuOpen } = runCompute(menuHelper, {});
-    const { isReportsMenuOpen } = runCompute(menuHelper, {});
-    const { isMessagesMenuOpen } = runCompute(menuHelper, {});
-    const { isDocumentQCMenuOpen } = runCompute(menuHelper, {});
-    const { isCaseDetailMenuOpen } = runCompute(menuHelper, {});
+    const { isAccountMenuOpen } = runCompute(menuHelper, { state: undefined });
+    const { isReportsMenuOpen } = runCompute(menuHelper, { state: undefined });
+    const { isMessagesMenuOpen } = runCompute(menuHelper, { state: undefined });
+    const { isDocumentQCMenuOpen } = runCompute(menuHelper, {
+      state: undefined,
+    });
+    const { isCaseDetailMenuOpen } = runCompute(menuHelper, {
+      state: undefined,
+    });
 
     expect(isMessagesMenuOpen).toEqual(false);
     expect(isAccountMenuOpen).toEqual(false);

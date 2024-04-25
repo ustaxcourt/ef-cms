@@ -5,6 +5,23 @@ import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
+function calculateStatisticsTotal(
+  casesClosedByJudge,
+  opinions,
+  orders,
+  trialSessions,
+) {
+  if (!orders && !opinions && !trialSessions && !casesClosedByJudge) {
+    return 0;
+  }
+  return (
+    orders.total +
+    opinions.total +
+    trialSessions.total +
+    casesClosedByJudge.total
+  );
+}
+
 export const judgeActivityReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -17,35 +34,30 @@ export const judgeActivityReportHelper = (
   progressDescriptionTableTotal: number;
   reportHeader: string;
   showResultsTables: boolean;
-  showSelectDateRangeText: boolean;
   submittedAndCavCasesByJudge: any;
   today: string;
   trialSessionsHeldTotal: number;
 } => {
   const { endDate, startDate } = get(state.judgeActivityReport.filters);
 
-  const { judgeNameToDisplayForHeader } = get(state.judgeActivityReport);
+  const { judgeName } = get(state.judgeActivityReport.filters);
 
-  const {
-    casesClosedByJudge,
-    opinions,
-    orders,
-    submittedAndCavCasesByJudge = [],
-    trialSessions,
-  } = get(state.judgeActivityReport.judgeActivityReportData);
+  const judgeActivityReportData = get(
+    state.judgeActivityReport.judgeActivityReportData,
+  );
 
   const hasFormBeenSubmitted = get(
     state.judgeActivityReport.hasUserSubmittedForm,
   );
 
-  const totalResults =
-    orders.total +
-    opinions.total +
-    trialSessions.total +
-    casesClosedByJudge.total;
-  const showResultsTables = hasFormBeenSubmitted && totalResults > 0;
+  const totalResults = calculateStatisticsTotal(
+    judgeActivityReportData.casesClosedByJudge,
+    judgeActivityReportData.opinions,
+    judgeActivityReportData.orders,
+    judgeActivityReportData.trialSessions,
+  );
 
-  const showSelectDateRangeText = !hasFormBeenSubmitted;
+  const showResultsTables = hasFormBeenSubmitted && totalResults > 0;
 
   const currentDate: string = applicationContext
     .getUtilities()
@@ -54,9 +66,11 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
+  const reportHeader: string = `${judgeName} ${currentDate}`;
 
-  const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(aCase => {
+  const submittedAndCavCasesRows = (
+    judgeActivityReportData.submittedAndCavCasesByJudge || []
+  ).map(aCase => {
     let consolidatedIconTooltipText = '';
     let isLeadCase = false;
     let inConsolidatedGroup = false;
@@ -117,20 +131,21 @@ export const judgeActivityReportHelper = (
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
-  const ordersToDisplay = orders.aggregations?.filter(agg => agg.count);
+  const ordersToDisplay = judgeActivityReportData.orders
+    ? judgeActivityReportData.orders.aggregations?.filter(agg => agg.count)
+    : [];
 
   return {
-    closedCasesTotal: casesClosedByJudge?.total || 0,
+    closedCasesTotal: judgeActivityReportData.casesClosedByJudge?.total || 0,
     isFormPristine: !endDate || !startDate,
-    opinionsFiledTotal: opinions?.total || 0,
+    opinionsFiledTotal: judgeActivityReportData.opinions?.total || 0,
     orders: ordersToDisplay,
-    ordersFiledTotal: orders?.total || 0,
+    ordersFiledTotal: judgeActivityReportData.orders?.total || 0,
     progressDescriptionTableTotal: submittedAndCavCasesRows.length,
     reportHeader,
     showResultsTables,
-    showSelectDateRangeText,
     submittedAndCavCasesByJudge: submittedAndCavCasesRows,
     today,
-    trialSessionsHeldTotal: trialSessions?.total || 0,
+    trialSessionsHeldTotal: judgeActivityReportData.trialSessions?.total || 0,
   };
 };

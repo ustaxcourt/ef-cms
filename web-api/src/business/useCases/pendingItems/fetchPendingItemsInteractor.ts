@@ -6,6 +6,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const pendingItemCaseSource = [
   'associatedJudge',
+  'associatedJudgeId',
   'caseCaption',
   'docketNumber',
   'docketNumberSuffix',

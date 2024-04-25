@@ -25,10 +25,6 @@ variable "zone_id" {
   type = string
 }
 
-variable "pool_arn" {
-  type = string
-}
-
 variable "lambda_environment" {
   type = map(any)
 }
@@ -153,20 +149,7 @@ variable "stream_arn" {
   type = string
 }
 
-variable "create_triggers" {
-  type    = number
-  default = 1
-}
-
 variable "web_acl_arn" {
-  type = string
-}
-
-variable "triggers_object" {
-  type = any
-}
-
-variable "triggers_object_hash" {
   type = string
 }
 
@@ -201,6 +184,13 @@ variable "bounce_handler_object" {
 variable "bounce_handler_object_hash" {
   type = string
 }
+variable "worker_object" {
+  type = any
+}
+
+variable "worker_object_hash" {
+  type = string
+}
 
 variable "node_version" {
   type = string
@@ -222,4 +212,8 @@ variable "health_check_id" {
 
 variable "deployment_timestamp" {
   type = number
+}
+
+variable "alert_sns_topic_arn" {
+  type = string
 }

@@ -2,9 +2,9 @@ resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
   name = "/aws/aes/kibana"
 }
 
-resource "aws_elasticsearch_domain" "efcms-logs" {
+resource "aws_opensearch_domain" "efcms-logs" {
   domain_name           = "info"
-  elasticsearch_version = "7.10"
+  engine_version        = "OpenSearch_2.11"
 
   cluster_config {
     instance_type  = var.es_logs_instance_type
@@ -39,7 +39,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 }
 
 resource "aws_elasticsearch_domain_policy" "kibana_access" {
-  domain_name     = aws_elasticsearch_domain.efcms-logs.domain_name
+  domain_name     = aws_opensearch_domain.efcms-logs.domain_name
   access_policies = <<POLICY
 {
   "Version": "2012-10-17",
@@ -50,7 +50,7 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
         "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
       },
       "Action": "es:ESHttp*",
-      "Resource":"${aws_elasticsearch_domain.efcms-logs.arn}/*"
+      "Resource":"${aws_opensearch_domain.efcms-logs.arn}/*"
     }
   ]
 }
@@ -95,7 +95,7 @@ data "aws_iam_policy_document" "log_viewers_auth" {
       "es:ESHttpGet"
     ]
 
-    resources = ["${aws_elasticsearch_domain.efcms-logs.arn}/*"]
+    resources = ["${aws_opensearch_domain.efcms-logs.arn}/*"]
   }
 }
 
@@ -143,14 +143,24 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
   }
 }
 
+resource "opensearch_snapshot_repository" "archived-logs" {
+  name = "archived-logs"
+  type = "s3"
+  settings = {
+    bucket   = "${var.log_snapshot_bucket_name}"
+    region   = "us-east-1"
+    role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
+  }
+}
+
 locals {
-  instance_size_in_mb = aws_elasticsearch_domain.efcms-logs.ebs_options[0].volume_size * 1000
+  instance_size_in_mb = aws_opensearch_domain.efcms-logs.ebs_options[0].volume_size * 1000
 }
 
 module "logs_alarms" {
   source                       = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
-  domain_name                  = aws_elasticsearch_domain.efcms-logs.domain_name
-  alarm_name_prefix            = "${aws_elasticsearch_domain.efcms-logs.domain_name}: "
+  domain_name                  = aws_opensearch_domain.efcms-logs.domain_name
+  alarm_name_prefix            = "${aws_opensearch_domain.efcms-logs.domain_name}: "
   free_storage_space_threshold = local.instance_size_in_mb * 0.25
   create_sns_topic             = false
   sns_topic                    = aws_sns_topic.system_health_alarms.arn

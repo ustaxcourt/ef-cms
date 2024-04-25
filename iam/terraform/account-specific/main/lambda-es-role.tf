@@ -40,7 +40,7 @@ resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
         "es:*"
       ],
       "Resource": [
-        "${aws_elasticsearch_domain.efcms-logs.arn}/*"
+        "${aws_opensearch_domain.efcms-logs.arn}/*"
       ]
     }
   ]

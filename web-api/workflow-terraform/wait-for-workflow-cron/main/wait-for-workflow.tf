@@ -31,7 +31,7 @@ resource "aws_lambda_function" "wait_for_workflow_lambda" {
 resource "aws_cloudwatch_event_rule" "wait_for_workflow_cron_rule" {
   name                = "wait_for_workflow_cron_${var.environment}"
   schedule_expression = "rate(1 minute)"
-  is_enabled          = "false"
+  state               = "DISABLED"
 }
 
 resource "aws_cloudwatch_event_target" "wait_for_workflow_cron_target" {

@@ -69,7 +69,7 @@ describe('Petitioner', () => {
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
         additionalName:
-          'Limit is 100 characters. Enter 100 or fewer characters.',
+          'Limit is 200 characters. Enter 200 or fewer characters.',
       });
     });
 

@@ -55,15 +55,6 @@ describe('formattedTrialSessionDetails', () => {
       );
   });
 
-  it('returns undefined if state.trialSession is undefined', () => {
-    mockTrialSession = undefined;
-
-    const result: any = runCompute(formattedTrialSessionDetails, {
-      state: {},
-    });
-    expect(result).toBeUndefined();
-  });
-
   it('should return false for isHybridSession when sessionType is set to Regular', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
@@ -149,16 +140,18 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ disableHybridFilter: true });
   });
 
-  it('should NOT set canDelete, canEdit, or can canClose when the trial session does NOT have a start date', () => {
+  it('should NOT set canDelete, canEdit, or canClose to true if the trial session does NOT have a start date', () => {
     mockTrialSession = omit(mockTrialSession, 'startDate');
 
     const result: any = runCompute(formattedTrialSessionDetails, {
-      state: {},
+      state: {
+        trialSession: {},
+      },
     });
 
-    expect(result.canEdit).toBeUndefined();
-    expect(result.canDelete).toBeUndefined();
-    expect(result.canClose).toBeUndefined();
+    expect(result.canEdit).toBe(false);
+    expect(result.canDelete).toBe(false);
+    expect(result.canClose).toBe(false);
   });
 
   describe('canDelete', () => {
@@ -357,7 +350,7 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
 
-      expect(result.canClose).toBeUndefined();
+      expect(result.canClose).toBe(false);
     });
 
     it('should not set canClose if the session has open cases', () => {
@@ -373,7 +366,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {},
         },
       });
-      expect(result.canClose).toBeUndefined();
+      expect(result.canClose).toBe(false);
     });
 
     it('should not set canClose if the session is not standalone remote', () => {
@@ -390,7 +383,7 @@ describe('formattedTrialSessionDetails', () => {
         },
       });
 
-      expect(result.canClose).toBeUndefined();
+      expect(result.canClose).toBe(false);
     });
   });
 

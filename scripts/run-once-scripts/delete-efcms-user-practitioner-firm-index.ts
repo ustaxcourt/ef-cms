@@ -7,6 +7,7 @@ requireEnvVars(['ENV']);
 const environmentName: string = process.env.ENV!;
 const index: string = 'efcms-user-practitioner-firm';
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const version: string = await getVersion();
   const client: Client = await getClient({ environmentName, version });

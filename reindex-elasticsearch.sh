@@ -23,6 +23,4 @@
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
 ./web-api/setup-elasticsearch-aliases.sh "${ENV}"
 
-pushd web-api
-node reindex-dynamodb-records.js "${DYNAMODB_TABLE_NAME}"
-popd
+npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DYNAMODB_TABLE_NAME}"

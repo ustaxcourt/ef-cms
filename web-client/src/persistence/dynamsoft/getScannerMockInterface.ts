@@ -3,13 +3,13 @@ import {
   image2,
 } from '../../../../shared/src/business/useCases/scannerMockFiles';
 
-let scanBuffer = [];
+let scanBuffer: Blob[] = [];
 
 const DWObject = {
   AcquireImage: () => {
     const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
       const byteCharacters = atob(b64Data);
-      const byteArrays = [];
+      const byteArrays: Uint8Array[] = [];
 
       for (
         let offset = 0;

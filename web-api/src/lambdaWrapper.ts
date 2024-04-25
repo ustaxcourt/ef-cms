@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -10,14 +11,23 @@ export const headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-export const lambdaWrapper = (lambda, options = {}) => {
+const defaultOptions: {
+  isAsync?: boolean;
+  isAsyncSync?: boolean;
+} = {};
+
+export const lambdaWrapper = (
+  lambda,
+  options = defaultOptions,
+  applicationContext?: IApplicationContext,
+) => {
   return async (req, res) => {
-    // This flag was added because when invoking async endpoints on API gateway, the api gateway will return
-    // a 204 response with no body immediately.  This was causing discrepancies between how these endpoints
-    // ran locally and how they ran when deployed to an AWS environment.  We now turn this flag on
-    // whenever we are not deployed in AWS to mimic how API gateway async endpoints work.
+    // 'shouldMimicApiGatewayAsyncEndpoint' flag is set to mimic how API gateway async endpoints work locally.
+    // When an async endpoint invoked in API gateway, the service immediately returns a 204 response with no body.
+    // This behavior causes discrepancies between how these endpoints behave locally vs in a deployed AWS environment.
     const shouldMimicApiGatewayAsyncEndpoint =
-      options.isAsync && process.env.NODE_ENV != 'production';
+      (options.isAsync || options.isAsyncSync) &&
+      process.env.NODE_ENV != 'production';
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
@@ -44,6 +54,18 @@ export const lambdaWrapper = (lambda, options = {}) => {
       body: JSON.stringify(req.body),
       logger: req.locals.logger,
     });
+
+    const { asyncsyncid } = req.headers;
+
+    if (options.isAsyncSync && asyncsyncid && applicationContext) {
+      const user = getUserFromAuthHeader(event);
+      await applicationContext.getNotificationGateway().saveRequestResponse({
+        applicationContext,
+        requestId: asyncsyncid,
+        response,
+        userId: user.userId,
+      });
+    }
 
     if (shouldMimicApiGatewayAsyncEndpoint) {
       // api gateway async endpoints do not care about the headers returned after we

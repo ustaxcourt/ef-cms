@@ -367,6 +367,7 @@ const updateCaseWorkItems = async ({
   const updatedWorkItems = rawWorkItems.map(rawWorkItem => ({
     ...rawWorkItem,
     associatedJudge: caseToUpdate.associatedJudge,
+    associatedJudgeId: caseToUpdate.associatedJudgeId,
     caseStatus: caseToUpdate.status,
     caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
     docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
@@ -414,10 +415,10 @@ const updateCaseDeadlines = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
-  deadlines.forEach(
-    caseDeadline =>
-      (caseDeadline.associatedJudge = caseToUpdate.associatedJudge),
-  );
+  deadlines.forEach(caseDeadline => {
+    caseDeadline.associatedJudge = caseToUpdate.associatedJudge;
+    caseDeadline.associatedJudgeId = caseToUpdate.associatedJudgeId;
+  });
   const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines, {
     applicationContext,
   });

@@ -36,6 +36,7 @@ export const EditPractitionerUser = connect(
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">
               <Button
+                data-testid="save-practitioner-updates-button"
                 onClick={() => {
                   submitUpdatePractitionerUserSequence();
                 }}

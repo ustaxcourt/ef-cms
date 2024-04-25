@@ -8,15 +8,16 @@ export const submitCourtIssuedOrderAction = async ({
   props,
 }: ActionProps<{
   primaryDocumentFileId: string;
+  createOrderSelectedCases?;
 }>) => {
   let caseDetail;
   const { docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId: docketEntryId } = props;
   const formData = get(state.form);
   const { docketEntryIdToEdit } = formData;
-  const consolidatedCasesToMultiDocketOn = get(
-    state.modal.form.consolidatedCasesToMultiDocketOn,
-  );
+  const consolidatedCasesToMultiDocketOn =
+    props.createOrderSelectedCases ||
+    get(state.modal.form.consolidatedCasesToMultiDocketOn);
 
   const consolidatedCasesToMultiDocketOnMetaData: CaseWithSelectionInfo[] = (
     consolidatedCasesToMultiDocketOn || []

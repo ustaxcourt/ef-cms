@@ -143,13 +143,14 @@ export const DateRangePickerComponent = ({
         className={classNames('usa-date-range-picker', rangePickerCls)}
         data-max-date={maxDate}
       >
-        <div className={startPickerCls}>
+        <div className={startPickerCls} data-testid={`${startName}-date-start`}>
           <FormGroup
             errorText={startDateErrorText}
             formGroupRef={startDatePickerRef}
           >
             <label
               className="usa-label"
+              data-testid={`${startName}-date-start-label`}
               htmlFor={`${startName}-date-start`}
               id={`${startName}-date-start-label`}
             >
@@ -160,6 +161,7 @@ export const DateRangePickerComponent = ({
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
                 className="usa-input"
+                data-testid={`${startName}-date-start-input`}
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
                 placeholder={showDateHint ? '' : 'MM/DD/YYYY'}
@@ -170,13 +172,14 @@ export const DateRangePickerComponent = ({
           </FormGroup>
         </div>
 
-        <div className={endPickerCls}>
+        <div className={endPickerCls} data-testid={`${endName}-date-end}`}>
           <FormGroup
             errorText={endDateErrorText}
             formGroupRef={endDatePickerRef}
           >
             <label
               className="usa-label"
+              data-testid={`${endName}-date-end-label`}
               htmlFor={`${endName}-date-end`}
               id={`${endName}-date-end-label`}
             >
@@ -187,6 +190,7 @@ export const DateRangePickerComponent = ({
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
+                data-testid={`${endName}-date-end-input}`}
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
                 placeholder={showDateHint ? '' : 'MM/DD/YYYY'}

@@ -1,4 +1,7 @@
-import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import {
+  CHIEF_JUDGE,
+  CUSTOM_CASE_REPORT_PAGE_SIZE,
+} from '@shared/business/entities/EntityConstants';
 import {
   CustomCaseReportFilters,
   GetCustomCaseReportRequest,
@@ -6,6 +9,7 @@ import {
 } from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCustomCaseReportAction } from './getCustomCaseReportAction';
+import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -35,7 +39,7 @@ describe('getCustomCaseReportAction', () => {
       endDate: '05/14/2022',
       filingMethod: 'electronic',
       highPriority: true,
-      judges: ['Colvin'],
+      judges: [CHIEF_JUDGE],
       preferredTrialCities: ['Jackson, Mississippi'],
       procedureType: 'All',
       startDate: '05/10/2022',
@@ -172,6 +176,42 @@ describe('getCustomCaseReportAction', () => {
           filters: filterValues,
           lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
         },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getCustomCaseReportInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+  });
+
+  it('should get the custom case report with judges ids if judges names have been selected', async () => {
+    const judgeSotomayor = judgeUser;
+    const judgeColvin = {
+      ...judgeUser,
+      name: 'Colvin',
+      userId: '13b00e5f-b78c-476c-820e-5d6ed1d45678',
+    };
+
+    filterValues.judges = [judgeColvin.name, judgeSotomayor.name, CHIEF_JUDGE];
+    expectedRequest.judges = [
+      judgeColvin.userId,
+      judgeSotomayor.userId,
+      CHIEF_JUDGE,
+    ];
+
+    await runAction(getCustomCaseReportAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: 0,
+      },
+      state: {
+        customCaseReport: {
+          filters: filterValues,
+          lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
+        },
+        judges: [judgeSotomayor, judgeColvin],
       },
     });
 

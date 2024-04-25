@@ -1,16 +1,16 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
-import { getCasesClosedByJudgeAction } from '../../actions/JudgeActivityReport/getCasesClosedByJudgeAction';
-import { getJudgeActivityReportCountsAction } from '../../actions/JudgeActivityReport/getJudgeActivityReportCountsAction';
+import { clearJudgeActivityReportStatisticsDataAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityReportStatisticsDataAction';
+import { clearJudgeActivityReportStatisticsFiltersAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityReportStatisticsFiltersAction';
+import { getPendingMotionDocketEntriesAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesAction';
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
-import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
+import { resetHasUserSubmittedFormAction } from '@web-client/presenter/actions/JudgeActivityReport/resetHasUserSubmittedFormAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultSubmittedAndCavSortOrderAction } from '@web-client/presenter/actions/JudgeActivityReport/setDefaultSubmittedAndCavSortOrderAction';
-import { setHasUserSubmittedFormAction } from '@web-client/presenter/actions/JudgeActivityReport/setHasUserSubmittedFormAction';
-import { setJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeActivityReportDataAction';
-import { setJudgeLastNamesAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeLastNamesAction';
+import { setJudgeActivityReportFiltersAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeActivityReportFiltersAction';
+import { setPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/setPendingMotionDocketEntriesForCurrentJudgeAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
@@ -19,7 +19,10 @@ import { stopShowValidationAction } from '../../actions/stopShowValidationAction
 import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
 export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
-  setHasUserSubmittedFormAction,
+  clearJudgeActivityReportStatisticsDataAction,
+  clearJudgeActivityReportStatisticsFiltersAction,
+  setJudgeActivityReportFiltersAction,
+  resetHasUserSubmittedFormAction,
   startShowValidationAction,
   validateJudgeActivityReportSearchAction,
   {
@@ -33,15 +36,12 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       clearErrorAlertsAction,
       setDefaultSubmittedAndCavSortOrderAction,
       clearAlertsAction,
-      setJudgeLastNamesAction,
       parallel([
-        getJudgeActivityReportCountsAction,
-        getCasesClosedByJudgeAction,
-        getTrialSessionsForJudgeActivityReportAction,
         getSubmittedAndCavCasesByJudgeAction,
+        getPendingMotionDocketEntriesAction,
       ]),
       setCavAndSubmittedCasesAction,
-      setJudgeActivityReportDataAction,
+      setPendingMotionDocketEntriesForCurrentJudgeAction,
     ],
   },
 ]);

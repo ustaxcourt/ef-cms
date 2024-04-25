@@ -13,7 +13,7 @@ import { put } from './requests';
 export const updateQcCompleteForTrialInteractor = (
   applicationContext,
   { docketNumber, qcCompleteForTrial, trialSessionId },
-) => {
+): Promise<RawCase> => {
   return put({
     applicationContext,
     body: { qcCompleteForTrial, trialSessionId },

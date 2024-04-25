@@ -6,6 +6,7 @@ export const getDocumentQCInboxForSection = async ({
   judgeUserName,
   section,
 }) => {
+  applicationContext.logger.info('getDocumentQCInboxForSection start');
   const query = {
     body: {
       query: {
@@ -58,6 +59,8 @@ export const getDocumentQCInboxForSection = async ({
     applicationContext,
     searchParameters: query,
   });
+
+  applicationContext.logger.info('getDocumentQCInboxForSection end');
 
   return results;
 };

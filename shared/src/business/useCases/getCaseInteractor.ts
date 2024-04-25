@@ -24,9 +24,9 @@ const getSealedCase = ({
   isAssociatedWithCase,
 }: {
   applicationContext: IApplicationContext;
-  caseRecord: Case;
+  caseRecord: RawCase;
   isAssociatedWithCase: boolean;
-}): Case => {
+}): RawCase | RawPublicCase => {
   const currentUser = applicationContext.getCurrentUser();
 
   let isAuthorizedToViewSealedCase = isAuthorized(

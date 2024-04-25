@@ -9,27 +9,44 @@ import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
+    caseDetail: state.caseDetail,
     docketRecordHelper: state.docketRecordHelper,
-    formattedDocketEntries: state.formattedDocketEntries,
+    formattedDocketEntriesHelper: state.formattedDocketEntries,
     openSealDocketEntryModalSequence:
       sequences.openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence:
       sequences.openUnsealDocketEntryModalSequence,
+    setSelectedDocumentsForDownloadSequence:
+      sequences.setSelectedDocumentsForDownloadSequence,
     showModal: state.modal.showModal,
   },
 
   function DocketRecord({
     docketRecordHelper,
-    formattedDocketEntries,
+    formattedDocketEntriesHelper,
     openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence,
+    setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
+    useEffect(() => {
+      if (!docketRecordHelper.showBatchDownloadControls) return;
+
+      const documentsSelectorHeaderInput = window.document.getElementById(
+        'all-selectable-docket-entries-checkbox',
+      ) as HTMLInputElement;
+      documentsSelectorHeaderInput.indeterminate =
+        !!formattedDocketEntriesHelper.someDocumentsSelectedForDownload;
+    }, [
+      docketRecordHelper.showBatchDownloadControls,
+      formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
+    ]);
+
     return (
       <>
         <DocketRecordHeader />
@@ -44,6 +61,25 @@ export const DocketRecord = connect(
             >
               <thead>
                 <tr>
+                  {docketRecordHelper.showBatchDownloadControls && (
+                    <th>
+                      <input
+                        aria-label="all-selectable-docket-entries-checkbox"
+                        checked={
+                          formattedDocketEntriesHelper.allDocumentsSelectedForDownload
+                        }
+                        data-testid="all-selectable-docket-entries-checkbox"
+                        id="all-selectable-docket-entries-checkbox"
+                        type="checkbox"
+                        onChange={() => {
+                          setSelectedDocumentsForDownloadSequence({
+                            documentIds:
+                              formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
+                          });
+                        }}
+                      />
+                    </th>
+                  )}
                   <th className="center-column hide-on-mobile">
                     <span>
                       <span className="usa-sr-only">Number</span>
@@ -65,7 +101,7 @@ export const DocketRecord = connect(
                 </tr>
               </thead>
               <tbody>
-                {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
+                {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
                     return (
                       <tr
@@ -73,8 +109,30 @@ export const DocketRecord = connect(
                           entry.isInProgress && 'in-progress',
                           entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
+                        data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
+                        {' '}
+                        {docketRecordHelper.showBatchDownloadControls && (
+                          <td>
+                            {entry.isSelectableForDownload && (
+                              <input
+                                aria-label={`${entry.index}-${entry.documentTitle}`}
+                                checked={entry.isDocumentSelected}
+                                id={`${entry.index}-${entry.documentTitle}`}
+                                type="checkbox"
+                                onChange={() => {
+                                  const documentIdSelected = {
+                                    docketEntryId: entry.docketEntryId,
+                                  };
+                                  setSelectedDocumentsForDownloadSequence({
+                                    documentIds: [documentIdSelected],
+                                  });
+                                }}
+                              />
+                            )}
+                          </td>
+                        )}
                         <td className="center-column hide-on-mobile">
                           {entry.index}
                         </td>
@@ -88,7 +146,10 @@ export const DocketRecord = connect(
                             {entry.createdAtFormatted}
                           </span>
                         </td>
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-testid={`docket-entry-index-${entry.index}-eventCode`}
+                        >
                           {entry.eventCode}
                         </td>
                         <td aria-hidden="true" className="filing-type-icon">
@@ -107,7 +168,7 @@ export const DocketRecord = connect(
                         </td>
                         <td className="hide-on-mobile">{entry.filedBy}</td>
                         <td className="hide-on-mobile">{entry.action}</td>
-                        <td>
+                        <td data-testid="docket-record-cell-not-served">
                           {entry.showNotServed && (
                             <span className="text-semibold not-served">
                               Not served
@@ -117,14 +178,18 @@ export const DocketRecord = connect(
                             <span>{entry.servedAtFormatted}</span>
                           )}
                         </td>
-                        <td className="center-column hide-on-mobile">
+                        <td
+                          className="center-column hide-on-mobile"
+                          data-testid={`docket-entry-index-${entry.index}-servedPartiesCode`}
+                        >
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
                         {docketRecordHelper.showEditOrSealDocketRecordEntry && (
-                          <td>
+                          <td className="seal-and-edit-col">
                             {entry.showEditDocketRecordEntry && (
                               <Button
                                 link
+                                data-testid={`edit-${entry.eventCode}`}
                                 href={entry.editDocketEntryMetaLink}
                                 icon="edit"
                               >
@@ -174,7 +239,7 @@ export const DocketRecord = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
+              {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
                 entry => {
                   return (
                     <tr key={entry.index}>

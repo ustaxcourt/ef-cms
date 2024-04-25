@@ -81,7 +81,6 @@ const internalFieldsBlocked = () => {
   expect(cerebralTest.getState('caseDetail.blockedDate')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.blockedReason')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.caseNote')).toBeUndefined();
-  expect(cerebralTest.getState('caseDetail.correspondence')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.damages')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.highPriority')).toBeUndefined();
   expect(
@@ -233,7 +232,7 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('Unassociated private practitioner views case detail', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

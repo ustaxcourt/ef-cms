@@ -1,7 +1,7 @@
 data "archive_file" "zip_rotate_info_indices_lambda" {
   type        = "zip"
   output_path = "${path.cwd}/../../../../aws/lambdas/RotateInfoIndices.zip"
-  source_file = "${path.cwd}/../../../../aws/lambdas/RotateInfoIndices/dist/index.js"
+  source_dir = "${path.cwd}/../../../../aws/lambdas/RotateInfoIndices/dist/"
 }
 
 resource "aws_lambda_function" "rotate_info_indices" {
@@ -15,7 +15,7 @@ resource "aws_lambda_function" "rotate_info_indices" {
 
   environment {
     variables = {
-      es_endpoint = aws_elasticsearch_domain.efcms-logs.endpoint
+      es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
       expiration = var.number_of_days_to_keep_info_logs
     }
   }

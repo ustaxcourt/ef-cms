@@ -33,7 +33,7 @@ describe('Practitioner case association journey', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('navigates to case detail and checks for case association', async () => {
     await viewCaseDetail({
       cerebralTest,

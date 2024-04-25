@@ -14,13 +14,13 @@ export const validateCaseDeadlineAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { associatedJudge, docketNumber, leadDocketNumber } = get(
-    state.caseDetail,
-  );
+  const { associatedJudge, associatedJudgeId, docketNumber, leadDocketNumber } =
+    get(state.caseDetail);
 
   const caseDeadline = {
     ...get(state.form),
     associatedJudge,
+    associatedJudgeId,
     docketNumber,
     leadDocketNumber,
   };

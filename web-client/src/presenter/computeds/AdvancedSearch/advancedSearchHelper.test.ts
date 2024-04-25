@@ -64,8 +64,6 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
-      feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
-      showFeedbackButton: true,
       showPractitionerSearch: undefined,
       showStateSelect: false,
     });
@@ -80,8 +78,6 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
-      feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
-      showFeedbackButton: true,
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -103,24 +99,6 @@ describe('advancedSearchHelper', () => {
     });
     expect(result).toMatchObject({
       showPractitionerSearch: false,
-    });
-  });
-
-  it('returns showFeedbackButton false when user is an external user', () => {
-    globalUser = {
-      role: USER_ROLES.privatePractitioner,
-      userId: 'practitioner',
-    };
-
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {},
-        advancedSearchTab: 'case',
-      },
-    });
-    expect(result).toMatchObject({
-      showFeedbackButton: false,
     });
   });
 

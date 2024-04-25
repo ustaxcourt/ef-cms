@@ -7,7 +7,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.29.0"
+    aws = "5.45.0"
   }
 }
 

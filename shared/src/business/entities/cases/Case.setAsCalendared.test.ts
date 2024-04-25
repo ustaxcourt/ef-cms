@@ -32,7 +32,7 @@ describe('setAsCalendared', () => {
     const trialSession = new TrialSession(
       {
         isCalendared: true,
-        judge: { name: 'Judge Buch' },
+        judge: { name: 'Judge Buch', userId: 'buch-id' },
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -46,7 +46,8 @@ describe('setAsCalendared', () => {
 
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(myCase.trialDate).toBeTruthy();
-    expect(myCase.associatedJudge).toBeTruthy();
+    expect(myCase.associatedJudge).toEqual('Judge Buch');
+    expect(myCase.associatedJudgeId).toEqual('buch-id');
     expect(myCase.trialLocation).toBeTruthy();
     expect(myCase.trialSessionId).toBeTruthy();
     expect(myCase.trialTime).toBeTruthy();
@@ -64,7 +65,7 @@ describe('setAsCalendared', () => {
     const trialSession = new TrialSession(
       {
         isCalendared: false,
-        judge: { name: 'Judge Buch' },
+        judge: { name: 'Judge Buch', userId: 'buch-id' },
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -79,6 +80,7 @@ describe('setAsCalendared', () => {
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
     expect(myCase.trialDate).toBeTruthy();
     expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
+    expect(myCase.associatedJudgeId).toEqual(undefined);
     expect(myCase.trialLocation).toBeTruthy();
     expect(myCase.trialSessionId).toBeTruthy();
     expect(myCase.trialTime).toBeTruthy();

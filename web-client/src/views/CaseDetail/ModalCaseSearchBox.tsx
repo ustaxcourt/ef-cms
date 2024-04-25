@@ -32,6 +32,7 @@ export const ModalCaseSearchBox = connect(
           </label>
           <input
             className="usa-input"
+            data-testid="consolidated-case-search"
             id="search-field"
             name="searchTerm"
             placeholder="Enter docket no. (123-19)"
@@ -44,7 +45,11 @@ export const ModalCaseSearchBox = connect(
               });
             }}
           />
-          <Button className="ustc-search-button" type="submit">
+          <Button
+            className="ustc-search-button"
+            data-testid="consolidated-search"
+            type="submit"
+          >
             <span className="usa-search-submit-text">Search</span>
           </Button>
         </div>

@@ -52,6 +52,10 @@ hr {
   max-width: 50%;
 }
 
+.max-width-150 {
+  max-width: 150px;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -988,27 +992,39 @@ header.usa-header {
   color: white;
 }
 
-.floating-card-pages {
-  flex: 1;
+.background-blue {
   background-color: color($theme-color-primary-darker);
 
-  .usa-label {
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-weight: normal;
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 4rem;
+  }
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    padding-top: 2rem;
+  }
+
+  .usa-alert__body {
+    padding-right: 15px !important;
   }
 }
 
-.requirement-text{
-	line-height: 1.43;
+.create-petitioner-account {
+  .usa-label {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+}
 
-	&.valid-requirement{
-		color: $color-green
-	}
+.requirement-text {
+  line-height: 1.43;
 
-	&.invalid-requirement{
-		color: color($theme-color-secondary-vivid)
-	}
+  &.valid-requirement {
+    color: $color-green;
+  }
+
+  &.invalid-requirement {
+    color: color($theme-color-secondary-vivid);
+  }
 }
 
 .create-petitioner-form {
@@ -1017,7 +1033,13 @@ header.usa-header {
     max-width: unset;
   }
 
-  h1, 
+  @media only screen and (min-width: $large-screen) {
+    form {
+      max-width: 90%;
+    }
+  }
+
+  h1,
   h2 {
     font-family: inherit;
   }
@@ -1807,6 +1829,7 @@ button.change-scanner-button {
 
   .document-viewer--documents-list {
     height: 1000px;
+    padding-bottom: 600px;
     overflow-y: scroll;
   }
 }
@@ -2019,6 +2042,10 @@ button.change-scanner-button {
   }
 }
 
+.display-block {
+  display: block;
+}
+
 .display-flex {
   display: flex;
 }
@@ -2140,6 +2167,10 @@ button.change-scanner-button {
   }
 }
 
+.seal-and-edit-col {
+  display: grid;
+}
+
 .blue-pill {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -2179,4 +2210,36 @@ button.change-scanner-button {
 
 .resize-vertical-only {
   resize: vertical;
+}
+
+.max-width-unset {
+  max-width: unset;
+}
+
+.inherit-body-font-family {
+  font-family: inherit;
+}
+
+.change-password-form,
+.forgot-password-form,
+.login-form {
+  label {
+    margin-bottom: 7px;
+  }
+}
+
+.login {
+  .ustc-button--unstyled {
+    text-align: left;
+  }
+}
+
+.floating-card.usa-section {
+  @media only screen and (min-width: $medium-screen) {
+    padding-top: 6rem;
+  }
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    padding-bottom: 2rem;
+  }
 }
