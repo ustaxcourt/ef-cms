@@ -74,8 +74,8 @@ export const practitionerSearchHelper = (
         }),
     );
 
-    if (paginatedResults.formattedSearchResults!.length > 1) {
-      paginatedResults.formattedSearchResults!.sort(
+    if (paginatedResults.length > 1) {
+      paginatedResults.sort(
         (a: PractitionerSearchResultType, b: PractitionerSearchResultType) => {
           const val = compareStrings(
             a['name'].toLowerCase(),
