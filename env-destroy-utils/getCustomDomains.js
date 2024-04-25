@@ -1,7 +1,7 @@
-const { filter } = require('lodash');
+import { filter } from 'lodash';
 
-exports.getCustomDomains = async ({ apiGateway, environment }) => {
-  const { Items } = await apiGateway.getDomainNames({}).promise();
+export const getCustomDomains = async ({ apiGateway, environment }) => {
+  const { Items } = await apiGateway.getDomainNames();
   return filter(Items, customDomain => {
     return (
       customDomain.DomainName.includes(`-${environment.name}`) ||
