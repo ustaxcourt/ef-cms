@@ -1,8 +1,9 @@
-const { getApiGateway } = require('./getApiGateway');
-const { getCustomDomains } = require('./getCustomDomains');
-const { sleepForMilliseconds } = require('./sleep');
+import { DeleteDomainNameCommand } from '@aws-sdk/client-api-gateway';
+import { getApiGateway } from './getApiGateway';
+import { getCustomDomains } from './getCustomDomains';
+import { sleepForMilliseconds } from './sleep';
 
-exports.deleteCustomDomains = async ({ environment }) => {
+export const deleteCustomDomains = async ({ environment }) => {
   const apiGateway = getApiGateway({ environment });
 
   const customDomains = await getCustomDomains({
@@ -12,9 +13,10 @@ exports.deleteCustomDomains = async ({ environment }) => {
 
   for (const domain of customDomains) {
     console.log('Delete Custom Domain:', domain.DomainName);
-    await apiGateway
-      .deleteDomainName({ DomainName: domain.DomainName })
-      .promise();
+    const deleteDomainNameCommand = new DeleteDomainNameCommand({
+      DomainName: domain.DomainName,
+    });
+    await apiGateway.send(deleteDomainNameCommand);
     await sleepForMilliseconds(100);
   }
 };
