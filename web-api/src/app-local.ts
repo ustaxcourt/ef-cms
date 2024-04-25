@@ -1,3 +1,9 @@
+import {
+  DescribeStreamCommand,
+  DynamoDBStreamsClient,
+  Shard,
+} from '@aws-sdk/client-dynamodb-streams';
+import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { server as WebSocketServer } from 'websocket';
 import { Writable } from 'stream';
 import { connectLambda } from './lambdas/notifications/connectLambda';
@@ -6,7 +12,6 @@ import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
 import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
 import { v4 as uuid } from 'uuid';
-import AWS from 'aws-sdk';
 import DynamoDBReadable from 'dynamodb-streams-readable';
 import express from 'express';
 import http from 'http';
@@ -33,56 +38,56 @@ const config = {
 };
 
 const localStreamsApp = express();
-const dynamodbClient = new AWS.DynamoDB(config);
-const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
-const tableName = 'efcms-local';
-
+const dynamodbClient = new DynamoDBClient(config);
+const dynamodbStreamsClient = new DynamoDBStreamsClient(config);
+const TableName = 'efcms-local';
 let chunks: any[] = [];
 
-/**
- * This endpoint it hit to know when the streams queue is empty.  An empty queue
- * means everything added to dynamo should have been indexed into elasticsearch.
- */
-localStreamsApp.get('/isDone', (req, res) => {
-  res.send(chunks.length === 0);
-});
+const processShards = async () => {
+  const tableDescription = await dynamodbClient.send(
+    new DescribeTableCommand({
+      TableName,
+    }),
+  );
+  const StreamArn = tableDescription.Table?.LatestStreamArn;
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  const streamARN = await dynamodbClient
-    .describeTable({
-      TableName: tableName,
-    })
-    .promise()
-    .then(results => results?.Table?.LatestStreamArn!);
-
-  const { StreamDescription } = await dynamodbStreamsClient
-    .describeStream({
-      StreamArn: streamARN,
-    })
-    .promise();
-
-  const processShard = shard => {
-    const readable = DynamoDBReadable(dynamodbStreamsClient, streamARN, {
-      ...config,
-      iterator: 'TRIM_HORIZON',
-      limit: 100,
-      shardId: shard.shardId,
-    });
-
-    readable.pipe(
-      new Writable({
-        objectMode: true,
-        write: (chunk, encoding, processNextChunk) => {
-          chunks.push(chunk);
-          processNextChunk();
-        },
+  if (StreamArn) {
+    const { StreamDescription } = await dynamodbStreamsClient.send(
+      new DescribeStreamCommand({
+        StreamArn,
       }),
     );
-  };
 
-  StreamDescription?.Shards?.forEach(shard => processShard(shard));
-})();
+    StreamDescription?.Shards?.forEach(shard =>
+      processShard({ StreamArn, shard }),
+    );
+  }
+};
+
+const processShard = ({
+  shard,
+  StreamArn,
+}: {
+  shard: Shard;
+  StreamArn: string;
+}) => {
+  const readable = DynamoDBReadable(dynamodbStreamsClient, StreamArn, {
+    ...config,
+    iterator: 'TRIM_HORIZON',
+    limit: 100,
+    shardId: shard.ShardId,
+  });
+
+  readable.pipe(
+    new Writable({
+      objectMode: true,
+      write: (chunk, _encoding, processNextChunk) => {
+        chunks.push(chunk);
+        processNextChunk();
+      },
+    }),
+  );
+};
 
 const processChunks = async () => {
   for (const chunk of chunks) {
@@ -97,8 +102,20 @@ const processChunks = async () => {
   setTimeout(processChunks, 1);
 };
 
+/**
+ * This endpoint it hit to know when the streams queue is empty.  An empty queue
+ * means everything added to dynamo should have been indexed into elasticsearch.
+ */
+localStreamsApp.get('/isDone', (_req, res) => {
+  res.send(chunks.length === 0);
+});
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-processChunks();
+(async () => {
+  await processShards();
+
+  await processChunks();
+})();
 
 localStreamsApp.listen(5005);
 
@@ -110,7 +127,7 @@ const server = http.createServer((request, response) => {
   request.on('data', chunk => {
     requestBody += chunk.toString();
   });
-  request.on('end', async () => {
+  request.on('end', () => {
     const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
@@ -145,8 +162,7 @@ wsServer.on('request', async function (request) {
   connections[connectionId] = connection;
   const queryStringParameters = Object.keys(request.resourceURL.query!).reduce(
     (aggregatedValue, key) => {
-      const value = request.resourceURL.query![key];
-      aggregatedValue[key] = value;
+      aggregatedValue[key] = request.resourceURL.query![key];
       return aggregatedValue;
     },
     {},
