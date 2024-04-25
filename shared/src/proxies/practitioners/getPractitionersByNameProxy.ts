@@ -10,13 +10,14 @@ import { get } from '../requests';
  */
 export const getPractitionersByNameInteractor = (
   applicationContext,
-  { name },
+  { name, searchAfter },
 ) => {
   return get({
     applicationContext,
     endpoint: '/practitioners',
     params: {
       name,
+      searchAfter,
     },
   });
 };
