@@ -11,7 +11,11 @@ export const getPractitionersByNameAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { practitionerName } = get(
+  const {
+    lastKeysOfPages,
+    pageNum,
+    practitionerName,
+  }: { practitionerName: string; searchAfter: string } = get(
     state.advancedSearchForm.practitionerSearchByName,
   );
 
@@ -19,6 +23,7 @@ export const getPractitionersByNameAction = async ({
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
+      searchAfter: lastKeysOfPages[pageNum],
     });
 
   return { searchResults };

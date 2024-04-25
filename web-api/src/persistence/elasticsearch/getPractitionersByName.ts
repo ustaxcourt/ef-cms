@@ -1,5 +1,7 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
+// import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
+import { PractitionerSearchResultType } from '../../../../web-client/src/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
 import { search } from './searchClient';
 
 /**
@@ -10,7 +12,11 @@ import { search } from './searchClient';
  * @param {string} params.name the name to search by
  * @returns {*} the result
  */
-export const getPractitionersByName = async ({ applicationContext, name }) => {
+export const getPractitionersByName = async ({
+  applicationContext,
+  name,
+  searchAfter,
+}) => {
   const searchParameters = {
     body: {
       _source: [
@@ -37,21 +43,29 @@ export const getPractitionersByName = async ({ applicationContext, name }) => {
           ],
         },
       },
+      search_after: [searchAfter],
+      sort: [{ 'barNumber.S': 'asc' }],
     },
     index: 'efcms-user',
     size: PRACTITIONER_SEARCH_PAGE_SIZE,
     track_total_hits: true,
   };
 
-  // add lastCaseId extraction and pass it back
-
-  const { results, total } = await search({
+  const searchResult = await search({
     applicationContext,
     searchParameters,
   });
 
-  console.log('results', results);
-  console.log('total', total);
+  console.log('search result', searchResult);
 
-  return { results, total };
+  const {
+    results,
+    total,
+  }: { results: PractitionerSearchResultType[]; total: number } = searchResult;
+
+  // get last bar num
+
+  console.log('results', results);
+
+  return { lastBarNum: '1', results, total };
 };

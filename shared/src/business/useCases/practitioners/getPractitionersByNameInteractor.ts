@@ -5,17 +5,9 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-/**
- * getPractitionersByNameInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} params the params object
- * @param {string} params.name the name to search by
- * @returns {*} the result
- */
 export const getPractitionersByNameInteractor = async (
   applicationContext: IApplicationContext,
-  { name }: { name: string },
+  { name, searchAfter }: { name: string; searchAfter: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
@@ -29,11 +21,12 @@ export const getPractitionersByNameInteractor = async (
     throw new Error('Name must be provided to search');
   }
 
-  const { results, total } = await applicationContext
+  const { lastBarNum, results, total } = await applicationContext
     .getPersistenceGateway()
     .getPractitionersByName({
       applicationContext,
       name,
+      searchAfter,
     });
 
   const foundUsers = results.slice(0, MAX_SEARCH_RESULTS);
@@ -43,12 +36,12 @@ export const getPractitionersByNameInteractor = async (
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
     contact: {
-      state: foundUser.contact.state,
+      state: foundUser.contact?.state,
     },
     name: foundUser.name,
     practiceType: foundUser.practiceType,
     practitionerType: foundUser.practitionerType,
   }));
 
-  return { searchResults: { practitioners, total } };
+  return { searchResults: { lastBarNum, practitioners, total } };
 };
