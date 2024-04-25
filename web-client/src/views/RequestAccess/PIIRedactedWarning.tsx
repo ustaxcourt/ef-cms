@@ -8,7 +8,7 @@ export function PIIRedactedWarning() {
         message:
           'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or redacted.',
       }}
-      dismissable={false}
+      dismissible={false}
       scrollToTop={false}
     />
   );

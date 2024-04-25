@@ -72,6 +72,7 @@ import joi from 'joi';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
+  public associatedJudgeId?: string;
   public automaticBlocked?: boolean;
   public automaticBlockedDate?: string;
   public automaticBlockedReason?: string;
@@ -136,7 +137,7 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: any[];
-  public correspondence?: any[];
+  public correspondence: any[];
   public archivedCorrespondences?: any[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
@@ -160,6 +161,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
+    this.correspondence = [];
     const currentUser = applicationContext.getCurrentUser();
 
     if (!filtered || User.isInternalUser(currentUser.role)) {
@@ -284,6 +286,7 @@ export class Case extends JoiValidationEntity {
 
   assignFieldsForInternalUsers({ applicationContext, rawCase }) {
     this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
+    this.associatedJudgeId = rawCase.associatedJudgeId;
     this.automaticBlocked = rawCase.automaticBlocked;
     this.automaticBlockedDate = rawCase.automaticBlockedDate;
     this.automaticBlockedReason = rawCase.automaticBlockedReason;
@@ -331,6 +334,13 @@ export class Case extends JoiValidationEntity {
       .optional()
       .meta({ tags: ['Restricted'] })
       .description('Judge assigned to this case. Defaults to Chief Judge.'),
+    associatedJudgeId: joi
+      .when('associatedJudge', {
+        is: joi.valid(CHIEF_JUDGE),
+        otherwise: JoiValidationConstants.UUID.required(),
+        then: JoiValidationConstants.UUID.optional(),
+      })
+      .description('Judge ID assigned to this case.'),
     automaticBlocked: joi
       .boolean()
       .optional()
@@ -799,7 +809,7 @@ export class Case extends JoiValidationEntity {
   }
 
   hasPrivatePractitioners() {
-    return this.privatePractitioners.length > 0;
+    return this.privatePractitioners && this.privatePractitioners.length > 0;
   }
 
   assignContacts({ applicationContext, rawCase }) {
@@ -940,7 +950,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitioner the irsPractitioner to add to the case
    */
   attachIrsPractitioner(practitioner) {
-    this.irsPractitioners.push(practitioner);
+    this.irsPractitioners?.push(practitioner);
   }
 
   archiveDocketEntry(docketEntry: DocketEntry) {
@@ -950,7 +960,7 @@ export class Case extends JoiValidationEntity {
       );
     }
     docketEntry.archive();
-    this.archivedDocketEntries.push(docketEntry);
+    this.archivedDocketEntries?.push(docketEntry);
     this.deleteDocketEntryById({
       docketEntryId: docketEntry.docketEntryId,
     });
@@ -962,7 +972,7 @@ export class Case extends JoiValidationEntity {
    */
   archiveCorrespondence(correspondenceEntity) {
     correspondenceEntity.archived = true;
-    this.archivedCorrespondences.push(correspondenceEntity);
+    this.archivedCorrespondences?.push(correspondenceEntity);
     this.deleteCorrespondenceById({
       correspondenceId: correspondenceEntity.correspondenceId,
     });
@@ -974,7 +984,7 @@ export class Case extends JoiValidationEntity {
    * @returns {void} modifies the irsPractitioners array on the case
    */
   updateIrsPractitioner(practitionerToUpdate) {
-    const foundPractitioner = this.irsPractitioners.find(
+    const foundPractitioner = this.irsPractitioners?.find(
       practitioner => practitioner.userId === practitionerToUpdate.userId,
     );
     if (foundPractitioner)
@@ -987,10 +997,10 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the modified case entity
    */
   removeIrsPractitioner(practitionerToRemove) {
-    const index = this.irsPractitioners.findIndex(
+    const index = this.irsPractitioners!.findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
-    if (index > -1) this.irsPractitioners.splice(index, 1);
+    if (index > -1) this.irsPractitioners?.splice(index, 1);
     return this;
   }
 
@@ -999,7 +1009,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitioner the privatePractitioner to add to the case
    */
   attachPrivatePractitioner(practitioner) {
-    this.privatePractitioners.push(practitioner);
+    this.privatePractitioners!.push(practitioner);
   }
 
   /**
@@ -1007,7 +1017,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitionerToUpdate the practitioner user object with updated info
    */
   updatePrivatePractitioner(practitionerToUpdate) {
-    const foundPractitioner = this.privatePractitioners.find(
+    const foundPractitioner = this.privatePractitioners?.find(
       practitioner => practitioner.userId === practitionerToUpdate.userId,
     );
     if (foundPractitioner)
@@ -1022,7 +1032,7 @@ export class Case extends JoiValidationEntity {
     const index = this.privatePractitioners.findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
-    if (index > -1) this.privatePractitioners.splice(index, 1);
+    if (index > -1) this.privatePractitioners?.splice(index, 1);
   }
 
   /**
@@ -1231,7 +1241,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} petitionerContactId the id of the petitioner
    */
   removeRepresentingFromPractitioners(petitionerContactId) {
-    this.privatePractitioners.forEach(practitioner => {
+    this.privatePractitioners?.forEach(practitioner => {
       const representingArrayIndex =
         practitioner.representing.indexOf(petitionerContactId);
       if (representingArrayIndex >= 0) {
@@ -1266,7 +1276,7 @@ export class Case extends JoiValidationEntity {
    * @returns {object} the retrieved correspondence
    */
   getCorrespondenceById({ correspondenceId }) {
-    return this.correspondence.find(
+    return this.correspondence?.find(
       correspondence => correspondence.correspondenceId === correspondenceId,
     );
   }
@@ -1292,7 +1302,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   deleteCorrespondenceById({ correspondenceId }) {
-    this.correspondence = this.correspondence.filter(
+    this.correspondence = this.correspondence?.filter(
       item => item.correspondenceId !== correspondenceId,
     );
 
@@ -1361,14 +1371,18 @@ export class Case extends JoiValidationEntity {
 
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
+    associatedJudgeId = undefined,
     changedBy,
     updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
   }: {
     associatedJudge?: string;
+    associatedJudgeId?: string;
     changedBy?: string;
     updatedCaseStatus?: CaseStatus;
   }): Case {
     this.setAssociatedJudge(associatedJudge);
+
+    this.setAssociatedJudgeId(associatedJudgeId);
     this.setCaseStatus({
       changedBy,
       updatedCaseStatus,
@@ -1404,9 +1418,13 @@ export class Case extends JoiValidationEntity {
     this.hearings.splice(removeIndex, 1);
   }
 
-  removeFromTrialWithAssociatedJudge(associatedJudge?: string): Case {
-    if (associatedJudge) {
-      this.associatedJudge = associatedJudge;
+  removeFromTrialWithAssociatedJudge(judgeData?: {
+    associatedJudge: string;
+    associatedJudgeId: string;
+  }): Case {
+    if (judgeData && judgeData.associatedJudge) {
+      this.associatedJudge = judgeData.associatedJudge;
+      this.associatedJudgeId = judgeData.associatedJudgeId;
     }
 
     this.trialDate = undefined;
@@ -1423,6 +1441,11 @@ export class Case extends JoiValidationEntity {
    */
   setAssociatedJudge(associatedJudge) {
     this.associatedJudge = associatedJudge;
+    return this;
+  }
+
+  setAssociatedJudgeId(associatedJudgeId) {
+    this.associatedJudgeId = associatedJudgeId;
     return this;
   }
 
@@ -1449,6 +1472,7 @@ export class Case extends JoiValidationEntity {
       ].includes(updatedCaseStatus)
     ) {
       this.associatedJudge = CHIEF_JUDGE;
+      this.associatedJudgeId = undefined;
     }
 
     if (isClosedStatus(updatedCaseStatus)) {
@@ -1572,8 +1596,8 @@ export class Case extends JoiValidationEntity {
    */
   isPractitioner(userId) {
     return (
-      this.privatePractitioners.some(p => p.userId === userId) ||
-      this.irsPractitioners.some(p => p.userId === userId)
+      this.privatePractitioners?.some(p => p.userId === userId) ||
+      this.irsPractitioners?.some(p => p.userId === userId)
     );
   }
 
@@ -1702,7 +1726,7 @@ export class Case extends JoiValidationEntity {
       receivedAt,
       FORMATS.TRIAL_SORT_TAG,
     );
-    const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
+    const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
 
     const nonHybridSortKey = [
       formattedTrialCity,
@@ -1754,7 +1778,9 @@ export class Case extends JoiValidationEntity {
       trialSessionEntity.judge.name
     ) {
       this.associatedJudge = trialSessionEntity.judge.name;
+      this.associatedJudgeId = trialSessionEntity.judge.userId;
     }
+
     this.trialSessionId = trialSessionEntity.trialSessionId;
     this.trialDate = trialSessionEntity.startDate;
     this.trialTime = trialSessionEntity.startTime;
@@ -1846,8 +1872,14 @@ export class Case extends JoiValidationEntity {
    * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
    * @returns {Case} this case entity
    */
-  setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId }) {
-    this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
+  setQcCompleteForTrial({
+    qcCompleteForTrial,
+    trialSessionId,
+  }: {
+    qcCompleteForTrial: boolean;
+    trialSessionId: string;
+  }) {
+    this.qcCompleteForTrial![trialSessionId] = qcCompleteForTrial;
     return this;
   }
 
@@ -1896,7 +1928,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   updateCorrespondence(correspondenceEntity) {
-    const foundCorrespondence = this.correspondence.find(
+    const foundCorrespondence = this.correspondence?.find(
       correspondence =>
         correspondence.correspondenceId ===
         correspondenceEntity.correspondenceId,
@@ -1914,11 +1946,11 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   addStatistic(statisticEntity) {
-    if (this.statistics.length === 12) {
+    if (this.statistics?.length === 12) {
       throw new Error('maximum number of statistics reached');
     }
 
-    this.statistics = [...this.statistics, statisticEntity];
+    this.statistics = [...this.statistics!, statisticEntity];
 
     return this;
   }
@@ -1930,7 +1962,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   updateStatistic(statisticEntity, statisticId) {
-    const statisticToUpdate = this.statistics.find(
+    const statisticToUpdate = this.statistics?.find(
       statistic => statistic.statisticId === statisticId,
     );
 
@@ -1945,12 +1977,12 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} this case entity
    */
   deleteStatistic(statisticId) {
-    const statisticIndexToDelete = this.statistics.findIndex(
+    const statisticIndexToDelete = this.statistics?.findIndex(
       statistic => statistic.statisticId === statisticId,
     );
 
     if (statisticIndexToDelete !== -1) {
-      this.statistics.splice(statisticIndexToDelete, 1);
+      this.statistics!.splice(statisticIndexToDelete, 1);
     }
 
     return this;
@@ -2107,7 +2139,7 @@ export const getPractitionersRepresenting = function (
   rawCase: RawCase,
   petitionerContactId: string,
 ) {
-  return rawCase.privatePractitioners.filter(practitioner =>
+  return rawCase.privatePractitioners?.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),
   );
 };

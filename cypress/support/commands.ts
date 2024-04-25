@@ -1,13 +1,23 @@
+import '../support/commands/keepAliases';
 import 'cypress-file-upload';
-import { getEnvironmentSpecificFunctions } from '../helpers/auth/environment-specific-factory';
-
-const { login } = getEnvironmentSpecificFunctions();
+import { getCypressEnv } from '../helpers/env/cypressEnvironment';
 
 Cypress.Commands.add('login', (username, route = '/') => {
-  login(`${username}@example.com`, route);
+  Cypress.session.clearCurrentSessionData();
+
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
+  cy.get('[data-testid="password-input"]').type(
+    getCypressEnv().defaultAccountPass,
+  );
+  cy.get('[data-testid="login-button"]').click();
+  cy.get('[data-testid="account-menu-button"]');
+  cy.visit(route);
+
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
+
   cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
     body: `window.Dynamsoft = {DWT: {
             GetWebTwain() {}

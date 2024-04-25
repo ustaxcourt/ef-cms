@@ -12,7 +12,6 @@ export const MessagesSectionInbox = connect(
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -21,100 +20,88 @@ export const MessagesSectionInbox = connect(
     constants,
     formattedMessages,
     screenMetadata,
-    showSortableHeaders,
     sortTableSequence,
     tableSort,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {formattedMessages.showFilters && (
-          <TableFilters
-            filters={[
-              {
-                isSelected: screenMetadata.caseStatus,
-                key: 'caseStatus',
-                label: 'Case Status',
-                options: formattedMessages.caseStatuses,
-              },
-              {
-                isSelected: screenMetadata.toUser,
-                key: 'toUser',
-                label: 'To',
-                options: formattedMessages.toUsers,
-              },
-              {
-                isSelected: screenMetadata.fromUser,
-                key: 'fromUser',
-                label: 'From',
-                options: formattedMessages.fromUsers,
-              },
-              {
-                isSelected: screenMetadata.fromSection,
-                key: 'fromSection',
-                label: 'Section',
-                options: formattedMessages.fromSections,
-              },
-            ]}
-            onSelect={updateScreenMetadataSequence}
-          ></TableFilters>
-        )}
+        <TableFilters
+          filters={[
+            {
+              isSelected: screenMetadata.caseStatus,
+              key: 'caseStatus',
+              label: 'Case Status',
+              options: formattedMessages.caseStatuses,
+            },
+            {
+              isSelected: screenMetadata.toUser,
+              key: 'toUser',
+              label: 'To',
+              options: formattedMessages.toUsers,
+            },
+            {
+              isSelected: screenMetadata.fromUser,
+              key: 'fromUser',
+              label: 'From',
+              options: formattedMessages.fromUsers,
+            },
+            {
+              isSelected: screenMetadata.fromSection,
+              key: 'fromSection',
+              label: 'Section',
+              options: formattedMessages.fromSections,
+            },
+          ]}
+          onSelect={updateScreenMetadataSequence}
+        ></TableFilters>
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="docketNumber"
-                    title="Docket No."
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  Docket No.
-                </th>
-              )}
-              {showSortableHeaders && (
-                <th className="medium">
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="createdAt"
-                    title="Received"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th className="small">Received</th>}
-              {showSortableHeaders && (
-                <th>
-                  <SortableColumn
-                    ascText={constants.ALPHABETICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="subject"
-                    title="Message"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th>Message</th>}
+              <th aria-label="Docket Number" className="small" colSpan={2}>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-docket-number-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="docketNumber"
+                  title="Docket No."
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th className="medium">
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-received-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="createdAt"
+                  title="Received"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-subject-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="subject"
+                  title="Message"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
@@ -145,15 +132,28 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
             showLeadCaseIcon={message.isLeadCase}
           />
         </td>
-        <td className="message-queue-row small" colSpan={2}>
+        <td
+          className="message-queue-row small"
+          colSpan={2}
+          data-testid="section-message-inbox-docket-number-cell"
+        >
           {message.docketNumberWithSuffix}
         </td>
-        <td className="message-queue-row small">
+        <td
+          className="message-queue-row small"
+          data-testid="section-message-inbox-received-at-cell"
+        >
           <span className="no-wrap">{message.createdAtFormatted}</span>
         </td>
         <td className="message-queue-row message-subject">
           <div className="message-document-title">
-            <Button link className="padding-0" href={message.messageDetailLink}>
+            <Button
+              link
+              section-message-inbox-subject-cell
+              className="padding-0"
+              data-testid="section-message-inbox-subject-cell"
+              href={message.messageDetailLink}
+            >
               {message.subject}
             </Button>
           </div>

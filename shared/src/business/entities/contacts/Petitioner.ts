@@ -17,7 +17,7 @@ export class Petitioner extends JoiValidationEntity {
   public countryType: string;
   public email?: string;
   public paperPetitionEmail?: string;
-  public hasConsentedToEService?: string;
+  public hasConsentedToEService?: boolean;
   public hasEAccess?: boolean;
   public inCareOf?: string;
   public isAddressSealed: boolean;
@@ -67,8 +67,8 @@ export class Petitioner extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     ...User.USER_CONTACT_VALIDATION_RULES,
-    additionalName: JoiValidationConstants.STRING.max(100).optional().messages({
-      'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
+    additionalName: JoiValidationConstants.STRING.max(200).optional().messages({
+      'string.max': 'Limit is 200 characters. Enter 200 or fewer characters.',
     }),
     contactId: JoiValidationConstants.UUID.required().description(
       'Unique contact ID only used by the system.',

@@ -3,7 +3,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { generatePrintableCaseInventoryReportInteractor } from './generatePrintableCaseInventoryReportInteractor';
 
 describe('generatePrintableCaseInventoryReportInteractor', () => {
-  it('calls generateCaseInventoryReportPdf function and returns result', async () => {
+  beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
@@ -13,8 +13,10 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
       .generateCaseInventoryReportPdf.mockReturnValue('https://example.com');
     applicationContext
       .getPersistenceGateway()
-      .getCaseInventoryReport.mockReturnValue([]);
+      .getCaseInventoryReport.mockReturnValue({ foundCases: [] });
+  });
 
+  it('calls generateCaseInventoryReportPdf function and returns result', async () => {
     const results = await generatePrintableCaseInventoryReportInteractor(
       applicationContext,
       {

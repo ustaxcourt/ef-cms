@@ -158,7 +158,8 @@
     "sortableDocketNumber": 20001338,
     "description": "Due date migrated from Blackstone",
     "pk": "case-deadline|ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab",
-    "docketNumber": "1338-20"
+    "docketNumber": "1338-20",
+    "associatedJudgeId": "dabbad02-18d0-43ec-bafb-654e83405416"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -1441,6 +1442,7 @@
         "email": "mayor@flavortown.gov"
       }
     ],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "S",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "S",
@@ -10664,7 +10666,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -10733,7 +10735,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -10844,7 +10846,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "pk": "case|102-20",
-    "email": "privatepractitioner1@example.com"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -11146,7 +11148,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "attachments": false,
@@ -11270,7 +11272,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -11418,7 +11420,7 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|102-67",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -11815,6 +11817,7 @@
         "email": "petitioner@example.com"
       }
     ],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "L",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "L",
@@ -11915,7 +11918,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "attachments": false,
@@ -12175,7 +12178,7 @@
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -12298,6 +12301,7 @@
     "pk": "case|103-20",
     "docketNumber": "103-20",
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2022-12-01T20:02:10.611Z"
   },
   {
@@ -14499,7 +14503,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -14579,7 +14583,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|105-19",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "isSealed": true,
@@ -14715,7 +14719,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "attachments": false,
@@ -14757,7 +14761,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "isPaper": true,
@@ -14873,7 +14877,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "isStricken": false,
@@ -14952,7 +14956,7 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
     "pk": "case|105-20",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -15158,7 +15162,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15249,7 +15253,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15300,7 +15304,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15351,7 +15355,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15444,7 +15448,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15484,7 +15488,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15575,7 +15579,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15624,7 +15628,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15680,7 +15684,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15758,7 +15762,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15811,7 +15815,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15901,7 +15905,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -15953,7 +15957,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16012,7 +16016,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16066,7 +16070,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16098,7 +16102,7 @@
         "servedParties": [
           {
             "name": "Test Private Practitioner",
-            "email": "privatepractitioner1@example.com"
+            "email": "privatePractitioner1@example.com"
           },
           {
             "name": "Test IRS Practitioner",
@@ -16170,7 +16174,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16224,7 +16228,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16279,7 +16283,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16328,7 +16332,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16378,7 +16382,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16431,7 +16435,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16485,7 +16489,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16539,7 +16543,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16597,7 +16601,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16653,7 +16657,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16708,7 +16712,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner1@example.com"
+        "email": "privatePractitioner1@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -16802,7 +16806,7 @@
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "firmName": "Bogus Barristers",
     "pk": "case|105-23",
-    "email": "privatepractitioner1@example.com"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -16830,7 +16834,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -16961,7 +16965,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17066,7 +17070,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17173,7 +17177,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17284,7 +17288,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17389,7 +17393,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17526,7 +17530,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17665,7 +17669,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17769,7 +17773,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17870,7 +17874,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -17977,7 +17981,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18078,7 +18082,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18180,7 +18184,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18464,7 +18468,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18571,7 +18575,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18677,7 +18681,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -18953,7 +18957,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -19182,7 +19186,7 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|105-67",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -19873,7 +19877,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|106-23",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -20011,7 +20015,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -20096,7 +20100,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -20194,7 +20198,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatepractitioner@example.com"
+        "email": "privatePractitioner@example.com"
       },
       {
         "name": "Test IRS Practitioner",
@@ -20274,7 +20278,7 @@
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|107-19",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -20453,6 +20457,7 @@
         "email": "petitioner@example.com"
       }
     ],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
@@ -22766,6 +22771,7 @@
         "state": "CO"
       }
     ],
+    "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "archivedCorrespondences": [],
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
@@ -22960,6 +22966,7 @@
     "sk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
     "gsi2pk": "assigneeId|4805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "124-20",
+    "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-30T20:23:57.361Z",
     "completedAt": "2020-09-30T20:24:15.441Z",
     "completedMessage": "Served to IRS",
@@ -30378,6 +30385,7 @@
     "docketNumberWithSuffix": "400-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -30486,6 +30494,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|49c79776-b266-4b5f-b348-4f23a9a27cac",
     "docketNumberWithSuffix": "400-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:19:21.048Z",
     "completedAt": "2023-11-22T01:19:21.048Z",
     "completedMessage": "completed",
@@ -30530,6 +30539,7 @@
     "docketNumberWithSuffix": "400-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -30606,6 +30616,7 @@
     "docketNumberWithSuffix": "401-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -30682,6 +30693,7 @@
     "docketNumberWithSuffix": "401-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -30758,6 +30770,7 @@
     "docketNumberWithSuffix": "402-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -30834,6 +30847,7 @@
     "docketNumberWithSuffix": "402-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -30910,6 +30924,7 @@
     "docketNumberWithSuffix": "403-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -30986,6 +31001,7 @@
     "docketNumberWithSuffix": "403-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31067,6 +31083,7 @@
     "docketNumberWithSuffix": "404-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -31176,6 +31193,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|d0d0c865-2933-45ca-8897-9cac9aa2c7f8",
     "docketNumberWithSuffix": "404-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.176Z",
     "completedAt": "2023-11-22T01:17:49.176Z",
     "completedMessage": "completed",
@@ -31220,6 +31238,7 @@
     "docketNumberWithSuffix": "404-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31301,6 +31320,7 @@
     "docketNumberWithSuffix": "405-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -31410,6 +31430,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|727f3dde-6dab-4780-affa-cecff2092ac2",
     "docketNumberWithSuffix": "405-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.334Z",
     "completedAt": "2023-11-22T01:17:49.334Z",
     "completedMessage": "completed",
@@ -31454,6 +31475,7 @@
     "docketNumberWithSuffix": "405-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31530,6 +31552,7 @@
     "docketNumberWithSuffix": "406-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31606,6 +31629,7 @@
     "docketNumberWithSuffix": "406-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31682,6 +31706,7 @@
     "docketNumberWithSuffix": "407-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31758,6 +31783,7 @@
     "docketNumberWithSuffix": "407-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31834,6 +31860,7 @@
     "docketNumberWithSuffix": "408-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31910,6 +31937,7 @@
     "docketNumberWithSuffix": "408-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -31991,6 +32019,7 @@
     "docketNumberWithSuffix": "409-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -32100,6 +32129,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|0753f228-7995-406c-a144-09afb8895f9f",
     "docketNumberWithSuffix": "409-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.162Z",
     "completedAt": "2023-11-22T01:20:35.162Z",
     "completedMessage": "completed",
@@ -32144,6 +32174,7 @@
     "docketNumberWithSuffix": "409-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -32223,6 +32254,7 @@
     "docketNumberWithSuffix": "410-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -32300,6 +32332,7 @@
     "docketNumberWithSuffix": "410-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -32381,6 +32414,7 @@
     "docketNumberWithSuffix": "411-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -32490,6 +32524,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|4ffce7b0-d947-4047-8c56-f40a446a83ca",
     "docketNumberWithSuffix": "411-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.395Z",
     "completedAt": "2023-11-22T01:20:35.395Z",
     "completedMessage": "completed",
@@ -32534,6 +32569,7 @@
     "docketNumberWithSuffix": "411-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -32613,6 +32649,7 @@
     "docketNumberWithSuffix": "412-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -32690,6 +32727,7 @@
     "docketNumberWithSuffix": "412-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -32771,6 +32809,7 @@
     "docketNumberWithSuffix": "413-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "caseStatusHistory": [
@@ -32880,6 +32919,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|8b4be2af-6e7c-4c55-93d9-a150fe284b78",
     "docketNumberWithSuffix": "413-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.518Z",
     "completedAt": "2023-11-22T01:20:35.518Z",
     "completedMessage": "completed",
@@ -32924,6 +32964,7 @@
     "docketNumberWithSuffix": "413-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33000,6 +33041,7 @@
     "docketNumberWithSuffix": "414-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33076,6 +33118,7 @@
     "docketNumberWithSuffix": "414-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33152,6 +33195,7 @@
     "docketNumberWithSuffix": "415-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33228,6 +33272,7 @@
     "docketNumberWithSuffix": "415-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33304,6 +33349,7 @@
     "docketNumberWithSuffix": "416-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33380,6 +33426,7 @@
     "docketNumberWithSuffix": "416-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33456,6 +33503,7 @@
     "docketNumberWithSuffix": "417-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33532,6 +33580,7 @@
     "docketNumberWithSuffix": "417-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33608,6 +33657,7 @@
     "docketNumberWithSuffix": "418-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33684,6 +33734,7 @@
     "docketNumberWithSuffix": "418-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33760,6 +33811,7 @@
     "docketNumberWithSuffix": "419-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33836,6 +33888,7 @@
     "docketNumberWithSuffix": "419-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33912,6 +33965,7 @@
     "docketNumberWithSuffix": "420-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -33988,6 +34042,7 @@
     "docketNumberWithSuffix": "420-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34064,6 +34119,7 @@
     "docketNumberWithSuffix": "421-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34140,6 +34196,7 @@
     "docketNumberWithSuffix": "421-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34216,6 +34273,7 @@
     "docketNumberWithSuffix": "422-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34292,6 +34350,7 @@
     "docketNumberWithSuffix": "422-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34368,6 +34427,7 @@
     "docketNumberWithSuffix": "423-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34444,6 +34504,7 @@
     "docketNumberWithSuffix": "423-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34520,6 +34581,7 @@
     "docketNumberWithSuffix": "424-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34596,6 +34658,7 @@
     "docketNumberWithSuffix": "424-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34672,6 +34735,7 @@
     "docketNumberWithSuffix": "425-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34748,6 +34812,7 @@
     "docketNumberWithSuffix": "425-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34824,6 +34889,7 @@
     "docketNumberWithSuffix": "426-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34900,6 +34966,7 @@
     "docketNumberWithSuffix": "426-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -34976,6 +35043,7 @@
     "docketNumberWithSuffix": "427-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35052,6 +35120,7 @@
     "docketNumberWithSuffix": "427-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35128,6 +35197,7 @@
     "docketNumberWithSuffix": "428-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35204,6 +35274,7 @@
     "docketNumberWithSuffix": "428-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35280,6 +35351,7 @@
     "docketNumberWithSuffix": "429-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35356,6 +35428,7 @@
     "docketNumberWithSuffix": "429-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35432,6 +35505,7 @@
     "docketNumberWithSuffix": "430-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35508,6 +35582,7 @@
     "docketNumberWithSuffix": "430-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35584,6 +35659,7 @@
     "docketNumberWithSuffix": "431-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35660,6 +35736,7 @@
     "docketNumberWithSuffix": "431-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35736,6 +35813,7 @@
     "docketNumberWithSuffix": "432-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35812,6 +35890,7 @@
     "docketNumberWithSuffix": "432-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35888,6 +35967,7 @@
     "docketNumberWithSuffix": "433-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -35964,6 +36044,7 @@
     "docketNumberWithSuffix": "433-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36040,6 +36121,7 @@
     "docketNumberWithSuffix": "434-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36116,6 +36198,7 @@
     "docketNumberWithSuffix": "434-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36192,6 +36275,7 @@
     "docketNumberWithSuffix": "435-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36268,6 +36352,7 @@
     "docketNumberWithSuffix": "435-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36344,6 +36429,7 @@
     "docketNumberWithSuffix": "436-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36420,6 +36506,7 @@
     "docketNumberWithSuffix": "436-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36496,6 +36583,7 @@
     "docketNumberWithSuffix": "437-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36572,6 +36660,7 @@
     "docketNumberWithSuffix": "437-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36648,6 +36737,7 @@
     "docketNumberWithSuffix": "438-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36724,6 +36814,7 @@
     "docketNumberWithSuffix": "438-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36800,6 +36891,7 @@
     "docketNumberWithSuffix": "439-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36876,6 +36968,7 @@
     "docketNumberWithSuffix": "439-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -36952,6 +37045,7 @@
     "docketNumberWithSuffix": "440-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37028,6 +37122,7 @@
     "docketNumberWithSuffix": "440-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37104,6 +37199,7 @@
     "docketNumberWithSuffix": "441-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37180,6 +37276,7 @@
     "docketNumberWithSuffix": "441-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37256,6 +37353,7 @@
     "docketNumberWithSuffix": "442-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37332,6 +37430,7 @@
     "docketNumberWithSuffix": "442-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37408,6 +37507,7 @@
     "docketNumberWithSuffix": "443-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37484,6 +37584,7 @@
     "docketNumberWithSuffix": "443-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37560,6 +37661,7 @@
     "docketNumberWithSuffix": "444-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37636,6 +37738,7 @@
     "docketNumberWithSuffix": "444-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37712,6 +37815,7 @@
     "docketNumberWithSuffix": "445-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37788,6 +37892,7 @@
     "docketNumberWithSuffix": "445-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37864,6 +37969,7 @@
     "docketNumberWithSuffix": "446-22",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -37940,6 +38046,7 @@
     "docketNumberWithSuffix": "446-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38016,6 +38123,7 @@
     "docketNumberWithSuffix": "447-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38092,6 +38200,7 @@
     "docketNumberWithSuffix": "448-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38168,6 +38277,7 @@
     "docketNumberWithSuffix": "449-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38244,6 +38354,7 @@
     "docketNumberWithSuffix": "450-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38320,6 +38431,7 @@
     "docketNumberWithSuffix": "451-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38396,6 +38508,7 @@
     "docketNumberWithSuffix": "452-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38472,6 +38585,7 @@
     "docketNumberWithSuffix": "453-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38548,6 +38662,7 @@
     "docketNumberWithSuffix": "454-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38624,6 +38739,7 @@
     "docketNumberWithSuffix": "455-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38700,6 +38816,7 @@
     "docketNumberWithSuffix": "456-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38776,6 +38893,7 @@
     "docketNumberWithSuffix": "457-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38852,6 +38970,7 @@
     "docketNumberWithSuffix": "458-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -38928,6 +39047,7 @@
     "docketNumberWithSuffix": "459-23",
     "orderForRatification": true,
     "petitioners": [],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "caseStatusHistory": [
       {
@@ -39272,6 +39392,7 @@
         "email": "testuser@example.com"
       }
     ],
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
@@ -39619,7 +39740,7 @@
     "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Colvin",
@@ -39636,6 +39757,7 @@
     "entityName": "WorkItem",
     "sk": "work-item|3c732694-4a1b-4540-8425-4587d33a28b0",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:08:04.711Z",
     "completedAt": "2023-11-22T01:08:04.712Z",
     "completedMessage": "completed",
@@ -39676,6 +39798,7 @@
     "sk": "work-item|4a3e2ec3-f9d8-40f3-abf9-526aab1e8c46",
     "gsi2pk": "assigneeId|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2021-12-02T16:18:37.515Z",
     "completedAt": "2021-12-02T16:18:37.515Z",
     "completedMessage": "completed",
@@ -39734,12 +39857,30 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "sk": "connection|31eea9df-78e1-41a1-9198-686d3c8165bc",
+    "connectionId": "31eea9df-78e1-41a1-9198-686d3c8165bc",
+    "pk": "connection|31eea9df-78e1-41a1-9198-686d3c8165bc",
+    "ttl": 1703187903,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "468842b4-b4a6-4162-9010-9c3272a56a2c",
     "sk": "connection|37f906b5-0f7f-42bb-9e24-9c3212f67297",
     "connectionId": "37f906b5-0f7f-42bb-9e24-9c3212f67297",
     "pk": "connection|37f906b5-0f7f-42bb-9e24-9c3212f67297",
     "ttl": 1700701781,
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "sk": "connection|4944b3d9-6c51-42a5-8599-4c3f5e6475bc",
+    "connectionId": "4944b3d9-6c51-42a5-8599-4c3f5e6475bc",
+    "pk": "connection|4944b3d9-6c51-42a5-8599-4c3f5e6475bc",
+    "ttl": 1703188889,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -39758,6 +39899,15 @@
     "pk": "connection|5b488851-4192-444f-aea6-c884e6b6944b",
     "ttl": 1691602262,
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "sk": "connection|755c1676-9f0a-40cd-9491-52df6a1e0026",
+    "connectionId": "755c1676-9f0a-40cd-9491-52df6a1e0026",
+    "pk": "connection|755c1676-9f0a-40cd-9491-52df6a1e0026",
+    "ttl": 1703188669,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -39785,6 +39935,15 @@
     "pk": "connection|8218a248-790f-468c-aef9-f8503b62dd18",
     "ttl": 1667076368,
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "sk": "connection|97ea305f-2998-4db7-b4c2-3ac05c3e3e12",
+    "connectionId": "97ea305f-2998-4db7-b4c2-3ac05c3e3e12",
+    "pk": "connection|97ea305f-2998-4db7-b4c2-3ac05c3e3e12",
+    "ttl": 1703188700,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -39921,11 +40080,6 @@
     "pk": "e-consent-fields-enabled-feature-flag"
   },
   {
-    "sk": "entity-locking-feature-flag",
-    "current": true,
-    "pk": "entity-locking-feature-flag"
-  },
-  {
     "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
     "pk": "eligible-for-trial-case-catalog",
     "docketNumber": "105-67",
@@ -40014,6 +40168,11 @@
     "sk": "45473e99-6498-4485-84cf-1c806c104a80",
     "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->This is a legacy judge&#x27;s order</div><div>Docket Entry No.: <!-- -->3</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:25 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->3</div><div>docketEntryId: <!-- -->c611ee2e-a270-4dcd-a7bd-b8b9062db630</div><div>eventCode: <!-- -->O</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
+  },
+  {
+    "sk": "entity-locking-feature-flag",
+    "current": true,
+    "pk": "entity-locking-feature-flag"
   },
   {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
@@ -40326,7 +40485,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner@example.com"
+          "email": "privatePractitioner@example.com"
         }
       ],
       "attachments": false,
@@ -40438,6 +40597,7 @@
     "entityName": "WorkItem",
     "sk": "2020-09-30T20:25:32.962Z",
     "docketNumberWithSuffix": "124-20",
+    "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-30T20:25:32.385Z",
     "completedAt": "2020-09-30T20:25:32.962Z",
     "completedMessage": "completed",
@@ -42344,6 +42504,7 @@
     "entityName": "WorkItem",
     "sk": "2021-12-02T16:18:37.515Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2021-12-02T16:18:37.515Z",
     "completedAt": "2021-12-02T16:18:37.515Z",
     "completedMessage": "completed",
@@ -42799,7 +42960,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -42900,7 +43061,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43001,7 +43162,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43102,7 +43263,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43209,7 +43370,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43316,7 +43477,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43423,7 +43584,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43529,7 +43690,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43635,7 +43796,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43741,7 +43902,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43851,7 +44012,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -43951,7 +44112,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44058,7 +44219,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44163,7 +44324,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44273,7 +44434,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44379,7 +44540,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -44592,6 +44753,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:08:04.712Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:08:04.711Z",
     "completedAt": "2023-11-22T01:08:04.712Z",
     "completedMessage": "completed",
@@ -44633,6 +44795,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.176Z",
     "docketNumberWithSuffix": "404-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.176Z",
     "completedAt": "2023-11-22T01:17:49.176Z",
     "completedMessage": "completed",
@@ -44673,6 +44836,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.334Z",
     "docketNumberWithSuffix": "405-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.334Z",
     "completedAt": "2023-11-22T01:17:49.334Z",
     "completedMessage": "completed",
@@ -44712,6 +44876,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:19:21.048Z",
     "docketNumberWithSuffix": "400-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:19:21.048Z",
     "completedAt": "2023-11-22T01:19:21.048Z",
     "completedMessage": "completed",
@@ -44752,6 +44917,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.162Z",
     "docketNumberWithSuffix": "409-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.162Z",
     "completedAt": "2023-11-22T01:20:35.162Z",
     "completedMessage": "completed",
@@ -44792,6 +44958,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.395Z",
     "docketNumberWithSuffix": "411-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.395Z",
     "completedAt": "2023-11-22T01:20:35.395Z",
     "completedMessage": "completed",
@@ -44832,6 +44999,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.518Z",
     "docketNumberWithSuffix": "413-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.518Z",
     "completedAt": "2023-11-22T01:20:35.518Z",
     "completedMessage": "completed",
@@ -45496,6 +45664,7 @@
     "entityName": "WorkItem",
     "sk": "2021-12-02T16:18:37.515Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2021-12-02T16:18:37.515Z",
     "completedAt": "2021-12-02T16:18:37.515Z",
     "completedMessage": "completed",
@@ -45981,7 +46150,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46081,7 +46250,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46181,7 +46350,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46281,7 +46450,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46387,7 +46556,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46493,7 +46662,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46600,7 +46769,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46705,7 +46874,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46810,7 +46979,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -46915,7 +47084,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47023,7 +47192,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47122,7 +47291,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47229,7 +47398,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47333,7 +47502,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47441,7 +47610,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47546,7 +47715,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -47757,6 +47926,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:08:04.712Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:08:04.711Z",
     "completedAt": "2023-11-22T01:08:04.712Z",
     "completedMessage": "completed",
@@ -47797,6 +47967,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.176Z",
     "docketNumberWithSuffix": "404-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.176Z",
     "completedAt": "2023-11-22T01:17:49.176Z",
     "completedMessage": "completed",
@@ -47836,6 +48007,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.334Z",
     "docketNumberWithSuffix": "405-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.334Z",
     "completedAt": "2023-11-22T01:17:49.334Z",
     "completedMessage": "completed",
@@ -47874,6 +48046,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:19:21.048Z",
     "docketNumberWithSuffix": "400-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:19:21.048Z",
     "completedAt": "2023-11-22T01:19:21.048Z",
     "completedMessage": "completed",
@@ -47913,6 +48086,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.162Z",
     "docketNumberWithSuffix": "409-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.162Z",
     "completedAt": "2023-11-22T01:20:35.162Z",
     "completedMessage": "completed",
@@ -47952,6 +48126,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.395Z",
     "docketNumberWithSuffix": "411-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.395Z",
     "completedAt": "2023-11-22T01:20:35.395Z",
     "completedMessage": "completed",
@@ -47991,6 +48166,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.518Z",
     "docketNumberWithSuffix": "413-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.518Z",
     "completedAt": "2023-11-22T01:20:35.518Z",
     "completedMessage": "completed",
@@ -48211,6 +48387,7 @@
     "entityName": "WorkItem",
     "sk": "2020-09-30T20:24:15.441Z",
     "docketNumberWithSuffix": "124-20",
+    "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-30T20:23:57.361Z",
     "completedAt": "2020-09-30T20:24:15.441Z",
     "completedMessage": "Served to IRS",
@@ -49106,6 +49283,10 @@
     "pk": "section|admissions"
   },
   {
+    "sk": "user|9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "pk": "section|admissions"
+  },
+  {
     "sk": "user|817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "pk": "section|ashfordsChambers"
   },
@@ -49131,6 +49312,10 @@
   },
   {
     "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "pk": "section|caseServicesSupervisor"
+  },
+  {
+    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
     "pk": "section|caseServicesSupervisor"
   },
   {
@@ -49163,6 +49348,10 @@
   },
   {
     "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "pk": "section|docket"
+  },
+  {
+    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
     "pk": "section|docket"
   },
   {
@@ -49251,6 +49440,10 @@
   },
   {
     "sk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
+    "pk": "section|petitions"
+  },
+  {
+    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
     "pk": "section|petitions"
   },
   {
@@ -50241,11 +50434,6 @@
     "sk": "updated-trial-status-types",
     "current": true,
     "pk": "updated-trial-status-types"
-  },
-  {
-    "sk": "use-external-pdf-generation",
-    "current": false,
-    "pk": "use-external-pdf-generation"
   },
   {
     "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -52045,6 +52233,7 @@
     "entityName": "WorkItem",
     "sk": "2021-12-02T16:18:37.515Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2021-12-02T16:18:37.515Z",
     "completedAt": "2021-12-02T16:18:37.515Z",
     "completedMessage": "completed",
@@ -52484,6 +52673,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:08:04.712Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:08:04.711Z",
     "completedAt": "2023-11-22T01:08:04.712Z",
     "completedMessage": "completed",
@@ -52525,6 +52715,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.176Z",
     "docketNumberWithSuffix": "404-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.176Z",
     "completedAt": "2023-11-22T01:17:49.176Z",
     "completedMessage": "completed",
@@ -52565,6 +52756,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.334Z",
     "docketNumberWithSuffix": "405-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.334Z",
     "completedAt": "2023-11-22T01:17:49.334Z",
     "completedMessage": "completed",
@@ -52604,6 +52796,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:19:21.048Z",
     "docketNumberWithSuffix": "400-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:19:21.048Z",
     "completedAt": "2023-11-22T01:19:21.048Z",
     "completedMessage": "completed",
@@ -52644,6 +52837,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.162Z",
     "docketNumberWithSuffix": "409-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.162Z",
     "completedAt": "2023-11-22T01:20:35.162Z",
     "completedMessage": "completed",
@@ -52684,6 +52878,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.395Z",
     "docketNumberWithSuffix": "411-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.395Z",
     "completedAt": "2023-11-22T01:20:35.395Z",
     "completedMessage": "completed",
@@ -52724,6 +52919,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.518Z",
     "docketNumberWithSuffix": "413-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.518Z",
     "completedAt": "2023-11-22T01:20:35.518Z",
     "completedMessage": "completed",
@@ -52773,7 +52969,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -52873,7 +53069,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -52973,7 +53169,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53073,7 +53269,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53179,7 +53375,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53285,7 +53481,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53392,7 +53588,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53497,7 +53693,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53602,7 +53798,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53707,7 +53903,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53815,7 +54011,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -53914,7 +54110,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -54021,7 +54217,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -54125,7 +54321,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -54233,7 +54429,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -54338,7 +54534,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner1@example.com"
+          "email": "privatePractitioner1@example.com"
         },
         {
           "name": "Test IRS Practitioner",
@@ -54549,6 +54745,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:08:04.712Z",
     "docketNumberWithSuffix": "999-15",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:08:04.711Z",
     "completedAt": "2023-11-22T01:08:04.712Z",
     "completedMessage": "completed",
@@ -54589,6 +54786,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.176Z",
     "docketNumberWithSuffix": "404-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.176Z",
     "completedAt": "2023-11-22T01:17:49.176Z",
     "completedMessage": "completed",
@@ -54628,6 +54826,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:17:49.334Z",
     "docketNumberWithSuffix": "405-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:17:49.334Z",
     "completedAt": "2023-11-22T01:17:49.334Z",
     "completedMessage": "completed",
@@ -54666,6 +54865,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:19:21.048Z",
     "docketNumberWithSuffix": "400-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:19:21.048Z",
     "completedAt": "2023-11-22T01:19:21.048Z",
     "completedMessage": "completed",
@@ -54705,6 +54905,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.162Z",
     "docketNumberWithSuffix": "409-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.162Z",
     "completedAt": "2023-11-22T01:20:35.162Z",
     "completedMessage": "completed",
@@ -54744,6 +54945,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.395Z",
     "docketNumberWithSuffix": "411-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.395Z",
     "completedAt": "2023-11-22T01:20:35.395Z",
     "completedMessage": "completed",
@@ -54783,6 +54985,7 @@
     "entityName": "WorkItem",
     "sk": "2023-11-22T01:20:35.518Z",
     "docketNumberWithSuffix": "413-22",
+    "associatedJudgeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-11-22T01:20:35.518Z",
     "completedAt": "2023-11-22T01:20:35.518Z",
     "completedMessage": "completed",
@@ -54922,7 +55125,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatepractitioner@example.com"
+          "email": "privatePractitioner@example.com"
         }
       ],
       "attachments": false,
@@ -55034,6 +55237,7 @@
     "entityName": "WorkItem",
     "sk": "2020-09-30T20:25:32.962Z",
     "docketNumberWithSuffix": "124-20",
+    "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-30T20:25:32.385Z",
     "completedAt": "2020-09-30T20:25:32.962Z",
     "completedMessage": "completed",
@@ -55961,6 +56165,7 @@
     "entityName": "WorkItem",
     "sk": "2020-09-30T20:24:15.441Z",
     "docketNumberWithSuffix": "124-20",
+    "associatedJudgeId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-30T20:23:57.361Z",
     "completedAt": "2020-09-30T20:24:15.441Z",
     "completedMessage": "Served to IRS",
@@ -56362,7 +56567,7 @@
     "firmName": "Law Offices of Rivas and Kathy Gee",
     "pk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "originalBarState": "FL",
-    "email": "privatepractitioner4@example.com"
+    "email": "privatePractitioner4@example.com"
   },
   {
     "admissionsStatus": "Active",
@@ -56403,6 +56608,26 @@
     "pk": "user|35959d1a-0981-40b2-a93d-f65c7977db52",
     "userId": "35959d1a-0981-40b2-a93d-f65c7977db52",
     "email": "caseservicessupervisor@example.com"
+  },
+  {
+    "entityName": "User",
+    "email": "caseServicesSupervisor1@example.com",
+    "name": "Test caseServicesSupervisor1",
+    "role": "caseServicesSupervisor",
+    "userId": "91bae3e8-3079-43a6-920d-b74ed9c649d4",
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    },
+    "pk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
+    "sk": "user|91bae3e8-3079-43a6-920d-b74ed9c649d4",
+    "section": "caseServicesSupervisor"
   },
   {
     "role": "petitionsclerk",
@@ -57050,7 +57275,7 @@
     "firmName": "Lilah, Lilah",
     "pk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "originalBarState": "N/A",
-    "email": "privatepractitioner2@example.com"
+    "email": "privatePractitioner2@example.com"
   },
   {
     "sk": "case|102-67",
@@ -57131,7 +57356,7 @@
     "firmName": "GW Law Offices",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "originalBarState": "MD",
-    "email": "privatepractitioner@example.com"
+    "email": "privatePractitioner@example.com"
   },
   {
     "role": "chambers",
@@ -57152,6 +57377,16 @@
     "pk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "userId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "email": "admissionsclerk@example.com"
+  },
+  {
+    "role": "admissionsclerk",
+    "entityName": "User",
+    "sk": "user|9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "name": "Test Admissions Clerk1",
+    "section": "admissions",
+    "pk": "user|9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "userId": "9d7d63a3-d7a5-4905-ba89-ef71bf30057f",
+    "email": "admissionsclerk1@example.com"
   },
   {
     "role": "floater",
@@ -57192,7 +57427,7 @@
     "firmName": "Iron Law",
     "pk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
     "originalBarState": "TX",
-    "email": "privatepractitioner3@example.com"
+    "email": "privatePractitioner3@example.com"
   },
   {
     "role": "chambers",
@@ -57234,7 +57469,7 @@
     "firmName": "Bogus Barristers",
     "pk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
     "originalBarState": "OR",
-    "email": "privatepractitioner99@example.com"
+    "email": "privatePractitioner99@example.com"
   },
   {
     "sk": "case|102-20",
@@ -57296,7 +57531,7 @@
     "firmName": "Bogus Barristers",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "originalBarState": "OR",
-    "email": "privatepractitioner1@example.com"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "admissionsStatus": "Active",
@@ -57434,12 +57669,42 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "gsi1pk": "connection",
+    "sk": "connection|31eea9df-78e1-41a1-9198-686d3c8165bc",
+    "connectionId": "31eea9df-78e1-41a1-9198-686d3c8165bc",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1703187903,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "gsi1pk": "connection",
+    "sk": "connection|4944b3d9-6c51-42a5-8599-4c3f5e6475bc",
+    "connectionId": "4944b3d9-6c51-42a5-8599-4c3f5e6475bc",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1703188889,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "22ee1af1-399d-4773-a328-d52065878666",
     "gsi1pk": "connection",
     "sk": "connection|58379d04-3f98-40e2-b6e5-48c5bdeda157",
     "connectionId": "58379d04-3f98-40e2-b6e5-48c5bdeda157",
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "ttl": 1700702315,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "gsi1pk": "connection",
+    "sk": "connection|755c1676-9f0a-40cd-9491-52df6a1e0026",
+    "connectionId": "755c1676-9f0a-40cd-9491-52df6a1e0026",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1703188669,
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
@@ -57460,6 +57725,16 @@
     "connectionId": "7ed1eb6f-5fac-4b63-a856-137f806b7016",
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "ttl": 1700702315,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
+    "gsi1pk": "connection",
+    "sk": "connection|97ea305f-2998-4db7-b4c2-3ac05c3e3e12",
+    "connectionId": "97ea305f-2998-4db7-b4c2-3ac05c3e3e12",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1703188700,
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {

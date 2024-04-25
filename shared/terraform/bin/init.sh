@@ -36,7 +36,7 @@ if [[ -n "$2" ]] && [[ "$2" == "--build-lambda" ]]; then
   npm run "build:lambda:${SLUG}"
 fi
 
-terraform init -backend=true \
+terraform init -upgrade -backend=true \
  -backend-config=bucket="${BUCKET}" \
  -backend-config=key="${KEY}" \
  -backend-config=dynamodb_table="${LOCK_TABLE}" \

@@ -21,7 +21,7 @@ export const FileCompressionErrorModal = connect(
         noCancel={!allowRetry}
         noConfirm={!allowRetry}
         preventCancelOnBlur={true}
-        title="File Compression Error"
+        title="Unable to Compress Files"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="batchDownloadTrialSessionSequence"
       >
@@ -35,8 +35,11 @@ export const FileCompressionErrorModal = connect(
           </>
         )) || (
           <p>
-            An error occurred during the file compression of “
-            {trialSessionTitle}” trial session. Please contact OIS.
+            Please try again. If this error persists, contact{' '}
+            <a href="mailto:dawson.support@ustaxcourt.gov">
+              dawson.support@ustaxcourt.gov
+            </a>
+            .
           </p>
         )}
       </ConfirmModal>

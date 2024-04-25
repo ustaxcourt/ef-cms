@@ -26,11 +26,13 @@ describe('validateStampAction', () => {
       .validateStampInteractor.mockReturnValue(null);
 
     await runAction(validateStampAction, {
-      form: {
-        disposition: MOTION_DISPOSITIONS.GRANTED,
-      },
       modules: {
         presenter,
+      },
+      state: {
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+        },
       },
     });
 
@@ -43,9 +45,11 @@ describe('validateStampAction', () => {
     });
 
     await runAction(validateStampAction, {
-      form: {},
       modules: {
         presenter,
+      },
+      state: {
+        form: {},
       },
     });
 

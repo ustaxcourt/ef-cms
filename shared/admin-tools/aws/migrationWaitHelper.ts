@@ -1,6 +1,7 @@
 import {
   CloudWatchClient,
   GetMetricStatisticsCommand,
+  GetMetricStatisticsOutput,
 } from '@aws-sdk/client-cloudwatch';
 import { DateTime } from 'luxon';
 import { countItemsInQueue } from './sqsHelper';
@@ -10,7 +11,9 @@ const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
 const env = process.env.STAGE;
 const key = 'migration-queue-is-empty';
 
-export const getMetricStatistics = async (type: string): Promise<object> => {
+export const getMetricStatistics = async (
+  type: string,
+): Promise<GetMetricStatisticsOutput> => {
   const now = DateTime.now();
   const start = DateTime.now().minus({ minutes: 15 });
   const command = new GetMetricStatisticsCommand({
@@ -30,7 +33,7 @@ export const getMetricStatistics = async (type: string): Promise<object> => {
   return await cloudwatchClient.send(command);
 };
 
-export const getSqsQueueCount = queueUrl => {
+export const getSqsQueueCount = (queueUrl: string): Promise<number> => {
   return countItemsInQueue({ QueueUrl: queueUrl });
 };
 

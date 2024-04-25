@@ -5,18 +5,14 @@ import { fetchUserNotificationsSequence } from '@web-client/presenter/sequences/
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
-import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
-import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
-import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
-import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -37,111 +33,91 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
-const goToDashboard = [
+export const gotoDashboardSequence = [
   setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   setUserPermissionsAction,
-  parallel([
-    [
-      getMaintenanceModeAction,
+  startWebSocketConnectionAction,
+  {
+    error: [setShowModalFactoryAction('WebSocketErrorModal')],
+    success: [
+      runPathForUserRoleAction,
       {
-        maintenanceOff: [
-          startWebSocketConnectionAction,
-          {
-            error: [setShowModalFactoryAction('WebSocketErrorModal')],
-            success: [
-              runPathForUserRoleAction,
-              {
-                ...takePathForRoles(
-                  [
-                    USER_ROLES.adc,
-                    USER_ROLES.admin,
-                    USER_ROLES.admissionsClerk,
-                    USER_ROLES.clerkOfCourt,
-                    USER_ROLES.caseServicesSupervisor,
-                    USER_ROLES.docketClerk,
-                    USER_ROLES.floater,
-                    USER_ROLES.petitionsClerk,
-                    USER_ROLES.reportersOffice,
-                    USER_ROLES.trialClerk,
-                  ],
-                  proceedToMessages,
-                ),
-                chambers: [
-                  fetchUserNotificationsSequence,
-                  getJudgeForCurrentUserAction,
-                  setJudgeUserAction,
-                  parallel([
-                    getMessages,
-                    [getTrialSessionsForJudgeAction, setTrialSessionsAction],
-                    [
-                      getSubmittedAndCavCasesForCurrentJudgeAction,
-                      setSubmittedAndCavCasesForJudgeAction,
-                    ],
-                    [
-                      getPendingMotionDocketEntriesForCurrentJudgeAction,
-                      setPendingMotionDocketEntriesForCurrentJudgeAction,
-                    ],
-                  ]),
-                  setupCurrentPageAction('DashboardChambers'),
-                ],
-                general: [navigateToSectionDocumentQCAction],
-                inactivePractitioner: [
-                  setupCurrentPageAction('DashboardInactive'),
-                ],
-                irsPractitioner: [
-                  setDefaultCaseTypeToDisplayAction,
-                  getOpenAndClosedCasesForUserAction,
-                  setCasesAction,
-                  setupCurrentPageAction('DashboardRespondent'),
-                ],
-                irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
-                judge: [
-                  fetchUserNotificationsSequence,
-                  passAlongJudgeUserAction,
-                  setJudgeUserAction,
-                  parallel([
-                    getMessages,
-                    [getTrialSessionsForJudgeAction, setTrialSessionsAction],
-                    [
-                      getSubmittedAndCavCasesForCurrentJudgeAction,
-                      setSubmittedAndCavCasesForJudgeAction,
-                    ],
-                    [
-                      getPendingMotionDocketEntriesForCurrentJudgeAction,
-                      setPendingMotionDocketEntriesForCurrentJudgeAction,
-                    ],
-                  ]),
-                  setupCurrentPageAction('DashboardJudge'),
-                ],
-                petitioner: [
-                  setDefaultCaseTypeToDisplayAction,
-                  getOpenAndClosedCasesForUserAction,
-                  setCasesAction,
-                  setupCurrentPageAction('DashboardPetitioner'),
-                ],
-                privatePractitioner: [
-                  setDefaultCaseTypeToDisplayAction,
-                  getOpenAndClosedCasesForUserAction,
-                  setCasesAction,
-                  setupCurrentPageAction('DashboardPractitioner'),
-                ],
-              },
+        ...takePathForRoles(
+          [
+            USER_ROLES.adc,
+            USER_ROLES.admin,
+            USER_ROLES.admissionsClerk,
+            USER_ROLES.clerkOfCourt,
+            USER_ROLES.caseServicesSupervisor,
+            USER_ROLES.docketClerk,
+            USER_ROLES.floater,
+            USER_ROLES.petitionsClerk,
+            USER_ROLES.reportersOffice,
+            USER_ROLES.trialClerk,
+          ],
+          proceedToMessages,
+        ),
+        chambers: [
+          fetchUserNotificationsSequence,
+          getJudgeForCurrentUserAction,
+          setJudgeUserAction,
+          parallel([
+            getMessages,
+            [getTrialSessionsForJudgeAction, setTrialSessionsAction],
+            [
+              getSubmittedAndCavCasesForCurrentJudgeAction,
+              setSubmittedAndCavCasesForJudgeAction,
             ],
-          },
+            [
+              getPendingMotionDocketEntriesForCurrentJudgeAction,
+              setPendingMotionDocketEntriesForCurrentJudgeAction,
+            ],
+          ]),
+          setupCurrentPageAction('DashboardChambers'),
         ],
-        maintenanceOn: [gotoMaintenanceSequence],
+        general: [navigateToSectionDocumentQCAction],
+        inactivePractitioner: [setupCurrentPageAction('DashboardInactive')],
+        irsPractitioner: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesForUserAction,
+          setCasesAction,
+          setupCurrentPageAction('DashboardRespondent'),
+        ],
+        irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
+        judge: [
+          fetchUserNotificationsSequence,
+          passAlongJudgeUserAction,
+          setJudgeUserAction,
+          parallel([
+            getMessages,
+            [getTrialSessionsForJudgeAction, setTrialSessionsAction],
+            [
+              getSubmittedAndCavCasesForCurrentJudgeAction,
+              setSubmittedAndCavCasesForJudgeAction,
+            ],
+            [
+              getPendingMotionDocketEntriesForCurrentJudgeAction,
+              setPendingMotionDocketEntriesForCurrentJudgeAction,
+            ],
+          ]),
+          setupCurrentPageAction('DashboardJudge'),
+        ],
+        petitioner: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesForUserAction,
+          setCasesAction,
+          setupCurrentPageAction('DashboardPetitioner'),
+        ],
+        privatePractitioner: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesForUserAction,
+          setCasesAction,
+          setupCurrentPageAction('DashboardPractitioner'),
+        ],
       },
     ],
-  ]),
-];
-
-export const gotoDashboardSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [goToDashboard],
-    unauthorized: [redirectToCognitoAction],
   },
 ];

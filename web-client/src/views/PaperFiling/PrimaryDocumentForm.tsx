@@ -125,6 +125,7 @@ export const PrimaryDocumentForm = connect(
 
             <SelectSearch
               aria-label="document-type-label"
+              data-testid="primary-document-type-search"
               id="document-type"
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
@@ -171,6 +172,7 @@ export const PrimaryDocumentForm = connect(
               </label>
               <SelectSearch
                 aria-label="secondary-document-type-label"
+                data-testid="secondary-document-type-search"
                 id="secondary-document-type"
                 isClearable={true}
                 name="secondaryDocument.eventCode"
@@ -225,9 +227,9 @@ export const PrimaryDocumentForm = connect(
               aria-describedby="additional-info-label"
               autoCapitalize="none"
               className="usa-textarea height-8"
+              data-testid="additional-info-1-textarea"
               id="additional-info"
               name="additionalInfo"
-              type="text"
               value={form.additionalInfo || ''}
               onBlur={() => {
                 validateDocketEntrySequence();
@@ -258,6 +260,7 @@ export const PrimaryDocumentForm = connect(
               />
               <label
                 className="usa-checkbox__label"
+                data-testid="add-to-coversheet-checkbox"
                 htmlFor="add-to-coversheet"
               >
                 Add to cover sheet
@@ -322,6 +325,7 @@ export const PrimaryDocumentForm = connect(
                     />
                     <label
                       className="usa-radio__label"
+                      data-testid={`objections-${option}`}
                       htmlFor={`objections-${option}`}
                     >
                       {option}

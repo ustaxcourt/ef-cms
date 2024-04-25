@@ -16,6 +16,7 @@ export const SortableColumn = ({
   onClickSequence,
   sortField,
   title,
+  ...props
 }: {
   ascText: string;
   defaultSortOrder?: 'asc' | 'desc';
@@ -44,6 +45,7 @@ export const SortableColumn = ({
     <Button
       link
       className={'sortable-header-button margin-right-0'}
+      data-testid={props['data-testid']}
       onClick={() => {
         if (hasRows) {
           setIsLoading(true);

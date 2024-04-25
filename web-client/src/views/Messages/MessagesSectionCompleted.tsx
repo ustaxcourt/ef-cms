@@ -12,7 +12,6 @@ export const MessagesSectionCompleted = connect(
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -21,84 +20,71 @@ export const MessagesSectionCompleted = connect(
     constants,
     formattedMessages,
     screenMetadata,
-    showSortableHeaders,
     sortTableSequence,
     tableSort,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {formattedMessages.showFilters && (
-          <TableFilters
-            filters={[
-              {
-                isSelected: screenMetadata.completedBy,
-                key: 'completedBy',
-                label: 'Completed By',
-                options: formattedMessages.completedByUsers,
-                useInlineSelect: false,
-              },
-            ]}
-            onSelect={updateScreenMetadataSequence}
-          ></TableFilters>
-        )}
+        <TableFilters
+          filters={[
+            {
+              isSelected: screenMetadata.completedBy,
+              key: 'completedBy',
+              label: 'Completed By',
+              options: formattedMessages.completedByUsers,
+              useInlineSelect: false,
+            },
+          ]}
+          onSelect={updateScreenMetadataSequence}
+        ></TableFilters>
 
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.DESCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="docketNumber"
-                    title="Docket No."
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan={2}>
-                  Docket No.
-                </th>
-              )}
-              {showSortableHeaders && (
-                <th className="medium">
-                  <SortableColumn
-                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="completedAt"
-                    title="Completed"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th className="medium">Completed</th>}
-              {showSortableHeaders && (
-                <th>
-                  <SortableColumn
-                    ascText={constants.ALPHABETICALLY_ASCENDING}
-                    currentlySortedField={tableSort.sortField}
-                    currentlySortedOrder={tableSort.sortOrder}
-                    defaultSortOrder={constants.ASCENDING}
-                    descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={formattedMessages.hasMessages}
-                    sortField="subject"
-                    title="Last Message"
-                    onClickSequence={sortTableSequence}
-                  />
-                </th>
-              )}
-              {!showSortableHeaders && <th>Message</th>}
+              <th aria-label="Docket Number" className="small" colSpan={2}>
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-docket-number-header-button"
+                  defaultSortOrder={constants.DESCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="docketNumber"
+                  title="Docket No."
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th className="medium">
+                <SortableColumn
+                  ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-completed-at-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.CHRONOLOGICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="completedAt"
+                  title="Completed"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-subject-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="subject"
+                  title="Last Message"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
               <th>Comment</th>
               <th>Completed By</th>
               <th>Section</th>
@@ -129,14 +115,24 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
             showLeadCaseIcon={message.isLeadCase}
           />
         </td>
-        <td className="message-queue-row small" colSpan={2}>
+        <td
+          className="message-queue-row small"
+          colSpan={2}
+          data-testid="section-message-completed-docket-number-cell"
+        >
           {message.docketNumberWithSuffix}
         </td>
-        <td className="message-queue-row small">
+        <td
+          className="message-queue-row small"
+          data-testid="section-message-completed-completed-at-cell"
+        >
           <span className="no-wrap">{message.completedAtFormatted}</span>
         </td>
         <td className="message-queue-row">
-          <div className="message-document-title">
+          <div
+            className="message-document-title"
+            data-testid="section-message-completed-subject-cell"
+          >
             <Button link className="padding-0" href={message.messageDetailLink}>
               {message.subject}
             </Button>

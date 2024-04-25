@@ -1,4 +1,5 @@
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getUserById } from './getUserById';
 import { updateUserRecords } from './updateUserRecords';
 
@@ -6,7 +7,7 @@ export const updatePractitionerUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: RawUser;
 }) => {
   const { userId } = user;
@@ -17,19 +18,12 @@ export const updatePractitionerUser = async ({
   });
 
   try {
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email ? user.email : user.pendingEmail,
-      })
-      .promise();
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
+      attributesToUpdate: {
+        role: user.role,
+      },
+      email: user.email ? user.email : user.pendingEmail,
+    });
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;

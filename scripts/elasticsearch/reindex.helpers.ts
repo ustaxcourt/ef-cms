@@ -1,4 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
+import { areAllReindexTasksFinished } from './check-reindex-complete';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import {
   esAliasType,
@@ -36,4 +37,16 @@ export const reindexIfNecessary = async ({
       }),
     );
   }
+};
+
+export const waitForReindexTasksToComplete = async ({
+  environmentName,
+}: {
+  environmentName: string;
+}): Promise<void> => {
+  let reindexFinished: boolean;
+  do {
+    reindexFinished = await areAllReindexTasksFinished({ environmentName });
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  } while (!reindexFinished);
 };

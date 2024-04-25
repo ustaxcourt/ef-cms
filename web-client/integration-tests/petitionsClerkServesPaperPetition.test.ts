@@ -12,7 +12,6 @@ cerebralTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
-    jest.setTimeout(40000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

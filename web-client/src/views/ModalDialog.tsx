@@ -17,6 +17,7 @@ export const ModalDialog = ({
   confirmLabel,
   confirmSequence,
   confirmTarget = '_self',
+  dataTestId = 'modal-dialog',
   disableSubmit = false,
   message,
   messageClass = 'margin-bottom-5',
@@ -37,6 +38,7 @@ export const ModalDialog = ({
   confirmLabel?: string;
   confirmSequence: any;
   confirmTarget?: string;
+  dataTestId: string;
   disableSubmit?: boolean;
   message?: string;
   preventCancelOnBlur?: boolean;
@@ -116,6 +118,7 @@ export const ModalDialog = ({
         <dialog
           open
           className="modal-screen"
+          data-testid={dataTestId}
           role="dialog"
           onClick={blurDialog}
         >
@@ -126,9 +129,16 @@ export const ModalDialog = ({
           >
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
-                <div className="mobile-lg:grid-col-9">
+                <div
+                  className="mobile-lg:grid-col-9"
+                  data-testid="modal-dialog-header"
+                >
                   {title && (
-                    <h3 className="modal-header__title" tabIndex={-1}>
+                    <h3
+                      className="modal-header__title"
+                      data-testid="modal-header"
+                      tabIndex={-1}
+                    >
                       {title}
                     </h3>
                   )}

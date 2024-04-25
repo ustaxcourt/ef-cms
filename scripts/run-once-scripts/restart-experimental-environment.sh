@@ -39,12 +39,12 @@ npm run deploy:api "${ENV}"
 ./web-api/setup-elasticsearch-aliases.sh "${ENV}"
 
 # Indexing data
-npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
+npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DESTINATION_TABLE}"
 
 # Setting up users
-npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
+npx ts-node --transpile-only scripts/user/setup-admin.ts
 # shellcheck disable=SC1091
-. ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
+. ./scripts/user/setup-test-users.sh "${ENV}"
 
 # Setting up Judge users
 ./scripts/circleci/judge/bulk-import-judge-users.sh

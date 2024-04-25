@@ -4,6 +4,7 @@ describe('getAllFeatureFlagsInteractor', () => {
   const mockFeatureFlagKey = 'chief-judge-name';
   beforeEach(() => {
     jest.resetModules();
+    applicationContext.environment = { stage: 'prod' };
   });
 
   it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {

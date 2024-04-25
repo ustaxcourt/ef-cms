@@ -66,7 +66,10 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "cognito-idp:AdminCreateUser",
                 "cognito-idp:AdminDisableUser",
                 "cognito-idp:AdminGetUser",
+                "cognito-idp:DescribeUserPool",
                 "cognito-idp:AdminUpdateUserAttributes",
+                "cognito-idp:AdminConfirmSignUp",
+                "cognito-idp:AdminSetUserPassword",
                 "cognito-idp:ListUserPoolClients",
                 "cognito-idp:ListUsers"
             ],
@@ -109,7 +112,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "dynamodb:GetItem",
                 "dynamodb:GetRecords",
                 "dynamodb:GetShardIterator",
-                "dynamodb:ListShards",
                 "dynamodb:ListStreams",
                 "dynamodb:PutItem",
                 "dynamodb:Query",
@@ -124,6 +126,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
         {
             "Action": [
                 "dynamodb:GetItem",
+                "dynamodb:Query",
                 "dynamodb:DescribeTable",
                 "dynamodb:UpdateItem",
                 "dynamodb:PutItem"
@@ -133,7 +136,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "ses:SendBulkTemplatedEmail"
+                "ses:SendBulkTemplatedEmail",
+                "ses:SendEmail"
             ],
             "Resource": [
                 "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
@@ -184,15 +188,18 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:ListQueueTags",
+                "sqs:CreateQueue",
+                "sqs:SetQueueAttributes",
                 "sqs:SendMessage",
-                "sqs:SendMessageBatch",
                 "sqs:ReceiveMessage",
-                "sqs:GetQueueAttributes"
+                "sqs:DeleteMessage"
             ],
             "Resource": [
                 "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
-                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"],
+                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"
+            ],
             "Effect": "Allow"
         }
     ]

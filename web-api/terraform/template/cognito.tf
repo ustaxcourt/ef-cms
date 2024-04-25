@@ -1,41 +1,32 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "efcms-${var.environment}"
 
-  auto_verified_attributes = ["email"]
-
   username_attributes = ["email"]
 
   verification_message_template {
-    default_email_option  = "CONFIRM_WITH_LINK"
-    email_message_by_link = <<EMAILMESSAGE
-    <body>
-      <p>Welcome to DAWSON!</p>
+    default_email_option = "CONFIRM_WITH_CODE"
+    email_message        = <<EMAILMESSAGE
+    <div>
+    <div>
+      Hello DAWSON user, 
+    </div>
+    <div style="margin-top: 20px;">
+    You have requested a password reset. Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
+    </div>
+    <div style="margin-top: 20px;">
+      <span style="font-weight: bold; font-size: 20px;">{####}</span>
+    </div>
+    <div style="margin-top: 20px;">
+      <span>If you did not request to reset your password, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+    </div>
 
-      <p>Your account with DAWSON has been created. Use the button below to verify your email address.</p>
-
-      <span>{##<button style="font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
-          font-size: 1.06rem;
-          line-height: .9;
-          color: #fff;
-          background-color: #005ea2;
-          border: 0;
-          border-radius: 0.25rem;
-          cursor: pointer;
-          display: inline-block;
-          margin-right: 0.5rem;
-          padding: .75rem 2.25rem;
-          text-align: center;
-          text-decoration: none;">Verify Email</button>##}
-      </span>
-
-      <p>If you did not create an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</p>
-
-      <hr>
-
-      <p>This is an automated email. We are unable to respond to any messages to this email address.</p>
-    </body>
+    <hr style="border-top:1px solid #000000;">
+    <div style="margin-top: 20px;">
+      <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
+    </div>
+  </div>
   EMAILMESSAGE
-    email_subject_by_link = "U.S. Tax Court DAWSON Account Verification"
+    email_subject        = "U.S. Tax Court DAWSON: Password Reset Code"
   }
 
   account_recovery_setting {
@@ -49,8 +40,50 @@ resource "aws_cognito_user_pool" "pool" {
     allow_admin_create_user_only = false
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
-      email_subject = "An account has been set up for you with the U.S. Tax Court"
-      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> <span style=\"font-family: 'Courier New', Courier, monospace;\">{####}</span><br /><br /><b>This temporary password is valid for 7 days. </b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a><br /><br />NOTE:<br />1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.<br />2. Please copy and paste the temporary password versus trying to retype it.<br />3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.<br />4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password. <br /><br />"
+      email_subject = "U.S. Tax Court DAWSON: Account Created"
+      email_message = <<EMAILMESSAGE
+      <div>
+        <div>
+          Hello DAWSON user, 
+        </div>
+        <div style="margin-top: 20px;">
+          Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
+        </div>
+        <div style="margin-top: 20px;">
+          Please verify that your contact information is correct in the system, and make any required changes.
+        </div>
+        <div style="margin-top: 20px;"> 
+          <span style="font-weight: bold;">Your username: </span>{username}
+        </div>
+        <div> 
+          <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
+        </div>
+        <div style="margin-top: 20px;">
+          <span style="font-weight: bold;">This temporary password is valid for 7 days.</span> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>
+        </div>
+        <div style="margin-top: 20px;">NOTE:</div>
+        <div>
+          1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.
+        </div>
+        <div>
+          2. Please copy and paste the temporary password versus trying to retype it.
+        </div>
+        <div>
+          3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.
+        </div>
+        <div>
+          4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password.
+        </div>
+
+        <div style="margin-top: 20px;">
+          <span>If you did not request an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+        </div>
+        <hr style="border-top:1px solid #000000;">
+        <div style="margin-top: 20px;">
+          <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
+        </div>
+      </div>
+    EMAILMESSAGE
     }
   }
 
@@ -120,17 +153,19 @@ resource "aws_cognito_user_pool" "pool" {
 
   lifecycle {
     prevent_destroy = true
-
-    # the lambda_config isn't specified in this block because we only want to change its configuration during the color-change step of a deployment
-    # but we also don't want the lambda_config to be deleted, so we need to ignore its configuration
-    ignore_changes = [lambda_config]
   }
+}
+
+# TODO 10007 Cleanup: Remove this block when we no longer need to handle users who bookmarked the legacy login URL
+resource "aws_cognito_user_pool_domain" "main" {
+  domain       = "auth-${var.environment}-${var.cognito_suffix}"
+  user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 resource "aws_cognito_user_pool_client" "client" {
   name = "client"
 
-  explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
+  explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
   allowed_oauth_flows_user_pool_client = true
@@ -144,17 +179,15 @@ resource "aws_cognito_user_pool_client" "client" {
   access_token_validity  = 1
   id_token_validity      = 1
 
-  callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
-  ]
-
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.pool.id
 
+  # WARNING: Do NOT add custom:userId or custom:role to this list. Adding those
+  # attributes to this list will allow anyone with a valid access/id token to 
+  # update their role or userId directly in Cognito.
   write_attributes = [
     "address",
     "birthdate",
@@ -174,11 +207,6 @@ resource "aws_cognito_user_pool_client" "client" {
     "website",
     "zoneinfo",
   ]
-}
-
-resource "aws_cognito_user_pool_domain" "main" {
-  domain       = "auth-${var.environment}-${var.cognito_suffix}"
-  user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 resource "aws_cognito_user_pool" "irs_pool" {
@@ -204,8 +232,50 @@ resource "aws_cognito_user_pool" "irs_pool" {
     allow_admin_create_user_only = true
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
-      email_subject = "U.S. Tax Court account creation"
-      email_message = "An account has been created for you on the <a href='https://app.${var.dns_domain}/'>U.S. Tax Court site</a>. Your username is {username} and temporary password is {####}. Please log in and change your password."
+      email_subject = "U.S. Tax Court DAWSON: Account Created"
+      email_message = <<EMAILMESSAGE
+      <div>
+        <div>
+          Hello DAWSON user, 
+        </div>
+        <div style="margin-top: 20px;">
+          Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
+        </div>
+        <div style="margin-top: 20px;">
+          Please verify that your contact information is correct in the system, and make any required changes.
+        </div>
+        <div style="margin-top: 20px;"> 
+          <span style="font-weight: bold;">Your username: </span>{username}
+        </div>
+        <div> 
+          <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
+        </div>
+        <div style="margin-top: 20px;">
+          <span style="font-weight: bold;">This temporary password is valid for 7 days.</span> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>
+        </div>
+        <div style="margin-top: 20px;">NOTE:</div>
+        <div>
+          1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.
+        </div>
+        <div>
+          2. Please copy and paste the temporary password versus trying to retype it.
+        </div>
+        <div>
+          3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.
+        </div>
+        <div>
+          4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password.
+        </div>
+
+        <div style="margin-top: 20px;">
+          <span>If you did not request an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+        </div>
+        <hr style="border-top:1px solid #000000;">
+        <div style="margin-top: 20px;">
+          <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
+        </div>
+      </div>
+    EMAILMESSAGE      
     }
   }
 
@@ -281,11 +351,6 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   refresh_token_validity = 30 # irs app expects 30 days
   access_token_validity  = 1
   id_token_validity      = 1
-
-  callback_urls = [
-    "http://localhost:1234/log-in",
-    "https://app.${var.dns_domain}/log-in",
-  ]
 
   allowed_oauth_flows          = ["code", "implicit"]
   allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
