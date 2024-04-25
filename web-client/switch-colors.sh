@@ -29,7 +29,7 @@ fi
 UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${DEPLOYING_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
 aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1
 
-npx ts-node --transpile-only ./web-client/switch-public-ui-colors.js
+npx ts-node --transpile-only ./web-client/switch-public-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-api-colors.ts
 npx ts-node --transpile-only ./web-client/switch-public-api-colors.ts
