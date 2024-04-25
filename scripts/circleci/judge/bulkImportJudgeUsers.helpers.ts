@@ -1,7 +1,4 @@
-import {
-  gatherRecords,
-  getCsvOptions,
-} from '../../../shared/src/tools/helpers';
+import { gatherRecords, getCsvOptions } from '@shared/tools/helpers';
 import {
   getServices,
   getToken,
@@ -20,9 +17,19 @@ export const CSV_HEADERS = [
   'isSeniorJudge',
 ];
 
-export const init = async (csvFile, outputMap) => {
+type judgeUser = {
+  email: string;
+  isSeniorJudge: string;
+  judgeFullName: string;
+  judgeTitle: string;
+  name: string;
+  role: string;
+  section: string;
+};
+
+export const init = async (csvFile: string, outputMap: {}) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
-  let output = [];
+  let output: judgeUser[] = [];
 
   const token = await getToken();
   const data = readCsvFile(csvFile);
@@ -33,12 +40,12 @@ export const init = async (csvFile, outputMap) => {
     stream.on('end', async () => {
       for (let row of output) {
         try {
-          let endpoint;
+          let endpoint: string;
 
           if (process.env.ENV === 'local') {
             endpoint = 'http://localhost:4000/users';
           } else {
-            const services = await getServices();
+            const services = await getServices({});
             endpoint = `${
               services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
             }/users`;
