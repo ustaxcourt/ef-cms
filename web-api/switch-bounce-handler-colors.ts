@@ -12,16 +12,11 @@ const { AWS_ACCOUNT_ID, CURRENT_COLOR, DEPLOYING_COLOR, ENV } = process.env;
 const SNS = new SNSClient({ region: 'us-east-1' });
 const TopicArn = `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`;
 
-/**
- * getCurrentColorSubscription
- *
- * Returns the ARN of the current color's lambda subscription, if one exists. Otherwise it
- * returns undefined
- *
- * @param {string} Token A string to use if we do not find what we are looking for and there are more results
- * @returns {Promise<string|undefined>} which resolves to the ARN of the current color's Lambda subscription, if found
- */
-const getCurrentColorSubscription = async Token => {
+const getCurrentColorSubscription = async ({
+  Token,
+}: {
+  Token?: string;
+}): Promise<string | undefined> => {
   const CurrentLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`;
   const { NextToken, Subscriptions } = await SNS.send(
     new ListSubscriptionsCommand({
@@ -30,7 +25,7 @@ const getCurrentColorSubscription = async Token => {
   );
 
   // Look for a subscription that match the current color and return it
-  const foundSubscription = Subscriptions.find(
+  const foundSubscription = Subscriptions?.find(
     ({ Endpoint, Protocol, TopicArn: SubscriptionTopicArn }) =>
       Endpoint === CurrentLambda &&
       Protocol === 'lambda' &&
@@ -39,7 +34,7 @@ const getCurrentColorSubscription = async Token => {
 
   if (foundSubscription) return foundSubscription.SubscriptionArn;
 
-  if (NextToken) return getCurrentColorSubscription(NextToken);
+  if (NextToken) return getCurrentColorSubscription({ Token: NextToken });
 
   return undefined;
 };
@@ -56,7 +51,7 @@ const getCurrentColorSubscription = async Token => {
   );
 
   // find current lambda subscription and unsubscribe from topic
-  const SubscriptionArn = await getCurrentColorSubscription();
+  const SubscriptionArn = await getCurrentColorSubscription({});
   if (SubscriptionArn) {
     await SNS.send(new UnsubscribeCommand({ SubscriptionArn }));
   }
