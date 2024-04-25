@@ -1,5 +1,6 @@
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { count, search, searchAll } from './searchClient';
+import { efcmsUserIndex } from '../../../elasticsearch/efcms-user-mappings';
 import {
   emptyResults,
   mockCaseSearchResult,
@@ -311,8 +312,35 @@ describe('searchClient', () => {
 
       const result = await search({
         applicationContext,
-        searchParameters: {},
+        searchParameters: {
+          body: {
+            aggs: {
+              roles: {
+                terms: {
+                  field: 'role.S',
+                },
+              },
+            },
+            query: {
+              bool: {
+                filter: {
+                  exists: {
+                    field: 'barNumber.S',
+                  },
+                },
+                must: {
+                  term: {
+                    'admissionsStatus.S': 'Active',
+                  },
+                },
+              },
+            },
+            size: 0,
+          },
+          index: efcmsUserIndex,
+        },
       });
+
       expect(result.aggregations).toMatchObject({
         roles: {
           buckets: [
