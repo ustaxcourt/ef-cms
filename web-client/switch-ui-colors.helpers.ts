@@ -9,21 +9,11 @@ import {
   ListDistributionsCommand,
   UpdateDistributionCommand,
 } from '@aws-sdk/client-cloudfront';
-import { requireEnvVars } from '../shared/admin-tools/util';
-
-requireEnvVars([
-  'CURRENT_COLOR',
-  'DEPLOYING_COLOR',
-  'EFCMS_DOMAIN',
-  'ZONE_NAME',
-]);
-
-const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN, ZONE_NAME } = process.env;
 
 const cloudfront = new CloudFrontClient({ maxAttempts: 4 });
 const route53 = new Route53Client();
 
-const switchUiColors = async ({
+export const switchUiColors = async ({
   currentColor,
   deployingColor,
   efcmsDomain,
@@ -157,14 +147,3 @@ const switchUiColors = async ({
     );
   }
 };
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  await switchUiColors({
-    currentColor: CURRENT_COLOR!,
-    deployingColor: DEPLOYING_COLOR!,
-    efcmsDomain: EFCMS_DOMAIN!,
-    publicUi: false,
-    zoneName: ZONE_NAME!,
-  });
-})();
