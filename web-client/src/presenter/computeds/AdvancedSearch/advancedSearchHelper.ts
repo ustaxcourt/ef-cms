@@ -35,6 +35,10 @@ export const advancedSearchHelper = (
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
 
+  if (advancedSearchTab === 'practitioner') {
+    return result;
+  }
+
   if (searchResults) {
     const paginatedResults = paginationHelper(
       searchResults,

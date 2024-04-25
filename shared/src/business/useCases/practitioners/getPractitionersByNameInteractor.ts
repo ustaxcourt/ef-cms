@@ -38,7 +38,7 @@ export const getPractitionersByNameInteractor = async (
 
   const foundUsers = results.slice(0, MAX_SEARCH_RESULTS);
 
-  const formattedUsers = foundUsers.map(foundUser => ({
+  const practitioners = foundUsers.map(foundUser => ({
     admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
@@ -50,5 +50,5 @@ export const getPractitionersByNameInteractor = async (
     practitionerType: foundUser.practitionerType,
   }));
 
-  return { formattedUsers, total };
+  return { searchResults: { practitioners, total } };
 };
