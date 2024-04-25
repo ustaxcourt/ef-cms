@@ -4,11 +4,6 @@ import {
   DeleteBasePathMappingCommand,
   GetRestApisCommand,
 } from '@aws-sdk/client-api-gateway';
-import { requireEnvVars } from '../shared/admin-tools/util';
-
-requireEnvVars(['DEPLOYING_COLOR', 'EFCMS_DOMAIN', 'ENV']);
-
-const { DEPLOYING_COLOR, EFCMS_DOMAIN, ENV } = process.env;
 
 export const switchApiColors = async ({
   deployingColor,
@@ -66,13 +61,3 @@ export const switchApiColors = async ({
     }
   }
 };
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  await switchApiColors({
-    deployingColor: DEPLOYING_COLOR!,
-    efcmsDomain: EFCMS_DOMAIN!,
-    environmentName: ENV!,
-    publicApi: false,
-  });
-})();

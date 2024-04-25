@@ -11,6 +11,6 @@ const { DEPLOYING_COLOR, EFCMS_DOMAIN, ENV } = process.env;
     deployingColor: DEPLOYING_COLOR!,
     efcmsDomain: EFCMS_DOMAIN!,
     environmentName: ENV!,
-    publicApi: true,
+    publicApi: false,
   });
 })();
