@@ -23,8 +23,19 @@ const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN, ZONE_NAME } = process.env;
 const cloudfront = new CloudFrontClient({ maxAttempts: 4 });
 const route53 = new Route53Client();
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
+const switchUiColors = async ({
+  currentColor,
+  deployingColor,
+  efcmsDomain,
+  publicUi,
+  zoneName,
+}: {
+  currentColor: string;
+  deployingColor: string;
+  efcmsDomain: string;
+  publicUi: boolean;
+  zoneName: string;
+}) => {
   const { DistributionList } = await cloudfront.send(
     new ListDistributionsCommand({}),
   );
@@ -34,10 +45,14 @@ const route53 = new Route53Client();
       : [];
   const updateDistributionCommands: UpdateDistributionCommand[] = [];
   let DNSName = '';
+  const generalDomainAlias = publicUi ? efcmsDomain : `app.${efcmsDomain}`;
 
+  const currentColorDomainAlias = publicUi
+    ? `${currentColor}.${efcmsDomain}`
+    : `app-${currentColor}.${efcmsDomain}`;
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases?.Items?.find(
-      alias => alias === `app-${CURRENT_COLOR}.${EFCMS_DOMAIN}`,
+      alias => alias === currentColorDomainAlias,
     ),
   );
   if (currentColorDistribution?.Id) {
@@ -48,7 +63,7 @@ const route53 = new Route53Client();
     );
     if (currentColorConfig.DistributionConfig?.Aliases) {
       currentColorConfig.DistributionConfig.Aliases.Items = [
-        `app-${CURRENT_COLOR}.${EFCMS_DOMAIN}`,
+        currentColorDomainAlias,
       ];
       currentColorConfig.DistributionConfig.Aliases.Quantity = 1;
     }
@@ -61,9 +76,12 @@ const route53 = new Route53Client();
     );
   }
 
+  const deployingColorDomainAlias = publicUi
+    ? `${deployingColor}.${efcmsDomain}`
+    : `app-${deployingColor}.${efcmsDomain}`;
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases?.Items?.find(
-      alias => alias === `app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+      alias => alias === deployingColorDomainAlias,
     ),
   );
   if (deployingColorDistribution?.Id) {
@@ -75,8 +93,8 @@ const route53 = new Route53Client();
     if (deployingColorConfig.DistributionConfig?.Aliases) {
       deployingColorConfig.DistributionConfig.Aliases.Quantity = 2;
       deployingColorConfig.DistributionConfig.Aliases.Items = [
-        `app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
-        `app.${EFCMS_DOMAIN}`,
+        deployingColorDomainAlias,
+        generalDomainAlias,
       ];
     }
     if (deployingColorDistribution.DomainName) {
@@ -103,7 +121,7 @@ const route53 = new Route53Client();
   }
 
   const zone = await route53.send(
-    new ListHostedZonesByNameCommand({ DNSName: `${ZONE_NAME}.` }),
+    new ListHostedZonesByNameCommand({ DNSName: `${zoneName}.` }),
   );
 
   if (
@@ -127,15 +145,26 @@ const route53 = new Route53Client();
                   EvaluateTargetHealth: false,
                   HostedZoneId: 'Z2FDTNDATAQYW2', // this magic number is the zone for all cloud front distributions on AWS
                 },
-                Name: `app.${EFCMS_DOMAIN}`,
+                Name: generalDomainAlias,
                 Type: 'A',
               },
             },
           ],
-          Comment: `The UI for app.${EFCMS_DOMAIN}`,
+          Comment: `The UI for ${generalDomainAlias}`,
         },
         HostedZoneId,
       }),
     );
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await switchUiColors({
+    currentColor: CURRENT_COLOR!,
+    deployingColor: DEPLOYING_COLOR!,
+    efcmsDomain: EFCMS_DOMAIN!,
+    publicUi: false,
+    zoneName: ZONE_NAME!,
+  });
 })();
