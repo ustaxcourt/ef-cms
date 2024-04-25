@@ -9,33 +9,49 @@ import { requireEnvVars } from '../shared/admin-tools/util';
 requireEnvVars(['DEPLOYING_COLOR', 'EFCMS_DOMAIN', 'ENV']);
 
 const { DEPLOYING_COLOR, EFCMS_DOMAIN, ENV } = process.env;
-const REGIONS = ['us-east-1', 'us-west-1'];
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  for (const region of REGIONS) {
-    const apigateway = new APIGatewayClient({ region });
+export const switchApiColors = async ({
+  deployingColor,
+  efcmsDomain,
+  environmentName,
+  publicApi,
+}: {
+  deployingColor: string;
+  efcmsDomain: string;
+  environmentName: string;
+  publicApi: boolean;
+}) => {
+  const regions = ['us-east-1', 'us-west-1'];
+  const apiGatewayRecordName = publicApi
+    ? `gateway_api_public_${environmentName}_${deployingColor}`
+    : `gateway_api_${environmentName}_${deployingColor}`;
+  const domainName = publicApi
+    ? `public-api.${efcmsDomain}`
+    : `api.${efcmsDomain}`;
+
+  for (const region of regions) {
+    const apiGateway = new APIGatewayClient({ region });
     const getRestApisCommand = new GetRestApisCommand({ limit: 500 });
-    const { items } = await apigateway.send(getRestApisCommand);
+    const { items } = await apiGateway.send(getRestApisCommand);
 
     const apiGatewayRecord = items?.find(
-      record => record.name === `gateway_api_${ENV}_${DEPLOYING_COLOR}`,
+      record => record.name === apiGatewayRecordName,
     );
 
     if (apiGatewayRecord && 'id' in apiGatewayRecord && apiGatewayRecord.id) {
       try {
-        const deleteBasePathMappingResult = await apigateway.send(
+        const deleteBasePathMappingResult = await apiGateway.send(
           new DeleteBasePathMappingCommand({
             basePath: '(none)',
-            domainName: `api.${EFCMS_DOMAIN}`,
+            domainName,
           }),
         );
         if (deleteBasePathMappingResult) {
-          const createBasePathMappingResult = await apigateway.send(
+          const createBasePathMappingResult = await apiGateway.send(
             new CreateBasePathMappingCommand({
-              domainName: `api.${EFCMS_DOMAIN}`,
+              domainName,
               restApiId: apiGatewayRecord.id,
-              stage: ENV,
+              stage: environmentName,
             }),
           );
           if (createBasePathMappingResult) {
@@ -49,4 +65,14 @@ const REGIONS = ['us-east-1', 'us-west-1'];
       }
     }
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  await switchApiColors({
+    deployingColor: DEPLOYING_COLOR!,
+    efcmsDomain: EFCMS_DOMAIN!,
+    environmentName: ENV!,
+    publicApi: false,
+  });
 })();
