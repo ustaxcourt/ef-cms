@@ -2,6 +2,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { count, search, searchAll } from './searchClient';
 import {
   emptyResults,
+  mockCaseSearchResult,
   mockDocketEntrySearchResult,
   mockMalformedQueryResult,
   mockMessageSearchResult,
@@ -338,8 +339,32 @@ describe('searchClient', () => {
       expect(stringifiedResults).not.toContain('case_relations');
     });
 
-    it.todo('unmarshalls the data it within each hit');
-    it.todo('includes the score');
+    it('unmarshalls the data within each hit', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockCaseSearchResult);
+
+      const result = await search({
+        applicationContext,
+        searchParameters: {},
+      });
+      expect(
+        mockCaseSearchResult.body.hits.hits[0]._source.docketNumber,
+      ).toEqual({ S: '101-23' });
+      expect(result.results[0].docketNumber).toEqual('101-23');
+    });
+
+    it('includes the score', async () => {
+      applicationContext
+        .getSearchClient()
+        .search.mockReturnValue(mockCaseSearchResult);
+
+      const result = await search({
+        applicationContext,
+        searchParameters: {},
+      });
+      expect(result.results[0]._score).toBeDefined();
+    });
 
     it('search should format and return the list of results when the results are docket entry entities', async () => {
       applicationContext
