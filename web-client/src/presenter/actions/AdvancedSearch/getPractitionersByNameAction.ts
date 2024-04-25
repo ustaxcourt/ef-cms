@@ -15,11 +15,11 @@ export const getPractitionersByNameAction = async ({
     state.advancedSearchForm.practitionerSearchByName,
   );
 
-  const { formattedUsers: practitioners, total } = await applicationContext
+  const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
     });
 
-  return { searchResults: practitioners, total };
+  return { searchResults };
 };

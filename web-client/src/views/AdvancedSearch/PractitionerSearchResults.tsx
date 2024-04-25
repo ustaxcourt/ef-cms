@@ -18,8 +18,6 @@ export const PractitionerSearchResults = connect(
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
 
-    console.log('helper', practitionerSearchHelper);
-
     return (
       <>
         {practitionerSearchHelper.showSearchResults && (

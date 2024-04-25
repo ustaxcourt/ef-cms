@@ -65,8 +65,7 @@ export const practitionerSearchHelper = (
   };
 
   if (searchResults) {
-    console.log('search results:', searchResults);
-    const paginatedResults = searchResults;
+    const paginatedResults = searchResults.practitioners;
 
     paginatedResults.formattedSearchResults = paginatedResults.map(
       searchResult =>
@@ -90,8 +89,8 @@ export const practitionerSearchHelper = (
     }
 
     Object.assign(result, {
-      ...paginatedResults,
-      numberOfResults: 1,
+      formattedSearchResults: paginatedResults,
+      numberOfResults: searchResults.total,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
       showPractitionerSearch: result.showPractitionerSearch,
