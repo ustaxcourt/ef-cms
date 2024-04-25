@@ -1,20 +1,16 @@
-const AWS = require('aws-sdk');
+import {
+  ListSubscriptionsCommand,
+  SNSClient,
+  SubscribeCommand,
+  UnsubscribeCommand,
+} from '@aws-sdk/client-sns';
+import { requireEnvVars } from '../shared/admin-tools/util';
 
-const check = (value, message) => {
-  if (!value) {
-    console.log(message);
-    process.exit(1);
-  }
-};
+requireEnvVars(['AWS_ACCOUNT_ID', 'CURRENT_COLOR', 'DEPLOYING_COLOR', 'ENV']);
 
 const { AWS_ACCOUNT_ID, CURRENT_COLOR, DEPLOYING_COLOR, ENV } = process.env;
-const SNS = new AWS.SNS({ region: 'us-east-1' });
+const SNS = new SNSClient({ region: 'us-east-1' });
 const TopicArn = `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`;
-
-check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
-check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
-check(ENV, 'You must have ENV set in your environment');
-check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
 
 /**
  * getCurrentColorSubscription
@@ -27,9 +23,11 @@ check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
  */
 const getCurrentColorSubscription = async Token => {
   const CurrentLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`;
-  const { NextToken, Subscriptions } = await SNS.listSubscriptions({
-    NextToken: Token,
-  }).promise();
+  const { NextToken, Subscriptions } = await SNS.send(
+    new ListSubscriptionsCommand({
+      NextToken: Token,
+    }),
+  );
 
   // Look for a subscription that match the current color and return it
   const foundSubscription = Subscriptions.find(
@@ -41,24 +39,25 @@ const getCurrentColorSubscription = async Token => {
 
   if (foundSubscription) return foundSubscription.SubscriptionArn;
 
-  if (NextToken) {
-    return getCurrentColorSubscription(NextToken);
-  }
+  if (NextToken) return getCurrentColorSubscription(NextToken);
+
+  return undefined;
 };
 
-const run = async () => {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   // subscribe deploying lambda to topic
-  await SNS.subscribe({
-    Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`,
-    Protocol: 'lambda',
-    TopicArn,
-  }).promise();
+  await SNS.send(
+    new SubscribeCommand({
+      Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`,
+      Protocol: 'lambda',
+      TopicArn,
+    }),
+  );
 
   // find current lambda subscription and unsubscribe from topic
   const SubscriptionArn = await getCurrentColorSubscription();
   if (SubscriptionArn) {
-    await SNS.unsubscribe({ SubscriptionArn }).promise();
+    await SNS.send(new UnsubscribeCommand({ SubscriptionArn }));
   }
-};
-
-run();
+})();
