@@ -45,9 +45,10 @@ export const PractitionerSearchByName = connect(
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
+                    // revert this value
                     value={
                       advancedSearchForm.practitionerSearchByName
-                        .practitionerName || ''
+                        ?.practitionerName || ''
                     }
                     onBlur={() => {
                       validatePractitionerSearchByNameFormSequence();

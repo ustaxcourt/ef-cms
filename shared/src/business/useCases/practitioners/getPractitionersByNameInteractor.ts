@@ -29,14 +29,16 @@ export const getPractitionersByNameInteractor = async (
     throw new Error('Name must be provided to search');
   }
 
-  const foundUsers = (
-    await applicationContext.getPersistenceGateway().getPractitionersByName({
+  const { results, total } = await applicationContext
+    .getPersistenceGateway()
+    .getPractitionersByName({
       applicationContext,
       name,
-    })
-  ).slice(0, MAX_SEARCH_RESULTS);
+    });
 
-  return foundUsers.map(foundUser => ({
+  const foundUsers = results.slice(0, MAX_SEARCH_RESULTS);
+
+  const formattedUsers = foundUsers.map(foundUser => ({
     admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
@@ -47,4 +49,6 @@ export const getPractitionersByNameInteractor = async (
     practiceType: foundUser.practiceType,
     practitionerType: foundUser.practitionerType,
   }));
+
+  return { formattedUsers, total };
 };

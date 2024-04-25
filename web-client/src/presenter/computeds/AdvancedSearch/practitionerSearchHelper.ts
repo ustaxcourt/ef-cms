@@ -1,6 +1,10 @@
+import {
+  COUNTRY_TYPES,
+  PRACTITIONER_SEARCH_PAGE_SIZE,
+  US_STATES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '../../../applicationContext';
 import { Get } from 'cerebral';
-import { US_STATES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { compareStrings } from '../../../../../shared/src/business/utilities/sortFunctions';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -16,6 +20,8 @@ export type PractitionerSearchResultType = {
   state?: string;
   stateFullName?: string;
 };
+
+// const PAGE_SIZE_OVERRIDE = 2;
 
 export const formatPractitionerSearchResultRecord = (
   result,
@@ -42,7 +48,7 @@ export const formatPractitionerSearchResultRecord = (
   return result;
 };
 
-export const practitionerSearchResultHelper = (
+export const practitionerSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
@@ -51,7 +57,7 @@ export const practitionerSearchResultHelper = (
     state.advancedSearchForm.caseSearchByName.countryType,
   );
   const searchResults = get(state.searchResults['practitioner']);
-  const currentPage = get(state.advancedSearchForm.currentPage);
+  // const currentPage = get(state.advancedSearchForm.currentPage);
 
   const result = {
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
@@ -59,18 +65,15 @@ export const practitionerSearchResultHelper = (
   };
 
   if (searchResults) {
-    const paginatedResults = paginationHelper(
-      searchResults,
-      currentPage,
-      CASE_SEARCH_PAGE_SIZE,
-    );
+    console.log('search results:', searchResults);
+    const paginatedResults = searchResults;
 
-    paginatedResults.formattedSearchResults =
-      paginatedResults.searchResults.map(searchResult =>
+    paginatedResults.formattedSearchResults = paginatedResults.map(
+      searchResult =>
         formatPractitionerSearchResultRecord(searchResult, {
           applicationContext,
         }),
-      );
+    );
 
     if (paginatedResults.formattedSearchResults!.length > 1) {
       paginatedResults.formattedSearchResults!.sort(
@@ -86,7 +89,14 @@ export const practitionerSearchResultHelper = (
       );
     }
 
-    Object.assign(result, { ...paginatedResults });
-    return result;
+    Object.assign(result, {
+      ...paginatedResults,
+      numberOfResults: 1,
+      pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
+      showNoMatches: false,
+      showPractitionerSearch: result.showPractitionerSearch,
+      showSearchResults: true,
+    });
   }
+  return result;
 };

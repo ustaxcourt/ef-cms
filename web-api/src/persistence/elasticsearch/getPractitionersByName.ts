@@ -1,5 +1,5 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { search } from './searchClient';
 
 /**
@@ -37,15 +37,21 @@ export const getPractitionersByName = async ({ applicationContext, name }) => {
           ],
         },
       },
-      size: MAX_SEARCH_CLIENT_RESULTS,
     },
     index: 'efcms-user',
+    size: PRACTITIONER_SEARCH_PAGE_SIZE,
+    track_total_hits: true,
   };
 
-  const { results } = await search({
+  // add lastCaseId extraction and pass it back
+
+  const { results, total } = await search({
     applicationContext,
     searchParameters,
   });
 
-  return results;
+  console.log('results', results);
+  console.log('total', total);
+
+  return { results, total };
 };
