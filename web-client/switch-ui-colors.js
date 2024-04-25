@@ -1,28 +1,33 @@
-const AWS = require('aws-sdk');
+import {
+  ChangeResourceRecordSetsCommand,
+  ListHostedZonesByNameCommand,
+  Route53Client,
+} from '@aws-sdk/client-route-53';
+import {
+  CloudFrontClient,
+  GetDistributionConfigCommand,
+  ListDistributionsCommand,
+  UpdateDistributionCommand,
+} from '@aws-sdk/client-cloudfront';
+import { requireEnvVars } from '../shared/admin-tools/util';
 
-const check = (value, message) => {
-  if (!value) {
-    console.log(message);
-    process.exit(1);
-  }
-};
+requireEnvVars([
+  'CURRENT_COLOR',
+  'DEPLOYING_COLOR',
+  'EFCMS_DOMAIN',
+  'ZONE_NAME',
+]);
 
-const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN, ENV, ZONE_NAME } =
-  process.env;
+const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN, ZONE_NAME } = process.env;
 
-check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
-check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
-check(EFCMS_DOMAIN, 'You must have EFCMS_DOMAIN set in your environment');
-check(ZONE_NAME, 'You must have ZONE_NAME set in your environment');
-check(ENV, 'You must have ENV set in your environment');
+const cloudfront = new CloudFrontClient({ maxRetries: 3 });
+const route53 = new Route53Client();
 
-const cloudfront = new AWS.CloudFront({ maxRetries: 3 });
-const route53 = new AWS.Route53();
-
-const run = async () => {
-  const { Items: distributions } = await cloudfront
-    .listDistributions({})
-    .promise();
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  const { Items: distributions } = await cloudfront.send(
+    new ListDistributionsCommand({}),
+  );
 
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
@@ -36,17 +41,17 @@ const run = async () => {
     ),
   );
 
-  const currentColorConfig = await cloudfront
-    .getDistributionConfig({
+  const currentColorConfig = await cloudfront.send(
+    new GetDistributionConfigCommand({
       Id: currentColorDistribution.Id,
-    })
-    .promise();
+    }),
+  );
 
-  const deployingColorConfig = await cloudfront
-    .getDistributionConfig({
+  const deployingColorConfig = await cloudfront.send(
+    new GetDistributionConfigCommand({
       Id: deployingColorDistribution.Id,
-    })
-    .promise();
+    }),
+  );
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
     `app-${CURRENT_COLOR}.${EFCMS_DOMAIN}`,
@@ -59,42 +64,42 @@ const run = async () => {
     `app.${EFCMS_DOMAIN}`,
   ];
 
-  await cloudfront
-    .updateDistribution({
+  await cloudfront.send(
+    new UpdateDistributionCommand({
       DistributionConfig: currentColorConfig.DistributionConfig,
       Id: currentColorDistribution.Id,
       IfMatch: currentColorConfig.ETag,
-    })
-    .promise();
+    }),
+  );
   try {
-    await cloudfront
-      .updateDistribution({
+    await cloudfront.send(
+      new UpdateDistributionCommand({
         DistributionConfig: deployingColorConfig.DistributionConfig,
         Id: deployingColorDistribution.Id,
         IfMatch: deployingColorConfig.ETag,
-      })
-      .promise();
+      }),
+    );
   } catch (e) {
     // Need to retry after one minute as throttling occurs after the previous update request.
     setTimeout(async () => {
-      await cloudfront
-        .updateDistribution({
+      await cloudfront.send(
+        new UpdateDistributionCommand({
           DistributionConfig: deployingColorConfig.DistributionConfig,
           Id: deployingColorDistribution.Id,
           IfMatch: deployingColorConfig.ETag,
-        })
-        .promise();
+        }),
+      );
     }, 60000);
   }
 
-  const zone = await route53
-    .listHostedZonesByName({ DNSName: `${ZONE_NAME}.` })
-    .promise();
+  const zone = await route53.send(
+    new ListHostedZonesByNameCommand({ DNSName: `${ZONE_NAME}.` }),
+  );
 
   const zoneId = zone.HostedZones[0].Id;
 
-  await route53
-    .changeResourceRecordSets({
+  await route53.send(
+    new ChangeResourceRecordSetsCommand({
       ChangeBatch: {
         Changes: [
           {
@@ -113,8 +118,6 @@ const run = async () => {
         Comment: `The UI for app.${EFCMS_DOMAIN}`,
       },
       HostedZoneId: zoneId,
-    })
-    .promise();
-};
-
-run();
+    }),
+  );
+})();
