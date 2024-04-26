@@ -88,7 +88,7 @@ export const migrateRecords = async (
   },
 ) => {
   for (let { key, script } of migrationsToRun) {
-    if (ranMigrations && !ranMigrations[key]) {
+    if (!ranMigrations || !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, applicationContext);
     }
@@ -119,7 +119,6 @@ export const processItems = async (
     applicationContext.logger.error('Error migrating records', err);
     throw err;
   }
-
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let aChunk of chunks) {
     const promises: Promise<string | PutCommandOutput>[] = [];
