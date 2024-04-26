@@ -26,13 +26,13 @@ describe('Practitioner', () => {
       state: 'IL',
     },
     email: 'test.practitioner@example.com',
-    employer: 'Private',
     entityName: 'Practitioner',
     firmName: 'GW Law Offices',
     firstName: 'Test',
     lastName: 'Practitioner',
     name: 'Test Practitioner',
     originalBarState: 'IL',
+    practiceType: 'Private',
     practitionerNotes: '',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
@@ -71,10 +71,10 @@ describe('Practitioner', () => {
     expect(user.isValid()).toBeFalsy();
   });
 
-  it('creates an invalid Practitioner with invalid employer option', () => {
+  it('creates an invalid Practitioner with invalid practiceType option', () => {
     const user = new Practitioner({
       ...mockPractitioner,
-      employer: 'Something else',
+      practiceType: 'Something else',
     });
 
     expect(user.isValid()).toBeFalsy();
@@ -101,7 +101,7 @@ describe('Practitioner', () => {
   it('should fail validation when role is "inactivePractitioner" and admissionsStatus is Active', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
-      employer: 'IRS',
+      practiceType: 'IRS',
       role: ROLES.inactivePractitioner,
     });
 
@@ -128,37 +128,37 @@ describe('Practitioner', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('should set the role to "irsPractitioner" when employer is "IRS" and admissionsStatus is Active', () => {
+  it('should set the role to "irsPractitioner" when practiceType is "IRS" and admissionsStatus is Active', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
-      employer: 'IRS',
+      practiceType: 'IRS',
     });
 
     expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
-  it('should set the role to "irsPractitioner" when employer is "DOJ" and admissionsStatus is Active', () => {
+  it('should set the role to "irsPractitioner" when practiceType is "DOJ" and admissionsStatus is Active', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
-      employer: 'DOJ',
+      practiceType: 'DOJ',
     });
 
     expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
-  it('should set the role to "privatePractitioner" when employer is "Private" and admissionsStatus is Active', () => {
+  it('should set the role to "privatePractitioner" when practiceType is "Private" and admissionsStatus is Active', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
-      employer: 'Private',
+      practiceType: 'Private',
     });
 
     expect(user.role).toEqual(ROLES.privatePractitioner);
   });
 
-  it('should set the role to "inactivePractitioner" when employer is "Private" and admissionsStatus is Inactive', () => {
+  it('should set the role to "inactivePractitioner" when practiceType is "Private" and admissionsStatus is Inactive', () => {
     const user = new Practitioner({
       admissionsStatus: 'Inactive',
-      employer: 'Private',
+      practiceType: 'Private',
     });
 
     expect(user.role).toEqual(ROLES.inactivePractitioner);

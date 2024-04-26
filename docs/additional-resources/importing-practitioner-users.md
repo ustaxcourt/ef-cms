@@ -21,6 +21,6 @@ Notes:
 5. The `userId` and `section` are programmatically set. `section` is set based on the role, `userId` is auto-generated
 
 Fields that are required:
-admissionsDate, admissionsStatus, barNumber, birthYear, employer, firstName, lastName, originalBarState, practitionerType
+admissionsDate, admissionsStatus, barNumber, birthYear, practiceType, firstName, lastName, originalBarState, practitionerType
 
 
