@@ -58,19 +58,29 @@ export const lambdaWrapper = (
     const { asyncsyncid } = req.headers;
 
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
-      const user = getUserFromAuthHeader(event);
-      const responseString = JSON.stringify(response);
-      const chunks = chunkString(responseString);
-      const totalNumberOfChunks = chunks.length;
-      for (let index = 0; index < totalNumberOfChunks; index++) {
-        await applicationContext.getNotificationGateway().saveRequestResponse({
-          applicationContext,
-          chunk: chunks[index],
-          index,
-          requestId: asyncsyncid,
-          totalNumberOfChunks,
-          userId: user.userId,
-        });
+      try {
+        const user = getUserFromAuthHeader(event);
+        const fullResponse = {
+          ...response,
+          body: response.body ? JSON.parse(response.body) : response.body,
+        };
+        const responseString = JSON.stringify(fullResponse);
+        const chunks = chunkString(responseString);
+        const totalNumberOfChunks = chunks.length;
+        for (let index = 0; index < totalNumberOfChunks; index++) {
+          await applicationContext
+            .getNotificationGateway()
+            .saveRequestResponse({
+              applicationContext,
+              chunk: chunks[index],
+              index,
+              requestId: asyncsyncid,
+              totalNumberOfChunks,
+              userId: user.userId,
+            });
+        }
+      } catch (errorAsyncSync) {
+        console.log('Error: async sync if condition', errorAsyncSync);
       }
     }
 
