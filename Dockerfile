@@ -1,6 +1,6 @@
 # Note: this is debian 11 (bullseye)
 
-FROM cypress/browsers:node-18.16.1-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
+FROM cypress/browsers:node-20.12.2-chrome-124.0.6367.60-1-ff-125.0.2-edge-124.0.2478.51-1
 
 WORKDIR /home/app
 
