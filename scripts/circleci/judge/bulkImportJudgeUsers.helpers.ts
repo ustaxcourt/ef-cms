@@ -3,10 +3,7 @@ import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createOrUpdateUser } from '../../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
-import {
-  gatherRecords,
-  getCsvOptions,
-} from '../../../shared/src/tools/helpers';
+import { gatherRecords, getCsvOptions } from '@shared/tools/helpers';
 import {
   getDestinationTableInfo,
   getUserPoolId,
