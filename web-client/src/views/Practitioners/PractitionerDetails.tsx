@@ -76,9 +76,9 @@ export const PractitionerDetails = connect(
                         {practitionerDetailHelper.birthYear}
                       </div>
                       <span className="usa-label usa-label-display">
-                        Employer
+                        Practice type
                       </span>
-                      {practitionerDetailHelper.employer}
+                      {practitionerDetailHelper.practiceType}
                     </div>
                   </div>
                 </div>
