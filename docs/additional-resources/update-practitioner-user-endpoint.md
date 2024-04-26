@@ -34,7 +34,7 @@ Payload:
       "admissionsStatus":"Active",
       "barNumber":"PRACTITIONERS_BAR_NUMBER",
       "birthYear":1970,
-      "employer":"Private",
+      "practiceType":"Private",
       "firstName":"Test",
       "lastName":"Practitioner",
       "middleName":"V.",

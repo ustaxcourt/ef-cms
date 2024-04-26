@@ -1,7 +1,7 @@
 import {
   ADMISSIONS_STATUS_OPTIONS,
   COUNTRY_TYPES,
-  EMPLOYER_OPTIONS,
+  PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
 } from '../../entities/EntityConstants';
@@ -40,12 +40,12 @@ describe('updateUserContactInformationInteractor', () => {
       admissionsDate: '2020-03-14',
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
-      employer: EMPLOYER_OPTIONS[2],
       entityName: IrsPractitioner.ENTITY_NAME,
       firmName: 'broken',
       firstName: 'Roy',
       lastName: 'Rogers',
       originalBarState: 'OR',
+      practiceType: PRACTICE_TYPE_OPTIONS[2],
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
@@ -140,11 +140,11 @@ describe('updateUserContactInformationInteractor', () => {
       admissionsDate: '2020-03-14',
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
-      employer: EMPLOYER_OPTIONS[1],
       entityName: IrsPractitioner.ENTITY_NAME,
       firstName: 'Test',
       lastName: 'IRS Practitioner',
       originalBarState: 'OR',
+      practiceType: PRACTICE_TYPE_OPTIONS[1],
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
