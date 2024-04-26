@@ -25,7 +25,7 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 const getStartOfWeek = date => {
-  return prepareDateFromString(date, null).startOf('week').toFormat('DDD');
+  return prepareDateFromString(date).startOf('week').toFormat('DDD');
 };
 
 let nextYear;
