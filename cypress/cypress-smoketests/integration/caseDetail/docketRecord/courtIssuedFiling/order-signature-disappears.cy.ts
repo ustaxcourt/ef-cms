@@ -1,10 +1,10 @@
+import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
-} from '../../helpers/auth/login-as-helpers';
-import { petitionerCreatesElectronicCase } from '../../helpers/petitioner-creates-electronic-case';
-import { petitionsClerkServesPetition } from '../../helpers/petitionsclerk-serves-petition';
-import { searchByDocketNumberInHeader } from '../../helpers/search-by-docket-number-in-header';
+} from '../../../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 describe('BUG: order signature disappears', () => {
   before(() => {
@@ -23,7 +23,7 @@ describe('BUG: order signature disappears', () => {
     loginAsDocketClerk1();
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       console.log('docketNumber', docketNumber);
-      searchByDocketNumberInHeader(docketNumber);
+      goToCase(docketNumber);
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-create-order"]').click();
       cy.get('[data-testid="event-code-select"]').select('O');
