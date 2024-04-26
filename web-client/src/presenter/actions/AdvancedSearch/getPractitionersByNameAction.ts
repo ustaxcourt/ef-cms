@@ -3,6 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getPractitionersByNameAction = async ({
   applicationContext,
   get,
+  store,
 }: ActionProps) => {
   const {
     lastKeysOfPages,
@@ -17,6 +18,13 @@ export const getPractitionersByNameAction = async ({
       name: practitionerName,
       searchAfter: lastKeysOfPages[pageNum],
     });
+
+  store.set(
+    state.advancedSearchForm.practitinoerSearchByName.lastKeysOfPages[
+      pageNum + 1
+    ],
+    searchResults.lastKey,
+  );
 
   return { searchResults };
 };

@@ -2,7 +2,7 @@ import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef, useState } from 'react';
 
 export const PractitionerSearchResults = connect(
@@ -10,10 +10,13 @@ export const PractitionerSearchResults = connect(
     PRACTITIONER_SEARCH_PAGE_SIZE:
       state.constants.PRACTITIONER_SEARCH_PAGE_SIZE,
     practitionerSearchHelper: state.practitionerSearchHelper,
+    submitPractitionerNameSearchSequence:
+      sequences.submitPractitionerNameSearchSequence,
   },
   function PractitionerSearchResults({
     PRACTITIONER_SEARCH_PAGE_SIZE,
     practitionerSearchHelper,
+    submitPractitionerNameSearchSequence,
   }) {
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
@@ -34,9 +37,10 @@ export const PractitionerSearchResults = connect(
                   pageRangeDisplayed={0}
                   onPageChange={pageChange => {
                     setActivePage(pageChange.selected);
-                    // await getCustomCaseReportSequence({
-                    //   selectedPage: pageChange.selected,
-                    // });
+
+                    submitPractitionerNameSearchSequence({
+                      selectedPage: pageChange.selected,
+                    });
                     focusPaginatorTop(paginatorTop);
                   }}
                 />
@@ -46,7 +50,7 @@ export const PractitionerSearchResults = connect(
               <span className="text-bold" id="custom-case-result-count">
                 Count: &nbsp;
               </span>
-              <span data-testid="custom-case-report-count">
+              <span data-testid="practitioner-search-result-count">
                 {formatPositiveNumber(practitionerSearchHelper.numberOfResults)}
               </span>
             </div>
