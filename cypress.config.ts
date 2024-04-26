@@ -1,18 +1,20 @@
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
-  expireUserConfirmationCode,
-  getEmailVerificationToken,
-  getNewAccountVerificationCode,
-} from './cypress/support/cognito-login';
+} from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
   deleteAllFilesInFolder,
   ensureFolderExists,
 } from './cypress/cypress-integration/support/database';
-import { unzipFile } from './cypress/helpers/unzip-file';
-import { waitForNoce } from './cypress/helpers/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
+import {
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import { unzipFile } from './cypress/helpers/file/unzip-file';
+import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
+import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
