@@ -23,7 +23,7 @@ export const defaultAdvancedSearchFormAction = ({
   if (!advancedSearchForm.practitionerSearchByName) {
     store.set(state.advancedSearchForm.practitionerSearchByName, {
       lastKeysOfPages: [''],
-      pageNum: 0,
+      total: 0,
     });
   }
   if (!advancedSearchForm.searchMode) {

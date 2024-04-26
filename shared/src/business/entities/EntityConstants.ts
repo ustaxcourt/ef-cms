@@ -1497,7 +1497,7 @@ export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for ea
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
 export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
-export const PRACTITIONER_SEARCH_PAGE_SIZE = 5;
+export const PRACTITIONER_SEARCH_PAGE_SIZE = 5; //10281: make sure this is set back to 100
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
