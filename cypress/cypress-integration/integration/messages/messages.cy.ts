@@ -1,4 +1,3 @@
-import { assertCountOfSelector, retry } from '../../../helpers/retry';
 import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import {
   createMessage,
@@ -21,6 +20,7 @@ import {
   loginAsDocketClerk,
   loginAsPetitionsClerk,
 } from '../../../helpers/authentication/login-as-helpers';
+import { retry } from '../../../helpers/retry';
 
 describe('Messages', () => {
   describe('Message filtering', () => {
@@ -637,7 +637,7 @@ function sendMessagesToCompletedTab(
     retry(() => {
       cy.reload(true);
       cy.get('[data-testid="inbox-tab-content"]').should('exist');
-      cy.get('body').then(body => {
+      return cy.get('body').then(body => {
         return (
           body.find(`a[href^="/messages/${docketNumber}/message-detail"]`)
             .length ===
