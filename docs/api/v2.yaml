@@ -98,6 +98,27 @@ paths:
           required: true
           schema:
             type: string
+          examples:
+            justDate:
+              summary: A specific date
+              value: 2022-12-25
+            withToday:
+              summary: The current date
+              value: today
+        - in: query
+          name: end
+          description: A time in HH:mm format (EST), to limit docket entries served before specified time
+          required: false
+          schema:
+            type: string
+          example: '23:00'
+        - in: query
+          name: start
+          description: A time in HH:mm format (EST), to limit docket entries served after specified time
+          required: false
+          schema:
+            type: string
+          example: '05:30'
       responses:
         '200':
           description: reconciliation report of served docket entries
