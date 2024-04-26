@@ -2,7 +2,9 @@ import fs from 'fs';
 import shuffleSeed from 'shuffle-seed';
 
 const specDir = './cypress/cypress-integration/integration';
-const files = fs.readdirSync(specDir).filter(f => f.endsWith('cy.ts'));
+const files = fs
+  .readdirSync(specDir, { recursive: true })
+  .filter(f => (f as string).endsWith('cy.ts') && !f.includes('public/'));
 
 const shuffled = shuffleSeed.shuffle(files, process.env.GITHUB_SHA);
 
