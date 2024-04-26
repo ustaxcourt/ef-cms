@@ -1,10 +1,9 @@
-import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import {
-  DeleteRequest,
-  DynamoDBClient,
-  PutRequest,
-} from '@aws-sdk/client-dynamodb';
-import { chunk } from 'lodash';
+  DeleteCommand,
+  DynamoDBDocument,
+  PutCommand,
+} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createLogger } from '@web-api/createLogger';
 import { migrateRecords as migrations } from './migration-segments';
@@ -24,61 +23,44 @@ type migrationsCallback = {
   ): Promise<any>;
 };
 
-const dynamodb = new DynamoDBClient({
-  maxAttempts: 10,
-  region: 'us-east-1',
-});
-
-const docClient = DynamoDBDocument.from(dynamodb, {
-  marshallOptions: { removeUndefinedValues: true },
-});
-
 export const processItems = async (
   applicationContext: IApplicationContext,
   {
+    docClient,
     items,
     migrateRecords,
   }: {
+    docClient: DynamoDBDocument;
     items: Record<string, any>[];
     migrateRecords: migrationsCallback;
   },
-): Promise<{ PutRequest: PutRequest }[]> => {
-  items = await migrateRecords(applicationContext, { items });
+): Promise<void> => {
+  const unmarshalledItems = items.map(item => unmarshall(item));
 
-  return items.map(item => ({
-    PutRequest: {
-      Item: unmarshall(item),
-    },
-  }));
-};
+  items = await migrateRecords(applicationContext, {
+    items: unmarshalledItems,
+  });
 
-export const getFilteredGlobalEvents = (
-  event: DynamoDBStreamEvent,
-): Record<string, any>[] | undefined => {
-  const { Records } = event;
-  return Records.filter(
-    item => item.eventName !== 'REMOVE' && !!item.dynamodb?.NewImage,
-  ).map(item => item.dynamodb!.NewImage!);
-};
+  for (const item of items) {
+    const putCommand = new PutCommand({
+      Item: item,
+      TableName: process.env.DESTINATION_TABLE,
+    });
 
-const generateDeleteRequests = (
-  event: DynamoDBStreamEvent,
-): { DeleteRequest: DeleteRequest }[] => {
-  const { Records } = event;
-  if (!Records) {
-    return [];
+    await docClient.send(putCommand);
   }
-  const removedItems = Records.filter(
-    item => item.eventName === 'REMOVE' && !!item.dynamodb?.OldImage,
-  ).map(item => item.dynamodb!.OldImage!);
-  return removedItems.map(item => ({
-    DeleteRequest: {
-      Key: { pk: item.pk.S, sk: item.sk.S } as Record<string, any>,
-    },
-  }));
 };
 
-export const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
+  const dynamodb = new DynamoDBClient({
+    maxAttempts: 10,
+    region: 'us-east-1',
+  });
+
+  const docClient = DynamoDBDocument.from(dynamodb, {
+    marshallOptions: { removeUndefinedValues: true },
+  });
+
   const applicationContext = createApplicationContext(
     {},
     createLogger({
@@ -93,30 +75,26 @@ export const handler: Handler = async (event, context) => {
     }),
   );
 
-  let requests: { DeleteRequest?: DeleteRequest; PutRequest?: PutRequest }[] =
-    [];
+  const { Records } = event;
 
-  const items = getFilteredGlobalEvents(event);
-  if (items) {
-    requests = await processItems(applicationContext, {
-      items,
-      migrateRecords: migrations,
-    });
-  }
-
-  requests = [...requests, ...generateDeleteRequests(event)];
-
-  const requestChunks = chunk(requests, 25);
-  const commands: BatchWriteCommand[] = [];
-  for (const requestChunk of requestChunks) {
-    commands.push(
-      new BatchWriteCommand({
-        RequestItems: {
-          [process.env.DESTINATION_TABLE!]: requestChunk,
+  for (const item of Records) {
+    if (item.dynamodb?.OldImage && item.eventName === 'REMOVE') {
+      const deleteCommand = new DeleteCommand({
+        Key: {
+          pk: item.dynamodb.OldImage.pk.S,
+          sk: item.dynamodb.OldImage.sk.S,
         },
-      }),
-    );
+        TableName: process.env.DESTINATION_TABLE!,
+      });
+      await docClient.send(deleteCommand);
+    } else if (item.dynamodb?.NewImage) {
+      // REMOVE events only have OldImage, not NewImage;
+      // we need to migrate this item
+      await processItems(applicationContext, {
+        docClient,
+        items: [item.dynamodb.NewImage],
+        migrateRecords: migrations,
+      });
+    }
   }
-
-  await Promise.all(commands.map(command => docClient.send(command)));
 };

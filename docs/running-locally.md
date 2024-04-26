@@ -53,8 +53,8 @@ We recommend you install a tool called [tfenv](https://github.com/tfutils/tfenv)
 
 ```bash
 brew install tfenv
-tfenv install 1.1.0
-tfenv use 1.1.0
+tfenv install 3.0.0
+tfenv use 3.0.0
 ```
 
 !> Before running terraform on your workspace, double check you are on the correct version.
@@ -66,6 +66,12 @@ Since we use circle ci in our CI/CD process, we using a husky pre-commit to vali
 ```bash
 brew install circleci
 ```
+
+#### 💻 MacOS Monterey+
+
+There is a conflict on `port 5000` with the public API and AirPlay Receiver.
+
+Disable AirPlay Receiver: System Preferences --> General --> AirDrop & Handoff--> Uncheck "AirPlay Receiver" in the list.
 
 ## Getting Running
 
@@ -80,12 +86,6 @@ All of the scripts needed to run this project should be outlined in our [package
 #### Checkout Develop
 
 Make sure you are on the `ustaxcourt/staging` branch before you try to start the services.
-
-#### 💻 MacOS Monterey+
-
-There is a conflict on `port 5000` with the public API and AirPlay Receiver.
-
-Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
 
 #### Starting the Services
 
@@ -131,12 +131,6 @@ Make sure you are on the `ustaxcourt/staging` branch before you install the npm 
 All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
 
 `npm install`
-
-#### 💻 MacOS Monterey+
-
-There is a conflict on `port 5000` with the public API and AirPlay Receiver.
-
-Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
 
 #### 🏃 Starting the Services
 

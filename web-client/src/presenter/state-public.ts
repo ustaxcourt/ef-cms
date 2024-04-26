@@ -57,11 +57,13 @@ export const baseState = {
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
+    todaysOrdersSort: '',
   },
   showPassword: false,
   todaysOpinions: [],
   todaysOrders: {
     results: [],
+    totalCount: 0,
   },
   user: {},
   validationErrors: {},
