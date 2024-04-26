@@ -21,7 +21,7 @@ export const getPractitionersByNameInteractor = async (
     throw new Error('Name must be provided to search');
   }
 
-  const { lastBarNum, results, total } = await applicationContext
+  const { lastKey, results, total } = await applicationContext
     .getPersistenceGateway()
     .getPractitionersByName({
       applicationContext,
@@ -43,5 +43,5 @@ export const getPractitionersByNameInteractor = async (
     practitionerType: foundUser.practitionerType,
   }));
 
-  return { searchResults: { lastBarNum, practitioners, total } };
+  return { searchResults: { lastKey, practitioners, total } };
 };

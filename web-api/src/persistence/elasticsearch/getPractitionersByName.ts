@@ -64,8 +64,9 @@ export const getPractitionersByName = async ({
   }: { results: PractitionerSearchResultType[]; total: number } = searchResult;
 
   // get last bar num
+  const lastKey = results[results.length - 1].barNumber;
 
   console.log('results', results);
 
-  return { lastBarNum: '1', results, total };
+  return { lastKey, results, total };
 };
