@@ -4,11 +4,12 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
+    excludeSpecPattern: 'cypress/cypress-readonly/integration/public/*.cy.ts',
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {});
     },
-    specPattern: 'cypress/cypress-readonly/integration/*.cy.ts',
+    specPattern: 'cypress/cypress-readonly/integration/**/*.cy.ts',
     supportFile: 'cypress/cypress-readonly/support/index.ts',
     testIsolation: false,
   },
