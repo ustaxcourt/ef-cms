@@ -26,17 +26,9 @@ The private application contains features specific to the **internal users** of 
 
 The private UI is also where **external** users will interact with their Case.  For example, a Petitioner may login to upload a petition, or a Private Practitioner may login to upload their first Entry of Appearance document to become associated with a Case.
 
-Our authentication is managed via AWS Cognito.  The screenshot below is an example of what a user will see when trying to access the private UI while being unauthenticated:
-
-![Dawson Cognito Login UI](./images/cognito.png)
-
-After logging into Dawson as a Petitioner, you'll be redirected to our private application where you can view your petitioner dashboard:
-
-![Petitioner Dashboard](./images/petitioner-dashboard.png)
-
 ## Logging into Dawson
 
-Our Dawson application is hosted on a variety of different environments on different domains.  Flexion maintains their own instances of the Dawson system deployed to a Flexion AWS account separate from the Tax Court.  This enables Flexion to experiment with features, security settings, AWS services, etc. without requiring special permissions on the Tax Court environments. The following links all redirect to the **public UI**, but you can click the **log in** link in the header to navigate to the private application. This will redirect you to a Cognito login.
+Our Dawson application is hosted on a variety of different environments on different domains.  Flexion maintains their own instances of the Dawson system deployed to a Flexion AWS account separate from the Tax Court.  This enables Flexion to experiment with features, security settings, AWS services, etc. without requiring special permissions on the Tax Court environments. The following links all redirect to the **public UI**, but you can click the **log in** link in the header to navigate to the private application.
 
 Here is a list of the **Tax Court**'s deployed Dawson instances:
 

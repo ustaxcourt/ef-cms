@@ -8,8 +8,8 @@ export const renewIdTokenInteractor = async (
   idToken: string;
 }> => {
   try {
-    const { idToken } = await applicationContext
-      .getPersistenceGateway()
+    const idToken = await applicationContext
+      .getUserGateway()
       .renewIdToken(applicationContext, { refreshToken });
 
     return {
