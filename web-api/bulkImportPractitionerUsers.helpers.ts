@@ -1,15 +1,36 @@
-const {
+import {
   COUNTRY_TYPES,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
   ROLES,
-} = require('../shared/src/business/entities/EntityConstants');
-const {
-  formatDateString,
+} from '@shared/business/entities/EntityConstants';
+import {
   FORMATS,
-} = require('../shared/src/business/utilities/DateHandler');
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
-const formatRecord = record => {
-  const returnData = {};
+export const formatRecord = record => {
+  const returnData: RawPractitioner = {
+    additionalPhone: record.additionalPhone,
+    admissionsDate: formatDateString(record.admissionsDate, FORMATS.YYYYMMDD),
+    admissionsStatus: record.admissionsStatus,
+    barNumber: record.barNumber,
+    birthYear: '',
+    email: record.email,
+    employer: 'Private',
+    entityName: '',
+    firmName: record.firmName,
+    firstName: record.firstName,
+    lastName: record.lastName,
+    middleName: record.middleName,
+    name: '',
+    originalBarState: record.originalBarState || 'N/A',
+    practitionerType: record.practitionerType,
+    role: ROLES.privatePractitioner,
+    serviceIndicator: 'Electronic',
+    suffix: record.suffix,
+    userId: '',
+  };
 
   Object.keys(record).forEach(key => {
     if (record[key] === '') {
@@ -17,18 +38,9 @@ const formatRecord = record => {
     }
   });
 
-  returnData.firstName = record.firstName;
-  returnData.middleName = record.middleName;
-  returnData.lastName = record.lastName;
-  returnData.suffix = record.suffix;
-
-  returnData.admissionsDate = formatDateString(
-    record.admissionsDate,
-    FORMATS.YYYYMMDD,
-  );
-
-  returnData.birthYear =
-    parseInt(record.birthYear) || DEFAULT_PRACTITIONER_BIRTH_YEAR;
+  returnData.birthYear = record.birthYear
+    ? String(record.birthYear)
+    : String(DEFAULT_PRACTITIONER_BIRTH_YEAR);
 
   if (record.isIrsEmployee === 'Y') {
     returnData.employer = 'IRS';
@@ -36,25 +48,16 @@ const formatRecord = record => {
   } else if (record.isDojEmployee === 'Y') {
     returnData.employer = 'DOJ';
     returnData.role = ROLES.irsPractitioner;
-  } else {
-    returnData.employer = 'Private';
-    returnData.role = ROLES.privatePractitioner;
   }
-
-  returnData.additionalPhone = record.additionalPhone;
-  returnData.admissionsStatus = record.admissionsStatus;
-  returnData.barNumber = record.barNumber;
-  returnData.email = record.email;
-  returnData.firmName = record.firmName;
-  returnData.originalBarState = record.originalBarState || 'N/A';
-  returnData.practitionerType = record.practitionerType;
 
   returnData.contact = {
     address1: record['contact/address1'],
     address2: record['contact/address2'],
     city: record['contact/city'],
+    country: '',
     countryType: record['contact/countryType'],
     phone: record['contact/phone'],
+    postalCode: '',
     state: record['contact/state'],
   };
 
@@ -70,8 +73,4 @@ const formatRecord = record => {
   }
 
   return returnData;
-};
-
-module.exports = {
-  formatRecord,
 };
