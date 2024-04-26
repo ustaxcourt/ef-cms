@@ -10,6 +10,7 @@ const workflowId = uuidv4();
 const completionMarker = {
   apiToken: 'openSesame',
   completedAt: now,
+  deployingColor: 'blue',
   entityName: 'CompletionMarker',
   environment: 'local',
   jobName: 'wait-for-reindex',

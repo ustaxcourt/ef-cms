@@ -32,7 +32,7 @@ generate_post_data() {
   barNumber=$3
   section=$4
   name=$5
-  employer=$6
+  practiceType=$6
   firstName=$7
   middleName=$8
   lastName=$9
@@ -52,7 +52,7 @@ generate_post_data() {
   "admissionsDate": "2019-03-01",
   "admissionsStatus": "Active",
   "birthYear": "1950",
-  "employer": "$employer",
+  "practiceType": "$practiceType",
   "firmName": "Some Firm",
   "originalBarState": "WA",
   "practitionerType": "Attorney",
@@ -98,7 +98,7 @@ createAdmin() {
   adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 }
 
-#createAccount [email] [role] [index] [barNumber] [section] [overrideName(optional)] [employer(optional)] [firstName(*optional)] [middleName(optional)] [lastName(*optional)] [suffix(optional)]
+#createAccount [email] [role] [index] [barNumber] [section] [overrideName(optional)] [practiceType(optional)] [firstName(*optional)] [middleName(optional)] [lastName(*optional)] [suffix(optional)]
 # *optional - only optional when user is NOT irsPractitioner or privatePractitioner
 createAccount() {
   email=$1
@@ -107,7 +107,7 @@ createAccount() {
   barNumber=$4
   section=$5
   name=${6:-Test ${role}$3}
-  employer=$7
+  practiceType=$7
   firstName=$8
   middleName=$9
   lastName=${10}
@@ -116,7 +116,7 @@ createAccount() {
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}" "${employer}" "${firstName}" "${middleName}" "${lastName}" "${suffix}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}" "${practiceType}" "${firstName}" "${middleName}" "${lastName}" "${suffix}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/users"
 
   response=$(aws cognito-idp admin-initiate-auth \
