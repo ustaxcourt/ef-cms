@@ -22,7 +22,7 @@ export const validatePractitionerAction = ({
       'lastName',
       'birthYear',
       'practitionerType',
-      'employer',
+      'practiceType',
       'country',
       'address1',
       'city',
