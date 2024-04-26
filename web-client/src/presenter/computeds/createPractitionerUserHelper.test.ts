@@ -9,22 +9,22 @@ const createPractitionerUserHelper = withAppContextDecorator(
 );
 
 describe('createPractitionerUserHelper', () => {
-  it('returns true for showFirmName if employer is Private', () => {
+  it('returns true for showFirmName if practiceType is Private', () => {
     const result = runCompute(createPractitionerUserHelper, {
       state: {
         form: {
-          employer: 'Private',
+          practiceType: 'Private',
         },
       },
     });
     expect(result.showFirmName).toBeTruthy();
   });
 
-  it('returns false for showFirmName if employer is not Private', () => {
+  it('returns false for showFirmName if practiceType is not Private', () => {
     const result = runCompute(createPractitionerUserHelper, {
       state: {
         form: {
-          employer: 'DOJ',
+          practiceType: 'DOJ',
         },
       },
     });
