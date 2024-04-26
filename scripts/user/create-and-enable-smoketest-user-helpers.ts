@@ -23,9 +23,9 @@ const baseUser = {
     postalCode: '61234',
     state: 'IL',
   },
-  employer: '',
   lastName: 'Test',
   password: DEFAULT_ACCOUNT_PASS,
+  practiceType: '',
   suffix: '',
 };
 
