@@ -1,10 +1,24 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBDocument,
+  DynamoDBDocumentClient,
+  PutCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getFilteredGlobalEvents, processItems } from './migration';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import { mockClient } from 'aws-sdk-client-mock';
+import { processItems } from './migration';
+
+const ddbMock = mockClient(DynamoDBDocumentClient);
 
 describe('migration', () => {
   describe('processItems', () => {
+    beforeEach(() => {
+      ddbMock.reset();
+      ddbMock.on(PutCommand).resolves({});
+    });
+
     it('migrates items and generates dynamodb PutRequest objects with the resulting data', async () => {
       const mockCase = marshall({
         ...MOCK_CASE,
@@ -13,135 +27,22 @@ describe('migration', () => {
       });
       const mockItems: Record<string, any>[] = [mockCase];
       const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
-      const result = await processItems(applicationContext, {
+      const dynamodb = new DynamoDBClient({
+        maxAttempts: 10,
+        region: 'us-east-1',
+      });
+
+      const docClient = DynamoDBDocument.from(dynamodb, {
+        marshallOptions: { removeUndefinedValues: true },
+      });
+
+      await processItems(applicationContext, {
+        docClient,
         items: mockItems,
         migrateRecords: mockMigrateRecords,
       });
 
       expect(mockMigrateRecords).toHaveBeenCalledTimes(1);
-      expect(result.length).toEqual(mockItems.length);
-    });
-  });
-
-  describe('getFilteredGlobalEvents', () => {
-    it('should return everything', () => {
-      const items = getFilteredGlobalEvents({
-        Records: [
-          {
-            dynamodb: {
-              NewImage: {
-                'aws:rep:updatetime': {
-                  N: '10',
-                },
-              },
-              OldImage: {
-                'aws:rep:updatetime': {
-                  N: '20',
-                },
-              },
-            },
-          },
-        ],
-      });
-      expect(items).not.toBeUndefined();
-      // @ts-ignore
-      expect(items.length).toBe(1);
-    });
-
-    it('should not attempt to process REMOVE events', () => {
-      const items = getFilteredGlobalEvents({
-        Records: [
-          {
-            awsRegion: 'us-east-1',
-            dynamodb: {
-              Keys: {
-                Id: {
-                  N: '101',
-                },
-              },
-              NewImage: {
-                Id: {
-                  N: '101',
-                },
-                Message: {
-                  S: 'New item!',
-                },
-              },
-              SequenceNumber: '111',
-              SizeBytes: 26,
-              StreamViewType: 'NEW_AND_OLD_IMAGES',
-            },
-            eventID: '1',
-            eventName: 'INSERT',
-            eventSource: 'aws:dynamodb',
-            eventSourceARN: 'stream-ARN',
-            eventVersion: '1.0',
-          },
-          {
-            awsRegion: 'us-east-1',
-            dynamodb: {
-              Keys: {
-                Id: {
-                  N: '101',
-                },
-              },
-              NewImage: {
-                Id: {
-                  N: '101',
-                },
-                Message: {
-                  S: 'This item has changed',
-                },
-              },
-              OldImage: {
-                Id: {
-                  N: '101',
-                },
-                Message: {
-                  S: 'New item!',
-                },
-              },
-              SequenceNumber: '222',
-              SizeBytes: 59,
-              StreamViewType: 'NEW_AND_OLD_IMAGES',
-            },
-            eventID: '2',
-            eventName: 'MODIFY',
-            eventSource: 'aws:dynamodb',
-            eventSourceARN: 'stream-ARN',
-            eventVersion: '1.0',
-          },
-          {
-            awsRegion: 'us-east-1',
-            dynamodb: {
-              Keys: {
-                Id: {
-                  N: '101',
-                },
-              },
-              OldImage: {
-                Id: {
-                  N: '101',
-                },
-                Message: {
-                  S: 'This item has changed',
-                },
-              },
-              SequenceNumber: '333',
-              SizeBytes: 38,
-              StreamViewType: 'NEW_AND_OLD_IMAGES',
-            },
-            eventID: '3',
-            eventName: 'REMOVE',
-            eventSource: 'aws:dynamodb',
-            eventSourceARN: 'stream-ARN',
-            eventVersion: '1.0',
-          },
-        ],
-      });
-      expect(items).not.toBeUndefined();
-      // @ts-ignore
-      expect(items.length).toEqual(2);
     });
   });
 });
