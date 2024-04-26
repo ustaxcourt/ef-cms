@@ -33,14 +33,13 @@ export const PractitionerSearchResults = connect(
                   breakClassName="hide"
                   forcePage={activePage}
                   marginPagesDisplayed={0}
-                  pageCount={practitionerSearchHelper.numberOfResults}
+                  pageCount={practitionerSearchHelper.pageCount}
                   pageRangeDisplayed={0}
                   onPageChange={pageChange => {
-                    setActivePage(pageChange.selected);
-
                     submitPractitionerNameSearchSequence({
                       selectedPage: pageChange.selected,
                     });
+                    setActivePage(pageChange.selected);
                     focusPaginatorTop(paginatorTop);
                   }}
                 />

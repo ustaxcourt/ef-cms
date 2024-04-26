@@ -3,25 +3,30 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getPractitionersByNameAction = async ({
   applicationContext,
   get,
+  props,
   store,
 }: ActionProps) => {
   const {
     lastKeysOfPages,
-    pageNum,
     practitionerName,
   }: { practitionerName: string; pageNum: number; lastKeysOfPages: string[] } =
     get(state.advancedSearchForm.practitionerSearchByName);
+
+  store.set(
+    state.advancedSearchForm.practitionerSearchByName.pageNum,
+    props.selectedPage,
+  );
 
   const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
-      searchAfter: lastKeysOfPages[pageNum],
+      searchAfter: lastKeysOfPages[props.selectedPage],
     });
 
   store.set(
-    state.advancedSearchForm.practitinoerSearchByName.lastKeysOfPages[
-      pageNum + 1
+    state.advancedSearchForm.practitionerSearchByName.lastKeysOfPages[
+      props.selectedPage + 1
     ],
     searchResults.lastKey,
   );

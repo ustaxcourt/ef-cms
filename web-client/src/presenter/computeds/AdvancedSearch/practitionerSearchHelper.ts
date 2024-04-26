@@ -57,7 +57,6 @@ export const practitionerSearchHelper = (
     state.advancedSearchForm.caseSearchByName.countryType,
   );
   const searchResults = get(state.searchResults['practitioner']);
-  // const currentPage = get(state.advancedSearchForm.currentPage);
 
   const result = {
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
@@ -88,9 +87,14 @@ export const practitionerSearchHelper = (
       );
     }
 
+    const pageCount = Math.ceil(
+      searchResults.total / PRACTITIONER_SEARCH_PAGE_SIZE,
+    );
+
     Object.assign(result, {
       formattedSearchResults: paginatedResults,
       numberOfResults: searchResults.total,
+      pageCount,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
       showPractitionerSearch: result.showPractitionerSearch,

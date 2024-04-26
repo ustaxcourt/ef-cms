@@ -2,7 +2,7 @@ import { IS_PRACTITIONER } from './helpers/searchClauses';
 // import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { PractitionerSearchResultType } from '../../../../web-client/src/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
-import { search } from './searchClient';
+import { formatResults } from './searchClient';
 
 /**
  * getPractitionersByName
@@ -51,22 +51,21 @@ export const getPractitionersByName = async ({
     track_total_hits: true,
   };
 
-  const searchResult = await search({
-    applicationContext,
-    searchParameters,
-  });
-
-  console.log('search result', searchResult);
+  const searchResults = await applicationContext
+    .getSearchClient()
+    .search(searchParameters);
 
   const {
     results,
     total,
-  }: { results: PractitionerSearchResultType[]; total: number } = searchResult;
+  }: { results: PractitionerSearchResultType[]; total: number } = formatResults(
+    searchResults.body,
+  );
 
-  // get last bar num
-  const lastKey = results[results.length - 1].barNumber;
-
-  console.log('results', results);
+  const matchingPractitioners: any[] = searchResults.body.hits.hits;
+  const lastKey =
+    (matchingPractitioners[matchingPractitioners.length - 1]
+      ?.sort[0] as string) || '';
 
   return { lastKey, results, total };
 };
