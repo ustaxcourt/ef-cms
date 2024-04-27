@@ -20,7 +20,7 @@ export const getAllIrsPractitionersForSelectHelper = (
   const irsPractitioners = get(state.irsPractitioners);
   const irsPractitionersContactInfo = irsPractitioners
     .filter(irsPrac => irsPrac['admissionsStatus'] === 'Active')
-    .filter(irsPrac => irsPrac['employer'] === 'IRS')
+    .filter(irsPrac => irsPrac['practiceType'] === 'IRS')
     .map(irsPrac => getFormattedIrsPractitionerInfo(irsPrac));
 
   return {
