@@ -1,4 +1,5 @@
 import {
+  MINUTE_ENTRIES_MAP,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
@@ -89,40 +90,41 @@ describe('formatDocketEntry', () => {
   });
 
   describe('isNotServedDocument', () => {
-    it('should be true when isLegacyServed, isMinuteEntry, and servedAt are undefined', () => {
+    it('should be true when isLegacyServed and servedAt are undefined and document is not a minute entry', () => {
       const result = formatDocketEntry(applicationContext, {
+        eventCode: 'A',
         isLegacyServed: undefined,
-        isMinuteEntry: undefined,
         servedAt: undefined,
       });
 
       expect(result.isNotServedDocument).toBe(true);
     });
 
-    it('should be false when isLegacyServed is true and isMinuteEntry and servedAt are undefined', () => {
+    it('should be false when isLegacyServed is true, servedAt are undefined, and document is not a minute entry', () => {
       const result = formatDocketEntry(applicationContext, {
+        eventCode: 'A',
         isLegacyServed: true,
-        isMinuteEntry: undefined,
         servedAt: undefined,
       });
 
       expect(result.isNotServedDocument).toBe(false);
     });
 
-    it('should be false when isMinuteEntry is true and isLegacyServed and servedAt are undefined', () => {
+    it('should be false when isLegacyServed and servedAt are undefined and the document is a minute entry', () => {
       const result = formatDocketEntry(applicationContext, {
+        eventCode:
+          MINUTE_ENTRIES_MAP[Object.keys(MINUTE_ENTRIES_MAP)[0]].eventCode,
         isLegacyServed: undefined,
-        isMinuteEntry: true,
         servedAt: undefined,
       });
 
       expect(result.isNotServedDocument).toBe(false);
     });
 
-    it('should be false when servedAt is defined and isLegacyServed and isMinuteEntry are undefined', () => {
+    it('should be false when servedAt is defined and isLegacyServed and is not a minute entry', () => {
       const result = formatDocketEntry(applicationContext, {
+        eventCode: 'A',
         isLegacyServed: undefined,
-        isMinuteEntry: undefined,
         servedAt: '2019-06-27T21:53:00.297Z',
       });
 
@@ -133,9 +135,8 @@ describe('formatDocketEntry', () => {
   describe('isInProgress', () => {
     it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
       const results = formatDocketEntry(applicationContext, {
-        eventCode: 'A', //not unservable, not court-issued
+        eventCode: 'A', //not unservable, not court-issued, not minute entry
         isFileAttached: false,
-        isMinuteEntry: false,
       });
 
       expect(results.isInProgress).toEqual(true);
@@ -178,7 +179,7 @@ describe('formatDocketEntry', () => {
 
     it('should return isInProgress false if the document is a minute entry', () => {
       const results = formatDocketEntry(applicationContext, {
-        isMinuteEntry: true,
+        eventcode: 'RQT', // minute entry
       });
 
       expect(results.isInProgress).toEqual(false);
