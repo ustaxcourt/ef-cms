@@ -305,8 +305,9 @@ resource "aws_iam_user_policy_attachment" "circle_ci_iam_policy_attachment" {
   policy_arn = aws_iam_policy.circle_ci_iam_policy.arn
 }
 
-# TODO 10345: s3_replication_role_* needs to be removed AFTER this story has been deployed to all environments on an account.
+# TODO 10345: All old roles need to be removed AFTER this story has been deployed to all environments on an account.
 # If it is removed before then, CircleCI will not have appropriate (backwards compatible) permission as it has been renamed.
+# Old roles start on line 363 and below.
 resource "aws_iam_policy" "circle_ci_iam_policy" {
   name = "circle_ci_iam_policy"
 
@@ -347,9 +348,9 @@ resource "aws_iam_policy" "circle_ci_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav_s3_download_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_bucket_replication_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
@@ -357,8 +358,17 @@ resource "aws_iam_policy" "circle_ci_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/public_api_authorizer_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_role_*"
       ]
     }
   ]
