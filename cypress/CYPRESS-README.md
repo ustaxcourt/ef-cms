@@ -32,6 +32,23 @@ In order to write a realiable cypress test suites, there are some best practices
   - Instead use nesting of chainables in cypress tests.  Please review the `cypress/cypress-integration/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
 
 
+# Test Organization
+
+- Organize Cypress test by feature. 
+  - For example, a test that verifies a paper filed docket entry displays a served date after it has been served would belong under `caseDetail > docketRecord > paperFiling` because the feature under test is the behavior of a paper filed docket entry. 
+- If multiple users use the same feature, create a new test for each user if they interact with it differently.
+  - For example, a docket clerk and a judge both have a dashboard page, but those pages function differently from one another so two tests files should be created under `dashboard > docketClerk.cy.ts` and `dashboard > judge.cy.ts`. 
+- Organize helper functions by feature.
+  - Helper functions that perform often repeated steps (such as creating and serving a case, granting e-access) are organized similarly as tests under `cypress >helpers`.
+  - For example, a helper function that creates a paper petition should be organized under `helpers > fileAPetition`.
+  - Helper functions that connect to or interact with lower level services (Dynamo, Cognito, etc.) or run Node functions from within a Cypress task are organized under `helpers > cypressTasks`.
+- Tests for individual React components should be placed under `components > <COMPONENT_NAME>`.
+  - For example, we have custom validation logic for the date picker component, the test for that validation is placed at `components > datePicker > date-picker-validation-invalid-year.cy.ts`.
+- Local tests vs deployed tests vs production tests vs public tests.
+  - `cypress-integration`folder is for tests that are meant to only run locally and in gitHub Actions
+  - `cypress-smoketests`folder is for tests that are meant to run locally, in gitHub Actions, and against deployed environments.
+  - `cypress-readonly` folder is for tests that are meant to be run against deployed environments, and against production as they do not create any test data.
+  - All of these folders may also have a subfolder for tests that are meant to run against the public site. So a test that you would want to be run against public and only locally belongs in `cypress-integration > integration > public`.
 
 # Learn More
 
@@ -40,5 +57,4 @@ For more content related to best practices, please consider reading the followin
  - [cypress best practices guide](https://docs.cypress.io/guides/references/best-practices).  
  - [hour stream about some cypress employee talking about best practices](https://www.youtube.com/watch?v=PPZSySI5ooc).  
  - [short video about best practices](https://www.youtube.com/watch?v=eBKYm7F05vY)
-
- There is [another video](https://www.youtube.com/watch?v=5XQOK0v_YRE) made by one of the creators of cypress, but I'm not convinced his best practices are actually good.  He recommends testing each page in isolation which would mean pre-seeding the database or mocking out api calls.  I personally believe this will put us back in a state where we are tightly coupled to implementation details and will make the test suites too coupled to api endpoints or database structures.
+ - [There is another video](https://www.youtube.com/watch?v=5XQOK0v_YRE) made by one of the creators of cypress, but I'm not convinced his best practices are actually good.  He recommends testing each page in isolation which would mean pre-seeding the database or mocking out api calls.  I personally believe this will put us back in a state where we are tightly coupled to implementation details and will make the test suites too coupled to api endpoints or database structures.
