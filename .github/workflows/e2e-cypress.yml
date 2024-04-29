@@ -12,7 +12,6 @@ jobs:
       matrix:
         ci_node_total: [4]
         ci_node_index: [0, 1, 2, 3]
-
     env:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
