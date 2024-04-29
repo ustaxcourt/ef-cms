@@ -36,6 +36,7 @@ note: we have 2 package.json files, be sure to update them all
    - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
      - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
+     - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
@@ -73,7 +74,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### puppeteer and @sparticuz/chromium
 
-- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
+- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 
 ### pdfjs-dist
 
@@ -83,7 +84,11 @@ Below is a list of dependencies that are locked down due to known issues with se
 - (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
 
 ### @uswds/uswds
-- Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues). 
+- Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
+
+### eslint
+- Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
+- Keep eslint-plugin-security at 2.1.1 since upgrading makes it only compatible with v9.0.0
 
 ## Incrementing the Node Cache Key Version
 
