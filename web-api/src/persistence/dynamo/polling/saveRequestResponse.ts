@@ -3,21 +3,28 @@ import { put } from '@web-api/persistence/dynamodbClientService';
 
 export const saveRequestResponse = async ({
   applicationContext,
+  chunk,
+  index,
   requestId,
-  response,
+  totalNumberOfChunks,
   userId,
 }: {
   applicationContext: IApplicationContext;
   requestId: string;
-  response: any;
+  chunk: string;
+  index: number;
+  totalNumberOfChunks: number;
   userId: string;
 }) => {
   const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   return await put({
     Item: {
+      chunk,
+      index,
       pk: `user|${userId}`,
-      response: JSON.stringify(response),
-      sk: `request|${requestId}`,
+      requestId,
+      sk: `request|${requestId}-${index}`,
+      totalNumberOfChunks,
       ttl: 16 * 60 + nowUnix,
     },
     applicationContext,
