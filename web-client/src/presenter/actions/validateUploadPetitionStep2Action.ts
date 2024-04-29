@@ -1,45 +1,14 @@
 import { UploadPetitionStep2 } from '@shared/business/entities/startCase/UploadPetitionStep2';
-import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateUploadPetitionStep2Action = ({
-  get,
   path,
-}: ActionProps<{ selectedPage: number }>) => {
-  const {
-    businessType,
-    contactPrimary,
-    contactSecondary,
-    corporateDisclosureFile,
-    corporateDisclosureFileSize,
-    countryType,
-    estateType,
-    filingType,
-    hasSpouseConsent,
-    inCareOf,
-    isSpouseDeceased,
-    minorIncompetentType,
-    otherType,
-    partyType,
-    petitionType,
-  } = get(state.form);
+  props,
+}: ActionProps<{ step2Data: any }>) => {
+  const { step2Data } = props;
 
-  const errors = new UploadPetitionStep2({
-    businessType,
-    contactPrimary,
-    contactSecondary,
-    corporateDisclosureFile,
-    corporateDisclosureFileSize,
-    countryType,
-    estateType,
-    filingType,
-    hasSpouseConsent,
-    inCareOf,
-    isSpouseDeceased,
-    minorIncompetentType,
-    otherType,
-    partyType,
-    petitionType,
-  }).getFormattedValidationErrors();
+  const errors = new UploadPetitionStep2(
+    step2Data,
+  ).getFormattedValidationErrors();
 
   return errors
     ? path.error({
