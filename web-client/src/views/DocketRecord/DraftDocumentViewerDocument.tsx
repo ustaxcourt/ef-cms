@@ -53,7 +53,10 @@ export const DraftDocumentViewerDocument = connect(
               </div>
 
               {draftDocumentViewerHelper.showDocumentNotSignedAlert && (
-                <div className="grid-col-6 text-align-right text-secondary-dark text-semibold">
+                <div
+                  className="grid-col-6 text-align-right text-secondary-dark text-semibold"
+                  data-testid="signature-required-label"
+                >
                   Signature required for this document.
                 </div>
               )}
@@ -150,6 +153,7 @@ export const DraftDocumentViewerDocument = connect(
 
               <Button
                 link
+                data-testid="view-full-pdf-button"
                 icon="file-pdf"
                 iconColor="white"
                 id="view-full-pdf"
