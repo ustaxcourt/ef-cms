@@ -1,4 +1,3 @@
-
 # Cypress for Integration Testing
 
 This document aims to outline the issues with our current integration testing approach and propose the adoption of Cypress for future tests. We have read through various best practices of cypress and outlined them in this document as a guideline for writing future cypress tests.
@@ -44,29 +43,3 @@ Overall we feel cypress is a better testing approach compared to our home brewed
 We propose that all future integration and e2e tests are written in cypress.  We feel this will allow us to not only slowly decouple from cerebral, but also build up a more realiable test suite.  We also recommend that any existing integration tests that are flaky should be rewritten in cypress.  We've had a lot of flaky integration tests fail on github actions and circle, and refactoring them to cypress might be a good solution to make our test suites more stable.
 
 At some point we may decide to slowly refactor existing integration tests into cypress tests with the hopes to be able to remove cerebral from our system and not lose all our test coverage.
-
-## Best Practices
-
-In order to write a realiable cypress test suites, there are some best practices we should follow that our outlined in the cypress documentation and also some best practices we have learned from trying to write realiable tests.
-
-- every `it` statement should be a repeatable test that should be able to run in isolation.  This means your `it` statement shouldn't depend on a previous it statement to pass.  If you write tests that depend on previous it statements, your tests can become flaky.  This also goes against the best practices outlined in the cypress docs.
-- dom elements should be accessed using our custom cypress command `cy.get('[data-testid="YOUR_ID"]')`.  This means any element you need to click or find in the UI must have a `data-testid` attribute.  The reason test ids are prefered is that some attributes such as classes and ids can accidently be changed when making style changes; whereas, it's obvious when you see a data-testid that a cypress test uses that element.
-  - for example, if you need to click on a button on from inside a test, your button should look like this `<button data-testid="my-button">submit</button>`
-  - avoid cy.get('.my-class')
-  - avoid cy.get('#my-id')
-- always verify something on the page after running an action or loading a new page.  For example, if you click on a button which updates a practitioner name, be sure to wait for a success alert to appear before trying to move onto the next steps in your test.  Failing to do this will result in race conditions and flaky tests.  
-  - Here is an example scenario where you may write a bad cypress test:  Your test clicks a button but then directly calls cy.visit().  This will redirect to a new page but your api request might still be running (especially if doing an action which does PDF generation).  This means you'll load the new page and expect data to exist, but it never will.  Be sure to wait for something, such as a success alert, after clicking the button before redirection.
-- avoid waiting on spinners to show and hide.  Depending on how fast the machine is, the spinner might hide and show faster than cypress can even listen for it to show up.  This can cause a flaky test.  We recommend to just wait for something in the UI to change after a successful mutation in the system, such as listening for a URL redirect or a success alert to show.
-- avoid `cy.visit` unless you're specially trying to verify how a page acts on an initial fresh load.  The goal of the tests are to verify the application working as a user clicks through our links and buttons.  Entering urls directly isn't something a user will be doing; test like a user would be using.  Also, cy.visit will clear cookies and often cause issues in tests resulting in random authentication errors.
-- try to avoid `cy.intercept`.  This again is coupling our tests to a lower level API implementation detail which can make our tests harder to refactor in the future.
-- don't use `after` in cypress.  Any database setup should be in a `before` setup.  Running code in an `after` can potentially never get ran because cypress can stop a test early on a failure which means your after will never run.
-- avoid using aliases, we recommend just using nesting of chainables in cypress tests.  Please review the `cypress/cypress-integration/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
-- try to find ways to create helper functions which we can re-use in other tests.  For example, creating a case as a petitioner is a good re-usable flow.  When writing these helpers, be sure they do not contain asserts related to the high level test you are writing.  They should just login as a user, create or modify the data, then return any new created values we may need.
-
-For more content related to best practices, please consider reading the following:
-
- - [cypress best practices guide](https://docs.cypress.io/guides/references/best-practices).  
- - [hour stream about some cypress employee talking about best practices](https://www.youtube.com/watch?v=PPZSySI5ooc).  
- - [short video about best practices](https://www.youtube.com/watch?v=eBKYm7F05vY)
-
- There is [another video](https://www.youtube.com/watch?v=5XQOK0v_YRE) made by one of the creators of cypress, but I'm not convinced his best practices are actually good.  He recommends testing each page in isolation which would mean pre-seeding the database or mocking out api calls.  I personally believe this will put us back in a state where we are tightly coupled to implementation details and will make the test suites too coupled to api endpoints or database structures.
