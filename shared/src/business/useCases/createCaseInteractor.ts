@@ -195,7 +195,6 @@ export const createCaseInteractor = async (
       eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
       filingDate: caseToAdd.createdAt,
       isFileAttached: false,
-      isMinuteEntry: true,
       isOnDocketRecord: true,
       processingStatus: 'complete',
     },

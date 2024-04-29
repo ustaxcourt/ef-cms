@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES, DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
 import { Case } from './Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('updateDocketNumberRecord records suffix changes', () => {
@@ -23,9 +24,11 @@ describe('updateDocketNumberRecord records suffix changes', () => {
     expect(caseToVerify.docketEntries.length).toEqual(1);
     expect(caseToVerify.docketEntries[0]).toMatchObject({
       index: 1,
-      isMinuteEntry: true,
       isOnDocketRecord: true,
     });
+    expect(
+      DocketEntry.isMinuteEntry(caseToVerify.docketEntries[0]),
+    ).toBeTruthy();
   });
 
   it('should not create a notice of docket number change document when the suffix updates but the case was created from paper', () => {

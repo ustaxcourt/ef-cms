@@ -1,18 +1,19 @@
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 
 describe('getShowNotServedForDocument', () => {
   const docketEntryId = '155870c2-5b27-48ce-9aac-dd41305c7797';
 
-  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
-
   describe('showNotServed', () => {
     it('should return true for showNotServed if the document type is servable and does not have a servedAt', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
+              ...MOCK_DOCUMENTS[0],
               docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
@@ -29,10 +30,11 @@ describe('getShowNotServedForDocument', () => {
 
     it('should return false for showNotServed if the document type is unservable', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
+              ...MOCK_DOCUMENTS[0],
               docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Corrected Transcript',
@@ -49,10 +51,11 @@ describe('getShowNotServedForDocument', () => {
 
     it('should return false for showNotServed if the document type is servable and has servedAt', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
+              ...MOCK_DOCUMENTS[0],
               docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
@@ -70,10 +73,11 @@ describe('getShowNotServedForDocument', () => {
 
     it('should return false for showNotServed if the document type is servable and not served and the document is a draft', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
+              ...MOCK_DOCUMENTS[0],
               docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
@@ -82,7 +86,7 @@ describe('getShowNotServedForDocument', () => {
           ],
         },
         docketEntryId,
-        draftDocuments: [{ docketEntryId }],
+        draftDocuments: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -90,12 +94,12 @@ describe('getShowNotServedForDocument', () => {
 
     it('should return false for showNotServed if the document is not on the case detail', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [],
         },
         docketEntryId,
-        draftDocuments: [{ docketEntryId }],
+        draftDocuments: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -106,12 +110,12 @@ describe('getShowNotServedForDocument', () => {
       const correspondenceDocumentId = applicationContext.getUniqueId();
 
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketEntries: [{ docketEntryId }],
+          ...MOCK_CASE,
+          docketEntries: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
         },
         docketEntryId: correspondenceDocumentId,
-        draftDocuments: [{ docketEntryId }],
+        draftDocuments: [{ ...MOCK_DOCUMENTS[0], docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -119,10 +123,11 @@ describe('getShowNotServedForDocument', () => {
 
     it('should return true when the document is a legacy document that has not been served and has no servedAt', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
+              ...MOCK_DOCUMENTS[0],
               docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
@@ -139,10 +144,11 @@ describe('getShowNotServedForDocument', () => {
 
     it('should return false when the document is a legacy document that has been served', () => {
       const showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
+              ...MOCK_DOCUMENTS[0],
               docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
