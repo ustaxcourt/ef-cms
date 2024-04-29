@@ -1,6 +1,7 @@
 import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+import * as Sentry from '@sentry/react';
 
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
@@ -119,6 +120,14 @@ import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
+
+if (process.env.USTC_ENV === 'prod') {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.ENV,
+    integrations: [],
+  });
+}
 
 /**
  * Instantiates the Cerebral app with React
