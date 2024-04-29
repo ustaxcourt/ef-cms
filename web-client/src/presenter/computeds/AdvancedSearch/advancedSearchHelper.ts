@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { US_STATES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSearchResultRecord = (
@@ -9,6 +10,15 @@ export const formatSearchResultRecord = (
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
+
+  if (result.petitioners) {
+    result.petitionerFullStateNames = result.petitioners.map(petitioner => {
+      return {
+        contactId: petitioner.contactId,
+        state: US_STATES[petitioner.state] || petitioner.state,
+      };
+    });
+  }
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
