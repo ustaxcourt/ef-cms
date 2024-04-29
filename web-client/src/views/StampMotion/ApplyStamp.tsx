@@ -151,6 +151,7 @@ export const ApplyStamp = connect(
                         />
                         <label
                           className="usa-radio__label"
+                          data-testid={`motion-disposition-${option}`}
                           htmlFor={`motion-disposition-${option}`}
                         >
                           {option}
