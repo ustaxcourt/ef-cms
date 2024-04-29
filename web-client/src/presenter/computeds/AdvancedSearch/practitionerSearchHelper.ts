@@ -63,7 +63,7 @@ export const practitionerSearchHelper = (
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
 
-  if (searchResults) {
+  if (searchResults && searchResults.total) {
     const paginatedResults = searchResults.practitioners;
 
     paginatedResults.formattedSearchResults = paginatedResults.map(
@@ -100,6 +100,11 @@ export const practitionerSearchHelper = (
       showPractitionerSearch: result.showPractitionerSearch,
       showSearchResults: true,
     });
+  } else if (searchResults && !searchResults.total) {
+    return {
+      showNoMatches: true,
+      showSearchResults: false,
+    };
   }
   return result;
 };
