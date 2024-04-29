@@ -21,8 +21,6 @@ export type PractitionerSearchResultType = {
   stateFullName?: string;
 };
 
-// const PAGE_SIZE_OVERRIDE = 2;
-
 export const formatPractitionerSearchResultRecord = (
   result,
   { applicationContext }: { applicationContext: ClientApplicationContext },
@@ -101,6 +99,7 @@ export const practitionerSearchHelper = (
       showSearchResults: true,
     });
   } else if (searchResults && !searchResults.total) {
+    // search has been run but hasn't returned any results
     return {
       showNoMatches: true,
       showSearchResults: false,
