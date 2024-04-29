@@ -11,6 +11,7 @@
   "dependencies": {
     "@18f/us-federal-holidays": "4.0.0",
     "@aws-crypto/sha256-browser": "5.2.0",
+    "@aws-sdk/client-api-gateway": "^3.556.0",
     "@aws-sdk/client-cloudwatch": "3.556.0",
     "@aws-sdk/client-cognito-identity-provider": "3.556.0",
     "@aws-sdk/client-dynamodb": "3.556.0",
@@ -101,14 +102,6 @@
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
     "build:assets": "node shared/createModule.js",
     "build:client": "NODE_ENV=production USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.config.mjs",
-    "build:lambda:api": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.api.ts",
-    "build:lambda:glue-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.glue-cron.ts",
-    "build:lambda:migration": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.migration.ts",
-    "build:lambda:migration-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.migration-cron.ts",
-    "build:lambda:reindex-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.reindex-cron.ts",
-    "build:lambda:switch-colors-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.switch-colors-cron.ts",
-    "build:lambda:rotate-info-indices": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.rotate-info-indices.ts",
-    "build:lambda:wait-for-workflow-cron": "USTC_ENV=prod npx --node-options='--max-old-space-size=8192' webpack --config webpack.config.lambda.wait-for-workflow.ts",
     "build:public": "USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.public.config.mjs",
     "clean:public": "rm -rf dist-public/",
     "clean": "./reset-dependencies.sh CLEAN_ONLY",
@@ -131,7 +124,9 @@
     "delete:dynamo-table": "./scripts/dynamo/delete-dynamo-table.sh",
     "delete:elasticsearch-cluster": "./scripts/elasticsearch/delete-elasticsearch-cluster.sh",
     "deploy:account-specific": "cd iam/terraform/account-specific/main && ../bin/deploy-app.sh",
-    "deploy:api": "cd web-api/terraform/main && ../bin/deploy-app.sh",
+    "deploy:allColors": "cd web-api/terraform/applyables/allColors && ../../bin/deploy-app-all-colors.sh",
+    "deploy:blue": "cd web-api/terraform/applyables/blue && COLOR=blue ../../bin/deploy-app-color.sh",
+    "deploy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/deploy-app-color.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",
     "deploy:environment-specific": "cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh",
     "deploy:glue-cron": "cd web-api/workflow-terraform/glue-cron/main && ../bin/deploy-app.sh",
@@ -244,8 +239,7 @@
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "verify-private-s3-buckets": "./scripts/circleci/verify-private-s3-buckets.sh",
-    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
-    "watch": "nodemon -e yml --exec sls offline start"
+    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html"
   },
   "overrides": {
     "axios": "$axios",
@@ -293,7 +287,6 @@
     "babel-plugin-transform-html-import-require-to-string": "0.0.3",
     "checksum": "1.0.0",
     "cognito-local": "3.23.3",
-    "copy-webpack-plugin": "12.0.2",
     "crypto-browserify": "3.12.0",
     "css-loader": "7.1.1",
     "csv-parse": "5.5.5",
@@ -329,8 +322,6 @@
     "eslint-plugin-spellcheck": "0.0.20",
     "esm": "3.2.25",
     "file-loader": "6.2.0",
-    "html-webpack-plugin": "5.6.0",
-    "html-webpack-pug-plugin": "4.0.0",
     "husky": "9.0.11",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
@@ -372,10 +363,7 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "tsconfig-paths-webpack-plugin": "4.1.0",
     "typescript": "5.4.5",
-    "utf8": "3.0.0",
-    "webpack": "5.91.0",
-    "webpack-cli": "5.1.4"
+    "utf8": "3.0.0"
   }
 }
