@@ -17,12 +17,12 @@
 * Options are Attorney or Non-attorney
 * Non-attorney = Tax Court allows individuals who are not attorneys to practice if they have passed the Tax Court Non-Attorney Exam; in the ef-cms, they are treated the same as attorneys
 
-**Employer**
+**Practice type**
 * Options are Private, IRS, or DOJ
 
 **Firm name**
-* If "Private" is selected for employer= firm name field is displayed and optional
-* If "IRS" or "DOJ" is selected for employer= firm name field is hidden
+* If "Private" is selected for practiceType= firm name field is displayed and optional
+* If "IRS" or "DOJ" is selected for practiceType= firm name field is hidden
 
 **Contact fields**
 * use standard address, contact, and phone fields and functionality

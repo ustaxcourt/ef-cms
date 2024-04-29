@@ -1,12 +1,12 @@
 import {
   COUNTRY_TYPES,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
-} from '../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { formatRecord } from './bulkImportPractitionerUsers.helpers';
 
 describe('formatRecord', () => {
   it('formats a record for a practitioner with default values for certain fields when no value is supplied', () => {
-    const defaultEmployer = 'Private';
+    const defaultPracticeType = 'Private';
     const defaultBarState = 'N/A';
 
     const initialRecord = {
@@ -29,16 +29,16 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
+      birthYear: String(DEFAULT_PRACTITIONER_BIRTH_YEAR),
       contact: {
         address1: 'Somewhere over the rainbow',
         postalCode: 'N/A',
       },
-      employer: defaultEmployer,
       firstName: 'Bob',
       lastName: 'Builder',
       middleName: 'the',
       originalBarState: defaultBarState,
+      practiceType: defaultPracticeType,
       suffix: 'yeswecan',
     });
   });
@@ -60,11 +60,11 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: 1999,
-      employer: 'IRS',
+      birthYear: '1999',
       firstName: 'Bob',
       lastName: 'Builder',
       middleName: 'the',
+      practiceType: 'IRS',
       suffix: 'yeswecan',
     });
   });
@@ -87,10 +87,10 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Inactive',
-      birthYear: 1999,
-      employer: 'DOJ',
+      birthYear: '1999',
       firstName: 'Mike',
       lastName: 'Wazowski',
+      practiceType: 'DOJ',
     });
   });
 
@@ -98,7 +98,7 @@ describe('formatRecord', () => {
     const initialRecord = {
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: 'what',
+      birthYear: undefined,
       firstName: 'Rachael',
       isDojEmployee: 'N',
       isIrsEmployee: 'N',
@@ -112,10 +112,10 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
-      employer: 'Private',
+      birthYear: String(DEFAULT_PRACTITIONER_BIRTH_YEAR),
       firstName: 'Rachael',
       lastName: 'Ray',
+      practiceType: 'Private',
     });
   });
 
@@ -142,7 +142,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30',
       admissionsStatus: 'Active',
-      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
+      birthYear: String(DEFAULT_PRACTITIONER_BIRTH_YEAR),
       contact: {
         address1: 'knows how to party',
         city: 'the city of Compton',
@@ -151,10 +151,10 @@ describe('formatRecord', () => {
         postalCode: '00000',
         state: 'CA',
       },
-      employer: 'Private',
       firstName: 'Rachael',
       lastName: 'Ray',
       middleName: 'R',
+      practiceType: 'Private',
       suffix: 'Esquire',
     });
   });
