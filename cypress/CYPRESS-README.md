@@ -29,7 +29,7 @@ In order to write a realiable cypress test suites, there are some best practices
 - Rely on `after` hooks.
   - Instead any setup should be performed in a `before` hook. Running code in an `after` can potentially not get run because cypress will stop a test early on a failure which means your after will not run.
 - Use aliases
-  - Instead use nesting of chainables in cypress tests.  Please review the `cypress/cypress-integration/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
+  - Instead use nesting of chainables in cypress tests.  Please review the `cypress/local-only/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
 
 
 # Test Organization
@@ -45,10 +45,10 @@ In order to write a realiable cypress test suites, there are some best practices
 - Tests for individual React components should be placed under `components > <COMPONENT_NAME>`.
   - For example, we have custom validation logic for the date picker component, the test for that validation is placed at `components > datePicker > date-picker-validation-invalid-year.cy.ts`.
 - Local tests vs deployed tests vs production tests vs public tests.
-  - `cypress-integration`folder is for tests that are meant to only run locally and in gitHub Actions
-  - `cypress-smoketests`folder is for tests that are meant to run locally, in gitHub Actions, and against deployed environments.
-  - `cypress-readonly` folder is for tests that are meant to be run against deployed environments, and against production as they do not create any test data.
-  - All of these folders may also have a subfolder for tests that are meant to run against the public site. So a test that you would want to be run against public and only locally belongs in `cypress-integration > integration > public`.
+  - `local-only`folder is for tests that are meant to only run locally and in gitHub Actions
+  - `deployed-and-local`folder is for tests that are meant to run locally, in gitHub Actions, and against deployed environments.
+  - `readonly` folder is for tests that are meant to be run against deployed environments, and against production as they do not create any test data.
+  - All of these folders may also have a subfolder for tests that are meant to run against the public site. So a test that you would want to be run against public and only locally belongs in `local-only > integration > public`.
 
 # Learn More
 

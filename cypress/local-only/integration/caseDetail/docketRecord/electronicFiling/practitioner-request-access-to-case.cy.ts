@@ -11,7 +11,6 @@ import {
   petitionerCreatesElectronicCaseWithDeceasedSpouse,
 } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { selectRedactionAcknowledgement } from '../../../../../helpers/select-redaction-acknowledgement';
 import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { uploadFile } from '../../../../../helpers/file/upload-file';
 
