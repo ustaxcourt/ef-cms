@@ -5,9 +5,11 @@
  * @param {object} docketEntryObject the most up-to-date representation of a docketEntry
  * @returns {object} the v2 representation of a docketEntry
  */
-export const marshallDocketEntry = docketEntryObject => {
+export const marshallDocketEntry = (docketEntryObject: RawDocketEntry) => {
   return {
     docketEntryId: docketEntryObject.docketEntryId,
+    docketNumber: docketEntryObject.docketNumber,
+    documentTitle: docketEntryObject.documentTitle,
     eventCode: docketEntryObject.eventCode,
     eventCodeDescription: docketEntryObject.documentType,
     filedBy: docketEntryObject.filedBy,
