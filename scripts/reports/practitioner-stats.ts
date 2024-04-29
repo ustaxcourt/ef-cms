@@ -54,9 +54,9 @@ const getAllPractitioners = async (
   const admittedInYear = allPractitioners.filter(p => {
     return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
   });
-  const uniqueEmployers = getUniqueValues({
+  const uniquePracticeTypes = getUniqueValues({
     arrayOfObjects: admittedInYear,
-    keyToFilter: 'employer',
+    keyToFilter: 'practiceType',
   });
   const uniqueStatuses = getUniqueValues({
     arrayOfObjects: admittedInYear,
@@ -68,7 +68,7 @@ const getAllPractitioners = async (
   });
   console.log({
     total: admittedInYear.length,
-    uniqueEmployers,
+    uniquePracticeTypes,
     uniqueStatuses,
     uniqueTypes,
     year,
