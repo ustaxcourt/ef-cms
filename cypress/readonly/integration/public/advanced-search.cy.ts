@@ -1,4 +1,4 @@
-import { getPetitionerNameInput } from '../../../cypress-integration/support/pages/public/advanced-search';
+import { getPetitionerNameInput } from '../../../local-only/support/pages/public/advanced-search';
 import { isValidRequest } from '../../support/helpers';
 
 describe('advanced search pages', () => {

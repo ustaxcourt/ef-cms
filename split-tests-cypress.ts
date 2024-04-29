@@ -1,7 +1,7 @@
 import fs from 'fs';
 import shuffleSeed from 'shuffle-seed';
 
-const specDir = './cypress/cypress-integration/integration';
+const specDir = './cypress/local-only/integration';
 const files = fs
   .readdirSync(specDir, { recursive: true })
   .filter(f => (f as string).endsWith('cy.ts') && !f.includes('public/'));
@@ -13,6 +13,6 @@ const index = parseInt(process.env.CI_NODE_INDEX!, 10);
 
 const tests = shuffled
   .filter((num, i) => i % total === index)
-  .map(file => `./cypress/cypress-integration/integration/${file}`);
+  .map(file => `./cypress/local-only/integration/${file}`);
 
 console.log(tests.join(','));

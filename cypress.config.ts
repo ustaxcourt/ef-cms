@@ -6,7 +6,7 @@ import { defineConfig } from 'cypress';
 import {
   deleteAllFilesInFolder,
   ensureFolderExists,
-} from './cypress/cypress-integration/support/database';
+} from './cypress/local-only/support/database';
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
@@ -66,11 +66,11 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/cypress-integration/integration/**/*.cy.ts',
-    supportFile: 'cypress/cypress-integration/support/index.ts',
+    specPattern: 'cypress/local-only/integration/**/*.cy.ts',
+    supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },
-  fixturesFolder: 'cypress/cypress-integration/fixtures',
+  fixturesFolder: 'cypress/local-only/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
@@ -78,9 +78,9 @@ export default defineConfig({
   requestTimeout: 60000,
   retries: 0,
   screenshotOnRunFailure: false,
-  screenshotsFolder: 'cypress/cypress-integration/screenshots',
+  screenshotsFolder: 'cypress/local-only/screenshots',
   video: true,
-  videosFolder: 'cypress/cypress-integration/videos',
+  videosFolder: 'cypress/local-only/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
   watchForFileChanges: false,

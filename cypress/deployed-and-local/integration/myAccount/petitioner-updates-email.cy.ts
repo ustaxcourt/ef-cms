@@ -4,7 +4,7 @@ import {
   clickConfirmModal,
   confirmEmailPendingAlert,
   goToMyAccount,
-} from '../../../cypress-integration/support/pages/my-account';
+} from '../../../local-only/support/pages/my-account';
 import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
