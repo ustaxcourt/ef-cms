@@ -361,7 +361,6 @@ describe('DocketEntry entity', () => {
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
           filedByRole: ROLES.petitioner,
-          isMinuteEntry: true,
           isOnDocketRecord: true,
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
@@ -369,7 +368,7 @@ describe('DocketEntry entity', () => {
       );
 
       expect(docketEntry.isValid()).toBe(true);
-      expect(docketEntry.isMinuteEntry).toBe(true);
+      expect(DocketEntry.isMinuteEntry(docketEntry)).toBe(true);
     });
   });
 
