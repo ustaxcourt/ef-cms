@@ -38,6 +38,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       eventCode: systemGeneratedDocument.eventCode,
       ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       isDraft: true,
+      isFileAttached: true,
     },
     { applicationContext },
   );
