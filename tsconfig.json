@@ -46,9 +46,9 @@
     "./scripts/run-once-scripts/**/*",
     "./cypress/**/*",
     "./cypress.config.ts",
-    "./deployed-and-local.config.ts",
-    "./deployed-and-local-readonly.config.ts",
-    "./deployed-and-local-readonly-public.config.ts",
+    "./cypress-smoketests.config.ts",
+    "./cypress-smoketests-readonly.config.ts",
+    "./cypress-smoketests-readonly-public.config.ts",
     "./cypress-public.config.ts"
   ]
 }
