@@ -17,12 +17,13 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
     otherType,
     partyType,
     petitionType,
+    useSameAsPrimary,
   } = get(state.form);
 
   const step2Data = {
     businessType,
     contactPrimary,
-    contactSecondary,
+    contactSecondary: useSameAsPrimary ? contactPrimary : contactSecondary,
     corporateDisclosureFile,
     corporateDisclosureFileSize,
     countryType,
@@ -35,6 +36,7 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
     otherType,
     partyType,
     petitionType,
+    useSameAsPrimary,
   };
 
   return {
