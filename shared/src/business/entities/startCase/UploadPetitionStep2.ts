@@ -1,5 +1,6 @@
 import {
   BUSINESS_TYPES,
+  ESTATE_TYPES,
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
@@ -95,7 +96,7 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
       }),
     countryType: JoiValidationConstants.STRING.optional(),
     estateType: JoiValidationConstants.STRING.valid(
-      ...Object.values(OTHER_TYPES),
+      ...Object.values(ESTATE_TYPES),
     )
       .when('otherType', {
         is: 'An estate or trust',
