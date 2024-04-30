@@ -1,0 +1,9 @@
+//todo: web-api/src/persistence/ses/getSesStatus.ts::getSesStatus
+//todo: sendBulkTemplatedEmail::sendBulkTemplatedEmail
+//todo: sendBulkTemplatedEmail::sendWithRetry
+//todo: web-api/src/persistence/messages/sendEmailEventToQueue.ts
+//todo: web-api/src/applicationContext.ts::getEmailClient
+//todo: web-api/src/applicationContext.ts::getMessageGateway
+//todo: shared/src/business/useCaseHelper/email/sendEmailVerificationLink.ts
+//todo: web-api/src/persistence/messages/sendEmailToUser.ts
+//todo: web-api/src/persistence/messages/sendEmailEventToQueue.ts
