@@ -30,6 +30,10 @@ export const getPractitionersByNameAction = async ({
     ],
     searchResults.lastKey,
   );
+  store.set(
+    state.advancedSearchForm.practitionerSearchByName.activePage,
+    props.selectedPage,
+  );
 
   return { searchResults };
 };

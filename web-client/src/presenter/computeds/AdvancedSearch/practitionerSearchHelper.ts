@@ -55,8 +55,12 @@ export const practitionerSearchHelper = (
     state.advancedSearchForm.caseSearchByName.countryType,
   );
   const searchResults = get(state.searchResults['practitioner']);
+  const activePage = get(
+    state.advancedSearchForm.practitionerSearchByName.activePage,
+  );
 
   const result = {
+    activePage,
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };

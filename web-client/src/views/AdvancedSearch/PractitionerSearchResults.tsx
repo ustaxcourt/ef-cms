@@ -3,7 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 export const PractitionerSearchResults = connect(
   {
@@ -18,9 +18,7 @@ export const PractitionerSearchResults = connect(
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
-    const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
-
     return (
       <>
         {practitionerSearchHelper.showSearchResults && (
@@ -31,7 +29,7 @@ export const PractitionerSearchResults = connect(
                 PRACTITIONER_SEARCH_PAGE_SIZE && (
                 <Paginator
                   breakClassName="hide"
-                  forcePage={activePage}
+                  forcePage={practitionerSearchHelper.activePage}
                   marginPagesDisplayed={0}
                   pageCount={practitionerSearchHelper.pageCount}
                   pageRangeDisplayed={0}
@@ -39,7 +37,6 @@ export const PractitionerSearchResults = connect(
                     submitPractitionerNameSearchSequence({
                       selectedPage: pageChange.selected,
                     });
-                    setActivePage(pageChange.selected);
                     focusPaginatorTop(paginatorTop);
                   }}
                 />
