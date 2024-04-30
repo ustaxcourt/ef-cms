@@ -39,7 +39,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const pdfjsExpressUrl = 'https://*.pdfjs.express';
-  const sentryUrl = 'https://*.ingest.sentry.io';
+  const sentryUrl = 'https://*.ingest.us.sentry.io';
 
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
