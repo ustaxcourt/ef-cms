@@ -14,9 +14,8 @@ export function createAndServePaperFiling(
   cy.get('[data-testid="objections-No"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
 
-  cy.get('input#primaryDocumentFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
-  );
+  //TODO: this is a broken path
+  cy.get('input#primaryDocumentFile-file').attachFile('../fixtures/sample.pdf');
 
   cy.get('[data-testid="save-and-serve"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
