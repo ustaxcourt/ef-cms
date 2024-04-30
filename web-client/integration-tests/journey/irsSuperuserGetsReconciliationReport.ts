@@ -10,7 +10,7 @@ export const irsSuperuserGetsReconciliationReport = cerebralTest => {
     }
     const user = {
       ...userMap[loginUsername],
-      sub: userMap[loginUsername].userId,
+      'custom:userId': userMap[loginUsername].userId,
     };
 
     const userToken = jwt.sign(user, 'secret');

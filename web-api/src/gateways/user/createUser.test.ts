@@ -7,8 +7,10 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { createUser } from '@web-api/gateways/user/createUser';
 
 describe('createUser', () => {
+  const userEmail = 'PetiTioneR@example.com';
+  const lowerCasedEmail = 'petitioner@example.com';
   const mockUser = {
-    email: 'petitioner@example.com',
+    email: userEmail,
     entityName: 'User',
     name: 'Bob Ross',
     role: ROLES.petitioner,
@@ -16,7 +18,7 @@ describe('createUser', () => {
     userId: '2f92447e-3a0b-4cfe-95cb-810aef270c03',
   };
 
-  it('should make a call to persistence to create a user with the provided attributes', async () => {
+  it('should make a call to persistence to create a user with the provided attributes, and the email lowercased', async () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
@@ -37,6 +39,10 @@ describe('createUser', () => {
       MessageAction: undefined,
       UserAttributes: [
         {
+          Name: 'custom:userId',
+          Value: mockUser.userId,
+        },
+        {
           Name: 'custom:role',
           Value: mockUser.role,
         },
@@ -45,12 +51,8 @@ describe('createUser', () => {
           Value: mockUser.name,
         },
         {
-          Name: 'custom:userId',
-          Value: mockUser.userId,
-        },
-        {
           Name: 'email',
-          Value: mockUser.email,
+          Value: lowerCasedEmail,
         },
         {
           Name: 'email_verified',
@@ -58,11 +60,11 @@ describe('createUser', () => {
         },
       ],
       UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockUser.email,
+      Username: lowerCasedEmail,
     });
   });
 
-  it('should resend an invitation email to the user when resendInvitationEmail is true', async () => {
+  it('should resend an invitation email to the user when resendInvitationEmail is true, and lowercase their email', async () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
@@ -83,6 +85,10 @@ describe('createUser', () => {
       MessageAction: MessageActionType.RESEND,
       UserAttributes: [
         {
+          Name: 'custom:userId',
+          Value: mockUser.userId,
+        },
+        {
           Name: 'custom:role',
           Value: mockUser.role,
         },
@@ -91,12 +97,8 @@ describe('createUser', () => {
           Value: mockUser.name,
         },
         {
-          Name: 'custom:userId',
-          Value: mockUser.userId,
-        },
-        {
           Name: 'email',
-          Value: mockUser.email,
+          Value: lowerCasedEmail,
         },
         {
           Name: 'email_verified',
@@ -104,7 +106,7 @@ describe('createUser', () => {
         },
       ],
       UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockUser.email,
+      Username: lowerCasedEmail,
     });
   });
 
@@ -112,7 +114,9 @@ describe('createUser', () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {},
+      attributesToUpdate: {
+        userId: 'b95429eb-54e1-4755-a35f-3b4f137f0693',
+      },
       email: mockUser.email,
       resendInvitationEmail: false,
     });
@@ -127,7 +131,9 @@ describe('createUser', () => {
     process.env.STAGE = 'test';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {},
+      attributesToUpdate: {
+        userId: '2d09e076-1220-4abe-adb9-f73e9acb114d',
+      },
       email: mockUser.email,
       resendInvitationEmail: false,
     });

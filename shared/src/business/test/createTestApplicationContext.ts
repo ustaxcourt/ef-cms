@@ -359,11 +359,6 @@ export const createTestApplicationContext = ({
     put: jest.fn(),
   };
 
-  const mockAsyncSync = appContextProxy({
-    getAsyncSyncCompleter: jest.fn(),
-    removeAsyncSyncCompleter: jest.fn(),
-  });
-
   const mockGetUseCases = appContextProxy({
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
@@ -608,7 +603,6 @@ export const createTestApplicationContext = ({
     },
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
-    getAsynSyncUtil: mockAsyncSync,
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
@@ -649,7 +643,6 @@ export const createTestApplicationContext = ({
     getDocumentGenerators: jest
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),
-    getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
     getEnvironment: jest.fn().mockReturnValue({
@@ -680,14 +673,12 @@ export const createTestApplicationContext = ({
     getPersistenceGateway: mockGetPersistenceGateway,
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
-    getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: emptyAppContextProxy,
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
-    getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
@@ -703,7 +694,6 @@ export const createTestApplicationContext = ({
       info: jest.fn(),
       warn: jest.fn(),
     },
-    runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
     setTimeout: jest.fn().mockImplementation(callback => callback()),

@@ -3,8 +3,9 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { signUp } from '@web-api/gateways/user/signUp';
 
 describe('signUp', () => {
-  it('should make a call to disable the user with the provided email', async () => {
-    const mockEmail = 'test@example.com';
+  it('should make a call to sign up the user with the provided email, lowercased', async () => {
+    const mockEmail = 'teST@EXAMPLE.com';
+    const mockLowerCasedEmail = mockEmail.toLowerCase();
     const mockName = 'Test Petitioner';
     const mockPassword = 'P@ssword!';
     const mockRole = ROLES.petitioner;
@@ -20,28 +21,37 @@ describe('signUp', () => {
       role: mockRole,
     });
 
-    expect(applicationContext.getCognito().signUp).toHaveBeenCalledWith({
-      ClientId: mockCognitoClientId,
+    expect(
+      applicationContext.getCognito().signUp.mock.calls[0][0],
+    ).toMatchObject({
       Password: mockPassword,
       UserAttributes: [
         {
           Name: 'email',
-          Value: mockEmail,
+          Value: mockLowerCasedEmail,
         },
         {
           Name: 'name',
           Value: mockName,
         },
+      ],
+      Username: mockLowerCasedEmail,
+    });
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes.mock
+        .calls[0][0],
+    ).toMatchObject({
+      UserAttributes: [
         {
           Name: 'custom:userId',
           Value: mockUserId,
         },
         {
           Name: 'custom:role',
-          Value: mockRole,
+          Value: ROLES.petitioner,
         },
       ],
-      Username: mockEmail,
+      Username: mockLowerCasedEmail,
     });
   });
 });

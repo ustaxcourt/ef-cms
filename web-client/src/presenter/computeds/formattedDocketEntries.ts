@@ -10,8 +10,12 @@ type DocketEntriesSelectionType = (RawDocketEntry & {
   isDocumentSelected?: boolean;
 })[];
 
-export const isSelectableForDownload = entry => {
-  return !entry.isMinuteEntry && entry.isFileAttached && entry.isOnDocketRecord;
+export const isSelectableForDownload = (entry: RawDocketEntry) => {
+  return (
+    !DocketEntry.isMinuteEntry(entry) &&
+    entry.isFileAttached &&
+    entry.isOnDocketRecord
+  );
 };
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
