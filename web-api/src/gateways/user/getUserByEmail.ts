@@ -29,10 +29,9 @@ export const getUserByEmail = async (
     }
   | undefined
 > => {
-  const cognito = applicationContext.getCognito();
   let foundUser: AdminGetUserCommandOutput;
   try {
-    foundUser = await cognito.adminGetUser({
+    foundUser = await applicationContext.getCognito().adminGetUser({
       UserPoolId: process.env.USER_POOL_ID,
       Username: email,
     });

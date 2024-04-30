@@ -24,7 +24,7 @@ describe('Work item assignment', () => {
           elm.length,
         );
       });
-      cy.get('[data-testid="dropdown-select-assignee"]').select('Unassigned');
+      cy.get('[data-testid="dropdown-filter-assignee"]').select('Unassigned');
       cy.get('[data-testid="select-work-item"]:checked').should(
         'have.length',
         0,

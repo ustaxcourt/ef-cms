@@ -1,10 +1,7 @@
 import * as client from '../../dynamodbClientService';
-import {
-  AdminCreateUserCommandInput,
-  CognitoIdentityProvider,
-} from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -35,52 +32,27 @@ export const createNewPetitionerUser = async ({
   applicationContext,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   user: RawUser;
-}) => {
-  const { userId } = user;
-
-  const input: AdminCreateUserCommandInput = {
-    DesiredDeliveryMediums: ['EMAIL'],
-    UserAttributes: [
-      {
-        Name: 'email_verified',
-        Value: 'True',
+}): Promise<void> => {
+  const createUserPromise = applicationContext
+    .getUserGateway()
+    .createUser(applicationContext, {
+      attributesToUpdate: {
+        email: user.pendingEmail,
+        name: user.name,
+        role: ROLES.petitioner,
+        userId: user.userId,
       },
-      {
-        Name: 'email',
-        Value: user.pendingEmail,
-      },
-      {
-        Name: 'custom:role',
-        Value: ROLES.petitioner,
-      },
-      {
-        Name: 'name',
-        Value: user.name,
-      },
-      {
-        Name: 'custom:userId',
-        Value: user.userId,
-      },
-    ],
-    UserPoolId: process.env.USER_POOL_ID!,
-    Username: user.pendingEmail!,
-  };
+      email: user.pendingEmail!,
+      resendInvitationEmail: false,
+    });
 
-  if (process.env.STAGE !== 'prod') {
-    input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
-  }
-
-  const cognito: CognitoIdentityProvider = applicationContext.getCognito();
-
-  await cognito.adminCreateUser(input);
-
-  const newUser: RawUser = await createUserRecords({
+  const createUserRecordsPromise = createUserRecords({
     applicationContext,
     newUser: user,
-    userId,
+    userId: user.userId,
   });
 
-  return newUser;
+  await Promise.all([createUserPromise, createUserRecordsPromise]);
 };

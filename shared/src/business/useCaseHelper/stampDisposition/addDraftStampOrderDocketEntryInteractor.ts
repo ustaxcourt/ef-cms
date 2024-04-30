@@ -88,6 +88,7 @@ export const addDraftStampOrderDocketEntry = async (
       filedBy: user.judgeFullName || user.name,
       freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
+      isFileAttached: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       stampData: validatedStampData,
