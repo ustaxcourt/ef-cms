@@ -230,7 +230,6 @@ import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/t
 import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/getTrialSessionsForJudgeActivityReportProxy';
 import { getTrialSessionsForJudgeInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsForJudgeProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
-import { getUserByIdInteractor } from '../../shared/src/proxies/users/getUserByIdProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { getUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
@@ -284,6 +283,7 @@ import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { signUpUserInteractor } from '../../shared/src/proxies/signUpUserProxy';
 import { sleep } from '@shared/tools/helpers';
+import { startPollingForResultsInteractor } from '@shared/proxies/polling/startPollingForResultsProxy';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
@@ -513,7 +513,6 @@ const allUseCases = {
   getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
-  getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
@@ -558,6 +557,7 @@ const allUseCases = {
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
   signUpUserInteractor,
+  startPollingForResultsInteractor,
   strikeDocketEntryInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,

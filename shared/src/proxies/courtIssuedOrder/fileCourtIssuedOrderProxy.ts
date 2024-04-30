@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncHandler, post } from '../requests';
 
 /**
  * fileCourtIssuedOrderProxy
@@ -14,12 +14,17 @@ export const fileCourtIssuedOrderInteractor = (
   { documentMetadata, primaryDocumentFileId },
 ) => {
   const { docketNumber } = documentMetadata;
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    body: {
-      documentMetadata,
-      primaryDocumentFileId,
-    },
-    endpoint: `/case-documents/${docketNumber}/court-issued-order`,
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        body: {
+          documentMetadata,
+          primaryDocumentFileId,
+        },
+        endpoint: `/async/case-documents/${docketNumber}/court-issued-order`,
+      }),
+  );
 };

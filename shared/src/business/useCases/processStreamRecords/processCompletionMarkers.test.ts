@@ -17,6 +17,9 @@ describe('processCompletionMarker', () => {
         completedAt: {
           S: '2020-01-01T05:00:00Z',
         },
+        deployingColor: {
+          S: 'green',
+        },
         entityName: {
           S: 'CompletionMarker',
         },
@@ -41,6 +44,7 @@ describe('processCompletionMarker', () => {
 
   beforeEach(() => {
     process.env.STAGE = 'jest';
+    process.env.CURRENT_COLOR = 'green';
   });
 
   it('returns immediately if the completion markers array is empty', async () => {
@@ -51,24 +55,27 @@ describe('processCompletionMarker', () => {
     expect(applicationContext.logger.debug).not.toHaveBeenCalled();
   });
 
-  it.each(['apiToken', 'environment', 'jobName', 'workflowId'])(
-    'does not proceed if %s is undefined',
-    async key => {
-      const invalidCompletionMarker = cloneDeep(mockCompletionMarker);
-      if (
-        invalidCompletionMarker.dynamodb &&
-        invalidCompletionMarker.dynamodb.NewImage &&
-        invalidCompletionMarker.dynamodb.NewImage[key]
-      ) {
-        invalidCompletionMarker.dynamodb.NewImage[key].S = undefined;
-      }
-      await processCompletionMarkers({
-        applicationContext,
-        completionMarkers: [invalidCompletionMarker],
-      });
-      expect(approvePendingJob).not.toHaveBeenCalled();
-    },
-  );
+  it.each([
+    'apiToken',
+    'deployingColor',
+    'environment',
+    'jobName',
+    'workflowId',
+  ])('does not proceed if %s is undefined', async key => {
+    const invalidCompletionMarker = cloneDeep(mockCompletionMarker);
+    if (
+      invalidCompletionMarker.dynamodb &&
+      invalidCompletionMarker.dynamodb.NewImage &&
+      invalidCompletionMarker.dynamodb.NewImage[key]
+    ) {
+      invalidCompletionMarker.dynamodb.NewImage[key].S = undefined;
+    }
+    await processCompletionMarkers({
+      applicationContext,
+      completionMarkers: [invalidCompletionMarker],
+    });
+    expect(approvePendingJob).not.toHaveBeenCalled();
+  });
 
   it("does not proceed if the completion marker's environment does not match this one", async () => {
     process.env.STAGE = 'not-jest';

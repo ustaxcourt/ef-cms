@@ -18,13 +18,13 @@ describe('verifyUserPendingEmailInteractor', () => {
     barNumber: 'RA3333',
     birthYear: '1950',
     email: 'test@example.com',
-    employer: 'Private',
     firstName: 'Alden',
     lastName: 'Rivas',
     name: 'Alden Rivas',
     originalBarState: 'FL',
     pendingEmail: 'other@example.com',
     pendingEmailVerificationToken: TOKEN,
+    practiceType: 'Private',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -100,7 +100,7 @@ describe('verifyUserPendingEmailInteractor', () => {
 
     await expect(
       verifyUserPendingEmailInteractor(applicationContext, {
-        token: undefined,
+        token: undefined as any,
       }),
     ).rejects.toThrow('Tokens do not match');
   });
@@ -118,23 +118,19 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   it('should update the cognito email when tokens match', async () => {
-    await expect(
-      verifyUserPendingEmailInteractor(applicationContext, {
-        token: TOKEN,
-      }),
-    ).resolves.not.toThrow();
-
-    const adminUpdateUserAttributesResult =
-      applicationContext.getCognito().adminUpdateUserAttributes.mock
-        .calls[0][0];
-
-    expect(adminUpdateUserAttributesResult.UserAttributes[0]).toMatchObject({
-      Name: 'email',
-      Value: 'other@example.com',
+    await verifyUserPendingEmailInteractor(applicationContext, {
+      token: TOKEN,
     });
-    expect(adminUpdateUserAttributesResult).toMatchObject({
-      Username: 'test@example.com',
-    });
+
+    expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
+      applicationContext,
+      {
+        attributesToUpdate: {
+          email: 'other@example.com',
+        },
+        email: 'test@example.com',
+      },
+    );
   });
 
   it('should update the dynamo record with the new info', async () => {

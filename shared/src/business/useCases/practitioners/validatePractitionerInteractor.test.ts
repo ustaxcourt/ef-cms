@@ -16,10 +16,10 @@ describe('validatePractitionerInteractor', () => {
       'admissionsStatus',
       'barNumber',
       'birthYear',
-      'employer',
       'firstName',
       'lastName',
       'originalBarState',
+      'practiceType',
       'practitionerType',
     ]);
   });
@@ -31,10 +31,10 @@ describe('validatePractitionerInteractor', () => {
         admissionsStatus: 'Active',
         barNumber: 'PT7890',
         birthYear: '2009',
-        employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',
         originalBarState: 'IL',
+        practiceType: 'IRS',
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         userId: '195e31b6-20f7-4fa4-980e-4236b771cced',
