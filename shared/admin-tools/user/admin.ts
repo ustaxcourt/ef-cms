@@ -82,7 +82,7 @@ export async function createOrUpdateUser(
     user: RawUser | RawPractitioner;
     password: string;
   },
-): Promise<{ userId: string }> {
+): Promise<RawUser> {
   const userPoolId =
     user.role === ROLES.irsSuperuser
       ? process.env.USER_POOL_IRS_ID
@@ -153,5 +153,5 @@ export async function createOrUpdateUser(
     Username: user.email?.toLowerCase(),
   });
 
-  return { userId };
+  return rawUser;
 }
