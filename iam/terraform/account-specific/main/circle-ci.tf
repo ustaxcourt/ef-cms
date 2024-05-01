@@ -305,7 +305,7 @@ resource "aws_iam_user_policy_attachment" "circle_ci_iam_policy_attachment" {
   policy_arn = aws_iam_policy.circle_ci_iam_policy.arn
 }
 
-# TODO 10345: All old roles need to be removed AFTER this story has been deployed to all environments on an account.
+# 10345 Cleanup: All old roles need to be removed AFTER this story has been deployed to all environments on an account.
 # If it is removed before then, CircleCI will not have appropriate (backwards compatible) permission as it has been renamed.
 # Old roles start on line 363 and below.
 resource "aws_iam_policy" "circle_ci_iam_policy" {
