@@ -36,7 +36,7 @@ fi
 echo "Initiating Terraform state bucket creation for [${MY_ARN}], bucket [${BUCKET}], key [${KEY}] in region [${REGION}]"
 
 aws s3 mb "s3://${BUCKET}" --region "${REGION}"
-sed -e "s/RESOURCE/arn:aws:s3:::${BUCKET}/g" -e "s/KEY/${KEY}/g" -e "s|ARN|${MY_ARN}|g" "../../../shared/terraform/bin/policy.json" > new-policy.json
+sed -e "s/RESOURCE/arn:aws:s3:::${BUCKET}/g" -e "s/KEY/${KEY}/g" -e "s|ARN|${MY_ARN}|g" "../../../../shared/terraform/bin/policy.json" > new-policy.json
 aws s3api put-bucket-policy --bucket "${BUCKET}" --policy file://new-policy.json
 aws s3api put-bucket-versioning --bucket "${BUCKET}" --versioning-configuration Status=Enabled
 rm new-policy.json
