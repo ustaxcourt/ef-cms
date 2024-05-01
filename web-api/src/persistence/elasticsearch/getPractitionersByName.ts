@@ -53,6 +53,7 @@ export const getPractitionersByName = async ({
     },
     index: 'efcms-user',
     size: PRACTITIONER_SEARCH_PAGE_SIZE,
+    track_scores: true,
     track_total_hits: true,
   };
 
