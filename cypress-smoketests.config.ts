@@ -1,17 +1,19 @@
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
-  expireUserConfirmationCode,
-  getEmailVerificationToken,
-  getNewAccountVerificationCode,
-} from './cypress/support/cognito-login';
+} from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
   deleteAllItemsInEmailBucket,
   readAllItemsInBucket,
-} from './cypress/cypress-smoketests/support/email-receipt';
-import { waitForNoce } from './cypress/helpers/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
+} from './cypress/deployed-and-local/support/email-receipt';
+import {
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
+import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -72,11 +74,11 @@ export default defineConfig({
       });
     },
     specPattern:
-      'cypress/cypress-smoketests/integration/**/*.cy.{js,jsx,ts,tsx}',
-    supportFile: 'cypress/cypress-smoketests/support/index.ts',
+      'cypress/deployed-and-local/integration/**/*.cy.{js,jsx,ts,tsx}',
+    supportFile: 'cypress/deployed-and-local/support/index.ts',
     testIsolation: false,
   },
-  fixturesFolder: 'cypress/cypress-smoketests/fixtures',
+  fixturesFolder: 'cypress/deployed-and-local/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
@@ -84,10 +86,10 @@ export default defineConfig({
   requestTimeout: 60000,
   retries: 0,
   screenshotOnRunFailure: false,
-  screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
+  screenshotsFolder: 'cypress/deployed-and-local/screenshots',
   video: true,
   videoCompression: 10,
-  videosFolder: 'cypress/cypress-smoketests/videos',
+  videosFolder: 'cypress/deployed-and-local/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
   watchForFileChanges: false,

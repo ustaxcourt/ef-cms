@@ -22,19 +22,20 @@ ENV=$1
 
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
-pushd ./web-api/terraform/main
-../bin/deploy-init.sh "${ENV}"
-
-
 if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
-  ELASTICSEARCH_ENDPOINT="$(terraform output -raw elasticsearch_endpoint_alpha)"
+  ELASTICSEARCH_ENDPOINT=$(aws ssm get-parameter \
+    --region "us-east-1" \
+    --name "terraform-${ENV}-elasticsearch-endpoint-alpha" \
+    --with-decryption | jq -r ".Parameter.Value")
 else
-  ELASTICSEARCH_ENDPOINT="$(terraform output -raw elasticsearch_endpoint_beta)"
+  ELASTICSEARCH_ENDPOINT=$(aws ssm get-parameter \
+    --region "us-east-1" \
+    --name "terraform-${ENV}-elasticsearch-endpoint-beta" \
+    --with-decryption | jq -r ".Parameter.Value")
 fi
 
-popd
-
 echo "- DESTINATION_DOMAIN: ${DESTINATION_DOMAIN}"
+echo "- ELASTICSEARCH_ENDPOINT: ${ELASTICSEARCH_ENDPOINT}"
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT}" ]]; then
   echo " => Setting up ${DESTINATION_DOMAIN} Cluster"

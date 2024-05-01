@@ -32,9 +32,6 @@ fi
 npm run build:assets
 
 set -eo pipefail
-if [[ -n "$2" ]] && [[ "$2" == "--build-lambda" ]]; then
-  npm run "build:lambda:${SLUG}"
-fi
 
 terraform init -upgrade -backend=true \
  -backend-config=bucket="${BUCKET}" \

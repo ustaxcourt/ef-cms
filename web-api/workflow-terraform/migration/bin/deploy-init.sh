@@ -31,4 +31,4 @@ export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
 export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
 
-../../../../shared/terraform/bin/init.sh migration --build-lambda
+../../../../shared/terraform/bin/init.sh migration
