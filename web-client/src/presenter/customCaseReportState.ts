@@ -1,13 +1,14 @@
 import {
   CaseInventory,
   CustomCaseReportFilters,
-} from '../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
+  CustomCaseReportSearchAfter,
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 
 export type CustomCaseReportState = {
   totalCases: number;
   cases: CaseInventory[];
   filters: CustomCaseReportFilters;
-  lastIdsOfPages: { receivedAt: number; pk: string }[];
+  lastIdsOfPages: CustomCaseReportSearchAfter[];
 };
 
 export const initialCustomCaseReportState: CustomCaseReportState = {
@@ -23,6 +24,6 @@ export const initialCustomCaseReportState: CustomCaseReportState = {
     procedureType: 'All',
     startDate: '',
   },
-  lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
+  lastIdsOfPages: [{ pk: null, receivedAt: null }],
   totalCases: 0,
 };

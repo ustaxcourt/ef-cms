@@ -1,7 +1,8 @@
 import {
+  AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   PARTIES_CODES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   fakeFile,
@@ -101,7 +102,7 @@ describe('Amicus Brief Journey', () => {
 
     expect(amicusBriefDocketEntry).toMatchObject({
       documentTitle: amicusBriefMissingFormFields.freeText,
-      documentType: 'Amicus Brief',
+      documentType: AMICUS_BRIEF_DOCUMENT_TYPE,
       eventCode: AMICUS_BRIEF_EVENT_CODE,
       filedBy: amicusBriefMissingFormFields.otherFilingParty,
       isFileAttached: true,
@@ -147,7 +148,7 @@ describe('Amicus Brief Journey', () => {
 
     expect(amicusbriefDocument).toMatchObject({
       documentTitle: 'The final title of this document',
-      documentType: 'Amicus Brief',
+      documentType: AMICUS_BRIEF_DOCUMENT_TYPE,
       filedBy: 'Marie Dont Curie',
       isFileAttached: true,
       servedPartiesCode: PARTIES_CODES.BOTH,

@@ -1,8 +1,9 @@
 import {
+  AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   PARTY_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { filingPartiesFormHelper as filingPartiesFormHelperComputed } from './filingPartiesFormHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -174,7 +175,7 @@ describe('filingPartiesFormHelper', () => {
         state: {
           ...baseState,
           form: {
-            documentType: 'Amicus Brief',
+            documentType: AMICUS_BRIEF_DOCUMENT_TYPE,
             eventCode: AMICUS_BRIEF_EVENT_CODE,
           },
         },

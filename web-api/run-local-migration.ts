@@ -24,7 +24,6 @@ const applicationContext = createApplicationContext({});
   const results = await scanFull(process.env.SOURCE_TABLE!, documentClient);
 
   await processItems(applicationContext, {
-    documentClient,
     items: results,
     ranMigrations: undefined,
   });

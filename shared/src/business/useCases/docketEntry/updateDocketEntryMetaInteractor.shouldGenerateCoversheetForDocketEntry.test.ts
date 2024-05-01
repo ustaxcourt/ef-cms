@@ -11,7 +11,6 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
       eventCode: 'SOP',
       filingDate: '2011-02-22T00:01:00.000Z',
       index: 7,
-      isMinuteEntry: false,
       judge: 'Buch',
       userId: '38c36925-c936-44c5-b219-e13039f7d235',
     },
@@ -25,7 +24,6 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
   let shouldAddNewCoverSheet = false;
 
   it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', () => {
-    mockDocketEntry.isMinuteEntry = false;
     shouldAddNewCoverSheet = true;
     entryRequiresCoverSheet = true;
 
@@ -41,7 +39,6 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
   });
 
   it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', () => {
-    mockDocketEntry.isMinuteEntry = false;
     shouldAddNewCoverSheet = true;
     entryRequiresCoverSheet = true;
 
@@ -57,7 +54,6 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
   });
 
   it('should return true when the certificateOfService changes', () => {
-    mockDocketEntry.isMinuteEntry = false;
     shouldAddNewCoverSheet = false;
     entryRequiresCoverSheet = true;
 
@@ -74,7 +70,6 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
   });
 
   it('should return true when the documentTitle changes', () => {
-    mockDocketEntry.isMinuteEntry = false;
     shouldAddNewCoverSheet = false;
     entryRequiresCoverSheet = true;
 
@@ -92,7 +87,6 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
   });
 
   it('should return false if nothing related to the coversheet has changed on the metadata', () => {
-    mockDocketEntry.isMinuteEntry = false;
     shouldAddNewCoverSheet = false;
     entryRequiresCoverSheet = true;
     servedAtUpdated = false;
