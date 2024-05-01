@@ -27,6 +27,8 @@ module.exports = {
       files: [
         '*.js',
         'cypress/**/*.ts',
+        '*.mjs',
+        '*.cjs',
         'webpack.config**',
         './cypress*.config.ts',
       ],
