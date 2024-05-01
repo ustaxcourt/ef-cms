@@ -1,4 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES, ROLES } from '../entities/EntityConstants';
 
 export const serveCaseDocument = async ({
@@ -16,7 +17,11 @@ export const serveCaseDocument = async ({
     doc => doc.documentType === initialDocumentType.documentType,
   );
 
-  if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
+  if (
+    initialDocketEntry &&
+    !DocketEntry.isUnservable(initialDocketEntry) &&
+    initialDocketEntry.isFileAttached
+  ) {
     initialDocketEntry.setAsServed([
       {
         name: 'IRS',

@@ -15,12 +15,12 @@ describe('updateUserPendingEmailInteractor', () => {
       admissionsStatus: 'Active',
       barNumber: 'RA3333',
       birthYear: '1950',
-      employer: 'Private',
       entityName: 'Practitioner',
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
       originalBarState: 'FL',
+      practiceType: 'Private',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
     };

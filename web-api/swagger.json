@@ -8590,10 +8590,6 @@
           "type": "boolean",
           "description": "used to know if a file is attached to the docket entry"
         },
-        "isMinuteEntry": {
-          "type": "boolean",
-          "description": "used to know if the docket entry is a minute entry"
-        },
         "isOnDocketRecord": {
           "type": "boolean",
           "description": "used to know if the docket entry is on the docket record"

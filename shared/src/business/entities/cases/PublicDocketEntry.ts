@@ -25,7 +25,6 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public index?: number;
   public isFileAttached?: boolean;
   public isLegacyServed?: boolean;
-  public isMinuteEntry?: boolean;
   public isOnDocketRecord?: boolean;
   public isPaper?: boolean;
   public isSealed: boolean;
@@ -63,7 +62,6 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.isFileAttached = rawProps.isFileAttached;
     this.filedByRole = rawProps.filedByRole;
     this.isLegacyServed = rawProps.isLegacyServed;
-    this.isMinuteEntry = rawProps.isMinuteEntry;
     this.isOnDocketRecord = rawProps.isOnDocketRecord;
     this.isPaper = rawProps.isPaper;
     this.isSealed = !!rawProps.isSealed;
@@ -113,7 +111,6 @@ export class PublicDocketEntry extends JoiValidationEntity {
     index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
     isFileAttached: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isFileAttached,
     isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,
-    isMinuteEntry: joi.boolean().optional(),
     isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
     isSealed: joi.boolean().required(),
     isStricken: joi
