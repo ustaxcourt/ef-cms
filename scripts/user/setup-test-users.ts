@@ -47,6 +47,7 @@ const createManyAccounts = async (
 
     await createOrUpdateUser(applicationContext, {
       password: DEFAULT_ACCOUNT_PASS!,
+      setPasswordAsPermanent: true,
       user,
     });
   }
@@ -154,6 +155,7 @@ const setupPractitioners = async (
 
       return createOrUpdateUser(applicationContext, {
         password: DEFAULT_ACCOUNT_PASS!,
+        setPasswordAsPermanent: true,
         user,
       });
     });

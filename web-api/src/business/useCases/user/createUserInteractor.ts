@@ -32,6 +32,7 @@ export const createUserInteractor = async (
   const { password, ...everyThingElse } = user;
   return await createOrUpdateUser(applicationContext, {
     password,
+    setPasswordAsPermanent: false,
     user: everyThingElse,
   });
 };

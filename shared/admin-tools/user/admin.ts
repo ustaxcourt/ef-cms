@@ -77,10 +77,12 @@ export async function createOrUpdateUser(
   applicationContext: ServerApplicationContext,
   {
     password,
+    setPasswordAsPermanent,
     user,
   }: {
     user: RawUser | RawPractitioner;
     password: string;
+    setPasswordAsPermanent: boolean;
   },
 ): Promise<RawUser> {
   const userPoolId =
@@ -148,7 +150,7 @@ export async function createOrUpdateUser(
 
   await applicationContext.getCognito().adminSetUserPassword({
     Password: password,
-    Permanent: true,
+    Permanent: setPasswordAsPermanent,
     UserPoolId: userPoolId,
     Username: user.email?.toLowerCase(),
   });
