@@ -53,7 +53,7 @@ export const getCustomCaseReportAction = async ({
     .getCustomCaseReportInteractor(applicationContext, {
       ...filterValues,
       endDate: formattedEndDate,
-      judges: judgesIds,
+      judges: judgesIds!,
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
       searchAfter,
       startDate: formattedStartDate,
