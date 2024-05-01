@@ -35,8 +35,7 @@ export const formattedMessageDetail = (
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
   const user = applicationContext.getCurrentUser();
-  const { UNSERVABLE_EVENT_CODES, USER_ROLES } =
-    applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -63,7 +62,6 @@ export const formattedMessageDetail = (
   if (formattedMessages[0].attachments) {
     formattedMessages[0].attachments.map(attachment => {
       attachment.showNotServed = getShowNotServedForDocument({
-        UNSERVABLE_EVENT_CODES,
         caseDetail,
         docketEntryId: attachment.documentId,
         draftDocuments,
