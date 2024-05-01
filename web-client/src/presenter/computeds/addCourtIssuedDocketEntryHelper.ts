@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -9,7 +10,6 @@ export const addCourtIssuedDocketEntryHelper = (
   const {
     COURT_ISSUED_EVENT_CODES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
-    UNSERVABLE_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
   const caseDetail = applicationContext
@@ -54,9 +54,9 @@ export const addCourtIssuedDocketEntryHelper = (
     form.attachments ? ' (Attachment(s))' : ''
   }`;
 
-  const eventCodeIsUnservable = !!UNSERVABLE_EVENT_CODES.includes(
-    form.eventCode,
-  );
+  const eventCodeIsUnservable = DocketEntry.isUnservable({
+    eventCode: form.eventCode,
+  });
 
   const eventCodesNotRequiringAttachmentsAndService = ['TCRP'];
 

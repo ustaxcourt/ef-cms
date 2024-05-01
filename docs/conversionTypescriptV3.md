@@ -25,7 +25,7 @@
 
 ## Steps to convert cypress tests to Typescript
 1. Verify the only file in the ./cypress folder is tsconfig.json. Delete any other file or folder.
-1. Move cypress-integration, cypress-readonly, cypress-smoketests into the cypress foleder
+1. Move local-only, readonly, deployed-and-local into the cypress foleder
 1. Commit all files with a --no-verify
 1. Rename all .js files to .ts files in cypress
   - Navigate to cypress/ in the terminal and run: ```find . -iname "*.js" -exec rename -f 's/\.js/\.ts/' {} \;```
