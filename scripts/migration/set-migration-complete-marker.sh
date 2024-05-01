@@ -3,7 +3,7 @@
 # Writes a record that will indicate to the streams lambda that migration writes have finished indexing
 
 # Usage
-#   ./scripts/dynamo/set-migration-complete-marker.sh
+#   ./scripts/migration/set-migration-complete-marker.sh
 
 ./check-env-variables.sh \
   "AWS_ACCESS_KEY_ID" \

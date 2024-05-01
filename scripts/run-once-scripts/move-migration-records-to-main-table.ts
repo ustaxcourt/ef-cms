@@ -7,7 +7,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { BatchWriteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { chunk } from 'lodash';
-import { getMigrationFiles } from '../../scripts/dynamo/migrationFilesHelper.ts';
+import { getMigrationFiles } from '../../scripts/migration/migrationFilesHelper';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
