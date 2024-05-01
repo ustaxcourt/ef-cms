@@ -1,3 +1,4 @@
+import { captureException, setUser } from '@web-api/sentry';
 import { createApplicationContext } from './applicationContext';
 import {
   getConnectionIdFromEvent,
@@ -60,6 +61,13 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
 export const genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
     const user = options.user || getUserFromAuthHeader(awsEvent);
+    if (user) {
+      setUser({
+        ip: awsEvent.ip,
+        name: user.name,
+        userId: user.userId as string,
+      });
+    }
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext =
       options.applicationContext ||
@@ -97,11 +105,13 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
 
       return returnResults;
     } catch (e) {
-      if (!e.skipLogging) {
+      const error = e as Error & { skipLogging?: boolean };
+      if (!error.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
-        applicationContext.logger.error(e);
+        applicationContext.logger.error(error);
+        await captureException(error);
       }
-      throw e;
+      throw error;
     }
   });
 };

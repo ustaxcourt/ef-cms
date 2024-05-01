@@ -75,4 +75,10 @@ variable "slack_webhook_url" {
   type = string
 }
 
+variable "sentry_dsn_api" {
+  type = string
+}
 
+variable "commit_sha" {
+  type = string
+}

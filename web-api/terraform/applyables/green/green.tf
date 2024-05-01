@@ -85,6 +85,8 @@ data "null_data_source" "locals" {
     TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
+    SENTRY_DSN_API                     = var.sentry_dsn_api
+    COMMIT_SHA                         = var.commit_sha
   }
 }
 
