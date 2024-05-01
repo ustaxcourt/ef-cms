@@ -152,10 +152,24 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({ '*': 'Select an other type of taxpayer' }),
+    partyType: joi.required(), // This will be undefined when any sub radios are not selected
   };
 
   getValidationRules() {
     return UploadPetitionStep2.VALIDATION_RULES;
+  }
+
+  getFormattedValidationErrors(): Record<string, any> | null {
+    const errors = super.getFormattedValidationErrors();
+    // If partyType is failing that means user has not selected all the radio buttons
+    // meaning if that is the case we should not be displaying errors for the contact
+    if (errors?.partyType)
+      return {
+        ...errors,
+        contactPrimary: undefined,
+        partyType: undefined,
+      };
+    return errors;
   }
 }
 
