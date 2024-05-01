@@ -1,18 +1,20 @@
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
-  expireUserConfirmationCode,
-  getEmailVerificationToken,
-  getNewAccountVerificationCode,
-} from './cypress/support/cognito-login';
+} from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
   deleteAllFilesInFolder,
   ensureFolderExists,
-} from './cypress/cypress-integration/support/database';
-import { unzipFile } from './cypress/helpers/unzip-file';
-import { waitForNoce } from './cypress/helpers/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/wait-for-practitioner-email-update';
+} from './cypress/local-only/support/database';
+import {
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import { unzipFile } from './cypress/helpers/file/unzip-file';
+import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
+import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -64,11 +66,11 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/cypress-integration/integration/**/*.cy.ts',
-    supportFile: 'cypress/cypress-integration/support/index.ts',
+    specPattern: 'cypress/local-only/integration/**/*.cy.ts',
+    supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },
-  fixturesFolder: 'cypress/cypress-integration/fixtures',
+  fixturesFolder: 'cypress/local-only/fixtures',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
@@ -76,9 +78,9 @@ export default defineConfig({
   requestTimeout: 60000,
   retries: 0,
   screenshotOnRunFailure: false,
-  screenshotsFolder: 'cypress/cypress-integration/screenshots',
+  screenshotsFolder: 'cypress/local-only/screenshots',
   video: true,
-  videosFolder: 'cypress/cypress-integration/videos',
+  videosFolder: 'cypress/local-only/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
   watchForFileChanges: false,
