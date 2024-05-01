@@ -1,8 +1,7 @@
 ## TO DO
-- Move files from scripts/dynamo to scripts/migration
 - Update documentation around anything having to do with workflow-terraform/ directory
 - Add blue green migrations for UI
-- Delete environment specific terraform.
+- Create PR with environment-specific folder deleted so it can be merged after we delete all the environment-specific resources.
 
 ## Deployment Steps:
 - Run an account specific deploy.

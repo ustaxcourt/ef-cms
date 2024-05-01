@@ -171,7 +171,7 @@
     "maintenance:disengage:local": ". ./setup-local-env.sh && npx ts-node --transpile-only scripts/set-maintenance-mode-locally.ts false",
     "maintenance:engage:local": ". ./setup-local-env.sh && npx ts-node --transpile-only scripts/set-maintenance-mode-locally.ts true",
     "migrate:local": "DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://0.0.0.0:9001 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SOURCE_TABLE=efcms-local DESTINATION_TABLE=efcms-local-1 ts-node --transpile-only ./web-api/run-local-migration.ts",
-    "migration:cleanup": "./scripts/dynamo/update-deploy-table-after-migration.sh",
+    "migration:cleanup": "./scripts/migration/update-deploy-table-after-migration.sh",
     "pending-color-switch": "./web-client/pending-color-switch.sh",
     "postinstall": "husky install",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
