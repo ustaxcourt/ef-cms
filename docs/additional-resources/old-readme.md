@@ -107,7 +107,7 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 - You can access the public UI at http://localhost:5678
 - You can access the API at http://localhost:4000
 - You can access the DynamoDB admin UI at http://localhost:8001
-- You can access S3 local at http://localhost:9000
+- You can access S3 local at http://localhost:9001
 - You can access the style guide at http://localhost:1234/style-guide
 
 Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.

@@ -39,7 +39,6 @@ export const MOCK_WORK_ITEM: RawWorkItem = Object.freeze({
     freeText: 'abcdef',
     isDraft: false,
     isFileAttached: true,
-    isMinuteEntry: false,
     isOnDocketRecord: true,
     isStricken: false,
     judge: 'Carluzzo',

@@ -23,7 +23,7 @@ echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
-URL=http://0.0.0.0:9000/ ./wait-until.sh
+URL=http://0.0.0.0:9001/ ./wait-until.sh
 npm run seed:s3
 
 

@@ -1,11 +1,16 @@
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { lambdaWrapper } from './lambdaWrapper';
 jest.mock('@vendia/serverless-express');
+jest.mock('@web-api/middleware/apiGatewayHelper');
 import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 describe('lambdaWrapper', () => {
   let req, res;
+  let orignalParse;
 
   beforeAll(() => {
+    orignalParse = JSON.parse;
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -27,7 +32,14 @@ describe('lambdaWrapper', () => {
         send: jest.fn(),
       }),
     };
-    JSON.parse = jest.fn();
+
+    JSON.parse = jest.fn().mockImplementation(json => orignalParse(json));
+
+    (getUserFromAuthHeader as jest.Mock).mockReturnValue({ userId: 'user-id' });
+  });
+
+  afterAll(() => {
+    JSON.parse = orignalParse;
   });
 
   it('sets res.headers', async () => {
@@ -103,7 +115,7 @@ describe('lambdaWrapper', () => {
       };
     })(req, res);
     expect(JSON.parse).toHaveBeenCalled();
-    expect(res.send).toHaveBeenCalledWith(undefined);
+    expect(res.send).toHaveBeenCalledWith(null);
   });
 
   it('calls res.redirect if header Location is set', async () => {
@@ -132,7 +144,7 @@ describe('lambdaWrapper', () => {
   });
 
   it('sets X-Terminal-User if it was set in api gateway event context', async () => {
-    getCurrentInvoke.mockReturnValue({
+    (getCurrentInvoke as jest.Mock).mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
     });
     await lambdaWrapper(() => {
@@ -159,7 +171,7 @@ describe('lambdaWrapper', () => {
   });
 
   it('returns 204 when it is simulating an async function', async () => {
-    getCurrentInvoke.mockReturnValue({
+    (getCurrentInvoke as jest.Mock).mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'false' } } },
     });
     await lambdaWrapper(
@@ -175,5 +187,45 @@ describe('lambdaWrapper', () => {
     )(req, res);
 
     expect(res.status).toHaveBeenCalledWith(204);
+  });
+
+  it('should return 204 when simulating an async/sync function', async () => {
+    await lambdaWrapper(
+      () => {
+        return {
+          body: 'hello world',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+      },
+      { isAsyncSync: true },
+    )(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(204);
+  });
+
+  it('should save response to database when asyncsyncid is present', async () => {
+    req.headers.asyncsyncid = 'some-id';
+    const TEST_BODY = {
+      testBody: 'SOMETHING',
+    };
+    const response = { a: 'LAMBDA_RESULTS', body: JSON.stringify(TEST_BODY) };
+    await lambdaWrapper(
+      () => response,
+      { isAsyncSync: true },
+      applicationContext,
+    )(req, res);
+
+    expect(
+      applicationContext.getNotificationGateway().saveRequestResponse,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      chunk: JSON.stringify({ a: 'LAMBDA_RESULTS', body: TEST_BODY }),
+      index: 0,
+      requestId: 'some-id',
+      totalNumberOfChunks: 1,
+      userId: 'user-id',
+    });
   });
 });
