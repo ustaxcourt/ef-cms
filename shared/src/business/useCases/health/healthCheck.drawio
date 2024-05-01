@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="qfKXbh_cGv5SsnbBj9Zz" name="Page-1">
-        <mxGraphModel dx="3359" dy="887" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2628" dy="1759" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -165,6 +165,54 @@
                 </mxCell>
                 <mxCell id="81" value="30s" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
                     <mxGeometry x="-921" y="1434.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="84" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="85" target="92">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="-30" width="300" height="450" as="geometry"/>
+                </mxCell>
+                <mxCell id="86" value="SSM Parameter Fqdn&lt;br&gt;Relies On: Api_gateway_stage" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="155" y="30" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="87" value="Route 53 A Record &lt;br&gt;Relies On: Health_check_id" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="155" y="110" width="185" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="88" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="89" target="85">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-260" y="-30" width="270" height="450" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="API Module" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="-10" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" value="All Colors" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="-205" y="-70" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="490" y="-25" width="310" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="switch-health-check-domain.ts" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="560" y="-70" width="170" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="Cloudwatch metric alarm.&lt;br&gt;&lt;br&gt;Relies on: Health Check East, Health Check West" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-250" y="30" width="250" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="95" value="Health Check East&lt;br&gt;Relies on: Nothing?(Script handles it)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-250" y="130" width="250" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="Health Check West&lt;br&gt;Relies on: Nothing?(Script handles it)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-250" y="220" width="250" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="97" value="Updates Health Check East&lt;br&gt;Relies on: SSM Param" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="520" y="50" width="250" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="98" value="Updates Health Check West&lt;br&gt;Relies on: SSM Param" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="520" y="130" width="250" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="99" value="Blue Deploy" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="167.5" y="-70" width="160" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
