@@ -97,7 +97,7 @@ describe('Batch Download Documents', () => {
         'trialclerk',
       ].forEach(account => {
         cy.login(account);
-        searchByDocketNumberInHeader(docketNumber);
+        goToCase(docketNumber);
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         includePrintableDocketRecord();
         cy.get('[data-testid="modal-button-confirm"]').should('exist');
