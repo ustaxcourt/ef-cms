@@ -597,7 +597,10 @@ const ReportTable = ({
         {cases.length !== 0 && (
           <tbody id="custom-case-report-table-body">
             {cases.map(entry => (
-              <tr key={`${entry.docketNumber}-${entry.receivedAt}`}>
+              <tr
+                data-testid={`custom-case-report-row-${entry.docketNumber}`}
+                key={`${entry.docketNumber}-${entry.receivedAt}`}
+              >
                 <td>
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={

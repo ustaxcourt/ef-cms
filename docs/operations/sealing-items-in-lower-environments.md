@@ -34,7 +34,7 @@ The terraform config also permits a specified lambda in a lower environment to s
 
 In any environment that is not production, a new lambda named `seal_in_lower` is created to subscribe to the SNS topic above. These lambdas are only created if the `AWS_ACCOUNT_ID` matches the `LOWER_ENV_ACCOUNT_ID`.
 
-Since it needs to make use of the `applicationContext` and seal cases via the `sealCaseInteractor`, we make a webpack bundle for it, include it in the build step, and deploy it via the `blue`/`green` template.
+Since it needs to make use of the `applicationContext` and seal cases via the `sealCaseInteractor`, we make a esbuild bundle for it, include it in the build step, and deploy it via the `blue`/`green` template.
 
 We need to make use of the `PROD_ENV_ACCOUNT_ID` in order to grant the ability to invoke this function to the `seal_notifier` topic, and we include that as an `aws_lambda_permission` in the [terraform configuration for the lambda](../../web-api/terraform/api/seal-in-lower-environment.tf).
 
