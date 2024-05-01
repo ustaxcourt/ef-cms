@@ -1,4 +1,3 @@
-import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -29,10 +28,7 @@ export const getPractitionersByNameInteractor = async (
       searchAfter,
     });
 
-  // TODO do we need this line still if we're changing how we do pagination?
-  const foundUsers = results.slice(0, MAX_SEARCH_RESULTS);
-
-  const practitioners = foundUsers.map(foundUser => ({
+  const practitioners = results.map(foundUser => ({
     admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
