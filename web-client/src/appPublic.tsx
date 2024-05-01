@@ -44,7 +44,7 @@ import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
 import React from 'react';
 
-if (process.env.USTC_ENV === 'prod') {
+if (process.env.SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
     environment: process.env.ENV,

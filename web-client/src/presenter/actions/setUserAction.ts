@@ -15,9 +15,11 @@ export const setUserAction = ({
 }: ActionProps) => {
   store.set(state.user, props.user);
   applicationContext.setCurrentUser(props.user);
-  Sentry.setUser({
-    id: props.user.userId,
-    ip_address: '{{auto}}',
-    username: props.user.name,
-  });
+  if (process.env.SENTRY_DSN) {
+    Sentry.setUser({
+      id: props.user.userId,
+      ip_address: '{{auto}}',
+      username: props.user.name,
+    });
+  }
 };
