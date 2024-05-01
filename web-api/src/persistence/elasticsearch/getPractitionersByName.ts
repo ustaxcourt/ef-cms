@@ -43,8 +43,13 @@ export const getPractitionersByName = async ({
           ],
         },
       },
-      search_after: [searchAfter],
-      sort: [{ 'barNumber.S': 'asc' }],
+      search_after: searchAfter,
+      sort: [
+        '_score',
+        // { 'lastName.S': 'asc' },
+        // { 'firstName.S': 'asc' },
+        { 'barNumber.S': 'asc' },
+      ],
     },
     index: 'efcms-user',
     size: PRACTITIONER_SEARCH_PAGE_SIZE,
@@ -63,9 +68,12 @@ export const getPractitionersByName = async ({
   );
 
   const matchingPractitioners: any[] = searchResults.body.hits.hits;
+  console.log('matches', matchingPractitioners);
   const lastKey =
-    (matchingPractitioners[matchingPractitioners.length - 1]
-      ?.sort[0] as string) || '';
+    (matchingPractitioners[matchingPractitioners.length - 1]?.sort as Array<
+      number | string
+    >) || [];
+  console.log('last Key', lastKey);
 
   return { lastKey, results, total };
 };

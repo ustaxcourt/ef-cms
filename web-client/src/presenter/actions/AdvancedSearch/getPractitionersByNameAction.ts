@@ -9,8 +9,11 @@ export const getPractitionersByNameAction = async ({
   const {
     lastKeysOfPages,
     practitionerName,
-  }: { practitionerName: string; pageNum: number; lastKeysOfPages: string[] } =
-    get(state.advancedSearchForm.practitionerSearchByName);
+  }: {
+    practitionerName: string;
+    pageNum: number;
+    lastKeysOfPages: Array<string | number>;
+  } = get(state.advancedSearchForm.practitionerSearchByName);
 
   store.set(
     state.advancedSearchForm.practitionerSearchByName.pageNum,
