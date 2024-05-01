@@ -19,4 +19,4 @@ export TF_VAR_circle_pipeline_id=$CIRCLE_PIPELINE_ID
 export TF_VAR_approval_job_name=$APPROVAL_JOB_NAME
 export TF_VAR_environment=$ENVIRONMENT
 
-../../../../shared/terraform/bin/init.sh wait-for-workflow-cron --build-lambda
+../../../../shared/terraform/bin/init.sh wait-for-workflow-cron
