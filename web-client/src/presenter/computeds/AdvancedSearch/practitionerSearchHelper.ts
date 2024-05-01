@@ -5,7 +5,6 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '../../../applicationContext';
 import { Get } from 'cerebral';
-import { compareStrings } from '../../../../../shared/src/business/utilities/sortFunctions';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type PractitionerSearchResultType = {
@@ -73,20 +72,6 @@ export const practitionerSearchHelper = (
         applicationContext,
       }),
     );
-
-    if (paginatedResults.length > 1) {
-      paginatedResults.sort(
-        (a: PractitionerSearchResultType, b: PractitionerSearchResultType) => {
-          const val = compareStrings(
-            a['name'].toLowerCase(),
-            b['name'].toLowerCase(),
-          );
-          //secondary sort
-          if (val === 0) return compareStrings(a['barNumber'], b['barNumber']);
-          return val;
-        },
-      );
-    }
 
     const pageCount = Math.ceil(
       searchResults.total / PRACTITIONER_SEARCH_PAGE_SIZE,
