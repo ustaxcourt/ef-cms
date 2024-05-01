@@ -63,7 +63,7 @@ describe('Advanced Search', () => {
     });
   });
 
-  it.only('should find matching results when the user searches for an opinion by keyword', () => {
+  it('should find matching results when the user searches for an opinion by keyword', () => {
     /** Arrange */
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
@@ -76,7 +76,7 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
       cy.get('[data-testid="upload-description"]').type(opinionTitle);
       cy.get('[data-testid="primary-document-file"]').attachFile(
-        '../fixtures/sample.pdf',
+        '../../helpers/file/sample.pdf',
       );
       cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
