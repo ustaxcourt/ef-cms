@@ -29,6 +29,7 @@ export const getPractitionersByNameInteractor = async (
       searchAfter,
     });
 
+  // TODO do we need this line still if we're changing how we do pagination?
   const foundUsers = results.slice(0, MAX_SEARCH_RESULTS);
 
   const practitioners = foundUsers.map(foundUser => ({
