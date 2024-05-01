@@ -48,6 +48,7 @@ export const createAndEnableSmoketestUser = async () => {
     console.log('About to create test user!');
     await createOrUpdateUser(applicationContext, {
       password: DEFAULT_ACCOUNT_PASS!,
+      setPasswordAsPermanent: true,
       user,
     });
     console.log('Successfully created test user!');

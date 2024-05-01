@@ -47,6 +47,7 @@ export const init = async () => {
             try {
               const { userId } = await createOrUpdateUser(applicationContext, {
                 password: DEFAULT_ACCOUNT_PASS!,
+                setPasswordAsPermanent: true,
                 user: row,
               });
 

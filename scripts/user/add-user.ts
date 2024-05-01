@@ -145,6 +145,7 @@ const sendWelcomeEmail = async ({ email }) => {
   environment.dynamoDbTableName = tableName;
   await createOrUpdateUser(applicationContext, {
     password: environment.defaultAccountPass,
+    setPasswordAsPermanent: true,
     user: params,
   });
   await sendWelcomeEmail({ email: params.email });
