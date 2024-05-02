@@ -31,7 +31,7 @@ export const forgotPasswordInteractor = async (
 
   if (user.accountStatus === UserStatusType.FORCE_CHANGE_PASSWORD) {
     await applicationContext
-      .getUseCaseHelpers()
+      .getUserGateway()
       .resendTemporaryPassword(applicationContext, {
         email,
       });

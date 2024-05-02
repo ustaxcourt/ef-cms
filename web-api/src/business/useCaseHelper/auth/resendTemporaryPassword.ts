@@ -1,26 +1,24 @@
+import {
+  AdminCreateUserCommandInput,
+  DeliveryMediumType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export async function resendTemporaryPassword(
   applicationContext: ServerApplicationContext,
   { email }: { email: string },
 ): Promise<void> {
-  const user = await applicationContext
-    .getUserGateway()
-    .getUserByEmail(applicationContext, {
-      email,
-    });
+  const createUserArgs: AdminCreateUserCommandInput = {
+    DesiredDeliveryMediums: [DeliveryMediumType.EMAIL],
+    MessageAction: 'RESEND',
+    UserPoolId: applicationContext.environment.userPoolId,
+    Username: email.toLowerCase(),
+  };
 
-  if (!user) {
-    throw new Error(
-      `Could not resend temporary password for email: ${email}. Account not found.`,
-    );
+  if (applicationContext.environment.stage !== 'prod') {
+    createUserArgs.TemporaryPassword =
+      applicationContext.environment.defaultAccountPass;
   }
 
-  await applicationContext.getUserGateway().createUser(applicationContext, {
-    attributesToUpdate: {
-      userId: user.userId,
-    },
-    email,
-    resendInvitationEmail: true,
-  });
+  await applicationContext.getCognito().adminCreateUser(createUserArgs);
 }
