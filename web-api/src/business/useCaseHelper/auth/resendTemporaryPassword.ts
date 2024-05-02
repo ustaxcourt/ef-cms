@@ -2,10 +2,12 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export async function resendTemporaryPassword(
   applicationContext: ServerApplicationContext,
-  { email }: { email: string },
+  { email, userId }: { email: string; userId: string },
 ): Promise<void> {
   await applicationContext.getUserGateway().createUser(applicationContext, {
-    attributesToUpdate: {},
+    attributesToUpdate: {
+      userId,
+    },
     email,
     resendInvitationEmail: true,
   });

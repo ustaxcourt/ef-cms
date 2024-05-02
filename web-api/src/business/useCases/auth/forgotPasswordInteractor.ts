@@ -32,7 +32,10 @@ export const forgotPasswordInteractor = async (
   if (user.accountStatus === UserStatusType.FORCE_CHANGE_PASSWORD) {
     await applicationContext
       .getUseCaseHelpers()
-      .resendTemporaryPassword(applicationContext, { email });
+      .resendTemporaryPassword(applicationContext, {
+        email,
+        userId: user.userId,
+      });
     throw new UnauthorizedError('User is unconfirmed'); //403
   }
 

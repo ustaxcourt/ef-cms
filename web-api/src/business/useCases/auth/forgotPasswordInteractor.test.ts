@@ -119,11 +119,14 @@ describe('forgotPasswordInteractor', () => {
 
     expect(
       applicationContext.getUserGateway().getUserByEmail,
-    ).toHaveBeenCalledWith(applicationContext, { email });
+    ).toHaveBeenCalledWith(applicationContext, {
+      email,
+    });
     expect(
       applicationContext.getUseCaseHelpers().resendTemporaryPassword,
     ).toHaveBeenCalledWith(applicationContext, {
       email,
+      userId: mockUser.userId,
     });
   });
 
