@@ -57,9 +57,15 @@ export const getPractitionersByName = async ({
     track_total_hits: true,
   };
 
+  console.debug(
+    'The search function in the code-under-test',
+    applicationContext.getSearchClient().search,
+  );
   const searchResults = await applicationContext
     .getSearchClient()
     .search(searchParameters);
+
+  console.debug('************searchResults', searchResults);
 
   const {
     results,
