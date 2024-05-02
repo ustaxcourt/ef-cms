@@ -1,3 +1,4 @@
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -12,7 +13,7 @@ export const setDocketEntryMetaTypeAction = ({
   get,
   store,
 }: ActionProps) => {
-  const { docketEntryId, eventCode, isMinuteEntry } = get(state.form);
+  const { docketEntryId, eventCode } = get(state.form);
 
   const { COURT_ISSUED_EVENT_CODES, SYSTEM_GENERATED_DOCUMENT_TYPES } =
     applicationContext.getConstants();
@@ -24,7 +25,7 @@ export const setDocketEntryMetaTypeAction = ({
     SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode,
   );
 
-  const hasDocument = !isMinuteEntry;
+  const hasDocument = !DocketEntry.isMinuteEntry({ eventCode });
 
   const isCourtIssuedDocument =
     hasDocument && COURT_ISSUED_EVENT_CODES_LIST.includes(eventCode);

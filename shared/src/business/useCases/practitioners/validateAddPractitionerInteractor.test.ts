@@ -13,10 +13,10 @@ describe('validateAddPractitionerInteractor', () => {
       'admissionsDate',
       'admissionsStatus',
       'birthYear',
-      'employer',
       'firstName',
       'lastName',
       'originalBarState',
+      'practiceType',
       'practitionerType',
     ]);
   });
@@ -29,10 +29,10 @@ describe('validateAddPractitionerInteractor', () => {
         birthYear: '2009',
         confirmEmail: 'test@example.com',
         email: 'test@example.com',
-        employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',
         originalBarState: 'IL',
+        practiceType: 'IRS',
         practitionerType: 'Attorney',
       } as RawPractitioner,
     });
