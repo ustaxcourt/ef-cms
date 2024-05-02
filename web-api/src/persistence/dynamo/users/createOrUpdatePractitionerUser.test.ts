@@ -85,8 +85,7 @@ describe('createOrUpdatePractitionerUser', () => {
     });
 
     expect(
-      applicationContext.getUserGateway().createUser.mock.calls[0][1]
-        .attributesToUpdate.email,
+      applicationContext.getUserGateway().createUser.mock.calls[0][1].email,
     ).toBe(privatePractitionerUserWithSection.email);
     expect(applicationContext.getUserGateway().createUser).toHaveBeenCalled();
     expect(
@@ -108,8 +107,7 @@ describe('createOrUpdatePractitionerUser', () => {
     });
 
     expect(
-      applicationContext.getUserGateway().createUser.mock.calls[0][1]
-        .attributesToUpdate.email,
+      applicationContext.getUserGateway().createUser.mock.calls[0][1].email,
     ).toBe(mockPendingEmail);
   });
 
