@@ -110,7 +110,7 @@ describe('admissions clerk practitioner journey', () => {
 
     expect(
       cerebralTest.getState(
-        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.practitioners.0.name`,
       ),
     ).toEqual('Ronald Buch Jr.');
   });
