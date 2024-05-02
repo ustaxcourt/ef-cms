@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.3
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.4
 
 parameters:
   run_build_and_deploy:
@@ -111,7 +111,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     environment:
       DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
     steps:
@@ -131,14 +131,23 @@ jobs:
             ./setup-for-blue-green-migration.sh
       - run:
           no_output_timeout: 20m
-          name: 'Deploy - Web API - Terraform'
+          name: 'Deploy - All Color Terraform'
           command: |
-            cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
+            npm run deploy:allColors $ENV
+      - run:
+          no_output_timeout: 20m
+          name: 'Deploy - Color Terraform'
+          command: |
+            if [ "${DEPLOYING_COLOR}" == "blue" ]; then
+              npm run deploy:blue $ENV
+            else
+              npm run deploy:green $ENV
+            fi
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
           command: |
-            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
+            npm run deploy:ui $ENV
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
@@ -351,13 +360,10 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: 'Disable Maintenance Mode'
-          command: npm run maintenance:disengage $ENV
-      - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
       - store_artifacts:
-          path: /root/project/cypress/cypress-smoketests/videos/
+          path: /root/project/cypress/deployed-and-local/videos/
 
   smoketests-readonly:
     docker:
@@ -396,7 +402,7 @@ jobs:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
       - store_artifacts:
-          path: /root/project/cypress/cypress-readonly/videos/
+          path: /root/project/cypress/readonly/videos/
 
   loadtests:
     docker:
