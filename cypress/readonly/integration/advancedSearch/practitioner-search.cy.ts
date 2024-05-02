@@ -24,6 +24,7 @@ describe('Practitioner Search', () => {
       .then(row => {
         return row.length > 0;
       });
+    cy.get('[data-testid="practitioner-search-result-count"]').should('exist');
   });
 
   it('should do a practitioner search by bar number', () => {

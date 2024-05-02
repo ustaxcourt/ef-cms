@@ -50,16 +50,27 @@ export const PractitionerSearchResults = connect(
                 {formatPositiveNumber(practitionerSearchHelper.numberOfResults)}
               </span>
             </div>
-            <table className="usa-table search-results ustc-table responsive-table">
+            <table
+              className="usa-table search-results ustc-table responsive-table"
+              data-testid="practitioner-results-table"
+            >
               <thead>
                 <tr>
                   <th aria-label="bar number">Bar No.</th>
-                  <th>Name</th>
-                  <th>State</th>
-                  <th>Admission Status</th>
-                  <th>Admission Date</th>
-                  <th>Practitioner Type</th>
-                  <th>Practice Type</th>
+                  <th data-testid="results-table-header-name">Name</th>
+                  <th data-testid="results-table-header-state">State</th>
+                  <th data-testid="results-table-header-admission-status">
+                    Admission Status
+                  </th>
+                  <th data-testid="results-table-header-admission-date">
+                    Admission Date
+                  </th>
+                  <th data-testid="results-table-header-practitioner-type">
+                    Practitioner Type
+                  </th>
+                  <th data-testid="results-table-header-practice-type">
+                    Practice Type
+                  </th>
                 </tr>
               </thead>
               <tbody>
