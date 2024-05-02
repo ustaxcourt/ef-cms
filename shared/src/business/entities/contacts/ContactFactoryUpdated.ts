@@ -49,7 +49,7 @@ export function ContactFactoryUpdated({
     };
   }
 
-  if (PARTY_TYPES.petitionerSpouse) {
+  if (partyType === PARTY_TYPES.petitionerSpouse) {
     const shouldValidateSecondary = !!hasSpouseConsent;
     return {
       primary: new ContactUpdated(
@@ -82,7 +82,6 @@ export function ContactFactoryUpdated({
       secondary: null,
     };
   }
-
   return {
     primary: new ContactUpdated(
       contactInfo,

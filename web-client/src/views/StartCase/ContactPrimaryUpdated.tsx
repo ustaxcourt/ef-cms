@@ -153,7 +153,12 @@ export const ContactPrimaryUpdated = connect(
           )}
 
           {titleLabel && (
-            <FormGroup>
+            <FormGroup
+              errorText={
+                validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.title
+              }
+            >
               <label className="usa-label" htmlFor="title">
                 {titleLabel}
                 {titleLabelNote && (
