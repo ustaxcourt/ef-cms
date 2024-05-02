@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from '@web-client/views/StartCaseUpdated/IrsNoticeUploadForm';
@@ -36,7 +37,9 @@ export const UpdatedFilePetitionStep3 = connect(
   }) {
     return (
       <>
-        <div className="blue-container margin-bottom-5">
+        <ErrorNotification />
+
+        <div className="blue-container padding-bottom-0 margin-bottom-5">
           <div className="usa-form-group">
             <FormGroup errorText={validationErrors.hasIrsNotice}>
               <fieldset
@@ -114,6 +117,52 @@ export const UpdatedFilePetitionStep3 = connect(
                   />
                   Add another IRS Notice
                 </Button>
+
+                <div className="grid-row grid-gap margin-top-5">
+                  <span className="margin-bottom-1 font-sans-pro">
+                    <b>Please read and acknowledge moving to the next step:</b>
+                  </span>
+                  <div className="tablet:grid-col-12">
+                    <div className="card">
+                      <div className="content-wrapper usa-checkbox">
+                        <input
+                          aria-describedby="redaction-acknowledgement-label"
+                          checked={
+                            form.irsNoticesRedactionAcknowledgement || false
+                          }
+                          className="usa-checkbox__input"
+                          id="irs-notices-acknowledgement"
+                          name="irsNoticesRedactionAcknowledgement"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="irs-notices-acknowledgement"
+                          id="irs-notices-acknowledgement-label"
+                        >
+                          <b>
+                            All documents I am filing have been redacted in
+                            accordance with{' '}
+                            <a
+                              href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
+                              rel="noreferrer"
+                              target="_blank"
+                            >
+                              Rule 27
+                            </a>
+                            .
+                          </b>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </>
             )}
 
@@ -135,6 +184,9 @@ export const UpdatedFilePetitionStep3 = connect(
         </div>
 
         <Button
+          disabled={
+            form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
+          }
           onClick={() => {
             updatedFilePetitionCompleteStep3Sequence();
           }}

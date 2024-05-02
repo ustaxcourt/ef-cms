@@ -34,7 +34,9 @@ function getShowContactPrimary(partyType, PARTY_TYPES, filingType) {
       PARTY_TYPES.survivingSpouse,
       PARTY_TYPES.transferee,
       PARTY_TYPES.trust,
-    ].includes(partyType) || filingType === 'Myself and my spouse'
+    ].includes(partyType) ||
+    filingType === 'Myself and my spouse' ||
+    filingType === 'Myself'
   );
 }
 function getShowContactSecondary(partyType, PARTY_TYPES, props) {

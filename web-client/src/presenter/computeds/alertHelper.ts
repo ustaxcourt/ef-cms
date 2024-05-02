@@ -11,7 +11,7 @@ export const alertHelper = (
   const userIsIdentified = applicationContext.getCurrentUser() || false;
 
   return {
-    messagesDeduped: uniq(alertError.messages),
+    messagesDeduped: uniq(alertError.messages).filter(Boolean),
     preventAutoScroll: false,
     responseCode: alertError.responseCode,
     showErrorAlert:

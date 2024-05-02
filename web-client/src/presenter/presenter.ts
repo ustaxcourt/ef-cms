@@ -530,6 +530,7 @@ import { updatedFilePetitionCompleteStep1Sequence } from './sequences/updatedFil
 import { updatedFilePetitionCompleteStep2Sequence } from '@web-client/presenter/sequences/updatedFilePetitionCompleteStep2Sequence';
 import { updatedFilePetitionCompleteStep3Sequence } from './sequences/updatedFilePetitionCompleteStep3Sequence';
 import { updatedFilePetitionCompleteStep4Sequence } from './sequences/updatedFilePetitionCompleteStep4Sequence';
+import { updatedFilePetitionCompleteStep5Sequence } from './sequences/updatedFilePetitionCompleteStep5Sequence';
 import { updatedFilePetitionGoBackAStepSequence } from '@web-client/presenter/sequences/updatedFilePetitionGoBackAStepSequence';
 import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
@@ -1473,6 +1474,8 @@ export const presenterSequences = {
     updatedFilePetitionCompleteStep3Sequence as unknown as Function,
   updatedFilePetitionCompleteStep4Sequence:
     updatedFilePetitionCompleteStep4Sequence as unknown as Function,
+  updatedFilePetitionCompleteStep5Sequence:
+    updatedFilePetitionCompleteStep5Sequence as unknown as Function,
   updatedFilePetitionGoBackAStepSequence:
     updatedFilePetitionGoBackAStepSequence as unknown as Function,
   uploadCorrespondenceDocumentSequence:
