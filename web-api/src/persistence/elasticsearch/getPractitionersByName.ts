@@ -1,5 +1,4 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
-// import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { PractitionerSearchResultType } from '../../../../web-client/src/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
 import { formatResults } from './searchClient';
@@ -57,15 +56,9 @@ export const getPractitionersByName = async ({
     track_total_hits: true,
   };
 
-  console.debug(
-    'The search function in the code-under-test',
-    applicationContext.getSearchClient().search,
-  );
   const searchResults = await applicationContext
     .getSearchClient()
     .search(searchParameters);
-
-  console.debug('************searchResults', searchResults);
 
   const {
     results,
