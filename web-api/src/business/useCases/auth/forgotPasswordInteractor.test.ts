@@ -123,7 +123,7 @@ describe('forgotPasswordInteractor', () => {
       email,
     });
     expect(
-      applicationContext.getUseCaseHelpers().resendTemporaryPassword,
+      applicationContext.getUserGateway().resendTemporaryPassword,
     ).toHaveBeenCalledWith(applicationContext, {
       email,
     });
