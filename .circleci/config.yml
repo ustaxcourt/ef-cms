@@ -345,7 +345,7 @@ jobs:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
       - store_artifacts:
-          path: /root/project/cypress/cypress-smoketests/videos/
+          path: /root/project/cypress/deployed-and-local/videos/
 
   smoketests-readonly:
     docker:
@@ -387,7 +387,7 @@ jobs:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
       - store_artifacts:
-          path: /root/project/cypress/cypress-readonly/videos/
+          path: /root/project/cypress/readonly/videos/
 
   loadtests:
     docker:
