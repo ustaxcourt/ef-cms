@@ -17,21 +17,26 @@ describe('Practitioner Search', () => {
       url: '/practitioners**',
     }).as('getPractitionerByName');
 
-    cy.get('input#practitioner-name').type('Smith');
+    cy.get('input#practitioner-name').type('test');
 
     cy.get('button#practitioner-search-by-name-button').click();
 
     cy.wait('@getPractitionerByName').then(isValidRequest);
+    cy.get('[data-testid="practitioner-row-PT1111"]').should('exist');
+    cy.get('[data-testid="practitioner-search-result-count"]').should(
+      'have.text',
+      '20',
+    );
 
     cy.get('button#tab-practitioner').click();
 
     cy.intercept({
       hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
       method: 'GET',
-      url: '/practitioners/Smith',
+      url: '/practitioners/test',
     }).as('getPractitionerByBarNumber');
 
-    cy.get('input#bar-number').type('Smith');
+    cy.get('input#bar-number').type('test');
 
     cy.get('button#practitioner-search-by-bar-number-button').click();
 
