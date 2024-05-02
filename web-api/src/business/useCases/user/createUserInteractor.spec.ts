@@ -34,6 +34,7 @@ describe('createUserInteractor', () => {
 
     expect(createOrUpdateUser).toHaveBeenCalledWith(expect.anything(), {
       password: 'junkPass',
+      setPasswordAsPermanent: false,
       user: docketClerk1User,
     });
   });
