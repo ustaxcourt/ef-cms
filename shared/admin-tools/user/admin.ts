@@ -139,7 +139,6 @@ export async function createOrUpdateUser(
       },
       email: rawUser.email!,
       poolId: userPoolId,
-      resendInvitationEmail: false,
     });
   }
 

@@ -58,7 +58,6 @@ export const createNewPractitionerUser = async ({
       userId: user.userId,
     },
     email: user.pendingEmail!,
-    resendInvitationEmail: false,
   });
 
   return await updateUserRecords({
