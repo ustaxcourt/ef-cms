@@ -32,7 +32,11 @@ export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
 
     expect(
       cerebralTest.getState('advancedSearchForm.practitionerSearchByName'),
-    ).toEqual({});
+    ).toEqual({
+      activePage: 0,
+      lastKeysOfPages: [],
+      total: 0,
+    });
     expect(
       cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
