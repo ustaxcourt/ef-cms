@@ -51,13 +51,11 @@ export const createNewPractitionerUser = async ({
   user: RawPractitioner;
 }): Promise<RawPractitioner> => {
   await applicationContext.getUserGateway().createUser(applicationContext, {
-    attributesToUpdate: {
-      email: user.pendingEmail,
-      name: user.name,
-      role: user.role,
-      userId: user.userId,
-    },
     email: user.pendingEmail!,
+    name: user.name,
+    role: user.role,
+    sendWelcomeEmail: true,
+    userId: user.userId,
   });
 
   return await updateUserRecords({

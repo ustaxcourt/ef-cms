@@ -36,13 +36,11 @@ export const createOrUpdatePractitionerUser = async ({
 
     if (!existingUser) {
       await applicationContext.getUserGateway().createUser(applicationContext, {
-        attributesToUpdate: {
-          email: userEmail,
-          name: user.name,
-          role: user.role,
-          userId,
-        },
         email: userEmail,
+        name: user.name,
+        role: user.role,
+        sendWelcomeEmail: true,
+        userId,
       });
     } else {
       await applicationContext.getUserGateway().updateUser(applicationContext, {
