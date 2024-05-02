@@ -34,7 +34,6 @@ export const forgotPasswordInteractor = async (
       .getUseCaseHelpers()
       .resendTemporaryPassword(applicationContext, {
         email,
-        userId: user.userId,
       });
     throw new UnauthorizedError('User is unconfirmed'); //403
   }

@@ -126,7 +126,6 @@ describe('forgotPasswordInteractor', () => {
       applicationContext.getUseCaseHelpers().resendTemporaryPassword,
     ).toHaveBeenCalledWith(applicationContext, {
       email,
-      userId: mockUser.userId,
     });
   });
 
