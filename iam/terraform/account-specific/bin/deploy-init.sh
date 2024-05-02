@@ -44,8 +44,6 @@ if [ -z "$LOG_SNAPSHOT_BUCKET_NAME" ]; then
   exit 1
 fi
 
-npm run build:lambda:rotate-info-indices
-
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
 export TF_VAR_zone_name="${ZONE_NAME}"

@@ -35,12 +35,12 @@ describe('generateChangeOfAddress', () => {
     },
 
     email: 'irspractitioner1@example.com',
-    employer: 'IRS',
     entityName: 'IrsPractitioner',
     firstName: 'rick',
     lastName: 'james',
     name: 'Test IRS Practitioner',
     originalBarState: 'FL',
+    practiceType: 'IRS',
     practitionerType: 'Attorney',
     role: ROLES.irsPractitioner,
     section: 'irsPractitioner',

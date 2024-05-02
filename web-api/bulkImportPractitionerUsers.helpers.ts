@@ -17,7 +17,6 @@ export const formatRecord = record => {
     barNumber: record.barNumber,
     birthYear: '',
     email: record.email,
-    employer: 'Private',
     entityName: '',
     firmName: record.firmName,
     firstName: record.firstName,
@@ -25,6 +24,7 @@ export const formatRecord = record => {
     middleName: record.middleName,
     name: '',
     originalBarState: record.originalBarState || 'N/A',
+    practiceType: 'Private',
     practitionerType: record.practitionerType,
     role: ROLES.privatePractitioner,
     serviceIndicator: 'Electronic',
@@ -43,11 +43,14 @@ export const formatRecord = record => {
     : String(DEFAULT_PRACTITIONER_BIRTH_YEAR);
 
   if (record.isIrsEmployee === 'Y') {
-    returnData.employer = 'IRS';
+    returnData.practiceType = 'IRS';
     returnData.role = ROLES.irsPractitioner;
   } else if (record.isDojEmployee === 'Y') {
-    returnData.employer = 'DOJ';
+    returnData.practiceType = 'DOJ';
     returnData.role = ROLES.irsPractitioner;
+  } else {
+    returnData.practiceType = 'Private';
+    returnData.role = ROLES.privatePractitioner;
   }
 
   returnData.contact = {
