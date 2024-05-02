@@ -45,7 +45,6 @@ export const createNewPetitionerUser = async ({
         userId: user.userId,
       },
       email: user.pendingEmail!,
-      resendInvitationEmail: false,
     });
 
   const createUserRecordsPromise = createUserRecords({

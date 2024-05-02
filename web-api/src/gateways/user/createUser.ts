@@ -2,7 +2,6 @@ import {
   AdminCreateUserCommandInput,
   AttributeType,
   DeliveryMediumType,
-  MessageActionType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -20,12 +19,10 @@ export async function createUser(
     attributesToUpdate,
     email,
     poolId,
-    resendInvitationEmail = false,
   }: {
     email: string;
     poolId?: string;
     attributesToUpdate: UserAttributes;
-    resendInvitationEmail?: boolean;
   },
 ): Promise<void> {
   const formattedAttributesToUpdate: AttributeType[] = [
@@ -60,13 +57,8 @@ export async function createUser(
     });
   }
 
-  const messageAction = resendInvitationEmail
-    ? MessageActionType.RESEND
-    : undefined;
-
   const createUserArgs: AdminCreateUserCommandInput = {
     DesiredDeliveryMediums: [DeliveryMediumType.EMAIL],
-    MessageAction: messageAction,
     UserAttributes: formattedAttributesToUpdate,
     UserPoolId: poolId ?? applicationContext.environment.userPoolId,
     Username: email.toLowerCase(),

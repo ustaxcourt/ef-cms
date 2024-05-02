@@ -43,7 +43,6 @@ export const createOrUpdatePractitionerUser = async ({
           userId,
         },
         email: userEmail,
-        resendInvitationEmail: false,
       });
     } else {
       await applicationContext.getUserGateway().updateUser(applicationContext, {
