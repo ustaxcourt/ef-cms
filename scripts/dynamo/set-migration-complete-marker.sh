@@ -10,6 +10,7 @@
   "AWS_SECRET_ACCESS_KEY" \
   "CIRCLE_MACHINE_USER_TOKEN" \
   "CIRCLE_WORKFLOW_ID" \
+  "DEPLOYING_COLOR" \
   "ENV" \
   "JOB_NAME" \
   "SOURCE_TABLE"
@@ -36,6 +37,9 @@ ITEM=$(cat <<-END
     },
     "environment": {
         "S": "${ENV}"
+    },
+    "deployingColor": {
+        "S": "${DEPLOYING_COLOR}"
     },
     "jobName": {
         "S": "${JOB_NAME}"
