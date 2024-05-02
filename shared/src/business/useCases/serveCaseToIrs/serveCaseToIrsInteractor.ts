@@ -41,7 +41,6 @@ export const addDocketEntryForPaymentStatus = ({
         eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
         filingDate: caseEntity.petitionPaymentDate,
         isFileAttached: false,
-        isMinuteEntry: true,
         isOnDocketRecord: true,
         processingStatus: 'complete',
       },
@@ -59,7 +58,6 @@ export const addDocketEntryForPaymentStatus = ({
         eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
         filingDate: caseEntity.petitionPaymentWaivedDate,
         isFileAttached: false,
-        isMinuteEntry: true,
         isOnDocketRecord: true,
         processingStatus: 'complete',
       },
@@ -417,7 +415,7 @@ const createCoversheetsForServedEntries = async ({
 }) => {
   return await Promise.all(
     caseEntity.docketEntries.map(async doc => {
-      if (doc.isFileAttached) {
+      if (doc.isFileAttached && !doc.isDraft) {
         const updatedDocketEntry = await applicationContext
           .getUseCases()
           .addCoversheetInteractor(applicationContext, {

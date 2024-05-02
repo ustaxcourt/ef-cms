@@ -58,13 +58,30 @@ export const lambdaWrapper = (
     const { asyncsyncid } = req.headers;
 
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
-      const user = getUserFromAuthHeader(event);
-      await applicationContext.getNotificationGateway().saveRequestResponse({
-        applicationContext,
-        requestId: asyncsyncid,
-        response,
-        userId: user.userId,
-      });
+      try {
+        const user = getUserFromAuthHeader(event);
+        const fullResponse = {
+          ...response,
+          body: response.body ? JSON.parse(response.body) : response.body,
+        };
+        const responseString = JSON.stringify(fullResponse);
+        const chunks = chunkString(responseString);
+        const totalNumberOfChunks = chunks.length;
+        for (let index = 0; index < totalNumberOfChunks; index++) {
+          await applicationContext
+            .getNotificationGateway()
+            .saveRequestResponse({
+              applicationContext,
+              chunk: chunks[index],
+              index,
+              requestId: asyncsyncid,
+              totalNumberOfChunks,
+              userId: user.userId,
+            });
+        }
+      } catch (errorAsyncSync) {
+        console.log('Error: async sync if condition', errorAsyncSync);
+      }
     }
 
     if (shouldMimicApiGatewayAsyncEndpoint) {
@@ -97,3 +114,16 @@ export const lambdaWrapper = (
     }
   };
 };
+
+function chunkString(str) {
+  const CHUNK_SIZE = 2000; //TODO: change it to more realistic size
+  const chunkedArray: string[] = [];
+  let index = 0;
+
+  while (index < str.length) {
+    chunkedArray.push(str.substring(index, index + CHUNK_SIZE));
+    index += CHUNK_SIZE;
+  }
+
+  return chunkedArray;
+}
