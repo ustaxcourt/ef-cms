@@ -2,72 +2,71 @@ import {
   AdminCreateUserCommandInput,
   AttributeType,
   DeliveryMediumType,
+  MessageActionType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-interface UserAttributes {
-  role?: Role;
-  email?: string;
-  name?: string;
-  userId: string;
-}
-
 export async function createUser(
   applicationContext: ServerApplicationContext,
   {
-    attributesToUpdate,
     email,
+    name,
     poolId,
+    role,
+    sendWelcomeEmail,
+    temporaryPassword,
+    userId,
   }: {
     email: string;
+    role: Role;
+    name: string;
+    userId: string;
     poolId?: string;
-    attributesToUpdate: UserAttributes;
+    temporaryPassword?: string;
+    sendWelcomeEmail: boolean;
   },
 ): Promise<void> {
-  const formattedAttributesToUpdate: AttributeType[] = [
+  const formattedAttributes: AttributeType[] = [
     {
       Name: 'custom:userId',
-      Value: attributesToUpdate.userId,
+      Value: userId,
+    },
+    {
+      Name: 'custom:role',
+      Value: role,
+    },
+    {
+      Name: 'name',
+      Value: name,
+    },
+    {
+      Name: 'email',
+      Value: email.toLowerCase(),
+    },
+    {
+      Name: 'email_verified',
+      Value: 'true',
     },
   ];
 
-  if (attributesToUpdate.role) {
-    formattedAttributesToUpdate.push({
-      Name: 'custom:role',
-      Value: attributesToUpdate.role,
-    });
-  }
-
-  if (attributesToUpdate.name) {
-    formattedAttributesToUpdate.push({
-      Name: 'name',
-      Value: attributesToUpdate.name,
-    });
-  }
-
-  if (attributesToUpdate.email) {
-    formattedAttributesToUpdate.push({
-      Name: 'email',
-      Value: attributesToUpdate.email.toLowerCase(),
-    });
-    formattedAttributesToUpdate.push({
-      Name: 'email_verified',
-      Value: 'true',
-    });
+  let tempPass: string | undefined;
+  if (temporaryPassword) {
+    tempPass = temporaryPassword;
+  } else if (applicationContext.environment.stage !== 'prod') {
+    tempPass = applicationContext.environment.defaultAccountPass;
+  } else {
+    tempPass = undefined; // sets a random temporary password
   }
 
   const createUserArgs: AdminCreateUserCommandInput = {
     DesiredDeliveryMediums: [DeliveryMediumType.EMAIL],
-    UserAttributes: formattedAttributesToUpdate,
+    MessageAction: sendWelcomeEmail ? undefined : MessageActionType.SUPPRESS,
+    TemporaryPassword: tempPass,
+    UserAttributes: formattedAttributes,
     UserPoolId: poolId ?? applicationContext.environment.userPoolId,
     Username: email.toLowerCase(),
   };
-
-  if (applicationContext.environment.stage !== 'prod') {
-    createUserArgs.TemporaryPassword =
-      applicationContext.environment.defaultAccountPass;
-  }
 
   await applicationContext.getCognito().adminCreateUser(createUserArgs);
 }

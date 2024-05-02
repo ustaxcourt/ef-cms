@@ -131,14 +131,13 @@ export async function createOrUpdateUser(
     });
   } else {
     await applicationContext.getUserGateway().createUser(applicationContext, {
-      attributesToUpdate: {
-        email: rawUser.email,
-        name: rawUser.name,
-        role: rawUser.role,
-        userId,
-      },
       email: rawUser.email!,
+      name: rawUser.name,
       poolId: userPoolId,
+      role: rawUser.role,
+      sendWelcomeEmail: true,
+      temporaryPassword: password,
+      userId,
     });
   }
 

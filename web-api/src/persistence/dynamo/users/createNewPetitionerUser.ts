@@ -38,13 +38,11 @@ export const createNewPetitionerUser = async ({
   const createUserPromise = applicationContext
     .getUserGateway()
     .createUser(applicationContext, {
-      attributesToUpdate: {
-        email: user.pendingEmail,
-        name: user.name,
-        role: ROLES.petitioner,
-        userId: user.userId,
-      },
       email: user.pendingEmail!,
+      name: user.name,
+      role: ROLES.petitioner,
+      sendWelcomeEmail: true,
+      userId: user.userId,
     });
 
   const createUserRecordsPromise = createUserRecords({
