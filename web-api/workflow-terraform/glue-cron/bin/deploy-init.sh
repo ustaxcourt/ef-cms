@@ -13,4 +13,4 @@ export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_environment=$ENVIRONMENT
 
-../../../../shared/terraform/bin/init.sh glue-cron --build-lambda
+../../../../shared/terraform/bin/init.sh glue-cron
