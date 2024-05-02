@@ -18,13 +18,13 @@ export class OtherContact extends ContactUpdated {
           then: joi.optional(),
         })
         .messages({ '*': this.getMessageBasedOnPartyType() }),
-      // title: JoiValidationConstants.STRING.max(100)
-      //   .when('partyType', {
-      //     is: PARTY_TYPES.estate,
-      //     otherwise: joi.optional(),
-      //     then: joi.required(),
-      //   })
-      //   .messages({'*': }),
+      title: JoiValidationConstants.STRING.max(100)
+        .when('partyType', {
+          is: PARTY_TYPES.estate,
+          otherwise: joi.optional(),
+          then: joi.required(),
+        })
+        .messages({ '*': 'Enter title' }),
     };
   }
 
@@ -44,6 +44,8 @@ export class OtherContact extends ContactUpdated {
         return 'Enter name of next friend';
       case PARTY_TYPES.survivingSpouse:
         return 'Enter name of surviving spouse';
+      case PARTY_TYPES.estate:
+        return 'Enter name of executor/personal representative';
       default:
         return '';
     }
