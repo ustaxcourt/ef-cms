@@ -1,7 +1,4 @@
-import {
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  ORDER_EVENT_CODES,
-} from '../../entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
@@ -29,9 +26,8 @@ export const processDocketEntries = async ({
       const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
       const isSearchable =
-        OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
-          fullDocketEntry.eventCode,
-        ) || ORDER_EVENT_CODES.includes(fullDocketEntry.eventCode);
+        DocketEntry.isOpinion(fullDocketEntry.eventCode) ||
+        DocketEntry.isOrder(fullDocketEntry.eventCode);
 
       if (isSearchable && fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
