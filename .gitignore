@@ -69,4 +69,6 @@ metadata.json
 metadata-public.json
 stats.html
 other/
+dist-lambdas/
 .cognito/db/local_2pHzece7.json
+*execution-plan*
