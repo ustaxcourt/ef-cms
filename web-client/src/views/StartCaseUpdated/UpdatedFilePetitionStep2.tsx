@@ -84,7 +84,7 @@ export const UpdatedFilePetitionStep2 = connect(
             bind="form"
             nameLabel="Full Name"
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
-            onChange="updateFormValueSequence"
+            onChange="updateFormValueUpdatedSequence"
           />
         )}
         {console.log('form', form)}
@@ -94,7 +94,7 @@ export const UpdatedFilePetitionStep2 = connect(
               bind="form"
               nameLabel="Full Name"
               showPlaceOfLegalResidence={showPlaceOfLegalResidence}
-              onChange="updateFormValueSequence"
+              onChange="updateFormValueUpdatedSequence"
             />
             <PetitionerAndSpouseInfo
               hasSpouseConsent={form.hasSpouseConsent}
@@ -266,7 +266,7 @@ function Spouse({
           nameLabel="Full name of spouse"
           showPlaceOfLegalResidence={true}
           showSameAsPrimaryCheckbox={true}
-          onChange="updateFormValueSequence"
+          onChange="updateFormValueUpdatedSequence"
         />
       )}
     </>
@@ -281,7 +281,7 @@ function DeceasedSpouse() {
       nameLabel="Full name of deceased spouse"
       showPlaceOfLegalResidence={true}
       showSameAsPrimaryCheckbox={true}
-      onChange="updateFormValueSequence"
+      onChange="updateFormValueUpdatedSequence"
     />
   );
 }
@@ -343,7 +343,7 @@ function BusinessInfo({
             secondaryLabel={businessFieldNames.secondary}
             secondaryLabelNote={businessFieldNames.secondaryNote}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
-            onChange="updateFormValueSequence"
+            onChange="updateFormValueUpdatedSequence"
           />
           <CorporateDisclosureUpload
             hasCorporateDisclosureFile={hasCorporateDisclosureFile}
@@ -412,7 +412,7 @@ function CorporateDisclosureUpload({
             aria-describedby="corporate-disclosure-file-label"
             id="corporate-disclosure-file"
             name="corporateDisclosureFile"
-            updateFormValueSequence="updateFormValueSequence"
+            updateFormValueSequence="updateFormValueUpdatedSequence"
           />
         </FormGroup>
       </div>
@@ -508,7 +508,7 @@ function OtherContactInformation({
       showPlaceOfLegalResidence={showPlaceOfLegalResidence}
       titleLabel={otherContactNameLabel.titleLabel}
       titleLabelNote={otherContactNameLabel.titleLabelNote}
-      onChange="updateFormValueSequence"
+      onChange="updateFormValueUpdatedSequence"
     />
   );
 }

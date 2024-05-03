@@ -11,7 +11,6 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
     estateType,
     filingType,
     hasSpouseConsent,
-    inCareOf,
     isSpouseDeceased,
     minorIncompetentType,
     otherType,
@@ -23,14 +22,15 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
   const step2Data = {
     businessType,
     contactPrimary,
-    contactSecondary: useSameAsPrimary ? contactPrimary : contactSecondary,
+    contactSecondary: useSameAsPrimary
+      ? { ...contactSecondary, ...contactPrimary }
+      : contactSecondary,
     corporateDisclosureFile,
     corporateDisclosureFileSize,
     countryType,
     estateType,
     filingType,
     hasSpouseConsent,
-    inCareOf,
     isSpouseDeceased,
     minorIncompetentType,
     otherType,

@@ -501,6 +501,7 @@ import { updateFilingTypeSequence } from './sequences/updateFilingTypeSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
+import { updateFormValueUpdatedSequence } from '@web-client/presenter/sequences/updateFormValueUpdatedSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
 import { updateIrsNoticeIndexPropertySequence } from '@web-client/presenter/sequences/updateIrsNoticeIndexPropertySequence';
@@ -1422,6 +1423,8 @@ export const presenterSequences = {
   updateFormValueAndSecondaryContactInfoSequence:
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
   updateFormValueSequence: updateFormValueSequence as unknown as Function,
+  updateFormValueUpdatedSequence:
+    updateFormValueUpdatedSequence as unknown as Function,
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,

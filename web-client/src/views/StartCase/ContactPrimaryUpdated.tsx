@@ -43,8 +43,6 @@ export const ContactPrimaryUpdated = connect(
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     titleLabel: props.titleLabel,
     titleLabelNote: props.titleLabelNote,
-    updateFormValueAndSecondaryContactInfoSequence:
-      sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
   function ContactPrimaryUpdated({
@@ -64,7 +62,6 @@ export const ContactPrimaryUpdated = connect(
     showPlaceOfLegalResidence,
     titleLabel,
     titleLabelNote,
-    updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {} as {
       contactPrimary?: {
         secondaryName: string;
@@ -199,7 +196,7 @@ export const ContactPrimaryUpdated = connect(
               bind={bind}
               type="contactPrimary"
               onBlur={onBlur}
-              onChange="updateFormValueAndSecondaryContactInfoSequence"
+              onChange={onChange}
             />
           )}
 
@@ -246,7 +243,7 @@ export const ContactPrimaryUpdated = connect(
                 onBlurSequence();
               }}
               onChange={e => {
-                updateFormValueAndSecondaryContactInfoSequence({
+                onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
