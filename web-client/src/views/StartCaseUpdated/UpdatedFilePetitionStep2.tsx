@@ -65,7 +65,6 @@ export const UpdatedFilePetitionStep2 = connect(
                       key: e.target.name,
                       value: e.target.value,
                     });
-                    // validateStartCaseWizardSequence
                   }}
                 />
                 <label
@@ -86,7 +85,6 @@ export const UpdatedFilePetitionStep2 = connect(
             nameLabel="Full Name"
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
             onChange="updateFormValueSequence"
-            // onBlur
           />
         )}
         {console.log('form', form)}
@@ -112,10 +110,12 @@ export const UpdatedFilePetitionStep2 = connect(
           <BusinessInfo
             businessFieldNames={updatedFilePetitionHelper.businessFieldNames}
             businessTypes={constants.BUSINESS_TYPES}
+            hasCorporateDisclosureFile={form.corporateDisclosureFile}
             maxFileSize={constants.MAX_FILE_SIZE_MB}
             selectedBusinessType={form.businessType}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
             updateFilingTypeSequence={updateFilingTypeSequence}
+            validationErrors={validationErrors}
           />
         )}
         {form.filingType === 'Other' && (
@@ -289,18 +289,15 @@ function DeceasedSpouse() {
 function BusinessInfo({
   businessFieldNames,
   businessTypes,
+  hasCorporateDisclosureFile,
   maxFileSize,
   selectedBusinessType,
   showPlaceOfLegalResidence,
   updateFilingTypeSequence,
+  validationErrors,
 }) {
   return (
-    <div
-      className={classNames(
-        'ustc-secondary-question',
-        // validationErrors.partyType && 'usa-form-group--error',
-      )}
-    >
+    <div className="ustc-secondary-question">
       <fieldset className="usa-fieldset" id="business-type-radios">
         <legend id="business-type-legend">
           What type of business are you filing for?
@@ -325,7 +322,6 @@ function BusinessInfo({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                // validateStartCaseWizardSequence();
               }}
             />
             <label
@@ -349,14 +345,22 @@ function BusinessInfo({
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
             onChange="updateFormValueSequence"
           />
-          <CorporateDisclosureUpload maxFileSize={maxFileSize} />
+          <CorporateDisclosureUpload
+            hasCorporateDisclosureFile={hasCorporateDisclosureFile}
+            maxFileSize={maxFileSize}
+            validationErrors={validationErrors}
+          />
         </div>
       )}
     </div>
   );
 }
 
-function CorporateDisclosureUpload({ maxFileSize }) {
+function CorporateDisclosureUpload({
+  hasCorporateDisclosureFile,
+  maxFileSize,
+  validationErrors,
+}) {
   return (
     <>
       <h2 className="margin-top-4">Corporate Disclosure Statement</h2>
@@ -385,15 +389,15 @@ function CorporateDisclosureUpload({ maxFileSize }) {
       </Button>
       <div className="margin-top-20">
         <FormGroup
-        // errorText={
-        // validationErrors.corporateDisclosureFile ||
-        // validationErrors.corporateDisclosureFileSize
-        // }
+          errorText={
+            validationErrors.corporateDisclosureFile ||
+            validationErrors.corporateDisclosureFileSize
+          }
         >
           <label
             className={classNames(
               'ustc-upload-cds usa-label with-hint',
-              // startCaseHelper.showCorporateDisclosureValid && 'validated',
+              hasCorporateDisclosureFile && 'validated',
             )}
             htmlFor="corporate-disclosure-file"
             id="corporate-disclosure-file-label"
@@ -409,7 +413,6 @@ function CorporateDisclosureUpload({ maxFileSize }) {
             id="corporate-disclosure-file"
             name="corporateDisclosureFile"
             updateFormValueSequence="updateFormValueSequence"
-            // validationSequence="validateStartCaseWizardSequence"
           />
         </FormGroup>
       </div>
@@ -429,12 +432,7 @@ function OtherInfo({
   updateFilingTypeSequence,
 }) {
   return (
-    <div
-      className={classNames(
-        'ustc-secondary-question',
-        // validationErrors.partyType && 'usa-form-group--error',
-      )}
-    >
+    <div className="ustc-secondary-question">
       <fieldset className="usa-fieldset" id="other-type-radios">
         <legend id="other-type-legend">
           What other type of taxpayer are you filing for?
