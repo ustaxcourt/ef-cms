@@ -160,6 +160,14 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
 
   getFormattedValidationErrors(): Record<string, any> | null {
     const errors = super.getFormattedValidationErrors();
+    // // If partyType is failing and user selects "Myself and my spouse" as the filing type
+    // // don't show party type error since we show the isSpousedDeceased error
+    if (errors?.partyType && this.filingType === 'Myself and my spouse') {
+      return {
+        ...errors,
+        partyType: undefined,
+      };
+    }
     // If partyType is failing that means user has not selected all the radio buttons
     // meaning if that is the case we should not be displaying errors for the contact
     if (errors?.partyType)

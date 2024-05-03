@@ -10,9 +10,25 @@ export const validateUploadPetitionStep2Action = ({
     step2Data,
   ).getFormattedValidationErrors();
 
-  return errors
-    ? path.error({
-        errors,
-      })
-    : path.success();
+  if (!errors) {
+    return path.success();
+  }
+
+  const errorDisplayOrder = [
+    'name',
+    'secondaryName',
+    'inCareOf',
+    'title',
+    'address1',
+    'city',
+    'state',
+    'postalCode',
+    'placeOfLegalResidence',
+    'phone',
+  ];
+
+  return path.error({
+    errorDisplayOrder,
+    errors,
+  });
 };

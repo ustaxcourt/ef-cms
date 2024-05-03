@@ -94,9 +94,6 @@ export const ContactPrimaryUpdated = connect(
               name="contactPrimary.name"
               type="text"
               value={data.contactPrimary.name || ''}
-              onBlur={() => {
-                onBlurSequence();
-              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,

@@ -508,7 +508,6 @@ function OtherContactInformation({
       showPlaceOfLegalResidence={showPlaceOfLegalResidence}
       titleLabel={otherContactNameLabel.titleLabel}
       titleLabelNote={otherContactNameLabel.titleLabelNote}
-      onBlur="clearFormValidationErrorSequence"
       onChange="updateFormValueSequence"
     />
   );

@@ -13,14 +13,15 @@ export const setDefaultContactStateAction = ({
 }>) => {
   const partyType = get(state.form.partyType);
 
-  const { showContactPrimary, showContactSecondary } =
-    showContactsHelperUpdated(partyType, PARTY_TYPES, props);
+  const { showContactSecondary } = showContactsHelperUpdated(
+    partyType,
+    PARTY_TYPES,
+    props,
+  );
 
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
-  const defaultContact = showContactPrimary
-    ? { countryType: COUNTRY_TYPES.DOMESTIC }
-    : {};
+  const defaultContact = { countryType: COUNTRY_TYPES.DOMESTIC };
 
   if (props.key === 'filingType') {
     // toggling filing type
@@ -33,12 +34,12 @@ export const setDefaultContactStateAction = ({
   }
 
   if (showContactSecondary) {
-    // spouse deceased
     store.set(state.form.contactSecondary, {});
     store.set(state.form.useSameAsPrimary, true);
     store.set(state.form.hasSpouseConsent, false);
-  }
-  if (showContactPrimary) {
-    store.set(state.form.contactPrimary, defaultContact);
+  } else {
+    store.set(state.form.contactSecondary, {});
+    store.set(state.form.hasSpouseConsent, false);
+    store.set(state.form.useSameAsPrimary, false);
   }
 };
