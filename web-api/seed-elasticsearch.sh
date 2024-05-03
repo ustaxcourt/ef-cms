@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ELASTICSEARCH_ENDPOINT="http://localhost:9200"
+
 for ELASTICSEARCH_INDEX in $(curl -s -X GET "$ELASTICSEARCH_ENDPOINT/_cat/indices" | awk -F' ' '{print $3}'); do
   curl -X DELETE "${ELASTICSEARCH_ENDPOINT}/${ELASTICSEARCH_INDEX}"
 done
