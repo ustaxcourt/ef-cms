@@ -12,12 +12,6 @@ export const validateUploadedPdfAction = async ({
 
   await applicationContext
     .getUseCases()
-    .getStatusOfVirusScanInteractor(applicationContext, {
-      key: docketEntryId,
-    });
-
-  await applicationContext
-    .getUseCases()
     .validatePdfInteractor(applicationContext, {
       key: docketEntryId,
     });
