@@ -4,11 +4,11 @@ import classNames from 'classnames';
 export const PlaceOfLegalResidenceSelect = ({
   className = '',
   data,
+  onBlur,
   type,
   updateFormValueSequence,
   usStates,
   usStatesOther,
-  // validateStartCaseSequence,
 }) => {
   return (
     <select
@@ -17,12 +17,12 @@ export const PlaceOfLegalResidenceSelect = ({
       id={`${type}.placeOfLegalResidence`}
       name={`${type}.placeOfLegalResidence`}
       value={data[type].placeOfLegalResidence || ''}
+      onBlur={onBlur}
       onChange={e => {
         updateFormValueSequence({
           key: e.target.name,
           value: e.target.value,
         });
-        // validateStartCaseSequence();
       }}
     >
       <option value="">- Select -</option>

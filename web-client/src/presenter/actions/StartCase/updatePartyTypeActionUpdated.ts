@@ -11,7 +11,6 @@ export const updatePartyTypeActionUpdated = ({
   const { PARTY_TYPES } = applicationContext.getConstants();
 
   const resetFormFields = () => {
-    store.unset(state.form.partyType);
     store.unset(state.form.corporateDisclosureFile);
     store.unset(state.form.businessType);
     store.unset(state.form.otherType);
