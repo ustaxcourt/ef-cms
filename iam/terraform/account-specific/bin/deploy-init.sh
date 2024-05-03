@@ -39,10 +39,10 @@ if [ -z "$NUM_DAYS_TO_KEEP_LOGS" ]; then
   exit 1
 fi
 
-if [ -z "$LOG_SNAPSHOT_BUCKET_NAME" ]; then
-  echo "Please export the LOG_SNAPSHOT_BUCKET_NAME variable in your shell"
-  exit 1
-fi
+# if [ -z "$LOG_SNAPSHOT_BUCKET_NAME" ]; then
+#   echo "Please export the LOG_SNAPSHOT_BUCKET_NAME variable in your shell"
+#   exit 1
+# fi
 
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
@@ -56,5 +56,5 @@ if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 fi
 export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
-export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
+# export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
 ENVIRONMENT=account ../../../../shared/terraform/bin/init.sh permissions
