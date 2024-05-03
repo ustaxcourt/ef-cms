@@ -45,7 +45,6 @@ export const Login = connect(
                     >
                       Log in to DAWSON
                     </h1>
-                    <span>Email address and password are case sensitive.</span>
                     <form className="usa-form margin-top-4 max-width-unset login-form">
                       <label className="usa-label" htmlFor="email">
                         Email address
