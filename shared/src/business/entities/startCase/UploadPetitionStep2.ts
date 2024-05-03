@@ -5,7 +5,6 @@ import {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   OTHER_TYPES,
-  // PARTY_TYPES,
   ROLES,
 } from '../EntityConstants';
 import { ContactFactoryUpdated } from '../contacts/ContactFactoryUpdated';
