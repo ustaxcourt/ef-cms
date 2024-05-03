@@ -6,7 +6,10 @@ import {
   settings,
 } from '../../web-api/elasticsearch/elasticsearch-settings';
 import { getClient } from '../../web-api/elasticsearch/client';
-import { getVersion, requireEnvVars } from '../../shared/admin-tools/util';
+import {
+  getSourceTableInfo,
+  requireEnvVars,
+} from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV', 'SOURCE_TABLE', 'OVERRIDE_ES_NUMBER_OF_REPLICAS']);
 
@@ -30,7 +33,7 @@ const esSettings: esSettingsType = settings({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const version: string = await getVersion();
+  const { version } = await getSourceTableInfo();
   const client: Client = await getClient({ environmentName, version });
 
   const { body: indexExists } = await client.indices.exists({ index });
