@@ -23,7 +23,6 @@ export const PlaceOfLegalResidenceDropdown = connect(
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
-    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function PlaceOfLegalResidenceDropdown({
@@ -33,7 +32,6 @@ export const PlaceOfLegalResidenceDropdown = connect(
     updateFormValueSequence,
     usStates,
     usStatesOther,
-    // validateStartCaseSequence,
     validationErrors,
   }) {
     return (
@@ -58,7 +56,6 @@ export const PlaceOfLegalResidenceDropdown = connect(
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
               usStatesOther={usStatesOther}
-              // validateStartCaseSequence={validateStartCaseSequence}
             />
           </FormGroup>
         </Mobile>
