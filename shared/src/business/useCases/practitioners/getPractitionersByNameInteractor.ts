@@ -1,21 +1,12 @@
-import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-/**
- * getPractitionersByNameInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} params the params object
- * @param {string} params.name the name to search by
- * @returns {*} the result
- */
 export const getPractitionersByNameInteractor = async (
   applicationContext: IApplicationContext,
-  { name }: { name: string },
+  { name, searchAfter }: { name: string; searchAfter: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
@@ -29,19 +20,25 @@ export const getPractitionersByNameInteractor = async (
     throw new Error('Name must be provided to search');
   }
 
-  const foundUsers = (
-    await applicationContext.getPersistenceGateway().getPractitionersByName({
+  const { lastKey, results, total } = await applicationContext
+    .getPersistenceGateway()
+    .getPractitionersByName({
       applicationContext,
       name,
-    })
-  ).slice(0, MAX_SEARCH_RESULTS);
+      searchAfter,
+    });
 
-  return foundUsers.map(foundUser => ({
+  const practitioners = results.map(foundUser => ({
+    admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
     contact: {
-      state: foundUser.contact.state,
+      state: foundUser.contact?.state,
     },
     name: foundUser.name,
+    practiceType: foundUser.practiceType,
+    practitionerType: foundUser.practitionerType,
   }));
+
+  return { searchResults: { lastKey, practitioners, total } };
 };

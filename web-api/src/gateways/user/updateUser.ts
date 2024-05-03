@@ -12,7 +12,8 @@ export async function updateUser(
   {
     attributesToUpdate,
     email,
-  }: { email: string; attributesToUpdate: UserAttributes },
+    poolId,
+  }: { email: string; attributesToUpdate: UserAttributes; poolId?: string },
 ): Promise<void> {
   const formattedAttributesToUpdate: AttributeType[] = [];
 
@@ -26,7 +27,7 @@ export async function updateUser(
   if (attributesToUpdate.email) {
     formattedAttributesToUpdate.push({
       Name: 'email',
-      Value: attributesToUpdate.email,
+      Value: attributesToUpdate.email.toLowerCase(),
     });
     formattedAttributesToUpdate.push({
       Name: 'email_verified',
@@ -36,7 +37,7 @@ export async function updateUser(
 
   await applicationContext.getCognito().adminUpdateUserAttributes({
     UserAttributes: formattedAttributesToUpdate,
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: email,
+    UserPoolId: poolId ?? applicationContext.environment.userPoolId,
+    Username: email.toLowerCase(),
   });
 }

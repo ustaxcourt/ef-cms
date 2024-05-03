@@ -41,7 +41,7 @@ export const PractitionerSearchByName = connect(
                   </label>
                   <input
                     className="usa-input"
-                    data-testid="practitioner-name"
+                    data-testid="practitioner-name-input"
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
@@ -72,7 +72,7 @@ export const PractitionerSearchByName = connect(
                   id="practitioner-search-by-name-button"
                   onClick={e => {
                     e.preventDefault();
-                    submitPractitionerNameSearchSequence();
+                    submitPractitionerNameSearchSequence({ selectedPage: 0 });
                   }}
                 >
                   Search

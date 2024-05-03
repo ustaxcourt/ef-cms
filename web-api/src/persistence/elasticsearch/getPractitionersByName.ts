@@ -1,6 +1,7 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { search } from './searchClient';
+import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
+import { PractitionerSearchResultType } from '../../../../web-client/src/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
+import { formatResults } from './searchClient';
 
 /**
  * getPractitionersByName
@@ -10,33 +11,69 @@ import { search } from './searchClient';
  * @param {string} params.name the name to search by
  * @returns {*} the result
  */
-export const getPractitionersByName = async ({ applicationContext, name }) => {
+export const getPractitionersByName = async ({
+  applicationContext,
+  name,
+  searchAfter,
+}) => {
   const searchParameters = {
     body: {
-      _source: ['admissionsStatus', 'barNumber', 'contact', 'name'],
+      _source: [
+        'admissionsStatus',
+        'admissionsDate',
+        'barNumber',
+        'contact',
+        'name',
+        'practitionerType',
+        'practiceType',
+      ],
       query: {
         bool: {
           must: [
             ...IS_PRACTITIONER,
             {
-              simple_query_string: {
-                default_operator: 'and',
-                fields: ['name.S'],
-                query: name,
+              match: {
+                'name.S': {
+                  fuzziness: 'AUTO',
+                  query: name,
+                },
               },
             },
           ],
         },
       },
-      size: MAX_SEARCH_CLIENT_RESULTS,
+      search_after: searchAfter,
+      sort: [
+        '_score',
+        { 'firstName.S': 'asc' },
+        { 'lastName.S': 'asc' },
+        { 'barNumber.S': 'asc' },
+      ],
     },
     index: 'efcms-user',
+    size: PRACTITIONER_SEARCH_PAGE_SIZE,
+    track_scores: true,
+    track_total_hits: true,
   };
 
-  const { results } = await search({
-    applicationContext,
-    searchParameters,
-  });
+  const searchResults = await applicationContext
+    .getSearchClient()
+    .search(searchParameters);
 
-  return results;
+  const {
+    results,
+    total,
+  }: { results: PractitionerSearchResultType[]; total: number } = formatResults(
+    searchResults.body,
+  );
+
+  const matchingPractitioners: any[] = searchResults.body.hits.hits;
+  console.log('matches', matchingPractitioners);
+  const lastKey =
+    (matchingPractitioners[matchingPractitioners.length - 1]?.sort as Array<
+      number | string
+    >) || [];
+  console.log('last Key', lastKey);
+
+  return { lastKey, results, total };
 };
