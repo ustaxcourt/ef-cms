@@ -3,10 +3,7 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
-    actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/',
-    ],
+    actions: [...loginAs({ username: 'privatePractitioner@example.com' })],
     url: 'http://localhost:1234/',
   },
   {
@@ -81,7 +78,6 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/',
       'wait for #tab-closed to be visible',
       'click element #tab-closed',
       'wait for element #tabContent-closed to be visible',

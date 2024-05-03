@@ -4,7 +4,6 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'irssuperuser@example.com' }),
-      'navigate to http://localhost:1234/',
       'wait for #docket-search-field to be visible',
       'set field #docket-search-field to 103-19',
       'click element .usa-search-submit-text',
@@ -16,7 +15,6 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'irssuperuser@example.com' }),
-      'navigate to http://localhost:1234/',
       'wait for a#advanced-search-button to be visible',
       'click element #advanced-search-button',
       'wait for .advanced-search__form-container to be visible',
@@ -30,7 +28,6 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'irssuperuser@example.com' }),
-      'navigate to http://localhost:1234/',
       'wait for a#advanced-search-button to be visible',
       'click element #advanced-search-button',
       'wait for .advanced-search__form-container to be visible',

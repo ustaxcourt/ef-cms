@@ -643,7 +643,6 @@ export const createTestApplicationContext = ({
     getDocumentGenerators: jest
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),
-    getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
     getEnvironment: jest.fn().mockReturnValue({
@@ -674,14 +673,12 @@ export const createTestApplicationContext = ({
     getPersistenceGateway: mockGetPersistenceGateway,
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
-    getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: emptyAppContextProxy,
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
-    getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
@@ -697,7 +694,6 @@ export const createTestApplicationContext = ({
       info: jest.fn(),
       warn: jest.fn(),
     },
-    runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
     setTimeout: jest.fn().mockImplementation(callback => callback()),
