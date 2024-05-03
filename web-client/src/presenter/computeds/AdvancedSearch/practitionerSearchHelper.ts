@@ -2,6 +2,7 @@ import {
   COUNTRY_TYPES,
   PRACTITIONER_SEARCH_PAGE_SIZE,
   US_STATES,
+  US_STATES_OTHER,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '../../../applicationContext';
 import { Get } from 'cerebral';
@@ -35,7 +36,9 @@ export const formatPractitionerSearchResultRecord = (
 
   if (result.contact?.state) {
     result.contact.stateFullName =
-      US_STATES[result.contact.state] || result.contact.state;
+      US_STATES[result.contact.state] ||
+      US_STATES_OTHER[result.contact.state] ||
+      result.contact.state;
   }
 
   result.formattedAdmissionsDate = applicationContext
