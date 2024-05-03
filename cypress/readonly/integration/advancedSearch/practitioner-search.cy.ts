@@ -16,8 +16,8 @@ describe('Practitioner Search', () => {
       url: '/practitioners**',
     }).as('getPractitionerByName');
 
-    cy.get('input#practitioner-name').type('test');
-    cy.get('button#practitioner-search-by-name-button').click();
+    cy.get('[data-testid="practitioner-name-input"]').type('Smith');
+    cy.get('[data-testid="practitioner-search-by-name-button"]').click();
     cy.wait('@getPractitionerByName').then(isValidRequest);
     cy.get('[data-testid="practitioner-results-table"]')
       .find('tr')
@@ -38,8 +38,8 @@ describe('Practitioner Search', () => {
       url: '/practitioners/test',
     }).as('getPractitionerByBarNumber');
 
-    cy.get('input#bar-number').type('PT1111');
-    cy.get('button#practitioner-search-by-bar-number-button').click();
+    cy.get('[data-testid="bar-number-search-input"]').type('Smith');
+    cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
     cy.wait('@getPractitionerByBarNumber').then(isValidRequest);
   });
 });

@@ -41,7 +41,7 @@ export const PractitionerSearchByName = connect(
                   </label>
                   <input
                     className="usa-input"
-                    data-testid="practitioner-name"
+                    data-testid="practitioner-name-input"
                     id="practitioner-name"
                     name="practitionerName"
                     type="text"
