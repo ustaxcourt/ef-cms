@@ -14,6 +14,10 @@ provider "aws" {
 
 terraform {
   backend "s3" {
+    bucket = "ustc-case-mgmt.flexion.us.terraform.deploys"
+    key    = "permissions-account.tfstate"
+    region = "us-east-1"
+    dynamodb_table = "efcms-terraform-lock"
   }
 
   required_providers {
