@@ -11,7 +11,7 @@ export const headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-export const CHUNK_SIZE = 2000;
+export const CHUNK_SIZE = 4000;
 
 const defaultOptions: {
   isAsync?: boolean;
@@ -120,7 +120,6 @@ export const lambdaWrapper = (
 function chunkString(str) {
   const chunkedArray: string[] = [];
   let index = 0;
-
   while (index < str.length) {
     chunkedArray.push(str.substring(index, index + CHUNK_SIZE));
     index += CHUNK_SIZE;
