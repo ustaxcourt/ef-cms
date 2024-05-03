@@ -35,7 +35,7 @@ variable "dawson_dev_trusted_role_arns" {
   type = set(string)
 }
 
-variable "log_snapshot_bucket_name" {
-  type = string
-  default = "ustc-log-snapshots"
-}
+# variable "log_snapshot_bucket_name" {
+#   type = string
+#   default = "ustc-log-snapshots"
+# }
