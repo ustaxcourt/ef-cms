@@ -22,33 +22,33 @@ const REGIONS = ['us-east-1', 'us-west-1'];
       record => record.name === `gateway_api_public_${ENV}_${DEPLOYING_COLOR}`,
     );
 
-    console.log('apiGatewayRecord', apiGatewayRecord);
-
-    if (apiGatewayRecord && 'id' in apiGatewayRecord && apiGatewayRecord.id) {
+    if (apiGatewayRecord?.id) {
       try {
-        const deleteBasePathMappingResult = await apigateway.send(
+        await apigateway.send(
           new DeleteBasePathMappingCommand({
             basePath: '(none)',
             domainName: `public-api.${EFCMS_DOMAIN}`,
           }),
         );
-        if (deleteBasePathMappingResult) {
-          const createBasePathMappingResult = await apigateway.send(
-            new CreateBasePathMappingCommand({
-              domainName: `public-api.${EFCMS_DOMAIN}`,
-              restApiId: apiGatewayRecord.id,
-              stage: ENV,
-            }),
-          );
-          if (createBasePathMappingResult) {
-            console.log(createBasePathMappingResult);
-          }
-        }
+        console.log(
+          `Successfully deleted base path mapping for: public-api.${EFCMS_DOMAIN}`,
+        );
       } catch (err: any) {
-        if (err) {
-          console.log(err, err.stack);
-        }
+        console.log(
+          `Unable to delete base path mapping for: public-api.${EFCMS_DOMAIN}. Continuing forward.`,
+        );
       }
+
+      await apigateway.send(
+        new CreateBasePathMappingCommand({
+          domainName: `public-api.${EFCMS_DOMAIN}`,
+          restApiId: apiGatewayRecord.id,
+          stage: ENV,
+        }),
+      );
+      console.log(
+        `Successfully added base path mapping for: public-api.${EFCMS_DOMAIN}`,
+      );
     }
   }
 })();
