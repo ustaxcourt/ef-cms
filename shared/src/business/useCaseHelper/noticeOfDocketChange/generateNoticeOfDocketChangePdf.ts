@@ -56,7 +56,7 @@ export const generateNoticeOfDocketChangePdf = async ({
   const docketEntryId = applicationContext.getUniqueId();
 
   await new Promise<void>((resolve, reject) => {
-    const documentsBucket = applicationContext.getDocumentsBucketName();
+    const documentsBucket = applicationContext.environment.documentsBucketName;
     const s3Client = applicationContext.getStorageClient();
 
     const params = {

@@ -48,7 +48,7 @@ export async function authErrorHandling(
   ) {
     if (error.message?.includes('Temporary password has expired')) {
       await applicationContext
-        .getUseCaseHelpers()
+        .getUserGateway()
         .resendTemporaryPassword(applicationContext, { email });
       throw new UnauthorizedError('User temporary password expired'); //403
     }
