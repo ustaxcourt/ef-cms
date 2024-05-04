@@ -2,8 +2,9 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { confirmSignUp } from '@web-api/gateways/user/confirmSignUp';
 
 describe('confirmSignUp', () => {
-  it('should make a call confirm ownership of the provided email', async () => {
-    const mockEmail = 'test@example.com';
+  it('should make a call to confirm ownership of the provided email, lowercased', async () => {
+    const mockEmail = 'tESt@example.com';
+    const mockEmailLowercased = 'test@example.com';
     const mockUserPoolId = 'test';
     applicationContext.environment.userPoolId = mockUserPoolId;
 
@@ -15,7 +16,7 @@ describe('confirmSignUp', () => {
       applicationContext.getCognito().adminConfirmSignUp,
     ).toHaveBeenCalledWith({
       UserPoolId: mockUserPoolId,
-      Username: mockEmail,
+      Username: mockEmailLowercased,
     });
   });
 });

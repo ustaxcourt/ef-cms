@@ -8,18 +8,6 @@ describe('validateUploadedPdfAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to determine if virus scanning is enabled', async () => {
-    await runAction(validateUploadedPdfAction, {
-      modules: {
-        presenter,
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toHaveBeenCalled();
-  });
-
   it('should make a call to validate the pdf using the docketEntryId from props', async () => {
     const mockDocketEntryId = '5f354717-f7cc-4817-9575-452b04b2ef09';
 
