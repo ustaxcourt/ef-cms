@@ -172,7 +172,7 @@ describe('loginInteractor', () => {
     ).rejects.toThrow(new UnauthorizedError('User temporary password expired'));
 
     expect(
-      applicationContext.getUseCaseHelpers().resendTemporaryPassword,
+      applicationContext.getUserGateway().resendTemporaryPassword,
     ).toHaveBeenCalledWith(applicationContext, {
       email: mockEmail,
     });
