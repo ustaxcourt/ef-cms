@@ -33,6 +33,6 @@ export const uploadToS3 = async ({
 
     await parallelUploads3.done();
   } catch (e) {
-    console.log(e);
+    console.log(`Failed to upload document (${pdfName}) to S3.`, e);
   }
 };
