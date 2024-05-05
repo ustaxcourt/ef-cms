@@ -64,19 +64,11 @@ export const serveExternallyFiledDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    });
-
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
       docketEntryId,
-      documentBytes: pdfData,
     });
 
   await applicationContext

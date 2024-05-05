@@ -79,11 +79,11 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
         .eventCode
   ) {
-    const { Body: amendedPetitionFormData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: AMENDED_PETITION_FORM_NAME,
+    const amendedPetitionFormData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: AMENDED_PETITION_FORM_NAME,
       });
 
     const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
