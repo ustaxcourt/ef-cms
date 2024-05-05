@@ -31,9 +31,7 @@ describe('getHealthCheckInteractor', () => {
       getScannerResourceUri: () => '',
       getStorageClient: () => {
         return {
-          listObjectsV2: () => ({
-            promise: () => Promise.resolve(true),
-          }),
+          listObjectsV2: () => true,
         };
       },
       logger: {
@@ -100,9 +98,9 @@ describe('getHealthCheckInteractor', () => {
       getScannerResourceUri: () => '',
       getStorageClient: () => {
         return {
-          listObjectsV2: () => ({
-            promise: () => Promise.reject(true),
-          }),
+          listObjectsV2: () => {
+            throw new Error('');
+          },
         };
       },
       logger: {
@@ -142,7 +140,7 @@ describe('getHealthCheckInteractor', () => {
     it('should get the status of the buckets when the current color is green', async () => {
       process.env.CURRENT_COLOR = 'pink';
       process.env.EFCMS_DOMAIN = 'example';
-      const listObjectsMock = jest.fn().mockReturnValue(Promise.resolve(true));
+      const listObjectsMock = jest.fn().mockReturnValue(true);
 
       await getHealthCheckInteractor({
         environment: {

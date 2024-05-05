@@ -84,14 +84,8 @@ describe('completeDocketEntryQCInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
+      Body: testPdfDoc,
     });
-
-    applicationContext
-      .getStorageClient()
-      .upload.mockImplementation((params, resolve) => resolve());
 
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
