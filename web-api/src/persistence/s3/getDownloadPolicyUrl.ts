@@ -19,10 +19,10 @@ export const getDownloadPolicyUrl = async ({
     ? applicationContext.environment.tempDocumentsBucketName
     : applicationContext.environment.documentsBucketName;
 
-  const s3Client = applicationContext.getS3Client();
+  const s3 = applicationContext.getStorageClient();
 
   const url = await getSignedUrl(
-    s3Client,
+    s3,
     new GetObjectCommand({
       Bucket: bucketName,
       Key: key,
