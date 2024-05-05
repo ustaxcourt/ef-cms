@@ -9,10 +9,10 @@ export const getPublicDownloadPolicyUrl = async ({
   applicationContext: ServerApplicationContext;
   key: string;
 }): Promise<{ url: string }> => {
-  const s3Client = applicationContext.getS3Client();
+  const s3 = applicationContext.getStorageClient();
 
   const url = await getSignedUrl(
-    s3Client,
+    s3,
     new GetObjectCommand({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: key,

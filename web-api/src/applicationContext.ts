@@ -27,7 +27,7 @@ import { Message } from '../../shared/src/business/entities/Message';
 import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
-import { S3, S3Client } from '@aws-sdk/client-s3';
+import { S3 } from '@aws-sdk/client-s3';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -75,7 +75,6 @@ import pug from 'pug';
 import sass from 'sass';
 
 let s3Cache: S3;
-let s3ClientCache: S3Client;
 let sesCache;
 let sqsCache;
 let searchClientCache: Client;
@@ -328,22 +327,6 @@ export const createApplicationContext = (
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       return pug;
-    },
-    getS3Client: (): S3Client => {
-      if (!s3ClientCache) {
-        s3ClientCache = new S3Client({
-          endpoint: environment.s3Endpoint,
-          forcePathStyle: true,
-          maxAttempts: 3,
-          region: 'us-east-1',
-          requestHandler: new NodeHttpHandler({
-            connectionTimeout: 3000,
-            httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
-            requestTimeout: 5000,
-          }),
-        });
-      }
-      return s3ClientCache;
     },
     getScannerResourceUri: () => {
       return (

@@ -9,9 +9,9 @@ export const getUploadPolicy = async ({
   applicationContext: ServerApplicationContext;
   key: string;
 }): Promise<PresignedPost> => {
-  const s3Client = applicationContext.getS3Client();
+  const s3 = applicationContext.getStorageClient();
 
-  return await createPresignedPost(s3Client, {
+  return await createPresignedPost(s3, {
     Bucket: applicationContext.environment.documentsBucketName,
     Conditions: [
       ['starts-with', '$key', key],
