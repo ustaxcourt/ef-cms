@@ -1,5 +1,3 @@
-import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
-
 import {
   Case,
   getContactPrimary,
@@ -11,6 +9,7 @@ import {
 import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
+import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;
@@ -22,9 +21,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     caseEntity = new Case(MOCK_CASE, { applicationContext });
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
+      Body: testPdfDoc,
     });
 
     applicationContext

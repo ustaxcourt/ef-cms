@@ -138,7 +138,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: jest.fn().mockReturnValue({
-        promise: () => ({ Body: mockAmendedPetitionFormData }),
+        Body: mockAmendedPetitionFormData,
       }),
     });
 
@@ -168,7 +168,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: jest.fn().mockReturnValue({
-        promise: () => ({ Body: mockAmendedPetitionFormData }),
+        Body: mockAmendedPetitionFormData,
       }),
     });
 

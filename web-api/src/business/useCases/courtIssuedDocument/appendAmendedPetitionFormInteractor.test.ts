@@ -5,12 +5,11 @@ import {
 import { appendAmendedPetitionFormInteractor } from './appendAmendedPetitionFormInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
-const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
-
 describe('appendAmendedPetitionFormInteractor', () => {
   const fakeFile1 = 'docket tre';
   const fakeFile2 = 'snoop docket';
   const returnedCombinedPdf = 'ever';
+  const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -26,10 +25,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
       .getUtilities()
       .combineTwoPdfs.mockReturnValue(returnedCombinedPdf);
 
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: fakeFile2,
-      }),
+    applicationContext.getStorageClient().getObject.mockResolvedValue({
+      Body: fakeFile2,
     });
   });
 

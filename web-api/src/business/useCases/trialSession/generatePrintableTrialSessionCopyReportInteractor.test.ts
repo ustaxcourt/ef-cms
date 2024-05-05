@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -8,37 +9,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockUser;
   let mockTrialSession;
 
-  const interactorProps = {
-    filters: {
-      aBasisReached: true,
-      continued: true,
-      dismissed: true,
-      recall: true,
-      rule122: true,
-      setForTrial: true,
-      settled: true,
-      showAll: true,
-      statusUnassigned: true,
-      takenUnderAdvisement: true,
-    },
-    formattedCases: [MOCK_CASE],
-    formattedTrialSession: mockTrialSession,
-    sessionNotes: 'session notes',
-    showCaseNotes: true,
-    sort: 'docket',
-    userHeading: 'Yggdrasil - Session Copy',
-  };
-
-  beforeAll(() => {
-    applicationContext.getStorageClient.mockReturnValue({
-      upload: jest.fn((params, callback) => callback()),
-    });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
-  });
-
   beforeEach(() => {
     mockUser = {
       role: ROLES.trialClerk,
@@ -46,6 +16,10 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
 
     mockTrialSession = MOCK_TRIAL_REGULAR;
   });
@@ -56,24 +30,59 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       .printableWorkingCopySessionList.mockReset();
   });
 
-  it('should throw an unauthorized error when the user does not have access', async () => {
+  it('should throw an error when the user is not authorized to generate a printable trial session report', async () => {
     mockUser = {
       role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
     await expect(
-      generatePrintableTrialSessionCopyReportInteractor(
-        applicationContext,
-        interactorProps,
-      ),
+      generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
+        filters: {
+          aBasisReached: true,
+          continued: true,
+          dismissed: true,
+          recall: true,
+          rule122: true,
+          setForTrial: true,
+          settled: true,
+          showAll: true,
+          statusUnassigned: true,
+          takenUnderAdvisement: true,
+        },
+        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedTrialSession: mockTrialSession,
+        sessionNotes: 'session notes',
+        showCaseNotes: true,
+        sort: 'docket',
+        userHeading: 'Yggdrasil - Session Copy',
+      }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      interactorProps,
+      {
+        filters: {
+          aBasisReached: true,
+          continued: true,
+          dismissed: true,
+          recall: true,
+          rule122: true,
+          setForTrial: true,
+          settled: true,
+          showAll: true,
+          statusUnassigned: true,
+          takenUnderAdvisement: true,
+        },
+        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedTrialSession: mockTrialSession,
+        sessionNotes: 'session notes',
+        showCaseNotes: true,
+        sort: 'docket',
+        userHeading: 'Yggdrasil - Session Copy',
+      },
     );
 
     expect(
@@ -81,46 +90,85 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
         .printableWorkingCopySessionList,
     ).toHaveBeenCalledWith({
       applicationContext,
-      data: interactorProps,
+      data: {
+        filters: {
+          aBasisReached: true,
+          continued: true,
+          dismissed: true,
+          recall: true,
+          rule122: true,
+          setForTrial: true,
+          settled: true,
+          showAll: true,
+          statusUnassigned: true,
+          takenUnderAdvisement: true,
+        },
+        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedTrialSession: mockTrialSession,
+        sessionNotes: 'session notes',
+        showCaseNotes: true,
+        sort: 'docket',
+        userHeading: 'Yggdrasil - Session Copy',
+      },
     });
   });
 
-  it('uploads the Trial Session Working Copy PDF to s3', async () => {
+  it('should upload the generated trial session working copy PDF to persistence', async () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      interactorProps,
+      {
+        filters: {
+          aBasisReached: true,
+          continued: true,
+          dismissed: true,
+          recall: true,
+          rule122: true,
+          setForTrial: true,
+          settled: true,
+          showAll: true,
+          statusUnassigned: true,
+          takenUnderAdvisement: true,
+        },
+        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedTrialSession: mockTrialSession,
+        sessionNotes: 'session notes',
+        showCaseNotes: true,
+        sort: 'docket',
+        userHeading: 'Yggdrasil - Session Copy',
+      },
     );
 
-    expect(applicationContext.getStorageClient).toHaveBeenCalled();
-    expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
-  it('should return the Trial Session Working Copy PDF url', async () => {
+  it('should return the url to the generated trial session working copy PDF', async () => {
     const results = await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      interactorProps,
+      {
+        filters: {
+          aBasisReached: true,
+          continued: true,
+          dismissed: true,
+          recall: true,
+          rule122: true,
+          setForTrial: true,
+          settled: true,
+          showAll: true,
+          statusUnassigned: true,
+          takenUnderAdvisement: true,
+        },
+        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedTrialSession: mockTrialSession,
+        sessionNotes: 'session notes',
+        showCaseNotes: true,
+        sort: 'docket',
+        userHeading: 'Yggdrasil - Session Copy',
+      },
     );
 
     expect(
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
     ).toHaveBeenCalled();
     expect(results).toEqual('https://example.com');
-  });
-
-  it('fails and logs if the s3 upload fails', async () => {
-    applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback('error'),
-    });
-
-    await expect(
-      generatePrintableTrialSessionCopyReportInteractor(
-        applicationContext,
-        interactorProps,
-      ),
-    ).rejects.toEqual('error');
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'error uploading to s3',
-    );
   });
 });

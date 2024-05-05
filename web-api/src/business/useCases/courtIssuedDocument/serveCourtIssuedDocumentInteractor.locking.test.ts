@@ -1,9 +1,8 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-jest.mock('../addCoverToPdf');
 import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   handleLockError,
@@ -11,6 +10,7 @@ import {
 } from './serveCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+jest.mock('../../../../../shared/src/business/useCases/addCoverToPdf');
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
