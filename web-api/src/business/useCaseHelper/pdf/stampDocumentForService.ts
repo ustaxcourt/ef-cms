@@ -1,12 +1,21 @@
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
-} from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+} from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const stampDocumentForService = async ({
   applicationContext,
+  docketEntryId,
   documentToStamp,
-  pdfData,
+}: {
+  applicationContext: ServerApplicationContext;
+  docketEntryId: string;
+  documentToStamp: {
+    documentType: string;
+    eventCode: string;
+    serviceStamp: string;
+  };
 }) => {
   let serviceStampType = 'Served';
 
@@ -22,6 +31,11 @@ export const stampDocumentForService = async ({
   const serviceStampDate = applicationContext
     .getUtilities()
     .formatDateString(servedAt, 'MMDDYY');
+
+  const pdfData = await applicationContext.getPersistenceGateway().getDocument({
+    applicationContext,
+    key: docketEntryId,
+  });
 
   return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
     applicationContext,

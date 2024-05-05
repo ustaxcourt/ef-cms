@@ -83,19 +83,12 @@ export const fileAndServeCourtIssuedDocument = async (
     throw error;
   }
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryToServe.docketEntryId,
-    });
-
   const stampedPdf = await applicationContext
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
+      docketEntryId: docketEntryToServe.docketEntryId,
       documentToStamp: form,
-      pdfData,
     });
 
   const numberOfPages = await applicationContext
@@ -103,7 +96,7 @@ export const fileAndServeCourtIssuedDocument = async (
     .countPagesInDocument({
       applicationContext,
       docketEntryId,
-      documentBytes: pdfData,
+      documentBytes: stampedPdf,
     });
 
   await applicationContext
