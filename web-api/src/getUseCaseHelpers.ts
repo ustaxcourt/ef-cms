@@ -40,7 +40,7 @@ import { setNoticeOfChangeOfTrialJudge } from '../../shared/src/business/useCase
 import { setNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/setPdfFormFields';
-import { stampDocumentForService } from '../../shared/src/business/useCaseHelper/stampDocumentForService';
+import { stampDocumentForService } from './business/useCaseHelper/pdf/stampDocumentForService';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';

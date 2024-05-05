@@ -24,12 +24,10 @@ export const validatePdfInteractor = async (
   applicationContext: IApplicationContext,
   { key }: { key: string },
 ) => {
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: key,
-    });
+  const pdfData = await applicationContext.getPersistenceGateway().getDocument({
+    applicationContext,
+    key,
+  });
 
   const stringDecoder = new StringDecoder('utf8');
   const pdfHeaderBytes = pdfData.slice(0, 5);

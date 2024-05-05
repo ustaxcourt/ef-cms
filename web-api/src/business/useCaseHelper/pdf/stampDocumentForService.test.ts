@@ -1,5 +1,5 @@
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { stampDocumentForService } from './stampDocumentForService';
 
 describe('stampDocumentForService', () => {

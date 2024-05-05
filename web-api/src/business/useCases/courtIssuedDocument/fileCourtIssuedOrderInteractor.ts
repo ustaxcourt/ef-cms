@@ -48,12 +48,9 @@ export const fileCourtIssuedOrder = async (
   }
 
   if (shouldScrapePDFContents) {
-    const { Body: pdfBuffer } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: primaryDocumentFileId,
-      });
+    const pdfBuffer = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({ applicationContext, key: primaryDocumentFileId });
 
     const contents = await applicationContext
       .getUseCaseHelpers()
