@@ -34,11 +34,11 @@ export const appendAmendedPetitionFormInteractor = async (
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found`);
   }
 
-  const { Body: amendedPetitionFormData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: AMENDED_PETITION_FORM_NAME,
+  const amendedPetitionFormData = await applicationContext
+    .getPersistenceGateway()
+    .getDocument({
+      applicationContext,
+      key: AMENDED_PETITION_FORM_NAME,
     });
 
   const combinedPdf = await applicationContext.getUtilities().combineTwoPdfs({

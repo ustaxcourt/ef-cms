@@ -1,5 +1,4 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from '../../../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
@@ -36,17 +35,16 @@ export const serveDocumentAndGetPaperServicePdf = async ({
 
     if (servedParties.paper.length > 0) {
       if (!originalPdfDoc) {
-        let pdfData: GetObjectCommandOutput;
         if (stampedPdf) {
           originalPdfDoc = await PDFDocument.load(stampedPdf);
         } else {
-          pdfData = await applicationContext.getStorageClient().getObject({
-            Bucket: applicationContext.environment.documentsBucketName,
-            Key: docketEntryId,
-          });
-          originalPdfDoc = await PDFDocument.load(
-            pdfData.Body as unknown as ArrayBuffer,
-          );
+          const pdfData = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              key: docketEntryId,
+            });
+          originalPdfDoc = await PDFDocument.load(pdfData);
         }
       }
       await applicationContext

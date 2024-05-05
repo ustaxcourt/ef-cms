@@ -44,11 +44,10 @@ export const addCoversheetInteractor = async (
 
   let pdfData;
   try {
-    const { Body } = await applicationContext.getStorageClient().getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
+    pdfData = await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      key: docketEntryId,
     });
-    pdfData = Body;
   } catch (err) {
     applicationContext.logger.error(
       `Failed to get document for docket entry id ${docketEntryId} `,

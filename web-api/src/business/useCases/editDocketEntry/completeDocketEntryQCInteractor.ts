@@ -219,11 +219,11 @@ const completeDocketEntryQC = async (
     CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType)
   ) {
     if (servedParties.paper.length > 0) {
-      const { Body: pdfData } = await applicationContext
-        .getStorageClient()
-        .getObject({
-          Bucket: applicationContext.environment.documentsBucketName,
-          Key: updatedDocketEntry.docketEntryId,
+      const pdfData = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: updatedDocketEntry.docketEntryId,
         });
 
       const noticeDoc = await PDFDocument.load(pdfData);
@@ -296,17 +296,17 @@ const completeDocketEntryQC = async (
 
     caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
 
-    const { Body: pdfData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: noticeUpdatedDocketEntry.docketEntryId,
-      });
-
     const serviceStampDate = formatDateString(
       noticeUpdatedDocketEntry.servedAt!,
       FORMATS.MMDDYY,
     );
+
+    const pdfData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: noticeUpdatedDocketEntry.docketEntryId,
+      });
 
     const newPdfData = await addServedStampToDocument({
       applicationContext,
