@@ -1,41 +1,32 @@
-/**
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.key the key of the document to get
- * @returns {Promise<any>} the promise of the call to the storage client
- */
-export const getPublicDownloadPolicyUrl = ({
+import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+export const getPublicDownloadPolicyUrl = async ({
   applicationContext,
   key,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   key: string;
 }): Promise<{ url: string }> => {
-  return new Promise((resolve, reject) => {
-    applicationContext.getStorageClient().getSignedUrl(
-      'getObject',
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Expires: 120,
-        Key: key,
-      },
-      (err, data) => {
-        if (err) {
-          applicationContext.logger.error(
-            'unable to create the public download url policy',
-            err,
-          );
-          return reject(err);
-        }
-        resolve({
-          url: applicationContext.documentUrlTranslator({
-            applicationContext,
-            documentUrl: data,
-            useTempBucket: false,
-          }),
-        });
-      },
-    );
-  });
+  const s3Client = applicationContext.getS3Client();
+
+  const url = await getSignedUrl(
+    s3Client,
+    new GetObjectCommand({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: key,
+    }),
+    {
+      expiresIn: 120,
+    },
+  );
+
+  return {
+    url: applicationContext.documentUrlTranslator({
+      applicationContext,
+      documentUrl: url,
+      useTempBucket: false,
+    }),
+  };
 };

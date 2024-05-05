@@ -29,8 +29,7 @@ export const validatePdfInteractor = async (
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: key,
-    })
-    .promise();
+    });
 
   const stringDecoder = new StringDecoder('utf8');
   const pdfHeaderBytes = pdfData.slice(0, 5);

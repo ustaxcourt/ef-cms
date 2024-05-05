@@ -49,7 +49,7 @@ import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utili
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { sleep } from '@shared/tools/helpers';
-import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
+import { uploadToS3 } from './persistence/s3/uploadToS3';
 
 const utilities = {
   abbreviateState,

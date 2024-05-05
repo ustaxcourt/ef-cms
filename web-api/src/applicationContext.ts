@@ -3,6 +3,7 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
+import { Agent } from 'https';
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
@@ -23,8 +24,10 @@ import { Correspondence } from '../../shared/src/business/entities/Correspondenc
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { S3, S3Client } from '@aws-sdk/client-s3';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -66,12 +69,13 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SES, SQS } from 'aws-sdk';
+import AWS, { SES, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
-let s3Cache: AWS.S3 | undefined;
+let s3Cache: S3;
+let s3ClientCache: S3Client;
 let sesCache;
 let sqsCache;
 let searchClientCache: Client;
@@ -325,6 +329,22 @@ export const createApplicationContext = (
     getPug: () => {
       return pug;
     },
+    getS3Client: (): S3Client => {
+      if (!s3ClientCache) {
+        s3ClientCache = new S3Client({
+          endpoint: environment.s3Endpoint,
+          forcePathStyle: true,
+          maxAttempts: 3,
+          region: 'us-east-1',
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
+            requestTimeout: 5000,
+          }),
+        });
+      }
+      return s3ClientCache;
+    },
     getScannerResourceUri: () => {
       return (
         process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
@@ -358,17 +378,18 @@ export const createApplicationContext = (
       return searchClientCache;
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
-    getStorageClient: () => {
+    getStorageClient: (): S3 => {
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
+          forcePathStyle: true,
+          maxAttempts: 3,
           region: 'us-east-1',
-          s3ForcePathStyle: true,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
+            requestTimeout: 5000,
+          }),
         });
       }
       return s3Cache;

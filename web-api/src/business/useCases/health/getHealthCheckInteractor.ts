@@ -121,13 +121,10 @@ const checkS3BucketsStatus = async ({
   bucketName: string;
 }): Promise<boolean> => {
   try {
-    await applicationContext
-      .getStorageClient()
-      .listObjectsV2({
-        Bucket: bucketName,
-        MaxKeys: 1,
-      })
-      .promise();
+    await applicationContext.getStorageClient().listObjectsV2({
+      Bucket: bucketName,
+      MaxKeys: 1,
+    });
 
     return true;
   } catch (e) {
