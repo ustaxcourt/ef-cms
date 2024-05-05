@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { zipS3Files } from './zipS3Files';
 import archiver from 'archiver';
 import s3FilesLib from 's3-files';
@@ -13,7 +14,7 @@ import stream from 'stream';
  * @param {string} providers.zipName the name of the generated zip file
  * @returns {Promise} the created zip
  */
-export const zipDocuments = ({
+export const zipDocuments = async ({
   applicationContext,
   extraFileNames,
   extraFiles,
@@ -25,7 +26,7 @@ export const zipDocuments = ({
   s3Ids,
   zipName,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   extraFileNames: string[];
   extraFiles: any[];
   fileNames: string[];
@@ -36,39 +37,34 @@ export const zipDocuments = ({
   s3Ids: string[];
   zipName: string;
 }) => {
-  return new Promise((resolve, reject) => {
-    const { documentsBucketName, tempDocumentsBucketName } =
-      applicationContext.environment;
+  const s3Client = applicationContext.getStorageClient();
 
-    const s3Client = applicationContext.getStorageClient();
+  onUploadStart?.();
 
-    onUploadStart?.();
+  const passThrough = new stream.PassThrough();
 
-    const passThrough = new stream.PassThrough();
-
-    s3Client.upload(
-      {
-        Body: passThrough,
-        Bucket: tempDocumentsBucketName,
-        Key: zipName,
-      },
-      () => resolve(undefined),
-    );
-
-    passThrough.on('error', reject);
-
-    zipS3Files({
-      additionalFileNames: extraFileNames,
-      additionalFiles: extraFiles,
-      archiver,
-      bucket: documentsBucketName,
-      onEntry,
-      onError,
-      onProgress,
-      s3Client,
-      s3FilesLib,
-      s3Keys: s3Ids,
-      s3KeysFileNames: fileNames,
-    }).pipe(passThrough);
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    pdfData: passThrough,
+    pdfName: zipName,
+    useTempBucket: true,
   });
+
+  passThrough.on('error', () => {
+    throw new Error('');
+  });
+
+  zipS3Files({
+    additionalFileNames: extraFileNames,
+    additionalFiles: extraFiles,
+    archiver,
+    bucket: applicationContext.environment.documentsBucketName,
+    onEntry,
+    onError,
+    onProgress,
+    s3Client,
+    s3FilesLib,
+    s3Keys: s3Ids,
+    s3KeysFileNames: fileNames,
+  }).pipe(passThrough);
 };

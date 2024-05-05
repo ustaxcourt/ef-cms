@@ -1,16 +1,16 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 jest.mock('../addCoverToPdf');
-import { addCoverToPdf } from '../addCoverToPdf';
+import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
 import {
   determineEntitiesToLock,
   handleLockError,
-  serveExternallyFiledDocumentInteractor,
-} from '../../../../../web-api/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
-import { docketClerkUser } from '../../../test/mockUsers';
-import { testPdfDoc } from '../../test/getFakeFile';
+  serveCourtIssuedDocumentInteractor,
+} from './serveCourtIssuedDocumentInteractor';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -69,12 +69,12 @@ describe('handleLockError', () => {
     ).toMatchObject({
       action: 'retry_async_request',
       originalRequest: mockOriginalRequest,
-      requestToRetry: 'serve_externally_filed_document',
+      requestToRetry: 'serve_court_issued_document',
     });
   });
 });
 
-describe('serveExternallyFiledDocumentInteractor', () => {
+describe('serveCourtIssuedDocumentInteractor', () => {
   const mockClientConnectionId = '987654';
   const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f806';
   const mockPdfUrl = 'ayo.seankingston.com';
@@ -133,7 +133,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        serveExternallyFiledDocumentInteractor(applicationContext, mockRequest),
+        serveCourtIssuedDocumentInteractor(applicationContext, mockRequest),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -143,7 +143,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        serveExternallyFiledDocumentInteractor(applicationContext, mockRequest),
+        serveCourtIssuedDocumentInteractor(applicationContext, mockRequest),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -154,7 +154,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         message: {
           action: 'retry_async_request',
           originalRequest: mockRequest,
-          requestToRetry: 'serve_externally_filed_document',
+          requestToRetry: 'serve_court_issued_document',
         },
         userId: docketClerkUser.userId,
       });
@@ -171,10 +171,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        mockRequest,
-      );
+      await serveCourtIssuedDocumentInteractor(applicationContext, mockRequest);
 
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -186,10 +183,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     it('should remove the lock', async () => {
-      await serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        mockRequest,
-      );
+      await serveCourtIssuedDocumentInteractor(applicationContext, mockRequest);
 
       expect(
         applicationContext.getPersistenceGateway().removeLock,

@@ -44,13 +44,10 @@ export const addCoversheetInteractor = async (
 
   let pdfData;
   try {
-    const { Body } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryId,
-      })
-      .promise();
+    const { Body } = await applicationContext.getStorageClient().getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    });
     pdfData = Body;
   } catch (err) {
     applicationContext.logger.error(

@@ -7,5 +7,5 @@ interface IApplicationContext {
   getUseCases: IGetUseCases;
   getUtilities: IGetUtilities;
   getDocumentGenerators: IGetDocumentGenerators;
-  getStorageClient: () => AWS.S3;
+  getStorageClient: () => import('@aws-sdk/client-s3').S3;
 }

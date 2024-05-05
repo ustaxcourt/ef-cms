@@ -84,15 +84,12 @@ const uploadDocumentToS3 = async ({
   let tries = 0;
   while (!uploaded && tries < MAX_TRIES) {
     try {
-      await applicationContext
-        .getStorageClient()
-        .putObject({
-          Body: fileData,
-          Bucket: applicationContext.environment.documentsBucketName,
-          ContentType: 'application/pdf',
-          Key: fileId,
-        })
-        .promise();
+      await applicationContext.getStorageClient().putObject({
+        Body: fileData,
+        Bucket: applicationContext.environment.documentsBucketName,
+        ContentType: 'application/pdf',
+        Key: fileId,
+      });
       uploaded = true;
     } catch (err) {
       if (

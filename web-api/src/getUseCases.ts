@@ -6,7 +6,7 @@ import { addCoversheetInteractor } from '../../shared/src/business/useCases/addC
 import { addDeficiencyStatisticInteractor } from '../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor';
 import { addPaperFilingInteractor } from '../../shared/src/business/useCases/docketEntry/addPaperFilingInteractor';
 import { addPetitionerToCaseInteractor } from '../../shared/src/business/useCases/addPetitionerToCaseInteractor';
-import { appendAmendedPetitionFormInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor';
+import { appendAmendedPetitionFormInteractor } from './business/useCases/courtIssuedDocument/appendAmendedPetitionFormInteractor';
 import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/archiveCorrespondenceDocumentInteractor';
 import { archiveDraftDocumentInteractor } from '../../shared/src/business/useCases/archiveDraftDocumentInteractor';
 import { assignWorkItemsInteractor } from '../../shared/src/business/useCases/workitems/assignWorkItemsInteractor';
@@ -21,7 +21,7 @@ import { changePasswordInteractor } from '@web-api/business/useCases/auth/change
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
-import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
+import { completeDocketEntryQCInteractor } from './business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
 import { confirmSignUpInteractor } from './business/useCases/auth/confirmSignUpInteractor';
@@ -47,10 +47,10 @@ import { editPaperFilingInteractor } from '../../shared/src/business/useCases/do
 import { editPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/editPractitionerDocumentInteractor';
 import { exportPendingReportInteractor } from '@web-api/business/useCases/pendingItems/exportPendingReportInteractor';
 import { fetchPendingItemsInteractor } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
-import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
+import { fileAndServeCourtIssuedDocumentInteractor } from './business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
-import { fileCourtIssuedOrderInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor';
+import { fileCourtIssuedOrderInteractor } from './business/useCases/courtIssuedDocument/fileCourtIssuedOrderInteractor';
 import { fileExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
 import { forwardMessageInteractor } from '../../shared/src/business/useCases/messages/forwardMessageInteractor';
@@ -67,7 +67,7 @@ import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/busi
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor';
 import { generatePrintablePendingReportInteractor } from './business/useCases/pendingItems/generatePrintablePendingReportInteractor';
-import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor';
+import { generatePrintableTrialSessionCopyReportInteractor } from './business/useCases/trialSession/generatePrintableTrialSessionCopyReportInteractor';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from '../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor';
 import { generateStandingPretrialOrderInteractor } from '../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
@@ -166,9 +166,9 @@ import { sealCaseContactAddressInteractor } from '../../shared/src/business/useC
 import { sealCaseInteractor } from '../../shared/src/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/sealDocketEntryInteractor';
 import { sendMaintenanceNotificationsInteractor } from '../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor';
-import { serveCaseToIrsInteractor } from '../../shared/src/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';
-import { serveCourtIssuedDocumentInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor';
-import { serveExternallyFiledDocumentInteractor } from '../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
+import { serveCaseToIrsInteractor } from './business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';
+import { serveCourtIssuedDocumentInteractor } from './business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor';
+import { serveExternallyFiledDocumentInteractor } from './business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { serveThirtyDayNoticeInteractor } from '../../shared/src/business/useCases/trialSessions/serveThirtyDayNoticeInteractor';
 import { setForHearingInteractor } from '../../shared/src/business/useCases/trialSessions/setForHearingInteractor';
 import { setHealthCheckCacheInteractor } from '../../shared/src/business/useCases/health/setHealthCheckCacheInteractor';
