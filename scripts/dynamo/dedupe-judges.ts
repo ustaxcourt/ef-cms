@@ -1,65 +1,69 @@
-import { GetItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { ListUsersCommandOutput } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { batchWrite } from '@web-api/persistence/dynamodbClientService';
+import { environment } from '@web-api/environment';
+import { getUserPoolId } from 'shared/admin-tools/util';
 
-const getJudge = async ({ applicationContext, dynamoClient, judgeId }) => {
-  console.log(judgeId);
-  const item = await dynamoClient.send(
-    new GetItemCommand({
-      Key: {
-        pk: { S: judgeId },
-        sk: { S: judgeId },
+const deleteSubUsers = async (
+  data: ListUsersCommandOutput,
+  applicationContext: ServerApplicationContext,
+) => {
+  const usersToUpdate =
+    data.Users?.map(user => {
+      const customUserId = user.Attributes?.find(
+        attr => attr.Name === 'custom:userId',
+      )?.Value;
+      const sub = user.Attributes?.find(attr => attr.Name === 'sub')?.Value;
+      const email = user.Attributes?.find(attr => attr.Name === 'email')?.Value;
+
+      return { customUserId, email, sub };
+    }).filter(user => {
+      return (
+        user.sub !== user.customUserId && !!user.customUserId && !!user.sub
+      );
+    }) || [];
+
+  const deleteRequests: DeleteRequest[] = usersToUpdate.map(user => {
+    return {
+      DeleteRequest: {
+        Key: { pk: `user|${user.sub}`, sk: `user|${user.sub}` },
       },
-      TableName: process.env.DYNAMODB_TABLE_NAME,
-    }),
-  );
-
-  const judge = unmarshall(item.Item);
-  if (judge.role === 'judge') {
-    try {
-      // lookup in cognito
-      const cognitoRecord = await applicationContext
-        .getUserGateway()
-        .getUserByEmail({ email: judge.email });
-      console.log('cognitoRecord', cognitoRecord);
-    } catch (err) {
-      console.log('newp', { err, judge });
-    }
-    console.log(item);
-  }
+    };
+  });
+  await batchWrite(deleteRequests, applicationContext);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext({});
+  const userPoolId = await getUserPoolId();
+  environment.userPoolId = userPoolId;
 
-  const dynamoClient = applicationContext.getDynamoClient(applicationContext, {
-    useMainRegion: false,
-  });
+  try {
+    let paginationToken;
+    let completedUsers = 0;
 
-  // get judges by section|judge
+    do {
+      const data = await applicationContext.getCognito().listUsers({
+        Limit: 50,
+        PaginationToken: paginationToken,
+        UserPoolId: applicationContext.environment.userPoolId,
+      });
 
-  const tableName: string = process.env.DYNAMODB_TABLE_NAME!;
-  const command = new QueryCommand({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': {
-        S: 'section|judge',
-      },
-    },
-    KeyConditionExpression: '#pk = :pk',
-    TableName: tableName,
-  });
+      await deleteSubUsers(data, applicationContext);
 
-  const response = await dynamoClient.send(command);
+      paginationToken = data.PaginationToken;
+      completedUsers += 50;
 
-  for (const item of response.Items) {
-    await getJudge({ applicationContext, dynamoClient, judgeId: item.sk.S });
+      console.log(
+        `********** COMPLETED BATCH, total users migrated ${completedUsers} **********`,
+      );
+    } while (paginationToken);
+  } catch (error) {
+    console.error('Error updating users:', error);
   }
-
-  // for each judge, get judge by user|<id>
-
-  // check that they're in cognito
 })();
