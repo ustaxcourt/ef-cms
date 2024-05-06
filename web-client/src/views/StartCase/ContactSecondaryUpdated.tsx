@@ -28,8 +28,8 @@ export const ContactSecondaryUpdated = connect(
     data: state[props.bind],
     displayInCareOf: props.displayInCareOf,
     nameLabel: props.nameLabel,
-    // onBlur: props.onBlur,
-    // onBlurSequence: sequences[props.onBlur],
+    onBlur: props.onBlur,
+    onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
 
     onChangeSequence: sequences[props.onChange],
@@ -44,7 +44,8 @@ export const ContactSecondaryUpdated = connect(
     data,
     displayInCareOf,
     nameLabel,
-    // onBlurSequence,
+    onBlur,
+    onBlurSequence,
     onChange,
     onChangeSequence,
     resetSecondaryAddressSequence,
@@ -80,7 +81,9 @@ export const ContactSecondaryUpdated = connect(
               type="text"
               value={data.contactSecondary.name || ''}
               onBlur={() => {
-                // onBlurSequence();
+                onBlurSequence({
+                  validationKey: ['contactSecondary', 'name'],
+                });
               }}
               onChange={e => {
                 onChangeSequence({
@@ -95,6 +98,7 @@ export const ContactSecondaryUpdated = connect(
               inCareOf={data.contactSecondary.inCareOf}
               type="contactSecondary"
               validationErrors={validationErrors}
+              onBlurSequence={onBlurSequence}
               onChangeSequence={onChangeSequence}
             />
           )}
@@ -109,7 +113,7 @@ export const ContactSecondaryUpdated = connect(
               <Country
                 bind={bind}
                 type="contactSecondary"
-                // onBlur={onBlurSequence}
+                onBlur={onBlurSequence}
                 onChange={onChangeSequence}
               />
               {data.contactSecondary.countryType ===
@@ -117,7 +121,7 @@ export const ContactSecondaryUpdated = connect(
                 <Address
                   bind={bind}
                   type="contactSecondary"
-                  // onBlur={onBlurSequence}
+                  onBlur={onBlur}
                   onChange={onChange}
                 />
               )}
@@ -126,7 +130,7 @@ export const ContactSecondaryUpdated = connect(
                 <InternationalAddress
                   bind={bind}
                   type="contactSecondary"
-                  // onBlur={onBlurSequence}
+                  onBlur={onBlur}
                   onChange={onChange}
                 />
               )}
@@ -134,7 +138,14 @@ export const ContactSecondaryUpdated = connect(
                 <PlaceOfLegalResidenceDropdown
                   bind={bind}
                   type="contactSecondary"
-                  // onBlur={onBlurSequence}
+                  onBlurSequence={() => {
+                    onBlurSequence({
+                      validationKey: [
+                        'contactSecondary',
+                        'placeOfLegalResidence',
+                      ],
+                    });
+                  }}
                   onChange={onChange}
                 />
               )}
@@ -147,20 +158,22 @@ export const ContactSecondaryUpdated = connect(
               validationErrors.contactSecondary.phone
             }
           >
-            <label className="usa-label" htmlFor="phone">
+            <label className="usa-label" htmlFor="secondary-phone">
               Phone number <span className="usa-hint">(Optional)</span>
             </label>
             <input
               autoCapitalize="none"
               className="usa-input max-width-200"
               data-testid="phone"
-              id="phone"
+              id="secondary-phone"
               name="contactSecondary.phone"
               type="tel"
               value={data.contactSecondary.phone || ''}
-              // onBlur={() => {
-              //   onBlurSequence();
-              // }}
+              onBlur={() => {
+                onBlurSequence({
+                  validationKey: ['contactSecondary', 'phone'],
+                });
+              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
@@ -186,9 +199,11 @@ export const ContactSecondaryUpdated = connect(
               name="contactSecondary.email"
               type="text"
               value={data.contactSecondary.email || ''}
-              // onBlur={() => {
-              //   onBlurSequence();
-              // }}
+              onBlur={() => {
+                onBlurSequence({
+                  validationKey: ['contactSecondary', 'email'],
+                });
+              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
@@ -251,6 +266,7 @@ function SameAddressCheckbox({
 export function InCareOf({
   inCareOf,
   isOptional = false,
+  onBlurSequence,
   onChangeSequence,
   type,
   validationErrors,
@@ -276,7 +292,9 @@ export function InCareOf({
         type="text"
         value={inCareOf || ''}
         onBlur={() => {
-          // onBlurSequence();
+          onBlurSequence({
+            validationKey: [type, 'inCareOf'],
+          });
         }}
         onChange={e => {
           onChangeSequence({

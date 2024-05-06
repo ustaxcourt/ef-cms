@@ -84,6 +84,7 @@ export const UpdatedFilePetitionStep2 = connect(
             bind="form"
             nameLabel="Full Name"
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+            onBlur="step2LiveValdationSequence"
             onChange="updateFormValueUpdatedSequence"
           />
         )}
@@ -94,6 +95,7 @@ export const UpdatedFilePetitionStep2 = connect(
               bind="form"
               nameLabel="Full Name"
               showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+              onBlur="step2LiveValdationSequence"
               onChange="updateFormValueUpdatedSequence"
             />
             <PetitionerAndSpouseInfo
@@ -191,7 +193,6 @@ function PetitionerAndSpouseInfo({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                // validateStartCaseWizardSequence();
               }}
             />
             <label
@@ -266,6 +267,7 @@ function Spouse({
           nameLabel="Full name of spouse"
           showPlaceOfLegalResidence={true}
           showSameAsPrimaryCheckbox={true}
+          onBlur="step2LiveValdationSequence"
           onChange="updateFormValueUpdatedSequence"
         />
       )}
@@ -281,6 +283,7 @@ function DeceasedSpouse() {
       nameLabel="Full name of deceased spouse"
       showPlaceOfLegalResidence={true}
       showSameAsPrimaryCheckbox={true}
+      onBlur="step2LiveValdationSequence"
       onChange="updateFormValueUpdatedSequence"
     />
   );
@@ -343,6 +346,7 @@ function BusinessInfo({
             secondaryLabel={businessFieldNames.secondary}
             secondaryLabelNote={businessFieldNames.secondaryNote}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
+            onBlur="step2LiveValdationSequence"
             onChange="updateFormValueUpdatedSequence"
           />
           <CorporateDisclosureUpload

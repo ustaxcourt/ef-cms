@@ -11,22 +11,22 @@ import classNames from 'classnames';
 export const Address = connect(
   {
     data: state[props.bind],
+    onBlurSequence: sequences[props.onBlur],
     type: props.type,
     updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
-    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function Address({
     data,
+    onBlurSequence,
     type,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     usStates,
     usStatesOther,
-    validateStartCaseSequence,
     validationErrors,
   }) {
     /**
@@ -46,7 +46,7 @@ export const Address = connect(
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
               usStatesOther={usStatesOther}
-              validateStartCaseSequence={validateStartCaseSequence}
+              onChangeValidationSequence={onBlurSequence}
             />
           </FormGroup>
           <FormGroup>
@@ -67,7 +67,9 @@ export const Address = connect(
               type="text"
               value={data[type].postalCode || ''}
               onBlur={() => {
-                validateStartCaseSequence();
+                onBlurSequence({
+                  validationKey: [type, 'postalCode'],
+                });
               }}
               onChange={e => {
                 updateFormValueSequence({
@@ -109,7 +111,11 @@ export const Address = connect(
                   updateFormValueSequence={updateFormValueSequence}
                   usStates={usStates}
                   usStatesOther={usStatesOther}
-                  validateStartCaseSequence={validateStartCaseSequence}
+                  onChangeValidationSequence={() =>
+                    onBlurSequence({
+                      validationKey: [type, 'state'],
+                    })
+                  }
                 />
                 <div>
                   {validationErrors?.[type]?.state && (
@@ -137,7 +143,9 @@ export const Address = connect(
                   type="text"
                   value={data[type].postalCode || ''}
                   onBlur={() => {
-                    validateStartCaseSequence();
+                    onBlurSequence({
+                      validationKey: [type, 'postalCode'],
+                    });
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -175,7 +183,9 @@ export const Address = connect(
             type="text"
             value={data[type].address1 || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'address1'],
+              });
             }}
             onChange={e => {
               updateFormValueAndSecondaryContactInfoSequence({
@@ -197,7 +207,9 @@ export const Address = connect(
             type="text"
             value={data[type].address2 || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'address2'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -219,7 +231,9 @@ export const Address = connect(
             type="text"
             value={data[type].address3 || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'address3'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -242,7 +256,9 @@ export const Address = connect(
             type="text"
             value={data[type].city || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'city'],
+              });
             }}
             onChange={e => {
               updateFormValueAndSecondaryContactInfoSequence({

@@ -91,6 +91,11 @@ export const ContactPrimaryUpdated = connect(
               name="contactPrimary.name"
               type="text"
               value={data.contactPrimary.name || ''}
+              onBlur={() => {
+                onBlurSequence({
+                  validationKey: ['contactPrimary', 'name'],
+                });
+              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
@@ -124,7 +129,9 @@ export const ContactPrimaryUpdated = connect(
                 type="text"
                 value={data.contactPrimary.secondaryName || ''}
                 onBlur={() => {
-                  onBlurSequence();
+                  onBlurSequence({
+                    validationKey: ['contactPrimary', 'secondaryName'],
+                  });
                 }}
                 onChange={e => {
                   onChangeSequence({
@@ -171,7 +178,9 @@ export const ContactPrimaryUpdated = connect(
                 type="text"
                 value={data.contactPrimary.title || ''}
                 onBlur={() => {
-                  onBlurSequence();
+                  onBlurSequence({
+                    validationKey: ['contactPrimary', 'title'],
+                  });
                 }}
                 onChange={e => {
                   onChangeSequence({
@@ -214,6 +223,12 @@ export const ContactPrimaryUpdated = connect(
               bind={bind}
               placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
               type="contactPrimary"
+              // change - move to on change
+              onBlurSequence={() => {
+                onBlurSequence({
+                  validationKey: ['contactPrimary', 'placeOfLegalResidence'],
+                });
+              }}
               onChange={onChange}
             />
           )}
@@ -225,7 +240,7 @@ export const ContactPrimaryUpdated = connect(
               validationErrors.contactPrimary.phone
             }
           >
-            <label className="usa-label" htmlFor="phone">
+            <label className="usa-label" htmlFor="primary-phone">
               Phone number
             </label>
             <span className="usa-hint">
@@ -235,12 +250,14 @@ export const ContactPrimaryUpdated = connect(
               autoCapitalize="none"
               className="usa-input max-width-200"
               data-testid="phone"
-              id="phone"
+              id="primary-phone"
               name="contactPrimary.phone"
               type="tel"
               value={data.contactPrimary.phone || ''}
               onBlur={() => {
-                onBlurSequence();
+                onBlurSequence({
+                  validationKey: ['contactPrimary', 'phone'],
+                });
               }}
               onChange={e => {
                 onChangeSequence({

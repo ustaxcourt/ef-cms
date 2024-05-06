@@ -9,19 +9,19 @@ export const Country = connect(
   {
     constants: state.constants,
     data: state[props.bind],
+    onBlurSequence: sequences[props.onBlur],
     onChangeCountryType: sequences[props.onChangeCountryType],
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
-    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function Country({
     constants,
     data,
+    onBlurSequence,
     onChangeCountryType,
     type,
     updateFormValueSequence,
-    validateStartCaseSequence,
     validationErrors,
   }) {
     return (
@@ -42,8 +42,8 @@ export const Country = connect(
                 value: e.target.value,
               });
 
-              if (validateStartCaseSequence) {
-                validateStartCaseSequence();
+              if (onBlurSequence) {
+                onBlurSequence({ validationKey: [type, 'countryType'] });
               }
             }}
           >
@@ -68,8 +68,10 @@ export const Country = connect(
               type="text"
               value={data[type].country || ''}
               onBlur={() => {
-                if (validateStartCaseSequence) {
-                  validateStartCaseSequence();
+                if (onBlurSequence) {
+                  onBlurSequence({
+                    validationKey: [type, 'country'],
+                  });
                 }
               }}
               onChange={e => {

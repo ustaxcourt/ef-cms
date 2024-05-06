@@ -8,18 +8,19 @@ import React from 'react';
 export const InternationalAddress = connect(
   {
     data: state[props.bind],
+    onBlur: props.onBlur,
+    onBlurSequence: sequences[props.onBlur],
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
-    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function InternationalAddress({
     data,
+    onBlurSequence,
     type,
     updateFormValueSequence,
-    validateStartCaseSequence,
     validationErrors,
   }) {
     return (
@@ -36,7 +37,9 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].address1 || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'address1'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -58,7 +61,9 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].address2 || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'address2'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -80,7 +85,9 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].address3 || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'address3'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -102,7 +109,9 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].state || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'state'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -124,7 +133,9 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].city || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'city'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
@@ -146,7 +157,9 @@ export const InternationalAddress = connect(
             type="text"
             value={data[type].postalCode || ''}
             onBlur={() => {
-              validateStartCaseSequence();
+              onBlurSequence({
+                validationKey: [type, 'postalCode'],
+              });
             }}
             onChange={e => {
               updateFormValueSequence({
