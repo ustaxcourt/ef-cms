@@ -46,7 +46,16 @@ export const Address = connect(
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
               usStatesOther={usStatesOther}
-              onChangeValidationSequence={onBlurSequence}
+              onBlurSequence={() =>
+                onBlurSequence({
+                  validationKey: [type, 'state'],
+                })
+              }
+              onChangeValidationSequence={() =>
+                onBlurSequence({
+                  validationKey: [type, 'state'],
+                })
+              }
             />
           </FormGroup>
           <FormGroup>
@@ -111,6 +120,11 @@ export const Address = connect(
                   updateFormValueSequence={updateFormValueSequence}
                   usStates={usStates}
                   usStatesOther={usStatesOther}
+                  onBlurSequence={() =>
+                    onBlurSequence({
+                      validationKey: [type, 'state'],
+                    })
+                  }
                   onChangeValidationSequence={() =>
                     onBlurSequence({
                       validationKey: [type, 'state'],
