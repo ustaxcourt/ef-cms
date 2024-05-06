@@ -11,7 +11,6 @@ describe('getHealthCheckAction', () => {
   it('should retrieve the application health', async () => {
     const mockHealth = {
       allChecksHealthy: 'pass',
-      clamAV: false,
       cognito: false,
       dynamo: { efcms: true, efcmsDeploy: false },
       dynamsoft: false,
@@ -23,8 +22,6 @@ describe('getHealthCheckAction', () => {
         'dev.ustc-case-mgmt.flexion.us': false,
         'dev.ustc-case-mgmt.flexion.us-documents-local-us-east-1': false,
         'dev.ustc-case-mgmt.flexion.us-documents-local-us-west-1': false,
-        'dev.ustc-case-mgmt.flexion.us-quarantine-local-us-east-1': false,
-        'dev.ustc-case-mgmt.flexion.us-quarantine-local-us-west-1': false,
         'dev.ustc-case-mgmt.flexion.us-temp-documents-local-us-east-1': false,
         'dev.ustc-case-mgmt.flexion.us-temp-documents-local-us-west-1': false,
         'failover.dev.ustc-case-mgmt.flexion.us': false,

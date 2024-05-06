@@ -8,12 +8,10 @@ const HEALTH_CHECK_IDS = [
   's3-app',
   's3-app-failover',
   's3-east-documents',
-  's3-east-quarantine',
   's3-east-temp-documents',
   's3-public',
   's3-failover',
   's3-west-documents',
-  's3-west-quarantine',
   's3-west-temp-documents',
 ];
 
