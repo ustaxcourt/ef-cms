@@ -4,6 +4,7 @@ import classNames from 'classnames';
 export const StateSelect = ({
   className = '',
   data,
+  onBlurSequence,
   onChangeValidationSequence,
   type,
   updateFormValueSequence,
@@ -18,6 +19,7 @@ export const StateSelect = ({
       id={`${type}.state`}
       name={`${type}.state`}
       value={data[type].state || ''}
+      onBlur={() => onBlurSequence && onBlurSequence()}
       onChange={e => {
         updateFormValueSequence({
           key: e.target.name,

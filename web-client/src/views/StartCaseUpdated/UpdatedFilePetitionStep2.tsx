@@ -512,6 +512,7 @@ function OtherContactInformation({
       showPlaceOfLegalResidence={showPlaceOfLegalResidence}
       titleLabel={otherContactNameLabel.titleLabel}
       titleLabelNote={otherContactNameLabel.titleLabelNote}
+      onBlur="step2LiveValdationSequence"
       onChange="updateFormValueUpdatedSequence"
     />
   );
@@ -547,7 +548,6 @@ function SecondaryEstateOptions({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                // validateStartCaseWizardSequence();
               }}
             />
             <label

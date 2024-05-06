@@ -149,6 +149,7 @@ export const ContactPrimaryUpdated = connect(
               isOptional={showInCareOfOptional}
               type="contactPrimary"
               validationErrors={validationErrors}
+              onBlurSequence={onBlurSequence}
               onChangeSequence={onChangeSequence}
             />
           )}
