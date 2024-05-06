@@ -23,8 +23,16 @@ export const setDefaultContactStateAction = ({
 
   const defaultContact = { countryType: COUNTRY_TYPES.DOMESTIC };
 
-  if (props.key === 'filingType') {
-    // toggling filing type
+  const TYPES = [
+    'filingType',
+    'businessType',
+    'otherType',
+    'estateType',
+    'minorIncompetentType',
+  ];
+
+  if (TYPES.includes(props.key)) {
+    // toggling filing types
     store.set(state.form.contactPrimary, defaultContact);
     store.unset(state.form.contactSecondary);
     store.unset(state.form.useSameAsPrimary);
