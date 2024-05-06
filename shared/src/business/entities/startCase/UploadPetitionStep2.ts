@@ -42,22 +42,20 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
     this.estateType = rawProps.estateType;
     this.minorIncompetentType = rawProps.minorIncompetentType;
 
-    this.contactPrimary = ContactFactoryUpdated({
-      contactInfo: rawProps.contactPrimary,
+    const contactInfo = ContactFactoryUpdated({
+      contactInfoPrimary: rawProps.contactPrimary,
+      contactInfoSecondary: rawProps.contactSecondary,
       hasSpouseConsent: rawProps.hasSpouseConsent,
       partyType: rawProps.partyType,
       petitionType: rawProps.petitionType,
-    }).primary;
+    });
 
-    const secondaryContact = ContactFactoryUpdated({
-      contactInfo: rawProps.contactSecondary,
-      hasSpouseConsent: rawProps.hasSpouseConsent,
-      partyType: rawProps.partyType,
-      petitionType: rawProps.petitionType,
-    }).secondary;
+    if (contactInfo.primary) {
+      this.contactPrimary = contactInfo.primary;
+    }
 
-    if (secondaryContact) {
-      this.contactSecondary = secondaryContact;
+    if (contactInfo.secondary) {
+      this.contactSecondary = contactInfo.secondary;
     }
   }
 
