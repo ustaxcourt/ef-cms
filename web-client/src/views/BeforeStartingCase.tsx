@@ -199,6 +199,7 @@ export const BeforeStartingCase = connect(
               role="listitem"
             >
               <AccordionItem
+                customTitleClassName="petitioner-accordion-title"
                 key="Are you filing jointly with a spouse?"
                 title="Are you filing jointly with a spouse?"
               >
@@ -226,6 +227,7 @@ export const BeforeStartingCase = connect(
               role="listitem"
             >
               <AccordionItem
+                customTitleClassName="petitioner-accordion-title"
                 key="Are you filing on behalf of someone else?"
                 title="Are you filing on behalf of someone else?"
               >
@@ -254,6 +256,7 @@ export const BeforeStartingCase = connect(
               role="listitem"
             >
               <AccordionItem
+                customTitleClassName="petitioner-accordion-title"
                 key="Are you filing for a business?"
                 title="Are you filing for a business?"
               >
