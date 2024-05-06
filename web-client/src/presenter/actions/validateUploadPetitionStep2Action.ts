@@ -25,6 +25,7 @@ export const validateUploadPetitionStep2Action = ({
     'postalCode',
     'placeOfLegalResidence',
     'phone',
+    'email',
   ];
 
   return path.error({
