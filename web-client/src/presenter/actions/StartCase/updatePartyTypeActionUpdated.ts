@@ -12,6 +12,7 @@ export const updatePartyTypeActionUpdated = ({
 
   const resetFormFields = () => {
     store.unset(state.form.corporateDisclosureFile);
+    store.unset(state.form.corporateDisclosureFileSize);
     store.unset(state.form.businessType);
     store.unset(state.form.otherType);
     store.unset(state.form.isSpouseDeceased);
