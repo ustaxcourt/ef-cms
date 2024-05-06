@@ -45,8 +45,8 @@ export const getPractitionersByName = async ({
       search_after: searchAfter,
       sort: [
         '_score',
-        { 'firstName.S': 'asc' },
-        { 'lastName.S': 'asc' },
+        // { 'firstName.S': 'asc' },
+        // { 'lastName.S': 'asc' },
         { 'barNumber.S': 'asc' },
       ],
     },
@@ -68,7 +68,7 @@ export const getPractitionersByName = async ({
   );
 
   const matchingPractitioners: any[] = searchResults.body.hits.hits;
-  console.log('matches', matchingPractitioners);
+
   const lastKey =
     (matchingPractitioners[matchingPractitioners.length - 1]?.sort as Array<
       number | string
