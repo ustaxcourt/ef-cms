@@ -38,8 +38,10 @@ export const UpdatedFilePetitionStep3 = connect(
     return (
       <>
         <ErrorNotification />
-
-        <div className="blue-container padding-bottom-0 margin-bottom-5">
+        <p className="margin-bottom-3 margin-top-0 required-statement">
+          *All fields required unless otherwise noted
+        </p>
+        <div className="padding-bottom-0 margin-bottom-1">
           <div className="usa-form-group">
             <FormGroup errorText={validationErrors.hasIrsNotice}>
               <fieldset
