@@ -4,12 +4,12 @@ import classNames from 'classnames';
 export const StateSelect = ({
   className = '',
   data,
+  onChangeValidationSequence,
   type,
   updateFormValueSequence,
   useFullStateName,
   usStates,
   usStatesOther,
-  validateStartCaseSequence,
 }) => {
   return (
     <select
@@ -23,7 +23,7 @@ export const StateSelect = ({
           key: e.target.name,
           value: e.target.value,
         });
-        validateStartCaseSequence();
+        onChangeValidationSequence && onChangeValidationSequence();
       }}
     >
       <option value="">- Select -</option>

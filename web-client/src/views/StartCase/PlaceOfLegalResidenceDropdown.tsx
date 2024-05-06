@@ -10,14 +10,15 @@ import React from 'react';
 const props = cerebralProps as unknown as {
   type: string;
   bind: string;
-  onBlur: string;
   onChange: string;
   placeOfLegalResidenceTitle?: string;
+  onBlurSequence: Function;
 };
 
 export const PlaceOfLegalResidenceDropdown = connect(
   {
     data: state[props.bind],
+    onBlurSequence: props.onBlurSequence,
     placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
@@ -27,6 +28,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
   },
   function PlaceOfLegalResidenceDropdown({
     data,
+    onBlurSequence,
     placeOfLegalResidenceTitle,
     type,
     updateFormValueSequence,
@@ -80,7 +82,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
               usStatesOther={usStatesOther}
-              // validateStartCaseSequence={validateStartCaseSequence}
+              onBlur={onBlurSequence}
             />
           </FormGroup>
         </NonMobile>
