@@ -130,10 +130,7 @@ export const createAuthorizer =
       throw401GatewayError();
     }
 
-    const allowPolicy = createAllowPolicy(
-      event,
-      payload['custom:userId'] || payload.sub,
-    );
+    const allowPolicy = createAllowPolicy(event, payload['custom:userId']);
 
     logger.info('Request authorized', {
       metadata: { policy: allowPolicy },

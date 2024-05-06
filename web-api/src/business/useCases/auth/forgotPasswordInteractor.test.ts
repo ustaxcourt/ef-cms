@@ -119,9 +119,11 @@ describe('forgotPasswordInteractor', () => {
 
     expect(
       applicationContext.getUserGateway().getUserByEmail,
-    ).toHaveBeenCalledWith(applicationContext, { email });
+    ).toHaveBeenCalledWith(applicationContext, {
+      email,
+    });
     expect(
-      applicationContext.getUseCaseHelpers().resendTemporaryPassword,
+      applicationContext.getUserGateway().resendTemporaryPassword,
     ).toHaveBeenCalledWith(applicationContext, {
       email,
     });

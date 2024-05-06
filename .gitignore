@@ -41,10 +41,6 @@ shared/coverage
 shared/pdf-tests/*.html
 terraform-cache/
 web-api/bulk-import-log.txt
-web-api/runtimes/clamav/bin
-web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
-web-api/runtimes/clamav/clamav_lambda_layer.zip
-web-api/runtimes/clamav/lib
 web-api/storage/fixtures/efcms-export.json
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
