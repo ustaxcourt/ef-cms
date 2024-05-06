@@ -1,3 +1,4 @@
+import { pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getStep2DataAction = ({ get }: ActionProps) => {
@@ -23,7 +24,19 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
     businessType,
     contactPrimary,
     contactSecondary: useSameAsPrimary
-      ? { ...contactSecondary, ...contactPrimary }
+      ? {
+          ...pick(contactPrimary, [
+            'countryType',
+            'address1',
+            'address2',
+            'address3',
+            'city',
+            'postalCode',
+            'state',
+            'placeOfLegalResidence',
+          ]),
+          ...contactSecondary,
+        }
       : contactSecondary,
     corporateDisclosureFile,
     corporateDisclosureFileSize,
