@@ -15,6 +15,7 @@ import {
   formatResults,
 } from '@web-api/persistence/elasticsearch/searchClient';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { efcmsUserIndex } from '../../web-api/elasticsearch/efcms-user-mappings';
 import { getUserPoolId } from '../../shared/admin-tools/util';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
@@ -178,7 +179,7 @@ const getJudgeUsersByName = async (): Promise<{
       },
       size: MAX_ELASTICSEARCH_PAGINATION,
     },
-    index: 'efcms-user',
+    index: efcmsUserIndex,
   });
   const { results }: SearchClientResultsType = formatResults(queryResults.body);
 
