@@ -1,14 +1,13 @@
-import {
-  DeliveryMediumType,
-  MessageActionType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { DeliveryMediumType } from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createUser } from '@web-api/gateways/user/createUser';
 
 describe('createUser', () => {
+  const userEmail = 'PetiTioneR@example.com';
+  const lowerCasedEmail = 'petitioner@example.com';
   const mockUser = {
-    email: 'petitioner@example.com',
+    email: userEmail,
     entityName: 'User',
     name: 'Bob Ross',
     role: ROLES.petitioner,
@@ -16,18 +15,15 @@ describe('createUser', () => {
     userId: '2f92447e-3a0b-4cfe-95cb-810aef270c03',
   };
 
-  it('should make a call to persistence to create a user with the provided attributes', async () => {
+  it('should make a call to persistence to create a user with the provided attributes, and the email lowercased', async () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {
-        email: mockUser.email,
-        name: mockUser.name,
-        role: mockUser.role,
-        userId: mockUser.userId,
-      },
       email: mockUser.email,
-      resendInvitationEmail: false,
+      name: mockUser.name,
+      role: mockUser.role,
+      sendWelcomeEmail: true,
+      userId: mockUser.userId,
     });
 
     expect(
@@ -37,51 +33,9 @@ describe('createUser', () => {
       MessageAction: undefined,
       UserAttributes: [
         {
-          Name: 'custom:role',
-          Value: mockUser.role,
-        },
-        {
-          Name: 'name',
-          Value: mockUser.name,
-        },
-        {
           Name: 'custom:userId',
           Value: mockUser.userId,
         },
-        {
-          Name: 'email',
-          Value: mockUser.email,
-        },
-        {
-          Name: 'email_verified',
-          Value: 'true',
-        },
-      ],
-      UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockUser.email,
-    });
-  });
-
-  it('should resend an invitation email to the user when resendInvitationEmail is true', async () => {
-    process.env.STAGE = 'prod';
-
-    await createUser(applicationContext, {
-      attributesToUpdate: {
-        email: mockUser.email,
-        name: mockUser.name,
-        role: mockUser.role,
-        userId: mockUser.userId,
-      },
-      email: mockUser.email,
-      resendInvitationEmail: true,
-    });
-
-    expect(
-      applicationContext.getCognito().adminCreateUser,
-    ).toHaveBeenCalledWith({
-      DesiredDeliveryMediums: [DeliveryMediumType.EMAIL],
-      MessageAction: MessageActionType.RESEND,
-      UserAttributes: [
         {
           Name: 'custom:role',
           Value: mockUser.role,
@@ -91,12 +45,8 @@ describe('createUser', () => {
           Value: mockUser.name,
         },
         {
-          Name: 'custom:userId',
-          Value: mockUser.userId,
-        },
-        {
           Name: 'email',
-          Value: mockUser.email,
+          Value: lowerCasedEmail,
         },
         {
           Name: 'email_verified',
@@ -104,7 +54,7 @@ describe('createUser', () => {
         },
       ],
       UserPoolId: applicationContext.environment.userPoolId,
-      Username: mockUser.email,
+      Username: lowerCasedEmail,
     });
   });
 
@@ -112,9 +62,11 @@ describe('createUser', () => {
     process.env.STAGE = 'prod';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {},
       email: mockUser.email,
-      resendInvitationEmail: false,
+      name: 'terrance',
+      role: 'docketclerk',
+      sendWelcomeEmail: true,
+      userId: 'b95429eb-54e1-4755-a35f-3b4f137f0693',
     });
 
     expect(
@@ -125,16 +77,35 @@ describe('createUser', () => {
 
   it('should set the user`s temporary password when the environment is NOT prod', async () => {
     process.env.STAGE = 'test';
+    applicationContext.environment.defaultAccountPass = 'hello';
 
     await createUser(applicationContext, {
-      attributesToUpdate: {},
       email: mockUser.email,
-      resendInvitationEmail: false,
+      name: 'matilda',
+      role: 'adc',
+      sendWelcomeEmail: true,
+      userId: '2d09e076-1220-4abe-adb9-f73e9acb114d',
     });
 
     expect(
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
         .TemporaryPassword,
-    ).toBe(process.env.DEFAULT_ACCOUNT_PASS);
+    ).toBe('hello');
+  });
+
+  it('should set the user`s temporary password to the password requested when passed in', async () => {
+    await createUser(applicationContext, {
+      email: mockUser.email,
+      name: 'matilda',
+      role: 'adc',
+      sendWelcomeEmail: true,
+      temporaryPassword: 'personperson',
+      userId: '2d09e076-1220-4abe-adb9-f73e9acb114d',
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
+        .TemporaryPassword,
+    ).toBe('personperson');
   });
 });
