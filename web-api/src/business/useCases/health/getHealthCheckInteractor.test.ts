@@ -54,12 +54,10 @@ describe('getHealthCheckInteractor', () => {
         app: true,
         appFailover: true,
         eastDocuments: true,
-        eastQuarantine: true,
         eastTempDocuments: true,
         public: true,
         publicFailover: true,
         westDocuments: true,
-        westQuarantine: true,
         westTempDocuments: true,
       },
     });
@@ -125,12 +123,10 @@ describe('getHealthCheckInteractor', () => {
         app: false,
         appFailover: false,
         eastDocuments: false,
-        eastQuarantine: false,
         eastTempDocuments: false,
         public: false,
         publicFailover: false,
         westDocuments: false,
-        westQuarantine: false,
         westTempDocuments: false,
       },
     });
@@ -191,11 +187,11 @@ describe('getHealthCheckInteractor', () => {
         `app-failover-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
       // public bucket
-      expect(listObjectsMock.mock.calls[5][0].Bucket).toBe(
+      expect(listObjectsMock.mock.calls[4][0].Bucket).toBe(
         `${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
       // public fail-over bucket
-      expect(listObjectsMock.mock.calls[6][0].Bucket).toBe(
+      expect(listObjectsMock.mock.calls[5][0].Bucket).toBe(
         `failover-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
     });
