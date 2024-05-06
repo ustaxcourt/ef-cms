@@ -75,7 +75,15 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
 
     //TODO: dynamically get the properies from IrsNoticeForm entity
     const filters = this.hasIrsNotice
-      ? ['key', 'file', 'size', 'caseType', 'lastDateOfPeriod', 'taxYear']
+      ? [
+          'key',
+          'file',
+          'size',
+          'caseType',
+          'lastDateOfPeriod',
+          'taxYear',
+          'noticeIssuedDate',
+        ]
       : [];
 
     const filteredErrors = omit(errors, filters);
