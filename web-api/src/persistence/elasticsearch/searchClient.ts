@@ -43,6 +43,7 @@ export const formatResults = <T>(body: Record<string, any>) => {
       hit['_source'],
     );
     sourceUnmarshalled['_score'] = hit['_score'];
+    sourceUnmarshalled['sort'] = hit['sort'];
 
     const isDocketEntryResultWithParentCaseMapping =
       hit['_index'] === getIndexNameFromAlias('efcms-docket-entry') &&
