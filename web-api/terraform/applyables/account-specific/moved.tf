@@ -123,3 +123,44 @@ moved {
   to   = module.ci-cd.aws_ecr_lifecycle_policy.repo_policy
 }
 
+# elasticsearch.tf
+moved {
+  from = aws_cloudwatch_log_group.elasticsearch_kibana_logs
+  to   = module.kibana.aws_cloudwatch_log_group.elasticsearch_kibana_logs
+}
+moved {
+  from = aws_opensearch_domain.efcms-logs
+  to   = module.kibana.aws_opensearch_domain.efcms-logs
+}
+moved {
+  from = aws_elasticsearch_domain_policy.kibana_access
+  to   = module.kibana.aws_elasticsearch_domain_policy.kibana_access
+}
+moved {
+  from = aws_cloudwatch_log_resource_policy.allow_elasticsearch_to_write_logs
+  to   = module.kibana.aws_cloudwatch_log_resource_policy.allow_elasticsearch_to_write_logs
+}
+moved {
+  from = aws_iam_role.log_viewers_auth
+  to   = module.kibana.aws_iam_role.log_viewers_auth
+}
+moved {
+  from = aws_iam_policy.log_viewers_auth
+  to   = module.kibana.aws_iam_policy.log_viewers_auth
+}
+moved {
+  from = aws_iam_role_policy_attachment.log_viewers_auth
+  to   = module.kibana.aws_iam_role_policy_attachment.log_viewers_auth
+}
+moved {
+  from = aws_cognito_identity_pool_roles_attachment.log_viewers
+  to   = module.kibana.aws_cognito_identity_pool_roles_attachment.log_viewers
+}
+# moved {
+#   from = opensearch_snapshot_repository.archived-logs
+#   to   = module.kibana.opensearch_snapshot_repository.archived-logs
+# }
+moved {
+  from = module.logs_alarms
+  to   = module.kibana.module.logs_alarms
+}
