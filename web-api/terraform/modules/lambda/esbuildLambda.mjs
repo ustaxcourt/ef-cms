@@ -48,6 +48,6 @@ await esbuild.build({
       patterns: [getPathFromRoot(`/dist-lambdas/${fileName}/*`)],
     }),
   ].filter(Boolean),
-  sourcemap: true, // Enable sourcemaps causes RAM to increase by 1GB even when lambda does nothing. Keeping disabled.
+  sourcemap: false, // Enable sourcemaps causes RAM to increase by 1GB even when lambda does nothing. Keeping disabled.
   target: 'esnext',
 });
