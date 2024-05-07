@@ -58,13 +58,13 @@ export function createAndServePaperPetitionMultipleParties(
   cy.get('[data-testid="case-type-select"]').select(CASE_TYPES_MAP.passport);
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#scan-mode-radios').click();
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
   cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy

@@ -21,7 +21,7 @@ describe('Judge`s chambers stamps an order', () => {
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
       cy.get('input#primaryDocumentFile-file').attachFile(
-        '../fixtures/w3-dummy.pdf',
+        '../../helpers/file/sample.pdf',
       );
       cy.get('[data-testid="remove-pdf"]');
       cy.get('[data-testid="save-and-serve"]').click();

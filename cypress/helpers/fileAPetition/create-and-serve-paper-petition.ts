@@ -41,37 +41,37 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="case-type-select"]').select('CDP (Lien/Levy)');
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
-  cy.get('#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#scan-mode-radios').click();
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
   cy.get('#requestForPlaceOfTrialFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
 
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
 
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
   cy.get('[data-testid="remove-pdf"]');
 
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#corporateDisclosureFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
   cy.get(
     '[data-testid="tabButton-applicationForWaiverOfFilingFeeFile"]',
   ).click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#applicationForWaiverOfFilingFeeFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
 
   cy.get('[data-testid="submit-paper-petition"]').click();
