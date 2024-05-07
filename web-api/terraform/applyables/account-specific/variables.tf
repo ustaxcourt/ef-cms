@@ -20,7 +20,6 @@ variable "es_logs_ebs_volume_size_gb" {
 variable "log_group_environments" {
   description = "deployment environments"
   type        = list(string)
-  default     = ["dev", "stg"]
 }
 
 variable "cognito_suffix" {
