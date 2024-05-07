@@ -22,6 +22,7 @@ export const IrsNoticeUploadForm = connect(
     index: props.index,
     noticeIssuedDate: props.noticeIssuedDate,
     removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
+    step3LiveValdationSequence: sequences.step3LiveValdationSequence,
     taxYear: props.taxYear,
     todayDate: props.todayDate,
     updateIrsNoticeIndexPropertySequence:
@@ -38,6 +39,7 @@ export const IrsNoticeUploadForm = connect(
     index,
     noticeIssuedDate,
     removeIrsNoticeFromFormSequence,
+    step3LiveValdationSequence,
     taxYear,
     todayDate,
     updateIrsNoticeIndexPropertySequence,
@@ -97,6 +99,15 @@ export const IrsNoticeUploadForm = connect(
             name={index.toString()}
             validationError={validationError}
             value={caseType}
+            onBlurSequence={() => {
+              step3LiveValdationSequence({
+                validationKey: [
+                  'irsNotices',
+                  { property: 'index', value: index },
+                  'caseType',
+                ],
+              });
+            }}
             onChange={info => {
               updateIrsNoticeIndexPropertySequence(info);
               delete validationError.caseType;
