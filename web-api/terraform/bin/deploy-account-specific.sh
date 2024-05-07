@@ -32,9 +32,5 @@ export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
  
 npm run build:assets
 
-terraform init -upgrade -backend=true \
- -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
- -backend-config=key="permissions-account.tfstate" \
- -backend-config=dynamodb_table="efcms-terraform-lock" \
- -backend-config=region="us-east-1"
-terraform apply
+terraform init -upgrade
+terraform plan
