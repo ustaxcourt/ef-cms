@@ -67,7 +67,7 @@ describe('creation form', () => {
     cy.get('label#stin-file-label').scrollIntoView();
     cy.get('label#stin-file-label').should('not.have.class', 'validated');
 
-    cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
+    cy.get('input#stin-file').attachFile('../../helpers/file/sample.pdf');
     cy.get('label#stin-file-label').should('have.class', 'validated');
   });
 
@@ -84,7 +84,7 @@ describe('creation form', () => {
     cy.get('label#petition-file-label').scrollIntoView();
     cy.get('label#petition-file-label').should('not.have.class', 'validated');
 
-    cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
+    cy.get('input#petition-file').attachFile('../../helpers/file/sample.pdf');
 
     cy.get('label#petition-file-label').should('have.class', 'validated');
   });

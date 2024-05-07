@@ -21,14 +21,11 @@ describe('createNewPetitionerUser', () => {
     expect(applicationContext.getUserGateway().createUser).toHaveBeenCalledWith(
       applicationContext,
       {
-        attributesToUpdate: {
-          email: mockUser.pendingEmail,
-          name: mockUser.name,
-          role: mockUser.role,
-          userId: mockUser.userId,
-        },
         email: mockUser.pendingEmail,
-        resendInvitationEmail: false,
+        name: mockUser.name,
+        role: mockUser.role,
+        sendWelcomeEmail: true,
+        userId: mockUser.userId,
       },
     );
     expect(

@@ -1,5 +1,3 @@
-
-
 module "migration_segments_lambda" {
   source         = "../../../../web-api/terraform/modules/lambda"
   handler_file   = "./web-api/workflow-terraform/migration/main/lambdas/migration-segments.ts"
@@ -13,8 +11,6 @@ module "migration_segments_lambda" {
     SEGMENTS_QUEUE_URL     = aws_sqs_queue.migration_segments_queue.id
     SOURCE_TABLE           = var.source_table
     ACCOUNT_ID             = data.aws_caller_identity.current.account_id
-    DOCUMENTS_BUCKET_NAME  = var.documents_bucket_name
-    S3_ENDPOINT            = "s3.us-east-1.amazonaws.com"
     ELASTICSEARCH_ENDPOINT = var.elasticsearch_domain
   }
   timeout     = "900"
