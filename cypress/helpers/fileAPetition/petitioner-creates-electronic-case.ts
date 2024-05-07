@@ -81,7 +81,9 @@ export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
 export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  cy.get('[data-testid="stin-file"]').attachFile('../fixtures/corrupt-pdf.pdf');
+  cy.get('[data-testid="stin-file"]').attachFile(
+    '../../helpers/file/corrupt-pdf.pdf',
+  );
   cy.get('[data-testid="complete-step-1"]').click();
   uploadFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
