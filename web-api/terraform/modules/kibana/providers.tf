@@ -3,10 +3,7 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 5.47.0"
-    }
-    us-west-1 = {
-      source  = "hashicorp/aws"
-      version = ">= 5.47.0"
+      configuration_aliases = [ aws.us-west-1 ]
     }
   }
 }
