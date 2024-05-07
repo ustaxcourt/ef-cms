@@ -29,7 +29,6 @@ fi
 [ -z "${COLOR}" ] && echo "You must have COLOR set in your environment" && exit 1
 [ -z "${COMMIT_SHA}" ] && echo "You must have COMMIT_SHA set in your environment" && exit 1
 [ -z "${SENTRY_DSN_API}" ] && echo "You must have SENTRY_DSN_API set in your environment" && exit 1
-[ -z "${SENTRY_AUTH_TOKEN}" ] && echo "You must have SENTRY_AUTH_TOKEN set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
@@ -50,7 +49,6 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 echo "  - ZONE_NAME=${COLOR}"
 echo "  - SENTRY_DSN_API=${SENTRY_DSN_API}"
-echo "  - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}"
 echo "  - COMMIT_SHA=${COMMIT_SHA}"
 
 ../../../../scripts/verify-terraform-version.sh

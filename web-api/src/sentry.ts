@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node';
 
-if (process.env.SENTRY_AUTH_TOKEN) {
+if (process.env.SENTRY_DSN_API) {
   Sentry.init({
     beforeSend(event, hint) {
       const error = hint.originalException as Error & { skipLogging?: boolean };
@@ -17,7 +17,7 @@ if (process.env.SENTRY_AUTH_TOKEN) {
 
 export async function captureException(error: Error) {
   if (process.env.IS_LOCAL) return;
-  if (!process.env.SENTRY_AUTH_TOKEN) return;
+  if (!process.env.SENTRY_DSN_API) return;
   Sentry.captureException(error);
   await Sentry.flush();
 }
@@ -31,7 +31,7 @@ export function setUser({
   ip: string;
   name: string;
 }) {
-  if (!process.env.SENTRY_AUTH_TOKEN) return;
+  if (!process.env.SENTRY_DSN_API) return;
   Sentry.setUser({
     id: userId,
     ip_address: ip,

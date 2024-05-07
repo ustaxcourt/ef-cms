@@ -47,13 +47,6 @@ await esbuild.build({
       // Clean the output directory before every build
       patterns: [getPathFromRoot(`/dist-lambdas/${fileName}/*`)],
     }),
-    process.env.SENTRY_AUTH_TOKEN
-      ? sentryEsbuildPlugin({
-          authToken: process.env.SENTRY_AUTH_TOKEN,
-          org: 'united-states-tax-court',
-          project: 'dawson-backend',
-        })
-      : undefined,
   ].filter(Boolean),
   sourcemap: true, // Enable sourcemaps causes RAM to increase by 1GB even when lambda does nothing. Keeping disabled.
   target: 'esnext',
