@@ -247,3 +247,12 @@ moved {
   to   = module.route53-zone.aws_route53_zone.primary
 }
 
+# ses.tf
+moved {
+  from = aws_ses_receipt_rule_set.email_forwarding_rule_set
+  to   = module.email-monitoring.aws_ses_receipt_rule_set.email_forwarding_rule_set
+}
+moved {
+  from = aws_ses_active_receipt_rule_set.main
+  to   = module.email-monitoring.aws_ses_active_receipt_rule_set.main
+}
