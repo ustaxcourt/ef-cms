@@ -49,7 +49,7 @@ describe('Private Practitioner requests access to case', () => {
 
       cy.get('[data-testid="upload-pdf-button"]').click();
       cy.get('input#primaryDocumentFile-file').attachFile(
-        '../fixtures/w3-dummy.pdf',
+        '../../helpers/file/sample.pdf',
       );
 
       cy.get('[data-testid="save-for-later"]').click();
@@ -96,7 +96,7 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
     selectTypeaheadInput('document-type', 'MLSP');
     cy.get('[data-testid="submit-document"]').click();
     cy.get('[data-testid="primary-document"]').attachFile(
-      '../fixtures/w3-dummy.pdf',
+      '../../helpers/file/sample.pdf',
     );
     cy.get('[data-testid=primaryDocument-objections-No]').click();
     cy.get('#submit-document').click();
