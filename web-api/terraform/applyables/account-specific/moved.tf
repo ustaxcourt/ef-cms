@@ -87,3 +87,28 @@ moved {
   to   = module.dawson-developer-permissions.aws_iam_policy.dawson_dev_policy
 }
 
+# dynamsoft.tf
+moved {
+  from = aws_s3_bucket.dynamsoft
+  to   = module.dynamsoft.aws_s3_bucket.dynamsoft
+}
+moved {
+  from = aws_s3_bucket_public_access_block.dynamsoft
+  to   = module.dynamsoft.aws_s3_bucket_public_access_block.dynamsoft
+}
+moved {
+  from = aws_iam_role.dynamsoft_s3_download_role
+  to   = module.dynamsoft.aws_iam_role.dynamsoft_s3_download_role
+}
+moved {
+  from = aws_iam_policy.access_dynamsoft_s3_bucket
+  to   = module.dynamsoft.aws_iam_policy.access_dynamsoft_s3_bucket
+}
+moved {
+  from = aws_iam_role_policy_attachment.allow_dynamsoft_role_access_to_dynamsoft_s3_bucket
+  to   = module.dynamsoft.aws_iam_role_policy_attachment.allow_dynamsoft_role_access_to_dynamsoft_s3_bucket
+}
+moved {
+  from = aws_iam_instance_profile.dynamsoft_instance_profile
+  to   = module.dynamsoft.aws_iam_instance_profile.dynamsoft_instance_profile
+}
