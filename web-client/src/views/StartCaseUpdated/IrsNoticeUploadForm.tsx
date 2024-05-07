@@ -3,6 +3,7 @@ import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
@@ -45,7 +46,7 @@ export const IrsNoticeUploadForm = connect(
   }) {
     return (
       <>
-        <div className="usa-form-group">
+        <div className={classNames('usa-form-group', 'margin-bottom-0')}>
           <FormGroup errorText={[validationError.file, validationError.size]}>
             <label
               className={classNames(
@@ -72,12 +73,12 @@ export const IrsNoticeUploadForm = connect(
               updateFormValueSequence="updateIrsNoticeIndexPropertySequence"
             />
           </FormGroup>
-
           <h2>
             IRS Notice {index + 1}{' '}
             {index !== 0 && (
               <Button
                 link
+                className="margin-left-10"
                 onClick={() => removeIrsNoticeFromFormSequence({ index })}
               >
                 <Icon
@@ -85,7 +86,7 @@ export const IrsNoticeUploadForm = connect(
                   icon={['fas', 'times']}
                   size="1x"
                 />
-                Remove
+                <span style={{ marginLeft: '-5px' }}>Remove</span>
               </Button>
             )}
           </h2>
@@ -102,12 +103,8 @@ export const IrsNoticeUploadForm = connect(
               delete validationError.caseType;
             }}
           />
-
-          <div className="grid-row grid-gap">
-            <FormGroup
-              className="grid-col-8"
-              errorText={validationError.taxYear}
-            >
+          <Mobile>
+            <FormGroup errorText={validationError.taxYear}>
               <label className="usa-label" htmlFor="noticeIssuesTaxYear">
                 Tax year or period for which the notice was issued
               </label>
@@ -115,7 +112,7 @@ export const IrsNoticeUploadForm = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="noticeIssuesTaxYear"
-                name="firmName"
+                name="taxYear"
                 type="text"
                 value={taxYear}
                 onChange={e => {
@@ -128,7 +125,7 @@ export const IrsNoticeUploadForm = connect(
                 }}
               />
             </FormGroup>{' '}
-            <div className="grid-col-4">
+            <div>
               <DateSelector
                 defaultValue={noticeIssuedDate}
                 errorText={validationError.noticeIssuedDate}
@@ -147,7 +144,54 @@ export const IrsNoticeUploadForm = connect(
                 }}
               />
             </div>
-          </div>
+          </Mobile>
+          <NonMobile>
+            <div className="grid-row grid-gap">
+              <FormGroup
+                className="grid-col-8"
+                errorText={validationError.taxYear}
+              >
+                <label className="usa-label" htmlFor="noticeIssuesTaxYear">
+                  Tax year or period for which the notice was issued
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="noticeIssuesTaxYear"
+                  name="taxYear"
+                  type="text"
+                  value={taxYear}
+                  onChange={e => {
+                    updateIrsNoticeIndexPropertySequence({
+                      key: index.toString(),
+                      property: 'taxYear',
+                      value: e.target.value,
+                    });
+                    delete validationError.taxYear;
+                  }}
+                />
+              </FormGroup>{' '}
+              <div className="grid-col-4">
+                <DateSelector
+                  defaultValue={noticeIssuedDate}
+                  errorText={validationError.noticeIssuedDate}
+                  id="notice-issued-date"
+                  label="Date IRS issued the notice"
+                  maxDate={todayDate}
+                  onChange={e => {
+                    updateIrsNoticeIndexPropertySequence({
+                      key: index.toString(),
+                      property: 'noticeIssuedDate',
+                      toFormat: DATE_FORMATS.ISO,
+                      value: e.target.value,
+                    });
+
+                    validationError.noticeIssuedDate = '';
+                  }}
+                />
+              </div>
+            </div>
+          </NonMobile>
         </div>
       </>
     );
