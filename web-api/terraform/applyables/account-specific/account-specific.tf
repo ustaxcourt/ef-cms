@@ -65,3 +65,7 @@ module "dawson-developer-permissions" {
   dawson_dev_trusted_role_arns = var.dawson_dev_trusted_role_arns
 }
 
+module "dynamsoft" {
+  source = "../../modules/dynamsoft"
+  zone_name = var.zone_name
+}
