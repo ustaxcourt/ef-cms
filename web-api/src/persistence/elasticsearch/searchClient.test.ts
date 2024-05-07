@@ -162,6 +162,7 @@ describe('searchClient', () => {
         ...mockOpenCasesReceivedOnJulyFourthFormattedResults.body,
         expected: 7,
       });
+
       expect(openCasesReceivedOnJulyFourthSearchAllResults.total).toEqual(
         openCasesReceivedOnJulyFourthSearchAllResults.expected,
       );
