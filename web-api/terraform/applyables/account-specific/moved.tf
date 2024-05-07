@@ -6,7 +6,6 @@ moved {
   from = aws_sns_topic.system_health_alarms
   to   = module.health-alarms-east.aws_sns_topic.system_health_alarms
 }
-
 moved {
   from = aws_sns_topic.system_health_alarms_west
   to   = module.health-alarms-west.aws_sns_topic.system_health_alarms
@@ -50,4 +49,26 @@ moved {
 moved {
   from = aws_iam_policy.circle_ci_iam_policy
   to   = module.ci-cd-permissions.aws_iam_policy.ci_cd_iam_policy
+}
+
+# cognito.tf
+moved {
+  from = aws_cognito_user_pool.log_viewers
+  to   = module.kibana.aws_cognito_user_pool.log_viewers
+}
+moved {
+  from = aws_cognito_user_pool_domain.log_viewers
+  to   = module.kibana.aws_cognito_user_pool_domain.log_viewers
+}
+moved {
+  from = aws_cognito_identity_pool.log_viewers
+  to   = module.kibana.aws_cognito_identity_pool.log_viewers
+}
+moved {
+  from = aws_iam_role.es_kibana_role
+  to   = module.kibana.aws_iam_role.es_kibana_role
+}
+moved {
+  from = aws_iam_role_policy_attachment.es_cognito_auth
+  to   = module.kibana.aws_iam_role_policy_attachment.es_cognito_auth
 }

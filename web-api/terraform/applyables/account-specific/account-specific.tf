@@ -55,3 +55,8 @@ module "ci-cd-permissions" {
   source = "../../modules/ci-cd-permissions"
 }
 
+module "kibana" {
+  source = "../../modules/kibana"
+  cognito_suffix = var.cognito_suffix
+}
+
