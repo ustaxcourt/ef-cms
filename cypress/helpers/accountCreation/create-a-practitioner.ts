@@ -44,15 +44,9 @@ export function createAPractitioner() {
   cy.get('[data-testid="practitioner-bar-state-select"]').select(
     faker.location.state({ abbreviated: true }),
   );
-  const admissionsDate = faker.date.between({
-    from: '1975-01-01T00:00:00.000Z',
-    to: '2024-01-01T00:00:00.000Z',
-  });
   cy.get(
     '.usa-date-picker__wrapper > [data-testid="admissions-date-picker"]',
-  ).type(
-    `${admissionsDate.getMonth()}/${admissionsDate.getDay()}/${admissionsDate.getFullYear()}`,
-  );
+  ).type('02/14/2018');
   cy.get('[data-testid="create-practitioner-button"]').click();
 
   cy.get('[data-testid="success-alert"]').contains('Practitioner added');
