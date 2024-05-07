@@ -72,7 +72,7 @@ const createOrUpdateCognitoUser = async ({
         UserAttributes: [
           {
             Name: 'email_verified',
-            Value: 'True',
+            Value: 'true',
           },
           {
             Name: 'email',

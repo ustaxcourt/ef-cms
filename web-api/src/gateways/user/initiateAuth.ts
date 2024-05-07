@@ -16,7 +16,7 @@ export async function initiateAuth(
     AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
     AuthParameters: {
       PASSWORD: password,
-      USERNAME: email,
+      USERNAME: email.toLowerCase(),
     },
     ClientId: applicationContext.environment.cognitoClientId,
   });
