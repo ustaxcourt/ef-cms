@@ -90,26 +90,27 @@ describe('processMessageEntries', () => {
       isRepliedTo: true,
     });
 
-    await processMessageEntries({
-      applicationContext,
-      messageRecords: [
-        {
-          dynamodb: {
-            NewImage: {
-              ...mockRepliedToMessageRecord.dynamodb.NewImage,
-              isRepliedTo: {
-                BOOL: false,
-              },
+    const messageRecords = [
+      {
+        dynamodb: {
+          NewImage: {
+            ...mockRepliedToMessageRecord.dynamodb.NewImage,
+            isRepliedTo: {
+              BOOL: false,
             },
           },
         },
-      ],
+      },
+    ];
+    await processMessageEntries({
+      applicationContext,
+      messageRecords,
     });
 
     expect(
       applicationContext.getPersistenceGateway().bulkIndexRecords.mock
         .calls[0][0].records,
-    ).toEqual([]);
+    ).toMatchObject(messageRecords);
   });
 
   it('should index the data returned from getMessageById instead of the NewImage if the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = false', async () => {

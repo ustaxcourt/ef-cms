@@ -8,15 +8,15 @@ describe('getDownloadPolicyUrl', () => {
   const getSignedUrlMock = jest.fn((method, options, cb) =>
     cb(null, 'http://localhost'),
   );
+  const defaultBucketName = 'aBucket';
+  const tempBucketName = 'aTempBucket';
 
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
       getSignedUrl: getSignedUrlMock,
     });
-    applicationContext.getDocumentsBucketName.mockReturnValue('my-test-bucket');
-    applicationContext.getTempDocumentsBucketName.mockReturnValue(
-      'my-test-temp-bucket',
-    );
+    applicationContext.environment.documentsBucketName = defaultBucketName;
+    applicationContext.environment.tempDocumentsBucketName = tempBucketName;
   });
 
   it('returns a signed URL from the storage client (s3)', async () => {
@@ -27,7 +27,7 @@ describe('getDownloadPolicyUrl', () => {
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
-    expect(applicationContext.getDocumentsBucketName).toHaveBeenCalled();
+    expect(getSignedUrlMock.mock.calls[0][1].Bucket).toEqual(defaultBucketName);
   });
 
   it('returns a signed URL from the storage client using the temp bucket when the useTempBucket param is true', async () => {
@@ -39,7 +39,7 @@ describe('getDownloadPolicyUrl', () => {
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
-    expect(applicationContext.getTempDocumentsBucketName).toHaveBeenCalled();
+    expect(getSignedUrlMock.mock.calls[0][1].Bucket).toEqual(tempBucketName);
   });
 
   it('should return a URL intended for viewing inline in a web browser when filename has NOT been provided', async () => {

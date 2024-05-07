@@ -14,6 +14,7 @@ export const FileUploadErrorModal = connect(
         cancelSequence={cancelSequence}
         confirmLabel="Close"
         confirmSequence={cancelSequence}
+        dataTestId="file-upload-error-modal"
         title={'Your Request Was Not Completed'}
       >
         <div className="file-upload-error">

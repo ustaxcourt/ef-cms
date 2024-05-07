@@ -1,7 +1,15 @@
 import { chunk } from 'lodash';
 import { getIndexNameForRecord } from './getIndexNameForRecord';
+import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const bulkIndexRecords = async ({ applicationContext, records }) => {
+export const bulkIndexRecords = async ({
+  applicationContext,
+  records,
+}: {
+  applicationContext: ServerApplicationContext;
+  records: IDynamoDBRecord[];
+}) => {
   const searchClient = applicationContext.getSearchClient();
 
   const CHUNK_SIZE = 50;
@@ -16,12 +24,12 @@ export const bulkIndexRecords = async ({ applicationContext, records }) => {
     chunkOfRecords.map(async recordChunk => {
       const body = recordChunk
         .map(record => ({
-          ...record.dynamodb.NewImage,
+          ...record.dynamodb?.NewImage,
         }))
         .flatMap(doc => {
           const index = getIndexNameForRecord(doc);
           let id = `${doc.pk.S}_${doc.sk.S}`;
-          let routing = null;
+          let routing = '';
 
           if (index) {
             if (doc.entityName.S === 'DocketEntry') {
