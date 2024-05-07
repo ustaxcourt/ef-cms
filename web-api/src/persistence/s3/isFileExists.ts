@@ -20,8 +20,8 @@ export const isFileExists = async ({
       .getStorageClient()
       .headObject({
         Bucket: useTempBucket
-          ? applicationContext.getTempDocumentsBucketName()
-          : applicationContext.getDocumentsBucketName(),
+          ? applicationContext.environment.tempDocumentsBucketName
+          : applicationContext.environment.documentsBucketName,
         Key: key,
       })
       .promise();

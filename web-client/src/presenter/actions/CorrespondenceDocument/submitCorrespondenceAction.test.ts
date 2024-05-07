@@ -41,9 +41,6 @@ describe('submitCorrespondenceAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
 
@@ -79,9 +76,6 @@ describe('submitCorrespondenceAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();

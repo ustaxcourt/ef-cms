@@ -5,7 +5,7 @@ import {
 import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReport } from './getCaseInventoryReport';
-import AWS from 'aws-sdk';
+import { marshall } from '@aws-sdk/util-dynamodb';
 
 describe('getCaseInventoryReport', () => {
   const searchSpy = jest.fn();
@@ -53,10 +53,10 @@ describe('getCaseInventoryReport', () => {
         hits: {
           hits: [
             {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+              _source: marshall(mockDataOne),
             },
             {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+              _source: marshall(mockDataTwo),
             },
           ],
           total: { value: '2' },
@@ -102,7 +102,7 @@ describe('getCaseInventoryReport', () => {
         hits: {
           hits: [
             {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+              _source: marshall(mockDataOne),
             },
           ],
           total: { value: '1' },
@@ -143,10 +143,10 @@ describe('getCaseInventoryReport', () => {
         hits: {
           hits: [
             {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataOne),
+              _source: marshall(mockDataOne),
             },
             {
-              _source: AWS.DynamoDB.Converter.marshall(mockDataTwo),
+              _source: marshall(mockDataTwo),
             },
           ],
           total: { value: '2' },

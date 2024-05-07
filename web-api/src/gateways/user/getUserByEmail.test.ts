@@ -31,8 +31,9 @@ describe('getUserByEmail', () => {
     ).rejects.toThrow(mockError);
   });
 
-  it('should return the user when found by custom:userId', async () => {
-    const mockEmail = 'exists@example.com';
+  it('should return the user when found by email, lowercased', async () => {
+    const mockEmail = 'EXiSTS@example.com';
+    const lowerCasedMockEmail = 'exists@example.com';
     const mockAccountStatus = UserStatusType.CONFIRMED;
     const mockUserCustomId = 'b5f6bab7-0de1-4b85-8564-9430c22220d4';
     const mockUserName = 'Oran Muller';
@@ -49,7 +50,7 @@ describe('getUserByEmail', () => {
         },
         {
           Name: 'email',
-          Value: mockEmail,
+          Value: lowerCasedMockEmail,
         },
         {
           Name: 'name',
@@ -70,60 +71,16 @@ describe('getUserByEmail', () => {
       email: mockEmail,
     });
 
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalledWith({
+      UserPoolId: expect.anything(),
+      Username: lowerCasedMockEmail,
+    });
     expect(result).toEqual({
       accountStatus: mockAccountStatus,
       email: mockEmail,
       name: mockUserName,
       role: mockUserRole,
       userId: mockUserCustomId,
-    });
-  });
-
-  it('should return the user when found by sub (custom cognito user id)', async () => {
-    const mockSub = 'eef63721-3c5c-4c93-b550-0588d65ff7f0';
-    const mockEmail = 'exists@example.com';
-    const mockAccountStatus = UserStatusType.CONFIRMED;
-    const mockUserName = 'Oran Muller';
-    const mockUserRole = ROLES.petitioner;
-    const mockUserRecord = {
-      UserAttributes: [
-        {
-          Name: 'custom:role',
-          Value: mockUserRole,
-        },
-        {
-          Name: 'sub',
-          Value: mockSub,
-        },
-        {
-          Name: 'email',
-          Value: mockEmail,
-        },
-        {
-          Name: 'name',
-          Value: mockUserName,
-        },
-        {
-          Name: 'sub',
-          Value: 'SOMETHING_NOT_USER_ID',
-        },
-      ],
-      UserStatus: mockAccountStatus,
-    };
-    applicationContext
-      .getCognito()
-      .adminGetUser.mockResolvedValue(mockUserRecord);
-
-    const result = await getUserByEmail(applicationContext, {
-      email: mockEmail,
-    });
-
-    expect(result).toEqual({
-      accountStatus: mockAccountStatus,
-      email: mockEmail,
-      name: mockUserName,
-      role: mockUserRole,
-      userId: mockSub,
     });
   });
 });
