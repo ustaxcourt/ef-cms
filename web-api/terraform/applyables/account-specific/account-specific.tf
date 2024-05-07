@@ -47,7 +47,11 @@ module "health-alarms-west" {
   }
 }
 
-module "api_gateway_global_logging_permissions" {
+module "api-gateway-global-logging-permissions" {
   source = "../../modules/api-gateway-global-logging-permissions"
+}
+
+module "ci-cd-permissions" {
+  source = "../../modules/ci-cd-permissions"
 }
 
