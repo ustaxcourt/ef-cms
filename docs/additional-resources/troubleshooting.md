@@ -238,11 +238,11 @@ Solution:
 - This solution should only be used on non-prod environments. Clear the dynamo tables and recreate the users and judges.
 
   ```bash
-  . ./scripts/user/setup-test-users.sh "${ENV}"
+  npx ts-node --transpile-only scripts/user/setup-test-users.ts
   ```
 
   ```bash
-  ENV=exp5 FILE_NAME=judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
+  ENV=exp5 npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
   ```
 
 ## AxiosError: Request failed with status code 403 on Test Users Setup

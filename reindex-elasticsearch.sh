@@ -19,8 +19,8 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
-./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
+npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.ts
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
-./web-api/setup-elasticsearch-aliases.sh "${ENV}"
+npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
 
 npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DYNAMODB_TABLE_NAME}"
