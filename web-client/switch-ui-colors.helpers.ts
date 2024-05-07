@@ -10,8 +10,13 @@ import {
   UpdateDistributionCommand,
 } from '@aws-sdk/client-cloudfront';
 
-const cloudfront = new CloudFrontClient({ maxAttempts: 4 });
-const route53 = new Route53Client();
+const cloudfront = new CloudFrontClient({
+  maxAttempts: 4,
+  region: 'us-east-1',
+});
+const route53 = new Route53Client({
+  region: 'us-east-1',
+});
 
 export const switchUiColors = async ({
   currentColor,
