@@ -40,6 +40,10 @@ module "health-alarms-east" {
   }
 }
 
-# module "health-alarms-west" {
-#   source = "../../modules/reindex-cron"
-# }
+module "health-alarms-west" {
+  source = "../../modules/health-alarms"
+  providers = {
+    aws = aws.us-west-1
+  }
+}
+
