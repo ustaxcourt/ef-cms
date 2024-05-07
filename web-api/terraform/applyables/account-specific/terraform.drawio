@@ -1,0 +1,67 @@
+<mxfile host="65bd71144e">
+    <diagram id="IIxoGujW91cew33BokPd" name="Page-1">
+        <mxGraphModel dx="1626" dy="724" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="220" width="230" height="340" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="What I want(.tf files)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="180" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="What I have(state file)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="550" y="190" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="530" y="220" width="230" height="340" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="health alarms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="240" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="kibana lambdas" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="280" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="s3 bucket" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="330" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="health alarms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="235" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="kibana lambdas" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="275" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="s3 bucket" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="325" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="iam/terraform&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="130" width="170" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="710" width="230" height="340" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="What I want(.tf files)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="670" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="What I have(state file)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="550" y="680" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="530" y="710" width="230" height="340" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="module.health_alarms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="725" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="module.health_alarms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="725" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="kibana lambdas" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="765" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="s3 bucket" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="815" width="110" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
