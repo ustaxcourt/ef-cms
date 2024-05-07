@@ -1,9 +1,11 @@
+import type { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const processEntries = async ({
   applicationContext,
   records,
   recordType,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   records: any[];
   recordType: string;
 }) => {
