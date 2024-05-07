@@ -33,31 +33,29 @@ export const switchApiColors = async ({
       record => record.name === apiGatewayRecordName,
     );
 
-    if (apiGatewayRecord && 'id' in apiGatewayRecord && apiGatewayRecord.id) {
+    if (apiGatewayRecord?.id) {
       try {
-        const deleteBasePathMappingResult = await apiGateway.send(
+        await apiGateway.send(
           new DeleteBasePathMappingCommand({
             basePath: '(none)',
             domainName,
           }),
         );
-        if (deleteBasePathMappingResult) {
-          const createBasePathMappingResult = await apiGateway.send(
-            new CreateBasePathMappingCommand({
-              domainName,
-              restApiId: apiGatewayRecord.id,
-              stage: environmentName,
-            }),
-          );
-          if (createBasePathMappingResult) {
-            console.log(createBasePathMappingResult);
-          }
-        }
-      } catch (err: any) {
-        if (err) {
-          console.log(err, err.stack);
-        }
+        console.log(`Successfully deleted base path mapping for ${domainName}`);
+      } catch (err) {
+        console.log(
+          `Unable to delete base path mapping for ${domainName}. Continuing forward.`,
+        );
       }
+
+      await apiGateway.send(
+        new CreateBasePathMappingCommand({
+          domainName,
+          restApiId: apiGatewayRecord.id,
+          stage: environmentName,
+        }),
+      );
+      console.log(`Successfully added base path mapping for ${domainName}`);
     }
   }
 };

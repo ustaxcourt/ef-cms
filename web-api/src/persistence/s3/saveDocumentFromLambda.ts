@@ -11,9 +11,9 @@ export const saveDocumentFromLambda = async ({
   key: string;
   useTempBucket?: boolean;
 }) => {
-  let Bucket = applicationContext.getDocumentsBucketName();
+  let Bucket = applicationContext.environment.documentsBucketName;
   if (useTempBucket) {
-    Bucket = applicationContext.getTempDocumentsBucketName();
+    Bucket = applicationContext.environment.tempDocumentsBucketName;
   }
 
   const maxRetries = 1;

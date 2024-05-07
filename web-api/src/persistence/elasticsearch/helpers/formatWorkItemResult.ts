@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 export const formatWorkItemResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   const casePk = hit['_id'].split('_')[0];
@@ -19,7 +19,7 @@ export const formatWorkItemResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   }
 
   if (foundCase) {
-    const foundCaseUnmarshalled = AWS.DynamoDB.Converter.unmarshall(foundCase);
+    const foundCaseUnmarshalled = unmarshall(foundCase);
 
     return {
       ...foundCaseUnmarshalled,
