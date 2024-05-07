@@ -25,3 +25,7 @@ variable "log_group_environments" {
   description = "deployment environments"
   type        = list(string)
 }
+
+variable "number_of_days_to_keep_info_logs" {
+  type = number
+}

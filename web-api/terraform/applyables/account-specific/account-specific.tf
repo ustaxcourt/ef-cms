@@ -56,27 +56,27 @@ module "ci-cd" {
 }
 
 module "kibana" {
-  source = "../../modules/kibana"
-  cognito_suffix = var.cognito_suffix
-  es_logs_ebs_volume_size_gb = var.es_logs_ebs_volume_size_gb
-  es_logs_instance_count = var.es_logs_instance_count
-  es_logs_instance_type = var.es_logs_instance_type
-  sns_alarm_arn = module.health-alarms-east.topic_arn
-  log_group_environments = var.log_group_environments
-
+  source                           = "../../modules/kibana"
+  cognito_suffix                   = var.cognito_suffix
+  es_logs_ebs_volume_size_gb       = var.es_logs_ebs_volume_size_gb
+  es_logs_instance_count           = var.es_logs_instance_count
+  es_logs_instance_type            = var.es_logs_instance_type
+  sns_alarm_arn                    = module.health-alarms-east.topic_arn
+  log_group_environments           = var.log_group_environments
+  number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
   providers = {
-    aws = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
 }
 
 module "dawson-developer-permissions" {
-  source = "../../modules/dawson-developer-permissions"
+  source                       = "../../modules/dawson-developer-permissions"
   dawson_dev_trusted_role_arns = var.dawson_dev_trusted_role_arns
 }
 
 module "dynamsoft" {
-  source = "../../modules/dynamsoft"
+  source    = "../../modules/dynamsoft"
   zone_name = var.zone_name
 }
 
