@@ -58,6 +58,10 @@ module "ci-cd" {
 module "kibana" {
   source = "../../modules/kibana"
   cognito_suffix = var.cognito_suffix
+  es_logs_ebs_volume_size_gb = var.es_logs_ebs_volume_size_gb
+  es_logs_instance_count = var.es_logs_instance_count
+  es_logs_instance_type = var.es_logs_instance_type
+  sns_alarm_arn = module.health-alarms-east.topic_arn
 }
 
 module "dawson-developer-permissions" {
