@@ -62,6 +62,12 @@ module "kibana" {
   es_logs_instance_count = var.es_logs_instance_count
   es_logs_instance_type = var.es_logs_instance_type
   sns_alarm_arn = module.health-alarms-east.topic_arn
+  log_group_environments = var.log_group_environments
+
+  providers = {
+    aws = aws.us-east-1
+    us-west-1 = aws.us-west-1
+  }
 }
 
 module "dawson-developer-permissions" {

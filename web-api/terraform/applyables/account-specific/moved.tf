@@ -185,3 +185,33 @@ moved {
   to   = module.kibana.aws_iam_role_policy.lambda_elasticsearch_execution_policy
 }
 
+# lambda-logs-to-elasticsearch.tf
+moved {
+  from = module.logs_to_es
+  to   = module.kibana.module.logs_to_es
+}
+moved {
+  from = aws_cloudwatch_log_group.logs_to_elasticsearch
+  to   = module.kibana.aws_cloudwatch_log_group.logs_to_elasticsearch
+}
+moved {
+  from = terraform_data.logs_to_es_last_modified
+  to   = module.kibana.terraform_data.logs_to_es_last_modified
+}
+moved {
+  from = aws_lambda_permission.allow_cloudwatch
+  to   = module.kibana.aws_lambda_permission.allow_cloudwatch
+}
+moved {
+  from = module.regional-log-subscription-filters-east
+  to   = module.kibana.module.regional-log-subscription-filters-east
+}
+moved {
+  from = module.regional-log-subscription-filters-west
+  to   = module.kibana.module.regional-log-subscription-filters-west
+}
+moved {
+  from = aws_cloudwatch_log_subscription_filter.cognito_authorizer_filter
+  to   = module.kibana.aws_cloudwatch_log_subscription_filter.cognito_authorizer_filter
+}
+
