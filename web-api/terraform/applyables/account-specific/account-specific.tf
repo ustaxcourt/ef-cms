@@ -88,3 +88,7 @@ module "route53-zone" {
   source    = "../../modules/route53-zone"
   zone_name = var.zone_name
 }
+
+module "email-monitoring" {
+  source    = "../../modules/email-monitoring"
+}
