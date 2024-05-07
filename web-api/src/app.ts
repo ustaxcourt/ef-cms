@@ -109,7 +109,6 @@ import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPracti
 import { getPractitionerDocumentsLambda } from './lambdas/practitioners/getPractitionerDocumentsLambda';
 import { getPractitionersByNameLambda } from './lambdas/practitioners/getPractitionersByNameLambda';
 import { getPrivatePractitionersBySearchKeyLambda } from './lambdas/users/getPrivatePractitionersBySearchKeyLambda';
-import { getStatusOfVirusScanLambda } from './lambdas/documents/getStatusOfVirusScanLambda';
 import { getTrialSessionDetailsLambda } from './lambdas/trialSessions/getTrialSessionDetailsLambda';
 import { getTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/getTrialSessionWorkingCopyLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './lambdas/reports/getTrialSessionsForJudgeActivityReportLambda';
@@ -691,11 +690,6 @@ app.delete(
   );
 }
 
-app.get(
-  '/documents/:key/virus-scan',
-  lambdaWrapper(getStatusOfVirusScanLambda),
-);
-
 /**
  * messages
  */
@@ -1008,7 +1002,7 @@ app.get(
   );
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
-  app.post('/users', lambdaWrapper(createUserLambda));
+  app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: Only meant for admins and zendesk automations. Not meant for regular application use.
 }
 
 /**
