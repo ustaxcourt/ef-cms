@@ -174,3 +174,14 @@ moved {
   from = aws_iam_service_linked_role.lambda_cloudfront_logger_role
   to   = module.edge-lambda-permissions.aws_iam_service_linked_role.lambda_cloudfront_logger_role
 }
+
+# lambda-es-role.tf
+moved {
+  from = aws_iam_role.lambda_elasticsearch_execution_role
+  to   = module.kibana.aws_iam_role.lambda_elasticsearch_execution_role
+}
+moved {
+  from = aws_iam_role_policy.lambda_elasticsearch_execution_policy
+  to   = module.kibana.aws_iam_role_policy.lambda_elasticsearch_execution_policy
+}
+
