@@ -178,7 +178,10 @@ export const PractitionerDetails = connect(
                       <span className="usa-label usa-label-display">
                         Bar number
                       </span>
-                      <div className="margin-bottom-4">
+                      <div
+                        className="margin-bottom-4"
+                        data-testid="practitioner-bar-number"
+                      >
                         {practitionerDetailHelper.barNumber}
                       </div>
                       <span className="usa-label usa-label-display">
