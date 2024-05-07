@@ -73,3 +73,7 @@ module "dynamsoft" {
   source = "../../modules/dynamsoft"
   zone_name = var.zone_name
 }
+
+module "edge-lambda-permissions" {
+  source = "../../modules/edge-lambda-permissions"
+}
