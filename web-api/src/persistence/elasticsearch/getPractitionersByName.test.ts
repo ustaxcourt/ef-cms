@@ -1,20 +1,19 @@
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionersByName } from './getPractitionersByName';
+jest.mock('./searchClient');
+import { search } from './searchClient';
 
 describe('getPractitionersByName', () => {
   it('returns results from a single persistence query', async () => {
-    const search = (applicationContext.getSearchClient().search = jest
-      .fn()
-      .mockResolvedValue({
-        body: {
-          hits: {
-            hits: [
-              { barNumber: '009', name: 'other' },
-              { barNumber: '005', name: 'matches' },
-            ],
-          },
-        },
-      }));
+    search.mockImplementation(() =>
+      Promise.resolve({
+        results: [
+          { barNumber: '009', name: 'other' },
+          { barNumber: '005', name: 'matches' },
+        ],
+        total: 2,
+      }),
+    );
 
     const { results } = await getPractitionersByName({
       applicationContext,
