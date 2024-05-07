@@ -164,3 +164,13 @@ moved {
   from = module.logs_alarms
   to   = module.kibana.module.logs_alarms
 }
+
+#lambda-edge-role.tf
+moved {
+  from = aws_iam_service_linked_role.lambda_replication_role
+  to   = module.edge-lambda-permissions.aws_iam_service_linked_role.lambda_replication_role
+}
+moved {
+  from = aws_iam_service_linked_role.lambda_cloudfront_logger_role
+  to   = module.edge-lambda-permissions.aws_iam_service_linked_role.lambda_cloudfront_logger_role
+}
