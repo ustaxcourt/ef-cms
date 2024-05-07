@@ -316,7 +316,7 @@ module "regional-log-subscription-filters-west" {
   logs_to_elasticsearch_lambda_arn = module.logs_to_es.arn
 
   providers = {
-    aws = us-west-1
+    aws = aws.us-west-1
   }
 
   depends_on = [aws_lambda_permission.allow_cloudwatch]

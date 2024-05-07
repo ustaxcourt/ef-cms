@@ -66,7 +66,7 @@ module "kibana" {
 
   providers = {
     aws = aws.us-east-1
-    us-west-1 = aws.us-west-1
+    aws.us-west-1 = aws.us-west-1
   }
 }
 
