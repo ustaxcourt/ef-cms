@@ -83,3 +83,8 @@ module "dynamsoft" {
 module "edge-lambda-permissions" {
   source = "../../modules/edge-lambda-permissions"
 }
+
+module "route53-zone" {
+  source    = "../../modules/route53-zone"
+  zone_name = var.zone_name
+}
