@@ -60,3 +60,8 @@ module "kibana" {
   cognito_suffix = var.cognito_suffix
 }
 
+module "dawson-developer-permissions" {
+  source = "../../modules/dawson-developer-permissions"
+  dawson_dev_trusted_role_arns = var.dawson_dev_trusted_role_arns
+}
+
