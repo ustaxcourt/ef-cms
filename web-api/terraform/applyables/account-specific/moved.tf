@@ -24,31 +24,31 @@ moved {
 # circle-ci.tf
 moved {
   from = aws_iam_user.circle_ci
-  to   = module.ci-cd-permissions.aws_iam_user.ci_cd
+  to   = module.ci-cd.aws_iam_user.ci_cd
 }
 moved {
   from = aws_iam_user_policy_attachment.circle_ci_policy_attachment
-  to   = module.ci-cd-permissions.aws_iam_user_policy_attachment.ci_cd_policy_attachment
+  to   = module.ci-cd.aws_iam_user_policy_attachment.ci_cd_policy_attachment
 }
 moved {
   from = aws_iam_policy.circle_ci_policy
-  to   = module.ci-cd-permissions.aws_iam_policy.ci_cd_policy
+  to   = module.ci-cd.aws_iam_policy.ci_cd_policy
 }
 moved {
   from = aws_iam_user_policy_attachment.circle_ci_route53_policy_attachment
-  to   = module.ci-cd-permissions.aws_iam_user_policy_attachment.ci_cd_route53_policy_attachment
+  to   = module.ci-cd.aws_iam_user_policy_attachment.ci_cd_route53_policy_attachment
 }
 moved {
   from = aws_iam_policy.circle_ci_route53_policy
-  to   = module.ci-cd-permissions.aws_iam_policy.ci_cd_route53_policy
+  to   = module.ci-cd.aws_iam_policy.ci_cd_route53_policy
 }
 moved {
   from = aws_iam_user_policy_attachment.circle_ci_iam_policy_attachment
-  to   = module.ci-cd-permissions.aws_iam_user_policy_attachment.ci_cd_iam_policy_attachment
+  to   = module.ci-cd.aws_iam_user_policy_attachment.ci_cd_iam_policy_attachment
 }
 moved {
   from = aws_iam_policy.circle_ci_iam_policy
-  to   = module.ci-cd-permissions.aws_iam_policy.ci_cd_iam_policy
+  to   = module.ci-cd.aws_iam_policy.ci_cd_iam_policy
 }
 
 # cognito.tf
@@ -112,3 +112,14 @@ moved {
   from = aws_iam_instance_profile.dynamsoft_instance_profile
   to   = module.dynamsoft.aws_iam_instance_profile.dynamsoft_instance_profile
 }
+
+# ecr.tf
+moved {
+  from = aws_ecr_repository.image_repository
+  to   = module.ci-cd.aws_ecr_repository.image_repository
+}
+moved {
+  from = aws_ecr_lifecycle_policy.repo_policy
+  to   = module.ci-cd.aws_ecr_lifecycle_policy.repo_policy
+}
+

@@ -51,8 +51,8 @@ module "api-gateway-global-logging-permissions" {
   source = "../../modules/api-gateway-global-logging-permissions"
 }
 
-module "ci-cd-permissions" {
-  source = "../../modules/ci-cd-permissions"
+module "ci-cd" {
+  source = "../../modules/ci-cd"
 }
 
 module "kibana" {
