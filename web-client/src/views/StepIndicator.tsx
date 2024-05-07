@@ -1,6 +1,7 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const StepIndicator = connect(
   {
@@ -40,13 +41,34 @@ export const StepIndicator = connect(
             })}
           </ol>
           <div className="usa-step-indicator__header">
-            <h4 className="usa-step-indicator__heading">
-              <span className="usa-step-indicator__heading-counter">
+            <h4
+              className={classNames(
+                'usa-step-indicator__heading',
+                'display-flex-center',
+              )}
+            >
+              <span
+                className={classNames(
+                  'usa-step-indicator__heading-counter',
+                  'display-flex-center',
+                )}
+              >
                 <span className="usa-sr-only">Step</span>
-                <span className="usa-step-indicator__current-step">
+                <span
+                  className={classNames(
+                    'usa-step-indicator__current-step',
+                    'display-flex-center',
+                    'justify-content-center',
+                  )}
+                >
                   {currentStep + 1}
                 </span>
-                <span className="usa-step-indicator__total-steps">
+                <span
+                  className={classNames(
+                    'usa-step-indicator__total-steps',
+                    'margin-left-5',
+                  )}
+                >
                   of {steps.length}
                 </span>{' '}
               </span>
