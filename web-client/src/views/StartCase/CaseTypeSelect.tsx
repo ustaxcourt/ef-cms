@@ -13,6 +13,7 @@ export const CaseTypeSelect = connect(
     hint: props.hint,
     legend: props.legend,
     name: props.name,
+    onBlurSequence: props.onBlurSequence,
     onChange: sequences[props.onChange],
     onChangePreValidation: sequences[props.onChangePreValidation],
     rawOnChange: props.onChange,
@@ -28,6 +29,7 @@ export const CaseTypeSelect = connect(
     hint,
     legend,
     name,
+    onBlurSequence,
     onChange,
     onChangePreValidation,
     rawOnChange,
@@ -53,6 +55,7 @@ export const CaseTypeSelect = connect(
               id="case-type"
               name={name || 'caseType'}
               value={value}
+              onBlur={onBlurSequence}
               onChange={e => {
                 (onChange || rawOnChange)({
                   key: e.target.name,
