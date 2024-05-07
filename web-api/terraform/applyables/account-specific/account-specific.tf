@@ -14,9 +14,9 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "ustc-case-mgmt.flexion.us.terraform.deploys"
-    key    = "permissions-account.tfstate"
-    region = "us-east-1"
+    bucket         = "ustc-case-mgmt.flexion.us.terraform.deploys"
+    key            = "permissions-account.tfstate"
+    region         = "us-east-1"
     dynamodb_table = "efcms-terraform-lock"
   }
 
@@ -45,5 +45,9 @@ module "health-alarms-west" {
   providers = {
     aws = aws.us-west-1
   }
+}
+
+module "api_gateway_global_logging_permissions" {
+  source = "../../modules/api-gateway-global-logging-permissions"
 }
 
