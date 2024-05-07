@@ -72,3 +72,18 @@ moved {
   from = aws_iam_role_policy_attachment.es_cognito_auth
   to   = module.kibana.aws_iam_role_policy_attachment.es_cognito_auth
 }
+
+# dawson-dev.tf
+moved {
+  from = aws_iam_role.dawson_dev
+  to   = module.dawson-developer-permissions.aws_iam_role.dawson_dev
+}
+moved {
+  from = aws_iam_role_policy_attachment.dawson_dev_policy_attachment
+  to   = module.dawson-developer-permissions.aws_iam_role_policy_attachment.dawson_dev_policy_attachment
+}
+moved {
+  from = aws_iam_policy.dawson_dev_policy
+  to   = module.dawson-developer-permissions.aws_iam_policy.dawson_dev_policy
+}
+
