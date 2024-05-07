@@ -241,3 +241,9 @@ moved {
   to   = module.kibana.aws_lambda_permission.allow_cloudwatch_to_rotate_info_indices_daily
 }
 
+# route-53.tf
+moved {
+  from = aws_route53_zone.primary
+  to   = module.route53-zone.aws_route53_zone.primary
+}
+
