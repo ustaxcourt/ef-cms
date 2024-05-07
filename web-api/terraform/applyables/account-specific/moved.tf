@@ -215,3 +215,29 @@ moved {
   to   = module.kibana.aws_cloudwatch_log_subscription_filter.cognito_authorizer_filter
 }
 
+# lambda-rotate-info-indices.tf
+moved {
+  from = module.rotate_info_indices
+  to   = module.kibana.module.rotate_info_indices
+}
+moved {
+  from = aws_cloudwatch_log_group.rotate_info_indices
+  to   = module.kibana.aws_cloudwatch_log_group.rotate_info_indices
+}
+moved {
+  from = aws_cloudwatch_event_rule.every_day
+  to   = module.kibana.aws_cloudwatch_event_rule.every_day
+}
+moved {
+  from = aws_cloudwatch_event_target.rotate_info_indices_daily
+  to   = module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily
+}
+moved {
+  from = terraform_data.rotate_info_indices_last_modified
+  to   = module.kibana.terraform_data.rotate_info_indices_last_modified
+}
+moved {
+  from = aws_lambda_permission.allow_cloudwatch_to_rotate_info_indices_daily
+  to   = module.kibana.aws_lambda_permission.allow_cloudwatch_to_rotate_info_indices_daily
+}
+
