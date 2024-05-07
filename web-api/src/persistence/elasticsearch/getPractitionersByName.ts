@@ -1,7 +1,7 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
 import { PractitionerSearchResultType } from '../../../../web-client/src/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
-import { formatResults } from './searchClient';
+import { search } from './searchClient';
 
 /**
  * getPractitionersByName
@@ -56,24 +56,20 @@ export const getPractitionersByName = async ({
     track_total_hits: true,
   };
 
-  const searchResults = await applicationContext
-    .getSearchClient()
-    .search(searchParameters);
-
   const {
     results,
     total,
-  }: { results: PractitionerSearchResultType[]; total: number } = formatResults(
-    searchResults.body,
-  );
+  }: { results: PractitionerSearchResultType[]; total: number } = await search({
+    applicationContext,
+    searchParameters,
+  });
 
-  const matchingPractitioners: any[] = searchResults.body.hits.hits;
+  const matchingPractitioners: any[] = results;
   console.log('matches', matchingPractitioners);
   const lastKey =
     (matchingPractitioners[matchingPractitioners.length - 1]?.sort as Array<
       number | string
     >) || [];
-  console.log('last Key', lastKey);
 
   return { lastKey, results, total };
 };
