@@ -75,6 +75,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### puppeteer and @sparticuz/chromium
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
+- Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on.
 
 ### pdfjs-dist
 
@@ -89,6 +90,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### eslint
 - Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
 - Keep eslint-plugin-security at 2.1.1 since upgrading makes it only compatible with v9.0.0
+
+### esbuild
+- Keep esbuild pinned to 0.20.2 because esbuild-sass-plugin is not yet compatible with esbuild 0.21.0: https://github.com/glromeo/esbuild-sass-plugin/issues/176
 
 ## Incrementing the Node Cache Key Version
 
