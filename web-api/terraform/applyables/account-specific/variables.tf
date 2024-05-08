@@ -36,5 +36,4 @@ variable "dawson_dev_trusted_role_arns" {
 
 variable "log_snapshot_bucket_name" {
   type = string
-  default = "ustc-log-snapshots"
 }

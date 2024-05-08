@@ -256,3 +256,18 @@ moved {
   from = aws_ses_active_receipt_rule_set.main
   to   = module.email-monitoring.aws_ses_active_receipt_rule_set.main
 }
+
+# s3.tf
+moved {
+  from = aws_iam_role.es_s3_snapshot_access_role
+  to   = module.kibana.aws_iam_role.es_s3_snapshot_access_role
+}
+moved {
+  from = aws_iam_role_policy.es_s3_snapshot_access_policy
+  to   = module.kibana.aws_iam_role_policy.es_s3_snapshot_access_policy
+}
+moved {
+  from = aws_s3_bucket.ustc_log_snapshots_bucket
+  to   = module.kibana.aws_s3_bucket.ustc_log_snapshots_bucket
+}
+
