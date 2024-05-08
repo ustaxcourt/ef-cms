@@ -29,3 +29,7 @@ variable "log_group_environments" {
 variable "number_of_days_to_keep_info_logs" {
   type = number
 }
+
+variable "log_snapshot_bucket_name" {
+  type = string
+}

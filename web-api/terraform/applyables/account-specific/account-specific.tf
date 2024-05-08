@@ -29,10 +29,6 @@ terraform {
   }
 }
 
-provider "opensearch" {
-  url = "https://${aws_opensearch_domain.efcms-logs.endpoint}"
-}
-
 module "health-alarms-east" {
   source = "../../modules/health-alarms"
   providers = {
@@ -64,6 +60,7 @@ module "kibana" {
   sns_alarm_arn                    = module.health-alarms-east.topic_arn
   log_group_environments           = var.log_group_environments
   number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
+  log_snapshot_bucket_name         = var.log_snapshot_bucket_name
   providers = {
     aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
@@ -90,5 +87,5 @@ module "route53-zone" {
 }
 
 module "email-monitoring" {
-  source    = "../../modules/email-monitoring"
+  source = "../../modules/email-monitoring"
 }
