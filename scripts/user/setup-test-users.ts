@@ -93,17 +93,7 @@ const setupPetitioners = async (
 const setupPractitioners = async (
   applicationContext: ServerApplicationContext,
 ) => {
-  const allPractitioners = [
-    { barNumber: 'RT6789', role: 'irsPractitioner' },
-    { barNumber: 'RT0987', role: 'irsPractitioner' },
-    { barNumber: 'RT7777', role: 'irsPractitioner' },
-    { barNumber: 'RT8888', role: 'irsPractitioner' },
-    { barNumber: 'RT9999', role: 'irsPractitioner' },
-    { barNumber: 'RT6666', role: 'irsPractitioner' },
-    { barNumber: 'RT0000', role: 'irsPractitioner' },
-    { barNumber: 'RT1111', role: 'irsPractitioner' },
-    { barNumber: 'RT2222', role: 'irsPractitioner' },
-    { barNumber: 'RT3333', role: 'irsPractitioner' },
+  const privatePractitioners = [
     { barNumber: 'PT1234', role: 'privatePractitioner' },
     { barNumber: 'PT5432', role: 'privatePractitioner' },
     { barNumber: 'PT1111', role: 'privatePractitioner' },
@@ -115,46 +105,62 @@ const setupPractitioners = async (
     { barNumber: 'PT7777', role: 'privatePractitioner' },
     { barNumber: 'PT8888', role: 'privatePractitioner' },
   ];
+  const irsPractitioners = [
+    { barNumber: 'RT6789', role: 'irsPractitioner' },
+    { barNumber: 'RT0987', role: 'irsPractitioner' },
+    { barNumber: 'RT7777', role: 'irsPractitioner' },
+    { barNumber: 'RT8888', role: 'irsPractitioner' },
+    { barNumber: 'RT9999', role: 'irsPractitioner' },
+    { barNumber: 'RT6666', role: 'irsPractitioner' },
+    { barNumber: 'RT0000', role: 'irsPractitioner' },
+    { barNumber: 'RT1111', role: 'irsPractitioner' },
+    { barNumber: 'RT2222', role: 'irsPractitioner' },
+    { barNumber: 'RT3333', role: 'irsPractitioner' },
+  ];
 
-  for (let i = 0; i < allPractitioners.length; i++) {
-    const { barNumber, role } = allPractitioners[i];
+  const practitioners = [privatePractitioners, irsPractitioners];
+  for (let i = 0; i < practitioners.length; i++) {
+    const practitionerArray = practitioners[i];
+    for (let j = 0; j < practitionerArray.length; j++) {
+      const { barNumber, role } = practitionerArray[j];
 
-    const practiceType = role === 'privatePractitioner' ? 'Private' : 'IRS';
-    const email = `${role}${i + 1}@example.com`;
-    const user = {
-      admissionsDate: '2019-03-01',
-      admissionsStatus: 'Active',
-      barNumber,
-      birthYear: '1950',
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: 'domestic',
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email,
-      firmName: 'Some Firm',
-      firstName: `${role} ${i + 1}`,
-      lastName: 'Test',
-      name: `Test ${role}${i + 1}`,
-      originalBarState: 'WA',
-      password: DEFAULT_ACCOUNT_PASS,
-      practiceType,
-      practitionerType: 'Attorney',
-      role,
-      section: role,
-      suffix: '',
-    };
+      const practiceType = role === 'privatePractitioner' ? 'Private' : 'IRS';
+      const email = `${role}${j + 1}@example.com`;
+      const user = {
+        admissionsDate: '2019-03-01',
+        admissionsStatus: 'Active',
+        barNumber,
+        birthYear: '1950',
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          countryType: 'domestic',
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email,
+        firmName: 'Some Firm',
+        firstName: `${role} ${j + 1}`,
+        lastName: 'Test',
+        name: `Test ${role}${j + 1}`,
+        originalBarState: 'WA',
+        password: DEFAULT_ACCOUNT_PASS,
+        practiceType,
+        practitionerType: 'Attorney',
+        role,
+        section: role,
+        suffix: '',
+      };
 
-    await createOrUpdateUser(applicationContext, {
-      password: DEFAULT_ACCOUNT_PASS!,
-      setPasswordAsPermanent: true,
-      user,
-    });
+      await createOrUpdateUser(applicationContext, {
+        password: DEFAULT_ACCOUNT_PASS!,
+        setPasswordAsPermanent: true,
+        user,
+      });
+    }
   }
 };
 
