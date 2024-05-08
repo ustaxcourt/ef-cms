@@ -1,7 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
 import { TrialCity } from '@web-client/views/StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -70,17 +69,41 @@ export const UpdatedFilePetitionStep4 = connect(
           </div>
           {form.procedureType && (
             <div>
+              <h2>U.S. Tax Court trial locations</h2>
+              <div
+                className="max-width-900"
+                style={{
+                  fontSize: '18px',
+                  lineHeight: '1.5',
+                  paddingBottom: '10px',
+                }}
+              >
+                This is your preferred location where your case may be heard it
+                goes to trial. Trial locations are unavailable in the following
+                states: DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY.{' '}
+                <span>
+                  {' '}
+                  <Button
+                    link
+                    className="usa-link--external text-left mobile-text-wrap"
+                    href="https://www.ustaxcourt.gov/dpt_cities.html"
+                    overrideMargin="margin-right-1"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Trial locations
+                    <Icon
+                      className="fa-icon-blue"
+                      icon={['fa-soli', 'fa-arrow-up-right-from-square']}
+                      size="1x"
+                    />
+                  </Button>
+                </span>
+              </div>
               <TrialCity
                 label="Preferred trial location"
                 procedureType={form.procedureType}
                 showDefaultOption={true}
-                showHint={true}
-                showRegularTrialCitiesHint={
-                  form.procedureType === PROCEDURE_TYPES_MAP.regular
-                }
-                showSmallTrialCitiesHint={
-                  form.procedureType === PROCEDURE_TYPES_MAP.small
-                }
                 value={form.preferredTrialCity || ''}
                 onChange={e => {
                   updateFormValueSequence({

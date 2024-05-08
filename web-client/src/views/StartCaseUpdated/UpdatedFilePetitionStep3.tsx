@@ -3,11 +3,13 @@ import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { IrsNoticeUploadForm } from '@web-client/views/StartCaseUpdated/IrsNoticeUploadForm';
+import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
+import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep3 = connect(
   {
@@ -40,54 +42,55 @@ export const UpdatedFilePetitionStep3 = connect(
     return (
       <>
         <ErrorNotification />
-        <p className="margin-bottom-3 margin-top-0 required-statement">
-          *All fields required unless otherwise noted
-        </p>
         <div className="padding-bottom-0 margin-bottom-1">
-          <div className="usa-form-group">
+          <div>
+            <h2>{startCaseHelper.noticeLegend}</h2>
             <FormGroup errorText={validationErrors.hasIrsNotice}>
               <fieldset
                 className="usa-fieldset margin-bottom-0"
                 id="irs-notice-radios"
               >
-                <legend className="usa-legend" id="notice-legend">
-                  {startCaseHelper.noticeLegend}
-                </legend>
-                <div className="usa-form-group">
-                  {['Yes', 'No'].map((option, idx) => (
-                    <div className="usa-radio usa-radio__inline" key={option}>
-                      <input
-                        aria-describedby="notice-legend"
-                        checked={form.hasIrsNotice === (option === 'Yes')}
-                        className="usa-radio__input"
-                        id={`hasIrsNotice-${option}`}
-                        name="hasIrsNotice"
-                        type="radio"
-                        value={option === 'Yes'}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value === 'true',
-                          });
-                          validationErrors.hasIrsNotice = '';
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        data-testid={`irs-notice-${option}`}
-                        htmlFor={`hasIrsNotice-${option}`}
-                        id={`hasIrsNotice-${idx}`}
-                      >
-                        {option}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                {['Yes', 'No'].map((option, idx) => (
+                  <div className="usa-radio usa-radio__inline" key={option}>
+                    <input
+                      aria-describedby="notice-legend"
+                      checked={form.hasIrsNotice === (option === 'Yes')}
+                      className="usa-radio__input"
+                      id={`hasIrsNotice-${option}`}
+                      name="hasIrsNotice"
+                      type="radio"
+                      value={option === 'Yes'}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value === 'true',
+                        });
+                        validationErrors.hasIrsNotice = '';
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid={`irs-notice-${option}`}
+                      htmlFor={`hasIrsNotice-${option}`}
+                      id={`hasIrsNotice-${idx}`}
+                    >
+                      {option}
+                    </label>
+                  </div>
+                ))}
               </fieldset>
             </FormGroup>
 
             {startCaseHelper.showHasIrsNoticeOptions && (
               <>
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) for every form except the Statement of Taxpayer Identification.',
+                  }}
+                  dismissible={false}
+                  scrollToTop={false}
+                />
                 {irsNoticeUploadFormInfo.map((info, index) => {
                   const irsNotices =
                     (validationErrors.irsNotices as unknown as any[]) || [];
@@ -112,6 +115,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 })}
                 <Button
                   link
+                  className={classNames('padding-top-0', 'text-left')}
                   onClick={() => addAnotherIrsNoticeToFormSequence()}
                 >
                   <Icon
@@ -124,7 +128,9 @@ export const UpdatedFilePetitionStep3 = connect(
 
                 <div className="grid-row grid-gap margin-top-5">
                   <span className="margin-bottom-1 font-sans-pro">
-                    <b>Please read and acknowledge moving to the next step:</b>
+                    <div className="font-weight-600">
+                      Please read and acknowledge moving to the next step:
+                    </div>
                   </span>
                   <div className="tablet:grid-col-12">
                     <div className="card">
@@ -150,7 +156,7 @@ export const UpdatedFilePetitionStep3 = connect(
                           htmlFor="irs-notices-acknowledgement"
                           id="irs-notices-acknowledgement-label"
                         >
-                          <b>
+                          <div className="font-weight-600">
                             All documents I am filing have been redacted in
                             accordance with{' '}
                             <a
@@ -161,7 +167,7 @@ export const UpdatedFilePetitionStep3 = connect(
                               Rule 27
                             </a>
                             .
-                          </b>
+                          </div>
                         </label>
                       </div>
                     </div>
