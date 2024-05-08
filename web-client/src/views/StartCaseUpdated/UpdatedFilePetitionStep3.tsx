@@ -17,6 +17,7 @@ export const UpdatedFilePetitionStep3 = connect(
     form: state.form,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     startCaseHelper: state.startCaseHelper,
+    step3LiveValdationSequence: sequences.step3LiveValdationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep3Sequence:
       sequences.updatedFilePetitionCompleteStep3Sequence,
@@ -30,6 +31,7 @@ export const UpdatedFilePetitionStep3 = connect(
     form,
     irsNoticeUploadFormInfo,
     startCaseHelper,
+    step3LiveValdationSequence,
     updatedFilePetitionCompleteStep3Sequence,
     updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
@@ -176,6 +178,11 @@ export const UpdatedFilePetitionStep3 = connect(
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
                 value={form.caseType}
+                onBlurSequence={() => {
+                  step3LiveValdationSequence({
+                    validationKey: ['caseType'],
+                  });
+                }}
                 onChange={info => {
                   updateFormValueSequence(info);
                   delete validationErrors.caseType;
