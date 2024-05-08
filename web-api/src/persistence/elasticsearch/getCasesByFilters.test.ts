@@ -38,7 +38,7 @@ describe('getCasesByFilters', () => {
   const defaultRequest: GetCustomCaseReportRequest = {
     ...defaultParams,
     pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-    searchAfter: { pk: '', receivedAt: 0 },
+    searchAfter: { pk: null, receivedAt: null },
   };
 
   let requestWithFilters: GetCustomCaseReportRequest;
@@ -196,5 +196,33 @@ describe('getCasesByFilters', () => {
       pk: 'case|101-23',
       receivedAt: 1678746212843,
     });
+  });
+
+  it('should run the query using search_after if receivedAt and pk are present', async () => {
+    await getCasesByFilters({
+      applicationContext,
+      params: {
+        ...defaultRequest,
+        searchAfter: {
+          pk: 'case|101-23',
+          receivedAt: 1678746212843,
+        },
+      },
+    });
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body
+        .search_after,
+    ).toEqual([1678746212843, 'case|101-23']);
+  });
+
+  it('should run the query using search_after if receivedAt and pk are not present', async () => {
+    await getCasesByFilters({
+      applicationContext,
+      params: defaultRequest,
+    });
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body
+        .search_after,
+    ).toBeUndefined();
   });
 });
