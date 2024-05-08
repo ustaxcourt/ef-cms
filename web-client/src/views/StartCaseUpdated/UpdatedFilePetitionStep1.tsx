@@ -29,9 +29,7 @@ export const UpdatedFilePetitionStep1 = connect(
     return (
       <>
         {/* <ErrorNotification /> */}
-        <p className="margin-bottom-3 margin-top-0 required-statement">
-          *All fields required
-        </p>
+        <p className="margin-top-0 required-statement">*All fields required</p>
         <h2>How do you want to create the Petition?</h2>
         <div className="usa-radio petition-selection">
           <input
