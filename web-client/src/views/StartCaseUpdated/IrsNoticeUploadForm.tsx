@@ -22,8 +22,9 @@ export const IrsNoticeUploadForm = connect(
     file: props.file,
     index: props.index,
     noticeIssuedDate: props.noticeIssuedDate,
+    petitionGenerationLiveValidationSequence:
+      sequences.petitionGenerationLiveValidationSequence,
     removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
-    step3LiveValdationSequence: sequences.step3LiveValdationSequence,
     taxYear: props.taxYear,
     todayDate: props.todayDate,
     updateIrsNoticeIndexPropertySequence:
@@ -39,8 +40,8 @@ export const IrsNoticeUploadForm = connect(
     file,
     index,
     noticeIssuedDate,
+    petitionGenerationLiveValidationSequence,
     removeIrsNoticeFromFormSequence,
-    step3LiveValdationSequence,
     taxYear,
     todayDate,
     updateIrsNoticeIndexPropertySequence,
@@ -101,7 +102,8 @@ export const IrsNoticeUploadForm = connect(
             validationError={validationError}
             value={caseType}
             onBlurSequence={() => {
-              step3LiveValdationSequence({
+              petitionGenerationLiveValidationSequence({
+                step: 3,
                 validationKey: [
                   'irsNotices',
                   { property: 'index', value: index },
@@ -126,6 +128,16 @@ export const IrsNoticeUploadForm = connect(
                 name="taxYear"
                 type="text"
                 value={taxYear}
+                onBlur={() => {
+                  petitionGenerationLiveValidationSequence({
+                    step: 3,
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'taxYear',
+                    ],
+                  });
+                }}
                 onChange={e => {
                   updateIrsNoticeIndexPropertySequence({
                     key: index.toString(),
@@ -143,6 +155,16 @@ export const IrsNoticeUploadForm = connect(
                 id="notice-issued-date"
                 label="Date IRS issued the notice"
                 maxDate={todayDate}
+                onBlur={() => {
+                  petitionGenerationLiveValidationSequence({
+                    step: 3,
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'noticeIssuedDate',
+                    ],
+                  });
+                }}
                 onChange={e => {
                   updateIrsNoticeIndexPropertySequence({
                     key: index.toString(),

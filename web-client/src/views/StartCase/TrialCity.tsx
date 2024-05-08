@@ -9,6 +9,7 @@ import classNames from 'classnames';
 export const TrialCity = connect(
   {
     label: props.label,
+    onBlur: props.onBlur,
     onChange: props.onChange,
     showDefaultOption: props.showDefaultOption,
     showHint: props.showHint,
@@ -20,6 +21,7 @@ export const TrialCity = connect(
   },
   function TrialCity({
     label,
+    onBlur,
     onChange,
     procedureType,
     showDefaultOption,
@@ -64,6 +66,7 @@ export const TrialCity = connect(
           id="preferred-trial-city"
           name="preferredTrialCity"
           value={value}
+          onBlur={onBlur}
           onChange={onChange}
         >
           {showDefaultOption && <option value="">-- Select --</option>}
