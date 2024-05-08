@@ -74,10 +74,10 @@ const setupCourtUsers = async (
     [5, 'chambers', 'kerrigansChambers'],
   ];
 
-  const promises = userSet.map(user =>
-    createManyAccounts(applicationContext, user),
-  );
-  await Promise.all(promises);
+  for (let index = 0; index < userSet.length; index++) {
+    const user = userSet[index];
+    await createManyAccounts(applicationContext, user); // Not doing parallel because of cognito throttling
+  }
 };
 
 const setupPetitioners = async (
@@ -93,37 +93,39 @@ const setupPetitioners = async (
 const setupPractitioners = async (
   applicationContext: ServerApplicationContext,
 ) => {
-  const practitioners = {
-    irsPractitioner: [
-      'RT6789',
-      'RT0987',
-      'RT7777',
-      'RT8888',
-      'RT9999',
-      'RT6666',
-      'RT0000',
-      'RT1111',
-      'RT2222',
-      'RT3333',
-    ],
-    privatePractitioner: [
-      'PT1234',
-      'PT5432',
-      'PT1111',
-      'PT2222',
-      'PT3333',
-      'PT4444',
-      'PT5555',
-      'PT6666',
-      'PT7777',
-      'PT8888',
-    ],
-  };
+  const privatePractitioners = [
+    { barNumber: 'PT1234', role: 'privatePractitioner' },
+    { barNumber: 'PT5432', role: 'privatePractitioner' },
+    { barNumber: 'PT1111', role: 'privatePractitioner' },
+    { barNumber: 'PT2222', role: 'privatePractitioner' },
+    { barNumber: 'PT3333', role: 'privatePractitioner' },
+    { barNumber: 'PT4444', role: 'privatePractitioner' },
+    { barNumber: 'PT5555', role: 'privatePractitioner' },
+    { barNumber: 'PT6666', role: 'privatePractitioner' },
+    { barNumber: 'PT7777', role: 'privatePractitioner' },
+    { barNumber: 'PT8888', role: 'privatePractitioner' },
+  ];
+  const irsPractitioners = [
+    { barNumber: 'RT6789', role: 'irsPractitioner' },
+    { barNumber: 'RT0987', role: 'irsPractitioner' },
+    { barNumber: 'RT7777', role: 'irsPractitioner' },
+    { barNumber: 'RT8888', role: 'irsPractitioner' },
+    { barNumber: 'RT9999', role: 'irsPractitioner' },
+    { barNumber: 'RT6666', role: 'irsPractitioner' },
+    { barNumber: 'RT0000', role: 'irsPractitioner' },
+    { barNumber: 'RT1111', role: 'irsPractitioner' },
+    { barNumber: 'RT2222', role: 'irsPractitioner' },
+    { barNumber: 'RT3333', role: 'irsPractitioner' },
+  ];
 
-  for (let role in practitioners) {
-    const promises = practitioners[role].map((barNumber, i) => {
+  const practitioners = [privatePractitioners, irsPractitioners];
+  for (let i = 0; i < practitioners.length; i++) {
+    const practitionerArray = practitioners[i];
+    for (let j = 0; j < practitionerArray.length; j++) {
+      const { barNumber, role } = practitionerArray[j];
+
       const practiceType = role === 'privatePractitioner' ? 'Private' : 'IRS';
-      const email = `${role}${i + 1}@example.com`;
+      const email = `${role}${j + 1}@example.com`;
       const user = {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
@@ -141,9 +143,9 @@ const setupPractitioners = async (
         },
         email,
         firmName: 'Some Firm',
-        firstName: `${role} ${i + 1}`,
+        firstName: `${role} ${j + 1}`,
         lastName: 'Test',
-        name: `Test ${role}${i + 1}`,
+        name: `Test ${role}${j + 1}`,
         originalBarState: 'WA',
         password: DEFAULT_ACCOUNT_PASS,
         practiceType,
@@ -153,14 +155,12 @@ const setupPractitioners = async (
         suffix: '',
       };
 
-      return createOrUpdateUser(applicationContext, {
+      await createOrUpdateUser(applicationContext, {
         password: DEFAULT_ACCOUNT_PASS!,
         setPasswordAsPermanent: true,
         user,
       });
-    });
-
-    await Promise.all(promises);
+    }
   }
 };
 
