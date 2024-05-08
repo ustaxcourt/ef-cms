@@ -406,7 +406,6 @@ import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { sortTableSequence } from './sequences/sortTableSequence';
 import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
-import { step2LiveValdationSequence } from '@web-client/presenter/sequences/step2LiveValdationSequence';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
@@ -1263,7 +1262,6 @@ export const presenterSequences = {
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
-  step2LiveValdationSequence: step2LiveValdationSequence as unknown as Function,
   strikeDocketEntrySequence: strikeDocketEntrySequence as unknown as Function,
   submitAddConsolidatedCaseSequence:
     submitAddConsolidatedCaseSequence as unknown as Function,
