@@ -359,6 +359,7 @@ module.exports = {
           'petr',
           'petrs',
           'polyfill',
+          'opensearch',
           'postfix',
           'prepends',
           'pughs',
