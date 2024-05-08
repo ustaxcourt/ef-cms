@@ -76,6 +76,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on.
+- As of 05/08/2024, we cannot update puppeteer beyond 22.6.5 because @sparticuz/chromium only supports version 123 of chromium.
 
 ### pdfjs-dist
 
