@@ -147,7 +147,7 @@
 #   name = "archived-logs"
 #   type = "s3"
 #   settings = {
-#     bucket   = "${var.log_snapshot_bucket_name}"
+#    bucket   = aws_s3_bucket.ustc_log_snapshots_bucket.bucket
 #     region   = "us-east-1"
 #     role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
 #   }

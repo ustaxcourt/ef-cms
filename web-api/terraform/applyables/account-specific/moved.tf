@@ -156,10 +156,10 @@ moved {
   from = aws_cognito_identity_pool_roles_attachment.log_viewers
   to   = module.kibana.aws_cognito_identity_pool_roles_attachment.log_viewers
 }
-# moved {
-#   from = opensearch_snapshot_repository.archived-logs
-#   to   = module.kibana.opensearch_snapshot_repository.archived-logs
-# }
+moved {
+  from = opensearch_snapshot_repository.archived-logs
+  to   = module.kibana.opensearch_snapshot_repository.archived-logs
+}
 moved {
   from = module.logs_alarms
   to   = module.kibana.module.logs_alarms
