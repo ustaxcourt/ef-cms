@@ -1,3 +1,4 @@
+import { assertExists, retry } from '../../../helpers/retry';
 import { createAPractitioner } from '../../../helpers/accountCreation/create-a-practitioner';
 import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
@@ -7,7 +8,6 @@ import {
   loginAsDocketClerk1,
   loginAsPetitionsClerk1,
 } from '../../../helpers/authentication/login-as-helpers';
-import { retry } from '../../../helpers/retry';
 
 describe('Advanced Search', () => {
   it('should find a served paper case when the user searches by party name or docket number', () => {
@@ -32,10 +32,16 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="tab-practitioner"]').click();
       cy.get('[data-testid="practitioner-name"]').type(firstName);
-      cy.get('[data-testid="practitioner-search-by-name-button"]').click();
 
       /** Assert */
-      cy.get(`[data-testid="practitioner-row-${barNumber}"]`).should('exist');
+      // need to wait for opensearch to index the new practitioner
+      retry(() => {
+        cy.get('[data-testid="practitioner-search-by-name-button"]').click();
+
+        /** Assert */
+        return assertExists(`[data-testid="practitioner-row-${barNumber}"]`);
+      });
+
       cy.get('[data-testid="clear-practitioner-search"]').click();
       cy.get(`[data-testid="practitioner-row-${barNumber}"]`).should(
         'not.exist',
