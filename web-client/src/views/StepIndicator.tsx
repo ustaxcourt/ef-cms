@@ -61,7 +61,7 @@ export const StepIndicator = connect(
                     'justify-content-center',
                   )}
                 >
-                  {currentStep + 1}
+                  {currentStep}
                 </span>
                 <span
                   className={classNames(
