@@ -11,15 +11,19 @@ import React from 'react';
 export const UpdatedFilePetitionStep4 = connect(
   {
     form: state.form,
+    petitionGenerationLiveValidationSequence:
+      sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep4Sequence:
       sequences.updatedFilePetitionCompleteStep4Sequence,
     updatedFilePetitionGoBackAStepSequence:
       sequences.updatedFilePetitionGoBackAStepSequence,
+
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep4({
     form,
+    petitionGenerationLiveValidationSequence,
     updatedFilePetitionCompleteStep4Sequence,
     updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
@@ -105,6 +109,12 @@ export const UpdatedFilePetitionStep4 = connect(
                 procedureType={form.procedureType}
                 showDefaultOption={true}
                 value={form.preferredTrialCity || ''}
+                onBlur={() => {
+                  petitionGenerationLiveValidationSequence({
+                    step: 4,
+                    validationKey: ['preferredTrialCity'],
+                  });
+                }}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
