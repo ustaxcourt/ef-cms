@@ -21,12 +21,12 @@ export const UpdatedFilePetition = connect(
         <BigHeader text="Create a Case" />
         <section className="usa-section grid-container">
           <StepIndicator />
-          {currentStep === 0 && <UpdatedFilePetitionStep1 />}
-          {currentStep === 1 && <UpdatedFilePetitionStep2 />}
-          {currentStep === 2 && <UpdatedFilePetitionStep3 />}
-          {currentStep === 3 && <UpdatedFilePetitionStep4 />}
-          {currentStep === 4 && <UpdatedFilePetitionStep5 />}
-          {currentStep === 5 && <UpdatedFilePetitionStep6 />}
+          {currentStep === 1 && <UpdatedFilePetitionStep1 />}
+          {currentStep === 2 && <UpdatedFilePetitionStep2 />}
+          {currentStep === 3 && <UpdatedFilePetitionStep3 />}
+          {currentStep === 4 && <UpdatedFilePetitionStep4 />}
+          {currentStep === 5 && <UpdatedFilePetitionStep5 />}
+          {currentStep === 6 && <UpdatedFilePetitionStep6 />}
         </section>
       </>
     );
