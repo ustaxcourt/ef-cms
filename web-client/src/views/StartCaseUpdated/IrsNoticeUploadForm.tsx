@@ -103,7 +103,6 @@ export const IrsNoticeUploadForm = connect(
             value={caseType}
             onBlurSequence={() => {
               petitionGenerationLiveValidationSequence({
-                step: 3,
                 validationKey: [
                   'irsNotices',
                   { property: 'index', value: index },
@@ -130,7 +129,6 @@ export const IrsNoticeUploadForm = connect(
                 value={taxYear}
                 onBlur={() => {
                   petitionGenerationLiveValidationSequence({
-                    step: 3,
                     validationKey: [
                       'irsNotices',
                       { property: 'index', value: index },
@@ -157,7 +155,6 @@ export const IrsNoticeUploadForm = connect(
                 maxDate={todayDate}
                 onBlur={() => {
                   petitionGenerationLiveValidationSequence({
-                    step: 3,
                     validationKey: [
                       'irsNotices',
                       { property: 'index', value: index },
@@ -194,6 +191,15 @@ export const IrsNoticeUploadForm = connect(
                   name="taxYear"
                   type="text"
                   value={taxYear}
+                  onBlur={() => {
+                    petitionGenerationLiveValidationSequence({
+                      validationKey: [
+                        'irsNotices',
+                        { property: 'index', value: index },
+                        'taxYear',
+                      ],
+                    });
+                  }}
                   onChange={e => {
                     updateIrsNoticeIndexPropertySequence({
                       key: index.toString(),
@@ -211,6 +217,15 @@ export const IrsNoticeUploadForm = connect(
                   id="notice-issued-date"
                   label="Date IRS issued the notice"
                   maxDate={todayDate}
+                  onBlur={() => {
+                    petitionGenerationLiveValidationSequence({
+                      validationKey: [
+                        'irsNotices',
+                        { property: 'index', value: index },
+                        'noticeIssuedDate',
+                      ],
+                    });
+                  }}
                   onChange={e => {
                     updateIrsNoticeIndexPropertySequence({
                       key: index.toString(),
@@ -219,7 +234,7 @@ export const IrsNoticeUploadForm = connect(
                       value: e.target.value,
                     });
 
-                    validationError.noticeIssuedDate = '';
+                    delete validationError.noticeIssuedDate;
                   }}
                 />
               </div>
