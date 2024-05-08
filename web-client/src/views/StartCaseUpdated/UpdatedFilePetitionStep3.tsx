@@ -131,7 +131,7 @@ export const UpdatedFilePetitionStep3 = connect(
                     </div>
                   </span>
                   <div className="tablet:grid-col-12">
-                    <div className="card">
+                    <div className="card" style={{ maxWidth: 'fit-content' }}>
                       <div className="content-wrapper usa-checkbox">
                         <input
                           aria-describedby="redaction-acknowledgement-label"

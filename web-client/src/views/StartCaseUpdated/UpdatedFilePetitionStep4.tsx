@@ -29,14 +29,21 @@ export const UpdatedFilePetitionStep4 = connect(
       <>
         <ErrorNotification />
         <div className="margin-bottom-5">
-          <p className="margin-bottom-3 margin-top-0 required-statement">
+          <p className="margin-top-0 required-statement">
             *All fields required
           </p>
-          <h2>Case procedure</h2>
-          <p className="maxw-none">
+          <h2 style={{ marginBottom: '8px' }}>Case procedure</h2>
+          <div
+            className="maxw-none"
+            style={{
+              fontSize: '18px',
+              lineHeight: '1.5',
+              paddingBottom: '10px',
+            }}
+          >
             If your case qualifies, you may choose to have it handled as a small
             tax case. The Court handles small tax cases differently.
-          </p>
+          </div>
           <Button
             link
             className="usa-link--external text-left mobile-text-wrap"
@@ -69,7 +76,9 @@ export const UpdatedFilePetitionStep4 = connect(
           </div>
           {form.procedureType && (
             <div>
-              <h2>U.S. Tax Court trial locations</h2>
+              <h2 style={{ marginBottom: '8px' }}>
+                U.S. Tax Court trial locations
+              </h2>
               <div
                 className="max-width-900"
                 style={{
@@ -78,9 +87,9 @@ export const UpdatedFilePetitionStep4 = connect(
                   paddingBottom: '10px',
                 }}
               >
-                This is your preferred location where your case may be heard it
-                goes to trial. Trial locations are unavailable in the following
-                states: DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY.{' '}
+                This is your preferred location where your case may be heard if
+                it goes to trial. Trial locations are unavailable in the
+                following states: DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY.{' '}
                 <span>
                   {' '}
                   <Button
