@@ -18,8 +18,9 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     form: state.form,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
+    petitionGenerationLiveValidationSequence:
+      sequences.petitionGenerationLiveValidationSequence,
     startCaseHelper: state.startCaseHelper,
-    step3LiveValdationSequence: sequences.step3LiveValdationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep3Sequence:
       sequences.updatedFilePetitionCompleteStep3Sequence,
@@ -32,8 +33,8 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper,
     form,
     irsNoticeUploadFormInfo,
+    petitionGenerationLiveValidationSequence,
     startCaseHelper,
-    step3LiveValdationSequence,
     updatedFilePetitionCompleteStep3Sequence,
     updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
@@ -185,7 +186,8 @@ export const UpdatedFilePetitionStep3 = connect(
                 IRS?"
                 value={form.caseType}
                 onBlurSequence={() => {
-                  step3LiveValdationSequence({
+                  petitionGenerationLiveValidationSequence({
+                    step: 3,
                     validationKey: ['caseType'],
                   });
                 }}
