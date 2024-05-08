@@ -11,6 +11,8 @@ export const PetitionFormResponse = connect(
     count: props.count,
     form: state.form,
     id: props.id,
+    petitionGenerationLiveValidationSequence:
+      sequences.petitionGenerationLiveValidationSequence,
     removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
     textName: props.textName,
     updatePetitionFormValueSequence: sequences.updatePetitionFormValueSequence,
@@ -20,15 +22,18 @@ export const PetitionFormResponse = connect(
     count,
     form,
     id,
+    petitionGenerationLiveValidationSequence,
     removeFactOrReasonSequence,
     textName,
     updatePetitionFormValueSequence,
     validationErrors,
   }) {
+    const KEY = `${textName}[${count}]`;
+
     return (
       <FormGroup
         className="autogenerate-petition-form"
-        errorText={validationErrors[`${textName}[${count}]`]}
+        errorText={validationErrors[KEY]}
       >
         <div className="fact-or-reason">
           {/* TODO: move to scss */}
@@ -48,12 +53,19 @@ export const PetitionFormResponse = connect(
               name={textName}
               // style={{ verticalAlign: 'top' }}
               value={form[textName][count] || ''}
+              onBlur={() => {
+                petitionGenerationLiveValidationSequence({
+                  step: 1,
+                  validationKey: [KEY],
+                });
+              }}
               onChange={e => {
                 updatePetitionFormValueSequence({
                   index: count,
                   key: e.target.name,
                   value: e.target.value,
                 });
+                delete validationErrors[KEY];
               }}
             />
 
