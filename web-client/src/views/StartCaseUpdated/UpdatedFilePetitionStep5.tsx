@@ -38,13 +38,13 @@ export const UpdatedFilePetitionStep5 = connect(
             dismissible={false}
             scrollToTop={false}
           />
-          <p className="margin-bottom-0">
+          <div className="margin-bottom-0" style={{ fontSize: '18px' }}>
             Download and fill out the form if you haven&apos;t already done so:
-          </p>
+          </div>
           <Button
             link
-            className="usa-link--external text-left mobile-text-wrap"
-            href="https://ustaxcourt.gov/case_procedure.html"
+            className="usa-link--external text-left mobile-text-wrap font-weight-600"
+            href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
             icon="file-pdf"
             iconColor="blue"
             marginDirection="bottom"
@@ -88,7 +88,7 @@ export const UpdatedFilePetitionStep5 = connect(
                 id="stin-file"
                 name="stinFile"
                 updateFormValueSequence="updateStartCaseFormValueSequence"
-                validationSequence="validateStartCaseWizardSequence"
+                // validationSequence="validateStartCaseWizardSequence"
               />
             </FormGroup>
           </div>
