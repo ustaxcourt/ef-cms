@@ -1,5 +1,7 @@
-export const determineStepPathAction = ({ path, props }: ActionProps) => {
-  const { step } = props;
-  const pathName = `step${step}`;
+import { state } from '@web-client/presenter/app.cerebral';
+
+export const determineStepPathAction = ({ get, path }: ActionProps) => {
+  const { currentStep } = get(state.stepIndicatorInfo);
+  const pathName = `step${currentStep}`;
   return path[pathName]();
 };

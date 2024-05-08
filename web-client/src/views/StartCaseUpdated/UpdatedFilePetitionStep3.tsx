@@ -99,6 +99,7 @@ export const UpdatedFilePetitionStep3 = connect(
                   const validationError = irsNotices
                     ? irsNotices.find(errors => errors.index === index) || {}
                     : {};
+
                   return (
                     <>
                       <IrsNoticeUploadForm
@@ -187,7 +188,6 @@ export const UpdatedFilePetitionStep3 = connect(
                 value={form.caseType}
                 onBlurSequence={() => {
                   petitionGenerationLiveValidationSequence({
-                    step: 3,
                     validationKey: ['caseType'],
                   });
                 }}

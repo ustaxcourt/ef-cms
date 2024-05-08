@@ -111,7 +111,6 @@ export const UpdatedFilePetitionStep4 = connect(
                 value={form.preferredTrialCity || ''}
                 onBlur={() => {
                   petitionGenerationLiveValidationSequence({
-                    step: 4,
                     validationKey: ['preferredTrialCity'],
                   });
                 }}
