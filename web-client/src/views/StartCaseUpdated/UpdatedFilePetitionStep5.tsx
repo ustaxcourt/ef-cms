@@ -38,7 +38,7 @@ export const UpdatedFilePetitionStep5 = connect(
             dismissible={false}
             scrollToTop={false}
           />
-          <div className="margin-bottom-0" style={{ fontSize: '18px' }}>
+          <div style={{ fontSize: '18px', marginBottom: '3px' }}>
             Download and fill out the form if you haven&apos;t already done so:
           </div>
           <Button

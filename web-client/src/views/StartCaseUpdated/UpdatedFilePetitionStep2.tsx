@@ -44,7 +44,7 @@ export const UpdatedFilePetitionStep2 = connect(
     return (
       <>
         <ErrorNotification />
-        <p className="margin-bottom-3 margin-top-0 required-statement">
+        <p className="margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <h2>I am filing this petition on behalf of...</h2>
