@@ -129,6 +129,15 @@ export const IrsNoticeUploadForm = connect(
                 name="firmName"
                 type="text"
                 value={taxYear}
+                onBlur={() => {
+                  step3LiveValdationSequence({
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'taxYear',
+                    ],
+                  });
+                }}
                 onChange={e => {
                   updateIrsNoticeIndexPropertySequence({
                     key: index.toString(),
@@ -146,6 +155,15 @@ export const IrsNoticeUploadForm = connect(
                 id="notice-issued-date"
                 label="Date IRS issued the notice"
                 maxDate={todayDate}
+                onBlur={() => {
+                  step3LiveValdationSequence({
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'noticeIssuedDate',
+                    ],
+                  });
+                }}
                 onChange={e => {
                   updateIrsNoticeIndexPropertySequence({
                     key: index.toString(),
