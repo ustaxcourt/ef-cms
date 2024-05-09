@@ -120,8 +120,7 @@ export const Petition = ({
             {contactPrimary.address2 && <div>{contactPrimary.address2}</div>}
             {contactPrimary.address3 && <div>{contactPrimary.address3}</div>}
             <div>
-              {contactPrimary.city},{''}
-              {contactPrimary.state}
+              {contactPrimary.city}, {contactPrimary.state}{' '}
               {contactPrimary.postalCode}
             </div>
             <div>{contactPrimary.phone}</div>
