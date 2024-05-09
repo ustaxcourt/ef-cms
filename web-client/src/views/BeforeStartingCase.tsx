@@ -192,7 +192,7 @@ export const BeforeStartingCase = connect(
               may be dismissed for lack of jurisdiction.
             </div>
           </div>
-          <div className="grid-row grid-gap grid-col-10 margin-top-20">
+          <div className="grid-row grid-gap margin-top-20">
             <Accordion
               className="petitioner-accordion-title"
               headingLevel="3"
