@@ -12,7 +12,7 @@ export type PractitionersByName = {
       admissionsStatus: string;
       barNumber: string;
       contact: {
-        state: string | undefined;
+        state?: string;
       };
       name: string;
       practiceType: string;
