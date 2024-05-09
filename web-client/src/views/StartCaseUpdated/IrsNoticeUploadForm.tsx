@@ -19,6 +19,8 @@ export const IrsNoticeUploadForm = connect(
     caseType: props.caseType,
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     constants: state.constants,
+    deleteValidationErrorMessageSequence:
+      sequences.deleteValidationErrorMessageSequence,
     file: props.file,
     index: props.index,
     noticeIssuedDate: props.noticeIssuedDate,
@@ -37,6 +39,7 @@ export const IrsNoticeUploadForm = connect(
     caseTypeDescriptionHelper,
     constants,
     DATE_FORMATS,
+    deleteValidationErrorMessageSequence,
     file,
     index,
     noticeIssuedDate,
@@ -115,7 +118,14 @@ export const IrsNoticeUploadForm = connect(
             }}
             onChange={info => {
               updateIrsNoticeIndexPropertySequence(info);
-              delete validationError.caseType;
+
+              deleteValidationErrorMessageSequence({
+                validationKey: [
+                  'irsNotices',
+                  { property: 'index', value: index },
+                  'caseType',
+                ],
+              });
             }}
           />
           <Mobile>
@@ -145,7 +155,14 @@ export const IrsNoticeUploadForm = connect(
                     property: 'taxYear',
                     value: e.target.value,
                   });
-                  delete validationError.taxYear;
+
+                  deleteValidationErrorMessageSequence({
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'taxYear',
+                    ],
+                  });
                 }}
               />
             </FormGroup>{' '}
@@ -173,7 +190,13 @@ export const IrsNoticeUploadForm = connect(
                     value: e.target.value,
                   });
 
-                  validationError.noticeIssuedDate = '';
+                  deleteValidationErrorMessageSequence({
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'noticeIssuedDate',
+                    ],
+                  });
                 }}
               />
             </div>
@@ -209,7 +232,14 @@ export const IrsNoticeUploadForm = connect(
                       property: 'taxYear',
                       value: e.target.value,
                     });
-                    delete validationError.taxYear;
+
+                    deleteValidationErrorMessageSequence({
+                      validationKey: [
+                        'irsNotices',
+                        { property: 'index', value: index },
+                        'taxYear',
+                      ],
+                    });
                   }}
                 />
               </FormGroup>{' '}
@@ -237,7 +267,13 @@ export const IrsNoticeUploadForm = connect(
                       value: e.target.value,
                     });
 
-                    delete validationError.noticeIssuedDate;
+                    deleteValidationErrorMessageSequence({
+                      validationKey: [
+                        'irsNotices',
+                        { property: 'index', value: index },
+                        'noticeIssuedDate',
+                      ],
+                    });
                   }}
                 />
               </div>

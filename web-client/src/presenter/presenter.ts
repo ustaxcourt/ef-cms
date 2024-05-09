@@ -101,6 +101,7 @@ import { deletePractitionerDocumentSequence } from './sequences/deletePractition
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
 import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
+import { deleteValidationErrorMessageSequence } from '@web-client/presenter/sequences/deleteValidationErrorMessageSequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { disengageAppMaintenanceSequence } from './sequences/disengageAppMaintenanceSequence';
 import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/sequences/dismissAddEditCaseWorksheetModalSequence';
@@ -746,6 +747,8 @@ export const presenterSequences = {
   deleteUploadedPdfSequence: deleteUploadedPdfSequence as unknown as Function,
   deleteUserCaseNoteFromWorkingCopySequence:
     deleteUserCaseNoteFromWorkingCopySequence as unknown as Function,
+  deleteValidationErrorMessageSequence:
+    deleteValidationErrorMessageSequence as unknown as Function,
   deleteWorkingCopySessionNoteSequence:
     deleteWorkingCopySessionNoteSequence as unknown as Function,
   disengageAppMaintenanceSequence:
