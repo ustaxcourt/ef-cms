@@ -1,18 +1,16 @@
 import React from 'react';
 
-export const DocketHeader = ({
+export const PetitionDocketHeader = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
-  documentTitle,
 }: {
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  documentTitle: string;
 }) => {
   return (
-    <div id="docket-header">
+    <div id="petition-header">
       <div className="case-information">
         <div id="caption">
           <div id="caption-title">{caseTitle}</div>
@@ -21,11 +19,10 @@ export const DocketHeader = ({
           <div id="caption-commissioner">Commissioner of Internal Revenue</div>
           <div id="caption-respondent">Respondent</div>
         </div>
-        <div id="docket-number">Docket No. {docketNumberWithSuffix}</div>
+        <div id="electronically-filed">Electronically Filed</div>
+        <div id="temp-docket-number">Docket No. {docketNumberWithSuffix}</div>
         <div className="clear"></div>
-        {documentTitle && (
-          <h3 className="document-title underline">{documentTitle}</h3>
-        )}
+        <h3 className="document-title">PETITION</h3>
       </div>
     </div>
   );
