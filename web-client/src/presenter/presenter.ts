@@ -314,6 +314,7 @@ import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeC
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
+import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
@@ -405,8 +406,6 @@ import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { sortTableSequence } from './sequences/sortTableSequence';
 import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
-import { step2LiveValdationSequence } from '@web-client/presenter/sequences/step2LiveValdationSequence';
-import { step3LiveValdationSequence } from '@web-client/presenter/sequences/step3LiveValdationSequence';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
@@ -1119,6 +1118,8 @@ export const presenterSequences = {
     openUpdateCaseModalSequence as unknown as Function,
   paperServiceCompleteSequence:
     paperServiceCompleteSequence as unknown as Function,
+  petitionGenerationLiveValidationSequence:
+    petitionGenerationLiveValidationSequence as unknown as Function,
   printPaperServiceForTrialCompleteSequence:
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
@@ -1261,8 +1262,6 @@ export const presenterSequences = {
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
-  step2LiveValdationSequence: step2LiveValdationSequence as unknown as Function,
-  step3LiveValdationSequence: step3LiveValdationSequence as unknown as Function,
   strikeDocketEntrySequence: strikeDocketEntrySequence as unknown as Function,
   submitAddConsolidatedCaseSequence:
     submitAddConsolidatedCaseSequence as unknown as Function,

@@ -15,8 +15,6 @@
     }
 
     .fact-or-reason {
-      display: inline-block;
-
       textarea {
         display: inline-block;
         width: 55rem;
@@ -27,6 +25,14 @@
     
     .reason-button {
       margin-left: 1rem;
+    }
+
+    .usa-form-group {
+      margin-bottom: 15px;
+    }
+
+    .usa-button {
+      padding: 0;
     }
   }
 }

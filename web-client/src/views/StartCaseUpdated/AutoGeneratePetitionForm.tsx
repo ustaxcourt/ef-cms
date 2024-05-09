@@ -24,7 +24,7 @@ export const AutoGeneratePetitionForm = connect(
             (please add each reason separately):
           </label>
 
-          <div className="margin-bottom-2">
+          <div className="margin-bottom-2-rem">
             <ol>
               {form.petitionReasons &&
                 form.petitionReasons.map((reason, index) => {
@@ -57,7 +57,7 @@ export const AutoGeneratePetitionForm = connect(
             2. State the facts upon which you rely (please add each fact
             separately):
           </label>
-          <div className="margin-bottom-2">
+          <div>
             <ol>
               {form.petitionFacts &&
                 form.petitionFacts.map((fact, index) => {
@@ -71,6 +71,8 @@ export const AutoGeneratePetitionForm = connect(
                   );
                 })}
             </ol>
+          </div>
+          <div>
             <Button
               link
               icon="plus"

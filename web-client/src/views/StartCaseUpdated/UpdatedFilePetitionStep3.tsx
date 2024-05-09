@@ -18,6 +18,8 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     form: state.form,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
+    petitionGenerationLiveValidationSequence:
+      sequences.petitionGenerationLiveValidationSequence,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep3Sequence:
@@ -31,6 +33,7 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper,
     form,
     irsNoticeUploadFormInfo,
+    petitionGenerationLiveValidationSequence,
     startCaseHelper,
     updatedFilePetitionCompleteStep3Sequence,
     updatedFilePetitionGoBackAStepSequence,
@@ -96,6 +99,7 @@ export const UpdatedFilePetitionStep3 = connect(
                   const validationError = irsNotices
                     ? irsNotices.find(errors => errors.index === index) || {}
                     : {};
+
                   return (
                     <>
                       <IrsNoticeUploadForm
@@ -131,7 +135,7 @@ export const UpdatedFilePetitionStep3 = connect(
                     </div>
                   </span>
                   <div className="tablet:grid-col-12">
-                    <div className="card">
+                    <div className="card" style={{ maxWidth: 'fit-content' }}>
                       <div className="content-wrapper usa-checkbox">
                         <input
                           aria-describedby="redaction-acknowledgement-label"
@@ -182,6 +186,11 @@ export const UpdatedFilePetitionStep3 = connect(
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
                 value={form.caseType}
+                onBlurSequence={() => {
+                  petitionGenerationLiveValidationSequence({
+                    validationKey: ['caseType'],
+                  });
+                }}
                 onChange={info => {
                   updateFormValueSequence(info);
                   delete validationErrors.caseType;

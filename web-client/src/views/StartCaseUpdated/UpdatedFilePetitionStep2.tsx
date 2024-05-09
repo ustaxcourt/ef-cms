@@ -44,7 +44,7 @@ export const UpdatedFilePetitionStep2 = connect(
     return (
       <>
         <ErrorNotification />
-        <p className="margin-bottom-3 margin-top-0 required-statement">
+        <p className="margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <h2>I am filing this petition on behalf of...</h2>
@@ -84,7 +84,7 @@ export const UpdatedFilePetitionStep2 = connect(
             bind="form"
             nameLabel="Full Name"
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
-            onBlur="step2LiveValdationSequence"
+            onBlur="petitionGenerationLiveValidationSequence"
             onChange="updateFormValueUpdatedSequence"
           />
         )}
@@ -95,7 +95,7 @@ export const UpdatedFilePetitionStep2 = connect(
               bind="form"
               nameLabel="Full Name"
               showPlaceOfLegalResidence={showPlaceOfLegalResidence}
-              onBlur="step2LiveValdationSequence"
+              onBlur="petitionGenerationLiveValidationSequence"
               onChange="updateFormValueUpdatedSequence"
             />
             <PetitionerAndSpouseInfo
@@ -267,7 +267,7 @@ function Spouse({
           nameLabel="Full name of spouse"
           showPlaceOfLegalResidence={true}
           showSameAsPrimaryCheckbox={true}
-          onBlur="step2LiveValdationSequence"
+          onBlur="petitionGenerationLiveValidationSequence"
           onChange="updateFormValueUpdatedSequence"
         />
       )}
@@ -283,7 +283,7 @@ function DeceasedSpouse() {
       nameLabel="Full name of deceased spouse"
       showPlaceOfLegalResidence={true}
       showSameAsPrimaryCheckbox={true}
-      onBlur="step2LiveValdationSequence"
+      onBlur="petitionGenerationLiveValidationSequence"
       onChange="updateFormValueUpdatedSequence"
     />
   );
@@ -346,7 +346,7 @@ function BusinessInfo({
             secondaryLabel={businessFieldNames.secondary}
             secondaryLabelNote={businessFieldNames.secondaryNote}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
-            onBlur="step2LiveValdationSequence"
+            onBlur="petitionGenerationLiveValidationSequence"
             onChange="updateFormValueUpdatedSequence"
           />
           <CorporateDisclosureUpload
@@ -512,7 +512,7 @@ function OtherContactInformation({
       showPlaceOfLegalResidence={showPlaceOfLegalResidence}
       titleLabel={otherContactNameLabel.titleLabel}
       titleLabelNote={otherContactNameLabel.titleLabelNote}
-      onBlur="step2LiveValdationSequence"
+      onBlur="petitionGenerationLiveValidationSequence"
       onChange="updateFormValueUpdatedSequence"
     />
   );
