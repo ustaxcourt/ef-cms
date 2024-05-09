@@ -15,7 +15,7 @@ export function createAndServePaperFiling(
   cy.get('[data-testid="upload-pdf-button"]').click();
 
   cy.get('input#primaryDocumentFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
 
   cy.get('[data-testid="save-and-serve"]').click();

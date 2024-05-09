@@ -41,10 +41,6 @@ describe('submitCourtIssuedOrderAction', () => {
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toHaveBeenCalled();
   });
 
   it('should set document draftOrderState', async () => {

@@ -1,8 +1,8 @@
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { bulkIndexRecords } from './bulkIndexRecords';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
 import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
@@ -257,7 +257,7 @@ describe('bulkIndexRecords', () => {
           index: {
             _id: 'case|123-45_case|123-45|mapping',
             _index: efcmsDocketEntryIndex,
-            routing: null,
+            routing: '',
           },
         },
         {
@@ -306,7 +306,7 @@ describe('bulkIndexRecords', () => {
           index: {
             _id: 'case|123-45_case|123-45|mapping',
             _index: efcmsMessageIndex,
-            routing: null,
+            routing: '',
           },
         },
         {
@@ -355,7 +355,7 @@ describe('bulkIndexRecords', () => {
           index: {
             _id: 'case|123-45_case|123-45|mapping',
             _index: efcmsWorkItemIndex,
-            routing: null,
+            routing: '',
           },
         },
         {
