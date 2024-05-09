@@ -99,7 +99,7 @@ export const Petition = ({
             </li>
           </ol>
         </div>
-        <div>
+        <div className="privacy-notice">
           PRIVACY NOTICE: Form 4 (Statement of Taxpayer Identification Number)
           will not be part of the Court’s public files. All other documents
           filed with the Court, including this petition and any IRS Notice that
@@ -108,8 +108,8 @@ export const Petition = ({
           cover) from this petition, any enclosed IRS Notice, and any other
           document (other than Form 4) your taxpayer identification number
           (e.g., your Social Security number) and certain other confidential
-          information as specified in the Tax Court’s “Notice Regarding Privacy
-          and Public Access to Case Files,” available at{' '}
+          information as specified in the Tax Court’s &quot;Notice Regarding
+          Privacy and Public Access to Case Files,&quot; available at{' '}
           <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>.
         </div>
         <div>
@@ -142,8 +142,7 @@ export const Petition = ({
           {contactSecondary.address2 && <div>{contactSecondary.address2}</div>}
           {contactSecondary.address3 && <div>{contactSecondary.address3}</div>}
           <div>
-            {contactSecondary.city},{''}
-            {contactSecondary.state}
+            {contactSecondary.city}, {contactSecondary.state}{' '}
             {contactSecondary.postalCode}
           </div>
           <div>
