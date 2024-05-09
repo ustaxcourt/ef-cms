@@ -27,7 +27,6 @@ export const messageDocumentHelper = (
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
-    UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
@@ -120,7 +119,6 @@ export const messageDocumentHelper = (
     documentRequiresSignature && !documentIsSigned && !documentIsArchived;
 
   const showNotServed = getShowNotServedForDocument({
-    UNSERVABLE_EVENT_CODES,
     caseDetail,
     docketEntryId: caseDocument.docketEntryId,
     draftDocuments,

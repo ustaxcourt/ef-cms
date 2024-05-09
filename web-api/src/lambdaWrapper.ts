@@ -1,5 +1,6 @@
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -10,13 +11,25 @@ export const headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-export const lambdaWrapper = (lambda, options = {}) => {
+export const CHUNK_SIZE = 4000;
+
+const defaultOptions: {
+  isAsync?: boolean;
+  isAsyncSync?: boolean;
+} = {};
+
+export const lambdaWrapper = (
+  lambda,
+  options = defaultOptions,
+  applicationContext?: IApplicationContext,
+) => {
   return async (req, res) => {
     // 'shouldMimicApiGatewayAsyncEndpoint' flag is set to mimic how API gateway async endpoints work locally.
     // When an async endpoint invoked in API gateway, the service immediately returns a 204 response with no body.
     // This behavior causes discrepancies between how these endpoints behave locally vs in a deployed AWS environment.
     const shouldMimicApiGatewayAsyncEndpoint =
-      options.isAsync && process.env.NODE_ENV != 'production';
+      (options.isAsync || options.isAsyncSync) &&
+      process.env.NODE_ENV != 'production';
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
@@ -43,6 +56,35 @@ export const lambdaWrapper = (lambda, options = {}) => {
       body: JSON.stringify(req.body),
       logger: req.locals.logger,
     });
+
+    const { asyncsyncid } = req.headers;
+
+    if (options.isAsyncSync && asyncsyncid && applicationContext) {
+      try {
+        const user = getUserFromAuthHeader(event);
+        const fullResponse = {
+          ...response,
+          body: response.body ? JSON.parse(response.body) : response.body,
+        };
+        const responseString = JSON.stringify(fullResponse);
+        const chunks = chunkString(responseString);
+        const totalNumberOfChunks = chunks.length;
+        for (let index = 0; index < totalNumberOfChunks; index++) {
+          await applicationContext
+            .getNotificationGateway()
+            .saveRequestResponse({
+              applicationContext,
+              chunk: chunks[index],
+              index,
+              requestId: asyncsyncid,
+              totalNumberOfChunks,
+              userId: user.userId,
+            });
+        }
+      } catch (errorAsyncSync) {
+        console.log('Error: async sync if condition', errorAsyncSync);
+      }
+    }
 
     if (shouldMimicApiGatewayAsyncEndpoint) {
       // api gateway async endpoints do not care about the headers returned after we
@@ -74,3 +116,14 @@ export const lambdaWrapper = (lambda, options = {}) => {
     }
   };
 };
+
+function chunkString(str) {
+  const chunkedArray: string[] = [];
+  let index = 0;
+  while (index < str.length) {
+    chunkedArray.push(str.substring(index, index + CHUNK_SIZE));
+    index += CHUNK_SIZE;
+  }
+
+  return chunkedArray;
+}

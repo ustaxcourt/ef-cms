@@ -1,9 +1,7 @@
 import {
-  AuthFlowType,
   ChallengeNameType,
   CodeMismatchException,
   ExpiredCodeException,
-  InitiateAuthResponse,
   RespondToAuthChallengeResponse,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
@@ -37,7 +35,7 @@ describe('changePasswordInteractor', () => {
   });
 
   describe('when the user is attempting to log in with a temporary password', () => {
-    let mockInitiateAuthResponse: InitiateAuthResponse;
+    let mockInitiateAuthResponse;
     let mockRespondToAuthChallengeResponse: RespondToAuthChallengeResponse;
     let mockUserWithPendingEmail: UserRecord;
 
@@ -66,7 +64,7 @@ describe('changePasswordInteractor', () => {
       };
 
       applicationContext
-        .getCognito()
+        .getUserGateway()
         .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
 
       applicationContext
@@ -81,12 +79,11 @@ describe('changePasswordInteractor', () => {
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {
-      mockInitiateAuthResponse = {
-        AuthenticationResult: {},
-      };
       applicationContext
-        .getCognito()
-        .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
+        .getUserGateway()
+        .changePassword.mockRejectedValue(
+          new Error('User is not in `FORCE_CHANGE_PASSWORD` state'),
+        );
 
       await expect(
         changePasswordInteractor(applicationContext, {
@@ -96,57 +93,17 @@ describe('changePasswordInteractor', () => {
           tempPassword: mockPassword,
         }),
       ).rejects.toThrow('User is not in `FORCE_CHANGE_PASSWORD` state');
-
-      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
-        {
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: mockPassword,
-            USERNAME: mockEmail,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        },
-      );
-    });
-
-    it('should update the user`s password in persistence when they are in NEW_PASSWORD_REQUIRED state and their change password request is valid', async () => {
-      await changePasswordInteractor(applicationContext, {
-        confirmPassword: mockPassword,
-        email: mockEmail,
-        password: mockPassword,
-        tempPassword: mockPassword,
-      });
-
-      expect(
-        applicationContext.getCognito().respondToAuthChallenge,
-      ).toHaveBeenCalledWith({
-        ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
-        ChallengeResponses: {
-          NEW_PASSWORD: mockPassword,
-          USERNAME: mockEmail,
-        },
-        ClientId: applicationContext.environment.cognitoClientId,
-        Session: mockInitiateAuthResponse.Session,
-      });
-    });
-
-    it('should throw an error when updating the user`s password in persistence fails for some reason and therefore does NOT return their access tokens', async () => {
-      applicationContext.getCognito().respondToAuthChallenge.mockResolvedValue({
-        // intentionally empty response
-      });
-
-      await expect(
-        changePasswordInteractor(applicationContext, {
-          confirmPassword: mockPassword,
-          email: mockEmail,
-          password: mockPassword,
-          tempPassword: mockPassword,
-        }),
-      ).rejects.toThrow('Unsuccessful password change');
     });
 
     describe('and the user has a pending email', () => {
       it('should update the user`s email in persistence and kick off a worker that will generate notices for all their associated cases when the user is NOT a private/irs/or inactive practitioner', async () => {
+        applicationContext.getUserGateway().changePassword.mockResolvedValue({
+          accessToken: 'dbc7752e-4e86-4ceb-9fa6-43aac18b34a1',
+          idToken:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206dXNlcklkIjoiMTIzNDU2Nzg5MCIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.ASm6CklGr-UD0IFXoqRG7ng8JoXINDTVEsG3BxNU37g',
+          refreshToken: '0bc11bcb-efa3-44c6-9880-56210bcad9e2',
+        });
+
         await changePasswordInteractor(applicationContext, {
           confirmPassword: mockPassword,
           email: mockEmail,
@@ -242,7 +199,7 @@ describe('changePasswordInteractor', () => {
   });
 
   describe('when the user is attempting to log in with a forgot password code', () => {
-    let mockInitiateAuthResponse: InitiateAuthResponse;
+    let mockInitiateAuthResponse;
     let mockUser: {
       userId: string;
       email: string;
@@ -263,11 +220,9 @@ describe('changePasswordInteractor', () => {
       };
 
       mockInitiateAuthResponse = {
-        AuthenticationResult: {
-          AccessToken: mockToken,
-          IdToken: mockToken,
-          RefreshToken: mockToken,
-        },
+        accessToken: mockToken,
+        idToken: mockToken,
+        refreshToken: mockToken,
       };
 
       applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
@@ -279,7 +234,7 @@ describe('changePasswordInteractor', () => {
       });
 
       applicationContext
-        .getCognito()
+        .getUserGateway()
         .initiateAuth.mockResolvedValue(mockInitiateAuthResponse);
     });
 
@@ -298,41 +253,12 @@ describe('changePasswordInteractor', () => {
       ).rejects.toThrow(`User not found with email: ${mockEmail}`);
     });
 
-    it('should call confirmForgotPassword and return the user`s access tokens', async () => {
-      const result = await changePasswordInteractor(applicationContext, {
-        code: mockCode,
-        confirmPassword: mockPassword,
-        email: mockEmail,
-        password: mockPassword,
-      });
-
-      expect(
-        applicationContext.getCognito().confirmForgotPassword,
-      ).toHaveBeenCalledWith({
-        ClientId: applicationContext.environment.cognitoClientId,
-        ConfirmationCode: mockCode,
-        Password: mockPassword,
-        Username: mockEmail,
-      });
-      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
-        {
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: mockPassword,
-            USERNAME: mockEmail,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        },
-      );
-      expect(result).toEqual({
-        accessToken: mockToken,
-        idToken: mockToken,
-        refreshToken: mockToken,
-      });
-    });
-
-    it('should throw an error if initiate auth does not return the correct tokens', async () => {
-      applicationContext.getCognito().initiateAuth.mockResolvedValue({});
+    it('should throw an error when initiate auth does not return the correct tokens', async () => {
+      const initiateAuthError = new Error('InitiateAuthError');
+      initiateAuthError.name = 'InitiateAuthError';
+      applicationContext
+        .getUserGateway()
+        .changePassword.mockRejectedValue(initiateAuthError);
 
       await expect(
         changePasswordInteractor(applicationContext, {
@@ -342,23 +268,12 @@ describe('changePasswordInteractor', () => {
           password: mockPassword,
         }),
       ).rejects.toThrow(`Unable to change password for email: ${mockEmail}`);
-
-      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
-        {
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: mockPassword,
-            USERNAME: mockEmail,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        },
-      );
     });
 
-    it('should throw an InvalidRequest error if initiateAuth returns a CodeMismatchException', async () => {
+    it('should throw an InvalidRequest error when initiateAuth returns a CodeMismatchException', async () => {
       applicationContext
-        .getCognito()
-        .initiateAuth.mockRejectedValueOnce(
+        .getUserGateway()
+        .changePassword.mockRejectedValue(
           new CodeMismatchException({ $metadata: {}, message: '' }),
         );
 
@@ -370,23 +285,12 @@ describe('changePasswordInteractor', () => {
           password: mockPassword,
         }),
       ).rejects.toThrow('Forgot password code is expired or incorrect');
-
-      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
-        {
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: mockPassword,
-            USERNAME: mockEmail,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        },
-      );
     });
 
-    it('should throw an InvalidRequest error if initiateAuth returns a ExpiredCodeException', async () => {
+    it('should throw and error when the change password code has expired', async () => {
       applicationContext
-        .getCognito()
-        .initiateAuth.mockRejectedValueOnce(
+        .getUserGateway()
+        .changePassword.mockRejectedValue(
           new ExpiredCodeException({ $metadata: {}, message: '' }),
         );
 
@@ -398,17 +302,27 @@ describe('changePasswordInteractor', () => {
           password: mockPassword,
         }),
       ).rejects.toThrow('Forgot password code is expired or incorrect');
+    });
 
-      expect(applicationContext.getCognito().initiateAuth).toHaveBeenCalledWith(
-        {
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: mockPassword,
-            USERNAME: mockEmail,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        },
-      );
+    it('should return the user`s access tokens when their password change is successful', async () => {
+      applicationContext.getUserGateway().changePassword.mockResolvedValue({
+        accessToken: 'c20c632f-951f-49ac-af04-c2f41873edd4',
+        idToken: 'c20c632f-951f-49ac-af04-c2f41873edd4',
+        refreshToken: 'c20c632f-951f-49ac-af04-c2f41873edd4',
+      });
+
+      const result = await changePasswordInteractor(applicationContext, {
+        code: mockCode,
+        confirmPassword: mockPassword,
+        email: mockEmail,
+        password: mockPassword,
+      });
+
+      expect(result).toEqual({
+        accessToken: expect.anything(),
+        idToken: expect.anything(),
+        refreshToken: expect.anything(),
+      });
     });
   });
 });

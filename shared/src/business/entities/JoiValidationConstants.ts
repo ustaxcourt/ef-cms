@@ -43,8 +43,6 @@ export const JoiValidationConstants = Object.freeze({
     /^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/,
   ),
   US_POSTAL_CODE: STRING.regex(/^(\d{5}|\d{5}-\d{4})$/),
-  UUID: STRING.uuid({
-    version: ['uuidv4'],
-  }),
+  UUID: STRING.uuid(),
   YEAR_MAX_CURRENT: joi.number().integer().min(1900).max(CURRENT_YEAR),
 });

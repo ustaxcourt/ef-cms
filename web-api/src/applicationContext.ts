@@ -34,7 +34,7 @@ import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
-import { exec } from 'child_process';
+import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
@@ -55,6 +55,7 @@ import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
+import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
@@ -69,36 +70,6 @@ import AWS, { S3, SES, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
-import util from 'util';
-
-const execPromise = util.promisify(exec);
-
-const environment = {
-  appEndpoint: process.env.EFCMS_DOMAIN
-    ? `app.${process.env.EFCMS_DOMAIN}`
-    : 'localhost:1234',
-  cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
-  currentColor: process.env.CURRENT_COLOR || 'green',
-  documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
-  elasticsearchEndpoint:
-    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
-  emailFromAddress:
-    process.env.EMAIL_SOURCE ||
-    `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`,
-  masterRegion: process.env.MASTER_REGION || 'us-east-1',
-  quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
-  region: process.env.AWS_REGION || 'us-east-1',
-  s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-  stage: process.env.STAGE || 'local',
-  tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
-  userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
-  virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
-  workerQueueUrl:
-    `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
-    '',
-  wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
-};
 
 let s3Cache: AWS.S3 | undefined;
 let sesCache;
@@ -210,9 +181,6 @@ export const createApplicationContext = (
     }),
     getDocumentClient,
     getDocumentGenerators,
-    getDocumentsBucketName: () => {
-      return environment.documentsBucketName;
-    },
     getDynamoClient,
     getEmailClient: () => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
@@ -319,6 +287,7 @@ export const createApplicationContext = (
     },
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
+      saveRequestResponse,
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
@@ -355,9 +324,6 @@ export const createApplicationContext = (
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       return pug;
-    },
-    getQuarantineBucketName: () => {
-      return environment.quarantineBucketName;
     },
     getScannerResourceUri: () => {
       return (
@@ -407,9 +373,6 @@ export const createApplicationContext = (
       }
       return s3Cache;
     },
-    getTempDocumentsBucketName: () => {
-      return environment.tempDocumentsBucketName;
-    },
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
@@ -433,9 +396,6 @@ export const createApplicationContext = (
       error: (message, context?) => logger.error(message, { context }),
       info: (message, context?) => logger.info(message, { context }),
       warn: (message, context?) => logger.warn(message, { context }),
-    },
-    runVirusScan: async ({ filePath }) => {
-      return await execPromise(`clamdscan ${filePath}`);
     },
     setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };

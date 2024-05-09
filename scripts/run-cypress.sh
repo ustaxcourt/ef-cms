@@ -93,11 +93,6 @@ export CYPRESS_TARGET_ENV=$ENV
 
 if [ -n "${INTEGRATION}" ]; then
   echo "Running integration tests."
-  export CYPRESS_TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
-  export CYPRESS_QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1
-  export CYPRESS_DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
-  export CYPRESS_S3_ENDPOINT=http://0.0.0.0:9000
-  export CYPRESS_SLS_DEPLOYMENT_BUCKET=noop
   export CYPRESS_AWS_ACCESS_KEY_ID=S3RVER
   export CYPRESS_AWS_SECRET_ACCESS_KEY=S3RVER
   export CYPRESS_CHECK_DEPLOY_DATE_INTERVAL=5000

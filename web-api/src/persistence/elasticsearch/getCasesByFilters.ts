@@ -137,7 +137,10 @@ export const getCasesByFilters = async ({
           must: mustClause,
         },
       },
-      search_after: [params.searchAfter.receivedAt, params.searchAfter.pk],
+      search_after:
+        params.searchAfter.receivedAt && params.searchAfter.pk
+          ? [params.searchAfter.receivedAt, params.searchAfter.pk]
+          : undefined,
       sort: [{ 'receivedAt.S': 'asc' }, { 'pk.S': 'asc' }],
     },
     index: 'efcms-case',

@@ -1,11 +1,16 @@
 import { flattenDeep } from 'lodash';
-import AWS from 'aws-sdk';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import type {
+  AttributeValueWithName,
+  IDynamoDBRecord,
+} from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
   practitionerMappingRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   practitionerMappingRecords: any[];
 }) => {
   if (!practitionerMappingRecords.length) return;
@@ -15,7 +20,7 @@ export const processPractitionerMappingEntries = async ({
       const practitionerMappingData =
         practitionerMappingRecord.dynamodb.NewImage ||
         practitionerMappingRecord.dynamodb.OldImage;
-      const caseRecords = [];
+      const caseRecords: IDynamoDBRecord[] = [];
 
       const caseMetadataWithCounsel = await applicationContext
         .getPersistenceGateway()
@@ -24,9 +29,7 @@ export const processPractitionerMappingEntries = async ({
           docketNumber: practitionerMappingData.pk.S.substring('case|'.length),
         });
 
-      const marshalledCase = AWS.DynamoDB.Converter.marshall(
-        caseMetadataWithCounsel,
-      );
+      const marshalledCase = marshall(caseMetadataWithCounsel);
 
       caseRecords.push({
         dynamodb: {
@@ -57,7 +60,7 @@ export const processPractitionerMappingEntries = async ({
               S: practitionerMappingData.sk.S,
             },
           },
-          NewImage: marshalledCase,
+          NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
         },
         eventName: 'MODIFY',
       });

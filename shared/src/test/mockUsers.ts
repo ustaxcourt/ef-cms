@@ -18,6 +18,13 @@ import {
   getJudgesChambersWithLegacy,
 } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
+export const adminUser: RawUser = {
+  entityName: 'User',
+  name: 'Test admin',
+  role: ROLES.admin,
+  userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
+};
+
 export const adcUser = {
   name: 'ADC',
   role: ROLES.adc,
@@ -205,13 +212,13 @@ export const MOCK_PRACTITIONER: RawPractitioner = {
     state: 'IL',
   },
   email: 'ab@example.com',
-  employer: 'Private',
   entityName: 'Practitioner',
   firmName: 'GW Law Offices',
   firstName: 'Test',
   lastName: 'Attorney',
   name: 'Test Attorney',
   originalBarState: 'OK',
+  practiceType: 'Private',
   practitionerType: 'Attorney',
   role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
