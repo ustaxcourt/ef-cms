@@ -65,7 +65,6 @@ export const getPractitionersByName = async ({
   });
 
   const matchingPractitioners: any[] = results;
-  console.log('matches', matchingPractitioners);
   const lastKey =
     (matchingPractitioners[matchingPractitioners.length - 1]?.sort as Array<
       number | string
