@@ -56,7 +56,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
 
       cy.get('[data-testid="upload-pdf-button"]').click();
       cy.get('input#primaryDocumentFile-file').attachFile(
-        '../fixtures/w3-dummy.pdf',
+        '../../helpers/file/sample.pdf',
       );
 
       cy.get('[data-testid="save-for-later"]').click();
