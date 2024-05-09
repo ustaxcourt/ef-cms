@@ -59,7 +59,6 @@ export const PetitionFormResponse = connect(
                     value={form[textName][count] || ''}
                     onBlur={() => {
                       petitionGenerationLiveValidationSequence({
-                        step: 1,
                         validationKey: [KEY],
                       });
                     }}
@@ -104,7 +103,6 @@ export const PetitionFormResponse = connect(
                   value={form[textName][count] || ''}
                   onBlur={() => {
                     petitionGenerationLiveValidationSequence({
-                      step: 1,
                       validationKey: [KEY],
                     });
                   }}
