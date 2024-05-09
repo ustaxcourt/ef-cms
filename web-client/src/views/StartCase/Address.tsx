@@ -69,6 +69,7 @@ export const Address = connect(
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
               usStatesOther={usStatesOther}
+              useFullStateName={true}
               validateStartCaseSequence={validateStartCaseSequence}
             />
           </FormGroup>
@@ -125,6 +126,7 @@ export const Address = connect(
                   updateFormValueSequence={updateFormValueSequence}
                   usStates={usStates}
                   usStatesOther={usStatesOther}
+                  useFullStateName={true}
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
               </div>
