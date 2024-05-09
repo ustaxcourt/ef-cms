@@ -13,6 +13,7 @@ export const DateSelector = ({
   label,
   maxDate,
   minDate,
+  onBlur,
   onChange,
   placeHolderText,
   showDateHint = false,
@@ -29,6 +30,7 @@ export const DateSelector = ({
   id: string;
   label?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
 }) => {
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
@@ -52,6 +54,8 @@ export const DateSelector = ({
 
       (myDatePicker as HTMLInputElement).addEventListener('change', onChange);
       (myDatePicker as HTMLInputElement).addEventListener('input', onChange);
+      if (onBlur)
+        (myDatePicker as HTMLInputElement).addEventListener('blur', onBlur);
     }
   }, [formGroupInputRef]);
 
