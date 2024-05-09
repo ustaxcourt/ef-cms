@@ -13,9 +13,10 @@ export const StepIndicator = connect(
       <>
         <div aria-label="progress" className="usa-step-indicator">
           <ol className="usa-step-indicator__segments">
-            {steps.map((title, index) => {
-              const isCurrentStep = index === currentStep;
-              const completed = index < currentStep;
+            {Object.keys(steps).map(step => {
+              const title = steps[step];
+              const isCurrentStep = +step === currentStep;
+              const completed = +step < currentStep;
               const completedClass = completed
                 ? 'usa-step-indicator__segment--complete'
                 : '';
@@ -69,7 +70,7 @@ export const StepIndicator = connect(
                     'margin-left-5',
                   )}
                 >
-                  of {steps.length}
+                  of {Object.keys(steps).length}
                 </span>{' '}
               </span>
               <span className="usa-step-indicator__heading-text">
