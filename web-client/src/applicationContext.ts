@@ -144,6 +144,7 @@ import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/docu
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
+import { generatePetitionPdfInteractor } from '@shared/proxies/generatePetitionPdfProxy';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
@@ -452,6 +453,7 @@ const allUseCases = {
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
+  generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,

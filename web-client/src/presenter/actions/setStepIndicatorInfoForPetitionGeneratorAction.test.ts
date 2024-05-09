@@ -10,7 +10,7 @@ describe('setStepIndicatorInfoForPetitionGeneratorAction,', () => {
       },
     );
 
-    expect(result.state.stepIndicatorInfo.currentStep).toEqual(0);
+    expect(result.state.stepIndicatorInfo.currentStep).toEqual(1);
     expect(result.state.stepIndicatorInfo.steps).toEqual([
       'Petition',
       'Petitioner Information',
