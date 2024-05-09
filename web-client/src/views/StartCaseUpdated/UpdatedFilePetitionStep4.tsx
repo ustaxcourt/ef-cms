@@ -10,6 +10,8 @@ import React from 'react';
 
 export const UpdatedFilePetitionStep4 = connect(
   {
+    deleteValidationErrorMessageSequence:
+      sequences.deleteValidationErrorMessageSequence,
     form: state.form,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
@@ -18,16 +20,14 @@ export const UpdatedFilePetitionStep4 = connect(
       sequences.updatedFilePetitionCompleteStep4Sequence,
     updatedFilePetitionGoBackAStepSequence:
       sequences.updatedFilePetitionGoBackAStepSequence,
-
-    validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep4({
+    deleteValidationErrorMessageSequence,
     form,
     petitionGenerationLiveValidationSequence,
     updatedFilePetitionCompleteStep4Sequence,
     updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
-    validationErrors,
   }) {
     return (
       <>
@@ -73,7 +73,11 @@ export const UpdatedFilePetitionStep4 = connect(
                   key: 'procedureType',
                   value: e.target.value,
                 });
-                validationErrors.procedureType = '';
+
+                deleteValidationErrorMessageSequence({
+                  validationKey: ['procedureType'],
+                });
+
                 form.preferredTrialCity = '';
               }}
             />
@@ -128,7 +132,10 @@ export const UpdatedFilePetitionStep4 = connect(
                     key: e.target.name,
                     value: e.target.value || null,
                   });
-                  validationErrors.preferredTrialCity = '';
+
+                  deleteValidationErrorMessageSequence({
+                    validationKey: ['preferredTrialCity'],
+                  });
                 }}
               />
             </div>
