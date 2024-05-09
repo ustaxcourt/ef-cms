@@ -49,6 +49,7 @@ export const IrsNoticeUploadForm = connect(
   }) {
     return (
       <>
+        {index !== 0 && <LineBreak />}
         <div className={classNames('usa-form-group', 'margin-bottom-0')}>
           <FormGroup errorText={[validationError.file, validationError.size]}>
             <label
@@ -76,23 +77,25 @@ export const IrsNoticeUploadForm = connect(
               updateFormValueSequence="updateIrsNoticeIndexPropertySequence"
             />
           </FormGroup>
-          <h2>
-            IRS Notice {index + 1}{' '}
-            {index !== 0 && (
-              <Button
-                link
-                className="margin-left-10"
-                onClick={() => removeIrsNoticeFromFormSequence({ index })}
-              >
-                <Icon
-                  className="fa-icon-blue"
-                  icon={['fas', 'times']}
-                  size="1x"
-                />
-                <span style={{ marginLeft: '-5px' }}>Remove</span>
-              </Button>
-            )}
-          </h2>
+          <div>
+            <h2 style={{ alignItems: 'center', display: 'flex' }}>
+              <div>IRS Notice {index + 1}</div>
+              {index !== 0 && (
+                <Button
+                  link
+                  className="margin-left-10"
+                  onClick={() => removeIrsNoticeFromFormSequence({ index })}
+                >
+                  <Icon
+                    className="fa-icon-blue"
+                    icon={['fas', 'times']}
+                    size="1x"
+                  />
+                  <span style={{ marginLeft: '-5px' }}>Remove</span>
+                </Button>
+              )}
+            </h2>
+          </div>
           <CaseTypeSelect
             allowDefaultOption={true}
             caseTypes={caseTypeDescriptionHelper.caseTypes}
@@ -245,3 +248,9 @@ export const IrsNoticeUploadForm = connect(
     );
   },
 );
+
+function LineBreak() {
+  return (
+    <div style={{ borderTop: '1px solid #D9D9D9', marginBottom: '35px' }}></div>
+  );
+}
