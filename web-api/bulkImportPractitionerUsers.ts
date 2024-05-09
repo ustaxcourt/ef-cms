@@ -1,13 +1,14 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { formatRecord } from './bulkImportPractitionerUsers.helpers';
-import { gatherRecords, getCsvOptions } from '../shared/src/tools/helpers';
+import { gatherRecords, getCsvOptions } from '@shared/tools/helpers';
+import { getServices } from './importHelpers';
 import { getUserToken } from './storage/scripts/loadTest/loadTestHelpers';
 import { parse } from 'csv-parse';
-import AWS from 'aws-sdk';
 import axios from 'axios';
 import fs from 'fs';
 
-const main = async () => {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   const files: string[] = [];
   process.argv.forEach((val, index) => {
     if (index > 1) {
@@ -47,33 +48,16 @@ const main = async () => {
   }
 
   const cognito = new CognitoIdentityProvider({
-    region: process.env.REGION,
+    region: process.env.REGION!,
   });
-  const apigateway = new AWS.APIGateway({
-    region: process.env.REGION,
-  });
-  const { items: apis } = await apigateway
-    .getRestApis({ limit: 200 })
-    .promise();
 
-  const services = (apis ?? [])
-    .filter(
-      api =>
-        api.name?.includes(
-          `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
-        ),
-    )
-    .reduce((obj, api) => {
-      obj[api.name?.replace(`_${process.env.ENV}`, '')!] =
-        `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
-      return obj;
-    }, {});
+  const services = getServices({});
 
   let token = await getUserToken({
     cognito,
-    env: process.env.ENV,
-    password: process.env.USTC_ADMIN_PASS,
-    username: process.env.USTC_ADMIN_USER,
+    env: process.env.ENV!,
+    password: process.env.USTC_ADMIN_PASS!,
+    username: process.env.USTC_ADMIN_USER!,
   });
 
   const data = fs.readFileSync(files[0], 'utf8');
@@ -104,9 +88,9 @@ const main = async () => {
           console.log(`ERROR ${record.barNumber}`);
           console.log(result);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.log(`ERROR ${record.barNumber}`);
-        if (err.response) {
+        if (err && err.response) {
           console.log(record);
           console.log(err.response.data);
           console.log(err.response.status);
@@ -116,6 +100,4 @@ const main = async () => {
       }
     }
   });
-};
-
-main();
+})();

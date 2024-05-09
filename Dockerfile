@@ -1,6 +1,6 @@
 # Note: this is debian 11 (bullseye)
 
-FROM cypress/browsers:node-20.11.0-chrome-121.0.6167.184-1-ff-123.0-edge-121.0.2277.128-1
+FROM cypress/browsers:node-20.12.2-chrome-124.0.6367.60-1-ff-125.0.2-edge-124.0.2478.51-1
 
 WORKDIR /home/app
 
@@ -34,13 +34,13 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.30.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.43.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.7.5/terraform_1.7.5_linux_amd64.zip && \ 
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.8.2/terraform_1.8.2_linux_amd64.zip && \ 
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

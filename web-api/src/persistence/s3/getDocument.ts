@@ -11,8 +11,8 @@ export const getDocument = async ({
   return (
     await S3.getObject({
       Bucket: useTempBucket
-        ? applicationContext.getTempDocumentsBucketName()
-        : applicationContext.getDocumentsBucketName(),
+        ? applicationContext.environment.tempDocumentsBucketName
+        : applicationContext.environment.documentsBucketName,
       Key: key,
     }).promise()
   ).Body;

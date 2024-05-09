@@ -1,25 +1,28 @@
 import { approvePendingJob } from '../../../../admin-tools/circleci/circleci-helper';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processCompletionMarkers = async ({
   applicationContext,
   completionMarkers,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   completionMarkers: any[];
 }) => {
   if (!completionMarkers || !completionMarkers.length) return;
 
-  applicationContext.logger.debug(
+  applicationContext.logger.info(
     `found ${completionMarkers.length} completion marker${completionMarkers.length > 1 ? 's' : ''}`,
   );
 
   const stage = process.env.STAGE || 'local';
+  const color = process.env.CURRENT_COLOR!;
 
   for (const cm of completionMarkers) {
     const completionMarker = cm.dynamodb?.NewImage;
     if (completionMarker) {
-      const [apiToken, environment, jobName, workflowId] = [
+      const [apiToken, deployingColor, environment, jobName, workflowId] = [
         'apiToken',
+        'deployingColor',
         'environment',
         'jobName',
         'workflowId',
@@ -27,11 +30,13 @@ export const processCompletionMarkers = async ({
       if (
         environment &&
         environment === stage &&
+        deployingColor &&
+        deployingColor === color &&
         apiToken &&
         jobName &&
         workflowId
       ) {
-        applicationContext.logger.debug(
+        applicationContext.logger.info(
           `approving pending ${jobName} job in circle`,
           {
             jobName,

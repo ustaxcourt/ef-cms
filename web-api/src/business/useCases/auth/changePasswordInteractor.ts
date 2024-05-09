@@ -1,7 +1,3 @@
-import {
-  AuthFlowType,
-  ChallengeNameType,
-} from '@aws-sdk/client-cognito-identity-provider';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import { InvalidEntityError, NotFoundError } from '@web-api/errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
@@ -46,46 +42,16 @@ export const changePasswordInteractor = async (
     }
 
     if (tempPassword) {
-      const initiateAuthResult = await applicationContext
-        .getCognito()
-        .initiateAuth({
-          AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-          AuthParameters: {
-            PASSWORD: tempPassword,
-            USERNAME: email,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-        });
-
-      if (
-        initiateAuthResult.ChallengeName !==
-        ChallengeNameType.NEW_PASSWORD_REQUIRED
-      ) {
-        throw new Error('User is not in `FORCE_CHANGE_PASSWORD` state');
-      }
-
       const result = await applicationContext
-        .getCognito()
-        .respondToAuthChallenge({
-          ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
-          ChallengeResponses: {
-            NEW_PASSWORD: password,
-            USERNAME: email,
-          },
-          ClientId: applicationContext.environment.cognitoClientId,
-          Session: initiateAuthResult.Session,
+        .getUserGateway()
+        .changePassword(applicationContext, {
+          code: tempPassword,
+          email,
+          newPassword: password,
         });
 
-      if (
-        !result.AuthenticationResult?.AccessToken ||
-        !result.AuthenticationResult?.IdToken ||
-        !result.AuthenticationResult?.RefreshToken
-      ) {
-        throw new Error('Unsuccessful password change');
-      }
-
-      const decoded = jwt.decode(result.AuthenticationResult?.IdToken);
-      const userId = decoded['custom:userId'] || decoded.sub;
+      const decoded = jwt.decode(result.idToken);
+      const userId = decoded['custom:userId'];
 
       const userFromPersistence = await applicationContext
         .getPersistenceGateway()
@@ -94,7 +60,7 @@ export const changePasswordInteractor = async (
       if (
         userFromPersistence &&
         userFromPersistence.pendingEmail &&
-        userFromPersistence.pendingEmail === email
+        userFromPersistence.pendingEmail.toLowerCase() === email.toLowerCase()
       ) {
         const { updatedUser } = await updateUserPendingEmailRecord(
           applicationContext,
@@ -114,11 +80,7 @@ export const changePasswordInteractor = async (
           });
       }
 
-      return {
-        accessToken: result.AuthenticationResult.AccessToken,
-        idToken: result.AuthenticationResult.IdToken,
-        refreshToken: result.AuthenticationResult.RefreshToken,
-      };
+      return result;
     } else {
       const user = await applicationContext
         .getUserGateway()
@@ -128,42 +90,32 @@ export const changePasswordInteractor = async (
         throw new NotFoundError(`User not found with email: ${email}`);
       }
 
-      await applicationContext.getCognito().confirmForgotPassword({
-        ClientId: applicationContext.environment.cognitoClientId,
-        ConfirmationCode: code,
-        Password: password,
-        Username: email,
-      });
-
-      const result = await applicationContext.getCognito().initiateAuth({
-        AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-        AuthParameters: {
-          PASSWORD: password,
-          USERNAME: email,
-        },
-        ClientId: applicationContext.environment.cognitoClientId,
-      });
-
-      if (
-        !result.AuthenticationResult?.AccessToken ||
-        !result.AuthenticationResult?.IdToken ||
-        !result.AuthenticationResult?.RefreshToken
-      ) {
-        throw new Error(`Unable to change password for email: ${email}`);
+      if (!code) {
+        applicationContext.logger.info(
+          `Unable to change password for ${email}. No code was provided.`,
+        );
+        throw new Error('Unable to change password');
       }
 
-      return {
-        accessToken: result.AuthenticationResult.AccessToken,
-        idToken: result.AuthenticationResult.IdToken,
-        refreshToken: result.AuthenticationResult.RefreshToken,
-      };
+      return await applicationContext
+        .getUserGateway()
+        .changePassword(applicationContext, {
+          code,
+          email,
+          newPassword: password,
+        });
     }
   } catch (err: any) {
+    if (err.name === 'InitiateAuthError') {
+      throw new Error(`Unable to change password for email: ${email}`);
+    }
+
     await authErrorHandling(applicationContext, {
       email,
       error: err,
       sendAccountConfirmation: false,
     });
+
     throw err;
   }
 };

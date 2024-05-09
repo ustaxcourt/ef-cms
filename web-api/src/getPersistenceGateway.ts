@@ -22,10 +22,10 @@ import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
-import { createOrUpdateUser } from './persistence/dynamo/users/createOrUpdateUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
+import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteCaseDeadline } from './persistence/dynamo/caseDeadlines/deleteCaseDeadline';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
@@ -110,6 +110,7 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getPublicDownloadPolicyUrl } from './persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
+import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSectionInboxMessages } from './persistence/elasticsearch/messages/getSectionInboxMessages';
 import { getSectionOutboxMessages } from './persistence/elasticsearch/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
@@ -147,7 +148,6 @@ import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
-import { renewIdToken } from './persistence/cognito/renewIdToken';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
@@ -233,10 +233,10 @@ const gatewayMethods = {
     createNewPetitionerUser,
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
-    createOrUpdateUser,
     createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
+    createUserRecords,
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
@@ -358,6 +358,7 @@ const gatewayMethods = {
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
+  getRequestResults,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getSesStatus,
@@ -388,7 +389,6 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,
-  renewIdToken,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   verifyCaseForUser,

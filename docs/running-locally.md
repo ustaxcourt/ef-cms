@@ -14,18 +14,18 @@ After installing git, be sure to clone the project locally:
 
 `git clone git@github.com:flexion/ef-cms.git`
 
-### Node v18.16.1
+### Node v20.12.1
 
 All of our application code is built using Javascript:
 
-- Our frontend is written React, Cerebral, and bundled using webpack.
+- Our frontend is written React, Cerebral, and bundled using esbuild.
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v18.16.1
-    - npm v9.5.1
+    - Node v20.12.1
+    - npm v10.5.0
 
-As of May 2022, AWS Lambda only supports up to [`nodejs18.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+As of May 2022, AWS Lambda only supports up to [`nodejs20.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
 ### Java 11+
 
@@ -53,8 +53,8 @@ We recommend you install a tool called [tfenv](https://github.com/tfutils/tfenv)
 
 ```bash
 brew install tfenv
-tfenv install 1.1.0
-tfenv use 1.1.0
+tfenv install 3.0.0
+tfenv use 3.0.0
 ```
 
 !> Before running terraform on your workspace, double check you are on the correct version.
@@ -66,6 +66,12 @@ Since we use circle ci in our CI/CD process, we using a husky pre-commit to vali
 ```bash
 brew install circleci
 ```
+
+#### 💻 MacOS Monterey+
+
+There is a conflict on `port 5000` with the public API and AirPlay Receiver.
+
+Disable AirPlay Receiver: System Preferences --> General --> AirDrop & Handoff--> Uncheck "AirPlay Receiver" in the list.
 
 ## Getting Running
 
@@ -80,12 +86,6 @@ All of the scripts needed to run this project should be outlined in our [package
 #### Checkout Develop
 
 Make sure you are on the `ustaxcourt/staging` branch before you try to start the services.
-
-#### 💻 MacOS Monterey+
-
-There is a conflict on `port 5000` with the public API and AirPlay Receiver.
-
-Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
 
 #### Starting the Services
 
@@ -131,12 +131,6 @@ Make sure you are on the `ustaxcourt/staging` branch before you install the npm 
 All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
 
 `npm install`
-
-#### 💻 MacOS Monterey+
-
-There is a conflict on `port 5000` with the public API and AirPlay Receiver.
-
-Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
 
 #### 🏃 Starting the Services
 

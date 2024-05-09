@@ -30,7 +30,7 @@ describe('isPrintPreviewPreparedAction', () => {
         presenter,
       },
       state: {
-        pdfPreviewUrl: 'http://www.example.com:9000/some/pdf.pdf',
+        pdfPreviewUrl: 'http://www.example.com:9001/some/pdf.pdf',
       },
     });
     expect(presenter.providers.path.yes).toHaveBeenCalled();

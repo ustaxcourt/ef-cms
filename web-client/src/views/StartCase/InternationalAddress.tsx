@@ -32,6 +32,7 @@ export const InternationalAddress = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.address1`}
             id={`${type}.address1`}
             name={`${type}.address1`}
             type="text"
@@ -56,6 +57,7 @@ export const InternationalAddress = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.address2`}
             id={`${type}.address2`}
             name={`${type}.address2`}
             type="text"
@@ -80,6 +82,7 @@ export const InternationalAddress = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.address3`}
             id={`${type}.address3`}
             name={`${type}.address3`}
             type="text"
@@ -104,6 +107,7 @@ export const InternationalAddress = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.state`}
             id={`${type}.state`}
             name={`${type}.state`}
             type="text"
@@ -128,6 +132,7 @@ export const InternationalAddress = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.city`}
             id={`${type}.city`}
             name={`${type}.city`}
             type="text"
@@ -152,6 +157,7 @@ export const InternationalAddress = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-testid={`${type}.postalCode`}
             id={`${type}.postalCode`}
             name={`${type}.postalCode`}
             type="text"

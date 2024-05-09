@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.11.0'
+          node-version: '20.12.0'
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
@@ -67,19 +67,19 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          npm run cypress:integration:file cypress/cypress-integration/integration/start-a-case-practitioner.cy.ts
+          npm run cypress:integration:file cypress/local-only/integration/start-a-case-practitioner.cy.ts
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
-          path: ${{ github.workspace }}/cypress/cypress-integration/videos
+          path: ${{ github.workspace }}/cypress/local-only/videos
 ```
 
 The critical line in the above workflow is
 
 ```
-npm run cypress:integration:file cypress/cypress-integration/integration/start-a-case-practitioner.cy.ts
+npm run cypress:integration:file cypress/local-only/integration/start-a-case-practitioner.cy.ts
 ```
 
 This runs only the specified Cypress Integration test in isolation. Simply create a workflow in the `.github/workflows/` directory to ensure this test is run every time you push your branch. And be sure to remove this file when you are ready to submit a PR to the `staging` branch. 

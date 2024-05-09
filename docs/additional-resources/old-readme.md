@@ -107,7 +107,7 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 - You can access the public UI at http://localhost:5678
 - You can access the API at http://localhost:4000
 - You can access the DynamoDB admin UI at http://localhost:8001
-- You can access S3 local at http://localhost:9000
+- You can access S3 local at http://localhost:9001
 - You can access the style guide at http://localhost:1234/style-guide
 
 Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
@@ -124,18 +124,12 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v14.16.0
 - npm v6.14.11
-- ClamAV v0.101.2 (see Setup below)
 - Java 11
 - jq
 
 ##### Setup
 
 - Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
-For ClamAV, macOS users can do the following:
-*(Note: The following steps are unnecessary as clamav is disabled.)*
-- ~~`brew install clamav`~~
-- ~~`cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`~~
-- ~~`sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)~~
 - Installing `jq`
   - `brew install jq` for macOS users or visit https://stedolan.github.io/jq/download/
 
@@ -155,10 +149,6 @@ Other start commands:
 ###### Terminal B
 
 - `npm run start:client`
-
-#### Login and test users
-
-There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
 
 ##### Mock login
 
@@ -203,9 +193,6 @@ colvinschambers@example.com
 
 No password is required.
 
-##### AWS Cognito
-
-To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with the following accounts.
 
 ###### External Users
 

@@ -23,7 +23,7 @@ echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
-URL=http://0.0.0.0:9000/ ./wait-until.sh
+URL=http://0.0.0.0:9001/ ./wait-until.sh
 npm run seed:s3
 
 
@@ -44,7 +44,7 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore local-only/ --ignore deployed-and-local/ --ignore readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [ ! -e "$CI" ]; then
   echo "killing dynamodb local"
