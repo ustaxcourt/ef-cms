@@ -10,6 +10,8 @@ import React from 'react';
 export const PetitionFormResponse = connect(
   {
     count: props.count,
+    deleteValidationErrorMessageSequence:
+      sequences.deleteValidationErrorMessageSequence,
     form: state.form,
     id: props.id,
     petitionGenerationLiveValidationSequence:
@@ -21,6 +23,7 @@ export const PetitionFormResponse = connect(
   },
   function PetitionFormResponse({
     count,
+    deleteValidationErrorMessageSequence,
     form,
     id,
     petitionGenerationLiveValidationSequence,
@@ -66,7 +69,9 @@ export const PetitionFormResponse = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
-                      delete validationErrors[KEY];
+                      deleteValidationErrorMessageSequence({
+                        validationKey: [KEY],
+                      });
                     }}
                   />
                 </div>
@@ -109,7 +114,10 @@ export const PetitionFormResponse = connect(
                       key: e.target.name,
                       value: e.target.value,
                     });
-                    delete validationErrors[KEY];
+
+                    deleteValidationErrorMessageSequence({
+                      validationKey: [KEY],
+                    });
                   }}
                 />
               </div>
