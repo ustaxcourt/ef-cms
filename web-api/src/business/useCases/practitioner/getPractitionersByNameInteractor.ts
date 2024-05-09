@@ -4,7 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-type PractitionersByName = {
+export type PractitionersByName = {
   searchResults: {
     lastKey: (string | number)[];
     practitioners: {
@@ -40,8 +40,7 @@ export const getPractitionersByNameInteractor = async (
 
   const { lastKey, results, total } = await applicationContext
     .getPersistenceGateway()
-    .getPractitionersByName({
-      applicationContext,
+    .getPractitionersByName(applicationContext, {
       name,
       searchAfter,
     });

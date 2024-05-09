@@ -15,8 +15,7 @@ describe('getPractitionersByName', () => {
       }),
     );
 
-    const { results } = await getPractitionersByName({
-      applicationContext,
+    const { results } = await getPractitionersByName(applicationContext, {
       name: 'some practitioner name',
       searchAfter: [],
     });
