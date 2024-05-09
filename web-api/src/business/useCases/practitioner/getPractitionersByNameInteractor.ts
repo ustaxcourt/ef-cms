@@ -1,13 +1,31 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
+type PractitionersByName = {
+  searchResults: {
+    lastKey: (string | number)[];
+    practitioners: {
+      admissionsDate: string;
+      admissionsStatus: string;
+      barNumber: string;
+      contact: {
+        state: string | undefined;
+      };
+      name: string;
+      practiceType: string;
+      practitionerType: string;
+    }[];
+    total: number;
+  };
+};
 
 export const getPractitionersByNameInteractor = async (
   applicationContext: IApplicationContext,
   { name, searchAfter }: { name: string; searchAfter: string },
-) => {
+): Promise<PractitionersByName> => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
