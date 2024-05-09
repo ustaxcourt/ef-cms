@@ -1,21 +1,16 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
-import { PRACTITIONER_SEARCH_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
-import { PractitionerSearchResultType } from '../../../../web-client/src/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
+import { PRACTITIONER_SEARCH_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { PractitionerSearchResultType } from '@web-client/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
 import { search } from './searchClient';
 
-/**
- * getPractitionersByName
- *
- * @param {object} params the params object
- * @param {object} params.applicationContext the application context
- * @param {string} params.name the name to search by
- * @returns {*} the result
- */
-export const getPractitionersByName = async ({
-  applicationContext,
-  name,
-  searchAfter,
-}) => {
+export const getPractitionersByName = async (
+  applicationContext: IApplicationContext,
+  { name, searchAfter },
+): Promise<{
+  lastKey: (string | number)[];
+  total: number;
+  results: PractitionerSearchResultType[];
+}> => {
   const searchParameters = {
     body: {
       _source: [
@@ -63,12 +58,7 @@ export const getPractitionersByName = async ({
     applicationContext,
     searchParameters,
   });
-
-  const matchingPractitioners: any[] = results;
-  const lastKey =
-    (matchingPractitioners[matchingPractitioners.length - 1]?.sort as Array<
-      number | string
-    >) || [];
+  const lastKey = results[results.length - 1].sort || [];
 
   return { lastKey, results, total };
 };

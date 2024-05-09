@@ -18,6 +18,7 @@ export type PractitionerSearchResultType = {
   practiceType: string;
   practitionerType: string;
   state?: string;
+  sort?: (number | string)[];
   stateFullName?: string;
 };
 
