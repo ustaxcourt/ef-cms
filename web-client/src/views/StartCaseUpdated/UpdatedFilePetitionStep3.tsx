@@ -16,6 +16,8 @@ export const UpdatedFilePetitionStep3 = connect(
     addAnotherIrsNoticeToFormSequence:
       sequences.addAnotherIrsNoticeToFormSequence,
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
+    deleteValidationErrorMessageSequence:
+      sequences.deleteValidationErrorMessageSequence,
     form: state.form,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence:
@@ -31,6 +33,7 @@ export const UpdatedFilePetitionStep3 = connect(
   function UpdatedFilePetitionStep3({
     addAnotherIrsNoticeToFormSequence,
     caseTypeDescriptionHelper,
+    deleteValidationErrorMessageSequence,
     form,
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
@@ -66,7 +69,10 @@ export const UpdatedFilePetitionStep3 = connect(
                           key: e.target.name,
                           value: e.target.value === 'true',
                         });
-                        validationErrors.hasIrsNotice = '';
+
+                        deleteValidationErrorMessageSequence({
+                          validationKey: ['hasIrsNotice'],
+                        });
                       }}
                     />
                     <label
@@ -193,7 +199,9 @@ export const UpdatedFilePetitionStep3 = connect(
                 }}
                 onChange={info => {
                   updateFormValueSequence(info);
-                  delete validationErrors.caseType;
+                  deleteValidationErrorMessageSequence({
+                    validationKey: ['caseType'],
+                  });
                 }}
               />
             )}
