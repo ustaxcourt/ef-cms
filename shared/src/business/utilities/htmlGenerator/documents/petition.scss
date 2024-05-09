@@ -1,0 +1,40 @@
+.petition-pdf {
+    // margin-bottom: 2cm;
+    
+    ol {
+        padding-left: 0;
+        margin-left: 0;
+
+        li {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        ol {
+            padding-left: 0;
+            margin-left: 1rem;
+            list-style-type: lower-alpha;
+        }
+
+        &.list-disc {
+            padding-left: 0;
+            margin-left: 1rem;
+            list-style-type: disc;
+        }
+    }
+
+    p {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .petitioner-info {
+        width: 50%;
+        float: left;
+      }
+      
+    .spouse-info {
+        width: 50%;
+        float: right;
+    }
+}
