@@ -65,12 +65,3 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
   depends_on      = [aws_lambda_permission.allow_cloudwatch]
 }
-
-resource "aws_cloudwatch_log_subscription_filter" "clamav_fargate_filter" {
-  count           = length(var.log_group_environments)
-  destination_arn = module.logs_to_es.arn
-  filter_pattern  = ""
-  name            = "clamav_fargate_${element(var.log_group_environments, count.index)}_filter"
-  log_group_name  = "/aws/ecs/clamav_fargate_${element(var.log_group_environments, count.index)}"
-  depends_on      = [aws_lambda_permission.allow_cloudwatch]
-}

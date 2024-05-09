@@ -80,18 +80,18 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
 export SOURCE_TABLE_VERSION
 export ELASTICSEARCH_ENDPOINT
 export DEPLOYING_COLOR
-export FILE_NAME=./scripts/circleci/judge/judge_users.csv
 
 echo "clearing elasticsearch"
-./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
+npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.ts
+
 echo "setting up elasticsearch"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
-./web-api/setup-elasticsearch-aliases.sh "${ENV}"
+npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
 
 echo "clearing dynamo"
 npx ts-node --transpile-only ./web-api/clear-dynamodb-table.ts "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
 # shellcheck disable=SC1091
-. ./scripts/user/setup-test-users.sh "${ENV}"
+npx ts-node --transpile-only scripts/user/setup-test-users.ts "${ENV}"
 echo "importing judge users"
-./scripts/circleci/judge/bulk-import-judge-users.sh
+npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
