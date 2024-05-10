@@ -1,0 +1,32 @@
+import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
+import { runAction } from '@web-client/presenter/test.cerebral';
+
+describe('getStep1DataAction', () => {
+  it('should fetch step 1 related data from state.form', async () => {
+    const results = await runAction(getStep1DataAction, {
+      state: {
+        form: {
+          petitionFacts: 'TEST_petitionFacts',
+          petitionFile: 'TEST_petitionFile',
+          petitionFileSize: 'TEST_petitionFileSize',
+          petitionReasons: 'TEST_petitionReasons',
+          petitionType: 'TEST_petitionType',
+          redactionAcknowledgement: 'TEST_redactionAcknowledgement',
+          test1: 'TEST_test1',
+          test2: 'TEST_test2',
+          test3: 'TEST_test3',
+        },
+      },
+    });
+
+    const { step1Data } = results.output;
+    expect(step1Data).toEqual({
+      acknowledgeChecked: 'TEST_redactionAcknowledgement',
+      petitionFacts: 'TEST_petitionFacts',
+      petitionFile: 'TEST_petitionFile',
+      petitionFileSize: 'TEST_petitionFileSize',
+      petitionReasons: 'TEST_petitionReasons',
+      petitionType: 'TEST_petitionType',
+    });
+  });
+});
