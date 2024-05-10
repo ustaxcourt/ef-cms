@@ -18,8 +18,10 @@ export const migrateItems = (
   for (const item of items) {
     if (isRecordToUpdate(item)) {
       if (item.role && item.role.includes('Practitioner')) {
-        item.practiceType = item.employer;
-        delete item.employer;
+        if (!!item.employer && !item.practiceType) {
+          item.practiceType = item.employer;
+          delete item.employer;
+        }
       }
     }
     itemsAfter.push(item);
