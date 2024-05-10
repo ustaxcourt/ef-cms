@@ -74,7 +74,7 @@ export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    expect(helper.formattedSearchResults.length).toBeGreaterThan(0);
+    expect(helper.formattedSearchResults?.length).toBeGreaterThan(0);
     expect(helper.numberOfResults).toBeGreaterThan(0);
     expect(helper.showNoMatches).toBeFalsy();
     expect(helper.showSearchResults).toBeTruthy();

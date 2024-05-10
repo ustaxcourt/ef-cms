@@ -58,7 +58,10 @@ export const getPractitionersByName = async (
     applicationContext,
     searchParameters,
   });
-  const lastKey = results[results.length - 1].sort || [];
+  const lastKey =
+    results.length > 0 && results[results.length - 1].sort
+      ? results[results.length - 1].sort!
+      : [];
 
   return { lastKey, results, total };
 };
