@@ -22,6 +22,8 @@ export const PDFPreviewButton = connect<
     id?: string;
     shouldAbbreviateTitle?: boolean;
     shouldWrapText?: boolean;
+    showIcon?: boolean;
+    showModal?: boolean;
   },
   typeof pdfPreviewButtonDeps
 >(
