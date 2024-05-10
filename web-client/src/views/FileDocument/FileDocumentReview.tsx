@@ -46,6 +46,7 @@ export const FileDocumentReview = connect(
                     <div className="grid-col flex-auto">
                       <PDFPreviewButton
                         file={form.secondaryDocumentFile}
+                        showIcon={false}
                         title={form.secondaryDocument.documentTitle}
                       />
                     </div>
@@ -111,6 +112,7 @@ export const FileDocumentReview = connect(
                 <div className="grid-col flex-auto">
                   <PDFPreviewButton
                     file={item.supportingDocumentFile}
+                    showIcon={false}
                     title={item.documentTitle}
                   />
                 </div>
@@ -159,6 +161,7 @@ export const FileDocumentReview = connect(
                 <div className="grid-col flex-auto">
                   <PDFPreviewButton
                     file={item.supportingDocumentFile}
+                    showIcon={false}
                     title={item.documentTitle}
                   />
                 </div>
@@ -221,6 +224,7 @@ export const FileDocumentReview = connect(
                           <div className="grid-col flex-auto">
                             <PDFPreviewButton
                               file={form.primaryDocumentFile}
+                              showIcon={false}
                               title={form.documentTitle}
                             />
                           </div>
