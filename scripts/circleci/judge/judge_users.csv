@@ -12,7 +12,7 @@ Chiechi,Judge,Chiechi,legacy.judge.chiechi@example.com,legacyJudge,legacyJudgesC
 Choi,Special Trial Judge,Eunkyong Choi,legacy.stjudge.choi@example.com,legacyJudge,legacyJudgesChambers,false
 Clapp,Judge,Clapp,legacy.judge.clapp@example.com,legacyJudge,legacyJudgesChambers,false
 Cohen,Judge,Mary Ann Cohen,judge.cohen@example.com,judge,cohensChambers,true
-Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers,true
+Colvin,Judge,John O. Colvin,judge.colvin@example.com,legacyJudge,legacyJudgesChambers,true
 Copeland,Judge,Elizabeth A. Copeland,judge.copeland@example.com,judge,copelandsChambers,false
 Couvillion,Special Trial Judge,Couvillion,legacy.judge.couvillion@example.com,legacyJudge,legacyJudgesChambers,false
 Dawson,Judge,Dawson,legacy.judge.dawson@example.com,legacyJudge,legacyJudgesChambers,false

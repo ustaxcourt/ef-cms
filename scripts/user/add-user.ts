@@ -76,7 +76,6 @@ const checkParams = params => {
           'ashfordsChambers',
           'buchsChambers',
           'cohensChambers',
-          'colvinsChambers',
           'copelandsChambers',
           'foleysChambers',
           'friedsChambers',
