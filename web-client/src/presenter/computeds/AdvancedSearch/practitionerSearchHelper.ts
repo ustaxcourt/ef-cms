@@ -52,7 +52,13 @@ export const formatPractitionerSearchResultRecord = (
 export const practitionerSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+):
+  | { showNoMatches: boolean; showSearchResults: boolean }
+  | {
+      activePage: number;
+      showPractitionerSearch: boolean;
+      showStateSelect: boolean;
+    } => {
   const permissions = get(state.permissions);
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
