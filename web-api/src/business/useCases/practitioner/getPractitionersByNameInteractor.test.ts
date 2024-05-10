@@ -1,6 +1,6 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
 
 describe('getPractitionersByNameInteractor', () => {

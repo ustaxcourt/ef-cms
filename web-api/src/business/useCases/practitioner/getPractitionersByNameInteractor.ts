@@ -1,13 +1,31 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+
+export type PractitionersByName = {
+  searchResults: {
+    lastKey: (string | number)[];
+    practitioners: {
+      admissionsDate: string;
+      admissionsStatus: string;
+      barNumber: string;
+      contact: {
+        state?: string;
+      };
+      name: string;
+      practiceType: string;
+      practitionerType: string;
+    }[];
+    total: number;
+  };
+};
 
 export const getPractitionersByNameInteractor = async (
   applicationContext: IApplicationContext,
   { name, searchAfter }: { name: string; searchAfter: string },
-) => {
+): Promise<PractitionersByName> => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
@@ -22,8 +40,7 @@ export const getPractitionersByNameInteractor = async (
 
   const { lastKey, results, total } = await applicationContext
     .getPersistenceGateway()
-    .getPractitionersByName({
-      applicationContext,
+    .getPractitionersByName(applicationContext, {
       name,
       searchAfter,
     });
