@@ -25,29 +25,32 @@ export const PractitionerSearchResults = connect(
           <>
             <h1 className="margin-top-4">Search Results</h1>
             <div ref={paginatorTop}>
-              {practitionerSearchHelper.numberOfResults >
-                PRACTITIONER_SEARCH_PAGE_SIZE && (
-                <Paginator
-                  breakClassName="hide"
-                  forcePage={practitionerSearchHelper.activePage}
-                  marginPagesDisplayed={0}
-                  pageCount={practitionerSearchHelper.pageCount}
-                  pageRangeDisplayed={0}
-                  onPageChange={pageChange => {
-                    submitPractitionerNameSearchSequence({
-                      selectedPage: pageChange.selected,
-                    });
-                    focusPaginatorTop(paginatorTop);
-                  }}
-                />
-              )}
+              {practitionerSearchHelper.numberOfResults &&
+                practitionerSearchHelper.numberOfResults >
+                  PRACTITIONER_SEARCH_PAGE_SIZE && (
+                  <Paginator
+                    breakClassName="hide"
+                    forcePage={practitionerSearchHelper.activePage || 0}
+                    marginPagesDisplayed={0}
+                    pageCount={practitionerSearchHelper.pageCount || 0}
+                    pageRangeDisplayed={0}
+                    onPageChange={pageChange => {
+                      submitPractitionerNameSearchSequence({
+                        selectedPage: pageChange.selected,
+                      });
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                )}
             </div>
             <div className="text-right margin-bottom-2">
               <span className="text-bold" id="custom-case-result-count">
                 Count: &nbsp;
               </span>
               <span data-testid="practitioner-search-result-count">
-                {formatPositiveNumber(practitionerSearchHelper.numberOfResults)}
+                {formatPositiveNumber(
+                  practitionerSearchHelper.numberOfResults || 0,
+                )}
               </span>
             </div>
             <table
@@ -74,25 +77,27 @@ export const PractitionerSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {practitionerSearchHelper.formattedSearchResults.map(result => (
-                  <tr
-                    className="search-result"
-                    data-testid={`practitioner-row-${result.barNumber}`}
-                    key={result.barNumber}
-                  >
-                    <td>
-                      <a href={`/practitioner-detail/${result.barNumber}`}>
-                        {result.barNumber}
-                      </a>
-                    </td>
-                    <td>{result.name}</td>
-                    <td>{result.contact.stateFullName}</td>
-                    <td>{result.admissionsStatus}</td>
-                    <td>{result.formattedAdmissionsDate}</td>
-                    <td>{result.practitionerType}</td>
-                    <td>{result.practiceType}</td>
-                  </tr>
-                ))}
+                {practitionerSearchHelper.formattedSearchResults?.map(
+                  result => (
+                    <tr
+                      className="search-result"
+                      data-testid={`practitioner-row-${result.barNumber}`}
+                      key={result.barNumber}
+                    >
+                      <td>
+                        <a href={`/practitioner-detail/${result.barNumber}`}>
+                          {result.barNumber}
+                        </a>
+                      </td>
+                      <td>{result.name}</td>
+                      <td>{result.contact?.stateFullName}</td>
+                      <td>{result.admissionsStatus}</td>
+                      <td>{result.formattedAdmissionsDate}</td>
+                      <td>{result.practitionerType}</td>
+                      <td>{result.practiceType}</td>
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </>

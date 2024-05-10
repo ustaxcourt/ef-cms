@@ -12,7 +12,7 @@ export type PractitionerSearchResultType = {
   admissionsStatus: string;
   admissionsDate: string;
   barNumber: string;
-  contact?: { state: string };
+  contact?: { state: string; stateFullName?: string };
   formattedAdmissionsDate: string;
   name: string;
   practiceType: string;
@@ -20,6 +20,73 @@ export type PractitionerSearchResultType = {
   state?: string;
   sort?: (number | string)[];
   stateFullName?: string;
+};
+
+type PractitionerSearchHelperResult = {
+  showNoMatches?: boolean;
+  showSearchResults?: boolean;
+  showStateSelect?: boolean;
+  activePage?: number;
+  formattedSearchResults?: PractitionerSearchResultType[];
+  numberOfResults?: number;
+  pageCount?: number;
+  pageSize?: number;
+  showPractitionerSearch?: boolean;
+};
+
+export const practitionerSearchHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): PractitionerSearchHelperResult => {
+  const permissions = get(state.permissions);
+  const countryType: string = get(
+    state.advancedSearchForm.caseSearchByName.countryType,
+  );
+  const searchResults = get(state.searchResults['practitioner']);
+  const activePage: number = get(
+    state.advancedSearchForm.practitionerSearchByName.pageNum,
+  );
+
+  let result: PractitionerSearchHelperResult = {
+    activePage,
+    showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
+    showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
+  };
+
+  if (searchResults && !searchResults.total) {
+    // search has been run but hasn't returned any results
+    return {
+      showNoMatches: true,
+      showSearchResults: false,
+    };
+  }
+
+  if (searchResults && searchResults.total) {
+    let paginatedResults = searchResults.practitioners;
+
+    paginatedResults = paginatedResults.map(searchResult =>
+      formatPractitionerSearchResultRecord(searchResult, {
+        applicationContext,
+      }),
+    );
+
+    const pageCount = Math.ceil(
+      searchResults.total / PRACTITIONER_SEARCH_PAGE_SIZE,
+    );
+
+    result = {
+      ...result,
+      formattedSearchResults: paginatedResults,
+      numberOfResults: searchResults.total,
+      pageCount,
+      pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
+      showNoMatches: false,
+      showPractitionerSearch: result.showPractitionerSearch,
+      showSearchResults: true,
+    };
+  }
+
+  return result;
 };
 
 export const formatPractitionerSearchResultRecord = (
@@ -46,62 +113,5 @@ export const formatPractitionerSearchResultRecord = (
     .getUtilities()
     .formatDateString(result.admissionsDate, 'MMDDYYYY');
 
-  return result;
-};
-
-export const practitionerSearchHelper = (
-  get: Get,
-  applicationContext: ClientApplicationContext,
-):
-  | { showNoMatches: boolean; showSearchResults: boolean }
-  | {
-      activePage: number;
-      showPractitionerSearch: boolean;
-      showStateSelect: boolean;
-    } => {
-  const permissions = get(state.permissions);
-  const countryType = get(
-    state.advancedSearchForm.caseSearchByName.countryType,
-  );
-  const searchResults = get(state.searchResults['practitioner']);
-  const activePage = get(
-    state.advancedSearchForm.practitionerSearchByName.pageNum,
-  );
-
-  const result = {
-    activePage,
-    showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
-    showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
-  };
-
-  if (searchResults && searchResults.total) {
-    let paginatedResults = searchResults.practitioners;
-
-    paginatedResults = paginatedResults.map(searchResult =>
-      formatPractitionerSearchResultRecord(searchResult, {
-        applicationContext,
-      }),
-    );
-
-    const pageCount = Math.ceil(
-      searchResults.total / PRACTITIONER_SEARCH_PAGE_SIZE,
-    );
-
-    Object.assign(result, {
-      formattedSearchResults: paginatedResults,
-      numberOfResults: searchResults.total,
-      pageCount,
-      pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
-      showNoMatches: false,
-      showPractitionerSearch: result.showPractitionerSearch,
-      showSearchResults: true,
-    });
-  } else if (searchResults && !searchResults.total) {
-    // search has been run but hasn't returned any results
-    return {
-      showNoMatches: true,
-      showSearchResults: false,
-    };
-  }
   return result;
 };
