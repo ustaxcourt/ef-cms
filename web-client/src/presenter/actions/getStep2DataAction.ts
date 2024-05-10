@@ -26,14 +26,14 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
     contactSecondary: useSameAsPrimary
       ? {
           ...pick(contactPrimary, [
-            'countryType',
             'address1',
             'address2',
             'address3',
             'city',
+            'countryType',
+            'placeOfLegalResidence',
             'postalCode',
             'state',
-            'placeOfLegalResidence',
           ]),
           ...contactSecondary,
         }
