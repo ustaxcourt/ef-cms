@@ -6,6 +6,7 @@ import { UpdatedFilePetitionStep3 } from '@web-client/views/StartCaseUpdated/Upd
 import { UpdatedFilePetitionStep4 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep4';
 import { UpdatedFilePetitionStep5 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep5';
 import { UpdatedFilePetitionStep6 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep6';
+import { UpdatedFilePetitionStep7 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep7';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -27,6 +28,7 @@ export const UpdatedFilePetition = connect(
           {currentStep === 4 && <UpdatedFilePetitionStep4 />}
           {currentStep === 5 && <UpdatedFilePetitionStep5 />}
           {currentStep === 6 && <UpdatedFilePetitionStep6 />}
+          {currentStep === 7 && <UpdatedFilePetitionStep7 />}
         </section>
       </>
     );

@@ -133,7 +133,6 @@ export const UpdatedFilePetitionStep3 = connect(
                   />
                   Add another IRS Notice
                 </Button>
-
                 <div className="grid-row grid-gap margin-top-5">
                   <span className="margin-bottom-1 font-sans-pro">
                     <div className="font-weight-600">
@@ -163,6 +162,7 @@ export const UpdatedFilePetitionStep3 = connect(
                           className="usa-checkbox__label"
                           htmlFor="irs-notices-acknowledgement"
                           id="irs-notices-acknowledgement-label"
+                          style={{ marginTop: '0px' }}
                         >
                           <div className="font-weight-600">
                             All documents I am filing have been redacted in

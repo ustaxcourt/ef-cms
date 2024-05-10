@@ -130,7 +130,7 @@ export const UpdatedFilePetitionStep1 = connect(
                 <b>Please read and acknowledge before submitting your filing</b>
               </span>
               <div className="tablet:grid-col-12">
-                <div className="card">
+                <div className="card" style={{ maxWidth: 'fit-content' }}>
                   <div className="content-wrapper usa-checkbox">
                     <input
                       aria-describedby="redaction-acknowledgement-label"

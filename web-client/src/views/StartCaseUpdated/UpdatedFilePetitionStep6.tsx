@@ -16,13 +16,16 @@ export const UpdatedFilePetitionStep6 = connect(
     form: state.form,
     pdfPreviewUrl: state.pdfPreviewUrl,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep1Sequence:
-      sequences.updatedFilePetitionCompleteStep1Sequence,
-    validationErrors: state.validationErrors,
+    updatedFilePetitionCompleteStep6Sequence:
+      sequences.updatedFilePetitionCompleteStep6Sequence,
+    updatedFilePetitionGoBackAStepSequence:
+      sequences.updatedFilePetitionGoBackAStepSequence,
   },
   function UpdatedFilePetitionStep6({
     form,
     pdfPreviewUrl,
+    updatedFilePetitionCompleteStep6Sequence,
+    updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -192,16 +195,20 @@ export const UpdatedFilePetitionStep6 = connect(
 
                 <div className="margin-top-4">
                   <Button
-                    className="margin-bottom-1"
                     data-testid="petition-review-submit-document"
-                    disabled={true}
+                    // disabled={true}
                     id="submit-document"
                     type="submit"
-                    onClick={() => {}}
+                    onClick={() => {
+                      updatedFilePetitionCompleteStep6Sequence();
+                    }}
                   >
                     Submit Your Filing
                   </Button>
-                  <Button secondary onClick={() => {}}>
+                  <Button
+                    secondary
+                    onClick={() => updatedFilePetitionGoBackAStepSequence()}
+                  >
                     Back
                   </Button>
                   <Button link onClick={() => {}}>
