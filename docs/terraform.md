@@ -19,11 +19,22 @@ Our infrastructure is set to be deployed in the below order:
 This means account-specific will run first, allColors second, and individual color third. This order will never change as each step relies on resources the previous created. For example in order for green to deploy it will need cognito to have been deployed first by allColors, and in order for allColors to deploy, it will need a route53 zone to have been deployed by account-specific. It is always okay for later steps to depend on infrastructure created by previous steps, however it is not okay for previous steps to rely on infrastructure in later steps. If account-specific relies on green deploy to run first and green relies on account-specific to run first then there is a chicken-egg problem.
 
 ## Blue/Green
+
 All resources that are duplicated in both blue and green should be instantiated in the `applyables/blue/` and `applyables/green` folder. Folder structure is very important in terraform and we have separated our blue/green resources into their own deployments so that the deployment or changes to one color does not affect the other color. If you are refactoring an API that is duplicated across blue/green you should feel safe to make infrastructure changes as it will not affect the active color.
 
-### Account Specific Terraform
+## How To Guides
 
-### Manually Unlock the State File
+## Account Specific Terraform
+If you make changes to the account specific terraform you will need to manually run an account specific deploy as the account specific deploy is not automated as part of our CI/CD process.
+
+To run an account specific deploy:
+1. Use the environment switcher to point to an environment in the account you would like to deploy the changes to.
+2. Run the following command:
+```
+npm run deploy:account-specific
+```
+
+## Manually Unlock the State File
 
 Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes - verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
 
