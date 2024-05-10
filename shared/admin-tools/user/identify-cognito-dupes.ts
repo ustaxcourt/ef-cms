@@ -174,7 +174,7 @@ void (async () => {
 
   const allLowerCaseDupes = [];
   const allLowerCaseUsers = [];
-  const distinctUsers = [];
+  const distinctUsers = {};
 
   await processUsers({
     allLowerCaseDupes,
@@ -190,7 +190,7 @@ void (async () => {
   } else {
     console.log('There are no duplicate emails!', {
       allLowerCaseDupes,
-      totalDistinctUsers: distinctUsers.length,
+      totalDistinctUsers: Object.keys(distinctUsers).length,
       totalLowerCaseUsers: allLowerCaseUsers.length,
       totalUsers: allUsers.length,
     });
