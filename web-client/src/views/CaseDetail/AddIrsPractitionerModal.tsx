@@ -34,6 +34,7 @@ export const AddIrsPractitionerModal = connect(
         className="counsel-modal"
         confirmLabel="Add to Case"
         confirmSequence={confirmSequence}
+        dataTestId="irs-practitioner-modal"
         title="Add Respondent Counsel"
       >
         <div className="ustc-add-counsel-modal">

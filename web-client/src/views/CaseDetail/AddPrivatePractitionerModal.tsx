@@ -36,6 +36,7 @@ export const AddPrivatePractitionerModal = connect(
         className="counsel-modal"
         confirmLabel="Add to Case"
         confirmSequence={confirmSequence}
+        dataTestId="private-practitioner-modal"
         title="Add Petitioner Counsel"
       >
         <div className="ustc-add-counsel-modal">
