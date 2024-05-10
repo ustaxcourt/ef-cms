@@ -1,6 +1,6 @@
 # Terraform
 
-## How Dawson Uses Terraform
+# How Dawson Uses Terraform
 Dawson has split its terraform into two separate categories, infrastructure modules/blueprints and live infrastructure. 
 
 ### Infrastructure Modules (./web-api/terraform/modules)
@@ -52,3 +52,7 @@ Cancelling a Terraform run before it completes often results in a locked state f
 8. Determine the lock ID that needs to be unlocked (lockID).
 9. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
 10. Uncomment the `terraform plan` and `apply` commands.
+
+## Resources
+
+[Guide on creating scalable terraform](https://blog.gruntwork.io/an-introduction-to-terraform-f17df9c6d180)
