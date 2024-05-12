@@ -31,6 +31,7 @@ export const generatePetitionPdfAction = async ({
       caseType,
       contactPrimary,
       contactSecondary,
+      partyType,
       petitionFacts,
       petitionReasons,
       preferredTrialCity,
@@ -45,8 +46,6 @@ export const generatePetitionPdfAction = async ({
     const noticeIssuedDate = '01/01/99';
     const taxYear = '1999';
 
-    //handle business contact types
-
     const { url } = await applicationContext
       .getUseCases()
       .generatePetitionPdfInteractor(applicationContext, {
@@ -57,6 +56,7 @@ export const generatePetitionPdfAction = async ({
         contactSecondary,
         docketNumberWithSuffix,
         noticeIssuedDate,
+        partyType,
         petitionFacts,
         petitionReasons,
         preferredTrialCity,
