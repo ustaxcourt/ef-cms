@@ -30,7 +30,7 @@ export const Petition = ({
   preferredTrialCity: string;
   petitionReasons: string[];
   contactPrimary: object;
-  contactSecondary: object;
+  contactSecondary?: object;
 }) => {
   console.log('date', date);
   return (
@@ -41,7 +41,6 @@ export const Petition = ({
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle="Petition"
       />
 
       <div className="petition-pdf" id="petition-pdf">
@@ -134,33 +133,39 @@ export const Petition = ({
             </div>
           </div>
         </div>
-        <div className="address-label petitioner-info">
-          <b>Spouse&apos;s contact information:</b>
-          <div>{contactSecondary.name}</div>
-          <div>{contactSecondary.address1}</div>
-          {contactSecondary.address2 && <div>{contactSecondary.address2}</div>}
-          {contactSecondary.address3 && <div>{contactSecondary.address3}</div>}
-          <div>
-            {contactSecondary.city}, {contactSecondary.state}{' '}
-            {contactSecondary.postalCode}
+        {contactSecondary && (
+          <div className="address-label petitioner-info">
+            <b>Spouse&apos;s contact information:</b>
+            <div>{contactSecondary.name}</div>
+            <div>{contactSecondary.address1}</div>
+            {contactSecondary.address2 && (
+              <div>{contactSecondary.address2}</div>
+            )}
+            {contactSecondary.address3 && (
+              <div>{contactSecondary.address3}</div>
+            )}
+            <div>
+              {contactSecondary.city}, {contactSecondary.state}{' '}
+              {contactSecondary.postalCode}
+            </div>
+            <div>
+              {contactSecondary.phone
+                ? contactSecondary.phone
+                : 'Phone number not provided'}
+            </div>
+            {contactSecondary.email && <div>{contactSecondary.email}</div>}
+            <div>
+              <b>Register for electronic filing and service:</b>
+              {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}{' '}
+            </div>
+            <div>
+              <b>Place of legal residence: </b>
+              {contactSecondary.placeOfLegalResidence
+                ? contactSecondary.placeOfLegalResidence
+                : 'N/A'}
+            </div>
           </div>
-          <div>
-            {contactSecondary.phone
-              ? contactSecondary.phone
-              : 'Phone number not provided'}
-          </div>
-          {contactSecondary.email && <div>{contactSecondary.email}</div>}
-          <div>
-            <b>Register for electronic filing and service:</b>
-            {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}{' '}
-          </div>
-          <div>
-            <b>Place of legal residence: </b>
-            {contactSecondary.placeOfLegalResidence
-              ? contactSecondary.placeOfLegalResidence
-              : 'N/A'}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
