@@ -1,4 +1,8 @@
-import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  BUSINESS_TYPES,
+  PARTY_TYPES,
+  PROCEDURE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { PetitionDocketHeader } from '../components/PetitionDocketHeader';
 import { PetitionPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PetitionPrimaryHeader';
 import React from 'react';
@@ -12,6 +16,7 @@ export const Petition = ({
   date,
   docketNumberWithSuffix,
   noticeIssuedDate,
+  partyType,
   petitionFacts,
   petitionReasons,
   preferredTrialCity,
@@ -25,6 +30,7 @@ export const Petition = ({
   procedureType: string;
   taxYear: string;
   noticeIssuedDate: string;
+  partyType: string;
   docketNumberWithSuffix: string;
   petitionFacts: string[];
   preferredTrialCity: string;
@@ -36,7 +42,6 @@ export const Petition = ({
   return (
     <div className="petition-pdf" id="petition-pdf">
       <PetitionPrimaryHeader />
-      {/* Avoid underlining title and capitalize? */}
       <PetitionDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
@@ -115,6 +120,13 @@ export const Petition = ({
           <div className="address-label petitioner-info">
             <b>Petitioner&apos;s contact information:</b>
             <div>{contactPrimary.name}</div>
+            {Object.values(BUSINESS_TYPES).includes(partyType) &&
+              contactPrimary.secondaryName && (
+                <div>
+                  {partyType === PARTY_TYPES.corporation && <b>C/O: </b>}
+                  {contactPrimary.secondaryName}
+                </div>
+              )}
             <div>{contactPrimary.address1}</div>
             {contactPrimary.address2 && <div>{contactPrimary.address2}</div>}
             {contactPrimary.address3 && <div>{contactPrimary.address3}</div>}
@@ -137,6 +149,12 @@ export const Petition = ({
           <div className="address-label petitioner-info">
             <b>Spouse&apos;s contact information:</b>
             <div>{contactSecondary.name}</div>
+            {contactSecondary.inCareOf && (
+              <div>
+                <b>C/O: </b>
+                {contactSecondary.inCareOf}
+              </div>
+            )}
             <div>{contactSecondary.address1}</div>
             {contactSecondary.address2 && (
               <div>{contactSecondary.address2}</div>
