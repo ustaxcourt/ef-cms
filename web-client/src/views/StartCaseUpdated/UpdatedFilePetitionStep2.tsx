@@ -88,7 +88,6 @@ export const UpdatedFilePetitionStep2 = connect(
             onChange="updateFormValueUpdatedSequence"
           />
         )}
-        {console.log('form', form)}
         {form.filingType === 'Myself and my spouse' && (
           <>
             <ContactPrimaryUpdated
