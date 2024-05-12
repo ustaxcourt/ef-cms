@@ -20,6 +20,7 @@ const config: Config = {
     '!src/**/localStorage/',
     '!src/**/shared.cerebral.ts',
     '!src/ustc-ui/Utils/types.ts',
+    '!src/persistence/localStorage/*.ts',
   ],
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',

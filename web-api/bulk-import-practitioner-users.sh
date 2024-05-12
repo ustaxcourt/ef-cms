@@ -24,7 +24,5 @@ export REGION
 
 STAGE="${ENV}" \
     DEPLOYING_COLOR="${DEPLOYING_COLOR}" \
-    S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
-    DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
     USER_POOL_ID="${USER_POOL_ID}" \
     npx ts-node --transpile-only ./bulkImportPractitionerUsers.ts "${FILE_NAME}" >> bulk-import-log.txt

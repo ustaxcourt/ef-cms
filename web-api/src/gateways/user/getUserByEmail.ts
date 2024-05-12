@@ -5,20 +5,9 @@ import {
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-// Not every user has a custom:userId. If not then their userId is the sub
-// If they have a custom:userId then their userId is custom:userid
-
-// Hosted environment
-// Only attributes you ask for will be given back
-// Will explode when you ask for attributes that the user does not have.
-
-// Cognito Local
-// Will return all attributes no matter what you ask for.
-// Will not explode when you ask for attributes that the user does not have.
-
 export const getUserByEmail = async (
   applicationContext: ServerApplicationContext,
-  { email }: { email: string },
+  { email, poolId }: { email: string; poolId?: string },
 ): Promise<
   | {
       userId: string;
@@ -32,8 +21,8 @@ export const getUserByEmail = async (
   let foundUser: AdminGetUserCommandOutput;
   try {
     foundUser = await applicationContext.getCognito().adminGetUser({
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: email,
+      UserPoolId: poolId ?? applicationContext.environment.userPoolId,
+      Username: email.toLowerCase(),
     });
   } catch (err: any) {
     if (err.name === 'UserNotFoundException') {
@@ -42,10 +31,9 @@ export const getUserByEmail = async (
     throw err;
   }
 
-  const userId =
-    foundUser.UserAttributes?.find(element => element.Name === 'custom:userId')
-      ?.Value! ||
-    foundUser.UserAttributes?.find(element => element.Name === 'sub')?.Value!;
+  const userId = foundUser.UserAttributes?.find(
+    element => element.Name === 'custom:userId',
+  )?.Value!;
   const role = foundUser.UserAttributes?.find(
     element => element.Name === 'custom:role',
   )?.Value! as Role;
