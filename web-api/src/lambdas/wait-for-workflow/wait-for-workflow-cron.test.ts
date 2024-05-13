@@ -2,7 +2,7 @@ import * as circleHelper from '../../../../shared/admin-tools/circleci/circleci-
 import { handler } from './wait-for-workflow-cron';
 import type { Context } from 'aws-lambda';
 
-jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
+jest.mock('../../../../shared/admin-tools/circleci/circleci-helper');
 const approvePendingJob = jest
   .spyOn(circleHelper, 'approvePendingJob')
   .mockImplementation(jest.fn());
