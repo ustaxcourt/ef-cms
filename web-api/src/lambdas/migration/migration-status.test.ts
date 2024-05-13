@@ -4,7 +4,7 @@ import { handler } from './migration-status';
 import type { Context } from 'aws-lambda';
 import type { GetMetricStatisticsOutput } from '@aws-sdk/client-cloudwatch';
 
-jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
+jest.mock('../../../../shared/admin-tools/circleci/circleci-helper');
 const approvePendingJob = jest
   .spyOn(circleHelper, 'approvePendingJob')
   .mockImplementation(jest.fn());
@@ -12,7 +12,7 @@ const cancelWorkflow = jest
   .spyOn(circleHelper, 'cancelWorkflow')
   .mockImplementation(jest.fn());
 
-jest.mock('../../../../../shared/admin-tools/aws/migrationWaitHelper');
+jest.mock('../../../../shared/admin-tools/aws/migrationWaitHelper');
 const getMetricStatistics = jest
   .spyOn(migrationWaitHelper, 'getMetricStatistics')
   .mockImplementation(jest.fn());
