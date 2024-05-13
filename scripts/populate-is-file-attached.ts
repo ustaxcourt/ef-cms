@@ -32,7 +32,7 @@ const query = {
   },
 };
 
-const getNextPageOfIdsOfDocketEntriesMissingIsFileAttached = async ({
+const getNextPageOfDocketEntriesMissingIsFileAttached = async ({
   applicationContext,
   search_after,
 }: {
@@ -49,7 +49,7 @@ const getNextPageOfIdsOfDocketEntriesMissingIsFileAttached = async ({
     },
     index: 'efcms-docket-entry',
   };
-  const { results } = await search({ applicationContext, searchParameters }); // searchAll({ applicationContext, searchParameters });
+  const { results } = await search({ applicationContext, searchParameters });
   return results;
 };
 
@@ -67,9 +67,7 @@ const fileExistsInS3 = ({
 (async () => {
   const applicationContext = createApplicationContext({});
   const total = await applicationContext.getSearchClient().count({
-    body: {
-      query,
-    },
+    body: { query },
     index: efcmsDocketEntryIndex,
   });
   const expected = get(total, 'body.count', 0);
@@ -84,12 +82,13 @@ const fileExistsInS3 = ({
   }[] = [];
   let search_after = [''];
   for (let i = 0; i < 5; i++) {
-    //while (processed < expected) {
-    const docketEntries =
-      await getNextPageOfIdsOfDocketEntriesMissingIsFileAttached({
+    // while (processed < expected) {
+    const docketEntries = await getNextPageOfDocketEntriesMissingIsFileAttached(
+      {
         applicationContext,
         search_after,
-      });
+      },
+    );
     search_after = [docketEntries[docketEntries.length - 1].docketEntryId];
     console.log(`found ${docketEntries.length} in page ${i + 1}`);
     console.log(`next page will start after ${search_after[0]}`);
