@@ -310,6 +310,70 @@ describe('getDownloadPolicyUrlInteractor', () => {
       );
     });
 
+    it('should return the policy url when the doucument requested does not have the updated "isFileAttached" bur does have a file in S3 and updates the docket entry in the database', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(true);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getDocument.mockImplementation(
+          () => new Promise(resolve => resolve(true)),
+        );
+
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        createdAt: '2018-01-21T20:49:28.192Z',
+        date: '2200-01-21T20:49:28.192Z',
+        documentTitle: 'Answer of [anything] on [date]',
+        documentType: 'Answer',
+        eventCode: 'A',
+        isFileAttached: undefined,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getDocketEntryOnCase.mockReturnValue(mockCase.docketEntries[0]);
+
+      applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntry.mockImplementation(() => {});
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: baseDocketEntry.docketEntryId,
+      });
+      expect(url).toEqual('localhost');
+
+      const getDocketEntryOnCaseCalls =
+        applicationContext.getPersistenceGateway().getDocketEntryOnCase.mock
+          .calls;
+
+      expect(getDocketEntryOnCaseCalls.length).toEqual(1);
+      expect(getDocketEntryOnCaseCalls[0][0].docketEntryId).toEqual(
+        mockCase.docketEntries[0].docketEntryId,
+      );
+      expect(getDocketEntryOnCaseCalls[0][0].docketNumber).toEqual(
+        mockCase.docketNumber,
+      );
+
+      const updateDocketEntryCalls =
+        applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls;
+
+      expect(updateDocketEntryCalls.length).toEqual(1);
+      expect(updateDocketEntryCalls[0][0].docketEntryId).toEqual(
+        mockCase.docketEntries[0].docketEntryId,
+      );
+      expect(updateDocketEntryCalls[0][0].docketNumber).toEqual(
+        mockCase.docketNumber,
+      );
+      expect(updateDocketEntryCalls[0][0].document.isFileAttached).toEqual(
+        true,
+      );
+    });
+
     it('should throw a not found error when the case the document belonds to is not found', async () => {
       applicationContext
         .getPersistenceGateway()

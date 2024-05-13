@@ -72,6 +72,8 @@ export const getDownloadPolicyUrlInteractor = async (
           docketNumber: caseEntity.docketNumber,
           document: docketEntryFromDB,
         });
+
+        docketEntryEntity.isFileAttached = true;
       } else {
         throw new NotFoundError(
           `Docket entry ${key} does not have an attached file.`,
