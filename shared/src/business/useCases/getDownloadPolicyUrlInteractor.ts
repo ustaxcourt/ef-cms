@@ -66,11 +66,15 @@ export const getDownloadPolicyUrlInteractor = async (
 
         docketEntryFromDB.isFileAttached = true;
 
+        const docketEntryUpdatedEntity = new DocketEntry(docketEntryFromDB, {
+          applicationContext,
+        }).validate();
+
         await applicationContext.getPersistenceGateway().updateDocketEntry({
           applicationContext,
           docketEntryId: docketEntryEntity.docketEntryId,
           docketNumber: caseEntity.docketNumber,
-          document: docketEntryFromDB,
+          document: docketEntryUpdatedEntity,
         });
 
         docketEntryEntity.isFileAttached = true;
