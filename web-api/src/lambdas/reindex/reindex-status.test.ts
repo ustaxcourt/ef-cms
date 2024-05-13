@@ -3,7 +3,7 @@ import { handler } from './reindex-status';
 import axios from 'axios';
 import type { Context } from 'aws-lambda';
 
-jest.mock('../../../../../scripts/elasticsearch/check-reindex-complete');
+jest.mock('../../../../scripts/elasticsearch/check-reindex-complete');
 const areAllReindexTasksFinished = jest
   .spyOn(checkReindexComplete, 'areAllReindexTasksFinished')
   .mockImplementation(jest.fn());
