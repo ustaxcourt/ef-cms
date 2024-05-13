@@ -2,7 +2,7 @@ import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAc
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getStep4DataAction', () => {
-  it('should fetch step 3 related data from state.form', async () => {
+  it('should fetch step 4 related data from state.form', async () => {
     const results = await runAction(getStep4DataAction, {
       state: {
         form: {
