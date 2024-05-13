@@ -54,6 +54,12 @@ describe('getDownloadPolicyUrlInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue('localhost');
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockImplementation(
+        () => new Promise(resolve => resolve(false)),
+      );
   });
 
   it('should throw unauthorized error when the users role is invalid', async () => {
