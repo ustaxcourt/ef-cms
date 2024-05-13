@@ -71,9 +71,6 @@ const fileExistsInS3 = ({
     index: efcmsDocketEntryIndex,
   });
   const expected = get(total, 'body.count', 0);
-  //   console.log(
-  //     `found ${expected} docket entries missing the isFileAttached flag`,
-  //   );
   let processed = 0;
   let search_after = [''];
   while (processed < expected) {
@@ -83,19 +80,10 @@ const fileExistsInS3 = ({
         search_after,
       },
     );
-    search_after = [docketEntries[docketEntries.length - 1].docketEntryId];
-    // console.log(`found ${docketEntries.length} in page ${i + 1}`);
-    // console.log(`next page will start after ${search_after[0]}`);
+    search_after = [docketEntries[docketEntries.length - 1]?.docketEntryId];
     processed += docketEntries.length;
     docketEntries.map(de => {
       console.log(de.docketEntryId);
     });
-    // TODO: batch the dynamo put reqs
-    // console.log(
-    //   `found ${gottaFix.length} docket entries so far (page ${i + 1})`,
-    // );
   }
-  //   console.log(`checked ${processed} docket entries`);
-  //   console.log(`found ${gottaFix.length} docket entries to modify`);
-  //   console.log('fix these: ', gottaFix);
 })();

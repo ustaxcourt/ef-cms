@@ -13,29 +13,14 @@ const bucketName = 'test.ef-cms.ustaxcourt.gov-documents-test-us-east-1';
 
 let allKeys = [];
 let pagenum = 0;
-function listAllKeys(token, cb) {
-  let opts = { Bucket: bucketName };
-  if (token) opts.ContinuationToken = token;
-  pagenum++;
-
-  s3.listObjectsV2(opts, function (err, data) {
-    allKeys = allKeys.concat(data.Contents);
-    console.log(
-      `grabbing page ${pagenum} of results with ${data.Contents?.length} records`,
-    );
-    if (data.IsTruncated) listAllKeys(data.NextContinuationToken, cb);
-    else cb();
-  });
-}
 
 function echoKeys(keys) {
-  // let keys = allKeys.map(obj => obj.Key);
   keys.forEach(obj => {
     console.log(obj.Key);
   });
 }
 
-function listAllKeys2(token, cb) {
+function listAllKeys(token, cb) {
   let opts = { Bucket: bucketName };
   if (token) opts.ContinuationToken = token;
 
@@ -46,14 +31,9 @@ function listAllKeys2(token, cb) {
     // console.log(
     //   `grabbing page ${pagenum} of results with ${data.Contents?.length} records`,
     // );
-    if (data.IsTruncated) listAllKeys2(data.NextContinuationToken, cb);
+    if (data.IsTruncated) listAllKeys(data.NextContinuationToken, cb);
     else cb();
   });
 }
 
-listAllKeys2(undefined, () => {
-  // let keys = allKeys.map(obj => obj.Key);
-  // keys.forEach(key => {
-  //   console.log(key);
-  // });
-});
+listAllKeys(undefined, () => {});
