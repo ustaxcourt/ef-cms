@@ -19,3 +19,28 @@ aws dynamodb delete-item \
   --region us-east-1 \
   --table-name "efcms-deploy-${ENV}" \
   --key '{"pk":{"S":"deploying-node-version"},"sk":{"S":"deploying-node-version"}}'
+
+aws dynamodb delete-item \
+  --region us-east-1 \
+  --table-name "efcms-deploy-${ENV}" \
+  --key '{"pk":{"S":"deploying-use-layers"},"sk":{"S":"deploying-use-layers"}}'
+
+aws dynamodb delete-item \
+  --region us-east-1 \
+  --table-name "efcms-deploy-${ENV}" \
+  --key '{"pk":{"S":"current-use-layers"},"sk":{"S":"current-use-layers"}}'
+
+aws dynamodb delete-item \
+  --region us-east-1 \
+  --table-name "efcms-deploy-${ENV}" \
+  --key '{"pk":{"S":"use-external-pdf-generation"},"sk":{"S":"use-external-pdf-generation"}}'
+
+aws dynamodb delete-item \
+  --region us-east-1 \
+  --table-name "efcms-deploy-${ENV}" \
+  --key '{"pk":{"S":"pdfjs-express-viewer-enabled"},"sk":{"S":"pdfjs-express-viewer-enabled"}}'
+
+aws dynamodb delete-item \
+  --region us-east-1 \
+  --table-name "efcms-deploy-${ENV}" \
+  --key '{"pk":{"S":"multi-docketable-paper-filings"},"sk":{"S":"multi-docketable-paper-filings"}}'
