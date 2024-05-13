@@ -20,7 +20,7 @@ beforeEach(() => {
   // jest.resetAllMocks();
 });
 //swap out the applicationContext module used by migration-segments with our mocked version
-jest.mock('../../../../src/applicationContext', () => {
+jest.mock('../../../src/applicationContext', () => {
   return {
     createApplicationContext: () => mockApplicationContext,
   };
