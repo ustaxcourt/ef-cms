@@ -3,11 +3,9 @@ import React from 'react';
 export const PetitionDocketHeader = ({
   caseCaptionExtension,
   caseTitle,
-  docketNumberWithSuffix,
 }: {
   caseCaptionExtension: string;
   caseTitle: string;
-  docketNumberWithSuffix: string;
 }) => {
   return (
     <div id="petition-header">
@@ -20,7 +18,7 @@ export const PetitionDocketHeader = ({
           <div id="caption-respondent">Respondent</div>
         </div>
         <div id="electronically-filed">Electronically Filed</div>
-        <div id="temp-docket-number">Docket No. {docketNumberWithSuffix}</div>
+        <div id="temp-docket-number">Docket No.</div>
         <div className="clear"></div>
         <h3 className="document-title">PETITION</h3>
       </div>

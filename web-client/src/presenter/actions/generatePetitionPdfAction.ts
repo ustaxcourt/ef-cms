@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
@@ -25,12 +26,11 @@ export const generatePetitionPdfAction = async ({
       caseCaption,
     });
 
-    const docketNumberWithSuffix = '9999-99';
-
     const {
       caseType,
       contactPrimary,
       contactSecondary,
+      irsNotices,
       partyType,
       petitionFacts,
       petitionReasons,
@@ -42,9 +42,16 @@ export const generatePetitionPdfAction = async ({
     const user = applicationContext.getCurrentUser();
     contactPrimary.email = user.email;
 
-    // Why aren't these values set?
-    const noticeIssuedDate = '01/01/99';
-    const taxYear = '1999';
+    let noticeIssuedDate;
+    let taxYear;
+
+    if (irsNotices[0]) {
+      noticeIssuedDate = applicationContext
+        .getUtilities()
+        .formatDateString(irsNotices[0].noticeIssuedDate, FORMATS.MMDDYY);
+
+      ({ taxYear } = irsNotices[0]);
+    }
 
     const { url } = await applicationContext
       .getUseCases()
@@ -54,7 +61,6 @@ export const generatePetitionPdfAction = async ({
         caseType,
         contactPrimary,
         contactSecondary,
-        docketNumberWithSuffix,
         noticeIssuedDate,
         partyType,
         petitionFacts,

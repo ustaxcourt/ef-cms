@@ -14,7 +14,6 @@ export const Petition = ({
   contactPrimary,
   contactSecondary,
   date,
-  docketNumberWithSuffix,
   noticeIssuedDate,
   partyType,
   petitionFacts,
@@ -31,7 +30,6 @@ export const Petition = ({
   taxYear: string;
   noticeIssuedDate: string;
   partyType: string;
-  docketNumberWithSuffix: string;
   petitionFacts: string[];
   preferredTrialCity: string;
   petitionReasons: string[];
@@ -40,41 +38,42 @@ export const Petition = ({
 }) => {
   console.log('date', date);
   return (
-    <div className="petition-pdf" id="petition-pdf">
+    <div id="petition-pdf">
       <PetitionPrimaryHeader />
       <PetitionDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
-        docketNumberWithSuffix={docketNumberWithSuffix}
       />
 
-      <div className="petition-pdf" id="petition-pdf">
+      <div className="petition-pdf">
         <ol>
-          <li>Which IRS ACTION(S) do you dispute?</li>
+          <li className="list-bold">Which IRS ACTION(S) do you dispute?</li>
           <p>{caseDescription}</p>
-          <li>
+          <li className="list-bold">
             If applicable, provide the date(s) the IRS issued the NOTICE(S) for
             the above and the City and State of the IRS office(s) issuing the
             NOTICE(S):
           </li>
           {/* location goes here as well, but we don't collect it */}
-          <p>{noticeIssuedDate}</p>
-          <li>
+          <p>{noticeIssuedDate ? `${noticeIssuedDate} - ` : 'N/A'}</p>
+          <li className="list-bold">
             Provide the year(s) or period(s) for which the NOTICE(S) was/were
             issued:
           </li>
-          <p>{taxYear}</p>
-          <li>Which case procedure and trial location are you requesting?</li>
+          <p> {taxYear || 'N/A'}</p>
+          <li className="list-bold">
+            Which case procedure and trial location are you requesting?
+          </li>
           <p>
             {procedureType} - {preferredTrialCity}
           </p>
           {procedureType === PROCEDURE_TYPES_MAP.small && (
             <p>
-              Note: the decision in a &quot;small tax case&quot; cannot be
+              NOTE: the decision in a &quot;small tax case&quot; cannot be
               appealed to a Court of Appeals by the taxpayer or the IRS.
             </p>
           )}
-          <li>
+          <li className="list-bold">
             Explain why you disagree with the IRS action(s) in this case (please
             add each reason separately):
           </li>
@@ -83,7 +82,7 @@ export const Petition = ({
               return <li key={reason}>{reason}</li>;
             })}
           </ol>
-          <li>
+          <li className="list-bold">
             State the facts upon which you rely (please add each fact
             separately):
           </li>
@@ -96,11 +95,14 @@ export const Petition = ({
         <p>You have included the following items with this petition:</p>
         <div>
           <ol className="list-disc">
-            <li>Any NOTICE(S) the IRS issued to you</li>
+            {noticeIssuedDate && <li>Any NOTICE(S) the IRS issued to you</li>}
             <li>
               Statement of Taxpayer Identification Number (Form 4)(see PRIVACY
               NOTICE below)
             </li>
+            {Object.values(BUSINESS_TYPES).includes(partyType) && (
+              <li>Corporate Disclosure Statement</li>
+            )}
           </ol>
         </div>
         <div className="privacy-notice">
