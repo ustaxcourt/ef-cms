@@ -50,39 +50,9 @@ export const getDownloadPolicyUrlInteractor = async (
       throw new NotFoundError(`Docket entry ${key} was not found.`);
     }
     if (!docketEntryEntity.isFileAttached) {
-      const fileExistsInS3: boolean = await checkIfFileExistsInS3(
-        docketEntryEntity.docketEntryId,
-        applicationContext,
+      throw new NotFoundError(
+        `Docket entry ${key} does not have an attached file.`,
       );
-
-      if (fileExistsInS3) {
-        const docketEntryFromDB = await applicationContext
-          .getPersistenceGateway()
-          .getDocketEntryOnCase({
-            applicationContext,
-            docketEntryId: docketEntryEntity.docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-          });
-
-        docketEntryFromDB.isFileAttached = true;
-
-        const docketEntryUpdatedEntity = new DocketEntry(docketEntryFromDB, {
-          applicationContext,
-        }).validate();
-
-        await applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId: docketEntryEntity.docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          document: docketEntryUpdatedEntity,
-        });
-
-        docketEntryEntity.isFileAttached = true;
-      } else {
-        throw new NotFoundError(
-          `Docket entry ${key} does not have an attached file.`,
-        );
-      }
     }
 
     const featureFlags = await applicationContext
@@ -111,22 +81,6 @@ export const getDownloadPolicyUrlInteractor = async (
     key,
   });
 };
-
-async function checkIfFileExistsInS3(
-  docketEntryId: string,
-  applicationContext: IApplicationContext,
-): Promise<boolean> {
-  const results = await applicationContext
-    .getPersistenceGateway()
-    .getDocument({
-      applicationContext,
-      key: docketEntryId,
-      useTempBucket: false,
-    })
-    .catch(() => null);
-
-  return !!results;
-}
 
 export const UNAUTHORIZED_DOCUMENT_MESSAGE =
   'Unauthorized to view document at this time.';
