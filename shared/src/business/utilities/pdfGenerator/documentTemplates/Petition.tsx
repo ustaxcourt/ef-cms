@@ -1,4 +1,8 @@
-import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  BUSINESS_TYPES,
+  PARTY_TYPES,
+  PROCEDURE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { PetitionDocketHeader } from '../components/PetitionDocketHeader';
 import { PetitionPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PetitionPrimaryHeader';
 import React from 'react';
@@ -10,8 +14,8 @@ export const Petition = ({
   contactPrimary,
   contactSecondary,
   date,
-  docketNumberWithSuffix,
   noticeIssuedDate,
+  partyType,
   petitionFacts,
   petitionReasons,
   preferredTrialCity,
@@ -25,52 +29,51 @@ export const Petition = ({
   procedureType: string;
   taxYear: string;
   noticeIssuedDate: string;
-  docketNumberWithSuffix: string;
+  partyType: string;
   petitionFacts: string[];
   preferredTrialCity: string;
   petitionReasons: string[];
   contactPrimary: object;
-  contactSecondary: object;
+  contactSecondary?: object;
 }) => {
   console.log('date', date);
   return (
-    <div className="petition-pdf" id="petition-pdf">
+    <div id="petition-pdf">
       <PetitionPrimaryHeader />
-      {/* Avoid underlining title and capitalize? */}
       <PetitionDocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
-        docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle="Petition"
       />
 
-      <div className="petition-pdf" id="petition-pdf">
+      <div className="petition-pdf">
         <ol>
-          <li>Which IRS ACTION(S) do you dispute?</li>
+          <li className="list-bold">Which IRS ACTION(S) do you dispute?</li>
           <p>{caseDescription}</p>
-          <li>
+          <li className="list-bold">
             If applicable, provide the date(s) the IRS issued the NOTICE(S) for
             the above and the City and State of the IRS office(s) issuing the
             NOTICE(S):
           </li>
           {/* location goes here as well, but we don't collect it */}
-          <p>{noticeIssuedDate}</p>
-          <li>
+          <p>{noticeIssuedDate ? `${noticeIssuedDate} - ` : 'N/A'}</p>
+          <li className="list-bold">
             Provide the year(s) or period(s) for which the NOTICE(S) was/were
             issued:
           </li>
-          <p>{taxYear}</p>
-          <li>Which case procedure and trial location are you requesting?</li>
+          <p> {taxYear || 'N/A'}</p>
+          <li className="list-bold">
+            Which case procedure and trial location are you requesting?
+          </li>
           <p>
             {procedureType} - {preferredTrialCity}
           </p>
           {procedureType === PROCEDURE_TYPES_MAP.small && (
             <p>
-              Note: the decision in a &quot;small tax case&quot; cannot be
+              NOTE: the decision in a &quot;small tax case&quot; cannot be
               appealed to a Court of Appeals by the taxpayer or the IRS.
             </p>
           )}
-          <li>
+          <li className="list-bold">
             Explain why you disagree with the IRS action(s) in this case (please
             add each reason separately):
           </li>
@@ -79,7 +82,7 @@ export const Petition = ({
               return <li key={reason}>{reason}</li>;
             })}
           </ol>
-          <li>
+          <li className="list-bold">
             State the facts upon which you rely (please add each fact
             separately):
           </li>
@@ -92,11 +95,14 @@ export const Petition = ({
         <p>You have included the following items with this petition:</p>
         <div>
           <ol className="list-disc">
-            <li>Any NOTICE(S) the IRS issued to you</li>
+            {noticeIssuedDate && <li>Any NOTICE(S) the IRS issued to you</li>}
             <li>
               Statement of Taxpayer Identification Number (Form 4)(see PRIVACY
               NOTICE below)
             </li>
+            {Object.values(BUSINESS_TYPES).includes(partyType) && (
+              <li>Corporate Disclosure Statement</li>
+            )}
           </ol>
         </div>
         <div className="privacy-notice">
@@ -116,6 +122,13 @@ export const Petition = ({
           <div className="address-label petitioner-info">
             <b>Petitioner&apos;s contact information:</b>
             <div>{contactPrimary.name}</div>
+            {Object.values(BUSINESS_TYPES).includes(partyType) &&
+              contactPrimary.secondaryName && (
+                <div>
+                  {partyType === PARTY_TYPES.corporation && <b>C/O: </b>}
+                  {contactPrimary.secondaryName}
+                </div>
+              )}
             <div>{contactPrimary.address1}</div>
             {contactPrimary.address2 && <div>{contactPrimary.address2}</div>}
             {contactPrimary.address3 && <div>{contactPrimary.address3}</div>}
@@ -134,33 +147,45 @@ export const Petition = ({
             </div>
           </div>
         </div>
-        <div className="address-label petitioner-info">
-          <b>Spouse&apos;s contact information:</b>
-          <div>{contactSecondary.name}</div>
-          <div>{contactSecondary.address1}</div>
-          {contactSecondary.address2 && <div>{contactSecondary.address2}</div>}
-          {contactSecondary.address3 && <div>{contactSecondary.address3}</div>}
-          <div>
-            {contactSecondary.city}, {contactSecondary.state}{' '}
-            {contactSecondary.postalCode}
+        {contactSecondary && (
+          <div className="address-label petitioner-info">
+            <b>Spouse&apos;s contact information:</b>
+            <div>{contactSecondary.name}</div>
+            {contactSecondary.inCareOf && (
+              <div>
+                <b>C/O: </b>
+                {contactSecondary.inCareOf}
+              </div>
+            )}
+            <div>{contactSecondary.address1}</div>
+            {contactSecondary.address2 && (
+              <div>{contactSecondary.address2}</div>
+            )}
+            {contactSecondary.address3 && (
+              <div>{contactSecondary.address3}</div>
+            )}
+            <div>
+              {contactSecondary.city}, {contactSecondary.state}{' '}
+              {contactSecondary.postalCode}
+            </div>
+            <div>
+              {contactSecondary.phone
+                ? contactSecondary.phone
+                : 'Phone number not provided'}
+            </div>
+            {contactSecondary.email && <div>{contactSecondary.email}</div>}
+            <div>
+              <b>Register for electronic filing and service:</b>
+              {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}{' '}
+            </div>
+            <div>
+              <b>Place of legal residence: </b>
+              {contactSecondary.placeOfLegalResidence
+                ? contactSecondary.placeOfLegalResidence
+                : 'N/A'}
+            </div>
           </div>
-          <div>
-            {contactSecondary.phone
-              ? contactSecondary.phone
-              : 'Phone number not provided'}
-          </div>
-          {contactSecondary.email && <div>{contactSecondary.email}</div>}
-          <div>
-            <b>Register for electronic filing and service:</b>
-            {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}{' '}
-          </div>
-          <div>
-            <b>Place of legal residence: </b>
-            {contactSecondary.placeOfLegalResidence
-              ? contactSecondary.placeOfLegalResidence
-              : 'N/A'}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

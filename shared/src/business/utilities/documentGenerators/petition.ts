@@ -11,8 +11,8 @@ export const petition = async ({ applicationContext, data }) => {
     caseTitle,
     contactPrimary,
     contactSecondary,
-    docketNumberWithSuffix,
     noticeIssuedDate,
+    partyType,
     petitionFacts,
     petitionReasons,
     preferredTrialCity,
@@ -30,8 +30,8 @@ export const petition = async ({ applicationContext, data }) => {
       contactPrimary,
       contactSecondary,
       date,
-      docketNumberWithSuffix,
       noticeIssuedDate,
+      partyType,
       petitionFacts,
       petitionReasons,
       preferredTrialCity,
@@ -50,7 +50,6 @@ export const petition = async ({ applicationContext, data }) => {
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: false,
-      docketNumber: docketNumberWithSuffix,
     });
 
   return pdf;

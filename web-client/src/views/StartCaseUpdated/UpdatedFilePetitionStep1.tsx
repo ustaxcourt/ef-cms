@@ -105,9 +105,9 @@ export const UpdatedFilePetitionStep1 = connect(
                   'usa-label ustc-upload-stin with-hint',
                   // startCaseHelper.showStinFileValid && 'validated',
                 )}
-                data-testid="stin-file-label"
-                htmlFor="stin-file"
-                id="stin-file-label"
+                data-testid="petition-file-label"
+                htmlFor="petition-file"
+                id="petition-file-label"
               >
                 Upload the Petition PDF (.pdf)
               </label>

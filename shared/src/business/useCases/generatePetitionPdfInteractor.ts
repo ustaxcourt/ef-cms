@@ -2,6 +2,11 @@ import {
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
 } from '@shared/business/entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
+import { UnauthorizedError } from '@web-api/errors/errors';
 // import {
 //   ROLE_PERMISSIONS,
 //   isAuthorized,
@@ -13,13 +18,14 @@ import {
 export const generatePetitionPdfInteractor = async (
   applicationContext: IApplicationContext,
   {
+    addDraftWaterMark = true,
     caseCaptionExtension,
     caseTitle,
     caseType,
     contactPrimary,
     contactSecondary,
-    docketNumberWithSuffix,
     noticeIssuedDate,
+    partyType,
     petitionFacts,
     petitionReasons,
     preferredTrialCity,
@@ -27,16 +33,17 @@ export const generatePetitionPdfInteractor = async (
     taxYear,
   }: any,
 ) => {
-  // const user = applicationContext.getCurrentUser();
+  const user = applicationContext.getCurrentUser();
 
-  // if (!isAuthorized(user, ROLE_PERMISSIONS.???)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
   const caseDescription =
     CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType] ||
     CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
 
-  const file = await applicationContext.getDocumentGenerators().petition({
+  let pdfData = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -44,8 +51,8 @@ export const generatePetitionPdfInteractor = async (
       caseTitle,
       contactPrimary,
       contactSecondary,
-      docketNumberWithSuffix,
       noticeIssuedDate,
+      partyType,
       petitionFacts,
       petitionReasons,
       preferredTrialCity,
@@ -54,12 +61,21 @@ export const generatePetitionPdfInteractor = async (
     },
   });
 
+  if (addDraftWaterMark) {
+    pdfData = await applicationContext
+      .getUseCaseHelpers()
+      .addDraftWatermarkToDocument({
+        applicationContext,
+        pdfData,
+      });
+  }
+
   // 24 hrs
   const urlTtl = 60 * 60 * 24;
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    file,
+    file: pdfData,
     urlTtl,
     useTempBucket: true,
   });
