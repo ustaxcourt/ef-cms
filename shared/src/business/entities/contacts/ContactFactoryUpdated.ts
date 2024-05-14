@@ -21,6 +21,7 @@ export function ContactFactoryUpdated({
   if (!contactInfoPrimary) {
     return { primary: null, secondary: null };
   }
+
   if (
     (
       [
@@ -91,6 +92,7 @@ export function ContactFactoryUpdated({
       secondary: null,
     };
   }
+
   return {
     primary: new ContactUpdated(
       contactInfoPrimary,
