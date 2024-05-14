@@ -19,6 +19,7 @@ export const PractitionerSearchResults = connect(
     submitPractitionerNameSearchSequence,
   }) {
     const paginatorTop = useRef(null);
+    const paginatorBottom = useRef(null);
     return (
       <>
         {practitionerSearchHelper.showSearchResults && (
@@ -100,6 +101,25 @@ export const PractitionerSearchResults = connect(
                 )}
               </tbody>
             </table>
+            <div ref={paginatorBottom}>
+              {practitionerSearchHelper.numberOfResults &&
+                practitionerSearchHelper.numberOfResults >
+                  PRACTITIONER_SEARCH_PAGE_SIZE && (
+                  <Paginator
+                    breakClassName="hide"
+                    forcePage={practitionerSearchHelper.activePage || 0}
+                    marginPagesDisplayed={0}
+                    pageCount={practitionerSearchHelper.pageCount || 0}
+                    pageRangeDisplayed={0}
+                    onPageChange={pageChange => {
+                      submitPractitionerNameSearchSequence({
+                        selectedPage: pageChange.selected,
+                      });
+                      focusPaginatorTop(paginatorTop);
+                    }}
+                  />
+                )}
+            </div>
           </>
         )}
         {practitionerSearchHelper.showNoMatches && (
