@@ -40,7 +40,11 @@ export class BusinessContact extends ContactUpdated {
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         return 'Enter name of partner';
       default:
-        return '';
+        return 'Enter secondary name';
     }
   }
 }
+
+export type RawBusinessContact = ExcludeMethods<
+  Omit<BusinessContact, 'entityName'>
+>;
