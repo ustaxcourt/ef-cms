@@ -40,7 +40,6 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
     expect(cerebralTest.getState('currentPage')).toBe('CreateOrder');
 
     expect(cerebralTest.getState('featureFlags')).toMatchObject({
-      'consolidated-cases-add-docket-numbers': expect.anything(),
       'document-visibility-policy-change-date': expect.anything(),
       'e-consent-fields-enabled-feature-flag': expect.anything(),
     });

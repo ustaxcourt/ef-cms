@@ -1,10 +1,8 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const createOrderHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
 ): {
   addDocketNumbersButtonIcon: string;
   addDocketNumbersButtonText: string;
@@ -21,12 +19,6 @@ export const createOrderHelper = (
     state.setSelectedConsolidatedCasesToMultiDocketOn,
   );
 
-  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
-  const addDocketNumbersToOrderEnabled = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key
-    ],
-  );
   const isEditing = !!documentToEdit;
 
   const pageTitle = isEditing
@@ -45,6 +37,6 @@ export const createOrderHelper = (
     documentToEdit,
     isEditing,
     pageTitle,
-    showAddDocketNumbersButton: addDocketNumbersToOrderEnabled && isLeadCase,
+    showAddDocketNumbersButton: isLeadCase,
   };
 };

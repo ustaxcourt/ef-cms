@@ -5,7 +5,6 @@ import { setupCurrentPageAction } from './setupCurrentPageAction';
 
 describe('setupCurrentPageAction', () => {
   const featureFlagObject = {
-    'consolidated-cases-add-docket-numbers': true,
     'consolidated-cases-group-access-petitioner': true,
     'document-visibility-policy-change-date': '2023-05-01',
     'e-consent-fields-enabled-feature-flag': true,

@@ -78,11 +78,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
   },
-  CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS: {
-    disabledMessage:
-      'The ability to add multiple docket entries to an order is disabled.',
-    key: 'consolidated-cases-add-docket-numbers',
-  },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
   },

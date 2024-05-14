@@ -44,3 +44,8 @@ aws dynamodb delete-item \
   --region us-east-1 \
   --table-name "efcms-deploy-${ENV}" \
   --key '{"pk":{"S":"multi-docketable-paper-filings"},"sk":{"S":"multi-docketable-paper-filings"}}'
+
+aws dynamodb delete-item \
+  --region us-east-1 \
+  --table-name "efcms-deploy-${ENV}" \
+  --key '{"pk":{"S":"consolidated-cases-add-docket-numbers"},"sk":{"S":"consolidated-cases-add-docket-numbers"}}'

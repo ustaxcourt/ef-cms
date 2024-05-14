@@ -39425,11 +39425,6 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
-    "sk": "consolidated-cases-add-docket-numbers",
-    "current": true,
-    "pk": "consolidated-cases-add-docket-numbers"
-  },
-  {
     "sk": "consolidated-cases-group-access-petitioner",
     "current": true,
     "pk": "consolidated-cases-group-access-petitioner"
