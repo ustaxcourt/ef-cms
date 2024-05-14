@@ -32,7 +32,7 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v3.0.0
+        uses: rrainn/dynamodb-action@v4.0.0
         with:
           port: 8000
           cors: '*'
@@ -50,7 +50,7 @@ jobs:
           export TESTFILES=$(npx ts-node split-tests.ts)
           npm run test:client:integration:ci
       - name: Store Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: server log output
+          name: server-log-output-${{ matrix.ci_node_index }}
           path: /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt
