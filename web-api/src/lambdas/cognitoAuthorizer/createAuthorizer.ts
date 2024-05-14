@@ -3,6 +3,7 @@ import {
   APIGatewayRequestAuthorizerEvent,
 } from 'aws-lambda';
 import { createLogger } from '../../createLogger';
+import { environment } from '@web-api/environment';
 import { transports } from 'winston';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
@@ -13,8 +14,8 @@ const transport = new transports.Console({
   handleRejections: true,
 });
 
-const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID}`;
-const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
+const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${environment.userPoolId}`;
+const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${environment.userPoolIrsId}`;
 
 const getLogger = context => {
   return createLogger({
