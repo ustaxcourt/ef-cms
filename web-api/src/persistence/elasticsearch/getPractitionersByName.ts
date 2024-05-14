@@ -39,7 +39,6 @@ export const getPractitionersByName = async (
       },
       search_after: searchAfter,
       sort: [
-        '_score',
         { 'firstName.S': 'asc' },
         { 'lastName.S': 'asc' },
         { 'barNumber.S': 'asc' },
