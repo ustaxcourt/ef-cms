@@ -47,7 +47,7 @@ export class OtherContact extends ContactUpdated {
       case PARTY_TYPES.estate:
         return 'Enter name of executor/personal representative';
       default:
-        return '';
+        return 'Enter secondary name';
     }
   }
 }
