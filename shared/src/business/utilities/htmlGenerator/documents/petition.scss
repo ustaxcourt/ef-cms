@@ -1,13 +1,19 @@
 .petition-pdf {
-    // margin-bottom: 2cm;
+    margin: 0 -25px;
     
     ol {
         padding-left: 0;
         margin-left: 0;
+        list-style-position: inside;
 
         li {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+            margin-top: 4px;
+            margin-bottom: 2px;
+
+            &.list-bold {
+                margin-top: 15px;
+                font-weight: bold;
+            }
         }
         
         ol {
@@ -25,7 +31,7 @@
 
     p {
         padding-left: 0;
-        margin-left: 0;
+        margin: 2px 0;
     }
 
     .petitioner-info {
@@ -33,10 +39,4 @@
         margin-top: 4rem;
         float: left;
       }
-
-    .spouse-info {
-        width: 50%;
-        margin-top: 4rem;
-        float: right;
-    }
 }

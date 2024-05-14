@@ -14,8 +14,6 @@ export const PetitionFormResponse = connect(
       sequences.deleteValidationErrorMessageSequence,
     form: state.form,
     id: props.id,
-    petitionGenerationLiveValidationSequence:
-      sequences.petitionGenerationLiveValidationSequence,
     removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
     textName: props.textName,
     updatePetitionFormValueSequence: sequences.updatePetitionFormValueSequence,
@@ -26,7 +24,6 @@ export const PetitionFormResponse = connect(
     deleteValidationErrorMessageSequence,
     form,
     id,
-    petitionGenerationLiveValidationSequence,
     removeFactOrReasonSequence,
     textName,
     updatePetitionFormValueSequence,
@@ -57,11 +54,6 @@ export const PetitionFormResponse = connect(
                     name={textName}
                     style={{ marginTop: '0px' }}
                     value={form[textName][count] || ''}
-                    onBlur={() => {
-                      petitionGenerationLiveValidationSequence({
-                        validationKey: [KEY],
-                      });
-                    }}
                     onChange={e => {
                       updatePetitionFormValueSequence({
                         index: count,
@@ -101,18 +93,12 @@ export const PetitionFormResponse = connect(
                   name={textName}
                   style={{ marginTop: '0px', width: '100%' }}
                   value={form[textName][count] || ''}
-                  onBlur={() => {
-                    petitionGenerationLiveValidationSequence({
-                      validationKey: [KEY],
-                    });
-                  }}
                   onChange={e => {
                     updatePetitionFormValueSequence({
                       index: count,
                       key: e.target.name,
                       value: e.target.value,
                     });
-
                     deleteValidationErrorMessageSequence({
                       validationKey: [KEY],
                     });

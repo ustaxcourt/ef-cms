@@ -41,8 +41,8 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
           .required(),
       })
       .messages({
-        '*': 'Facts cannot be empty',
-        'number.max': 'Facts cannot exceed 1000 characters',
+        '*': 'Add at least one fact',
+        'string.max': 'Facts cannot exceed 1000 characters',
       }),
     petitionFile: joi.object().when('petitionType', {
       is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
@@ -76,10 +76,9 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
           .required(),
       })
       .messages({
-        '*': 'Reasons cannot be empty',
-        'number.max': 'Reasons cannot exceed 1000 characters',
+        '*': 'Add at least one reason',
+        'string.max': 'Reasons cannot exceed 1000 characters',
       }),
-    // TODO: there must be a cleaner way to reference PETITION_TYPES here
     petitionType: joi
       .string()
       .required()
