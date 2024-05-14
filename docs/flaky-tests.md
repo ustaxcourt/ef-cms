@@ -51,7 +51,7 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v3.0.0
+        uses: rrainn/dynamodb-action@v4.0.0
         with:
           port: 8000
           cors: '*'
@@ -70,7 +70,7 @@ jobs:
           npm run cypress:integration:file cypress/local-only/integration/start-a-case-practitioner.cy.ts
       - name: Store Cypress Failure Videos
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: ${{ github.workspace }}/cypress/local-only/videos
