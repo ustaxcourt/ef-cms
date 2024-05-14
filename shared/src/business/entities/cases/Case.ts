@@ -577,7 +577,10 @@ export class Case extends JoiValidationEntity {
         then: joi.required(),
       })
       .description('How the petitioner paid the case fee.')
-      .messages({ '*': 'Enter payment method' }),
+      .messages({
+        '*': 'Enter payment method',
+        'string.max': 'Payment method must contain fewer than 50 characters',
+      }),
     petitionPaymentStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(PAYMENT_STATUS),
     )
