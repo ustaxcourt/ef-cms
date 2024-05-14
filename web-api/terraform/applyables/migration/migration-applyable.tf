@@ -7,16 +7,16 @@ terraform {
   }
 
   required_providers {
-    aws = "5.47.0"
+    aws = "5.48.0"
   }
 }
 
 module "migration" {
-  source                = "../../modules/migration"
-  aws_region            = var.aws_region
-  environment           = var.environment
-  stream_arn            = var.stream_arn
-  destination_table     = var.destination_table
-  source_table          = var.source_table
-  elasticsearch_domain  = var.elasticsearch_domain
+  source               = "../../modules/migration"
+  aws_region           = var.aws_region
+  environment          = var.environment
+  stream_arn           = var.stream_arn
+  destination_table    = var.destination_table
+  source_table         = var.source_table
+  elasticsearch_domain = var.elasticsearch_domain
 }
