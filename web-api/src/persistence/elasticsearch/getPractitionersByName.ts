@@ -27,11 +27,10 @@ export const getPractitionersByName = async (
           must: [
             ...IS_PRACTITIONER,
             {
-              match: {
-                'name.S': {
-                  fuzziness: 'AUTO',
-                  query: name,
-                },
+              simple_query_string: {
+                default_operator: 'and',
+                fields: ['name.S'],
+                query: name,
               },
             },
           ],
@@ -46,7 +45,6 @@ export const getPractitionersByName = async (
     },
     index: 'efcms-user',
     size: PRACTITIONER_SEARCH_PAGE_SIZE,
-    track_scores: true,
     track_total_hits: true,
   };
 
