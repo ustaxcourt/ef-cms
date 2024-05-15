@@ -2,6 +2,7 @@ import { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } from '@shared/business/en
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareUploadExternalDocumentsAction = ({ get }: ActionProps) => {
+  console.log('Preparing upload external document');
   const form = get(state.form);
   const { consolidatedCases, docketNumber } = get(state.caseDetail);
 

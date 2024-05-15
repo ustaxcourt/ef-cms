@@ -20,7 +20,10 @@ export const uploadExternalDocumentsAction = async ({
   files: File;
   documentMetadata: any;
 }>) => {
+  console.log('Uploading external documents');
   const { documentMetadata, files, fileUploadProgressMap } = props;
+  console.log('documentMetadata', documentMetadata);
+  console.log('files', files);
   const { docketNumber } = get(state.caseDetail);
 
   try {
