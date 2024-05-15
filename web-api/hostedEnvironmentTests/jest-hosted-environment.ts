@@ -1,16 +1,16 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../../../tsconfig.json';
+import tsconfig from '../../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
   clearMocks: true,
   collectCoverage: false,
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/../../../',
+    prefix: '<rootDir>/../../',
   }),
   testEnvironment: 'node',
   testMatch: [
-    '**/web-api/src/hostedEnvironmentTests/**/?(*.)+(spec|test).[jt]s?(x)',
+    '**/web-api/hostedEnvironmentTests/**/?(*.)+(spec|test).[jt]s?(x)',
   ],
   testTimeout: 30000,
   transform: {
