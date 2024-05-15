@@ -3,7 +3,7 @@
 # Updates the offboarded judge user in the dynamo table based on their userId passed in
 
 # Usage
-#   ./scripts/dynamo/offboard-judge-user.sh 68686578-bc34-4aea-bc1d-25e505422843
+#   ./scripts/user/offboard-judge-user.sh 68686578-bc34-4aea-bc1d-25e505422843
 
 # Arguments
 #   - $1 - The userId of the judge to offboard

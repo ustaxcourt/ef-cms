@@ -31,7 +31,7 @@ source ./scripts/env/set-env.zsh ustc-test
 ```
 7. run `offboard-judge.sh`, passing in the user ID
 ```
-./offboard-judge-user.sh {judgeUserId}
+./scripts/user/offboard-judge-user.sh {judgeUserId}
 ```
 6. If you haven't already, open a PR against `staging` for this change. Apply the "Manual Deploy Step(s) Required" label and include a link to this documentation in the PR's description.
 7. At this point, hand off to a USTC engineer.
