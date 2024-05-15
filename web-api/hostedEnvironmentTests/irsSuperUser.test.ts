@@ -10,6 +10,9 @@ import axios from 'axios';
 import speakeasy from 'speakeasy';
 
 describe('irsSuperUser', () => {
+  if (process.env.DEPLOYING_COLOR === undefined) {
+    throw new Error('Missing environment variable: DEPLOYING_COLOR');
+  }
   let irsClientId, irsUserPoolId: string;
 
   const userName = 'ci_test_irs_super_user@example.com';
