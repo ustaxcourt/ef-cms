@@ -123,7 +123,7 @@ export const PractitionerSearchResults = connect(
           </>
         )}
         {practitionerSearchHelper.showNoMatches && (
-          <div id="no-search-results">
+          <div data-testid="no-search-results" id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
           </div>
