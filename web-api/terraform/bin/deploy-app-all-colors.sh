@@ -2,7 +2,7 @@
 
 ENV=$1
 
-MIGRATE_FLAG=$(../../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
+MIGRATE_FLAG=$(../../../../scripts/migration/get-migrate-flag.sh "${ENV}")
 
 export MIGRATE_FLAG
 
