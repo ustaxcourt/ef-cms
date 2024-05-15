@@ -27,6 +27,7 @@ export const environment = {
     ? 'noop-temp-documents-local-us-east-1'
     : `${process.env.EFCMS_DOMAIN}-temp-documents-${stage}-us-east-1`,
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
+  userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
   workerQueueUrl:
     `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
     '',
