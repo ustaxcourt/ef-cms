@@ -84,6 +84,8 @@ export const fileDocumentHelper = (
   const EARedactionAcknowledgement =
     form.generationType === GENERATION_TYPES.MANUAL && form.eventCode === 'EA';
 
+  const showGenerationTypeForm = true;
+
   const exported = {
     EARedactionAcknowledgement,
     allowExternalConsolidatedGroupFiling,
@@ -95,6 +97,7 @@ export const fileDocumentHelper = (
     primaryDocument,
     secondaryDocument,
     showFilingIncludes,
+    showGenerationTypeForm,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     supportingDocumentTypeList,
     ...showSecondaryProperties,

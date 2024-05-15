@@ -22,6 +22,7 @@ export const completeDocumentTypeSectionHelper = (
   }
   const {
     CATEGORY_MAP,
+    INTERNAL_CATEGORY_MAP,
     LEGACY_DOCUMENT_TYPES,
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -32,6 +33,11 @@ export const completeDocumentTypeSectionHelper = (
     value => value.eventCode,
   );
 
+  const entryOfAppearance = getDocumentTypesForSelect(
+    INTERNAL_CATEGORY_MAP,
+  ).find(document => document.eventCode === 'EA');
+
+  documentTypesForSelect.push(entryOfAppearance);
   returnData.documentTypesForSelectSorted = documentTypesForSelect
     .sort(getSortFunction(searchText))
     .filter(
