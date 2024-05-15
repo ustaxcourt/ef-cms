@@ -5,9 +5,9 @@ import {
   CognitoIdentityProvider,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { TOTP } from 'totp-generator';
 import { environment } from '@web-api/environment';
 import axios from 'axios';
-import speakeasy from 'speakeasy';
 
 describe('irsSuperUser', () => {
   if (process.env.DEPLOYING_COLOR === undefined) {
@@ -105,13 +105,10 @@ async function verifyUserAndGetIdToken({
   if (!associateResult.SecretCode) {
     throw new Error('Could not generate Secret Code');
   }
-  const token = speakeasy.totp({
-    encoding: 'base32',
-    secret: associateResult.SecretCode,
-  });
+  const { otp } = TOTP.generate(associateResult.SecretCode);
   const verifyTokenResult = await cognito.verifySoftwareToken({
     Session: associateResult.Session,
-    UserCode: token,
+    UserCode: otp,
   });
   const challengeResponse = await cognito.respondToAuthChallenge({
     ChallengeName: ChallengeNameType.MFA_SETUP,
