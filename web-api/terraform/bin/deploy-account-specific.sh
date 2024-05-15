@@ -33,4 +33,4 @@ export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
 npm run build:assets
 
 terraform init -upgrade
-terraform plan
+terraform apply
