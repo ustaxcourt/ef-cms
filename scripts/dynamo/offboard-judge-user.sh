@@ -40,3 +40,5 @@ UPDATE_OUTPUT=$(aws dynamodb update-item \
 )
 
 echo "Updated attributes of user ${USER_ID}: ${UPDATE_OUTPUT} in ${SOURCE_TABLE} table."
+
+./scripts/user/disable-cognito-user.sh "$USER_ID"
