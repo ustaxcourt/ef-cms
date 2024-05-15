@@ -1,3 +1,4 @@
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -11,7 +12,14 @@ export const navigateToReviewFileADocumentAction = async ({
   router,
   store,
 }: ActionProps) => {
-  store.set(state.form.redactionAcknowledgement, false);
+  if (
+    get(state.form.generationType) === GENERATION_TYPES.MANUAL &&
+    get(state.form.eventCode) === 'EA'
+  ) {
+    store.set(state.form.redactionAcknowledgement, false);
+  } else {
+    store.unset(state.form.redactionAcknowledgement);
+  }
   store.set(state.wizardStep, 'FileDocumentReview');
 
   const { docketNumber } = get(state.caseDetail);
