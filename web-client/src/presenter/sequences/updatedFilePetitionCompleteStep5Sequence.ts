@@ -6,6 +6,7 @@ import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAc
 import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
 import { getStep5DataAction } from '@web-client/presenter/actions/getStep5DataAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
+import { savePetitionDataSequence } from '@web-client/presenter/sequences/savePetitionDataSequence';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -30,6 +31,7 @@ export const updatedFilePetitionCompleteStep5Sequence = [
       generatePetitionPdfAction,
       setPdfPreviewUrlAction,
       incrementCurrentStepIndicatorAction,
+      savePetitionDataSequence,
     ]),
   },
 ];

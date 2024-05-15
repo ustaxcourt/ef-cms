@@ -348,6 +348,7 @@ import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessi
 import { saveCourtIssuedDocketEntrySequence } from './sequences/saveCourtIssuedDocketEntrySequence';
 import { saveDocketEntryForLaterCompleteSequence } from './sequences/saveDocketEntryForLaterCompleteSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
+import { savePetitionDataSequence } from '@web-client/presenter/sequences/savePetitionDataSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealAddressSequence } from './sequences/sealAddressSequence';
@@ -1174,6 +1175,7 @@ export const presenterSequences = {
     saveDocketEntryForLaterCompleteSequence as unknown as Function,
   saveDocumentSigningSequence:
     saveDocumentSigningSequence as unknown as Function,
+  savePetitionDataSequence: savePetitionDataSequence as unknown as Function,
   saveSavedCaseForLaterSequence:
     saveSavedCaseForLaterSequence as unknown as Function,
   scannerStartupSequence: scannerStartupSequence as unknown as Function,
