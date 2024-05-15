@@ -23,4 +23,6 @@ USER_COGNITO_ID=$(aws cognito-idp list-users --user-pool-id "$COGNITO_USER_POOL"
     | tr -d '"' \
 )
 
+[[ -z "$USER_COGNITO_ID" ]] && echo "No user found with the provided custom:userId" && exit 1
+
 aws cognito-idp admin-disable-user --user-pool-id "$COGNITO_USER_POOL" --username "$USER_COGNITO_ID"
