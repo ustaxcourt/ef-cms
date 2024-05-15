@@ -1,4 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
+import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PDFPreviewButton } from '@web-client/views/PDFPreviewButton';
@@ -15,6 +17,7 @@ export const UpdatedFilePetitionStep6 = connect(
   {
     form: state.form,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep6Sequence:
       sequences.updatedFilePetitionCompleteStep6Sequence,
@@ -24,6 +27,7 @@ export const UpdatedFilePetitionStep6 = connect(
   function UpdatedFilePetitionStep6({
     form,
     pdfPreviewUrl,
+    showModal,
     updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
@@ -71,7 +75,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                 {form.petitionType ===
                                 PETITION_TYPES.userUploaded ? (
                                   <PDFPreviewButton
-                                    file={form.primaryDocumentFile}
+                                    file={form.petitionFile}
                                     title={form.documentTitle}
                                   />
                                 ) : (
@@ -196,7 +200,7 @@ export const UpdatedFilePetitionStep6 = connect(
                 <div className="margin-top-4">
                   <Button
                     data-testid="petition-review-submit-document"
-                    // disabled={true}
+                    disabled={!form.redactionAcknowledgement}
                     id="submit-document"
                     type="submit"
                     onClick={() => {
@@ -231,12 +235,8 @@ export const UpdatedFilePetitionStep6 = connect(
           )}
         </div>
 
-        {/* {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={}
-          />
-        )} */}
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },
