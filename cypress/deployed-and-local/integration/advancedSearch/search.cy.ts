@@ -31,17 +31,16 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="tab-practitioner"]').click();
-      cy.get('[data-testid="practitioner-name"]').type(firstName);
+      cy.get('[data-testid="practitioner-name-input"]').type(firstName);
 
       /** Assert */
-      // need to wait for opensearch to index the new practitioner
       retry(() => {
         cy.get('[data-testid="practitioner-search-by-name-button"]').click();
-
-        /** Assert */
         return assertExists(`[data-testid="practitioner-row-${barNumber}"]`);
       });
-
+      cy.get('[data-testid="practitioner-search-result-count"]').should(
+        'exist',
+      );
       cy.get('[data-testid="clear-practitioner-search"]').click();
       cy.get(`[data-testid="practitioner-row-${barNumber}"]`).should(
         'not.exist',
