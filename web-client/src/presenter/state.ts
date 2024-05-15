@@ -684,6 +684,7 @@ export const baseState = {
     caseDetailMenu: '',
     openMenu: '',
   },
+  newPetitionData: {},
   noticeStatusState: {
     casesProcessed: 0,
     totalCases: 0,
