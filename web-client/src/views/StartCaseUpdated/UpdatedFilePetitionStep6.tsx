@@ -75,7 +75,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                 {form.petitionType ===
                                 PETITION_TYPES.userUploaded ? (
                                   <PDFPreviewButton
-                                    file={form.primaryDocumentFile}
+                                    file={form.petitionFile}
                                     title={form.documentTitle}
                                   />
                                 ) : (
