@@ -9,7 +9,7 @@ import { environment } from '@web-api/environment';
 import axios from 'axios';
 import speakeasy from 'speakeasy';
 
-describe('irsUserPool', () => {
+describe('irsSuperUser', () => {
   let irsClientId, irsUserPoolId: string;
 
   const userName = 'ci_test_irs_super_user@example.com';
