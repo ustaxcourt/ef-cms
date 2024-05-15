@@ -7,7 +7,9 @@ import { unmarshall } from '@aws-sdk/util-dynamodb';
 //max number of items this script will process
 // const FIX_COUNT_MAX = 10;
 const FIX_COUNT_MAX = 5000;
+// const FIX_COUNT_MAX = 1;
 // set this to false if you actually want to write updated records to dynamo
+// const PERFORM_UPDATE = false;
 const PERFORM_UPDATE = false;
 
 // Function to read a JSON file and parse its contents into an object
@@ -99,11 +101,17 @@ export async function main() {
 
   let rawDocsToFix = [] as any[];
   for (let de of docsToFix) {
-    console.log(`loading ${de.docketEntryId.S}`);
+    // console.log(`loading ${de.docketEntryId.S}`);
     let rawdoc = await getDocumentFromDynamo({
       docketEntryId: de.docketEntryId.S,
       docketNumber: de.docketNumber.S,
     });
+    if (!rawdoc?.hasOwnProperty('archived')) {
+      // if (rawdoc.hasOwnProperty('archived')) {
+      console.log(
+        `non-archived prop found: case|${rawdoc?.docketNumber}  docket-entry|${rawdoc?.docketEntryId}`,
+      );
+    }
     rawDocsToFix.push(rawdoc);
     if (rawDocsToFix.length > FIX_COUNT_MAX) {
       console.warn(
