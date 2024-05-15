@@ -13,8 +13,14 @@ Since completing this runbook in its entirety requires access to USTC environmen
 - The judge being offboarded should not have any active cases / trials / etc. assigned to them. (Check with the PO for whether or not this has happened)
 
 ## Steps
-1. In `judge_users.csv`, find the judge to be offboared. Change their role from `judge` to `legacyJudge` and their section from `{judgeName}Chambers` to `legacyJudgeChambers`.
-  a. e.g. `Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers,true` becomes `Colvin,Judge,John O. Colvin,judge.colvin@example.com,legacyJudge,legacyJudgesChambers,true`
+1. In `judge_users.csv`, find the judge to be offboared. Change their role from `judge` to `legacyJudge` and their section from `{judgeName}Chambers` to `legacyJudgeChambers`. For example:
+```
+Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers,true
+``` 
+becomes 
+```
+Colvin,Judge,John O. Colvin,judge.colvin@example.com,legacyJudge,legacyJudgesChambers,true
+```
 2. Remove their chambers from the list of valid sections in `add-user.ts`
 3. In `getJudgesChambers.ts`, add `isLegacy: process.env.USTC_ENV === 'prod',` to their chambers section. This marks their chambers section as legacy in deployed environments so that they no longer show up in select inputs for selecting a judge's chambers.
 4. Check for and fix any smoke tests that rely upon the judge being offboarded or their chambers. This process leaves the judge user active in environments relying on 'local' data (e.g. developer machines, CI pipeline), so other tests relying only on 'local' data should not be impacted.
@@ -29,9 +35,6 @@ source ./scripts/env/set-env.zsh ustc-test
 ```
 6. If you haven't already, open a PR against `staging` for this change
 7. At this point, hand off to a USTC engineer.
-8. Once this change is deployed to staging/production, run `offboard-judge.sh` as above, but against staging/production.
+8. Once this change is deployed to production, run `offboard-judge.sh` as above, but against production.
 
 ## Additional Resources
-- Optional section
-- List here any links to reference or exlanatory material that could be useful / related to the process defined in the runbook
-  - e.g. if the process is to "Deactivate a user", you might link to the Cognito docs, or another DAWSON doc page about how we manage users.
