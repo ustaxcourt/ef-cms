@@ -2,7 +2,7 @@ const WATERMARK_TEXT = 'DRAFT';
 
 export const addDraftWatermarkToDocument = async ({
   applicationContext,
-  pdfData,
+  pdfFile,
 }) => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
@@ -10,7 +10,7 @@ export const addDraftWatermarkToDocument = async ({
     .getUtilities()
     .setupPdfDocument({
       applicationContext,
-      pdfData,
+      pdfData: pdfFile,
     });
 
   const pages = pdfDoc.getPages();
