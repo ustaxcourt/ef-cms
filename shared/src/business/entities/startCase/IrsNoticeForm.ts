@@ -11,11 +11,11 @@ import joi from 'joi';
 
 export class IrsNoticeForm extends JoiValidationEntity {
   public key: string;
-  public file: File;
-  public size: number;
+  public file?: File;
+  public size?: number;
   public caseType: string;
-  public noticeIssuedDate: string;
-  public taxYear: number;
+  public noticeIssuedDate?: string;
+  public taxYear?: number;
 
   constructor(rawProps) {
     super('IrsNoticeForm');
