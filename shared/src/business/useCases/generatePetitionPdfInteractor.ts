@@ -18,12 +18,12 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const generatePetitionPdfInteractor = async (
   applicationContext: IApplicationContext,
   {
-    addDraftWaterMark = true,
     caseCaptionExtension,
     caseTitle,
     caseType,
     contactPrimary,
     contactSecondary,
+    isDraft,
     noticeIssuedDate,
     partyType,
     petitionFacts,
@@ -43,7 +43,7 @@ export const generatePetitionPdfInteractor = async (
     CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType] ||
     CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
 
-  let pdfData = await applicationContext.getDocumentGenerators().petition({
+  let pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -61,12 +61,12 @@ export const generatePetitionPdfInteractor = async (
     },
   });
 
-  if (addDraftWaterMark) {
-    pdfData = await applicationContext
+  if (isDraft) {
+    pdfFile = await applicationContext
       .getUseCaseHelpers()
       .addDraftWatermarkToDocument({
         applicationContext,
-        pdfData,
+        pdfFile,
       });
   }
 
@@ -75,8 +75,8 @@ export const generatePetitionPdfInteractor = async (
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    file: pdfData,
+    file: pdfFile,
     urlTtl,
-    useTempBucket: true,
+    useTempBucket: isDraft,
   });
 };
