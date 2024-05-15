@@ -9,7 +9,6 @@ import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkA
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
 import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
-import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
 import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
 import {
   loginAs,
@@ -34,7 +33,6 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   admissionsClerkAddsNewPractitioner(cerebralTest);
-  admissionsClerkSearchesForPractitionersByName(cerebralTest);
   admissionsClerkSearchesForPractitionerByBarNumber(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');

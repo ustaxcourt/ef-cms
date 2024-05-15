@@ -48,6 +48,24 @@ describe('Advanced Search', () => {
     });
   });
 
+  it('should return no results when the user searches for practitioner that does not exist', () => {
+    /** Arrange */
+    loginAsAdmissionsClerk();
+
+    /** Act */
+    cy.get('[data-testid="search-link"]').click();
+    cy.get('[data-testid="tab-practitioner"]').click();
+    cy.get('[data-testid="practitioner-name-input"]').type('doesNotExist');
+
+    /** Assert */
+    retry(() => {
+      cy.get('[data-testid="practitioner-search-by-name-button"]').click();
+      return assertExists('[data-testid="no-search-results"]');
+    });
+    cy.get('[data-testid="clear-practitioner-search"]').click();
+    cy.get('[data-testid="no-search-results"]').should('not.exist');
+  });
+
   it('should find a practitioner and route to the practitioner detail page when the user searches by bar number', () => {
     /** Arrange */
     loginAsAdmissionsClerk();
