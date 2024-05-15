@@ -137,6 +137,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "logs:*",
         "events:*",
         "sns:*",
+        "elasticloadbalancing:*",
         "es:*",
         "ec2:*",
         "ses:*",
