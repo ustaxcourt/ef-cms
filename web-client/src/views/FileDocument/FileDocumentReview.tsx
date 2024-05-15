@@ -13,12 +13,23 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+/*
+
+Resuable auto-generated EA review
+- on cancel
+- on submit
+- on back
+- a URL to the document
+
+*/
+
 export const FileDocumentReview = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
+    pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -219,6 +230,25 @@ export const FileDocumentReview = connect(
                         <h3 className="usa-label">{form.documentTitle}</h3>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
+                            {/* {pdfPreviewUrl ? (
+                              <Button
+                                link
+                                className="usa-link--external text-left mobile-text-wrap"
+                                href={pdfPreviewUrl}
+                                icon="file-pdf"
+                                iconColor="blue"
+                                overrideMargin="margin-right-1"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                {form.documentTitle}
+                              </Button>
+                            ) : (
+                              <PDFPreviewButton
+                                file={form.primaryDocumentFile}
+                                title={form.documentTitle}
+                              />
+                            )} */}
                             <PDFPreviewButton
                               file={form.primaryDocumentFile}
                               title={form.documentTitle}

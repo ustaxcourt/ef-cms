@@ -12,7 +12,11 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+/*
 
+Create a reusable '
+
+*/
 export const RequestAccessReview = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,

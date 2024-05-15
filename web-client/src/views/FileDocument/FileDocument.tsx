@@ -3,6 +3,7 @@ import { ExternalConsolidatedCaseGroupFilingCard } from './ExternalConsolidatedC
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
+import { PrimaryDocumentGeneratedTypeForm } from '@web-client/views/FileDocument/PrimaryDocumentGeneratedTypeForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SecondarySupportingDocuments } from './SecondarySupportingDocuments';
 import { SupportingDocuments } from './SupportingDocuments';
@@ -12,14 +13,21 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+// TODO Nate: This appears to be the _current_ 'File a document' page / form.
+// In the EA flow, we need to swap out this form for the EA specific form.
+// Q: where is the EA-specific form?
 export const FileDocument = connect(
   {
+    constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
     showModal: state.modal.showModal,
+    updateCaseAssociationFormValueSequence:
+      sequences.updateCaseAssociationFormValueSequence,
   },
   function FileDocument({
     fileDocumentHelper,
@@ -44,18 +52,21 @@ export const FileDocument = connect(
           *All fields required unless otherwise noted
         </p>
 
-        <PrimaryDocumentForm />
-
-        <SupportingDocuments />
-
-        {fileDocumentHelper.showSecondaryDocument && (
+        {fileDocumentHelper.showGenerationTypeForm ? (
+          <PrimaryDocumentGeneratedTypeForm />
+        ) : (
           <>
-            <SecondaryDocumentForm />
-            <SecondarySupportingDocuments />
+            <PrimaryDocumentForm />
+            <SupportingDocuments />
+            {fileDocumentHelper.showSecondaryDocument && (
+              <>
+                <SecondaryDocumentForm />
+                <SecondarySupportingDocuments />
+              </>
+            )}
+            <PartiesFiling />
           </>
         )}
-
-        <PartiesFiling />
 
         {fileDocumentHelper.allowExternalConsolidatedGroupFiling && (
           <ExternalConsolidatedCaseGroupFilingCard />

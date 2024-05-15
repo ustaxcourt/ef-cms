@@ -13,5 +13,7 @@ export const setFilersFromFilersMapAction = ({ get, store }: ActionProps) => {
     .map(contactId => (form.filersMap[contactId] ? contactId : null))
     .filter(Boolean);
 
+  // Option: set the filer to Respondant here?
+
   store.set(state.form.filers, filers);
 };

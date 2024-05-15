@@ -26,6 +26,10 @@ export const setDefaultFileDocumentFormValuesAction = ({
     filersMap[user.userId] = true;
   }
 
+  if (eventCode === 'EA') {
+    store.set(state.form.partyIrsPractitioner, true);
+  }
+
   store.set(state.form.fileAcrossConsolidatedGroup, canFileInConsolidatedGroup);
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);

@@ -29,6 +29,7 @@ export const generateEntryOfAppearancePdfAction = async ({
         petitioners,
       });
 
+    console.log('url:', url);
     return { pdfUrl: url };
   }
 };
