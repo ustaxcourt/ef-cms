@@ -1652,6 +1652,7 @@ export type CreatedCaseType = {
   petitionFile: Blob;
   petitionFileSize: number;
   petitionFileId?: string;
+  petitionType?: string;
   petitionPaymentStatus: string;
   procedureType: string;
   receivedAt: string;
