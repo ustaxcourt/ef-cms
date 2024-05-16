@@ -45,8 +45,6 @@ export const UpdatedFilePetitionStep5 = connect(
             link
             className="usa-link--external text-left mobile-text-wrap font-weight-600"
             href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
-            icon="file-pdf"
-            iconColor="blue"
             marginDirection="bottom"
             rel="noopener noreferrer"
             target="_blank"

@@ -78,23 +78,26 @@ export const UpdatedFilePetitionStep1 = connect(
               dismissible={false}
               scrollToTop={false}
             />
-            <p>
-              You may download and fill out the Court’s form if you haven’t
-              already done so:
-            </p>
-            <Button
-              link
-              className="usa-link--external text-left mobile-text-wrap"
-              href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
-              icon="file-pdf"
-              iconColor="blue"
-              overrideMargin="margin-right-1"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Petition form (T.C. Form 2)
-            </Button>
+            <div>
+              <p className="margin-bottom-0">
+                You may download and fill out the Court’s form if you haven’t
+                already done so:
+              </p>
+              <Button
+                link
+                className="usa-link--external text-left mobile-text-wrap"
+                href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
+                icon="file-pdf"
+                iconColor="blue"
+                overrideMargin="margin-right-1"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Petition form (T.C. Form 2)
+              </Button>
+            </div>
             <FormGroup
+              className="margin-top-2"
               errorText={[
                 validationErrors.petitionFile,
                 validationErrors.petitionFileSize,

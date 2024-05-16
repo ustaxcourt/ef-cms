@@ -47,7 +47,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
       then: joi
         .object()
         .required()
-        .messages({ '*': 'Upload the Petition PDF.' }),
+        .messages({ '*': 'Upload the Petition PDF' }),
     }),
     petitionFileSize: joi
       .number()
