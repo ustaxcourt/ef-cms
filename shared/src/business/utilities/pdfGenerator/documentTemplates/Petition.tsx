@@ -136,7 +136,11 @@ export const Petition = ({
             </div>
             <div>{contactPrimary.phone}</div>
             <div>
-              <b>Place of legal residence: </b>
+              {Object.values(BUSINESS_TYPES).includes(partyType) ? (
+                <b>Place of business: </b>
+              ) : (
+                <b>Place of legal residence: </b>
+              )}
               {contactPrimary.placeOfLegalResidence}
             </div>
             <div>
