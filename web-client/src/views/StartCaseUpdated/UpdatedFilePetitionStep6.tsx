@@ -17,8 +17,8 @@ import classNames from 'classnames';
 export const UpdatedFilePetitionStep6 = connect(
   {
     form: state.form,
-    newPetitionData: state.newPetitionData,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    petitionFormatted: state.petitionFormatted,
     showModal: state.modal.showModal,
     updatedFilePetitionCompleteStep6Sequence:
       sequences.updatedFilePetitionCompleteStep6Sequence,
@@ -29,8 +29,8 @@ export const UpdatedFilePetitionStep6 = connect(
 
   function UpdatedFilePetitionStep6({
     form,
-    newPetitionData,
     pdfPreviewUrl,
+    petitionFormatted,
     showModal,
     updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence,
@@ -76,7 +76,7 @@ export const UpdatedFilePetitionStep6 = connect(
                             <span className="usa-label usa-label-display">
                               Type of notice/case
                             </span>
-                            {newPetitionData.caseType}
+                            {petitionFormatted.caseType}
                             <div className="grid-row margin-top-3">
                               <div className="grid-col">
                                 <span className="usa-label usa-label-display">
@@ -104,26 +104,28 @@ export const UpdatedFilePetitionStep6 = connect(
                                 <span className="usa-label usa-label-display">
                                   IRS notice(s)
                                 </span>
-                                {newPetitionData.hasIrsNotice ? (
-                                  newPetitionData.irsNotices.map(irsNotice => {
-                                    return (
-                                      <div key={irsNotice.key}>
-                                        <div className="grid-row">
-                                          <div className="grid-col flex-auto">
-                                            <PDFPreviewButton
-                                              data-testid="irs-notice-preview-button"
-                                              file={irsNotice.file}
-                                              id="irs-notice-preview-button"
-                                              shouldAbbreviateTitle={false}
-                                              shouldWrapText={true}
-                                              showIcon={false}
-                                              title={irsNotice.file.name}
-                                            />
+                                {petitionFormatted.hasIrsNotice ? (
+                                  petitionFormatted.irsNotices.map(
+                                    irsNotice => {
+                                      return (
+                                        <div key={irsNotice.key}>
+                                          <div className="grid-row">
+                                            <div className="grid-col flex-auto">
+                                              <PDFPreviewButton
+                                                data-testid="irs-notice-preview-button"
+                                                file={irsNotice.file}
+                                                id="irs-notice-preview-button"
+                                                shouldAbbreviateTitle={false}
+                                                shouldWrapText={true}
+                                                showIcon={false}
+                                                title={irsNotice.file.name}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    );
-                                  })
+                                      );
+                                    },
+                                  )
                                 ) : (
                                   <div>N/A</div>
                                 )}
@@ -135,12 +137,12 @@ export const UpdatedFilePetitionStep6 = connect(
                           <span className="usa-label usa-label-display">
                             Case procedure
                           </span>
-                          {newPetitionData.procedureType}
+                          {petitionFormatted.procedureType}
                           <div className="margin-top-3">
                             <span className="usa-label usa-label-display">
                               Requested trial location
                             </span>
-                            {newPetitionData.preferredTrialCity}
+                            {petitionFormatted.preferredTrialCity}
                           </div>
                         </div>
                       </div>
@@ -162,7 +164,7 @@ export const UpdatedFilePetitionStep6 = connect(
                           <span className="usa-label usa-label-display">
                             Party type
                           </span>
-                          {newPetitionData.partyType}
+                          {petitionFormatted.partyType}
                           <div className="grid-row margin-top-3">
                             <span
                               className="usa-label usa-label-display margin-bottom-0"
@@ -170,10 +172,10 @@ export const UpdatedFilePetitionStep6 = connect(
                             >
                               Petitioner contact information
                             </span>
-                            {newPetitionData.contactPrimary && (
+                            {petitionFormatted.contactPrimary && (
                               <address aria-labelledby="filing-contact-primary">
                                 <AddressDisplay
-                                  contact={newPetitionData.contactPrimary}
+                                  contact={petitionFormatted.contactPrimary}
                                   noMargin={true}
                                 />
                                 <div className="display-flex-center margin-top-1">
@@ -182,7 +184,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                   </span>
                                   <span className="margin-left-5">
                                     {
-                                      newPetitionData.contactPrimary
+                                      petitionFormatted.contactPrimary
                                         .placeOfLegalResidence
                                     }
                                   </span>
@@ -208,7 +210,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
                                     data-testid="stin-preview-button"
-                                    file={newPetitionData.stinFile}
+                                    file={petitionFormatted.stinFile}
                                     id="stin-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
@@ -219,7 +221,7 @@ export const UpdatedFilePetitionStep6 = connect(
                               </div>
                             </div>
                           </div>
-                          {newPetitionData.corporateDisclosureFile && (
+                          {petitionFormatted.corporateDisclosureFile && (
                             <div className="margin-top-3 margin-bottom-2">
                               <span className="usa-label usa-label-display">
                                 Corporate Disclosure Statement
@@ -230,7 +232,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                     <PDFPreviewButton
                                       data-testid="stin-preview-button"
                                       file={
-                                        newPetitionData.corporateDisclosureFile
+                                        petitionFormatted.corporateDisclosureFile
                                       }
                                       id="cds-preview-button"
                                       shouldAbbreviateTitle={false}
@@ -244,7 +246,7 @@ export const UpdatedFilePetitionStep6 = connect(
                             </div>
                           )}
                           <div className="grid-row margin-top-3">
-                            {newPetitionData.contactSecondary && (
+                            {petitionFormatted.contactSecondary && (
                               <>
                                 <span
                                   className="usa-label usa-label-display margin-bottom-0"
@@ -254,7 +256,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                 </span>
                                 <address aria-labelledby="filing-contact-secondary">
                                   <AddressDisplay
-                                    contact={newPetitionData.contactSecondary}
+                                    contact={petitionFormatted.contactSecondary}
                                   />
                                 </address>
                                 <div className="margin-top-1 display-flex-center">
@@ -262,7 +264,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                     Register for eService/filing:
                                   </span>
                                   <span className="margin-left-5">
-                                    {newPetitionData.contactSecondary
+                                    {petitionFormatted.contactSecondary
                                       .hasConsentedToEService
                                       ? 'Yes'
                                       : 'No'}
@@ -274,7 +276,7 @@ export const UpdatedFilePetitionStep6 = connect(
                                   </span>
                                   <span className="margin-left-5">
                                     {
-                                      newPetitionData.contactSecondary
+                                      petitionFormatted.contactSecondary
                                         .placeOfLegalResidence
                                     }
                                   </span>
