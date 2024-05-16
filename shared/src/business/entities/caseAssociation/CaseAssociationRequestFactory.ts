@@ -8,7 +8,6 @@ import { CaseAssociationRequestDocumentTypeD } from './CaseAssociationRequestDoc
 export function CaseAssociationRequestFactory(
   rawProps,
 ): CaseAssociationRequestDocument {
-  console.log('rawProps', rawProps);
   switch (rawProps.documentType) {
     case 'Notice of Intervention':
     case 'Notice of Election to Participate':
@@ -20,7 +19,6 @@ export function CaseAssociationRequestFactory(
       return new CaseAssociationRequestDocumentTypeC(rawProps);
     case 'Entry of Appearance':
     case 'Limited Entry of Appearance':
-      console.log("We've made it to type D");
       return new CaseAssociationRequestDocumentTypeD(rawProps);
     default:
       return new CaseAssociationRequestDocumentBase(rawProps);

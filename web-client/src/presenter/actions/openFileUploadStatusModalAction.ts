@@ -7,6 +7,5 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {Function} providers.get the cerebral get function
  */
 export const openFileUploadStatusModalAction = ({ store }: ActionProps) => {
-  console.log('Open file upload status modal');
   store.set(state.modal.showModal, 'FileUploadStatusModal');
 };
