@@ -32,7 +32,7 @@ export const getDocumentContentsForDocketEntryInteractor = async (
       });
 
     const documentContentsData = JSON.parse(documentContentsFile.toString());
-    console.log('**** document', documentContentsData);
+
     return documentContentsData;
   } catch (e) {
     applicationContext.logger.error(

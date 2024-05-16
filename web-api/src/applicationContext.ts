@@ -314,7 +314,6 @@ export const createApplicationContext = (
     },
     getPdfJs: async () => {
       const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
-      //pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
     },
     getPdfLib: () => {
