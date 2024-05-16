@@ -28,7 +28,7 @@ describe('UploadPetitionStep1', () => {
         petitionFile: undefined,
       });
       const errors = entity.getFormattedValidationErrors()!;
-      expect(errors.petitionFile).toEqual('Upload the Petition PDF.');
+      expect(errors.petitionFile).toEqual('Upload the Petition PDF');
     });
 
     it('should return an error message for "petitionFileSize" when it passes the maximum size', () => {
