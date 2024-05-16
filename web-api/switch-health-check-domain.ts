@@ -4,24 +4,14 @@ import {
   UpdateHealthCheckCommand,
   UpdateHealthCheckRequest,
 } from '@aws-sdk/client-route-53';
+import { requireEnvVars } from '../shared/admin-tools/util';
 
-const check = (value: string | undefined, message: string) => {
-  if (!value) {
-    console.log(message);
-    process.exit(1);
-  }
-};
+requireEnvVars(['DEPLOYING_COLOR', 'ENABLE_HEALTH_CHECKS', 'ENV']);
 
 const { DEPLOYING_COLOR, ENABLE_HEALTH_CHECKS, ENV } = process.env;
 
-check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
-check(ENV, 'You must have ENV set in your environment');
-check(
-  ENABLE_HEALTH_CHECKS,
-  'You must have ENABLE_HEALTH_CHECKS set in your environment',
-);
-
-async function main() {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   if (ENABLE_HEALTH_CHECKS !== '1') {
     console.log(
       'ENABLE_HEALTH_CHECKS is turned off, will not switch health check colors',
@@ -60,6 +50,4 @@ async function main() {
 
     console.log('route53 response:', route53Response);
   }
-}
-
-main();
+})();

@@ -88,20 +88,20 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
 
   // petition
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('input#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
   cy.get('[data-testid="remove-pdf"]');
 
   //stin
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
-  cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
   cy.get('[data-testid="remove-pdf"]');
 
   //rqt
   cy.get('[data-testid="tabButton-requestForPlaceOfTrialFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
   cy.get('[data-testid="remove-pdf"]');
   cy.get('[data-testid="icon-requestForPlaceOfTrialFile"]').should(
@@ -112,7 +112,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   cy.get('input#attachmentToPetitionFile-file').attachFile(
-    '../fixtures/w3-dummy.pdf',
+    '../../helpers/file/sample.pdf',
   );
   cy.get('[data-testid="remove-pdf"]');
 };

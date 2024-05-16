@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
 import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
@@ -82,16 +83,116 @@ export const mockDocketEntrySearchResult = {
     hits: {
       hits: [
         {
-          _id: 'case|312-21_docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          _id: 'case|312-21_docket-entry|b8ab6e48-4eb8-43af-9776-106979baff5e',
           _index: efcmsDocketEntryIndex,
           _routing: 'case|312-21_case|312-21|mapping',
           _score: null,
           _source: {
-            messageId: {
-              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-              docketNumber: {
-                S: '312-21',
-              },
+            addToCoversheet: {
+              BOOL: false,
+            },
+            case_relations: {
+              name: 'document',
+              parent: 'case|312-21_case|312-21|mapping',
+            },
+            createdAt: {
+              S: '2021-01-01T05:45:21.944Z',
+            },
+            docketEntryId: {
+              S: 'b8ab6e48-4eb8-43af-9776-106979baff5e',
+            },
+            docketNumber: {
+              S: '312-21',
+            },
+            documentTitle: {
+              S: 'Petition',
+            },
+            documentType: {
+              S: 'Petition',
+            },
+            entityName: {
+              S: 'DocketEntry',
+            },
+            eventCode: {
+              S: 'P',
+            },
+            filedBy: {
+              S: 'Petr. Eve Brewer',
+            },
+            filedByRole: {
+              S: 'petitioner',
+            },
+            filers: {
+              L: [
+                {
+                  S: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                },
+              ],
+            },
+            filingDate: {
+              S: '2021-01-01T05:45:21.942Z',
+            },
+            index: {
+              N: '1',
+            },
+            isDraft: {
+              BOOL: false,
+            },
+            isFileAttached: {
+              BOOL: true,
+            },
+            isMinuteEntry: {
+              BOOL: false,
+            },
+            isOnDocketRecord: {
+              BOOL: true,
+            },
+            isStricken: {
+              BOOL: false,
+            },
+            numberOfPages: {
+              N: '4',
+            },
+            pending: {
+              BOOL: false,
+            },
+            pk: {
+              S: 'case|312-21',
+            },
+            privatePractitioners: {
+              L: [],
+            },
+            processingStatus: {
+              S: 'complete',
+            },
+            receivedAt: {
+              S: '2021-01-01T05:00:00.000Z',
+            },
+            servedAt: {
+              S: '2021-01-03T12:31:22.259Z',
+            },
+            servedParties: {
+              L: [
+                {
+                  M: {
+                    name: {
+                      S: 'IRS',
+                    },
+                    role: {
+                      S: 'irsSuperuser',
+                    },
+                  },
+                },
+              ],
+            },
+            servedPartiesCode: {
+              S: 'R',
+            },
+            sk: {
+              S: 'docket-entry|b8ab6e48-4eb8-43af-9776-106979baff5e',
+            },
+            userId: {
+              S: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
           },
           _type: '_doc',
@@ -101,7 +202,7 @@ export const mockDocketEntrySearchResult = {
                 hits: [
                   {
                     _id: 'case|312-21_case|312-21|mapping',
-                    _index: efcmsMessageIndex,
+                    _index: efcmsDocketEntryIndex,
                     _score: 1,
                     _source: {
                       docketNumber: {
@@ -149,11 +250,93 @@ export const mockMessageSearchResult = {
           _routing: 'case|312-21_case|312-21|mapping',
           _score: null,
           _source: {
+            attachments: {
+              L: [
+                {
+                  M: {
+                    documentId: {
+                      S: '4227bd1d-4bcf-46b0-942f-445cd8024bbe',
+                    },
+                  },
+                },
+                {
+                  M: {
+                    documentId: {
+                      S: '67ce8e4d-a64c-41a4-9857-b8ca7ae6b876',
+                    },
+                  },
+                },
+              ],
+            },
+            case_relations: {
+              name: 'message',
+              parent: 'case|312-21_case|312-21|mapping',
+            },
+            caseStatus: {
+              S: 'Closed',
+            },
+            caseTitle: {
+              S: 'Case 312-21',
+            },
+            createdAt: {
+              S: '2021-09-02T03:00:45.330Z',
+            },
+            docketNumber: {
+              S: '312-21',
+            },
+            docketNumberWithSuffix: {
+              S: '312-21',
+            },
+            entityName: {
+              S: 'Message',
+            },
+            from: {
+              S: 'Buch',
+            },
+            fromSection: {
+              S: 'buchsChambers',
+            },
+            fromUserId: {
+              S: '06b6fb09-889f-427d-9d45-b99023f6539b',
+            },
+            gsi1pk: {
+              S: 'message|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+            },
+            isCompleted: {
+              BOOL: false,
+            },
+            isRead: {
+              BOOL: true,
+            },
+            isRepliedTo: {
+              BOOL: true,
+            },
+            message: {
+              S: 'Thanks!',
+            },
             messageId: {
               S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-              docketNumber: {
-                S: '312-21',
-              },
+            },
+            parentMessageId: {
+              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+            },
+            pk: {
+              S: 'case|312-21',
+            },
+            sk: {
+              S: 'message|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+            },
+            subject: {
+              S: 'Order',
+            },
+            to: {
+              S: 'Docket Clerk 1',
+            },
+            toSection: {
+              S: 'buchsChambers',
+            },
+            toUserId: {
+              S: 'b6570a72-f6df-4f41-8256-ea2edb51d665',
             },
           },
           _type: '_doc',
@@ -206,16 +389,72 @@ export const mockWorkItemSearchResult = {
     hits: {
       hits: [
         {
-          _id: 'case|312-work-item|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          _id: 'case|312-work-item|7ab75b20-0127-4fff-a4e2-1b839585e668',
           _index: efcmsWorkItemIndex,
           _routing: 'case|312-21_case|312-21|mapping',
           _score: null,
           _source: {
-            messageId: {
-              S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
-              docketNumber: {
-                S: '312-21',
-              },
+            assigneeId: {
+              S: 'f50fbb1e-e0c9-47f5-aae7-aa221bdd364a',
+            },
+            assigneeName: {
+              S: 'Docket Clerk 1',
+            },
+            case_relations: {
+              name: 'workItem',
+              parent:
+                'user-outbox|f50fbb1e-e0c9-47f5-aae7-aa221bdd364a|2021-w6_user-outbox|f50fbb1e-e0c9-47f5-aae7-aa221bdd364a|2021-w6|mapping',
+            },
+            completedAt: {
+              S: '2021-02-12T20:05:52.401Z',
+            },
+            completedBy: {
+              S: 'Docket Clerk 1',
+            },
+            completedByUserId: {
+              S: 'f50fbb1e-e0c9-47f5-aae7-aa221bdd364a',
+            },
+            completedMessage: {
+              S: 'completed',
+            },
+            createdAt: {
+              S: '2021-02-11T16:50:30.851Z',
+            },
+            docketNumber: {
+              S: '312-21',
+            },
+            docketNumberWithSuffix: {
+              S: '312-21',
+            },
+            entityName: {
+              S: 'WorkItem',
+            },
+            gsi1pk: {
+              S: 'work-item|7ab75b20-0127-4fff-a4e2-1b839585e668',
+            },
+            highPriority: {
+              BOOL: false,
+            },
+            pk: {
+              S: 'user-outbox|f50fbb1e-e0c9-47f5-aae7-aa221bdd364a|2021-w6',
+            },
+            sentBy: {
+              S: 'docketclerk1@example.com',
+            },
+            sentBySection: {
+              S: 'docket',
+            },
+            sentByUserId: {
+              S: 'f50fbb1e-e0c9-47f5-aae7-aa221bdd364a',
+            },
+            sk: {
+              S: '2021-02-12T20:05:52.401Z',
+            },
+            updatedAt: {
+              S: '2021-02-11T16:50:30.851Z',
+            },
+            workItemId: {
+              S: '7ab75b20-0127-4fff-a4e2-1b839585e668',
             },
           },
           _type: '_doc',
@@ -225,7 +464,7 @@ export const mockWorkItemSearchResult = {
                 hits: [
                   {
                     _id: 'case|312-21_case|312-21|mapping',
-                    _index: efcmsMessageIndex,
+                    _index: efcmsWorkItemIndex,
                     _score: 1,
                     _source: {
                       leadDocketNumber: {
@@ -289,6 +528,43 @@ export const mockNonexistentDocumentCountResult = {
     },
     timed_out: false,
     took: 24,
+  },
+};
+
+export const mockPractitionerRoleAggregationResult = {
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    aggregations: {
+      roles: {
+        buckets: [
+          {
+            doc_count: 763,
+            key: 'privatePractitioner',
+          },
+          {
+            doc_count: 18,
+            key: 'irsPractitioner',
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+    },
+    hits: {
+      hits: [],
+      max_score: null,
+      total: {
+        relation: 'gte',
+        value: 10000,
+      },
+    },
+    timed_out: false,
+    took: 23,
   },
 };
 

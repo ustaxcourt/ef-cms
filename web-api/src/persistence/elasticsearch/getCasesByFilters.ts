@@ -139,7 +139,7 @@ export const getCasesByFilters = async ({
       },
       search_after:
         params.searchAfter.receivedAt && params.searchAfter.pk
-          ? params.searchAfter
+          ? [params.searchAfter.receivedAt, params.searchAfter.pk]
           : undefined,
       sort: [{ 'receivedAt.S': 'asc' }, { 'pk.S': 'asc' }],
     },

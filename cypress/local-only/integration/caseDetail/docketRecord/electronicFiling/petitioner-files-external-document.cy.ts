@@ -23,7 +23,7 @@ describe(
       ).type('Answer{enter}');
       cy.get('[data-testid="submit-document"]').click();
       cy.get('[data-testid="primary-document"]').attachFile(
-        '../fixtures/w3-dummy.pdf',
+        '../../helpers/file/sample.pdf',
       );
       cy.get('[data-testid=primaryDocument-objections-No]').click();
       cy.get('#submit-document').click();

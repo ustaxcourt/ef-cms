@@ -3,7 +3,7 @@ export const navigateTo = (username: string) => {
 };
 
 export const fillInAndSubmitForm = () => {
-  const w3Dummy = 'w3-dummy.pdf'; // this comes from the fixtures folder
+  const w3Dummy = '../../helpers/file/sample.pdf'; // this comes from the fixtures folder
 
   // wizard step 1
   cy.get('input#stin-file').should('be.enabled').attachFile(w3Dummy);

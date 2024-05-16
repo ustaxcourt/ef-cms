@@ -1,16 +1,12 @@
-const { clearS3Buckets } = require('./clearS3Buckets');
-const { deleteCloudWatchLogs } = require('./deleteCloudWatchLogs');
-const { deleteCognitoPool } = require('./deleteCognitoPool');
-const { deleteCustomDomains } = require('./deleteCustomDomains');
-const { exec } = require('child_process');
-const { readdirSync } = require('fs');
+import { clearS3Buckets } from './clearS3Buckets';
+import { deleteCloudWatchLogs } from './deleteCloudWatchLogs';
+import { deleteCognitoPool } from './deleteCognitoPool';
+import { deleteCustomDomains } from './deleteCustomDomains';
+import { exec } from 'child_process';
+import { readdirSync } from 'fs';
+import { requireEnvVars } from '../shared/admin-tools/util';
 
-if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
-  console.error(
-    'Missing required AWS credentials in environment - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY',
-  );
-  process.exit(1);
-}
+requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY']);
 
 const environmentName = process.argv[2] || 'exp1';
 
@@ -42,7 +38,8 @@ const addMissingIndexFiles = () => {
   );
 };
 
-const teardownEnvironment = async () => {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   addMissingIndexFiles();
 
   try {
@@ -73,6 +70,4 @@ const teardownEnvironment = async () => {
   } catch (e) {
     console.error('Error while deleting cognito pool: ', e);
   }
-};
-
-teardownEnvironment();
+})();

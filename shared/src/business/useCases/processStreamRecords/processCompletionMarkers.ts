@@ -1,10 +1,11 @@
 import { approvePendingJob } from '../../../../admin-tools/circleci/circleci-helper';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processCompletionMarkers = async ({
   applicationContext,
   completionMarkers,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   completionMarkers: any[];
 }) => {
   if (!completionMarkers || !completionMarkers.length) return;
