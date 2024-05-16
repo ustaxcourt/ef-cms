@@ -46,6 +46,7 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   testEnvironment: 'node',
+  testPathIgnorePatterns: ['hostedEnvironmentTests'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
