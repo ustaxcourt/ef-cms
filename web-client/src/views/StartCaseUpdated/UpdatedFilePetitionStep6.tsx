@@ -1,3 +1,4 @@
+import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
@@ -20,6 +21,7 @@ export const UpdatedFilePetitionStep6 = connect(
       sequences.updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence:
       sequences.updatedFilePetitionGoBackAStepSequence,
+    user: state.user,
   },
 
   function UpdatedFilePetitionStep6({
@@ -28,8 +30,8 @@ export const UpdatedFilePetitionStep6 = connect(
     pdfPreviewUrl,
     updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence,
+    user,
   }) {
-    console.log('newPetitionData', newPetitionData);
     return (
       <>
         {/* <ErrorNotification /> */}
@@ -83,7 +85,6 @@ export const UpdatedFilePetitionStep6 = connect(
                                         link
                                         className="usa-link--external text-left mobile-text-wrap"
                                         href={pdfPreviewUrl}
-                                        // marginDirection="bottom"
                                         rel="noopener noreferrer"
                                         target="_blank"
                                       >
@@ -143,7 +144,7 @@ export const UpdatedFilePetitionStep6 = connect(
                   </div>
                 </div>
 
-                {/* <div
+                <div
                   className={classNames('margin-bottom-4', {
                     'grid-col-12': true,
                     'tablet:grid-col-5': false,
@@ -153,99 +154,135 @@ export const UpdatedFilePetitionStep6 = connect(
                     <div className="content-wrapper">
                       <h3 className="underlined">Petitioner Information</h3>
                       <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-4 margin-bottom-1">
-                          <>
-                            <span className="usa-label usa-label-display">
-                              Party type
+                        <div className="tablet:grid-col-6 margin-bottom-1">
+                          <span className="usa-label usa-label-display">
+                            Party type
+                          </span>
+                          {newPetitionData.partyType}
+                          <div className="grid-row margin-top-3">
+                            <span
+                              className="usa-label usa-label-display margin-bottom-0"
+                              id="filing-contact-primary"
+                            >
+                              Petitioner contact information
                             </span>
-                            {newPetitionData.partyType}
+                            {newPetitionData.contactPrimary && (
+                              <address aria-labelledby="filing-contact-primary">
+                                <AddressDisplay
+                                  contact={newPetitionData.contactPrimary}
+                                  noMargin={true}
+                                />
+                                <div className="display-flex-center margin-top-1">
+                                  <span className="font-weight-600">
+                                    Place of legal residence:
+                                  </span>
+                                  <span className="margin-left-5">
+                                    {
+                                      newPetitionData.contactPrimary
+                                        .placeOfLegalResidence
+                                    }
+                                  </span>
+                                </div>
+                              </address>
+                            )}
+
                             <div className="margin-top-3 margin-bottom-2">
                               <span className="usa-label usa-label-display">
-                                Statement of Taxpayer Identification
+                                Service email
+                              </span>
+                              {user.email}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="tablet:grid-col-6 margin-bottom-1 party-information">
+                          <div className="margin-top-3 margin-bottom-2">
+                            <span className="usa-label usa-label-display">
+                              Statement of Taxpayer Identification
+                            </span>
+                            <div>
+                              <div className="grid-row">
+                                <div className="grid-col flex-auto">
+                                  <PDFPreviewButton
+                                    data-testid="stin-preview-button"
+                                    file={newPetitionData.stinFile}
+                                    id="stin-preview-button"
+                                    shouldAbbreviateTitle={false}
+                                    shouldWrapText={true}
+                                    showIcon={false}
+                                    title="Statement of Taxpayer Identification"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {newPetitionData.corporateDisclosureFile && (
+                            <div className="margin-top-3 margin-bottom-2">
+                              <span className="usa-label usa-label-display">
+                                Corporate Disclosure Statement
                               </span>
                               <div>
                                 <div className="grid-row">
                                   <div className="grid-col flex-auto">
                                     <PDFPreviewButton
                                       data-testid="stin-preview-button"
-                                      file={form.stinFile}
-                                      id="stin-preview-button"
+                                      file={
+                                        newPetitionData.corporateDisclosureFile
+                                      }
+                                      id="cds-preview-button"
                                       shouldAbbreviateTitle={false}
                                       shouldWrapText={true}
                                       showIcon={false}
-                                      title="Statement of Taxpayer Identification"
+                                      title="Corporate Disclosure Statement"
                                     />
                                   </div>
                                 </div>
                               </div>
                             </div>
-
-                            {form.corporateDisclosureFile && (
-                              <div className="margin-top-3 margin-bottom-3">
-                                <span className="usa-label usa-label-display margin-top-3">
-                                  Corporate Disclosure Statement
+                          )}
+                          <div className="grid-row margin-top-3">
+                            {newPetitionData.contactSecondary && (
+                              <>
+                                <span
+                                  className="usa-label usa-label-display margin-bottom-0"
+                                  id="filing-contact-secondary"
+                                >
+                                  {"Spouse's contact information"}
                                 </span>
-                                <div>
-                                  <div className="grid-row">
-                                    <div className="grid-col flex-auto">
-                                      <PDFPreviewButton
-                                        file={form.corporateDisclosureFile}
-                                        id="cds-preview-button"
-                                        shouldAbbreviateTitle={false}
-                                        shouldWrapText={true}
-                                        showIcon={false}
-                                        title="Corporate Disclosure Statement"
-                                      />
-                                    </div>
-                                  </div>
+                                <address aria-labelledby="filing-contact-secondary">
+                                  <AddressDisplay
+                                    contact={newPetitionData.contactSecondary}
+                                  />
+                                </address>
+                                <div className="margin-top-1 display-flex-center">
+                                  <span className="font-weight-600">
+                                    Register for eService/filing:
+                                  </span>
+                                  <span className="margin-left-5">
+                                    {newPetitionData.contactSecondary
+                                      .hasConsentedToEService
+                                      ? 'Yes'
+                                      : 'No'}
+                                  </span>
                                 </div>
-                              </div>
+                                <div className="margin-top-1 display-flex-center">
+                                  <span className="font-weight-600">
+                                    Place of legal residence:
+                                  </span>
+                                  <span className="margin-left-5">
+                                    {
+                                      newPetitionData.contactSecondary
+                                        .placeOfLegalResidence
+                                    }
+                                  </span>
+                                </div>
+                              </>
                             )}
-                          </>
-                        </div>
-                        <div className="tablet:grid-col-4 margin-bottom-1 party-information">
-                          <span
-                            className="usa-label usa-label-display margin-bottom-0"
-                            id="filing-contact-primary"
-                          >
-                            {startCaseHelper.contactPrimaryLabel}
-                          </span>
-                          {form.contactPrimary && (
-                            <address aria-labelledby="filing-contact-primary">
-                              <AddressDisplay
-                                contact={form.contactPrimary}
-                                noMargin={true}
-                              />
-                            </address>
-                          )}
-                          <div className="margin-top-3 margin-bottom-2">
-                            <span className="usa-label usa-label-display">
-                              Service email
-                            </span>
-                            {user.email}
                           </div>
-                        </div>
-                        <div className="tablet:grid-col-4 margin-bottom-1 party-information">
-                          {startCaseHelper.hasContactSecondary && (
-                            <>
-                              <span
-                                className="usa-label usa-label-display margin-bottom-0"
-                                id="filing-contact-secondary"
-                              >
-                                {startCaseHelper.contactSecondaryLabel}
-                              </span>
-                              <address aria-labelledby="filing-contact-secondary">
-                                <AddressDisplay
-                                  contact={form.contactSecondary}
-                                />
-                              </address>
-                            </>
-                          )}
                         </div>
                       </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
 
