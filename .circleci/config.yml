@@ -407,6 +407,24 @@ jobs:
           name: 'Load tests'
           command: npm run loadtest:pdf-generation
 
+  api-hosted-environment-tests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'API Hosted Environment Tests'
+          command: npm run test:api:hosted-environment
+
   deploy-switch-colors-cron:
     docker:
       - image: *efcms-docker-image
@@ -918,12 +936,17 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
+      - api-hosted-environment-tests:
+          <<: *only-deployed-lower-environments
+          requires:
+            - disable-reindex-cron
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
             - smoketests
             - loadtests
             - smoketests-readonly
+            - api-hosted-environment-tests
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
