@@ -6,16 +6,16 @@ export const getStep1DataAction = ({ get }: ActionProps) => {
     petitionFile,
     petitionFileSize,
     petitionReasons,
+    petitionRedactionAcknowledgement,
     petitionType,
-    redactionAcknowledgement,
   } = get(state.form);
 
   const step1Data = {
-    acknowledgeChecked: redactionAcknowledgement,
     petitionFacts,
     petitionFile,
     petitionFileSize,
     petitionReasons,
+    petitionRedactionAcknowledgement,
     petitionType,
   };
 

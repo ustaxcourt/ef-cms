@@ -34,6 +34,7 @@ export class ElectronicPetition extends JoiValidationEntity {
   public petitionFile?: object;
   public petitionFileSize?: number;
   public petitionFileId?: string;
+  public petitionRedactionAcknowledgement?: boolean;
   public preferredTrialCity: string;
   public procedureType: string;
   public stinFile?: object;
@@ -55,7 +56,6 @@ export class ElectronicPetition extends JoiValidationEntity {
     this.partyType = rawCase.partyType;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
-    this.petitionType = rawCase.petitionType;
 
     this.stinFile = rawCase.stinFile;
     this.stinFileSize = rawCase.stinFileSize;
@@ -63,6 +63,9 @@ export class ElectronicPetition extends JoiValidationEntity {
     this.petitionFile = rawCase.petitionFile;
     this.petitionFileSize = rawCase.petitionFileSize;
     this.petitionFileId = rawCase.petitionFileId;
+    this.petitionRedactionAcknowledgement =
+      rawCase.petitionRedactionAcknowledgement;
+    this.petitionType = rawCase.petitionType;
 
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
@@ -172,6 +175,12 @@ export class ElectronicPetition extends JoiValidationEntity {
         '*': 'Your Petition file size is empty',
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+    //required since only new petitions use this entity
+    petitionRedactionAcknowledgement: joi.boolean().when('petitionType', {
+      is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
+      otherwise: joi.optional(),
+      then: joi.boolean().required().valid(true),
+    }),
     petitionType: JoiValidationConstants.STRING.valid(
       ...Object.values(PETITION_TYPES),
     ),

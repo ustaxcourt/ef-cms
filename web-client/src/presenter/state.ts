@@ -733,6 +733,7 @@ export const baseState = {
     petitionFile: undefined,
     petitionFileId: undefined,
     petitionReasons: undefined,
+    petitionRedactionAcknowledgement: false,
     petitionType: undefined,
     preferredTrialCity: undefined,
     primaryDocumentFile: undefined,

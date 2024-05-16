@@ -133,11 +133,11 @@ export const UpdatedFilePetitionStep1 = connect(
                 <div className="card" style={{ maxWidth: 'fit-content' }}>
                   <div className="content-wrapper usa-checkbox">
                     <input
-                      aria-describedby="redaction-acknowledgement-label"
-                      checked={form.redactionAcknowledgement || false}
+                      aria-describedby="petition-redaction-acknowledgement-label"
+                      checked={form.petitionRedactionAcknowledgement || false}
                       className="usa-checkbox__input"
-                      id="redaction-acknowledgement"
-                      name="redactionAcknowledgement"
+                      id="petition-redaction-acknowledgement"
+                      name="petitionRedactionAcknowledgement"
                       type="checkbox"
                       onChange={e => {
                         updateFormValueSequence({
@@ -148,9 +148,9 @@ export const UpdatedFilePetitionStep1 = connect(
                     />
                     <label
                       className="usa-checkbox__label"
-                      data-testid="redaction-acknowledgement-label"
-                      htmlFor="redaction-acknowledgement"
-                      id="redaction-acknowledgement-label"
+                      data-testid="petition-redaction-acknowledgement-label"
+                      htmlFor="petition-redaction-acknowledgement"
+                      id="petition-redaction-acknowledgement-label"
                     >
                       <b>
                         All documents I am filing have been redacted in
@@ -174,7 +174,7 @@ export const UpdatedFilePetitionStep1 = connect(
         <Button
           disabled={
             form.petitionType === PETITION_TYPES.userUploaded &&
-            !form.redactionAcknowledgement
+            !form.petitionRedactionAcknowledgement
           }
           onClick={() => {
             updatedFilePetitionCompleteStep1Sequence();

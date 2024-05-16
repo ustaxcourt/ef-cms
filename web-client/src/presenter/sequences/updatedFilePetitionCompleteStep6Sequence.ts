@@ -1,7 +1,9 @@
 import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
+import { closeFileUploadStatusModalAction } from '@web-client/presenter/actions/closeFileUploadStatusModalAction';
 import { debounceSequenceDecorator } from '@web-client/presenter/utilities/debounceSequenceDecorator';
 import { generatePetitionPdfAction } from '@web-client/presenter/actions/generatePetitionPdfAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
+import { openFileUploadErrorModal } from '@web-client/presenter/actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '@web-client/presenter/actions/openFileUploadStatusModalAction';
 import { saveAndSubmitCaseAction } from '@web-client/presenter/actions/saveAndSubmitCaseAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
@@ -38,8 +40,12 @@ export const updatedFilePetitionCompleteStep6Sequence =
         setProgressForFileUploadAction,
         saveAndSubmitCaseAction,
         {
-          error: [setAlertErrorAction],
-          success: [setAlertSuccessAction, incrementCurrentStepIndicatorAction],
+          error: [setAlertErrorAction, openFileUploadErrorModal],
+          success: [
+            closeFileUploadStatusModalAction,
+            setAlertSuccessAction,
+            incrementCurrentStepIndicatorAction,
+          ],
         },
       ],
     },
