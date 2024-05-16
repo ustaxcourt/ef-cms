@@ -18,7 +18,7 @@ export const generateDocumentIds = async (
     applicationForWaiverOfFilingFeeUploadProgress?: FileUploadProgressType;
     attachmentToPetitionUploadProgress?: FileUploadProgressType;
     corporateDisclosureUploadProgress?: FileUploadProgressType;
-    petitionUploadProgress: FileUploadProgressType;
+    petitionUploadProgress?: FileUploadProgressType;
     requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
     stinUploadProgress: FileUploadProgressType;
   },
@@ -33,12 +33,15 @@ export const generateDocumentIds = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const petitionFileUpload = applicationContext
-    .getUseCases()
-    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionUploadProgress.file,
-      onUploadProgress: petitionUploadProgress.uploadProgress,
-    });
+  let petitionFileUpload;
+  if (petitionUploadProgress) {
+    petitionFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: petitionUploadProgress.file,
+        onUploadProgress: petitionUploadProgress.uploadProgress,
+      });
+  }
 
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeUploadProgress) {

@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
 import { generatePetitionPdfAction } from '@web-client/presenter/actions/generatePetitionPdfAction';
 import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
 import { getStep2DataAction } from '@web-client/presenter/actions/getStep2DataAction';
@@ -28,6 +29,7 @@ export const updatedFilePetitionCompleteStep5Sequence = [
       getStep2DataAction,
       getStep3DataAction,
       getStep4DataAction,
+      formatPetitionAction,
       generatePetitionPdfAction,
       setPdfPreviewUrlAction,
       incrementCurrentStepIndicatorAction,
