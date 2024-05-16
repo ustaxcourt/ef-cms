@@ -20,6 +20,7 @@ const NonstandardDateInput = ({
     errorText={validationErrors.date}
     id="date"
     label={addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
+    minDate={addCourtIssuedDocketEntryNonstandardHelper.minDate}
     onChange={e => {
       formatAndUpdateDateFromDatePickerSequence({
         key: 'date',
