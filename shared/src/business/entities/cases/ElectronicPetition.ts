@@ -175,11 +175,10 @@ export class ElectronicPetition extends JoiValidationEntity {
         '*': 'Your Petition file size is empty',
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
-    //required since only new petitions use this entity
     petitionRedactionAcknowledgement: joi.boolean().when('petitionType', {
       is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
       otherwise: joi.optional(),
-      then: joi.boolean().required().valid(true),
+      then: joi.boolean().optional().invalid(false),
     }),
     petitionType: JoiValidationConstants.STRING.valid(
       ...Object.values(PETITION_TYPES),
