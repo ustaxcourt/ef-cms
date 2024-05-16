@@ -13,9 +13,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-// TODO Nate: This appears to be the _current_ 'File a document' page / form.
-// In the EA flow, we need to swap out this form for the EA specific form.
-// Q: where is the EA-specific form?
 export const FileDocument = connect(
   {
     constants: state.constants,

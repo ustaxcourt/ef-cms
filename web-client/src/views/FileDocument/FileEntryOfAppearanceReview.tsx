@@ -8,6 +8,15 @@ import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import React from 'react';
 
+/*
+TODO
+
+- Entry of Appearance is showing up in ALL document filing lists, when it should ONLY be showing up in Request Access and File First IRS document flows.
+- Q: what should the form look like for the manual EA filing flow for filing first document?
+- tests, probably.
+- Need to make sure that the title of the document is 'Entry of Appearance for Respondant', both on the document itself and on the page.
+*/
+
 export const FileEntryOfAppearanceReview = ({
   documentTitle,
   onBack,
@@ -15,7 +24,6 @@ export const FileEntryOfAppearanceReview = ({
   onSubmit,
   pdfPreviewUrl,
   showModal,
-  supportingDocuments,
 }) => {
   return (
     <React.Fragment>
@@ -74,60 +82,6 @@ export const FileEntryOfAppearanceReview = ({
                         </div>
                       </div>
                     </div>
-
-                    {supportingDocuments &&
-                      supportingDocuments.map((item, idx) => (
-                        <React.Fragment key={item.documentTitle}>
-                          <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                            <div className="tablet:grid-col-6 margin-bottom-1">
-                              <div className="tablet:margin-bottom-0 margin-bottom-205">
-                                <h3 className="usa-label">
-                                  {item.documentTitle}
-                                </h3>
-                                <div className="grid-row">
-                                  <div className="grid-col flex-auto">
-                                    <a
-                                      href={pdfPreviewUrl}
-                                      rel="noreferrer"
-                                      target="_blank"
-                                    >
-                                      <FontAwesomeIcon
-                                        className="fa-icon-blue"
-                                        icon={['fas', 'file-pdf']}
-                                      />{' '}
-                                      {documentTitle}
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="tablet:grid-col-6 margin-bottom-1">
-                              {supportingDocuments[idx].showFilingIncludes && (
-                                <div className="margin-bottom-0">
-                                  <label
-                                    className="usa-label"
-                                    htmlFor="filing-includes"
-                                  >
-                                    Document includes
-                                  </label>
-                                  <ul className="ustc-unstyled-list without-margins">
-                                    {item.certificateOfService && (
-                                      <li>
-                                        Certificate of Service{' '}
-                                        {
-                                          supportingDocuments[idx]
-                                            .certificateOfServiceDateFormatted
-                                        }
-                                      </li>
-                                    )}
-                                    {item.attachments && <li>Attachment(s)</li>}
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </React.Fragment>
-                      ))}
                   </div>
                 </div>
               </div>
