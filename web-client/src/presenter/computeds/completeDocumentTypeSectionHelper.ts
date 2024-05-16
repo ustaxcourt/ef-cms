@@ -22,30 +22,36 @@ export const completeDocumentTypeSectionHelper = (
   }
   const {
     CATEGORY_MAP,
-    INTERNAL_CATEGORY_MAP,
     LEGACY_DOCUMENT_TYPES,
     NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+    USER_ROLES,
   } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);
 
-  const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
-    value => value.eventCode,
-  );
+  const documentTypesForSelectFilterFunction = (documentType): boolean => {
+    const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
+      value => value.eventCode,
+    );
 
-  const entryOfAppearance = getDocumentTypesForSelect(
-    INTERNAL_CATEGORY_MAP,
-  ).find(document => document.eventCode === 'EA');
+    const currentUser = applicationContext.getCurrentUser();
+    if (
+      currentUser.role === USER_ROLES.irsPractitioner &&
+      documentType.eventCode === 'EA'
+    ) {
+      documentType.documentTitle += ' for Respondent';
+    } else if (documentType.eventCode === 'EA') return false;
 
-  documentTypesForSelect.push(entryOfAppearance);
+    return (
+      !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
+        documentType.eventCode,
+      ) && legacyDocumentCodes.indexOf(documentType.eventCode) === -1
+    );
+  };
+
   returnData.documentTypesForSelectSorted = documentTypesForSelect
     .sort(getSortFunction(searchText))
-    .filter(
-      docType =>
-        !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
-          docType.eventCode,
-        ) && legacyDocumentCodes.indexOf(docType.eventCode) === -1,
-    );
+    .filter(documentType => documentTypesForSelectFilterFunction(documentType));
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(
       entry => entry.scenario !== 'Nonstandard H',
