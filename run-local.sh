@@ -57,7 +57,7 @@ CODE="385030" npx cognito-local &
 COGNITO_PID=$!
 
 
-nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
+nodemon --delay 1 -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec "npx tsx web-api/src/app-local.ts"
 
 if [[ -z "$CI" ]]; then
   echo "Stopping dynamodb, elasticsearch, and s3rver"

@@ -678,10 +678,10 @@ const applicationContext = {
     },
   }),
   getPdfJs: async () => {
-    const pdfjsLib = (await import('pdfjs-dist')).default;
-    const pdfjsWorker = (await import('pdfjs-dist/build/pdf.worker.entry'))
-      .default;
-    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    // const pdfjsWorker = (await import('pdfjs-dist'))
+    //   .default;
+    // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return pdfjsLib;
   },
   getPdfLib: () => {

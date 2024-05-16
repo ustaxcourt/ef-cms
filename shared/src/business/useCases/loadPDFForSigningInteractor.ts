@@ -22,6 +22,7 @@ export const loadPDFForSigningInteractor = async (
     removeCover: boolean;
   },
 ) => {
+  console.log('***** loading pdf for signing');
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   try {
@@ -53,7 +54,11 @@ export const loadPDFForSigningInteractor = async (
     } else {
       formattedArrayBuffer = arrayBuffer;
     }
-    return await pdfjsLib.getDocument(formattedArrayBuffer).promise;
+    console.log('***** about to return document');
+    const doc = await pdfjsLib.getDocument(formattedArrayBuffer).promise;
+
+    console.log('*** doc', doc);
+    return doc;
   } catch (err) {
     applicationContext.logger.error(
       `error loading PDF for signing with docketEntryId ${docketEntryId}`,

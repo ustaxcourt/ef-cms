@@ -2,7 +2,6 @@
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
@@ -313,8 +312,9 @@ export const createApplicationContext = (
       }
       return notificationServiceCache;
     },
-    getPdfJs: () => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
+    getPdfJs: async () => {
+      const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+      //pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
     },
     getPdfLib: () => {
