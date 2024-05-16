@@ -116,6 +116,20 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
     });
   });
 
+  it('should set partyIrsPractitioner to true when event code is EA', async () => {
+    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {},
+        form: {
+          eventCode: 'EA',
+        },
+      },
+    });
+
+    expect(result.state.form.partyIrsPractitioner).toEqual(true);
+  });
+
   it('should default the generationType to manual', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
