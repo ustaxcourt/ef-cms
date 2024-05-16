@@ -54,7 +54,7 @@ export const UpdatedFilePetitionStep6 = connect(
             <WarningNotificationComponent
               alertWarning={{
                 message:
-                  "Don't forget to check your document(s) to ensure personal information has been removed or redacted.",
+                  'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) for every form except the Statement of Taxpayer Identification.',
               }}
               dismissible={false}
               scrollToTop={false}
@@ -339,7 +339,6 @@ export const UpdatedFilePetitionStep6 = connect(
                 <div className="margin-top-4">
                   <Button
                     data-testid="petition-review-submit-document"
-                    disabled={!form.redactionAcknowledgement}
                     id="submit-document"
                     type="submit"
                     onClick={() => {
