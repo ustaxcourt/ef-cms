@@ -5,7 +5,7 @@ import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionState
 import joi from 'joi';
 
 export class UploadPetitionStep1 extends JoiValidationEntity {
-  public acknowledgeChecked: boolean;
+  public petitionRedactionAcknowledgement: boolean;
   public petitionFile: File;
   public petitionFileSize: number;
   public petitionType: typeof PETITION_TYPES;
@@ -16,7 +16,8 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('UploadPetitionStep1');
-    this.acknowledgeChecked = rawProps.acknowledgeChecked;
+    this.petitionRedactionAcknowledgement =
+      rawProps.petitionRedactionAcknowledgement;
     this.petitionFile = rawProps.petitionFile;
     this.petitionFileSize = rawProps.petitionFileSize;
     this.petitionType = rawProps.petitionType;
@@ -25,11 +26,6 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    acknowledgeChecked: joi.boolean().when('petitionType', {
-      is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
-      otherwise: joi.optional(),
-      then: joi.boolean().required().valid(true),
-    }),
     //TODO: figure out real max length
     petitionFacts: joi
       .when('petitionType', {
@@ -44,6 +40,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         '*': 'Add at least one fact',
         'string.max': 'Facts cannot exceed 1000 characters',
       }),
+
     petitionFile: joi.object().when('petitionType', {
       is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
       otherwise: joi.optional(),
@@ -79,6 +76,11 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         '*': 'Add at least one reason',
         'string.max': 'Reasons cannot exceed 1000 characters',
       }),
+    petitionRedactionAcknowledgement: joi.boolean().when('petitionType', {
+      is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
+      otherwise: joi.optional(),
+      then: joi.boolean().required().valid(true),
+    }),
     petitionType: joi
       .string()
       .required()

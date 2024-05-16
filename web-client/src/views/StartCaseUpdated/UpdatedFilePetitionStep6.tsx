@@ -20,7 +20,6 @@ export const UpdatedFilePetitionStep6 = connect(
     newPetitionData: state.newPetitionData,
     pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.modal.showModal,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep6Sequence:
       sequences.updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence:
@@ -339,7 +338,6 @@ export const UpdatedFilePetitionStep6 = connect(
                 <div className="margin-top-4">
                   <Button
                     data-testid="petition-review-submit-document"
-                    disabled={!form.redactionAcknowledgement}
                     id="submit-document"
                     type="submit"
                     onClick={() => {
