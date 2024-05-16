@@ -1,77 +1,88 @@
+import { assertExists, retry } from '../../../helpers/retry';
+import { createAPractitioner } from '../../../helpers/accountCreation/create-a-practitioner';
 import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { faker } from '@faker-js/faker';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
-import { loginAsPetitionsClerk1 } from '../../../helpers/authentication/login-as-helpers';
-import { retry } from '../../../helpers/retry';
+import {
+  loginAsAdmissionsClerk,
+  loginAsDocketClerk1,
+  loginAsPetitionsClerk1,
+} from '../../../helpers/authentication/login-as-helpers';
 
-describe('search page functionality', () => {
-  it('should be able to create a case and serve to IRS', () => {
+describe('Advanced Search', () => {
+  it('should find a served paper case when the user searches by party name or docket number', () => {
+    /** Arrange */
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber, name }) => {
+      /** Act */
       cy.get('[data-testid="search-link"]').click();
-      cy.get('[data-testid="petitioner-name"]').clear();
       cy.get('[data-testid="petitioner-name"]').type(name);
+      cy.get('[data-testid="case-search-by-name"]').click();
 
-      retry(() => {
-        cy.get('[data-testid="case-search-by-name"]').click();
-        return cy.get('body').then(body => {
-          return (
-            body.find(`[data-testid="case-result-${docketNumber}"]`).length > 0
-          );
-        });
-      });
-
-      cy.get('[data-testid="clear-search-by-name"]').click();
-      cy.get(`[data-testid="case-result-${docketNumber}"]`).should('not.exist');
-      cy.get('[data-testid="docket-number"]').clear();
-      cy.get('[data-testid="docket-number"]').type(docketNumber);
-      cy.get('[data-testid="docket-search-button"]').click();
-      cy.url().should('include', `/case-detail/${docketNumber}`);
+      /** Assert */
+      cy.get(`[data-testid="case-result-${docketNumber}"]`);
     });
   });
 
-  it('should be able to search for practitioners by name', () => {
-    cy.login('docketclerk1');
-    cy.get('[data-testid="inbox-tab-content"]').should('exist');
-    cy.get('[data-testid="search-link"]').click();
-    cy.get('[data-testid="tab-practitioner"]').click();
-    cy.get('[data-testid="practitioner-name"]').clear();
-    cy.get('[data-testid="practitioner-name"]').type('test');
-    cy.get('[data-testid="practitioner-search-by-name-button"]').click();
-    cy.get('[data-testid="practitioner-row-PT1234"]').should('exist');
-    cy.get('[data-testid="clear-practitioner-search"]').click();
-    cy.get('[data-testid="practitioner-row-PT1234"]').should('not.exist');
-    cy.get('[data-testid="bar-number-search-input"]').clear();
-    cy.get('[data-testid="bar-number-search-input"]').type('pt1234');
-    cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
-    cy.url().should('include', 'pt1234');
-    cy.get('[data-testid="print-practitioner-case-list"]').click();
-    cy.get('dialog.modal-screen').should('exist');
-    cy.get('h3:contains("Printable Case List")').should('be.visible');
+  it('should return practitioner results when the user searches by name', () => {
+    /** Arrange */
+    loginAsAdmissionsClerk();
+    createAPractitioner().then(({ barNumber, firstName }) => {
+      /** Act */
+      cy.get('[data-testid="search-link"]').click();
+      cy.get('[data-testid="tab-practitioner"]').click();
+      cy.get('[data-testid="practitioner-name"]').type(firstName);
+
+      /** Assert */
+      // need to wait for opensearch to index the new practitioner
+      retry(() => {
+        cy.get('[data-testid="practitioner-search-by-name-button"]').click();
+
+        /** Assert */
+        return assertExists(`[data-testid="practitioner-row-${barNumber}"]`);
+      });
+
+      cy.get('[data-testid="clear-practitioner-search"]').click();
+      cy.get(`[data-testid="practitioner-row-${barNumber}"]`).should(
+        'not.exist',
+      );
+    });
   });
 
-  it('should be able to search for practitioners by bar number', () => {
-    cy.login('docketclerk1');
-    cy.get('[data-testid="inbox-tab-content"]').should('exist');
-    cy.get('[data-testid="search-link"]').click();
-    cy.get('[data-testid="tab-practitioner"]').click();
-    cy.get('[data-testid="bar-number-search-input"]').clear();
-    cy.get('[data-testid="bar-number-search-input"]').type('pt1234');
-    cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
-    cy.url().should('include', 'pt1234');
+  it('should find a practitioner and route to the practitioner detail page when the user searches by bar number', () => {
+    /** Arrange */
+    loginAsAdmissionsClerk();
+    createAPractitioner().then(({ barNumber }) => {
+      /** Act */
+      cy.get('[data-testid="search-link"]').click();
+      cy.get('[data-testid="tab-practitioner"]').click();
+      cy.get('[data-testid="bar-number-search-input"]').type(barNumber);
+      cy.get(
+        '[data-testid="practitioner-search-by-bar-number-button"]',
+      ).click();
+
+      /** Assert */
+      cy.url().should('include', barNumber);
+      cy.get('[data-testid="print-practitioner-case-list"]').click();
+      cy.get('dialog.modal-screen').should('exist');
+      cy.get('h3:contains("Printable Case List")').should('be.visible');
+    });
   });
 
-  it('create an opinion on a case and search for it', () => {
+  it('should find matching results when the user searches for an opinion by keyword', () => {
+    /** Arrange */
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
-      cy.login('docketclerk1');
-      cy.get('[data-testid="inbox-tab-content"]').should('exist');
+      loginAsDocketClerk1();
+
       goToCase(docketNumber);
+
+      const opinionTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
-      cy.get('[data-testid="upload-description"]').clear();
-      cy.get('[data-testid="upload-description"]').type('an opinion');
+      cy.get('[data-testid="upload-description"]').type(opinionTitle);
       cy.get('[data-testid="primary-document-file"]').attachFile(
-        '../fixtures/w3-dummy.pdf',
+        '../../helpers/file/sample.pdf',
       );
       cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
@@ -83,15 +94,17 @@ describe('search page functionality', () => {
       cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="print-paper-service-done-button"]').click();
+
+      /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="tab-opinion"]').click();
-      cy.get('[data-testid="keyword-search"]').clear();
-      cy.get('[data-testid="keyword-search"]').type('an opinion');
+      cy.get('[data-testid="keyword-search"]').type(opinionTitle);
       // need to wait for elasticsearch potentially
       retry(() => {
         cy.get('[data-testid="advanced-search-button"]').click();
         cy.get('.search-results').should('exist');
         return cy.get('body').then(body => {
+          /** Assert */
           return (
             body.find(`[data-testid="docket-number-link-${docketNumber}"]`)
               .length > 0

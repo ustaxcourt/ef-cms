@@ -1,6 +1,6 @@
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { getMigrationFiles } from './migrationFilesHelper';
+import { migrationsToRun } from 'web-api/workflow-terraform/migration/main/lambdas/migrationsToRun';
 import { requireEnvVars } from '../../../../shared/admin-tools/util';
 
 requireEnvVars(['SOURCE_TABLE']);
@@ -24,12 +24,11 @@ const hasMigrationRan = async key => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const migrationFiles = getMigrationFiles();
-  for (let migrationFile of migrationFiles) {
-    const hasRan = await hasMigrationRan(migrationFile);
+  for (let { key } of migrationsToRun) {
+    const hasRan = await hasMigrationRan(key);
     if (!hasRan) {
       console.log(
-        `${migrationFile} has not run, migration is needed, exiting with status code 0`,
+        `${key} has not run, migration is needed, exiting with status code 0`,
       );
       process.exit(0);
     }
