@@ -1,7 +1,7 @@
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const formatPetitionAction = async ({
+export const formatPetitionAction = ({
   applicationContext,
   props,
   store,
@@ -42,7 +42,6 @@ export const formatPetitionAction = async ({
     ({ noticeIssuedDate, taxYear } = irsNotices[0]);
   }
 
-  //TODO: type this in state
   store.set(state.petitionFormatted, {
     ...petitionInfo,
     caseCaption,
