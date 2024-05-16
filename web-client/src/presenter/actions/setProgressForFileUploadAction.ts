@@ -12,7 +12,6 @@ export const setProgressForFileUploadAction = ({
 }>): {
   fileUploadProgressMap: FileUploadProgressMapType;
 } => {
-  console.log('Set progress for file upload');
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
   // eslint-disable-next-line @miovision/disallow-date/no-new-date

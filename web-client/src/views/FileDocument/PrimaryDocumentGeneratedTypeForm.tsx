@@ -14,16 +14,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-/*
-
-TODO
-- Conditionally EA-specific form view if EA is chosen document type
-  - What to use to conditionally render?
-  - How much should be behind this conditional render, and should it be its own new component or inline in something else?
--
-
-*/
-
 export const PrimaryDocumentGeneratedTypeForm = connect(
   {
     constants: state.constants,

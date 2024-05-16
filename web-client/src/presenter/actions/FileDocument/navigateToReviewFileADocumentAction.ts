@@ -13,12 +13,12 @@ export const navigateToReviewFileADocumentAction = async ({
   store,
 }: ActionProps) => {
   if (
-    get(state.form.generationType) === GENERATION_TYPES.MANUAL &&
+    get(state.form.generationType) === GENERATION_TYPES.AUTO &&
     get(state.form.eventCode) === 'EA'
   ) {
-    store.set(state.form.redactionAcknowledgement, false);
-  } else {
     store.unset(state.form.redactionAcknowledgement);
+  } else {
+    store.set(state.form.redactionAcknowledgement, false);
   }
   store.set(state.wizardStep, 'FileDocumentReview');
 

@@ -7,7 +7,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-// TODO start here, Nate
 export const ViewAllDocumentsDesktop = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
