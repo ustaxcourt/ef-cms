@@ -1,5 +1,7 @@
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
+import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PDFPreviewButton } from '@web-client/views/PDFPreviewButton';
@@ -17,6 +19,8 @@ export const UpdatedFilePetitionStep6 = connect(
     form: state.form,
     newPetitionData: state.newPetitionData,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    showModal: state.modal.showModal,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep6Sequence:
       sequences.updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence:
@@ -28,6 +32,7 @@ export const UpdatedFilePetitionStep6 = connect(
     form,
     newPetitionData,
     pdfPreviewUrl,
+    showModal,
     updatedFilePetitionCompleteStep6Sequence,
     updatedFilePetitionGoBackAStepSequence,
     user,
@@ -334,7 +339,7 @@ export const UpdatedFilePetitionStep6 = connect(
                 <div className="margin-top-4">
                   <Button
                     data-testid="petition-review-submit-document"
-                    // disabled={true}
+                    disabled={!form.redactionAcknowledgement}
                     id="submit-document"
                     type="submit"
                     onClick={() => {
@@ -368,6 +373,8 @@ export const UpdatedFilePetitionStep6 = connect(
             </NonMobile>
           )}
         </div>
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
       </>
     );
   },

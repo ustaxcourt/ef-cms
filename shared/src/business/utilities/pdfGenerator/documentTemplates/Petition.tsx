@@ -51,11 +51,9 @@ export const Petition = ({
           <p>{caseDescription}</p>
           <li className="list-bold">
             If applicable, provide the date(s) the IRS issued the NOTICE(S) for
-            the above and the City and State of the IRS office(s) issuing the
-            NOTICE(S):
+            the above:
           </li>
-          {/* location goes here as well, but we don't collect it */}
-          <p>{noticeIssuedDate ? `${noticeIssuedDate} - ` : 'N/A'}</p>
+          <p>{noticeIssuedDate ? `${noticeIssuedDate}` : 'N/A'}</p>
           <li className="list-bold">
             Provide the year(s) or period(s) for which the NOTICE(S) was/were
             issued:

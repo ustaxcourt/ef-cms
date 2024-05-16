@@ -87,10 +87,10 @@ export class ContactUpdated extends JoiValidationEntity {
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {
+    ...ContactUpdated.SHARED_VALIDATION_RULES,
     countryType: JoiValidationConstants.STRING.valid(COUNTRY_TYPES.DOMESTIC)
       .required()
       .messages({ '*': 'Enter country type' }),
-    ...ContactUpdated.SHARED_VALIDATION_RULES,
     postalCode: JoiValidationConstants.US_POSTAL_CODE.required().messages({
       '*': 'Enter ZIP code',
     }),
@@ -104,6 +104,7 @@ export class ContactUpdated extends JoiValidationEntity {
   } as const;
 
   static INTERNATIONAL_VALIDATION_RULES = {
+    ...ContactUpdated.SHARED_VALIDATION_RULES,
     country: JoiValidationConstants.STRING.max(500)
       .required()
       .messages({ '*': 'Enter a country' }),
@@ -112,7 +113,6 @@ export class ContactUpdated extends JoiValidationEntity {
     )
       .required()
       .messages({ '*': 'Enter country type' }),
-    ...ContactUpdated.SHARED_VALIDATION_RULES,
     postalCode: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({ '*': 'Enter ZIP code' }),
