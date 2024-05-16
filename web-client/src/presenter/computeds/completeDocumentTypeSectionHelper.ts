@@ -43,11 +43,14 @@ export const completeDocumentTypeSectionHelper = (
         .getUtilities()
         .isSealedCase(caseDetail);
 
+      console.log('isCaseSealed', isCaseSealed);
+
       const caseHasRespondent = !!(
         !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length
       );
 
       let showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
+
       if (!showFileFirstDocumentButton) return false;
       documentType.documentTitle += ' for Respondent';
     } else if (documentType.eventCode === 'EA') return false;
