@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '../../../applicationContext';
 import { Get } from 'cerebral';
+import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type PractitionerSearchResultType = {
@@ -77,7 +78,7 @@ export const practitionerSearchHelper = (
     result = {
       ...result,
       formattedSearchResults: paginatedResults,
-      numberOfResults: searchResults.total,
+      numberOfResults: Number(formatPositiveNumber(searchResults.total || 0)),
       pageCount,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,

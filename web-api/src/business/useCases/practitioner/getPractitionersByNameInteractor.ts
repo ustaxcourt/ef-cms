@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type PractitionersByName = {
@@ -23,7 +24,7 @@ export type PractitionersByName = {
 };
 
 export const getPractitionersByNameInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { name, searchAfter }: { name: string; searchAfter: string },
 ): Promise<PractitionersByName> => {
   const authenticatedUser = applicationContext.getCurrentUser();
