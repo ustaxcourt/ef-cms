@@ -1,6 +1,11 @@
-import { loginAsPetitioner } from '../../../../../helpers/authentication/login-as-helpers';
+import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
+import {
+  loginAsIrsPractitioner,
+  loginAsPetitioner,
+} from '../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { uploadFile } from '../../../../../helpers/file/upload-file';
 
 describe('IRS Practitioner files Entry of Appearance as First IRS Document', () => {
@@ -12,17 +17,17 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
       petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
-        cy.login('irspractitioner', `/case-detail/${docketNumber}`);
-        cy.get('#button-first-irs-document').click();
+        loginAsIrsPractitioner();
+        externalUserSearchesDocketNumber(docketNumber);
 
-        cy.get('#react-select-2-input').clear();
-        cy.get('#react-select-2-input').type('e');
-        cy.get('#react-select-2-option-0').click();
+        cy.get('[data-testid="button-first-irs-document"]').click();
+
+        selectTypeaheadInput('document-type', 'Entry of Appearance');
         cy.get('[data-testid="submit-document"]').click();
 
         cy.get('[data-testid="auto-generation"]').should('exist');
         cy.get('[data-testid="auto-generation"]').click();
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-submit-document"]').click();
 
         cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
           'exist',
@@ -38,22 +43,22 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
   });
 
   describe('Upload File Entry of Appearance', () => {
-    it('should allow manual uploadand subsequent filing of Entry of Appearance', () => {
+    it('should allow manual upload and subsequent filing of Entry of Appearance', () => {
       const primaryFilerName = 'John';
 
       loginAsPetitioner();
       petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
-        cy.login('irspractitioner', `/case-detail/${docketNumber}`);
-        cy.get('#button-first-irs-document').click();
-        cy.get('#react-select-2-input').clear();
-        cy.get('#react-select-2-input').type('e');
-        cy.get('#react-select-2-option-0').click();
+        loginAsIrsPractitioner();
+        externalUserSearchesDocketNumber(docketNumber);
+        cy.get('[data-testid="button-first-irs-document"]').click();
+
+        selectTypeaheadInput('document-type', 'Entry of Appearance');
         cy.get('[data-testid="submit-document"]').click();
 
         cy.get('[data-testid="manual-generation-label"]').click();
         uploadFile('primary-document');
-        cy.get('#submit-document').click();
+        cy.get('[data-testid="file-document-submit-document"]').click();
 
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();
         cy.get('[data-testid="file-document-review-submit-document"]').click();

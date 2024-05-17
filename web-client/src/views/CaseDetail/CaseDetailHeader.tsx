@@ -69,6 +69,7 @@ export const CaseDetailHeader = connect(
             <Button
               secondary
               className="tablet-full-width push-right margin-right-0"
+              data-testid="button-first-irs-document"
               href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
               icon="file"
               id="button-first-irs-document"

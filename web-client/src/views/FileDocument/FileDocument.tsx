@@ -28,6 +28,7 @@ export const FileDocument = connect(
   },
   function FileDocument({
     fileDocumentHelper,
+    form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
@@ -49,7 +50,7 @@ export const FileDocument = connect(
           *All fields required unless otherwise noted
         </p>
 
-        {fileDocumentHelper.showGenerationTypeForm ? (
+        {form.eventCode === 'EA' ? (
           <PrimaryDocumentGeneratedTypeForm />
         ) : (
           <>
@@ -71,6 +72,7 @@ export const FileDocument = connect(
 
         <div className="margin-top-4">
           <Button
+            data-testid="file-document-submit-document"
             id="submit-document"
             type="submit"
             onClick={() => {
