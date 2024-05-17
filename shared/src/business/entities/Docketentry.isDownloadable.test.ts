@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  STIN_DOCKET_ENTRY_TYPE,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from './DocketEntry';
@@ -8,9 +9,11 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   casePetitioner,
   docketClerk1User,
+  irsSuperuserUser,
   petitionerUser,
 } from '@shared/test/mockUsers';
 import { cloneDeep } from 'lodash';
+import { getPetitionDocketEntry } from './cases/Case';
 
 let baseDocketEntry: RawDocketEntry;
 let rawCase: RawCase;
@@ -361,6 +364,60 @@ describe('isDownloadable', () => {
           options,
         ),
       ).toEqual(false);
+    });
+  });
+
+  describe('IRS Superuser', () => {
+    let options;
+    let petitionDocketEntry;
+    beforeEach(() => {
+      petitionDocketEntry = getPetitionDocketEntry(rawCase);
+      options = {
+        isTerminalUser: false,
+        rawCase,
+        user: irsSuperuserUser,
+        visibilityChangeDate,
+      };
+    });
+
+    it('returns false if there is no file attached', () => {
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            isFileAttached: false,
+          },
+          options,
+        ),
+      ).toEqual(false);
+    });
+
+    it('returns true if there is a file attached', () => {
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            isFileAttached: true,
+          },
+          options,
+        ),
+      ).toEqual(true);
+    });
+
+    it('returns true if there is a file attached and is event code is STIN', () => {
+      expect(petitionDocketEntry).toBeDefined();
+      expect(DocketEntry.isServed(petitionDocketEntry)).toEqual(true);
+
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+            isFileAttached: true,
+          },
+          options,
+        ),
+      ).toEqual(true);
     });
   });
 });
