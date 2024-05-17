@@ -11,6 +11,7 @@ export const TrialCity = connect(
     label: props.label,
     onBlur: props.onBlur,
     onChange: props.onChange,
+    procedureType: props.procedureType,
     showDefaultOption: props.showDefaultOption,
     showHint: props.showHint,
     showRegularTrialCitiesHint: props.showRegularTrialCitiesHint,

@@ -129,7 +129,9 @@ export const UpdatedFilePetitionStep1 = connect(
             </FormGroup>
             <div className="grid-row grid-gap">
               <span className="margin-bottom-1 font-sans-pro">
-                <b>Please read and acknowledge before submitting your filing</b>
+                <b>
+                  Please read and acknowledge before moving to the next step:
+                </b>
               </span>
               <div className="tablet:grid-col-12">
                 <div className="card" style={{ maxWidth: 'fit-content' }}>
