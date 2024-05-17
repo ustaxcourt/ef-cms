@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-// import { FileUploadErrorModal } from '../FileUploadErrorModal';
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,15 +7,6 @@ import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import React from 'react';
-
-/*
-TODO
-
-- Entry of Appearance is showing up in ALL document filing lists, when it should ONLY be showing up in Request Access and File First IRS document flows.
-- Q: what should the form look like for the manual EA filing flow for filing first document?
-- tests, probably.
-- Need to make sure that the title of the document is 'Entry of Appearance for Respondant', both on the document itself and on the page.
-*/
 
 export const FileEntryOfAppearanceReview = ({
   documentTitle,
@@ -155,11 +146,7 @@ export const FileEntryOfAppearanceReview = ({
       </div>
 
       {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-      {/* {showModal === 'FileUploadErrorModal' && (
-        <FileUploadErrorModal
-          confirmSequence={submitCaseAssociationRequestSequence}
-        />
-      )} */}
+      {showModal === 'FileUploadStatusModal' && <FileUploadErrorModal />}
     </React.Fragment>
   );
 };
