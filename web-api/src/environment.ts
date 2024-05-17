@@ -33,4 +33,4 @@ export const environment = {
     `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
     '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
-} as const;
+};

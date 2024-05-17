@@ -77,9 +77,6 @@ describe('createOrderHelper', () => {
       state: {
         caseDetail,
         documentToEdit: {},
-        featureFlags: {
-          'consolidated-cases-add-docket-numbers': true,
-        },
         form: {
           documentTitle: 'Order',
         },
@@ -90,38 +87,12 @@ describe('createOrderHelper', () => {
     expect(result.showAddDocketNumbersButton).toEqual(true);
   });
 
-  it('sets showAddDocketNumbersButton to false if feature flag is not set', () => {
-    const result = runCompute(createOrderHelper, {
-      state: {
-        caseDetail,
-        documentToEdit: {},
-        featureFlags: {
-          'consolidated-cases-add-docket-numbers': false,
-        },
-        form: {
-          documentTitle: 'Order',
-        },
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn,
-          },
-        },
-        setSelectedConsolidatedCasesToMultiDocketOn,
-      },
-    });
-
-    expect(result.showAddDocketNumbersButton).toEqual(false);
-  });
-
   it('sets showAddDocketNumbersButton to false for member cases', () => {
     caseDetail.docketNumber = '103-20';
     const result = runCompute(createOrderHelper, {
       state: {
         caseDetail,
         documentToEdit: {},
-        featureFlags: {
-          'consolidated-cases-add-docket-numbers': true,
-        },
         form: {
           documentTitle: 'Order',
         },
@@ -142,9 +113,6 @@ describe('createOrderHelper', () => {
       state: {
         caseDetail,
         documentToEdit: {},
-        featureFlags: {
-          'consolidated-cases-add-docket-numbers': true,
-        },
         form: {
           documentTitle: 'Order',
         },
@@ -166,9 +134,6 @@ describe('createOrderHelper', () => {
           leadDocketNumber: '101-20',
         },
         documentToEdit: {},
-        featureFlags: {
-          'consolidated-cases-add-docket-numbers': true,
-        },
         form: {
           documentTitle: 'Order',
         },
