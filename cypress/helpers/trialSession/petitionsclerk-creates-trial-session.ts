@@ -20,7 +20,7 @@ export function petitionsClerkCreatesTrialSession() {
   cy.get('[data-testid="state"]').select('TN');
   cy.get('[data-testid="postal-code"]').clear();
   cy.get('[data-testid="postal-code"]').type('33333');
-  cy.get('[data-testid="trial-session-judge"]').select('Colvin');
+  cy.get('[data-testid="trial-session-judge"]').select('Carluzzo');
   cy.get('[data-testid="trial-session-trial-clerk"]').select(
     'Test trialclerk1',
   );
