@@ -39,7 +39,7 @@ export const StateSelect = ({
           );
         })}
       </optgroup>
-      <optgroup label="Territory">
+      <optgroup label="Other">
         {Object.keys(usStatesOther).map(abbrev => {
           const label = useFullStateName ? usStatesOther[abbrev] : abbrev;
           return (

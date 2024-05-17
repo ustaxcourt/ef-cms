@@ -128,7 +128,6 @@ export const UpdatedFilePetitionStep1 = connect(
               />
             </FormGroup>
             <div className="grid-row grid-gap">
-              {/* #validationErrors.ack */}
               <span className="margin-bottom-1 font-sans-pro">
                 <b>Please read and acknowledge before submitting your filing</b>
               </span>
