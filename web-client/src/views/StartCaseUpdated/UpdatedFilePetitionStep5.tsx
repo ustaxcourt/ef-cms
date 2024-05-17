@@ -32,8 +32,16 @@ export const UpdatedFilePetitionStep5 = connect(
         <div className="margin-bottom-5">
           <InfoNotificationComponent
             alertInfo={{
-              message:
-                "The Statement of Taxpayer Identification is the only document that should include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, or Employer Identification Numbers). It's sent to the IRS to help identify you but is never visible as part of the case record.",
+              message: (
+                <>
+                  The Statement of Taxpayer Identification is the only document
+                  that should include personal information (such as Social
+                  Security Numbers, Taxpayer Identification Numbers, or Employer
+                  Identification Numbers). It&apos;s sent to the IRS to help
+                  identify you but is{' '}
+                  <b>never visible as part of the case record.</b>
+                </>
+              ),
             }}
             dismissible={false}
             scrollToTop={false}

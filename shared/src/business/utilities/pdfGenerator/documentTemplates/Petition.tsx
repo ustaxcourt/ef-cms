@@ -177,8 +177,8 @@ export const Petition = ({
             </div>
             {contactSecondary.email && <div>{contactSecondary.email}</div>}
             <div>
-              <b>Register for electronic filing and service:</b>
-              {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}{' '}
+              <b>Register for electronic filing and service: </b>
+              {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}
             </div>
             <div>
               <b>Place of legal residence: </b>
