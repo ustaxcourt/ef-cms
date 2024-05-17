@@ -10,7 +10,7 @@ import classNames from 'classnames';
 type ConfirmModalProps = {
   cancelLabel?: string;
   children?: React.ReactNode;
-  className: string;
+  className?: string;
   confirmLabel?: string;
   deleteLabel?: string;
   hasErrorState?: boolean;
