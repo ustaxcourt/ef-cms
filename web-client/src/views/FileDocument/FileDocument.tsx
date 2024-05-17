@@ -17,7 +17,6 @@ export const FileDocument = connect(
   {
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
@@ -28,7 +27,6 @@ export const FileDocument = connect(
   },
   function FileDocument({
     fileDocumentHelper,
-    form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
@@ -50,7 +48,7 @@ export const FileDocument = connect(
           *All fields required unless otherwise noted
         </p>
 
-        {form.eventCode === 'EA' ? (
+        {fileDocumentHelper.showGenerationTypeForm ? (
           <PrimaryDocumentGeneratedTypeForm />
         ) : (
           <>
@@ -62,7 +60,7 @@ export const FileDocument = connect(
                 <SecondarySupportingDocuments />
               </>
             )}
-            <PartiesFiling />
+            {fileDocumentHelper.showPartiesFiling && <PartiesFiling />}
           </>
         )}
 

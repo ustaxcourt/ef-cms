@@ -15,8 +15,6 @@ export const validateCaseAssociationRequestAction = ({
 }: ActionProps) => {
   const caseAssociationRequest = get(state.form);
 
-  console.log('serviceDate', caseAssociationRequest.certificateOfServiceDate);
-
   const errors = applicationContext
     .getUseCases()
     .validateCaseAssociationRequestInteractor({
