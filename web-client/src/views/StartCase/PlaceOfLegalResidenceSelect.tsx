@@ -37,7 +37,7 @@ export const PlaceOfLegalResidenceSelect = ({
         })}
       </optgroup>
 
-      <optgroup label="Territory">
+      <optgroup label="Other">
         {Object.keys(usStatesOther).map(abbrev => {
           const label = usStatesOther[abbrev];
           return (
@@ -46,13 +46,8 @@ export const PlaceOfLegalResidenceSelect = ({
             </option>
           );
         })}
-      </optgroup>
-
-      <optgroup label="Other">
         <option value={'Other'}>Other</option>
       </optgroup>
     </select>
   );
 };
-
-PlaceOfLegalResidenceSelect.displayName = 'PlaceOfLegalResidenceSelect';

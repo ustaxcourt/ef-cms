@@ -168,13 +168,6 @@ export const Address = connect(
                     });
                   }}
                 />
-                <div>
-                  {validationErrors?.[type]?.postalCode && (
-                    <span className="usa-error-message">
-                      {validationErrors[type].postalCode}
-                    </span>
-                  )}
-                </div>
               </div>
             </div>
           </div>
