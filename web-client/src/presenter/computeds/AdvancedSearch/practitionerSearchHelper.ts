@@ -9,7 +9,7 @@ import { Get } from 'cerebral';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export type PractitionerSearchResultType = {
+export type FormattedPractitionerSearchResultType = {
   admissionsStatus: string;
   admissionsDate: string;
   barNumber: string;
@@ -28,7 +28,7 @@ type PractitionerSearchHelperResult = {
   showSearchResults?: boolean;
   showStateSelect?: boolean;
   activePage?: number;
-  formattedSearchResults?: PractitionerSearchResultType[];
+  formattedSearchResults?: FormattedPractitionerSearchResultType[];
   numberOfResults?: number;
   pageCount?: number;
   pageSize?: number;
@@ -93,7 +93,7 @@ export const practitionerSearchHelper = (
 export const formatPractitionerSearchResultRecord = (
   result,
   { applicationContext }: { applicationContext: ClientApplicationContext },
-): PractitionerSearchResultType => {
+): FormattedPractitionerSearchResultType => {
   if (result.petitioners) {
     result.petitionerFullStateNames = result.petitioners.map(petitioner => {
       return {
