@@ -11,8 +11,8 @@ import { appendFileSync } from 'fs';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
-const month = process.argv[2] || String(DateTime.now().toObject().month);
-const day = process.argv[3] || String(DateTime.now().toObject().day);
+const month = process.argv[2] || `${DateTime.now().toObject().month}`;
+const day = process.argv[3] || `${DateTime.now().toObject().day}`;
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getAllCasesOpenOnDate = async ({
@@ -140,7 +140,7 @@ const generateCsv = ({
   const filesGenerated: string[] = [];
 
   for (let y = thisYear - 4; y <= thisYear; y++) {
-    const year = String(y);
+    const year = `${y}`;
     const targetDate = validateDateAndCreateISO({ day, month, year })!;
     const targetDateHumanized = targetDate.split('T')[0];
     console.log(`Retrieving cases open on ${targetDateHumanized}...`);
@@ -199,7 +199,7 @@ const generateCsv = ({
   const monthAndDay = validateDateAndCreateISO({
     day,
     month,
-    year: String(thisYear),
+    year: `${thisYear}`,
   })!.substring(5, 10);
   const totalsFilename = `cases-open-on-${monthAndDay}.csv`;
   appendFileSync(`${OUTPUT_DIR}/${totalsFilename}`, totalsOutput);
