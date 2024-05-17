@@ -43,8 +43,6 @@ export const completeDocumentTypeSectionHelper = (
         .getUtilities()
         .isSealedCase(caseDetail);
 
-      console.log('isCaseSealed', isCaseSealed);
-
       const caseHasRespondent = !!(
         !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length
       );

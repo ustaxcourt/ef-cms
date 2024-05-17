@@ -4,11 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
-import { SupportingDocuments } from '@web-client/views/FileDocument/SupportingDocuments';
-import { TextView } from '@web-client/ustc-ui/Text/TextView';
 import { WhatCanIIncludeModalOverlay } from '@web-client/views/FileDocument/WhatCanIIncludeModalOverlay';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { formatAndUpdateDateFromDatePickerSequence } from '@web-client/presenter/sequences/formatAndUpdateDateFromDatePickerSequence';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -19,6 +16,8 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     showModal: state.modal.showModal,
     updateCaseAssociationFormValueSequence:
@@ -31,6 +30,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
     constants,
     fileDocumentHelper,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
     showModal,
     updateCaseAssociationFormValueSequence,
@@ -214,53 +214,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                   />
                 )}
               </div>
-
-              {fileDocumentHelper.documentWithObjections && (
-                <FormGroup errorText={validationErrors?.objections}>
-                  <fieldset className="usa-fieldset margin-top-2">
-                    <legend id="objections-legend">
-                      Are there any objections to this document?
-                    </legend>
-                    {constants.OBJECTIONS_OPTIONS.map(option => (
-                      <div className="usa-radio usa-radio__inline" key={option}>
-                        <input
-                          aria-describedby="objections-legend"
-                          checked={form.objections === option}
-                          className="usa-radio__input"
-                          id={`objections-${option}`}
-                          name="objections"
-                          type="radio"
-                          value={option}
-                          onChange={e => {
-                            updateCaseAssociationFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            validateCaseAssociationRequestSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-radio__label"
-                          htmlFor={`objections-${option}`}
-                        >
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                  </fieldset>
-                </FormGroup>
-              )}
             </div>
-
-            {fileDocumentHelper.documentWithSupportingDocuments && (
-              <div>
-                <SupportingDocuments />
-                <TextView
-                  bind="validationErrors.hasSupportingDocuments"
-                  className="usa-error-message"
-                />
-              </div>
-            )}
 
             {showModal === 'WhatCanIIncludeModalOverlay' && (
               <WhatCanIIncludeModalOverlay />
