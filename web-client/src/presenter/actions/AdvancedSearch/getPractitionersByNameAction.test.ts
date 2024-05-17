@@ -9,9 +9,9 @@ describe('getPractitionersByNameAction', () => {
   it('should call getPractitionersByNameInteractor with the practitionerName as name and return the results received', async () => {
     applicationContext
       .getUseCases()
-      .getPractitionersByNameInteractor.mockReturnValue([
-        { barNumber: '11111' },
-      ]);
+      .getPractitionersByNameInteractor.mockReturnValue({
+        searchResults: [{ barNumber: '11111' }],
+      });
 
     const results = await runAction(getPractitionersByNameAction, {
       modules: {
@@ -20,6 +20,7 @@ describe('getPractitionersByNameAction', () => {
       state: {
         advancedSearchForm: {
           practitionerSearchByName: {
+            lastKeysOfPages: ['1234'],
             practitionerName: 'Ricky',
           },
         },
@@ -30,12 +31,14 @@ describe('getPractitionersByNameAction', () => {
       applicationContext.getUseCases().getPractitionersByNameInteractor.mock
         .calls.length,
     ).toEqual(1);
+
     expect(
       applicationContext.getUseCases().getPractitionersByNameInteractor.mock
         .calls[0][1],
     ).toMatchObject({
       name: 'Ricky',
     });
+
     expect(results.output).toEqual({ searchResults: [{ barNumber: '11111' }] });
   });
 });
