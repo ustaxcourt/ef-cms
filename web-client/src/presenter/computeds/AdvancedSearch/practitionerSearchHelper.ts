@@ -78,7 +78,7 @@ export const practitionerSearchHelper = (
     result = {
       ...result,
       formattedSearchResults: paginatedResults,
-      numberOfResults: Number(formatPositiveNumber(searchResults.total || 0)),
+      numberOfResults: Number(formatPositiveNumber(searchResults.total)),
       pageCount,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
