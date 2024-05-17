@@ -1,7 +1,27 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
-import { PractitionerSearchResultType } from '@web-client/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
 import { search } from './searchClient';
+
+export type PractitionerSearchResultType = {
+  admissionsStatus: string;
+  barNumber: string;
+  admissionsDate: string;
+  contact: {
+    address3: string;
+    address2: string;
+    city: string;
+    phone: string;
+    address1: string;
+    postalCode: string;
+    state: string;
+    countryType: string;
+  };
+  name: string;
+  practitionerType: string;
+  practiceType: string;
+  _score?: number;
+  sort: string[];
+};
 
 export const getPractitionersByName = async (
   applicationContext: IApplicationContext,
