@@ -668,12 +668,24 @@ export class DocketEntry extends JoiValidationEntity {
 
     const petitionDocketEntry = getPetitionDocketEntry(rawCase);
 
+    //Only allow STIN download if:
+    //  - role Petition Clerk & entry not served, or
+    //  - role IRS Superuser and entry served.
     if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
-      return (
+      if (
         user.role === ROLES.petitionsClerk &&
         !DocketEntry.isServed(entry) &&
         !DocketEntry.isServed(petitionDocketEntry)
-      );
+      ) {
+        return true;
+      } else if (
+        user.role === ROLES.irsSuperuser &&
+        DocketEntry.isServed(entry) &&
+        DocketEntry.isServed(petitionDocketEntry)
+      ) {
+        return true;
+      }
+      return false;
     }
 
     if (User.isInternalUser(user.role)) return true;
