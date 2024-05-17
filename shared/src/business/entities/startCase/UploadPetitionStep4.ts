@@ -33,7 +33,7 @@ export class UploadPetitionStep4 extends JoiValidationEntity {
           JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER),
         )
         .required()
-        .messages({ '*': 'Select a trial location' }),
+        .messages({ '*': 'Select a preferred trial location' }),
     }),
     procedureType: JoiValidationConstants.STRING.required()
       .valid(...PROCEDURE_TYPES)

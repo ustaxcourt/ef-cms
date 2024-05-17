@@ -135,9 +135,10 @@ export const UpdatedFilePetitionStep3 = connect(
                 </Button>
                 <div className="grid-row grid-gap margin-top-5">
                   <span className="margin-bottom-1 font-sans-pro">
-                    <div className="font-weight-600">
-                      Please read and acknowledge moving to the next step:
-                    </div>
+                    <b>
+                      Please read and acknowledge before moving to the next
+                      step:
+                    </b>
                   </span>
                   <div className="tablet:grid-col-12">
                     <div className="card" style={{ maxWidth: 'fit-content' }}>

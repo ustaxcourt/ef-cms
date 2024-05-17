@@ -1,6 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
 import { TrialCity } from '@web-client/views/StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -95,9 +96,13 @@ export const UpdatedFilePetitionStep4 = connect(
                   paddingBottom: '10px',
                 }}
               >
-                This is your preferred location where your case may be heard if
+                {form.procedureType === PROCEDURE_TYPES_MAP.regular
+                  ? `This is your preferred location where your case may be heard if
                 it goes to trial. Trial locations are unavailable in the
-                following states: DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY.{' '}
+                following states: DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY.`
+                  : `This is your preferred location where your case may be heard if
+                it goes to trial. Trial locations are unavailable in the
+                following states:  DE, NH, NJ, RI.`}
                 <span>
                   {' '}
                   <Button
