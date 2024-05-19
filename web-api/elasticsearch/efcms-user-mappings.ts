@@ -14,8 +14,14 @@ export const efcmsUserMappings = {
     'entityName.S': {
       type: 'keyword',
     },
+    'firstName.S': {
+      type: 'keyword',
+    },
     'indexedTimestamp.N': {
       type: 'text',
+    },
+    'lastName.S': {
+      type: 'keyword',
     },
     'name.S': {
       type: 'text',
