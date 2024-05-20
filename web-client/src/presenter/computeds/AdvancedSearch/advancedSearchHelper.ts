@@ -1,18 +1,15 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { US_STATES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSearchResultRecord = (
   result,
   { applicationContext }: { applicationContext: ClientApplicationContext },
 ) => {
-  const { US_STATES } = applicationContext.getConstants();
-
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
-
-  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   if (result.petitioners) {
     result.petitionerFullStateNames = result.petitioners.map(petitioner => {
@@ -22,6 +19,8 @@ export const formatSearchResultRecord = (
       };
     });
   }
+
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   return result;
 };
@@ -45,6 +44,10 @@ export const advancedSearchHelper = (
     showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
+
+  if (advancedSearchTab === 'practitioner') {
+    return result;
+  }
 
   if (searchResults) {
     const paginatedResults = paginationHelper(
@@ -82,6 +85,7 @@ export const paginationHelper = (searchResults, currentPage, pageSize) => {
   }
 
   return {
+    formattedSearchResults: [],
     numberOfResults: searchResults.length,
     searchResults: searchResults.slice(0, currentPage * pageSize),
     searchResultsCount: searchResults.length,
