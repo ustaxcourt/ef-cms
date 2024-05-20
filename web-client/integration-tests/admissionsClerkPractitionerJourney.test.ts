@@ -9,7 +9,6 @@ import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkA
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
 import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
-import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
 import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
 import {
   loginAs,
@@ -34,7 +33,6 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   admissionsClerkAddsNewPractitioner(cerebralTest);
-  admissionsClerkSearchesForPractitionersByName(cerebralTest);
   admissionsClerkSearchesForPractitionerByBarNumber(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -110,7 +108,7 @@ describe('admissions clerk practitioner journey', () => {
 
     expect(
       cerebralTest.getState(
-        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.practitioners.0.name`,
       ),
     ).toEqual('Ronald Buch Jr.');
   });

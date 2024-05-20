@@ -110,6 +110,7 @@ import { practitionerDocumentationFormHelper } from './computeds/practitionerDoc
 import { practitionerDocumentationHelper } from './computeds/practitionerDocumentationHelper';
 import { practitionerInformationHelper } from './computeds/practitionerInformationHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
+import { practitionerSearchHelper } from './computeds/AdvancedSearch/practitionerSearchHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
@@ -451,6 +452,9 @@ export const computeds = {
     practitionerSearchFormHelper as unknown as ReturnType<
       typeof practitionerSearchFormHelper
     >,
+  practitionerSearchHelper: practitionerSearchHelper as unknown as ReturnType<
+    typeof practitionerSearchHelper
+  >,
   printPaperServiceHelper: printPaperServiceHelper as unknown as ReturnType<
     typeof printPaperServiceHelper
   >,
@@ -730,6 +734,7 @@ export const baseState = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {} as any,
+  searchResults: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
