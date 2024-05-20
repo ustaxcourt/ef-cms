@@ -48,10 +48,12 @@ export const PDFPreviewButton = connect<
     return (
       <>
         <Mobile>
-          <FontAwesomeIcon
-            className="fa-icon-blue"
-            icon={['fas', 'file-pdf']}
-          />
+          {showIcon && (
+            <FontAwesomeIcon
+              className="fa-icon-blue"
+              icon={['fas', 'file-pdf']}
+            />
+          )}
           {displayTitle}
         </Mobile>
         <NonMobile>
