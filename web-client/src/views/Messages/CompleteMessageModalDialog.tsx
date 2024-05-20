@@ -5,16 +5,24 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CompleteMessageModalDialog = connect(
-  { updateModalValueSequence: sequences.updateModalValueSequence },
-  function CompleteMessageModalDialog({ updateModalValueSequence }) {
+  {
+    clearModalFormSequence: sequences.clearModalFormSequence,
+    completeMessageSequence: sequences.completeMessageSequence,
+    updateModalValueSequence: sequences.updateModalValueSequence,
+  },
+  function CompleteMessageModalDialog({
+    clearModalFormSequence,
+    completeMessageSequence,
+    updateModalValueSequence,
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Complete"
         preventCancelOnBlur={true}
         title="Complete Message"
-        onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="completeMessageSequence"
+        onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={completeMessageSequence}
       >
         <FormGroup>
           <label className="usa-label" htmlFor="message">

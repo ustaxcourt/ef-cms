@@ -13,9 +13,13 @@ export const AddEditDocketEntryWorksheetModal = connect(
       state.constants.STATUS_OF_MATTER_OPTIONS_DICTIONARY,
     addEditDocketEntryWorksheetModalHelper:
       state.addEditDocketEntryWorksheetModalHelper,
+    dismissAddEditCaseWorksheetModalSequence:
+      sequences.dismissAddEditCaseWorksheetModalSequence,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    updateDocketEntryWorksheetSequence:
+      sequences.updateDocketEntryWorksheetSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateDocketEntryWorksheetSequence:
       sequences.validateDocketEntryWorksheetSequence,
@@ -24,9 +28,11 @@ export const AddEditDocketEntryWorksheetModal = connect(
   function AddEditCaseWorksheetModal({
     addEditDocketEntryWorksheetModalHelper,
     DATE_FORMATS,
+    dismissAddEditCaseWorksheetModalSequence,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     STATUS_OF_MATTER_OPTIONS_DICTIONARY,
+    updateDocketEntryWorksheetSequence,
     updateFormValueSequence,
     validateDocketEntryWorksheetSequence,
     validationErrors,
@@ -37,8 +43,8 @@ export const AddEditDocketEntryWorksheetModal = connect(
         confirmLabel="Save"
         preventCancelOnBlur={true}
         title="Edit Details"
-        onCancelSequence="dismissAddEditCaseWorksheetModalSequence"
-        onConfirmSequence="updateDocketEntryWorksheetSequence"
+        onCancelSequence={dismissAddEditCaseWorksheetModalSequence}
+        onConfirmSequence={updateDocketEntryWorksheetSequence}
       >
         <h5 className="margin-bottom-4">
           {addEditDocketEntryWorksheetModalHelper.title}
