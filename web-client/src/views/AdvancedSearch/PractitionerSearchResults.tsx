@@ -1,7 +1,6 @@
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 
@@ -49,9 +48,7 @@ export const PractitionerSearchResults = connect(
                 Count: &nbsp;
               </span>
               <span data-testid="practitioner-search-result-count">
-                {formatPositiveNumber(
-                  practitionerSearchHelper.numberOfResults || 0,
-                )}
+                {practitionerSearchHelper.numberOfResults}
               </span>
             </div>
             <table
@@ -123,7 +120,7 @@ export const PractitionerSearchResults = connect(
           </>
         )}
         {practitionerSearchHelper.showNoMatches && (
-          <div id="no-search-results">
+          <div data-testid="no-search-results" id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
           </div>

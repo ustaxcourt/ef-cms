@@ -6,9 +6,10 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '../../../applicationContext';
 import { Get } from 'cerebral';
+import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export type PractitionerSearchResultType = {
+export type FormattedPractitionerSearchResultType = {
   admissionsStatus: string;
   admissionsDate: string;
   barNumber: string;
@@ -27,7 +28,7 @@ type PractitionerSearchHelperResult = {
   showSearchResults?: boolean;
   showStateSelect?: boolean;
   activePage?: number;
-  formattedSearchResults?: PractitionerSearchResultType[];
+  formattedSearchResults?: FormattedPractitionerSearchResultType[];
   numberOfResults?: number;
   pageCount?: number;
   pageSize?: number;
@@ -77,7 +78,7 @@ export const practitionerSearchHelper = (
     result = {
       ...result,
       formattedSearchResults: paginatedResults,
-      numberOfResults: searchResults.total,
+      numberOfResults: Number(formatPositiveNumber(searchResults.total)),
       pageCount,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
@@ -92,7 +93,7 @@ export const practitionerSearchHelper = (
 export const formatPractitionerSearchResultRecord = (
   result,
   { applicationContext }: { applicationContext: ClientApplicationContext },
-): PractitionerSearchResultType => {
+): FormattedPractitionerSearchResultType => {
   if (result.petitioners) {
     result.petitionerFullStateNames = result.petitioners.map(petitioner => {
       return {
