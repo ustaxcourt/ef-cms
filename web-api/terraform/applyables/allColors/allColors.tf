@@ -44,3 +44,15 @@ module "ef-cms_apis" {
   should_es_beta_exist  = var.should_es_beta_exist
   zone_name             = var.zone_name
 }
+
+module "ui-public-certificate" {
+  source = "../../modules/certificates"
+
+  domain_name               = var.dns_domain
+  hosted_zone_name          = "${var.zone_name}."
+  subject_alternative_names = ["*.${var.dns_domain}"]
+  certificate_name          = var.dns_domain
+  environment               = var.environment
+  description               = "Certificate for public facing ${var.dns_domain}"
+  product_domain            = "EFCMS"
+}
