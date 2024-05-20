@@ -22,8 +22,7 @@ describe('Filing an Answer', function () {
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });
 
-  it('can select a party and go to the review page', () => {
-    cy.get('label[for="party-irs-practitioner"]').click();
+  it('can go to the review page without selecting party', () => {
     cy.get('button#submit-document').click();
   });
 
