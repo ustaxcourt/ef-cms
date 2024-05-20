@@ -14,6 +14,9 @@ export const EditDeficiencyStatistic = connect(
   {
     calculatePenaltiesSequence: sequences.calculatePenaltiesSequence,
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
+    clearModalSequence: sequences.clearModalSequence,
+    deleteDeficiencyStatisticsSequence:
+      sequences.deleteDeficiencyStatisticsSequence,
     editStatisticFormHelper: state.editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence:
       sequences.openConfirmDeleteDeficiencyStatisticsModalSequence,
@@ -26,6 +29,8 @@ export const EditDeficiencyStatistic = connect(
   function EditDeficiencyStatistic({
     calculatePenaltiesSequence,
     cancelAddStatisticSequence,
+    clearModalSequence,
+    deleteDeficiencyStatisticsSequence,
     editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal,
@@ -89,8 +94,8 @@ export const EditDeficiencyStatistic = connect(
             cancelLabel="Cancel"
             confirmLabel="Yes, Delete"
             title="Confirm Delete Year/Period"
-            onCancelSequence="clearModalSequence"
-            onConfirmSequence="deleteDeficiencyStatisticsSequence"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={deleteDeficiencyStatisticsSequence}
           >
             Are you sure you want to delete the year/period?
           </ConfirmModal>
