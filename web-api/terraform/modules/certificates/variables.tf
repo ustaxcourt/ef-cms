@@ -29,6 +29,5 @@ variable "hosted_zone_name" {
 }
 
 variable "subject_alternative_names" {
-  type    = list(string)
-  default = []
+  type = list(string)
 }
