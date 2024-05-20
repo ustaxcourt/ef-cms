@@ -14,6 +14,7 @@ export const UpdatedFilePetitionStep1 = connect(
   {
     constants: state.constants,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatedFilePetitionCompleteStep1Sequence:
       sequences.updatedFilePetitionCompleteStep1Sequence,
@@ -22,6 +23,7 @@ export const UpdatedFilePetitionStep1 = connect(
   function UpdatedFilePetitionStep1({
     constants,
     form,
+    formCancelToggleCancelSequence,
     updatedFilePetitionCompleteStep1Sequence,
     updateFormValueSequence,
     validationErrors,
@@ -188,9 +190,9 @@ export const UpdatedFilePetitionStep1 = connect(
         </Button>
         <Button
           link
-          onClick={() =>
-            console.log('TODO -> figure out where to go when Cancel')
-          }
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
         >
           Cancel
         </Button>

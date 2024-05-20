@@ -13,6 +13,7 @@ import classNames from 'classnames';
 export const UpdatedFilePetitionStep5 = connect(
   {
     constants: state.constants,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     updatedFilePetitionCompleteStep5Sequence:
       sequences.updatedFilePetitionCompleteStep5Sequence,
     updatedFilePetitionGoBackAStepSequence:
@@ -21,6 +22,7 @@ export const UpdatedFilePetitionStep5 = connect(
   },
   function UpdatedFilePetitionStep5({
     constants,
+    formCancelToggleCancelSequence,
     updatedFilePetitionCompleteStep5Sequence,
     updatedFilePetitionGoBackAStepSequence,
     validationErrors,
@@ -115,7 +117,12 @@ export const UpdatedFilePetitionStep5 = connect(
           >
             Back
           </Button>
-          <Button link onClick={() => console.log('Cancel')}>
+          <Button
+            link
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
+          >
             Cancel
           </Button>
         </div>

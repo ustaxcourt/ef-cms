@@ -14,6 +14,7 @@ export const UpdatedFilePetitionStep4 = connect(
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -25,6 +26,7 @@ export const UpdatedFilePetitionStep4 = connect(
   function UpdatedFilePetitionStep4({
     deleteValidationErrorMessageSequence,
     form,
+    formCancelToggleCancelSequence,
     petitionGenerationLiveValidationSequence,
     updatedFilePetitionCompleteStep4Sequence,
     updatedFilePetitionGoBackAStepSequence,
@@ -162,7 +164,12 @@ export const UpdatedFilePetitionStep4 = connect(
           >
             Back
           </Button>
-          <Button link onClick={() => console.log('Cancel')}>
+          <Button
+            link
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
+          >
             Cancel
           </Button>
         </div>
