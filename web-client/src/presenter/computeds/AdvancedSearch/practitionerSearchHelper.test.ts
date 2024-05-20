@@ -111,6 +111,22 @@ describe('practitionerSearchHelper', () => {
     });
   });
 
+  it('should display nothing if searchResults is empty', () => {
+    const result = runCompute(practitionerSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'practitioner',
+        searchResults: {},
+      },
+    });
+    expect(result).toMatchObject({
+      activePage: undefined,
+      showPractitionerSearch: true,
+      showStateSelect: false,
+    });
+  });
+
   it('returns showNoMatches false, showSearchResults true, and the results count if searchResults is an not empty array', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
@@ -130,6 +146,7 @@ describe('practitionerSearchHelper', () => {
       },
     });
     expect(result).toMatchObject({
+      numOfResultsDisplay: '1',
       numberOfResults: 1,
       pageCount: 1,
       showNoMatches: false,
