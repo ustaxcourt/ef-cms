@@ -51,7 +51,7 @@ export const UpdatedFilePetitionStep2 = connect(
         <fieldset className="usa-fieldset margin-bottom-2">
           {updatedFilePetitionHelper.filingOptions.map((filingType, index) => {
             return (
-              <div className="usa-radio" key={filingType}>
+              <div className="usa-radio margin-bottom-2" key={filingType}>
                 <input
                   aria-describedby="filing-type-legend"
                   checked={form.filingType === filingType}
