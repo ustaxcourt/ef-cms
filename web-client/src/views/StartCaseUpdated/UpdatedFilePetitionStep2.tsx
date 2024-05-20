@@ -17,6 +17,7 @@ export const UpdatedFilePetitionStep2 = connect(
   {
     constants: state.constants,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,6 +31,7 @@ export const UpdatedFilePetitionStep2 = connect(
   function UpdatedFilePetitionStep2({
     constants,
     form,
+    formCancelToggleCancelSequence,
     resetSecondaryAddressSequence,
     updatedFilePetitionCompleteStep2Sequence,
     updatedFilePetitionGoBackAStepSequence,
@@ -152,7 +154,12 @@ export const UpdatedFilePetitionStep2 = connect(
         >
           Back
         </Button>
-        <Button link onClick={() => console.log('Cancel')}>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
           Cancel
         </Button>
       </>

@@ -19,6 +19,7 @@ export const UpdatedFilePetitionStep3 = connect(
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
@@ -35,6 +36,7 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper,
     deleteValidationErrorMessageSequence,
     form,
+    formCancelToggleCancelSequence,
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
     startCaseHelper,
@@ -227,7 +229,12 @@ export const UpdatedFilePetitionStep3 = connect(
         >
           Back
         </Button>
-        <Button link onClick={() => console.log('Cancel')}>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
           Cancel
         </Button>
       </>

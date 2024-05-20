@@ -1,4 +1,5 @@
 import { BigHeader } from '@web-client/views/BigHeader';
+import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
 import { StepIndicator } from '@web-client/views/StepIndicator';
 import { UpdatedFilePetitionStep1 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep1';
 import { UpdatedFilePetitionStep2 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep2';
@@ -13,9 +14,10 @@ import React from 'react';
 
 export const UpdatedFilePetition = connect(
   {
+    showModal: state.modal.showModal,
     stepIndicatorInfo: state.stepIndicatorInfo,
   },
-  function UpdatedFilePetition({ stepIndicatorInfo }) {
+  function UpdatedFilePetition({ showModal, stepIndicatorInfo }) {
     const { currentStep } = stepIndicatorInfo;
     return (
       <>
@@ -30,6 +32,12 @@ export const UpdatedFilePetition = connect(
           {currentStep === 6 && <UpdatedFilePetitionStep6 />}
           {currentStep === 7 && <UpdatedFilePetitionStep7 />}
         </section>
+        {showModal == 'FormCancelModalDialog' && (
+          <FormCancelModalDialog
+            useRunConfirmSequence={true}
+            onCancelSequence="closeModalAndReturnToDashboardSequence"
+          />
+        )}
       </>
     );
   },
