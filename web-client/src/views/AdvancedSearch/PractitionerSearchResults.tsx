@@ -48,7 +48,7 @@ export const PractitionerSearchResults = connect(
                 Count: &nbsp;
               </span>
               <span data-testid="practitioner-search-result-count">
-                {practitionerSearchHelper.numberOfResults}
+                {practitionerSearchHelper.numOfResultsDisplay}
               </span>
             </div>
             <table
