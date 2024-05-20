@@ -96,7 +96,7 @@ export const UpdatedFilePetitionStep5 = connect(
                 id="stin-file"
                 name="stinFile"
                 updateFormValueSequence="updateStartCaseFormValueSequence"
-                // validationSequence="validateStartCaseWizardSequence"
+                validationSequence="validateUpdatedFilePetitionStep5Sequence"
               />
             </FormGroup>
           </div>
