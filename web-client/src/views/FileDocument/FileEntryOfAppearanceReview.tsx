@@ -146,7 +146,7 @@ export const FileEntryOfAppearanceReview = ({
       </div>
 
       {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-      {showModal === 'FileUploadStatusModal' && <FileUploadErrorModal />}
+      {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
     </React.Fragment>
   );
 };
