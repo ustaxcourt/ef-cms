@@ -22,6 +22,8 @@ export const PDFPreviewButton = connect<
     id?: string;
     shouldAbbreviateTitle?: boolean;
     shouldWrapText?: boolean;
+    showIcon?: boolean;
+    showModal?: boolean;
   },
   typeof pdfPreviewButtonDeps
 >(
@@ -46,10 +48,12 @@ export const PDFPreviewButton = connect<
     return (
       <>
         <Mobile>
-          <FontAwesomeIcon
-            className="fa-icon-blue"
-            icon={['fas', 'file-pdf']}
-          />
+          {showIcon && (
+            <FontAwesomeIcon
+              className="fa-icon-blue"
+              icon={['fas', 'file-pdf']}
+            />
+          )}
           {displayTitle}
         </Mobile>
         <NonMobile>
