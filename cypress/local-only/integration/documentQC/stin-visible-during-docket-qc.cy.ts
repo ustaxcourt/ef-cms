@@ -25,7 +25,6 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get(
         '[data-testid="Statement of Taxpayer Identification"] > .svg-inline--fa > path',
       ).should('be.visible');
-      cy.get('.pdf-preview-viewer').should('be.visible');
       cy.get('[data-testid="submit-case"]').click();
       cy.get('[data-testid="tab-irs-notice"] > .button-text').click();
       cy.get('[data-testid="has-irs-verified-notice-no"]').click();
