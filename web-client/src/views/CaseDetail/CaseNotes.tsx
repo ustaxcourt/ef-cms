@@ -1,7 +1,7 @@
 import { AddEditUserCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
-import { DeleteUserCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteUserCaseNoteConfirmModal';
 import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -12,6 +12,10 @@ export const CaseNotes = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
+    clearModalSequence: sequences.clearModalSequence,
+    deleteCaseNoteSequence: sequences.deleteCaseNoteSequence,
+    deleteJudgesCaseNoteFromCaseDetailSequence:
+      sequences.deleteJudgesCaseNoteFromCaseDetailSequence,
     judgesNote: state.judgesNote,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
@@ -22,16 +26,22 @@ export const CaseNotes = connect(
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
     showModal: state.modal.showModal,
+    updateJudgesCaseNoteOnCaseDetailSequence:
+      sequences.updateJudgesCaseNoteOnCaseDetailSequence,
   },
   function CaseNotes({
     caseDetail,
     caseDetailHelper,
+    clearModalSequence,
+    deleteCaseNoteSequence,
+    deleteJudgesCaseNoteFromCaseDetailSequence,
     judgesNote,
     openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     showModal,
+    updateJudgesCaseNoteOnCaseDetailSequence,
   }) {
     return (
       <>
@@ -151,13 +161,27 @@ export const CaseNotes = connect(
           </div>
         </div>
         {showModal === 'DeleteUserCaseNoteConfirmModal' && (
-          <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromCaseDetailSequence" />
+          <ConfirmModal
+            noCloseBtn
+            cancelLabel="No, Cancel"
+            confirmLabel="Yes, Delete"
+            preventCancelOnBlur={true}
+            title="Are You Sure You Want to Delete This Note?"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={deleteJudgesCaseNoteFromCaseDetailSequence}
+          >
+            <p>This action cannot be undone.</p>
+          </ConfirmModal>
         )}
         {showModal === 'AddEditUserCaseNoteModal' && (
-          <AddEditUserCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
+          <AddEditUserCaseNoteModal
+            onConfirmSequence={updateJudgesCaseNoteOnCaseDetailSequence}
+          />
         )}
         {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteSequence" />
+          <DeleteCaseNoteConfirmModal
+            onConfirmSequence={deleteCaseNoteSequence}
+          />
         )}
       </>
     );
