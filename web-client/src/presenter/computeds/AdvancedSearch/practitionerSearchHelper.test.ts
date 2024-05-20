@@ -115,13 +115,35 @@ describe('practitionerSearchHelper', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
+        advancedSearchForm: {
+          practitionerSearchByName: { pageNum: undefined },
+        },
         advancedSearchTab: 'practitioner',
         searchResults: {},
       },
     });
     expect(result).toMatchObject({
       activePage: undefined,
+      showPractitionerSearch: true,
+      showStateSelect: false,
+    });
+  });
+
+  it('should format the count if total is over 999', () => {
+    const result = runCompute(practitionerSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { practitionerSearchByName: { pageNum: 1 } },
+        advancedSearchTab: 'practitioner',
+        searchResults: {
+          practitioner: { practitioners: [], total: 1234 },
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      activePage: 1,
+      numberOfResults: '1,234',
+      showPaginator: true,
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -146,10 +168,10 @@ describe('practitionerSearchHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      numOfResultsDisplay: '1',
-      numberOfResults: 1,
+      numberOfResults: '1',
       pageCount: 1,
       showNoMatches: false,
+      showPaginator: false,
       showPractitionerSearch: true,
       showSearchResults: true,
       showStateSelect: false,

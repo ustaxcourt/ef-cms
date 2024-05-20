@@ -29,10 +29,11 @@ type PractitionerSearchHelperResult = {
   showStateSelect?: boolean;
   activePage?: number;
   formattedSearchResults?: FormattedPractitionerSearchResultType[];
-  numberOfResults?: number;
+  numberOfResults?: string;
   numOfResultsDisplay?: string;
   pageCount?: number;
   pageSize?: number;
+  showPaginator?: boolean;
   showPractitionerSearch?: boolean;
 };
 
@@ -79,11 +80,11 @@ export const practitionerSearchHelper = (
     result = {
       ...result,
       formattedSearchResults: paginatedResults,
-      numOfResultsDisplay: formatPositiveNumber(searchResults.total),
-      numberOfResults: searchResults.total,
+      numberOfResults: formatPositiveNumber(searchResults.total),
       pageCount,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
+      showPaginator: searchResults.total > PRACTITIONER_SEARCH_PAGE_SIZE,
       showPractitionerSearch: result.showPractitionerSearch,
       showSearchResults: true,
     };
