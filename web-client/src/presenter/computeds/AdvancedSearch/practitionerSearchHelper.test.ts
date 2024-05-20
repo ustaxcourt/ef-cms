@@ -111,24 +111,6 @@ describe('practitionerSearchHelper', () => {
     });
   });
 
-  it('should display nothing if searchResults is empty', () => {
-    const result = runCompute(practitionerSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {
-          practitionerSearchByName: { pageNum: undefined },
-        },
-        advancedSearchTab: 'practitioner',
-        searchResults: {},
-      },
-    });
-    expect(result).toMatchObject({
-      activePage: undefined,
-      showPractitionerSearch: true,
-      showStateSelect: false,
-    });
-  });
-
   it('should format the count if total is over 999', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {

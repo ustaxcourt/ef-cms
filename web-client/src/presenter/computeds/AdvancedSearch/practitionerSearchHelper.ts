@@ -30,7 +30,6 @@ type PractitionerSearchHelperResult = {
   activePage?: number;
   formattedSearchResults?: FormattedPractitionerSearchResultType[];
   numberOfResults?: string;
-  numOfResultsDisplay?: string;
   pageCount?: number;
   pageSize?: number;
   showPaginator?: boolean;
@@ -84,7 +83,7 @@ export const practitionerSearchHelper = (
       pageCount,
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
-      showPaginator: searchResults.total > PRACTITIONER_SEARCH_PAGE_SIZE,
+      showPaginator: pageCount > 1,
       showPractitionerSearch: result.showPractitionerSearch,
       showSearchResults: true,
     };
