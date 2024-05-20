@@ -7,13 +7,18 @@ import React from 'react';
 
 export const UnconsolidateCasesModal = connect(
   {
+    clearModalSequence: sequences.clearModalSequence,
     formattedCaseDetail: state.formattedCaseDetail,
     modal: state.modal,
+    submitRemoveConsolidatedCasesSequence:
+      sequences.submitRemoveConsolidatedCasesSequence,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function UnconsolidateCasesModal({
+    clearModalSequence,
     formattedCaseDetail,
     modal,
+    submitRemoveConsolidatedCasesSequence,
     updateModalValueSequence,
   }) {
     return (
@@ -24,8 +29,8 @@ export const UnconsolidateCasesModal = connect(
         preventCancelOnBlur={true}
         showModalWhen="UnconsolidateCasesModal"
         title="What Cases Would You Like to Unconsolidate?"
-        onCancelSequence="clearModalSequence"
-        onConfirmSequence="submitRemoveConsolidatedCasesSequence"
+        onCancelSequence={clearModalSequence}
+        onConfirmSequence={submitRemoveConsolidatedCasesSequence}
       >
         <FormGroup errorText={modal.error || ''}>
           <fieldset className="usa-fieldset margin-bottom-0">

@@ -11,9 +11,12 @@ export const AddEditCaseWorksheetModal = connect(
     DATE_FORMATS: state.constants.DATE_FORMATS,
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     addEditCaseWorksheetModalHelper: state.addEditCaseWorksheetModalHelper,
+    dismissAddEditCaseWorksheetModalSequence:
+      sequences.dismissAddEditCaseWorksheetModalSequence,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    updateCaseWorksheetSequence: sequences.updateCaseWorksheetSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseWorksheetSequence: sequences.validateCaseWorksheetSequence,
     validationErrors: state.validationErrors,
@@ -21,9 +24,11 @@ export const AddEditCaseWorksheetModal = connect(
   function AddEditCaseWorksheetModal({
     addEditCaseWorksheetModalHelper,
     DATE_FORMATS,
+    dismissAddEditCaseWorksheetModalSequence,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     STATUS_OF_MATTER_OPTIONS,
+    updateCaseWorksheetSequence,
     updateFormValueSequence,
     validateCaseWorksheetSequence,
     validationErrors,
@@ -34,8 +39,8 @@ export const AddEditCaseWorksheetModal = connect(
         confirmLabel="Save"
         preventCancelOnBlur={true}
         title="Edit Details"
-        onCancelSequence="dismissAddEditCaseWorksheetModalSequence"
-        onConfirmSequence="updateCaseWorksheetSequence"
+        onCancelSequence={dismissAddEditCaseWorksheetModalSequence}
+        onConfirmSequence={updateCaseWorksheetSequence}
       >
         <h5 className="margin-bottom-4">
           {addEditCaseWorksheetModalHelper.title}
