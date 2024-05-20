@@ -40,6 +40,7 @@ export const AutoGeneratePetitionForm = connect(
             </ol>
             <Button
               link
+              data-testid="add-another-reason-link-button"
               icon="plus"
               onClick={() =>
                 addFactOrReasonSequence({ key: 'petitionReasons' })
@@ -75,6 +76,7 @@ export const AutoGeneratePetitionForm = connect(
           <div>
             <Button
               link
+              data-testid="add-another-fact-link-button"
               icon="plus"
               onClick={() => {
                 addFactOrReasonSequence({ key: 'petitionFacts' });
