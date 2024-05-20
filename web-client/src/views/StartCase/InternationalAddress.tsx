@@ -52,7 +52,7 @@ export const InternationalAddress = connect(
         </FormGroup>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address2`}>
-            Address line 2 <span className="usa-hint">(optional)</span>
+            Mailing address line 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
@@ -77,7 +77,7 @@ export const InternationalAddress = connect(
         </div>{' '}
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address3`}>
-            Address line 3 <span className="usa-hint">(optional)</span>
+            Mailing address line 3 <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
