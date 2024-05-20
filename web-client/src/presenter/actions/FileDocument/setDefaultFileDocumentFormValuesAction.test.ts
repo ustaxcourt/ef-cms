@@ -6,6 +6,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  irsPractitionerUser,
   petitionerUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
@@ -116,11 +117,15 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
     });
   });
 
-  it('should set partyIrsPractitioner to true when event code is EA', async () => {
+  it('should set partyIrsPractitioner to true when first IRS filing', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
+
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
-        caseDetail: {},
+        caseDetail: {
+          docketNumber: '101-20',
+        },
         form: {
           eventCode: 'EA',
         },
