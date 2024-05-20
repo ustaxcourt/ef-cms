@@ -126,7 +126,7 @@ export const UpdatedFilePetitionStep1 = connect(
                 id="petition-file"
                 name="petitionFile"
                 updateFormValueSequence="updateFormValueSequence"
-                // validationSequence="validateStartCaseWizardSequence"
+                validationSequence="validateUpdatedFilePetitionStep1Sequence"
               />
             </FormGroup>
             <div className="grid-row grid-gap">

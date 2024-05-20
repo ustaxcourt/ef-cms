@@ -587,6 +587,8 @@ import { validateTrialSessionPlanningSequence } from './sequences/validateTrialS
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
 import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePractitionerSequence';
+import { validateUpdatedFilePetitionStep1Sequence } from '@web-client/presenter/sequences/validateUpdatedFilePetitionStep1Sequence';
+import { validateUpdatedFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateUpdatedFilePetitionStep5Sequence';
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
@@ -1587,6 +1589,10 @@ export const presenterSequences = {
     validateUpdateCaseModalSequence as unknown as Function,
   validateUpdatePractitionerSequence:
     validateUpdatePractitionerSequence as unknown as Function,
+  validateUpdatedFilePetitionStep1Sequence:
+    validateUpdatedFilePetitionStep1Sequence as unknown as Function,
+  validateUpdatedFilePetitionStep5Sequence:
+    validateUpdatedFilePetitionStep5Sequence as unknown as Function,
   validateUploadCorrespondenceDocumentSequence:
     validateUploadCorrespondenceDocumentSequence as unknown as Function,
   validateUploadCourtIssuedDocumentSequence:
