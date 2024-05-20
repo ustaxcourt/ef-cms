@@ -21,7 +21,11 @@ export const defaultAdvancedSearchFormAction = ({
     store.set(state.advancedSearchForm.practitionerSearchByBarNumber, {});
   }
   if (!advancedSearchForm.practitionerSearchByName) {
-    store.set(state.advancedSearchForm.practitionerSearchByName, {});
+    store.set(state.advancedSearchForm.practitionerSearchByName, {
+      activePage: 0,
+      lastKeysOfPages: [],
+      total: 0,
+    });
   }
   if (!advancedSearchForm.searchMode) {
     store.set(state.advancedSearchForm.searchMode, 'byName');

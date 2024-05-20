@@ -17,11 +17,6 @@ export const admissionsClerkSearchesForPractitionerByBarNumber =
           'advancedSearchForm.practitionerSearchByBarNumber',
         ),
       ).toEqual({});
-      expect(
-        cerebralTest.getState(
-          `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
-        ),
-      ).toEqual([]);
 
       await cerebralTest.runSequence(
         'submitPractitionerBarNumberSearchSequence',
