@@ -63,7 +63,11 @@ export const UpdatedFilePetitionStep1 = connect(
               });
             }}
           />
-          <label className="usa-radio__label" htmlFor="upload-a-petition">
+          <label
+            className="usa-radio__label"
+            data-testid="upload-a-petition-label"
+            htmlFor="upload-a-petition"
+          >
             Upload a completed PDF of the Tax Court’s Petition form or my own
             compliant Petition
           </label>
@@ -100,6 +104,7 @@ export const UpdatedFilePetitionStep1 = connect(
             </div>
             <FormGroup
               className="margin-top-2"
+              errorMessageId="petition-error-message"
               errorText={[
                 validationErrors.petitionFile,
                 validationErrors.petitionFileSize,
@@ -178,6 +183,7 @@ export const UpdatedFilePetitionStep1 = connect(
           </div>
         )}
         <Button
+          data-testid="step-1-next-button"
           disabled={
             form.petitionType === PETITION_TYPES.userUploaded &&
             !form.petitionRedactionAcknowledgement

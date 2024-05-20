@@ -61,6 +61,7 @@ export const StepIndicator = connect(
                     'display-flex-center',
                     'justify-content-center',
                   )}
+                  data-testid={`step-indicator-current-step-${currentStep}-icon`}
                 >
                   {currentStep}
                 </span>

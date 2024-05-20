@@ -30,10 +30,12 @@ export const PetitionFormResponse = connect(
     validationErrors,
   }) {
     const KEY = `${textName}[${count}]`;
+    const ERROR_KEY_ID = `error_message_${KEY}`;
 
     return (
       <FormGroup
         className="autogenerate-petition-form"
+        errorMessageId={ERROR_KEY_ID}
         errorText={validationErrors[KEY]}
       >
         <div className="fact-or-reason">
@@ -50,6 +52,7 @@ export const PetitionFormResponse = connect(
                   <textarea
                     aria-describedby={`${id}-label`}
                     className="usa-textarea max-width-unset"
+                    data-testid={id}
                     id={id}
                     name={textName}
                     style={{ marginTop: '0px' }}
@@ -89,6 +92,7 @@ export const PetitionFormResponse = connect(
                 <textarea
                   aria-describedby={`${id}-label`}
                   className="usa-textarea"
+                  data-testid={id}
                   id={id}
                   name={textName}
                   style={{ marginTop: '0px', width: '100%' }}
