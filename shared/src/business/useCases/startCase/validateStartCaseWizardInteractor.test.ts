@@ -4,12 +4,12 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateStartCaseWizardInteractor } from './validateStartCaseWizardInteractor';
 
 describe('validateStartCaseWizardInteractor', () => {
-  it('returns the expected errors object on an empty petition', () => {
+  it('should return the expected errors object on an empty petition', () => {
     const errors = validateStartCaseWizardInteractor(applicationContext, {
       petition: {},
     });
 
-    expect(Object.keys(errors)).toEqual([
+    expect(Object.keys(errors!)).toEqual([
       'wizardStep',
       'stinFile',
       'hasIrsNotice',
@@ -21,7 +21,7 @@ describe('validateStartCaseWizardInteractor', () => {
     ]);
   });
 
-  it('returns null for a valid petition', () => {
+  it('should return null for a valid petition', () => {
     const errors = validateStartCaseWizardInteractor(applicationContext, {
       petition: {
         ...MOCK_CASE,
