@@ -65,7 +65,7 @@ export class ElectronicPetition extends JoiValidationEntity {
     this.petitionFileId = rawCase.petitionFileId;
     this.petitionRedactionAcknowledgement =
       rawCase.petitionRedactionAcknowledgement;
-    this.petitionType = rawCase.petitionType;
+    this.petitionType = rawCase.petitionType || PETITION_TYPES.userUploaded;
 
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
@@ -180,7 +180,7 @@ export class ElectronicPetition extends JoiValidationEntity {
       otherwise: joi.optional(),
       then: joi.boolean().optional().invalid(false),
     }),
-    petitionType: JoiValidationConstants.STRING.valid(
+    petitionType: JoiValidationConstants.STRING.required().valid(
       ...Object.values(PETITION_TYPES),
     ),
     petitioners: joi

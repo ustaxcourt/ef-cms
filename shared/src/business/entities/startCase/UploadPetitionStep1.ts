@@ -5,12 +5,12 @@ import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionState
 import joi from 'joi';
 
 export class UploadPetitionStep1 extends JoiValidationEntity {
-  public petitionRedactionAcknowledgement: boolean;
-  public petitionFile: File;
-  public petitionFileSize: number;
-  public petitionType: typeof PETITION_TYPES;
-  public petitionFacts: string;
-  public petitionReasons: string;
+  public petitionRedactionAcknowledgement?: boolean;
+  public petitionFile?: File;
+  public petitionFileSize?: number;
+  public petitionType: (typeof PETITION_TYPES)[keyof typeof PETITION_TYPES];
+  public petitionFacts?: string[];
+  public petitionReasons?: string[];
 
   //TODO: Handle generated petition inputs
 
@@ -33,6 +33,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         otherwise: joi.optional(),
         then: joi
           .array()
+          .min(1)
           .items(JoiValidationConstants.STRING.max(1000))
           .required(),
       })
@@ -69,6 +70,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         otherwise: joi.optional(),
         then: joi
           .array()
+          .min(1)
           .items(JoiValidationConstants.STRING.max(1000))
           .required(),
       })
@@ -77,7 +79,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         'string.max': 'Reasons cannot exceed 1000 characters',
       }),
     petitionRedactionAcknowledgement: joi.boolean().when('petitionType', {
-      is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
+      is: PETITION_TYPES.userUploaded,
       otherwise: joi.optional(),
       then: joi.boolean().required().valid(true),
     }),
