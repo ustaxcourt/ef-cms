@@ -5,18 +5,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const CaseDetailHeader = connect(
-  {
-    CASE_CAPTION_POSTFIX: state.constants.CASE_CAPTION_POSTFIX,
-    caseDetailHeaderHelper: state.caseDetailHeaderHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
-    hideActionButtons: props.hideActionButtons,
-  },
+type CaseDetailHeaderProps = {
+  hideActionButtons?: boolean;
+  className?: string;
+};
+
+const caseDetailHeaderDeps = {
+  CASE_CAPTION_POSTFIX: state.constants.CASE_CAPTION_POSTFIX,
+  caseDetailHeaderHelper: state.caseDetailHeaderHelper,
+  formattedCaseDetail: state.formattedCaseDetail,
+};
+
+export const CaseDetailHeader = connect<
+  CaseDetailHeaderProps,
+  typeof caseDetailHeaderDeps
+>(
+  caseDetailHeaderDeps,
   function CaseDetailHeader({
     CASE_CAPTION_POSTFIX,
     caseDetailHeaderHelper,
