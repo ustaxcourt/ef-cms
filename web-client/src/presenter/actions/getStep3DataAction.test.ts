@@ -2,25 +2,49 @@ import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAc
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getStep3DataAction', () => {
-  it('should fetch step 3 related data from state.form', async () => {
+  it('should fetch step 3 related data from state.form when user has IRS notice', async () => {
     const results = await runAction(getStep3DataAction, {
       state: {
         form: {
-          caseType: 'TEST_caseType',
+          caseType: 'ROOT_LEVEL_CASE_TYPE',
           hasIrsNotice: 'TEST_hasIrsNotice',
           irsNoticesRedactionAcknowledgement:
             'TEST_irsNoticesRedactionAcknowledgement',
           testProps: 'testProps',
         },
-        irsNoticeUploadFormInfo: [1, 2, 3],
+        irsNoticeUploadFormInfo: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
       },
     });
 
     const { step3Data } = results.output;
     expect(step3Data).toEqual({
-      caseType: 'TEST_caseType',
+      caseType: 'IRS_NOTICE_CASE_TYPE',
       hasIrsNotice: 'TEST_hasIrsNotice',
-      irsNotices: [1, 2, 3],
+      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
+      irsNoticesRedactionAcknowledgement:
+        'TEST_irsNoticesRedactionAcknowledgement',
+    });
+  });
+
+  it('should fetch step 3 related data from state.form when user does not have IRS notice', async () => {
+    const results = await runAction(getStep3DataAction, {
+      state: {
+        form: {
+          caseType: 'ROOT_LEVEL_CASE_TYPE',
+          hasIrsNotice: false,
+          irsNoticesRedactionAcknowledgement:
+            'TEST_irsNoticesRedactionAcknowledgement',
+          testProps: 'testProps',
+        },
+        irsNoticeUploadFormInfo: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
+      },
+    });
+
+    const { step3Data } = results.output;
+    expect(step3Data).toEqual({
+      caseType: 'ROOT_LEVEL_CASE_TYPE',
+      hasIrsNotice: false,
+      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
       irsNoticesRedactionAcknowledgement:
         'TEST_irsNoticesRedactionAcknowledgement',
     });
