@@ -36,6 +36,11 @@ export function loginAsPetitioner() {
   cy.get('[data-testid="file-a-petition"]').should('exist');
 }
 
+export function loginAsCaseServicesSupervisor() {
+  cy.login('caseservicessupervisor');
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
+
 export function loginAsPetitionsClerk() {
   cy.login('petitionsclerk');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
