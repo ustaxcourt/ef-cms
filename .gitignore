@@ -45,8 +45,6 @@ web-api/storage/fixtures/efcms-export.json
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
 web-api/terraform/template/lambdas/*.zip
-web-api/workflow-terraform/*/main/lambdas/*.zip
-web-api/workflow-terraform/*/main/execution-plan
 web-client/.cache/
 web-client/coverage-e2e
 web-client/coverage-integration/*
