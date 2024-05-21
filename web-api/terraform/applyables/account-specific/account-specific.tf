@@ -68,7 +68,7 @@ module "dawson-developer-permissions" {
 }
 
 module "dynamsoft" {
-  source    = "../../modules/dynamsoft"
+  source    = "../../modules/dynamsoft-permissions"
   zone_name = var.zone_name
 }
 
