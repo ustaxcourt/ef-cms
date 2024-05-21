@@ -277,8 +277,9 @@ export const getWorkItemDocumentLink = ({
   if (showDocumentEditLink) {
     if (
       permissions.DOCKET_ENTRY &&
-      applicationContext.getCurrentUser().role !==
-        USER_ROLES.caseServicesSupervisor
+      (applicationContext.getCurrentUser().role !==
+        USER_ROLES.caseServicesSupervisor ||
+        !formattedDocketEntry.isPetition)
     ) {
       const editLinkExtension = getDocketEntryEditLink({
         applicationContext,
