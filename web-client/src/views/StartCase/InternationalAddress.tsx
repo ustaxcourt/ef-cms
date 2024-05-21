@@ -10,6 +10,7 @@ export const InternationalAddress = connect(
     data: state[props.bind],
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
+    registerRef: props.registerRef,
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
@@ -19,6 +20,7 @@ export const InternationalAddress = connect(
   function InternationalAddress({
     data,
     onBlurSequence,
+    registerRef,
     type,
     updateFormValueSequence,
     validationErrors,
@@ -35,6 +37,7 @@ export const InternationalAddress = connect(
             data-testid={`${type}.address1`}
             id={`${type}.address1`}
             name={`${type}.address1`}
+            ref={registerRef !== undefined && registerRef(`${type}.address1`)}
             type="text"
             value={data[type].address1 || ''}
             onBlur={() => {
@@ -110,6 +113,7 @@ export const InternationalAddress = connect(
             data-testid={`${type}.state`}
             id={`${type}.state`}
             name={`${type}.state`}
+            ref={registerRef !== undefined && registerRef(`${type}.state`)}
             type="text"
             value={data[type].state || ''}
             onBlur={() => {
@@ -135,6 +139,7 @@ export const InternationalAddress = connect(
             data-testid={`${type}.city`}
             id={`${type}.city`}
             name={`${type}.city`}
+            ref={registerRef !== undefined && registerRef(`${type}.city`)}
             type="text"
             value={data[type].city || ''}
             onBlur={() => {
@@ -160,6 +165,7 @@ export const InternationalAddress = connect(
             data-testid={`${type}.postalCode`}
             id={`${type}.postalCode`}
             name={`${type}.postalCode`}
+            ref={registerRef !== undefined && registerRef(`${type}.postalCode`)}
             type="text"
             value={data[type].postalCode || ''}
             onBlur={() => {

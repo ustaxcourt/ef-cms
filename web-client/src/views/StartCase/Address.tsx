@@ -12,6 +12,7 @@ export const Address = connect(
   {
     data: state[props.bind],
     onBlurSequence: sequences[props.onBlur],
+    registerRef: props.registerRef,
     type: props.type,
     updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
     updateFormValueSequence: sequences[props.onChange],
@@ -22,6 +23,7 @@ export const Address = connect(
   function Address({
     data,
     onBlurSequence,
+    registerRef,
     type,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
@@ -42,6 +44,9 @@ export const Address = connect(
             <StateSelect
               useFullStateName
               data={data}
+              refProp={
+                registerRef !== undefined && registerRef(`${type}.state`)
+              }
               type={type}
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
@@ -116,6 +121,9 @@ export const Address = connect(
                   useFullStateName
                   className="max-width-180"
                   data={data}
+                  refProp={
+                    registerRef !== undefined && registerRef(`${type}.state`)
+                  }
                   type={type}
                   updateFormValueSequence={updateFormValueSequence}
                   usStates={usStates}
@@ -154,6 +162,10 @@ export const Address = connect(
                   data-testid={`${type}.postalCode`}
                   id={`${type}.postalCode`}
                   name={`${type}.postalCode`}
+                  ref={
+                    registerRef !== undefined &&
+                    registerRef(`${type}.postalCode`)
+                  }
                   type="text"
                   value={data[type].postalCode || ''}
                   onBlur={() => {
@@ -187,6 +199,7 @@ export const Address = connect(
             data-testid={`${type}.address1`}
             id={`${type}.address1`}
             name={`${type}.address1`}
+            ref={registerRef !== undefined && registerRef(`${type}.address1`)}
             type="text"
             value={data[type].address1 || ''}
             onBlur={() => {
@@ -260,6 +273,7 @@ export const Address = connect(
             data-testid={`${type}.city`}
             id={`${type}.city`}
             name={`${type}.city`}
+            ref={registerRef !== undefined && registerRef(`${type}.city`)}
             type="text"
             value={data[type].city || ''}
             onBlur={() => {
