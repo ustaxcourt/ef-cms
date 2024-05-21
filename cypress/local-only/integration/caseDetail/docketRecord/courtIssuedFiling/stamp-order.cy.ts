@@ -3,6 +3,22 @@ import { petitionerCreatesElectronicCaseWithDeceasedSpouse } from '../../../../.
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 describe('Judge`s chambers stamps an order', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should create an order, serve it, and apply a stamp to it', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCaseWithDeceasedSpouse().then(docketNumber => {
