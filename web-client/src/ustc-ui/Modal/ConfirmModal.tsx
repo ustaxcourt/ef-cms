@@ -1,38 +1,55 @@
 import { BaseModal } from './BaseModal';
 import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-export const ConfirmModal = connect(
-  {
-    onCancel: sequences[props.onCancelSequence],
-    onConfirm: sequences[props.onConfirmSequence],
-    onDelete: sequences[props.onDeleteSequence],
-    showModal: state.modal.showModal,
-    waitingForResponse: state.progressIndicator.waitingForResponse,
-  },
+type ConfirmModalProps = {
+  cancelLabel?: string;
+  children?: React.ReactNode;
+  className?: string;
+  confirmLabel?: string;
+  deleteLabel?: string;
+  hasErrorState?: boolean;
+  headerIcon?: IconProp;
+  headerIconClassName?: string;
+  noCancel?: boolean;
+  noCloseBtn?: boolean;
+  noConfirm?: boolean;
+  onCancelSequence: Function;
+  onConfirmSequence: Function;
+  onDeleteSequence?: Function;
+  preventCancelOnBlur?: boolean;
+  showDelete?: boolean;
+  showModalWhen?: string;
+  title: string;
+};
+
+const confirmModalDeps = {
+  showModal: state.modal.showModal,
+  waitingForResponse: state.progressIndicator.waitingForResponse,
+};
+
+export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
+  confirmModalDeps,
   function ConfirmModal({
-    cancelLabel,
+    cancelLabel = 'Cancel',
     children,
     className,
-    confirmLabel,
-    deleteLabel,
-    displaySuccessBanner,
-    hasErrorState,
+    confirmLabel = 'Ok',
+    deleteLabel = 'Delete',
+    hasErrorState = false,
     headerIcon,
-    headerIconClassName,
+    headerIconClassName = '',
     noCancel,
     noCloseBtn,
     noConfirm,
-    onCancel,
     onCancelSequence,
-    onConfirm,
-    onDelete,
+    onConfirmSequence,
+    onDeleteSequence,
     preventCancelOnBlur,
     showDelete = false,
     showModal,
@@ -40,28 +57,6 @@ export const ConfirmModal = connect(
     title,
     waitingForResponse,
   }) {
-    hasErrorState = hasErrorState || false;
-    headerIcon = headerIcon || null;
-    headerIconClassName = headerIconClassName || '';
-    confirmLabel = confirmLabel || 'Ok';
-    cancelLabel = cancelLabel || 'Cancel';
-    deleteLabel = deleteLabel || 'Delete';
-
-    const runCancelSequence = event => {
-      event.stopPropagation();
-      onCancel?.call();
-    };
-
-    const runConfirmSequence = event => {
-      event.stopPropagation();
-      onConfirm?.call();
-    };
-
-    const runDeleteSequence = event => {
-      event.stopPropagation();
-      onDelete?.call();
-    };
-
     useEffect(() => {
       const focusModal = () => {
         const modalHeader = window.document.querySelector(
@@ -80,9 +75,8 @@ export const ConfirmModal = connect(
     return (
       <BaseModal
         className={classNames(className, hasErrorState && 'modal-error')}
-        displaySuccessBanner={displaySuccessBanner}
         preventCancelOnBlur={preventCancelOnBlur}
-        onBlurSequence={onCancelSequence}
+        onBlurSequence={onCancelSequence} // NEED TO PASS IN FUNCTION
       >
         <div className={classNames('modal-header grid-container padding-x-0')}>
           <div className="grid-row">
@@ -109,7 +103,10 @@ export const ConfirmModal = connect(
                   link
                   className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
                   icon="times-circle"
-                  onClick={runCancelSequence}
+                  onClick={event => {
+                    event.stopPropagation();
+                    onCancelSequence();
+                  }}
                 >
                   Close
                 </Button>
@@ -125,13 +122,22 @@ export const ConfirmModal = connect(
                 data-testid="modal-confirm"
                 disabled={waitingForResponse}
                 id="confirm"
-                onClick={runConfirmSequence}
+                onClick={event => {
+                  event.stopPropagation();
+                  onConfirmSequence();
+                }}
               >
                 {confirmLabel}
               </Button>
             )}
             {!noCancel && (
-              <Button secondary onClick={runCancelSequence}>
+              <Button
+                secondary
+                onClick={event => {
+                  event.stopPropagation();
+                  onCancelSequence();
+                }}
+              >
                 {cancelLabel}
               </Button>
             )}
@@ -141,7 +147,10 @@ export const ConfirmModal = connect(
                 className="red-warning float-right no-wrap"
                 icon="trash"
                 id="confirm-modal-delete-btn"
-                onClick={runDeleteSequence}
+                onClick={event => {
+                  event.stopPropagation();
+                  if (onDeleteSequence) onDeleteSequence();
+                }}
               >
                 {deleteLabel}
               </Button>
