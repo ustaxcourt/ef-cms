@@ -8,6 +8,22 @@ const BAR_NUMBER = 'WN7777';
 const USER = 'irspractitioner2';
 
 describe('a repondent modifies their address', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should generate a notice of change address for all cases associated with the respondent', function () {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {

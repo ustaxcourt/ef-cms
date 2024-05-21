@@ -10,8 +10,9 @@ describe('getStep1DataAction', () => {
           petitionFile: 'TEST_petitionFile',
           petitionFileSize: 'TEST_petitionFileSize',
           petitionReasons: 'TEST_petitionReasons',
+          petitionRedactionAcknowledgement:
+            'TEST_petitionRedactionAcknowledgement',
           petitionType: 'TEST_petitionType',
-          redactionAcknowledgement: 'TEST_redactionAcknowledgement',
           test1: 'TEST_test1',
           test2: 'TEST_test2',
           test3: 'TEST_test3',
@@ -21,11 +22,11 @@ describe('getStep1DataAction', () => {
 
     const { step1Data } = results.output;
     expect(step1Data).toEqual({
-      acknowledgeChecked: 'TEST_redactionAcknowledgement',
       petitionFacts: 'TEST_petitionFacts',
       petitionFile: 'TEST_petitionFile',
       petitionFileSize: 'TEST_petitionFileSize',
       petitionReasons: 'TEST_petitionReasons',
+      petitionRedactionAcknowledgement: 'TEST_petitionRedactionAcknowledgement',
       petitionType: 'TEST_petitionType',
     });
   });
