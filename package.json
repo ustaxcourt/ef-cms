@@ -129,6 +129,7 @@
     "delete:elasticsearch-cluster": "./scripts/elasticsearch/delete-elasticsearch-cluster.sh",
     "deploy:account-specific": "cd web-api/terraform/applyables/account-specific && ../../bin/deploy-account-specific.sh",
     "deploy:allColors": "cd web-api/terraform/applyables/allColors && ../../bin/deploy-app-all-colors.sh",
+    "move:allColors": "cd web-api/terraform/applyables/allColors && ./move-client-resources-all-colors.sh",
     "deploy:blue": "cd web-api/terraform/applyables/blue && COLOR=blue ../../bin/deploy-app-color.sh",
     "deploy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/deploy-app-color.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",

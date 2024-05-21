@@ -6,17 +6,17 @@ provider "aws" {
   alias = "us-west-1"
 }
 
-# module "ui-public-certificate" {
-#   source = "../../../iam/terraform/shared/certificates"
+module "ui-public-certificate" {
+  source = "../../../iam/terraform/shared/certificates"
 
-#   domain_name               = var.dns_domain
-#   hosted_zone_name          = "${var.zone_name}."
-#   subject_alternative_names = ["*.${var.dns_domain}"]
-#   certificate_name          = var.dns_domain
-#   environment               = var.environment
-#   description               = "Certificate for public facing ${var.dns_domain}"
-#   product_domain            = "EFCMS"
-# }
+  domain_name               = var.dns_domain
+  hosted_zone_name          = "${var.zone_name}."
+  subject_alternative_names = ["*.${var.dns_domain}"]
+  certificate_name          = var.dns_domain
+  environment               = var.environment
+  description               = "Certificate for public facing ${var.dns_domain}"
+  product_domain            = "EFCMS"
+}
 
 data "aws_acm_certificate" "private_certificate" {
   domain = "*.${var.dns_domain}"
