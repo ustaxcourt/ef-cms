@@ -17,7 +17,7 @@ export const PlaceOfLegalResidenceSelect = ({
       data-testid={`${type}.placeOfLegalResidence`}
       id={`${type}.placeOfLegalResidence`}
       name={`${type}.placeOfLegalResidence`}
-      ref={refProp}
+      ref={refProp || undefined}
       value={data[type].placeOfLegalResidence || ''}
       onBlur={onBlur}
       onChange={e => {
