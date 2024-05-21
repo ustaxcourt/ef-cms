@@ -269,11 +269,37 @@ export const getWorkItemDocumentLink = ({
         formattedDocketEntry.isPetition &&
         formattedDocketEntry.isInProgress));
 
+  // petitions clerk permissions
+  console.log('permissions.QC_PETITION', permissions.QC_PETITION); // true
+  console.log('permissions.DOCKET_ENTRY', permissions.DOCKET_ENTRY); // false (case services supervisor has true here)
+  console.log('permissions.UDPATE_CASE', permissions.UPDATE_CASE); // true
+
   const baseDocumentLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
+  // What case services supervisor is getting
+  // http://localhost:1234/case-detail/103-24/document-view?docketEntryId=e0489a4e-2d5f-41b4-bb4a-f328e900a440
+
+  // What petitions clerk is seeing
+  // http://localhost:1234/case-detail/103-24/documents/e0489a4e-2d5f-41b4-bb4a-f328e900a440/review
+
+  // const { USER_ROLES } = applicationContext.getConstants();
   let editLink = documentViewLink;
   if (showDocumentEditLink) {
+    // if (
+    //   formattedDocketEntry.isPetition &&
+    //   !DocketEntry.isServed(formattedDocketEntry) &&
+    //   applicationContext.getCurrentUser().role ===
+    //     USER_ROLES.caseServicesSupervisor
+    // ) {
+    //   if (result.caseIsInProgress) {
+    //     editLink = `${baseDocumentLink}/review`;
+    //   } else {
+    //     editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
+    //   }
+    //   return editLink;
+    // }
+
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
         applicationContext,
@@ -285,7 +311,16 @@ export const getWorkItemDocumentLink = ({
       });
       if (editLinkExtension) {
         editLink = `${baseDocumentLink}${editLinkExtension}`;
-      }
+      } /*else if (
+        applicationContext.getCurrentUser().role ===
+        USER_ROLES.caseServicesSupervisor
+      ) {
+        if (result.caseIsInProgress) {
+          editLink = `${baseDocumentLink}/review`;
+        } else {
+          editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
+        }
+      }*/
     } else if (
       formattedDocketEntry.isPetition &&
       !DocketEntry.isServed(formattedDocketEntry)
