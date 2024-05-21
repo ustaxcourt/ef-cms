@@ -33,6 +33,7 @@ export const ScanBatchPreviewer = connect(
       sequences.openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
+    removeScannedPdfSequence: sequences.removeScannedPdfSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scanHelper: state.scanHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
@@ -55,6 +56,7 @@ export const ScanBatchPreviewer = connect(
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence,
+    removeScannedPdfSequence,
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
@@ -267,7 +269,7 @@ export const ScanBatchPreviewer = connect(
         <>
           {showModal === 'ConfirmDeletePDFModal' && (
             <ConfirmDeletePDFModal
-              confirmSequence="removeScannedPdfSequence"
+              confirmSequence={removeScannedPdfSequence}
               confirmText="Yes, Delete"
               modalContent="This action cannot be undone."
               title="Are you sure you want to delete this PDF?"
