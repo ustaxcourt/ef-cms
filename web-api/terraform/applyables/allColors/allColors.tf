@@ -46,7 +46,7 @@ module "ef-cms_apis" {
 }
 
 module "ui-public-certificate" {
-  source = "../../modules/certificates"
+  source                    = "../../modules/certificates"
   domain_name               = var.dns_domain
   hosted_zone_name          = "${var.zone_name}."
   subject_alternative_names = ["*.${var.dns_domain}"]
@@ -54,4 +54,10 @@ module "ui-public-certificate" {
   environment               = var.environment
   description               = "Certificate for public facing ${var.dns_domain}"
   product_domain            = "EFCMS"
+}
+module "ui-public-www-redirect" {
+  source      = "../../modules/ui-public-www-redirect"
+  dns_domain  = var.dns_domain
+  environment = var.environment
+  zone_name   = var.zone_name
 }
