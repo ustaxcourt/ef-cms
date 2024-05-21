@@ -11,14 +11,14 @@ describe('setStepIndicatorInfoForPetitionGeneratorAction,', () => {
     );
 
     expect(result.state.stepIndicatorInfo.currentStep).toEqual(1);
-    expect(result.state.stepIndicatorInfo.steps).toEqual([
-      'Petition',
-      'Petitioner Information',
-      'IRS Notice',
-      'Case Procedure & Trial Location',
-      'Statement of Taxpayer Identification',
-      'Review & Submit Case',
-      'Pay Filing Fee',
-    ]);
+    expect(result.state.stepIndicatorInfo.steps).toEqual({
+      1: 'Petition',
+      2: 'Petitioner Information',
+      3: 'IRS Notice',
+      4: 'Case Procedure & Trial Location',
+      5: 'Statement of Taxpayer Identification',
+      6: 'Review & Submit Case',
+      7: 'Pay Filing Fee',
+    });
   });
 });
