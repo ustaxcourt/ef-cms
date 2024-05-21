@@ -19,7 +19,7 @@ export const StateSelect = ({
       data-testid={`${type}.state`}
       id={`${type}.state`}
       name={`${type}.state`}
-      ref={refProp}
+      ref={refProp || undefined}
       value={data[type].state || ''}
       onBlur={() => onBlurSequence && onBlurSequence()}
       onChange={e => {

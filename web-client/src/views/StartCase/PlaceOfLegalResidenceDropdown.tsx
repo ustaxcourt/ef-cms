@@ -58,8 +58,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
             <PlaceOfLegalResidenceSelect
               data={data}
               refProp={
-                registerRef !== undefined &&
-                registerRef(`${type}.placeOfLegalResidence`)
+                registerRef && registerRef(`${type}.placeOfLegalResidence`)
               }
               type={type}
               updateFormValueSequence={updateFormValueSequence}
@@ -86,8 +85,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
               className="max-width-180"
               data={data}
               refProp={
-                registerRef !== undefined &&
-                registerRef(`${type}.placeOfLegalResidence`)
+                registerRef && registerRef(`${type}.placeOfLegalResidence`)
               }
               type={type}
               updateFormValueSequence={updateFormValueSequence}

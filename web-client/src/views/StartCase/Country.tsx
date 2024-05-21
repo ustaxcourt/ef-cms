@@ -40,9 +40,7 @@ export const Country = connect(
               className="usa-radio__input"
               id={`${type}-countryType-domestic`}
               name={`${type}.countryType`}
-              ref={
-                registerRef !== undefined && registerRef(`${type}.countryType`)
-              }
+              ref={registerRef && registerRef(`${type}.countryType`)}
               type="radio"
               value={constants.COUNTRY_TYPES.DOMESTIC}
               onChange={e => {
@@ -107,7 +105,7 @@ export const Country = connect(
               data-testid="international-country-input"
               id={`${type}.country`}
               name={`${type}.country`}
-              ref={registerRef !== undefined && registerRef(`${type}.country`)}
+              ref={registerRef && registerRef(`${type}.country`)}
               type="text"
               value={data[type].country || ''}
               onBlur={() => {

@@ -93,9 +93,7 @@ export const ContactPrimaryUpdated = connect(
               data-testid="contact-primary-name"
               id="contactPrimary.name"
               name="contactPrimary.name"
-              ref={
-                registerRef !== undefined && registerRef('contactPrimary.name')
-              }
+              ref={registerRef && registerRef('contactPrimary.name')}
               type="text"
               value={data.contactPrimary.name || ''}
               onBlur={() => {
@@ -133,10 +131,7 @@ export const ContactPrimaryUpdated = connect(
                 data-testid="contact-primary-secondary-name"
                 id="secondaryName"
                 name="contactPrimary.secondaryName"
-                ref={
-                  registerRef !== undefined &&
-                  registerRef('contactPrimary.secondaryName')
-                }
+                ref={registerRef && registerRef('contactPrimary.secondaryName')}
                 type="text"
                 value={data.contactPrimary.secondaryName || ''}
                 onBlur={() => {
@@ -188,10 +183,7 @@ export const ContactPrimaryUpdated = connect(
                 data-testid="contact-primary-title"
                 id="title"
                 name="contactPrimary.title"
-                ref={
-                  registerRef !== undefined &&
-                  registerRef('contactPrimary.title')
-                }
+                ref={registerRef && registerRef('contactPrimary.title')}
                 type="text"
                 value={data.contactPrimary.title || ''}
                 onBlur={() => {
@@ -273,9 +265,7 @@ export const ContactPrimaryUpdated = connect(
               data-testid="phone"
               id="primary-phone"
               name="contactPrimary.phone"
-              ref={
-                registerRef !== undefined && registerRef('contactPrimary.phone')
-              }
+              ref={registerRef && registerRef('contactPrimary.phone')}
               type="tel"
               value={data.contactPrimary.phone || ''}
               onBlur={() => {

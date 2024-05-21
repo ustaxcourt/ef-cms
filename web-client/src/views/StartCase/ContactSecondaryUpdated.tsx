@@ -80,10 +80,7 @@ export const ContactSecondaryUpdated = connect(
               data-testid="contact-secondary-name"
               id="name"
               name="contactSecondary.name"
-              ref={
-                registerRef !== undefined &&
-                registerRef('contactSecondary.name')
-              }
+              ref={registerRef && registerRef('contactSecondary.name')}
               type="text"
               value={data.contactSecondary.name || ''}
               onBlur={() => {
@@ -178,10 +175,7 @@ export const ContactSecondaryUpdated = connect(
               data-testid="phone"
               id="secondary-phone"
               name="contactSecondary.phone"
-              ref={
-                registerRef !== undefined &&
-                registerRef('contactSecondary.phone')
-              }
+              ref={registerRef && registerRef('contactSecondary.phone')}
               type="tel"
               value={data.contactSecondary.phone || ''}
               onBlur={() => {
@@ -211,10 +205,7 @@ export const ContactSecondaryUpdated = connect(
               className="usa-input"
               id="email"
               name="contactSecondary.email"
-              ref={
-                registerRef !== undefined &&
-                registerRef('contactSecondary.email')
-              }
+              ref={registerRef && registerRef('contactSecondary.email')}
               type="text"
               value={data.contactSecondary.email || ''}
               onBlur={() => {
@@ -308,7 +299,7 @@ export function InCareOf({
         className="usa-input"
         id="inCareOf"
         name={`${type}.inCareOf`}
-        ref={registerRef !== undefined && registerRef(`${type}.inCareOf`)}
+        ref={registerRef && registerRef(`${type}.inCareOf`)}
         type="text"
         value={inCareOf || ''}
         onBlur={() => {
