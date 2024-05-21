@@ -133,7 +133,7 @@ resource "aws_acm_certificate_validation" "dns_validation_west" { # DONE, AllCol
   provider                = aws.us-west-1
 }
 
-resource "aws_route53_record" "statuspage" {
+resource "aws_route53_record" "statuspage" { # 10345: check prod state file to confirm not being used
   count   = var.statuspage_dns_record != "" ? 1 : 0
   name    = "status.${var.dns_domain}"
   type    = "CNAME"
@@ -149,7 +149,7 @@ data "aws_sns_topic" "system_health_alarms" {
   name = "system_health_alarms"
 }
 
-resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
+resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" { # DONE, AllColors
   alarm_name          = "${var.dns_domain} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
@@ -169,7 +169,7 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
   ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
-resource "aws_route53_health_check" "public_ui_health_check" {
+resource "aws_route53_health_check" "public_ui_health_check" { # DONE, AllColors
   fqdn              = var.dns_domain
   port              = 443
   type              = "HTTPS"
@@ -180,7 +180,7 @@ resource "aws_route53_health_check" "public_ui_health_check" {
   regions           = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
 
-resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
+resource "aws_cloudwatch_metric_alarm" "ui_health_check" { # DONE, AllColors
   alarm_name          = "app.${var.dns_domain} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
@@ -199,7 +199,7 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
   ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
-resource "aws_route53_health_check" "ui_health_check" {
+resource "aws_route53_health_check" "ui_health_check" { # DONE, AllColors
   fqdn              = "app.${var.dns_domain}"
   port              = 443
   count             = var.enable_health_checks

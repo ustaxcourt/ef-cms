@@ -97,3 +97,17 @@ module "dynamsoft_us_west" {
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys
 }
+
+module "public-ui-healthcheck" {
+  source     = "../../modules/ui-healthcheck"
+  count      = var.enable_health_checks
+  alarm_name = "${var.dns_domain} is accessible over HTTPS"
+  dns_domain = var.dns_domain
+}
+
+module "ui-healthcheck" {
+  source     = "../../modules/ui-healthcheck"
+  count      = var.enable_health_checks
+  alarm_name = "app.${var.dns_domain} is accessible over HTTPS"
+  dns_domain = "app.${var.dns_domain}"
+}
