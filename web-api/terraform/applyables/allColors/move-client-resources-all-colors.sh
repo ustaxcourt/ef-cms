@@ -38,9 +38,16 @@ terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfsta
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_acm_certificate_validation.dns_validation_east module.dynamsoft_us_east.aws_acm_certificate_validation.dns_validation
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_acm_certificate_validation.dns_validation_west module.dynamsoft_us_west.aws_acm_certificate_validation.dns_validation
 
-if [ -z "${IS_DYNAMSOFT_ENABLED}" ]; then
+if [ -n "${IS_DYNAMSOFT_ENABLED}" ]; then
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_east_www module.dynamsoft_us_east.aws_route53_record.record_www
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_west_www module.dynamsoft_us_west.aws_route53_record.record_www
+fi
+
+if [ -n "${ENABLE_HEALTH_CHECKS}" ]; then
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_cloudwatch_metric_alarm.public_ui_health_check[0] module.public-ui-healthcheck[0].aws_cloudwatch_metric_alarm.ui_health_check
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_health_check.public_ui_health_check[0] module.public-ui-healthcheck[0].aws_route53_health_check.ui_health_check
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_cloudwatch_metric_alarm.ui_health_check[0] module.ui-healthcheck[0].aws_cloudwatch_metric_alarm.ui_health_check
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_health_check.ui_health_check[0] module.ui-healthcheck[0].aws_route53_health_check.ui_health_check
 fi
 
 
