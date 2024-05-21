@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Address } from './Address';
 import { Country } from './Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -18,6 +19,7 @@ const props = cerebralProps as unknown as {
   showPlaceOfLegalResidence?: boolean;
   secondaryLabelNote?: string;
   secondaryLabel?: string;
+  registerRef?: Function;
   titleLabel?: string;
   titleLabelNote?: string;
   placeOfLegalResidenceTitle?: string;
@@ -36,6 +38,7 @@ export const ContactPrimaryUpdated = connect(
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
+    registerRef: props.registerRef,
     secondaryLabel: props.secondaryLabel,
     secondaryLabelNote: props.secondaryLabelNote,
     showInCareOf: props.showInCareOf,
@@ -55,6 +58,7 @@ export const ContactPrimaryUpdated = connect(
     onChange,
     onChangeSequence,
     placeOfLegalResidenceTitle,
+    registerRef,
     secondaryLabel,
     secondaryLabelNote,
     showInCareOf,
@@ -87,8 +91,11 @@ export const ContactPrimaryUpdated = connect(
               autoCapitalize="none"
               className="usa-input"
               data-testid="contact-primary-name"
-              id="name"
+              id="contactPrimary.name"
               name="contactPrimary.name"
+              ref={
+                registerRef !== undefined && registerRef('contactPrimary.name')
+              }
               type="text"
               value={data.contactPrimary.name || ''}
               onBlur={() => {
@@ -126,6 +133,10 @@ export const ContactPrimaryUpdated = connect(
                 data-testid="contact-primary-secondary-name"
                 id="secondaryName"
                 name="contactPrimary.secondaryName"
+                ref={
+                  registerRef !== undefined &&
+                  registerRef('contactPrimary.secondaryName')
+                }
                 type="text"
                 value={data.contactPrimary.secondaryName || ''}
                 onBlur={() => {
@@ -147,6 +158,7 @@ export const ContactPrimaryUpdated = connect(
             <InCareOf
               inCareOf={data.contactPrimary.inCareOf}
               isOptional={showInCareOfOptional}
+              registerRef={registerRef}
               type="contactPrimary"
               validationErrors={validationErrors}
               onBlurSequence={onBlurSequence}
@@ -176,6 +188,10 @@ export const ContactPrimaryUpdated = connect(
                 data-testid="contact-primary-title"
                 id="title"
                 name="contactPrimary.title"
+                ref={
+                  registerRef !== undefined &&
+                  registerRef('contactPrimary.title')
+                }
                 type="text"
                 value={data.contactPrimary.title || ''}
                 onBlur={() => {
@@ -195,6 +211,7 @@ export const ContactPrimaryUpdated = connect(
 
           <Country
             bind={bind}
+            registerRef={registerRef}
             type="contactPrimary"
             onBlur={onBlur}
             onChange={onChange}
@@ -204,6 +221,7 @@ export const ContactPrimaryUpdated = connect(
             constants.COUNTRY_TYPES.DOMESTIC && (
             <Address
               bind={bind}
+              registerRef={registerRef}
               type="contactPrimary"
               onBlur={onBlur}
               onChange={onChange}
@@ -214,6 +232,7 @@ export const ContactPrimaryUpdated = connect(
             constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress
               bind={bind}
+              registerRef={registerRef}
               type="contactPrimary"
               onBlur={onBlur}
               onChange={onChange}
@@ -223,6 +242,7 @@ export const ContactPrimaryUpdated = connect(
             <PlaceOfLegalResidenceDropdown
               bind={bind}
               placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
+              registerRef={registerRef}
               type="contactPrimary"
               // change - move to on change
               onBlurSequence={() => {
@@ -253,6 +273,9 @@ export const ContactPrimaryUpdated = connect(
               data-testid="phone"
               id="primary-phone"
               name="contactPrimary.phone"
+              ref={
+                registerRef !== undefined && registerRef('contactPrimary.phone')
+              }
               type="tel"
               value={data.contactPrimary.phone || ''}
               onBlur={() => {

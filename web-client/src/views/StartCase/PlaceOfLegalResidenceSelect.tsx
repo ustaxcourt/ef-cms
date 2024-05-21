@@ -5,6 +5,7 @@ export const PlaceOfLegalResidenceSelect = ({
   className = '',
   data,
   onBlur,
+  refProp,
   type,
   updateFormValueSequence,
   usStates,
@@ -16,6 +17,7 @@ export const PlaceOfLegalResidenceSelect = ({
       data-testid={`${type}.placeOfLegalResidence`}
       id={`${type}.placeOfLegalResidence`}
       name={`${type}.placeOfLegalResidence`}
+      ref={refProp}
       value={data[type].placeOfLegalResidence || ''}
       onBlur={onBlur}
       onChange={e => {
