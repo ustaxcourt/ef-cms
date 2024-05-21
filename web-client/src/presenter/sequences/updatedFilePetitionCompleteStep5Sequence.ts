@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
 import { generatePetitionPdfAction } from '@web-client/presenter/actions/generatePetitionPdfAction';
+import { generatePetitionPreviewPdfUrlAction } from '@web-client/presenter/actions/generatePetitionPreviewPdfUrlAction';
 import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
 import { getStep2DataAction } from '@web-client/presenter/actions/getStep2DataAction';
 import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAction';
@@ -31,6 +32,7 @@ export const updatedFilePetitionCompleteStep5Sequence = [
       formatPetitionAction,
       generatePetitionPdfAction,
       setPdfPreviewUrlAction,
+      generatePetitionPreviewPdfUrlAction,
       incrementCurrentStepIndicatorAction,
     ]),
   },
