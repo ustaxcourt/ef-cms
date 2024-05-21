@@ -47,7 +47,6 @@ module "ef-cms_apis" {
 
 module "ui-public-certificate" {
   source = "../../modules/certificates"
-
   domain_name               = var.dns_domain
   hosted_zone_name          = "${var.zone_name}."
   subject_alternative_names = ["*.${var.dns_domain}"]
