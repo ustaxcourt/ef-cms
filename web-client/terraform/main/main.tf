@@ -41,7 +41,7 @@ data "aws_route53_zone" "zone" {
   name = "${var.zone_name}."
 }
 
-module "dynamsoft_us_east" {
+module "dynamsoft_us_east" { # DONE, AllColors
   source = "../dynamsoft"
 
   environment = var.environment
@@ -58,7 +58,7 @@ module "dynamsoft_us_east" {
   dynamsoft_product_keys = var.dynamsoft_product_keys
 }
 
-module "dynamsoft_us_west" {
+module "dynamsoft_us_west" { # DONE, AllColors
   source = "../dynamsoft"
 
   environment = var.environment

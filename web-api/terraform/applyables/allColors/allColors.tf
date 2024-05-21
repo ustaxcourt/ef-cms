@@ -61,3 +61,37 @@ module "ui-public-www-redirect" {
   environment = var.environment
   zone_name   = var.zone_name
 }
+
+module "dynamsoft_us_east" {
+  source = "../../modules/dynamsoft"
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  environment            = var.environment
+  dns_domain             = var.dns_domain
+  zone_name              = var.zone_name
+  ami                    = "ami-0a313d6098716f372"
+  availability_zones     = ["us-east-1a"]
+  is_dynamsoft_enabled   = var.is_dynamsoft_enabled
+  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
+  dynamsoft_url          = var.dynamsoft_url
+  dynamsoft_product_keys = var.dynamsoft_product_keys
+}
+
+module "dynamsoft_us_west" {
+  source = "../../modules/dynamsoft"
+
+  environment = var.environment
+  dns_domain  = var.dns_domain
+  providers = {
+    aws = aws.us-west-1
+  }
+  zone_name              = var.zone_name
+  ami                    = "ami-06397100adf427136"
+  availability_zones     = ["us-west-1a"]
+  is_dynamsoft_enabled   = var.is_dynamsoft_enabled
+  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
+  dynamsoft_url          = var.dynamsoft_url
+  dynamsoft_product_keys = var.dynamsoft_product_keys
+}

@@ -23,6 +23,9 @@ terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfsta
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_s3_bucket.public_redirect module.ui-public-www-redirect.aws_s3_bucket.public_redirect
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_cloudfront_distribution.public_distribution_www module.ui-public-www-redirect.aws_cloudfront_distribution.public_distribution_www
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_route53_record.public_www_redirect module.ui-public-www-redirect.aws_route53_record.public_www_redirect
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.dynamsoft_us_east module.dynamsoft_us_east
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.dynamsoft_us_west module.dynamsoft_us_west
+
 echo 5555555
 
 # terraform state push ./ui-${ENV}.tfstate
