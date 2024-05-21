@@ -20,6 +20,9 @@ echo 4444444
 
 cd "../../../web-api/terraform/applyables/allColors"
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.module.ui-public-certificate module.ui-public-certificate
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_s3_bucket.public_redirect module.ui-public-www-redirect.aws_s3_bucket.public_redirect
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_cloudfront_distribution.public_distribution_www module.ui-public-www-redirect.aws_cloudfront_distribution.public_distribution_www
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_route53_record.public_www_redirect module.ui-public-www-redirect.aws_route53_record.public_www_redirect
 echo 5555555
 
 # terraform state push ./ui-${ENV}.tfstate

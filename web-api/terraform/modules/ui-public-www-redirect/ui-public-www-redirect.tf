@@ -1,4 +1,5 @@
-resource "aws_s3_bucket" "public_redirect" { #DONE ALL COLORS
+# 10345: Is this infrastructure needed? Explore.
+resource "aws_s3_bucket" "public_redirect" {
   bucket = "www.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.www_redirect_policy_bucket.json
@@ -39,7 +40,7 @@ data "aws_iam_policy_document" "www_redirect_policy_bucket" {
   }
 }
 
-resource "aws_cloudfront_distribution" "public_distribution_www" { #DONE ALL COLORS
+resource "aws_cloudfront_distribution" "public_distribution_www" {
   origin {
     domain_name = aws_s3_bucket.public_redirect.website_endpoint
     origin_id   = "www.${var.dns_domain}"
@@ -55,14 +56,14 @@ resource "aws_cloudfront_distribution" "public_distribution_www" { #DONE ALL COL
   enabled = true
 
   default_cache_behavior {
-    viewer_protocol_policy = var.viewer_protocol_policy
+    viewer_protocol_policy = "redirect-to-https"
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "www.${var.dns_domain}"
     min_ttl                = 0
-    default_ttl            = var.cloudfront_default_ttl
-    max_ttl                = var.cloudfront_max_ttl
+    default_ttl            = 86400
+    max_ttl                = 31536000
 
     forwarded_values {
       query_string = false
@@ -98,7 +99,7 @@ data "aws_route53_zone" "public_zone_www" {
   name = "${var.zone_name}."
 }
 
-resource "aws_route53_record" "public_www_redirect" { #DONE ALL COLORS
+resource "aws_route53_record" "public_www_redirect" {
   zone_id = data.aws_route53_zone.public_zone_www.zone_id
   name    = "www.${var.dns_domain}"
   type    = "A"
