@@ -51,6 +51,32 @@ export const expireUserConfirmationCode = async (
   return null;
 };
 
+export const toggleFeatureFlag = async ({
+  flag,
+  flagValue,
+}: {
+  flag: string;
+  flagValue: any;
+}): Promise<null> => {
+  const dynamoClient = await getDocumentClient();
+  await dynamoClient.update({
+    ExpressionAttributeNames: {
+      '#value': 'current',
+    },
+    ExpressionAttributeValues: {
+      ':value': flagValue,
+    },
+    Key: {
+      pk: flag,
+      sk: flag,
+    },
+    TableName: getCypressEnv().dynamoDbTableName,
+    UpdateExpression: 'SET #value = :value',
+  });
+
+  return null;
+};
+
 export const getEmailVerificationToken = async ({
   email,
 }: {
