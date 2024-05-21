@@ -75,8 +75,7 @@ module "dynamsoft_us_west" { # DONE, AllColors
   dynamsoft_product_keys = var.dynamsoft_product_keys
 }
 
-
-resource "aws_route53_record" "record_certs" {
+resource "aws_route53_record" "record_certs" { # DONE, AllColors
   for_each = {
     for dvo in module.dynamsoft_us_east.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -92,8 +91,7 @@ resource "aws_route53_record" "record_certs" {
   allow_overwrite = true
 }
 
-
-resource "aws_route53_record" "record_east_www" {
+resource "aws_route53_record" "record_east_www" { # DONE, AllColors
   name           = "dynamsoft-lib.${var.dns_domain}"
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
@@ -108,7 +106,7 @@ resource "aws_route53_record" "record_east_www" {
   ttl = 60
 }
 
-resource "aws_route53_record" "record_west_www" {
+resource "aws_route53_record" "record_west_www" { # DONE, AllColors
   name           = "dynamsoft-lib.${var.dns_domain}"
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
@@ -123,13 +121,13 @@ resource "aws_route53_record" "record_west_www" {
   ttl = 60
 }
 
-resource "aws_acm_certificate_validation" "dns_validation_east" {
+resource "aws_acm_certificate_validation" "dns_validation_east" { # DONE, AllColors
   certificate_arn         = module.dynamsoft_us_east.cert_arn
   validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
   provider                = aws.us-east-1
 }
 
-resource "aws_acm_certificate_validation" "dns_validation_west" {
+resource "aws_acm_certificate_validation" "dns_validation_west" { # DONE, AllColors
   certificate_arn         = module.dynamsoft_us_west.cert_arn
   validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
   provider                = aws.us-west-1

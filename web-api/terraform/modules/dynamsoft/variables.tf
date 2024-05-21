@@ -27,10 +27,13 @@ variable "dynamsoft_product_keys" {
 }
 
 variable "is_dynamsoft_enabled" {
-  default = "1"
   type = string
  }
 
 variable "zone_name" {
+  type = string
+}
+
+variable "region" {
   type = string
 }

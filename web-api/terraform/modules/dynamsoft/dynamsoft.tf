@@ -123,7 +123,6 @@ data "aws_route53_zone" "zone" {
   name = "${var.zone_name}."
 }
 
-
 resource "aws_acm_certificate" "this" {
   domain_name       = "dynamsoft-lib.${var.dns_domain}"
   validation_method = "DNS"
@@ -136,3 +135,40 @@ resource "aws_acm_certificate" "this" {
     ManagedBy     = "terraform"
   }
 }
+
+resource "aws_route53_record" "record_certs" { #10345 Used to only exist in the east
+  for_each = {
+    for dvo in aws_acm_certificate.this.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name            = each.value.name
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.zone.zone_id
+  records         = [each.value.record]
+  ttl             = 60
+  allow_overwrite = true
+}
+
+resource "aws_route53_record" "record_www" {
+  name           = "dynamsoft-lib.${var.dns_domain}"
+  type           = "CNAME"
+  zone_id        = data.aws_route53_zone.zone.zone_id
+  set_identifier = var.region
+  count          = var.is_dynamsoft_enabled
+  records = [
+    element(concat(aws_elb.dynamsoft_elb.*.dns_name, tolist([""])), 0),
+  ]
+  latency_routing_policy {
+    region = var.region
+  }
+  ttl = 60
+}
+
+resource "aws_acm_certificate_validation" "dns_validation" {
+  certificate_arn         = aws_acm_certificate.this.arn
+  validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
+}
+

@@ -4,6 +4,15 @@ ENV=$1
 
 ../../../../scripts/verify-terraform-version.sh
 
+# Getting the environment-specific deployment settings and injecting them into the shell environment
+if [ -z "${SECRETS_LOADED}" ]; then
+  pushd ../../../../
+  # shellcheck disable=SC1091
+  . ./scripts/load-environment-from-secrets.sh
+  popd
+fi
+
+
 # exit on any failure
 set -eo pipefail
 
@@ -25,6 +34,16 @@ terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfsta
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.environment.aws_route53_record.public_www_redirect module.ui-public-www-redirect.aws_route53_record.public_www_redirect
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.dynamsoft_us_east module.dynamsoft_us_east
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" module.dynamsoft_us_west module.dynamsoft_us_west
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_certs module.dynamsoft_us_east.aws_route53_record.record_certs
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_acm_certificate_validation.dns_validation_east module.dynamsoft_us_east.aws_acm_certificate_validation.dns_validation
+terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_acm_certificate_validation.dns_validation_west module.dynamsoft_us_west.aws_acm_certificate_validation.dns_validation
+
+if [ -z "${IS_DYNAMSOFT_ENABLED}" ]; then
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_east_www module.dynamsoft_us_east.aws_route53_record.record_www
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_west_www module.dynamsoft_us_west.aws_route53_record.record_www
+fi
+
+
 
 echo 5555555
 
