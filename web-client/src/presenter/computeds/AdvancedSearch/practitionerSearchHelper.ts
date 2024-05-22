@@ -38,12 +38,9 @@ export const practitionerSearchHelper = (
   applicationContext: ClientApplicationContext,
 ): PractitionerSearchHelperResult => {
   const searchResults = get(state.searchResults['practitioner']);
-  const activePage: number = get(
-    state.advancedSearchForm.practitionerSearchByName.pageNum,
-  );
 
   let result: PractitionerSearchHelperResult = {
-    activePage,
+    activePage: 0,
     formattedSearchResults: [],
     numberOfResults: '0',
     pageCount: 0,
@@ -63,6 +60,9 @@ export const practitionerSearchHelper = (
   }
 
   if (searchResults && searchResults.total) {
+    result.activePage = get(
+      state.advancedSearchForm.practitionerSearchByName.pageNum,
+    );
     let paginatedResults = searchResults.practitioners;
 
     paginatedResults = paginatedResults.map(searchResult =>
