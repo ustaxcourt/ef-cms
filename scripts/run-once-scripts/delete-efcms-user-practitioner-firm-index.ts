@@ -1,6 +1,9 @@
 import { Client } from '@opensearch-project/opensearch';
 import { getClient } from '../../web-api/elasticsearch/client';
-import { getVersion, requireEnvVars } from '../../shared/admin-tools/util';
+import {
+  getSourceTableInfo,
+  requireEnvVars,
+} from '../../shared/admin-tools/util';
 
 requireEnvVars(['ENV']);
 
@@ -9,7 +12,7 @@ const index: string = 'efcms-user-practitioner-firm';
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const version: string = await getVersion();
+  const { version } = await getSourceTableInfo();
   const client: Client = await getClient({ environmentName, version });
 
   const { body: indexExists } = await client.indices.exists({ index });

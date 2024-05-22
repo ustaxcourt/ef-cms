@@ -3,10 +3,12 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { updateUser } from '@web-api/gateways/user/updateUser';
 
 describe('updateUser', () => {
-  it('should update the user`s email in persistence when it is provided as an attribute to update', async () => {
-    const mockEmail = 'test@example.com';
+  const mockEmail = 'test@EXAMPLE.com';
+  const mockLowerCasedEmail = mockEmail.toLowerCase();
+
+  it('should update the user`s email in persistence, lowercased, when it is provided as an attribute to update', async () => {
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.userPoolId = mockUserPoolId;
 
     await updateUser(applicationContext, {
       attributesToUpdate: {
@@ -21,22 +23,21 @@ describe('updateUser', () => {
       UserAttributes: [
         {
           Name: 'email',
-          Value: mockEmail,
+          Value: mockLowerCasedEmail,
         },
         {
           Name: 'email_verified',
           Value: 'true',
         },
       ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: mockEmail,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: mockLowerCasedEmail,
     });
   });
 
   it('should update the user`s role in persistence when it is provided as an attribute to update', async () => {
-    const mockEmail = 'test@example.com';
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.UserPoolId = mockUserPoolId;
 
     await updateUser(applicationContext, {
       attributesToUpdate: {
@@ -54,15 +55,14 @@ describe('updateUser', () => {
           Value: ROLES.petitioner,
         },
       ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: mockEmail,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: mockLowerCasedEmail,
     });
   });
 
   it('should update the user`s role and email in persistence when they are both provided as attributes to update', async () => {
-    const mockEmail = 'test@example.com';
     const mockUserPoolId = 'test';
-    process.env.USER_POOL_ID = mockUserPoolId;
+    applicationContext.environment.userPoolId = mockUserPoolId;
 
     await updateUser(applicationContext, {
       attributesToUpdate: {
@@ -82,15 +82,15 @@ describe('updateUser', () => {
         },
         {
           Name: 'email',
-          Value: mockEmail,
+          Value: mockLowerCasedEmail,
         },
         {
           Name: 'email_verified',
           Value: 'true',
         },
       ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: mockEmail,
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: mockLowerCasedEmail,
     });
   });
 });

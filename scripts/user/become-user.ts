@@ -14,7 +14,10 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { getVersion, requireEnvVars } from '../../shared/admin-tools/util';
+import {
+  getSourceTableInfo,
+  requireEnvVars,
+} from '../../shared/admin-tools/util';
 
 requireEnvVars(['COGNITO_USER_EMAIL', 'COGNITO_USER_POOL', 'ENV']);
 
@@ -57,7 +60,7 @@ const lookupRoleForUser = async (userId: string): Promise<string> => {
   const documentClient = DynamoDBDocument.from(dynamodb, {
     marshallOptions: { removeUndefinedValues: true },
   });
-  const version = await getVersion();
+  const { version } = await getSourceTableInfo();
   const TableName = `efcms-${ENV}-${version}`;
   const data = await documentClient.get({
     ExpressionAttributeNames: {

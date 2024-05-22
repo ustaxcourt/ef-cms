@@ -50,19 +50,6 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     ).toEqual('123');
   });
 
-  it('does a virus scan on the provided document', async () => {
-    await uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: mockDocument,
-      key: 'abc',
-      onUploadProgress: () => {},
-    });
-
-    expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor.mock
-        .calls[0][0].key,
-    ).toEqual(mockDocument.key);
-  });
-
   it('validates the provided document', async () => {
     await uploadDocumentAndMakeSafeInteractor(applicationContext, {
       document: mockDocument,

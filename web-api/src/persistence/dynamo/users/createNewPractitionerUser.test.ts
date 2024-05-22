@@ -42,14 +42,11 @@ describe('createNewPractitionerUser', () => {
     expect(applicationContext.getUserGateway().createUser).toHaveBeenCalledWith(
       applicationContext,
       {
-        attributesToUpdate: {
-          email: mockNewPractitionerUser.pendingEmail,
-          name: mockNewPractitionerUser.name,
-          role: mockNewPractitionerUser.role,
-          userId: mockNewPractitionerUser.userId,
-        },
         email: mockNewPractitionerUser.pendingEmail,
-        resendInvitationEmail: false,
+        name: mockNewPractitionerUser.name,
+        role: mockNewPractitionerUser.role,
+        sendWelcomeEmail: true,
+        userId: mockNewPractitionerUser.userId,
       },
     );
   });

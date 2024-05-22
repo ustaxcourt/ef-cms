@@ -16,7 +16,7 @@ export const getPublicDownloadPolicyUrl = ({
     applicationContext.getStorageClient().getSignedUrl(
       'getObject',
       {
-        Bucket: applicationContext.getDocumentsBucketName(),
+        Bucket: applicationContext.environment.documentsBucketName,
         Expires: 120,
         Key: key,
       },

@@ -31,7 +31,7 @@ Follow these steps to perform a glue job manually.
    ```
 1. Back in the terminal session with environment variables pointed to the target lower environment, synchronize the S3 documents buckets:
    ```zsh
-   aws s3 sync "s3://${PROD_DOCUMENTS_BUCKET_NAME}" "s3://${DOCUMENTS_BUCKET_NAME}" --delete --region us-east-1
+   aws s3 sync "s3://${PROD_DOCUMENTS_BUCKET_NAME}" "s3://${EFCMS_DOMAIN}-documents-${STAGE}-us-east-1}" --delete --region us-east-1
    ```
 1. Wait for the glue job and S3 documents sync to complete before proceeding. The S3 sync will output each copy/delete operation to the terminal, so you will know when it is finished. You will need to periodically check on the glue job's status in the terminal session with environment variables pointed to the production environment:
    ```zsh

@@ -16,6 +16,7 @@ export async function signUp(
   },
 ): Promise<{ userId: string }> {
   const userId = applicationContext.getUniqueId();
+  const lowerCaseEmail = email.toLowerCase();
 
   await applicationContext.getCognito().signUp({
     ClientId: applicationContext.environment.cognitoClientId,
@@ -23,14 +24,14 @@ export async function signUp(
     UserAttributes: [
       {
         Name: 'email',
-        Value: email,
+        Value: lowerCaseEmail,
       },
       {
         Name: 'name',
         Value: name,
       },
     ],
-    Username: email,
+    Username: lowerCaseEmail,
   });
 
   await applicationContext.getCognito().adminUpdateUserAttributes({
@@ -45,7 +46,7 @@ export async function signUp(
       },
     ],
     UserPoolId: applicationContext.environment.userPoolId,
-    Username: email,
+    Username: lowerCaseEmail,
   });
 
   return { userId };

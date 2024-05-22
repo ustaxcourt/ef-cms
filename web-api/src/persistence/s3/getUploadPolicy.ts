@@ -17,7 +17,7 @@ export const getUploadPolicy = ({
   new Promise((resolve, reject) => {
     applicationContext.getStorageClient().createPresignedPost(
       {
-        Bucket: applicationContext.getDocumentsBucketName(),
+        Bucket: applicationContext.environment.documentsBucketName,
         Conditions: [
           ['starts-with', '$key', key],
           ['starts-with', '$Content-Type', ''],

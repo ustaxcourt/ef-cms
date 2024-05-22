@@ -6,6 +6,6 @@ export async function forgotPassword(
 ): Promise<void> {
   await applicationContext.getCognito().forgotPassword({
     ClientId: applicationContext.environment.cognitoClientId,
-    Username: email,
+    Username: email.toLowerCase(),
   });
 }

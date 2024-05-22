@@ -96,8 +96,8 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
       searchAfter: joi
         .object()
         .keys({
-          pk: joi.string().allow('').required(),
-          receivedAt: joi.number().required(),
+          pk: joi.string().allow(null).required(),
+          receivedAt: joi.number().allow(null).required(),
         })
         .required(),
       startDate: JoiValidationConstants.ISO_DATE.max('now')

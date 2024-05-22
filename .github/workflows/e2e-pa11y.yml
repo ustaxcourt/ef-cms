@@ -26,7 +26,7 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v3.0.0
+        uses: rrainn/dynamodb-action@v4.0.0
         with:
           port: 8000
           cors: '*'
@@ -50,13 +50,8 @@ jobs:
         run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
       - name: Run E2E Pa11y 4
         run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
-      - name: Store Screenshots Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: screen-shots
-          path: ${{ github.workspace }}/web-client/pa11y/pa11y-screenshots
       - name: Store Server Logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: server-logs
+          name: server-logs-${{ matrix.ci_node_index }}
           path: /tmp/pa11y

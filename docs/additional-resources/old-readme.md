@@ -124,18 +124,12 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v14.16.0
 - npm v6.14.11
-- ClamAV v0.101.2 (see Setup below)
 - Java 11
 - jq
 
 ##### Setup
 
 - Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
-For ClamAV, macOS users can do the following:
-*(Note: The following steps are unnecessary as clamav is disabled.)*
-- ~~`brew install clamav`~~
-- ~~`cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`~~
-- ~~`sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)~~
 - Installing `jq`
   - `brew install jq` for macOS users or visit https://stedolan.github.io/jq/download/
 

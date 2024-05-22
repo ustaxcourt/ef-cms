@@ -3,8 +3,9 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { signUp } from '@web-api/gateways/user/signUp';
 
 describe('signUp', () => {
-  it('should make a call to disable the user with the provided email', async () => {
-    const mockEmail = 'test@example.com';
+  it('should make a call to sign up the user with the provided email, lowercased', async () => {
+    const mockEmail = 'teST@EXAMPLE.com';
+    const mockLowerCasedEmail = mockEmail.toLowerCase();
     const mockName = 'Test Petitioner';
     const mockPassword = 'P@ssword!';
     const mockRole = ROLES.petitioner;
@@ -27,14 +28,14 @@ describe('signUp', () => {
       UserAttributes: [
         {
           Name: 'email',
-          Value: mockEmail,
+          Value: mockLowerCasedEmail,
         },
         {
           Name: 'name',
           Value: mockName,
         },
       ],
-      Username: mockEmail,
+      Username: mockLowerCasedEmail,
     });
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes.mock
@@ -50,7 +51,7 @@ describe('signUp', () => {
           Value: ROLES.petitioner,
         },
       ],
-      Username: mockEmail,
+      Username: mockLowerCasedEmail,
     });
   });
 });

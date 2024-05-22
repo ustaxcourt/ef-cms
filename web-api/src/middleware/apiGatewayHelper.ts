@@ -181,7 +181,7 @@ export const getUserFromAuthHeader = event => {
   if (decoded) {
     decoded.token = token;
     decoded.role = decoded['custom:role'];
-    decoded.userId = decoded['custom:userId'] || decoded.sub;
+    decoded.userId = decoded['custom:userId'];
     decoded.name = decoded.name || decoded['custom:name']; // custom:name only exists locally. This is a workaround for cognito-local.
     return decoded;
   } else {

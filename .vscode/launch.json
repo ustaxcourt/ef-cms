@@ -43,7 +43,6 @@
         "STAGE": "local",
         "CI": "false",
         "NO_SCANNER": "true",
-        "SKIP_VIRUS_SCAN": "true",
         "AWS_ACCESS_KEY_ID": "S3RVER",
         "AWS_SECRET_ACCESS_KEY": "S3RVER",
         "FILE_UPLOAD_MODAL_TIMEOUT": "1"

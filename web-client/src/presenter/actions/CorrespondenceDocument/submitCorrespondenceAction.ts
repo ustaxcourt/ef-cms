@@ -33,12 +33,6 @@ export const submitCorrespondenceAction = async ({
 
   await applicationContext
     .getUseCases()
-    .getStatusOfVirusScanInteractor(applicationContext, {
-      key: correspondenceId,
-    });
-
-  await applicationContext
-    .getUseCases()
     .validatePdfInteractor(applicationContext, {
       key: correspondenceId,
     });

@@ -25,4 +25,4 @@ export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
 export TF_VAR_source_table=$SOURCE_TABLE
 
-../../../../shared/terraform/bin/init.sh reindex-cron --build-lambda
+../../../../shared/terraform/bin/init.sh reindex-cron

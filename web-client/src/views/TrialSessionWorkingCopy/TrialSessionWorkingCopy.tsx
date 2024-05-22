@@ -1,8 +1,7 @@
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
 import { AddEditUserCaseNoteModal } from './AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
-import { DeleteUserCaseNoteConfirmModal } from './DeleteUserCaseNoteConfirmModal';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionAssignments } from './SessionAssignments';
@@ -19,20 +18,31 @@ export const TrialSessionWorkingCopy = connect(
   {
     batchDownloadTrialSessionSequence:
       sequences.batchDownloadTrialSessionSequence,
+    clearModalSequence: sequences.clearModalSequence,
+    deleteUserCaseNoteFromWorkingCopySequence:
+      sequences.deleteUserCaseNoteFromWorkingCopySequence,
+    deleteWorkingCopySessionNoteSequence:
+      sequences.deleteWorkingCopySessionNoteSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openPrintableTrialSessionWorkingCopyModalSequence:
       sequences.openPrintableTrialSessionWorkingCopyModalSequence,
     showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
+    updateUserCaseNoteOnWorkingCopySequence:
+      sequences.updateUserCaseNoteOnWorkingCopySequence,
   },
   function TrialSessionWorkingCopy({
     batchDownloadTrialSessionSequence,
+    clearModalSequence,
+    deleteUserCaseNoteFromWorkingCopySequence,
+    deleteWorkingCopySessionNoteSequence,
     formattedTrialSessionDetails,
     openPrintableTrialSessionWorkingCopyModalSequence,
     showModal,
     trialSessionHeaderHelper,
     trialSessionWorkingCopyHelper,
+    updateUserCaseNoteOnWorkingCopySequence,
   }) {
     return (
       <>
@@ -102,13 +112,35 @@ export const TrialSessionWorkingCopy = connect(
 
           <WorkingCopySessionList />
           {showModal === 'DeleteUserCaseNoteConfirmModal' && (
-            <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteUserCaseNoteFromWorkingCopySequence" />
+            <ConfirmModal
+              noCloseBtn
+              cancelLabel="No, Cancel"
+              confirmLabel="Yes, Delete"
+              preventCancelOnBlur={true}
+              title="Are You Sure You Want to Delete This Note?"
+              onCancelSequence={clearModalSequence}
+              onConfirmSequence={deleteUserCaseNoteFromWorkingCopySequence}
+            >
+              <p>This action cannot be undone.</p>
+            </ConfirmModal>
           )}
           {showModal === 'DeleteSessionNoteConfirmModal' && (
-            <DeleteSessionNoteConfirmModal />
+            <ConfirmModal
+              noCloseBtn
+              cancelLabel="No, Cancel"
+              confirmLabel="Yes, Delete"
+              preventCancelOnBlur={true}
+              title="Are You Sure You Want to Delete This Note?"
+              onCancelSequence={clearModalSequence}
+              onConfirmSequence={deleteWorkingCopySessionNoteSequence}
+            >
+              <p>This action cannot be undone.</p>
+            </ConfirmModal>
           )}
           {showModal === 'AddEditUserCaseNoteModal' && (
-            <AddEditUserCaseNoteModal onConfirmSequence="updateUserCaseNoteOnWorkingCopySequence" />
+            <AddEditUserCaseNoteModal
+              onConfirmSequence={updateUserCaseNoteOnWorkingCopySequence}
+            />
           )}
           {showModal === 'AddEditSessionNoteModal' && (
             <AddEditSessionNoteModal />

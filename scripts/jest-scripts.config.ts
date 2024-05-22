@@ -10,6 +10,7 @@ const config: Config = {
     '!checkUntouchedFiles.ts',
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
+    '!circleci/judge/bulkImportJudgeUsers.helpers.ts',
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',

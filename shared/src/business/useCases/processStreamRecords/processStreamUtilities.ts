@@ -1,5 +1,5 @@
 import { partition } from 'lodash';
-import type { DynamoDBRecord } from 'aws-lambda';
+import type { AttributeValue, DynamoDBRecord, StreamRecord } from 'aws-lambda';
 
 const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
 const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
@@ -173,3 +173,15 @@ export const shouldProcessRecord = ({
     approximateCreationDateTime >= deploymentTimestamp
   );
 };
+
+export interface AttributeValueWithName extends AttributeValue {
+  name?: string | undefined;
+}
+
+interface IStreamRecord extends StreamRecord {
+  NewImage?: { [key: string]: AttributeValueWithName } | undefined;
+}
+
+export interface IDynamoDBRecord extends DynamoDBRecord {
+  dynamodb?: IStreamRecord | undefined;
+}
