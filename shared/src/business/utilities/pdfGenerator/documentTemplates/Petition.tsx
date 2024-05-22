@@ -13,7 +13,6 @@ export const Petition = ({
   caseTitle,
   contactPrimary,
   contactSecondary,
-  date,
   noticeIssuedDate,
   partyType,
   petitionFacts,
@@ -25,7 +24,6 @@ export const Petition = ({
   caseCaptionExtension: string;
   caseDescription: string;
   caseTitle: string;
-  date: string;
   procedureType: string;
   taxYear: string;
   noticeIssuedDate: string;
@@ -33,10 +31,10 @@ export const Petition = ({
   petitionFacts: string[];
   preferredTrialCity: string;
   petitionReasons: string[];
-  contactPrimary: object;
-  contactSecondary?: object;
+  contactPrimary: { [key: string]: string };
+  contactSecondary?: { [key: string]: string };
 }) => {
-  console.log('date', date);
+  const BUSINESS_TYPE_VALUES: string[] = Object.values(BUSINESS_TYPES);
   return (
     <div id="petition-pdf">
       <PetitionPrimaryHeader />
@@ -98,7 +96,7 @@ export const Petition = ({
               Statement of Taxpayer Identification Number (Form 4)(see PRIVACY
               NOTICE below)
             </li>
-            {Object.values(BUSINESS_TYPES).includes(partyType) && (
+            {BUSINESS_TYPE_VALUES.includes(partyType) && (
               <li>Corporate Disclosure Statement</li>
             )}
           </ol>
@@ -120,7 +118,7 @@ export const Petition = ({
           <div className="address-label petitioner-info">
             <b>Petitioner&apos;s contact information:</b>
             <div>{contactPrimary.name}</div>
-            {Object.values(BUSINESS_TYPES).includes(partyType) &&
+            {BUSINESS_TYPE_VALUES.includes(partyType) &&
               contactPrimary.secondaryName && (
                 <div>
                   {partyType === PARTY_TYPES.corporation && <b>C/O: </b>}
@@ -136,7 +134,7 @@ export const Petition = ({
             </div>
             <div>{contactPrimary.phone}</div>
             <div>
-              {Object.values(BUSINESS_TYPES).includes(partyType) ? (
+              {BUSINESS_TYPE_VALUES.includes(partyType) ? (
                 <b>Place of business: </b>
               ) : (
                 <b>Place of legal residence: </b>
