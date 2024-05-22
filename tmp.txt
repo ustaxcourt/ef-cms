@@ -1,6 +1,6 @@
 ::: Ideas :::
 
-- Investigate New State File
+- Do blue and green
 
 
 ::: Documentation :::
@@ -13,3 +13,5 @@
 6. Run `npm run move:allColors <ENV>`.
 
 
+::: DOD :::
+- Fix warnings that have to do with deprecated resource blocks in terraform.
