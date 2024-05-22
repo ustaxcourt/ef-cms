@@ -72,3 +72,9 @@ variable "dynamsoft_url" {
 variable "dynamsoft_product_keys" {
   type = string
 }
+
+variable "viewer_protocol_policy" {
+  type    = string
+  default = "redirect-to-https"
+}
+

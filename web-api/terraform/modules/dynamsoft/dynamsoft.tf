@@ -19,7 +19,7 @@ resource "aws_instance" "dynamsoft" {
 }
 
 data "template_file" "setup_dynamsoft" {
-  template = file("setup_dynamsoft.sh")
+  template = file("${path.module}/setup_dynamsoft.sh")
 
   vars = {
     dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path

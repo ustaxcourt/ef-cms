@@ -56,7 +56,7 @@ resource "aws_cloudfront_distribution" "public_distribution_www" {
   enabled = true
 
   default_cache_behavior {
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = var.viewer_protocol_policy
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
@@ -84,13 +84,8 @@ resource "aws_cloudfront_distribution" "public_distribution_www" {
     }
   }
 
-
-  depends_on = [
-    module.ui-public-certificate
-  ]
-
   viewer_certificate {
-    acm_certificate_arn = module.ui-public-certificate.acm_certificate_arn
+    acm_certificate_arn = var.public_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }

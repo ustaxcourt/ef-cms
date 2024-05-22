@@ -54,6 +54,6 @@ fi
 
 echo 5555555
 
-# terraform state push ./documents-${ENV}.tfstate
-# echo 6666666
+terraform state push "./documents-${ENV}.tfstate"
+echo 6666666
 
