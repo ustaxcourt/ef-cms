@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
@@ -641,6 +642,7 @@ export const baseState = {
   docketRecordIndex: 0,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
+  featureFlags: {} as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,
@@ -733,7 +735,9 @@ export const baseState = {
     corporateDisclosureFile: undefined,
     corporateDisclosureFileUrl: undefined,
     irsNoticeFileUrl: undefined,
-    irsNotices: undefined,
+    irsNotices: undefined as
+      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
+      | undefined,
     noticeIssuedDate: undefined,
     partyType: undefined,
     petitionFacts: undefined,
@@ -803,7 +807,7 @@ export const baseState = {
     selectedFilingOption?: string;
   },
   user: null as any,
-  userContactEditProgress: {},
+  userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
