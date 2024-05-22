@@ -23,6 +23,7 @@ import classNames from 'classnames';
 export const PetitionQcScanBatchPreviewer = connect(
   {
     constants: state.constants,
+    deleteUploadedPdfSequence: sequences.deleteUploadedPdfSequence,
     generatePdfFromScanSessionSequence:
       sequences.generatePdfFromScanSessionSequence,
     openChangeScannerSourceModalSequence:
@@ -52,6 +53,7 @@ export const PetitionQcScanBatchPreviewer = connect(
   },
   function PetitionQcScanBatchPreviewer({
     constants,
+    deleteUploadedPdfSequence,
     documentTabs,
     documentType,
     generatePdfFromScanSessionSequence,
@@ -290,7 +292,7 @@ export const PetitionQcScanBatchPreviewer = connect(
           )}
           {showModal === 'ConfirmDeletePDFModal' && (
             <ConfirmDeletePDFModal
-              confirmSequence="deleteUploadedPdfSequence"
+              confirmSequence={deleteUploadedPdfSequence}
               confirmText="Yes, Remove"
               modalContent="The current PDF will be permanently removed, and you will need to add a new PDF."
               title="Are You Sure You Want to Remove this PDF?"
