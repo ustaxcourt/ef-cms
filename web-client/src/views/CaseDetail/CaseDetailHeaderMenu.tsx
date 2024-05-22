@@ -27,6 +27,7 @@ export const CaseDetailHeaderMenu = connect(
     addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
+    createMessageSequence: sequences.createMessageSequence,
     menuHelper: state.menuHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     openAddEditCaseNoteModalSequence:
@@ -41,6 +42,7 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
+    updateCaseNoteSequence: sequences.updateCaseNoteSequence,
     validateAddToTrialSessionSequence:
       sequences.validateAddToTrialSessionSequence,
   },
@@ -49,6 +51,7 @@ export const CaseDetailHeaderMenu = connect(
     addToTrialSessionModalHelper,
     caseDetail,
     caseDetailHeaderHelper,
+    createMessageSequence,
     menuHelper,
     navigateToPathSequence,
     openAddEditCaseNoteModalSequence,
@@ -59,6 +62,7 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence,
     showModal,
     toggleMenuSequence,
+    updateCaseNoteSequence,
     validateAddToTrialSessionSequence,
   }) {
     const menuRef = useRef(null);
@@ -290,7 +294,7 @@ export const CaseDetailHeaderMenu = connect(
           <DeleteCaseDeadlineModalDialog />
         )}
         {showModal === 'AddEditCaseNoteModal' && (
-          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
+          <AddEditCaseNoteModal onConfirmSequence={updateCaseNoteSequence} />
         )}
         {showModal === 'AddEditCalendarNoteModal' && (
           <AddEditCalendarNoteModal />
@@ -315,7 +319,9 @@ export const CaseDetailHeaderMenu = connect(
           <CreateOrderChooseTypeModal />
         )}
         {showModal === 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
-        {showModal === 'CreateMessageModal' && <CreateMessageModalDialog />}
+        {showModal === 'CreateMessageModal' && (
+          <CreateMessageModalDialog onConfirmSequence={createMessageSequence} />
+        )}
       </div>
     );
   },

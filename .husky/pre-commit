@@ -3,4 +3,3 @@
 
 npx lint-staged
 circleci config validate
-./check-auto-approve.sh

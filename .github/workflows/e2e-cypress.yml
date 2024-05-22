@@ -10,9 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [2]
-        ci_node_index: [0, 1]
-
+        ci_node_total: [4]
+        ci_node_index: [0, 1, 2, 3]
     env:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
@@ -28,7 +27,7 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v3.0.0
+        uses: rrainn/dynamodb-action@v4.0.0
         with:
           port: 8000
           cors: '*'
@@ -46,17 +45,9 @@ jobs:
           sleep 5
           export TESTFILES=$(npx ts-node split-tests-cypress.ts)
           npm run cypress:integration:file $TESTFILES
-      - name: Move Videos
+      - name: Store Cypress Videos
         if: always()
-        run: |
-          mkdir -p cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
-          cp cypress/cypress-integration/videos/* cypress/cypress-integration/videos-${{ matrix.ci_node_index }}/
-          ls cypress/cypress-integration/
-          ls cypress/cypress-integration/videos/
-          ls cypress/cypress-integration/videos-${{ matrix.ci_node_index }}
-      - name: Store Cypress Failure Videos
-        if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos-${{ matrix.ci_node_index }}
-          path: ${{ github.workspace }}/cypress/cypress-integration/videos-${{ matrix.ci_node_index }}
+          path: ${{ github.workspace }}/cypress/local-only/videos

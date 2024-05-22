@@ -51,7 +51,7 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v3.0.0
+        uses: rrainn/dynamodb-action@v4.0.0
         with:
           port: 8000
           cors: '*'
@@ -67,19 +67,19 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          npm run cypress:integration:file cypress/cypress-integration/integration/start-a-case-practitioner.cy.ts
+          npm run cypress:integration:file cypress/local-only/integration/start-a-case-practitioner.cy.ts
       - name: Store Cypress Failure Videos
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
-          path: ${{ github.workspace }}/cypress/cypress-integration/videos
+          path: ${{ github.workspace }}/cypress/local-only/videos
 ```
 
 The critical line in the above workflow is
 
 ```
-npm run cypress:integration:file cypress/cypress-integration/integration/start-a-case-practitioner.cy.ts
+npm run cypress:integration:file cypress/local-only/integration/start-a-case-practitioner.cy.ts
 ```
 
 This runs only the specified Cypress Integration test in isolation. Simply create a workflow in the `.github/workflows/` directory to ensure this test is run every time you push your branch. And be sure to remove this file when you are ready to submit a PR to the `staging` branch. 
