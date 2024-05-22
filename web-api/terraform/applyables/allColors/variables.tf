@@ -72,8 +72,3 @@ variable "dynamsoft_url" {
 variable "dynamsoft_product_keys" {
   type = string
 }
-
-variable "statuspage_dns_record" {
-  type    = string
-  default = ""
-}

@@ -111,10 +111,3 @@ module "ui-healthcheck" {
   alarm_name = "app.${var.dns_domain} is accessible over HTTPS"
   dns_domain = "app.${var.dns_domain}"
 }
-
-module "status-page" {
-  source                = "../../modules/status-page"
-  dns_domain            = var.dns_domain
-  count                 = var.statuspage_dns_record == "" ? 0 : 1
-  statuspage_dns_record = var.statuspage_dns_record
-}

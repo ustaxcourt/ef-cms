@@ -133,7 +133,7 @@ resource "aws_acm_certificate_validation" "dns_validation_west" { # DONE, AllCol
   provider                = aws.us-west-1
 }
 
-resource "aws_route53_record" "statuspage" { # Done, AllColors
+resource "aws_route53_record" "statuspage" { # 10345 Deleted as it was not in use
   count   = var.statuspage_dns_record != "" ? 1 : 0
   name    = "status.${var.dns_domain}"
   type    = "CNAME"

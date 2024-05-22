@@ -44,12 +44,6 @@ if [ "$IS_DYNAMSOFT_ENABLED" == "1" ]; then
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_west_www module.dynamsoft_us_west.aws_route53_record.record_www
 fi
 
-
-if [ "$STATUSPAGE_DNS_RECORD" != "" ]; then
-  echo STATUSPAGE_DNS_RECORD RUNNING
-  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.statuspage[0] module.status-page[0].aws_route53_record.statuspage
-fi
-
 if [ "$ENABLE_HEALTH_CHECKS" == "1" ]; then
   echo ENABLE_HEALTH_CHECKS RUNNING
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_cloudwatch_metric_alarm.public_ui_health_check[0] module.public-ui-healthcheck[0].aws_cloudwatch_metric_alarm.ui_health_check
