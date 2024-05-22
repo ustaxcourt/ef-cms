@@ -144,11 +144,6 @@ jobs:
               npm run deploy:green $ENV
             fi
       - run:
-          no_output_timeout: 20m
-          name: 'Deploy - Web Client - Terraform'
-          command: |
-            npm run deploy:ui $ENV
-      - run:
           name: Setup Elasticsearch Index Settings
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV

@@ -1,17 +1,28 @@
 ::: Ideas :::
 
-- Do blue and green
-
+- Review PR
+- Finish DoD
 
 ::: Documentation :::
 
-1. Goto terraform deploy bucket - ustc-case-mgmt.flexion.us.terraform.deploys
-2. Download the state files for the environment you are deploying to (ui-<ENV>.tfstate, documents-<ENV>-blue.tfstate, documents-<ENV>-green.tfstate, documents-<ENV>.tfstate).
-3. Use the environment switcher to point to the environment you want to deploy to.
-4. Navigate to web-client/terraform/main and delete the .terraform folder and the .terraform.hcl.lock file.
-5. Navigate to web-api/terraform/applyables/allColors and delete the .terraform folder and the .terraform.hcl.lock file.
-6. Run `npm run move:allColors <ENV>`.
-
+- Go to terraform deploy bucket - ustc-case-mgmt.flexion.us.terraform.deploys
+- Download the state files for the environment you are deploying to (ui-<ENV>.tfstate, documents-<ENV>-blue.tfstate, documents-<ENV>-green.tfstate, documents-<ENV>.tfstate).
+- Use the environment switcher to point to the environment you want to deploy to.
+- Navigate to web-client/terraform/main and delete the .terraform folder and the .terraform.hcl.lock file.
+- Navigate to web-api/terraform/applyables/allColors and delete the .terraform folder and the .terraform.hcl.lock file.
+- Run `npm run move:allColors <ENV>`.
+- Navigate to web-client/terraform/main and delete the .terraform folder and the .terraform.hcl.lock file.
+- Navigate to web-api/terraform/applyables/blue and delete the .terraform folder and the .terraform.hcl.lock file.
+- Run `npm run move:blue <ENV>`.
+- Navigate to web-client/terraform/main and delete the .terraform folder and the .terraform.hcl.lock file.
+- Navigate to web-api/terraform/applyables/green and delete the .terraform folder and the .terraform.hcl.lock file.
+- Run `npm run move:green <ENV>`.
+- Deploy as normal (This deploy will take 24 hours because new colored edge lambdas are being deployed)
 
 ::: DOD :::
+
 - Fix warnings that have to do with deprecated resource blocks in terraform.
+
+::: After ticket :::
+
+- Create PR with deleted files with DNM
