@@ -13,17 +13,12 @@ export const getJudgesCaseNoteForCaseAction = async ({
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  let userNote;
-
-  try {
-    userNote = await applicationContext
-      .getUseCases()
-      .getUserCaseNoteInteractor(applicationContext, {
-        docketNumber,
-      });
-  } catch (err) {
-    userNote = {};
-  }
+  const userNote = await applicationContext
+    .getUseCases()
+    .getUserCaseNoteInteractor(applicationContext, {
+      docketNumber,
+    })
+    .catch(() => ({}));
 
   return { userNote };
 };
