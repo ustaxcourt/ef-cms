@@ -55,6 +55,7 @@ module "ui-public-certificate" {
   description               = "Certificate for public facing ${var.dns_domain}"
   product_domain            = "EFCMS"
 }
+
 module "ui-public-www-redirect" {
   source                 = "../../modules/ui-public-www-redirect"
   dns_domain             = var.dns_domain
