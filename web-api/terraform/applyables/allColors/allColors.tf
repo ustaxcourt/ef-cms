@@ -56,10 +56,12 @@ module "ui-public-certificate" {
   product_domain            = "EFCMS"
 }
 module "ui-public-www-redirect" {
-  source      = "../../modules/ui-public-www-redirect"
-  dns_domain  = var.dns_domain
-  environment = var.environment
-  zone_name   = var.zone_name
+  source                 = "../../modules/ui-public-www-redirect"
+  dns_domain             = var.dns_domain
+  environment            = var.environment
+  zone_name              = var.zone_name
+  public_certificate_arn = module.ui-public-certificate.acm_certificate_arn
+  viewer_protocol_policy = var.viewer_protocol_policy
 }
 
 module "dynamsoft_us_east" {

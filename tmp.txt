@@ -1,6 +1,5 @@
 ::: Ideas :::
 
-- Investigate Status Page (context heavy)
 - Investigate New State File
 
 
