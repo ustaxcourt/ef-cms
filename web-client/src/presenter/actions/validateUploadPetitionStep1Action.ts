@@ -10,11 +10,11 @@ export const validateUploadPetitionStep1Action = ({
 
   // move this logic to entity?
   step1Data.petitionReasons = (arr => (arr.length > 0 ? arr : ['']))(
-    step1Data.petitionReasons.filter(r => r.length > 1),
+    step1Data.petitionReasons.filter(r => r.length >= 1),
   );
 
   step1Data.petitionFacts = (arr => (arr.length > 0 ? arr : ['']))(
-    step1Data.petitionFacts.filter(r => r.length > 1),
+    step1Data.petitionFacts.filter(r => r.length >= 1),
   );
 
   store.set(state.form.petitionReasons, step1Data.petitionReasons);
@@ -23,7 +23,7 @@ export const validateUploadPetitionStep1Action = ({
   let errors = new UploadPetitionStep1(
     step1Data,
   ).getFormattedValidationErrors();
-
+  console.log('errors', errors);
   if (errors) {
     return path.error({
       errors,
