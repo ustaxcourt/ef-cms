@@ -133,7 +133,7 @@ resource "aws_acm_certificate_validation" "dns_validation_west" { # DONE, AllCol
   provider                = aws.us-west-1
 }
 
-resource "aws_route53_record" "statuspage" { # 10345: check prod state file to confirm not being used
+resource "aws_route53_record" "statuspage" { # Done, AllColors
   count   = var.statuspage_dns_record != "" ? 1 : 0
   name    = "status.${var.dns_domain}"
   type    = "CNAME"

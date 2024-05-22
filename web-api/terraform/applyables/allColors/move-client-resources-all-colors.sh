@@ -39,13 +39,19 @@ terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfsta
 terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_acm_certificate_validation.dns_validation_west module.dynamsoft_us_west.aws_acm_certificate_validation.dns_validation
 
 if [ "$IS_DYNAMSOFT_ENABLED" == "1" ]; then
-  echo  IS_DYNAMSOFT_ENABLED RUNNING
+  echo IS_DYNAMSOFT_ENABLED RUNNING
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_east_www module.dynamsoft_us_east.aws_route53_record.record_www
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.record_west_www module.dynamsoft_us_west.aws_route53_record.record_www
 fi
 
+
+if [ "$STATUSPAGE_DNS_RECORD" != "" ]; then
+  echo STATUSPAGE_DNS_RECORD RUNNING
+  terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_record.statuspage[0] module.status-page[0].aws_route53_record.statuspage
+fi
+
 if [ "$ENABLE_HEALTH_CHECKS" == "1" ]; then
-  echo  ENABLE_HEALTH_CHECKS RUNNING
+  echo ENABLE_HEALTH_CHECKS RUNNING
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_cloudwatch_metric_alarm.public_ui_health_check[0] module.public-ui-healthcheck[0].aws_cloudwatch_metric_alarm.ui_health_check
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_route53_health_check.public_ui_health_check[0] module.public-ui-healthcheck[0].aws_route53_health_check.ui_health_check
   terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfstate" -state-out="documents-${ENV}.tfstate" aws_cloudwatch_metric_alarm.ui_health_check[0] module.ui-healthcheck[0].aws_cloudwatch_metric_alarm.ui_health_check
