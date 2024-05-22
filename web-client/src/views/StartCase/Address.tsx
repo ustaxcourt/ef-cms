@@ -12,6 +12,7 @@ export const Address = connect(
   {
     data: state[props.bind],
     onBlurSequence: sequences[props.onBlur],
+    registerRef: props.registerRef,
     type: props.type,
     updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
     updateFormValueSequence: sequences[props.onChange],
@@ -22,6 +23,7 @@ export const Address = connect(
   function Address({
     data,
     onBlurSequence,
+    registerRef,
     type,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
@@ -42,6 +44,7 @@ export const Address = connect(
             <StateSelect
               useFullStateName
               data={data}
+              refProp={registerRef && registerRef(`${type}.state`)}
               type={type}
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
@@ -96,6 +99,7 @@ export const Address = connect(
      * @returns {function} NonMobileCityAndState template
      */
     function NonMobileCityAndState() {
+      console.log('registerRef', registerRef);
       return (
         <NonMobile>
           {/* we do not use <FormGroup> here because of how custom the error text is displayed */}
@@ -116,6 +120,7 @@ export const Address = connect(
                   useFullStateName
                   className="max-width-180"
                   data={data}
+                  refProp={registerRef && registerRef(`${type}.state`)}
                   type={type}
                   updateFormValueSequence={updateFormValueSequence}
                   usStates={usStates}
@@ -154,6 +159,7 @@ export const Address = connect(
                   data-testid={`${type}.postalCode`}
                   id={`${type}.postalCode`}
                   name={`${type}.postalCode`}
+                  ref={registerRef && registerRef(`${type}.postalCode`)}
                   type="text"
                   value={data[type].postalCode || ''}
                   onBlur={() => {
@@ -174,7 +180,6 @@ export const Address = connect(
         </NonMobile>
       );
     }
-
     return (
       <div className="address-info">
         <FormGroup errorText={validationErrors?.[type]?.address1}>
@@ -187,6 +192,7 @@ export const Address = connect(
             data-testid={`${type}.address1`}
             id={`${type}.address1`}
             name={`${type}.address1`}
+            ref={registerRef && registerRef(`${type}.address1`)}
             type="text"
             value={data[type].address1 || ''}
             onBlur={() => {
@@ -260,6 +266,7 @@ export const Address = connect(
             data-testid={`${type}.city`}
             id={`${type}.city`}
             name={`${type}.city`}
+            ref={registerRef && registerRef(`${type}.city`)}
             type="text"
             value={data[type].city || ''}
             onBlur={() => {
@@ -282,5 +289,3 @@ export const Address = connect(
     );
   },
 );
-
-Address.displayName = 'Address';

@@ -6,6 +6,7 @@ export const StateSelect = ({
   data,
   onBlurSequence,
   onChangeValidationSequence,
+  refProp,
   type,
   updateFormValueSequence,
   useFullStateName,
@@ -18,6 +19,7 @@ export const StateSelect = ({
       data-testid={`${type}.state`}
       id={`${type}.state`}
       name={`${type}.state`}
+      ref={refProp || undefined}
       value={data[type].state || ''}
       onBlur={() => onBlurSequence && onBlurSequence()}
       onChange={e => {
