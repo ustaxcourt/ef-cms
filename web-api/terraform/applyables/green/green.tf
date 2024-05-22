@@ -199,3 +199,19 @@ module "worker-west-green" {
   }
   environment = var.environment
 }
+
+module "ui-green" {
+  source                 = "../../modules/ui"
+  current_color          = "green"
+  environment            = var.environment
+  dns_domain             = var.dns_domain
+  cloudfront_max_ttl     = "31536000"
+  cloudfront_default_ttl = "86400"
+  zone_name              = var.zone_name
+  viewer_protocol_policy = var.viewer_protocol_policy
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}

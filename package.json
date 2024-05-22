@@ -131,6 +131,7 @@
     "deploy:allColors": "cd web-api/terraform/applyables/allColors && ../../bin/deploy-app-all-colors.sh",
     "move:allColors": "cd web-api/terraform/applyables/allColors && ./move-client-resources-all-colors.sh",
     "move:blue": "cd web-api/terraform/applyables/blue && ./move-client-resources-blue.sh",
+    "move:green": "cd web-api/terraform/applyables/green && ./move-client-resources-green.sh",
     "deploy:blue": "cd web-api/terraform/applyables/blue && COLOR=blue ../../bin/deploy-app-color.sh",
     "deploy:green": "cd web-api/terraform/applyables/green && COLOR=green ../../bin/deploy-app-color.sh",
     "deploy:ci-image": "./docker-to-ecr.sh",
