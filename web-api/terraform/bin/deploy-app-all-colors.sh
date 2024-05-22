@@ -78,11 +78,6 @@ else
   SHOULD_ES_BETA_EXIST=true
 fi
 
-if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
-then
-  export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
-fi
-
 ACTIVE_SES_RULESET=$(../../../../scripts/ses/get-ses-ruleset.sh)
 
 export TF_VAR_environment=$ENV
@@ -103,6 +98,11 @@ export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
 export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
 export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
+
+if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
+then
+  export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
+fi
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
