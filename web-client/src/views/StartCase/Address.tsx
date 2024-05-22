@@ -99,7 +99,6 @@ export const Address = connect(
      * @returns {function} NonMobileCityAndState template
      */
     function NonMobileCityAndState() {
-      console.log('registerRef', registerRef);
       return (
         <NonMobile>
           {/* we do not use <FormGroup> here because of how custom the error text is displayed */}
