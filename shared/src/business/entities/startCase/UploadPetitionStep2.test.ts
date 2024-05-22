@@ -1,6 +1,7 @@
 import {
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
+  PARTY_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { UploadPetitionStep2 } from '@shared/business/entities/startCase/UploadPetitionStep2';
@@ -18,6 +19,19 @@ describe('UploadPetitionStep2', () => {
 
     const errors = entity.getFormattedValidationErrors();
     expect(errors).toEqual(null);
+  });
+
+  it('should set "contactPrimary" and "contactSecondary" to correct entity', () => {
+    const entity = new UploadPetitionStep2({
+      ...VALID_ENTITY,
+      contactPrimary: {},
+      contactSecondary: {},
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+    });
+
+    expect(entity).toBeDefined();
+    expect(entity.contactPrimary).toBeDefined();
+    expect(entity.contactSecondary).toBeDefined();
   });
 
   describe('VALIDATION', () => {
@@ -146,6 +160,38 @@ describe('UploadPetitionStep2', () => {
           corporateDisclosureFileSize:
             'Your Corporate Disclosure Statement file size is empty',
         });
+      });
+    });
+
+    describe('MODIFICATIONS', () => {
+      it('should clear the partyType error message but keep contactPrimary error message if partyType is undefined and filingType is "Myself and my spouse"', () => {
+        const entity = new UploadPetitionStep2({
+          ...VALID_ENTITY,
+          contactPrimary: {},
+          filingType: 'Myself and my spouse',
+          partyType: undefined,
+        });
+
+        expect(entity).toBeDefined();
+
+        const errors = entity.getFormattedValidationErrors()!;
+        expect(errors.contactPrimary).toBeDefined();
+        expect(errors.partyType).not.toBeDefined();
+      });
+
+      it('should clear the partyType and contactPrimary error message if partyType is undefined and filingType is not "Myself and my spouse"', () => {
+        const entity = new UploadPetitionStep2({
+          ...VALID_ENTITY,
+          contactPrimary: {},
+          filingType: 'SOMETHING ELSE',
+          partyType: undefined,
+        });
+
+        expect(entity).toBeDefined();
+
+        const errors = entity.getFormattedValidationErrors()!;
+        expect(errors.contactPrimary).not.toBeDefined();
+        expect(errors.partyType).not.toBeDefined();
       });
     });
   });
