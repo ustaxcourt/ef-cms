@@ -113,6 +113,17 @@
   ],
   "Appearance and Representation": [
     {
+      "documentTitle": "Entry of Appearance",
+      "documentType": "Entry of Appearance",
+      "category": "Appearance and Representation",
+      "eventCode": "EA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Designation of Counsel [Name] to Receive Service",
       "documentType": "Designation of Counsel to Receive Service",
       "category": "Appearance and Representation",
