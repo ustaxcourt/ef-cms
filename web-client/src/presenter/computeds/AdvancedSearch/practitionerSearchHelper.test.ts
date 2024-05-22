@@ -44,7 +44,7 @@ describe('practitionerSearchHelper', () => {
   };
 
   const defaultResult = {
-    activePage: undefined,
+    activePage: 0,
     formattedSearchResults: [],
     numberOfResults: '0',
     pageCount: 0,
