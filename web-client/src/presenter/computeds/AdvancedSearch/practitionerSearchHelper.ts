@@ -1,11 +1,10 @@
+import { ClientApplicationContext } from '../../../applicationContext';
+import { Get } from 'cerebral';
 import {
-  COUNTRY_TYPES,
   PRACTITIONER_SEARCH_PAGE_SIZE,
   US_STATES,
   US_STATES_OTHER,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ClientApplicationContext } from '../../../applicationContext';
-import { Get } from 'cerebral';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -24,26 +23,20 @@ export type FormattedPractitionerSearchResultType = {
 };
 
 type PractitionerSearchHelperResult = {
-  showNoMatches?: boolean;
-  showSearchResults?: boolean;
-  showStateSelect?: boolean;
-  activePage?: number;
-  formattedSearchResults?: FormattedPractitionerSearchResultType[];
-  numberOfResults?: string;
-  pageCount?: number;
-  pageSize?: number;
-  showPaginator?: boolean;
-  showPractitionerSearch?: boolean;
+  showNoMatches: boolean;
+  showSearchResults: boolean;
+  activePage: number;
+  formattedSearchResults: FormattedPractitionerSearchResultType[];
+  numberOfResults: string;
+  pageCount: number;
+  pageSize: number;
+  showPaginator: boolean;
 };
 
 export const practitionerSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): PractitionerSearchHelperResult => {
-  const permissions = get(state.permissions);
-  const countryType: string = get(
-    state.advancedSearchForm.caseSearchByName.countryType,
-  );
   const searchResults = get(state.searchResults['practitioner']);
   const activePage: number = get(
     state.advancedSearchForm.practitionerSearchByName.pageNum,
@@ -51,13 +44,19 @@ export const practitionerSearchHelper = (
 
   let result: PractitionerSearchHelperResult = {
     activePage,
-    showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
-    showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
+    formattedSearchResults: [],
+    numberOfResults: '0',
+    pageCount: 0,
+    pageSize: 0,
+    showNoMatches: false,
+    showPaginator: false,
+    showSearchResults: false,
   };
 
   if (searchResults && !searchResults.total) {
     // search has been run but hasn't returned any results
     return {
+      ...result,
       showNoMatches: true,
       showSearchResults: false,
     };
@@ -84,7 +83,6 @@ export const practitionerSearchHelper = (
       pageSize: PRACTITIONER_SEARCH_PAGE_SIZE,
       showNoMatches: false,
       showPaginator: pageCount > 1,
-      showPractitionerSearch: result.showPractitionerSearch,
       showSearchResults: true,
     };
   }
