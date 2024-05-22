@@ -27,9 +27,9 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   breakClassName="hide"
-                  forcePage={practitionerSearchHelper.activePage || 0}
+                  forcePage={practitionerSearchHelper.activePage}
                   marginPagesDisplayed={0}
-                  pageCount={practitionerSearchHelper.pageCount || 0}
+                  pageCount={practitionerSearchHelper.pageCount}
                   pageRangeDisplayed={0}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
@@ -99,9 +99,9 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   breakClassName="hide"
-                  forcePage={practitionerSearchHelper.activePage || 0}
+                  forcePage={practitionerSearchHelper.activePage}
                   marginPagesDisplayed={0}
-                  pageCount={practitionerSearchHelper.pageCount || 0}
+                  pageCount={practitionerSearchHelper.pageCount}
                   pageRangeDisplayed={0}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
