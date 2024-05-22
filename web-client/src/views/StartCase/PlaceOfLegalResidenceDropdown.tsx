@@ -11,6 +11,7 @@ const props = cerebralProps as unknown as {
   type: string;
   bind: string;
   onChange: string;
+  registerRef: Function;
   placeOfLegalResidenceTitle?: string;
   onBlurSequence: Function;
 };
@@ -20,6 +21,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
     data: state[props.bind],
     onBlurSequence: props.onBlurSequence,
     placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
+    registerRef: props.registerRef,
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
@@ -30,6 +32,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
     data,
     onBlurSequence,
     placeOfLegalResidenceTitle,
+    registerRef,
     type,
     updateFormValueSequence,
     usStates,
@@ -54,6 +57,9 @@ export const PlaceOfLegalResidenceDropdown = connect(
             </label>
             <PlaceOfLegalResidenceSelect
               data={data}
+              refProp={
+                registerRef && registerRef(`${type}.placeOfLegalResidence`)
+              }
               type={type}
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
@@ -78,6 +84,9 @@ export const PlaceOfLegalResidenceDropdown = connect(
             <PlaceOfLegalResidenceSelect
               className="max-width-180"
               data={data}
+              refProp={
+                registerRef && registerRef(`${type}.placeOfLegalResidence`)
+              }
               type={type}
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}

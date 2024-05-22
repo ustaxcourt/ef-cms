@@ -16,6 +16,7 @@ const props = cerebralProps as unknown as {
   onBlur: string;
   onChange: string;
   nameLabel: string;
+  registerRef?: Function;
   displayInCareOf?: boolean;
   showSameAsPrimaryCheckbox?: boolean;
   showPlaceOfLegalResidence?: boolean;
@@ -31,8 +32,8 @@ export const ContactSecondaryUpdated = connect(
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
-
     onChangeSequence: sequences[props.onChange],
+    registerRef: props.registerRef,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
@@ -48,6 +49,7 @@ export const ContactSecondaryUpdated = connect(
     onBlurSequence,
     onChange,
     onChangeSequence,
+    registerRef,
     resetSecondaryAddressSequence,
     showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox,
@@ -78,6 +80,7 @@ export const ContactSecondaryUpdated = connect(
               data-testid="contact-secondary-name"
               id="name"
               name="contactSecondary.name"
+              ref={registerRef && registerRef('contactSecondary.name')}
               type="text"
               value={data.contactSecondary.name || ''}
               onBlur={() => {
@@ -96,6 +99,7 @@ export const ContactSecondaryUpdated = connect(
           {displayInCareOf && (
             <InCareOf
               inCareOf={data.contactSecondary.inCareOf}
+              registerRef={registerRef}
               type="contactSecondary"
               validationErrors={validationErrors}
               onBlurSequence={onBlurSequence}
@@ -112,6 +116,7 @@ export const ContactSecondaryUpdated = connect(
             <>
               <Country
                 bind={bind}
+                registerRef={registerRef}
                 type="contactSecondary"
                 onBlur={onBlurSequence}
                 onChange={onChangeSequence}
@@ -120,6 +125,7 @@ export const ContactSecondaryUpdated = connect(
                 constants.COUNTRY_TYPES.DOMESTIC && (
                 <Address
                   bind={bind}
+                  registerRef={registerRef}
                   type="contactSecondary"
                   onBlur={onBlur}
                   onChange={onChange}
@@ -129,6 +135,7 @@ export const ContactSecondaryUpdated = connect(
                 constants.COUNTRY_TYPES.INTERNATIONAL && (
                 <InternationalAddress
                   bind={bind}
+                  registerRef={registerRef}
                   type="contactSecondary"
                   onBlur={onBlur}
                   onChange={onChange}
@@ -137,6 +144,7 @@ export const ContactSecondaryUpdated = connect(
               {showPlaceOfLegalResidence && (
                 <PlaceOfLegalResidenceDropdown
                   bind={bind}
+                  registerRef={registerRef}
                   type="contactSecondary"
                   onBlurSequence={() => {
                     onBlurSequence({
@@ -167,6 +175,7 @@ export const ContactSecondaryUpdated = connect(
               data-testid="phone"
               id="secondary-phone"
               name="contactSecondary.phone"
+              ref={registerRef && registerRef('contactSecondary.phone')}
               type="tel"
               value={data.contactSecondary.phone || ''}
               onBlur={() => {
@@ -191,12 +200,12 @@ export const ContactSecondaryUpdated = connect(
             <label className="usa-label" htmlFor="email">
               Email address <span className="usa-hint">(Optional)</span>
             </label>
-
             <input
               autoCapitalize="none"
               className="usa-input"
               id="email"
               name="contactSecondary.email"
+              ref={registerRef && registerRef('contactSecondary.email')}
               type="text"
               value={data.contactSecondary.email || ''}
               onBlur={() => {
@@ -268,6 +277,7 @@ export function InCareOf({
   isOptional = false,
   onBlurSequence,
   onChangeSequence,
+  registerRef,
   type,
   validationErrors,
 }) {
@@ -289,6 +299,7 @@ export function InCareOf({
         className="usa-input"
         id="inCareOf"
         name={`${type}.inCareOf`}
+        ref={registerRef && registerRef(`${type}.inCareOf`)}
         type="text"
         value={inCareOf || ''}
         onBlur={() => {

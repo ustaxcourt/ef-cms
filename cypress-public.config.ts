@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress';
 import { setAllowedTerminalIpAddresses } from './cypress/local-only/support/database';
+import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import fs from 'fs';
 import path from 'path';
 
@@ -19,6 +20,9 @@ export default defineConfig({
         },
         setAllowedTerminalIpAddresses(ipAddresses) {
           return setAllowedTerminalIpAddresses(ipAddresses);
+        },
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
       });
     },
