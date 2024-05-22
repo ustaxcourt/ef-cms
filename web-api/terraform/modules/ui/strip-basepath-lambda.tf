@@ -42,8 +42,8 @@ EOF
 }
 
 module "strip_basepath_lambda" {
-  source          = "../../../web-api/terraform/modules/lambda"
-  handler_file    = "./web-client/terraform/common/cloudfront-edge/strip-basepath-lambda.ts"
+  source          = "../lambda"
+  handler_file    = "web-api/src/lambdas/stripBasepath/strip-basepath-lambda.ts"
   handler_method  = "handler"
   lambda_name     = "strip_basepath_lambda_${var.environment}_${var.current_color}"
   role            = aws_iam_role.strip_basepath_lambda_role.arn

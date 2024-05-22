@@ -32,6 +32,6 @@ terraform state mv -state="../../../../web-client/terraform/main/ui-${ENV}.tfsta
 
 echo 5555555
 
-# terraform state push "./documents-${ENV}-blue.tfstate"
+terraform state push "./documents-${ENV}-blue.tfstate"
 echo 6666666
 

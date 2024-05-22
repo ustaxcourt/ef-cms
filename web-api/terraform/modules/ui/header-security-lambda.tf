@@ -46,12 +46,12 @@ EOF
 
 
 module "header_security_lambda" {
-  source         = "../../../web-api/terraform/modules/lambda"
-  handler_file   = "./web-client/terraform/common/cloudfront-edge/header-security-lambda.ts"
-  handler_method = "handler"
-  lambda_name    = "header_security_lambda_${var.environment}_${var.current_color}"
-  role           = aws_iam_role.header_security_lambda_role.arn
-  environment    = {}
-  publish        = true
+  source          = "../lambda"
+  handler_file    = "web-api/src/lambdas/headerSecurity/header-security-lambda.ts"
+  handler_method  = "handler"
+  lambda_name     = "header_security_lambda_${var.environment}_${var.current_color}"
+  role            = aws_iam_role.header_security_lambda_role.arn
+  environment     = {}
+  publish         = true
   use_source_maps = false
 }
