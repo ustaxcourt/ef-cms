@@ -1,0 +1,16 @@
+::: Ideas :::
+
+- Investigate Status Page (context heavy)
+- Investigate New State File
+
+
+::: Documentation :::
+
+1. Goto terraform deploy bucket - ustc-case-mgmt.flexion.us.terraform.deploys
+2. Download the state files for the environment you are deploying to (ui-<ENV>.tfstate, documents-<ENV>-blue.tfstate, documents-<ENV>-green.tfstate, documents-<ENV>.tfstate).
+3. Use the environment switcher to point to the environment you want to deploy to.
+4. Navigate to web-client/terraform/main and delete the .terraform folder and the .terraform.hcl.lock file.
+5. Navigate to web-api/terraform/applyables/allColors and delete the .terraform folder and the .terraform.hcl.lock file.
+6. Run `npm run move:allColors <ENV>`.
+
+
