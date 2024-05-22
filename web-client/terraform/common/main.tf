@@ -41,7 +41,7 @@ module "ui-green" {
   }
 }
 
-module "ui-blue" {
+module "ui-blue" { # Done, blue
   source                 = "../ui"
   current_color          = "blue"
   environment            = var.environment
