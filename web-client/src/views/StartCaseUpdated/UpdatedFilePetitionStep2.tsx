@@ -9,52 +9,9 @@ import { WarningNotificationComponent } from '@web-client/views/WarningNotificat
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect, useRef } from 'react';
+import { useValidationFocus } from '@web-client/views/UseValidationFocus';
+import React from 'react';
 import classNames from 'classnames';
-
-export const useValidationFocus = validationErrors => {
-  const refs = useRef({});
-  const hasFocused = useRef(false);
-
-  useEffect(() => {
-    if (!hasFocused.current && validationErrors) {
-      const elementsToFocus = [];
-
-      const collectInputElements = (errors, prefix = '') => {
-        for (const key in errors) {
-          if (typeof errors[key] === 'object' && errors[key] !== null) {
-            collectInputElements(errors[key], `${prefix}${key}.`);
-          } else if (errors[key] && refs.current[`${prefix}${key}`]) {
-            elementsToFocus.push(refs.current[`${prefix}${key}`]);
-          }
-        }
-      };
-
-      collectInputElements(validationErrors);
-
-      if (elementsToFocus.length > 0) {
-        elementsToFocus.sort(
-          (a, b) =>
-            a.getBoundingClientRect().top - b.getBoundingClientRect().top,
-        );
-        const element = elementsToFocus[0];
-        element.focus();
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        hasFocused.current = true;
-      }
-    }
-  }, [validationErrors]);
-
-  const registerRef = name => element => {
-    refs.current[name] = element;
-  };
-
-  const resetFocus = () => {
-    hasFocused.current = false;
-  };
-
-  return { registerRef, resetFocus };
-};
 
 export const UpdatedFilePetitionStep2 = connect(
   {
