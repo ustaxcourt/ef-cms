@@ -40,30 +40,34 @@ EOF
 resource "aws_s3_bucket" "documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_replication_configuration" "documents_s3_replication_us_east_1" {
+  depends_on = [aws_s3_bucket_versioning.documents_s3_versioning_us_east_1]
+  role   = aws_iam_role.s3_replication_role.arn
+  bucket = aws_s3_bucket.documents_us_east_1.id
+
+  rule {
+    id = "duplicate all documents from east to west"
+    status = "Enabled"
+    destination {
+      bucket        = aws_s3_bucket.documents_us_west_1.arn
+      storage_class = "STANDARD"
+    }
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_east_1" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
 
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
     allowed_origins = ["*"]
     max_age_seconds = 3000
-  }
-
-  tags = {
-    environment = var.environment
-  }
-
-  replication_configuration {
-    role = aws_iam_role.s3_replication_role.arn
-
-    rules {
-      status = "Enabled"
-      prefix = ""
-
-      destination {
-        bucket        = aws_s3_bucket.documents_us_west_1.arn
-        storage_class = "STANDARD"
-      }
-    }
   }
 }
 
@@ -143,15 +147,19 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   provider = aws.us-west-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-west-1"
 
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_west_1" {
+  bucket = aws_s3_bucket.documents_us_west_1.id
+
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
     allowed_origins = ["*"]
     max_age_seconds = 3000
-  }
-
-  tags = {
-    environment = var.environment
   }
 }
 
@@ -203,14 +211,19 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
 
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_east_1" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
+
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
     allowed_origins = ["*"]
     max_age_seconds = 3000
-  }
-  tags = {
-    environment = var.environment
   }
 }
 
@@ -258,15 +271,19 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
   provider = aws.us-west-1
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
 
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_west_1" {
+  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
     allowed_origins = ["*"]
     max_age_seconds = 3000
-  }
-
-  tags = {
-    environment = var.environment
   }
 }
 
