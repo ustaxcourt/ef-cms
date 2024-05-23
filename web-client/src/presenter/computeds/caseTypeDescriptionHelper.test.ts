@@ -118,6 +118,10 @@ describe('caseTypeDescriptionHelper', () => {
           type: CASE_TYPES_MAP.other,
         },
         {
+          description: 'Passport',
+          type: CASE_TYPES_MAP.passport,
+        },
+        {
           description: 'Whistleblower',
           type: CASE_TYPES_MAP.whistleblower,
         },

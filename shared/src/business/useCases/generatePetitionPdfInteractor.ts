@@ -7,11 +7,6 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-// import {
-//   ROLE_PERMISSIONS,
-//   isAuthorized,
-// } from '../../../authorization/authorizationClientService';
-// import { UnauthorizedError } from '@web-api/errors/errors';
 
 // TODO type for props
 
