@@ -7,9 +7,9 @@ export const setSingleValidationErrorAction = ({
   store,
 }: ActionProps) => {
   const { errors, validationKey } = props;
-  const validationErrors = cloneDeep(get(state.validationErrors));
+  const validationErrors = cloneDeep(get(state.validationErrors)) || {};
 
-  if (!errors) return store.unset(state.validationErrors);
+  if (!errors) return store.set(state.validationErrors, {});
 
   const rootErrorMessage = getNestedErrorMessage(errors, validationKey);
   setNestedErrorMessage(validationErrors, validationKey, rootErrorMessage);
