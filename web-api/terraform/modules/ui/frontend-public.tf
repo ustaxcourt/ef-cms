@@ -165,8 +165,8 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "group-${var.current_color}.${var.dns_domain}"
     min_ttl                = 0
-    default_ttl            = var.cloudfront_default_ttl
-    max_ttl                = var.cloudfront_max_ttl
+    default_ttl            = "86400"
+    max_ttl                = "31536000"
 
     lambda_function_association {
       event_type   = "origin-response"

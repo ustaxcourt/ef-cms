@@ -204,8 +204,6 @@ module "ui-blue" {
   current_color          = "blue"
   environment            = var.environment
   dns_domain             = var.dns_domain
-  cloudfront_max_ttl     = "31536000"
-  cloudfront_default_ttl = "86400"
   zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
   providers = {

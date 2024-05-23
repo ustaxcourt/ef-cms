@@ -10,21 +10,11 @@ variable "dns_domain" {
   type = string
 }
 
-variable "cloudfront_max_ttl" {
-  type    = string
-  default = "31536000"
-}
-
-variable "cloudfront_default_ttl" {
-  type    = string
-  default = "86400"
-}
-
 variable "zone_name" {
   type = string
 }
 
-variable "viewer_protocol_policy" {
+variable "viewer_protocol_policy" { # Only being utilized in the Flexion environment to restrict HTTP traffic to flexion domain.
   type    = string
   default = "redirect-to-https"
 }
