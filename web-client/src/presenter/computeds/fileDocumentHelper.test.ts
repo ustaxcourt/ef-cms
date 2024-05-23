@@ -10,6 +10,7 @@ import { capitalize } from 'lodash';
 import {
   docketClerkUser,
   irsPractitionerUser,
+  privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -560,6 +561,83 @@ describe('fileDocumentHelper', () => {
       });
 
       expect(showGenerationTypeForm).toEqual(true);
+    });
+  });
+
+  describe('showPartiesFiling', () => {
+    beforeAll(() => {
+      applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
+    });
+
+    it('should set showPartiesFiling to false if IRS practitioner is filing first IRS document', () => {
+      state.form = {
+        generationType: GENERATION_TYPES.AUTO,
+      };
+
+      state.caseDetail = {
+        petitioners: [
+          {
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const { showPartiesFiling } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(showPartiesFiling).toEqual(false);
+    });
+
+    it('should set showPartiesFiling to true if IRS practitioner is filing additional IRS document', () => {
+      state.form = {
+        generationType: GENERATION_TYPES.AUTO,
+      };
+
+      state.caseDetail = {
+        irsPractitioners: [
+          {
+            barNumber: '1234',
+          },
+        ],
+        petitioners: [
+          {
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const { showPartiesFiling } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(showPartiesFiling).toEqual(true);
+    });
+  });
+
+  describe('showPartiesFiling', () => {
+    it('should set showPartiesFiling to true if private practitioner is filing a document', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        privatePractitionerUser,
+      );
+
+      state.form = {
+        generationType: GENERATION_TYPES.AUTO,
+      };
+
+      state.caseDetail = {
+        petitioners: [
+          {
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const { showPartiesFiling } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(showPartiesFiling).toEqual(true);
     });
   });
 });
