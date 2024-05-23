@@ -8,6 +8,7 @@ import { openFileUploadStatusModalAction } from '@web-client/presenter/actions/o
 import { saveAndSubmitCaseAction } from '@web-client/presenter/actions/saveAndSubmitCaseAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
+import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
@@ -43,6 +44,7 @@ export const updatedFilePetitionCompleteStep6Sequence =
           error: [setAlertErrorAction, openFileUploadErrorModal],
           success: [
             closeFileUploadStatusModalAction,
+            setCaseAction,
             setAlertSuccessAction,
             incrementCurrentStepIndicatorAction,
           ],
