@@ -70,8 +70,22 @@ export function UpdatedFilePetitionStep7() {
             title="Can’t afford to pay the filing fee?"
           >
             <div>
-              Submit an Application for Waiver of Filing Fee. This form requires
-              detailed information and must be signed under penalty of perjury.
+              <span>Submit an </span>
+              <Button
+                link
+                className="usa-link--external text-left mobile-text-wrap"
+                href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                iconColor="blue"
+                overrideMargin="margin-right-1"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Application for Waiver of Filing Fee.
+              </Button>
+              <span>
+                This form requires detailed information and must be signed under
+                penalty of perjury.
+              </span>
               <ol style={{ marginTop: '5px', paddingLeft: '25px' }}>
                 <li>Download and fill in the form.</li>
                 <li>
