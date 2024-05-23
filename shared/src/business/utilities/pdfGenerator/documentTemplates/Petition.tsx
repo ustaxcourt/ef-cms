@@ -1,5 +1,8 @@
+/* eslint-disable complexity */
 import {
+  ALL_STATE_OPTIONS,
   BUSINESS_TYPES,
+  COUNTRY_TYPES,
   PARTY_TYPES,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
@@ -88,19 +91,27 @@ export const Petition = ({
             })}
           </ol>
         </ol>
-        <p>You have included the following items with this petition:</p>
-        <div>
-          <ol className="list-disc">
-            {noticeIssuedDate && <li>Any NOTICE(S) the IRS issued to you</li>}
+        <p>
+          <b>You have included the following items with this petition:</b>
+        </p>
+        <ol className="list-disc">
+          {noticeIssuedDate && (
             <li>
+              <span>Any NOTICE(S) the IRS issued to you</span>
+            </li>
+          )}
+          <li>
+            <span>
               Statement of Taxpayer Identification Number (Form 4)(see PRIVACY
               NOTICE below)
+            </span>
+          </li>
+          {BUSINESS_TYPE_VALUES.includes(partyType) && (
+            <li>
+              <span>Corporate Disclosure Statement</span>
             </li>
-            {BUSINESS_TYPE_VALUES.includes(partyType) && (
-              <li>Corporate Disclosure Statement</li>
-            )}
-          </ol>
-        </div>
+          )}
+        </ol>
         <div className="privacy-notice">
           PRIVACY NOTICE: Form 4 (Statement of Taxpayer Identification Number)
           will not be part of the Court’s public files. All other documents
@@ -118,13 +129,14 @@ export const Petition = ({
           <div className="address-label petitioner-info">
             <b>Petitioner&apos;s contact information:</b>
             <div>{contactPrimary.name}</div>
-            {BUSINESS_TYPE_VALUES.includes(partyType) &&
-              contactPrimary.secondaryName && (
-                <div>
-                  {partyType === PARTY_TYPES.corporation && <b>C/O: </b>}
-                  {contactPrimary.secondaryName}
-                </div>
-              )}
+            {contactPrimary.secondaryName && (
+              <div>
+                {(!BUSINESS_TYPE_VALUES.includes(partyType) ||
+                  partyType === PARTY_TYPES.corporation) && <b>C/O: </b>}
+                {contactPrimary.secondaryName}
+                {contactPrimary.title && <span>, {contactPrimary.title}</span>}
+              </div>
+            )}
             <div>{contactPrimary.address1}</div>
             {contactPrimary.address2 && <div>{contactPrimary.address2}</div>}
             {contactPrimary.address3 && <div>{contactPrimary.address3}</div>}
@@ -132,6 +144,9 @@ export const Petition = ({
               {contactPrimary.city}, {contactPrimary.state}{' '}
               {contactPrimary.postalCode}
             </div>
+            {contactPrimary.countryType === COUNTRY_TYPES.INTERNATIONAL && (
+              <div>{contactPrimary.country}</div>
+            )}
             <div>{contactPrimary.phone}</div>
             <div>
               {BUSINESS_TYPE_VALUES.includes(partyType) ? (
@@ -139,7 +154,7 @@ export const Petition = ({
               ) : (
                 <b>Place of legal residence: </b>
               )}
-              {contactPrimary.placeOfLegalResidence}
+              {ALL_STATE_OPTIONS[contactPrimary.placeOfLegalResidence]}
             </div>
             <div>
               <b>Service email: </b>
@@ -168,6 +183,9 @@ export const Petition = ({
               {contactSecondary.city}, {contactSecondary.state}{' '}
               {contactSecondary.postalCode}
             </div>
+            {contactSecondary.countryType === COUNTRY_TYPES.INTERNATIONAL && (
+              <div>{contactSecondary.country}</div>
+            )}
             <div>
               {contactSecondary.phone
                 ? contactSecondary.phone
@@ -181,7 +199,7 @@ export const Petition = ({
             <div>
               <b>Place of legal residence: </b>
               {contactSecondary.placeOfLegalResidence
-                ? contactSecondary.placeOfLegalResidence
+                ? ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]
                 : 'N/A'}
             </div>
           </div>
