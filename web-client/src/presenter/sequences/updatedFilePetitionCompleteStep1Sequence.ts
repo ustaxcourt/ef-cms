@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
-import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -12,7 +11,7 @@ export const updatedFilePetitionCompleteStep1Sequence = [
   getStep1DataAction,
   validateUploadPetitionStep1Action,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [setValidationErrorsAction],
     success: [
       clearAlertsAction,
       stopShowValidationAction,

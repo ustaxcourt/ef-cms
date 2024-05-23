@@ -1,5 +1,4 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
@@ -29,8 +28,6 @@ export const UpdatedFilePetitionStep5 = connect(
   }) {
     return (
       <>
-        <ErrorNotification />
-
         <div className="margin-bottom-5">
           <InfoNotificationComponent
             alertInfo={{

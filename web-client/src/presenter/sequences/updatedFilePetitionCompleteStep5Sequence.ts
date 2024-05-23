@@ -9,7 +9,6 @@ import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAc
 import { getStep5DataAction } from '@web-client/presenter/actions/getStep5DataAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
-import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -21,7 +20,7 @@ export const updatedFilePetitionCompleteStep5Sequence = [
   getStep5DataAction,
   validateUploadPetitionStep5Action,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       stopShowValidationAction,
