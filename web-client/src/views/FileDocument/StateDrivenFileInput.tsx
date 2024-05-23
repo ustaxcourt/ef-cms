@@ -38,6 +38,7 @@ export const StateDrivenFileInput = connect<
     file,
     form,
     id,
+    ignoreSizeKey,
     name: fileInputName,
     updateFormValueSequence,
     validationSequence,
