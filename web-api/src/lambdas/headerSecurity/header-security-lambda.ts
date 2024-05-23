@@ -1,11 +1,8 @@
-/**
- * adds headers
- *
- * @param {object} awsEvent the AWS event object
- * @param {object} handlerContext the context
- * @param {object} callback the callback
- */
-export const handler = (awsEvent, handlerContext, callback) => {
+import { CloudFrontResponse, CloudFrontResponseEvent } from 'aws-lambda';
+
+export const handler = (
+  awsEvent: CloudFrontResponseEvent,
+): CloudFrontResponse => {
   //Get contents of response
   const { request, response } = awsEvent.Records[0].cf;
   const { headers } = response;
@@ -71,6 +68,5 @@ export const handler = (awsEvent, handlerContext, callback) => {
     { key: 'Referrer-Policy', value: 'same-origin' },
   ];
 
-  //Return modified response
-  callback(null, response);
+  return response;
 };
