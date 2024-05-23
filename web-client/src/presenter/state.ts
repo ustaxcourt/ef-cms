@@ -738,7 +738,7 @@ export const baseState = {
     irsNotices: undefined as
       | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
       | undefined,
-    noticeIssuedDate: undefined,
+    noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
     petitionFacts: [''],
     petitionFile: undefined,
