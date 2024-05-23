@@ -10,6 +10,8 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "api_lambdas_bucket_sse_west" {
   bucket = aws_s3_bucket.api_lambdas_bucket_west.id
 
+  provider = aws.us-west-1
+
   rule {
     bucket_key_enabled = false
     apply_server_side_encryption_by_default {

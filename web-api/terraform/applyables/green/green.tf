@@ -209,7 +209,7 @@ module "ui-green" {
   viewer_protocol_policy = var.viewer_protocol_policy
 
   providers = {
-    aws.us-east-1 = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
 }
