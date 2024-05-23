@@ -1133,6 +1133,12 @@ export const US_STATES_OTHER = {
   VI: 'Virgin Islands',
 } as const;
 
+export const ALL_STATE_OPTIONS = {
+  ...US_STATES,
+  ...US_STATES_OTHER,
+  Other: 'Other',
+};
+
 const statesArray = [
   ...Object.values(US_STATES),
   ...Object.values(US_STATES_OTHER),
