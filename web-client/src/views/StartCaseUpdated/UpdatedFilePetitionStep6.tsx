@@ -1,5 +1,6 @@
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
@@ -42,7 +43,7 @@ export const UpdatedFilePetitionStep6 = connect(
 
     return (
       <>
-        {/* <ErrorNotification /> */}
+        <ErrorNotification />
         <div className="grid-row grid-gap">
           <div className="grid-col">
             <p>
