@@ -32,6 +32,7 @@ const env = {
   PDF_EXPRESS_LICENSE_KEY: process.env.PDF_EXPRESS_LICENSE_KEY,
   PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL,
   SCANNER_RESOURCE_URI: process.env.SCANNER_RESOURCE_URI,
+  SENTRY_DSN: process.env.SENTRY_DSN_UI,
   SESSION_MODAL_TIMEOUT: process.env.SESSION_MODAL_TIMEOUT,
   SESSION_TIMEOUT: process.env.SESSION_TIMEOUT,
   STAGE: process.env.STAGE,
@@ -127,7 +128,9 @@ export default async function ({
                 runtime: 'automatic',
               },
             ],
+            '@babel/preset-typescript',
           ],
+          sourceMaps: 'inline',
           sourceType: 'unambiguous',
           targets: 'defaults',
         },
@@ -168,7 +171,7 @@ export default async function ({
         },
       },
     ],
-    sourcemap: process.env.USTC_ENV !== 'prod',
+    sourcemap: true,
     splitting: true,
   };
 
