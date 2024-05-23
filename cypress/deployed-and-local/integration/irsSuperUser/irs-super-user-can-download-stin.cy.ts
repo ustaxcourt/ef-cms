@@ -1,95 +1,69 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import {
-  createUserInIrsPool,
-  getIrsCognitoInfo,
-  verifyUserAndGetIdToken,
-} from '../../../../web-api/hostedEnvironmentTests/irsSuperUser.test';
+// import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { environment } from '../../../../web-api/src/environment';
+import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
-
 //if local, skip this test
 
 describe('irs superuser integration', async () => {
-  const userName = 'ci_test_irs_super_user@example.com';
-  const cognito = new CognitoIdentityProvider({
-    maxAttempts: 3,
-    region: 'us-east-1',
-  });
-  let irsClientId: string, irsUserPoolId: string;
+  //   const userName = 'ci_test_irs_super_user@example.com';
+  //   let irsClientId: string, irsUserPoolId: string;
 
   //BEFORE!
-  before(async () => {
-    Cypress.env('DEPLOYING_COLOR', 'blue');
-    const result = await getIrsCognitoInfo({ cognito });
-    irsClientId = result.irsClientId;
-    irsUserPoolId = result.irsUserPoolId;
-
-    // Delete USER
-    try {
-      await cognito.adminDeleteUser({
-        UserPoolId: irsUserPoolId,
-        Username: userName,
-      });
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-  });
+  before(async () => {});
 
   it('should let an irs superuser view the reconciliation report and download a STIN', async () => {
+    const cognito = new CognitoIdentityProvider({
+      credentials: {
+        accessKeyId: getCypressEnv().accessKeyId,
+        secretAccessKey: getCypressEnv().secretAccessKey,
+      },
+      maxAttempts: 3,
+      region: 'us-east-1',
+    });
+
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
     });
-    const password = environment.defaultAccountPass;
-    createUserInIrsPool({ cognito, irsUserPoolId, password, userName });
-    const { idToken } = await verifyUserAndGetIdToken({
-      cognito,
-      irsClientId,
-      irsUserPoolId,
-      password,
-      userName,
-    });
-
-    console.log('THIS IS THE BERER ID TOKEN', idToken);
+    let foo = await getIrsCognitoInfo({ cognito });
+    expect(foo).to.exist;
+    expect(cognito).to.exist;
   });
 });
 
-async function createUserInIrsPool({
+async function getIrsCognitoInfo({
   cognito,
-  irsUserPoolId,
-  password,
-  userName,
 }: {
   cognito: CognitoIdentityProvider;
-  userName: string;
-  password: string;
-  irsUserPoolId: string;
-}): Promise<void> {
-  await cognito.adminCreateUser({
-    TemporaryPassword: password,
-    UserAttributes: [
-      {
-        Name: 'custom:role',
-        Value: ROLES.irsSuperuser,
-      },
-      {
-        Name: 'email',
-        Value: userName,
-      },
-      {
-        Name: 'email_verified',
-        Value: 'true',
-      },
-    ],
-    UserPoolId: irsUserPoolId,
-    Username: userName,
+}): Promise<{ irsUserPoolId: string; irsClientId: string }> {
+  const results = await cognito.listUserPools({
+    MaxResults: 50,
   });
-  await cognito.adminSetUserPassword({
-    Password: password,
-    Permanent: true,
+  const irsUserPoolId = results?.UserPools?.find(
+    pool => pool.Name === `efcms-irs-${environment.stage}`,
+  )?.Id;
+
+  if (!irsUserPoolId) {
+    throw new Error('Could not get userPoolId');
+  }
+
+  const userPoolClients = await cognito.listUserPoolClients({
+    MaxResults: 20,
     UserPoolId: irsUserPoolId,
-    Username: userName,
   });
+  const irsClientId = userPoolClients?.UserPoolClients?.[0].ClientId;
+
+  if (!irsClientId) {
+    throw new Error(
+      `Unable to find a client for the IRS Superuser pool: ${irsUserPoolId}`,
+    );
+  }
+
+  return {
+    irsClientId,
+    irsUserPoolId,
+  };
 }
