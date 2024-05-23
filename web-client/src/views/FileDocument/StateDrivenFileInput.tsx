@@ -8,27 +8,37 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const StateDrivenFileInput = connect(
-  {
-    ariaDescribedBy: props.ariaDescribedBy,
-    constants: state.constants,
-    file: props.file,
-    fileInputName: props.name,
-    form: state.form,
-    id: props.id,
-    ignoreSizeKey: props.ignoreSizeKey,
-    updateFormValueSequence: sequences[props.updateFormValueSequence],
-    validationSequence: sequences[props.validationSequence],
-  },
+type StateDriveFileInputProps = {
+  'aria-describedby': string;
+  file?: File;
+  id: string;
+  updateFormValueSequence: string;
+  validationSequence: string;
+  name: string;
+  accept?: string;
+};
+
+const deps = {
+  constants: state.constants,
+  form: state.form,
+  ignoreSizeKey: props.ignoreSizeKey,
+  updateFormValueSequence: sequences[props.updateFormValueSequence],
+  validationSequence: sequences[props.validationSequence],
+};
+
+export const StateDrivenFileInput = connect<
+  StateDriveFileInputProps,
+  typeof deps
+>(
+  deps,
   function StateDrivenFileInput({
     accept = '.pdf',
-    ariaDescribedBy,
+    'aria-describedby': ariaDescribedBy,
     constants,
     file,
-    fileInputName,
     form,
     id,
-    ignoreSizeKey,
+    name: fileInputName,
     updateFormValueSequence,
     validationSequence,
     ...remainingProps

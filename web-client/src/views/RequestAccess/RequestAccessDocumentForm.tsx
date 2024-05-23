@@ -111,9 +111,6 @@ export const RequestAccessDocumentForm = connect(
                   id="primary-document-label"
                 >
                   Upload your document
-                  <span className="success-message padding-left-1">
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
-                  </span>
                 </label>
                 <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}

@@ -89,7 +89,7 @@ export const CaseListTable = connect(
               {dashboardExternalHelper.showFilingFee && (
                 <span className="float-right margin-bottom-1">
                   *Filing fee status may take 2-3 business days from payment
-                  received date or approval of waiver to update
+                  received date or approval of waiver to update.
                 </span>
               )}
 
