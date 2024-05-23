@@ -3,7 +3,6 @@ import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FilingFeeOptions } from './FilingFeeOptions';
-import { OtherFilingOptions } from '@web-client/views/Dashboards/OtherFilingOptions';
 import { PetitionWelcomePage } from '../PetitionWelcomePage';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -36,16 +35,6 @@ export const DashboardPetitioner = connect(
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
                   <hr />
-                  <p>
-                    <a
-                      className="usa-link--external"
-                      href="https://www.ustaxcourt.gov/efile_a_petition.html"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      How to Create a Case
-                    </a>
-                  </p>
                   <p>
                     <a
                       className="usa-link--external"
@@ -93,10 +82,10 @@ export const DashboardPetitioner = connect(
               {dashboardExternalHelper.showPetitionWelcomePage && (
                 <FilingFeeOptions />
               )}
-
-              {dashboardExternalHelper.showPetitionWelcomePage && (
+              {/* are we 100% sure that it's ok to remove this even with the feature flag off? */}
+              {/* {dashboardExternalHelper.showPetitionWelcomePage && (
                 <OtherFilingOptions />
-              )}
+              )} */}
 
               {!dashboardExternalHelper.showPetitionWelcomePage && (
                 <FilingFeeOptions />
