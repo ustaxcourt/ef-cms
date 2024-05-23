@@ -231,22 +231,26 @@ function CaseInformation({ pdfPreviewUrl, petitionFormatted }) {
                   </span>
                   {petitionFormatted.hasIrsNotice ? (
                     petitionFormatted.irsNotices.map(irsNotice => {
-                      return (
-                        <div key={irsNotice.key}>
-                          <div className="grid-row">
-                            <div className="grid-col flex-auto">
-                              <Button
-                                link
-                                href={irsNotice.irsNoticeFileUrl}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                {irsNotice.file.name}
-                              </Button>
+                      if (irsNotice.file?.name) {
+                        return (
+                          <div key={irsNotice.key}>
+                            <div className="grid-row">
+                              <div className="grid-col flex-auto">
+                                <Button
+                                  link
+                                  href={irsNotice.irsNoticeFileUrl}
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
+                                  {irsNotice.file.name}
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
+                        );
+                      } else {
+                        return <div key={irsNotice.key}>N/A</div>;
+                      }
                     })
                   ) : (
                     <div>N/A</div>
