@@ -45,6 +45,7 @@ export const UpdatedFilePetitionStep3 = connect(
     updateFormValueSequence,
     validationErrors,
   }) {
+    // move... somewhere else
     const handleIrsNoticeErrors = (errors, refs, elementsToFocus, prefix) => {
       if (!Array.isArray(errors)) {
         return;
