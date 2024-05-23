@@ -47,11 +47,11 @@ resource "aws_s3_bucket" "documents_us_east_1" {
 
 resource "aws_s3_bucket_replication_configuration" "documents_s3_replication_us_east_1" {
   depends_on = [aws_s3_bucket_versioning.documents_s3_versioning_us_east_1]
-  role   = aws_iam_role.s3_replication_role.arn
-  bucket = aws_s3_bucket.documents_us_east_1.id
+  role       = aws_iam_role.s3_replication_role.arn
+  bucket     = aws_s3_bucket.documents_us_east_1.id
 
   rule {
-    id = "duplicate all documents from east to west"
+    id     = "duplicate all documents from east to west"
     status = "Enabled"
     destination {
       bucket        = aws_s3_bucket.documents_us_west_1.arn
@@ -155,6 +155,8 @@ resource "aws_s3_bucket" "documents_us_west_1" {
 resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_west_1" {
   bucket = aws_s3_bucket.documents_us_west_1.id
 
+  provider = aws.us-west-1
+
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
@@ -164,7 +166,8 @@ resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_west_1" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "documents_s3_lc_us_west_1" {
-  bucket = aws_s3_bucket.documents_us_west_1.id
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
 
   rule {
     id     = "remove_paper_service_documents_rule"
@@ -181,14 +184,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "documents_s3_lc_us_west_1" {
 }
 
 resource "aws_s3_bucket_versioning" "documents_s3_versioning_us_west_1" {
-  bucket = aws_s3_bucket.documents_us_west_1.id
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
   versioning_configuration {
     status = "Enabled"
   }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_west_1" {
-  bucket = aws_s3_bucket.documents_us_west_1.id
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
 
   rule {
     bucket_key_enabled = false
@@ -277,7 +282,8 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
 }
 
 resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_west_1" {
-  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
 
   cors_rule {
     allowed_headers = ["Authorization"]
@@ -288,7 +294,8 @@ resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_west_1" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "temp_documents_s3_lc_us_west_1" {
-  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
 
   rule {
     id     = "remove_temp_documents_rule"
@@ -301,14 +308,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "temp_documents_s3_lc_us_west_1
 }
 
 resource "aws_s3_bucket_versioning" "temp_documents_s3_versioning_us_west_1" {
-  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
+
   versioning_configuration {
     status = "Enabled"
   }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "temp_documents_sse_us_west_1" {
-  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
 
   rule {
     bucket_key_enabled = false

@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "www_redirect_policy_bucket" {
 
 resource "aws_cloudfront_distribution" "public_distribution_www" {
   origin {
-    domain_name = aws_s3_bucket.public_redirect.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.public_redirect_s3_website.website_endpoint
     origin_id   = "www.${var.dns_domain}"
 
     custom_origin_config {

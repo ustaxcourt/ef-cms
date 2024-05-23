@@ -46,12 +46,14 @@ resource "aws_s3_bucket" "failover" {
 }
 
 resource "aws_s3_bucket_policy" "failover_policy" {
-  bucket = aws_s3_bucket.failover.id
-  policy = data.aws_iam_policy_document.allow_public_failover.json
+  bucket   = aws_s3_bucket.failover.id
+  policy   = data.aws_iam_policy_document.allow_public_failover.json
+  provider = aws.us-west-1
 }
 
 resource "aws_s3_bucket_website_configuration" "failover_s3_website" {
-  bucket = aws_s3_bucket.failover.id
+  bucket   = aws_s3_bucket.failover.id
+  provider = aws.us-west-1
   index_document {
     suffix = "index.html"
   }
@@ -61,7 +63,8 @@ resource "aws_s3_bucket_website_configuration" "failover_s3_website" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "failover_sse" {
-  bucket = aws_s3_bucket.failover.id
+  bucket   = aws_s3_bucket.failover.id
+  provider = aws.us-west-1
 
   rule {
     bucket_key_enabled = false
@@ -129,7 +132,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = aws_s3_bucket.frontend.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.frontend_s3_website.website_endpoint
     origin_id   = "primary-app-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
@@ -147,7 +150,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
 
   origin {
-    domain_name = aws_s3_bucket.failover.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.failover_s3_website.website_endpoint
     origin_id   = "failover-app-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
