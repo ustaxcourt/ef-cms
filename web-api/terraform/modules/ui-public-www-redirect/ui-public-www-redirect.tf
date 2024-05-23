@@ -16,12 +16,12 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "public_redirect_s
   }
 }
 
-resource "aws_s3_bucket_website_configuration" "public_redirect_website" {
+resource "aws_s3_bucket_website_configuration" "public_redirect_s3_website" {
   bucket = aws_s3_bucket.public_redirect.id
   redirect_all_requests_to {
     host_name = var.dns_domain
-    protocol = "https"
-  } 
+    protocol  = "https"
+  }
 }
 
 resource "aws_s3_bucket_policy" "redirect_policy" {
