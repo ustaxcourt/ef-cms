@@ -1,5 +1,6 @@
 import { BigHeader } from '@web-client/views/BigHeader';
 import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
+import { PetitionSuccessHeader } from '@web-client/views/PetitionSuccessHeader';
 import { StepIndicator } from '@web-client/views/StepIndicator';
 import { UpdatedFilePetitionStep1 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep1';
 import { UpdatedFilePetitionStep2 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep2';
@@ -21,7 +22,11 @@ export const UpdatedFilePetition = connect(
     const { currentStep } = stepIndicatorInfo;
     return (
       <>
-        <BigHeader text="Create a Case" />
+        {currentStep === 7 ? (
+          <PetitionSuccessHeader />
+        ) : (
+          <BigHeader text="Create a Case" />
+        )}
         <section className="usa-section grid-container">
           <StepIndicator />
           {currentStep === 1 && <UpdatedFilePetitionStep1 />}
