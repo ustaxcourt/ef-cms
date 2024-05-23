@@ -23,7 +23,7 @@ export const validateUploadPetitionStep1Action = ({
   let errors = new UploadPetitionStep1(
     step1Data,
   ).getFormattedValidationErrors();
-  console.log('errors', errors);
+
   if (errors) {
     return path.error({
       errors,
