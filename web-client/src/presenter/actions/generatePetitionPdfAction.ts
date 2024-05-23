@@ -36,7 +36,7 @@ export const generatePetitionPdfAction = async ({
         // do this in interactor
         noticeIssuedDate: applicationContext
           .getUtilities()
-          .formatDateString(petition.noticeIssuedDate, FORMATS.MMDDYY),
+          .formatDateString(petition.noticeIssuedDate || '', FORMATS.MMDDYY),
       });
 
     if (!isDraft) {
