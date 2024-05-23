@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "api_lambdas_bucket_west" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-west-1.lambdas"
-  acl    = "private"
 
   provider = aws.us-west-1
   tags = {

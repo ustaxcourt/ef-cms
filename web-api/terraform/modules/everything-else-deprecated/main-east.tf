@@ -1,6 +1,5 @@
-resource "aws_s3_bucket" "api_lambdas_bucket_east" {
+resource "aws_s3_bucket" "api_lambdas_bucket_east" { # 10345: Can we remove this?
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
-  acl    = "private"
 
   tags = {
     environment = var.environment
