@@ -79,13 +79,15 @@ resource "aws_s3_bucket" "documents_us_east_1" {
       }
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_east_1" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -155,13 +157,15 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   tags = {
     environment = var.environment
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_west_1" {
+  bucket = aws_s3_bucket.documents_us_west_1.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -202,13 +206,15 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
       days = 1
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "temp_documents_sse_us_east_1" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -249,13 +255,15 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
       days = 1
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "temp_documents_sse_us_west_1" {
+  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -306,12 +314,15 @@ resource "aws_s3_bucket" "smoketest_email_inbox" {
   tags = {
     environment = var.environment
   }
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "smoketest_email_inbox_sse" {
+  bucket = aws_s3_bucket.smoketest_email_inbox.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
