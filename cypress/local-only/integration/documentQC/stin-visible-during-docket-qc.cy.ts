@@ -5,13 +5,8 @@ import {
 } from '../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
-/**
- * Given a case
- * When a docket clerk QCs a paper filing, changing the event code
- * Then they should see the document title was updated
- */
-describe('Docket clerk QC-ing a paper filing', () => {
-  it('should see the document title was updated when they change the event code while QC-ing', () => {
+describe('Case services supervisor performing petition QC', () => {
+  it('should show STIN during petition QC', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       loginAsCaseServicesSupervisor();
