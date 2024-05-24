@@ -1,8 +1,10 @@
+// AWS lambda handlers must be async to work properly
+/* eslint-disable require-await */
 import { CloudFrontResponse, CloudFrontResponseEvent } from 'aws-lambda';
 
-export const handler = (
+export const handler = async (
   awsEvent: CloudFrontResponseEvent,
-): CloudFrontResponse => {
+): Promise<CloudFrontResponse> => {
   //Get contents of response
   const { request, response } = awsEvent.Records[0].cf;
   const { headers } = response;
