@@ -13,17 +13,8 @@ describe('irs superuser integration', async () => {
 
   //BEFORE!
   before(async () => {});
-
   it('should let an irs superuser view the reconciliation report and download a STIN', async () => {
-    const cognito = new CognitoIdentityProvider({
-      credentials: {
-        accessKeyId: getCypressEnv().accessKeyId,
-        secretAccessKey: getCypressEnv().secretAccessKey,
-      },
-      maxAttempts: 3,
-      region: 'us-east-1',
-    });
-
+    let cognito = getCognitoClient();
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
@@ -32,7 +23,33 @@ describe('irs superuser integration', async () => {
     expect(foo).to.exist;
     expect(cognito).to.exist;
   });
+
+  it('acts sanely during my sanity check', async () => {
+    loginAsPetitioner();
+    let cognito = getCognitoClient();
+    expect(getCypressEnv().accessKeyId).to.exist;
+    expect(getCypressEnv().secretAccessKey).to.exist;
+    expect(getCognitoClient()).to.exist;
+    let userPools = await cognito.listUserPools({
+      MaxResults: 50,
+    });
+    expect(userPools).to.exist;
+  });
 });
+
+function getCognitoClient() {
+  const cognito = new CognitoIdentityProvider({
+    credentials: {
+      accessKeyId: getCypressEnv().accessKeyId,
+      secretAccessKey: getCypressEnv().secretAccessKey,
+      sessionToken: getCypressEnv().sessionToken,
+    },
+    maxAttempts: 3,
+    region: 'us-east-1',
+  });
+
+  return cognito;
+}
 
 async function getIrsCognitoInfo({
   cognito,
