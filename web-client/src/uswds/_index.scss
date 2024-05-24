@@ -41,3 +41,8 @@
 @forward 'usa-tooltip';
 @forward 'uswds-utilities';
 @forward 'usa-step-indicator';
+
+* {
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}

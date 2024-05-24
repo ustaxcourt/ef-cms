@@ -283,7 +283,6 @@ export const BeforeStartingCase = connect(
               </AccordionItem>
             </Accordion>
           </div>
-
           <Button
             className="margin-top-5"
             data-testid="go-to-step-1"
@@ -292,7 +291,19 @@ export const BeforeStartingCase = connect(
             {"I'm Ready to Start"}
           </Button>
           <Button
+            className="margin-top-5"
+            data-testid="go-to-step-1"
+            href="javascript:void(0);"
+            secondary={true}
+            onClick={() => {
+              window.print();
+            }}
+          >
+            Print This Page
+          </Button>
+          <Button
             link
+            href="javascript:void(0);"
             id="cancel"
             onClick={() => {
               formCancelToggleCancelSequence();
