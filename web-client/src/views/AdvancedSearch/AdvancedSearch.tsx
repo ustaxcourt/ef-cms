@@ -24,6 +24,7 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
     cerebralBindSimpleSetStateSequence:
       sequences.cerebralBindSimpleSetStateSequence,
+    practitionerSearchHelper: state.practitionerSearchHelper,
     searchTabs: state.constants.ADVANCED_SEARCH_TABS,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,

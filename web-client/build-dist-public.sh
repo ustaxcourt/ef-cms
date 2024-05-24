@@ -23,5 +23,6 @@ STAGE="${CLIENT_STAGE}" \
   API_URL="${API_URL}" \
   PDF_EXPRESS_LICENSE_KEY="${PDF_EXPRESS_LICENSE_KEY}" \
   PUBLIC_SITE_URL="${PUBLIC_SITE_URL}" \
+  ENV="${ENV}" \
   CI="" \
   npm run build:public

@@ -1,27 +1,33 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export const StateSelect = ({
+  className = '',
   data,
+  onBlurSequence,
+  onChangeValidationSequence,
+  refProp,
   type,
   updateFormValueSequence,
   useFullStateName,
   usStates,
   usStatesOther,
-  validateStartCaseSequence,
 }) => {
   return (
     <select
-      className="usa-select"
+      className={className ? classNames(className, 'usa-select') : 'usa-select'}
       data-testid={`${type}.state`}
       id={`${type}.state`}
       name={`${type}.state`}
+      ref={refProp || undefined}
       value={data[type].state || ''}
+      onBlur={() => onBlurSequence && onBlurSequence()}
       onChange={e => {
         updateFormValueSequence({
           key: e.target.name,
           value: e.target.value,
         });
-        validateStartCaseSequence();
+        onChangeValidationSequence && onChangeValidationSequence();
       }}
     >
       <option value="">- Select -</option>
@@ -37,9 +43,10 @@ export const StateSelect = ({
       </optgroup>
       <optgroup label="Other">
         {Object.keys(usStatesOther).map(abbrev => {
+          const label = useFullStateName ? usStatesOther[abbrev] : abbrev;
           return (
             <option key={abbrev} value={abbrev}>
-              {abbrev}
+              {label}
             </option>
           );
         })}

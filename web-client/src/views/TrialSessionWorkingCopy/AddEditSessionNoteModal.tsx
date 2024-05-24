@@ -8,12 +8,17 @@ import React from 'react';
 
 export const AddEditSessionNoteModal = connect(
   {
+    clearModalFormSequence: sequences.clearModalFormSequence,
     modal: state.modal,
+    updateWorkingCopySessionNoteSequence:
+      sequences.updateWorkingCopySessionNoteSequence,
     validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditSessionNoteModal({
+    clearModalFormSequence,
     modal,
+    updateWorkingCopySessionNoteSequence,
     validateNoteSequence,
     validationErrors,
   }) {
@@ -24,8 +29,8 @@ export const AddEditSessionNoteModal = connect(
         confirmLabel="Save"
         preventCancelOnBlur={true}
         title="Add/Edit Session Notes"
-        onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateWorkingCopySessionNoteSequence"
+        onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={updateWorkingCopySessionNoteSequence}
       >
         <h5 className="margin-bottom-4">{modal.heading}</h5>
         <FormGroup
