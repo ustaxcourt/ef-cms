@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "api_lambdas_bucket_east" { # 10345: Can we remove this?
+resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
 
   tags = {
