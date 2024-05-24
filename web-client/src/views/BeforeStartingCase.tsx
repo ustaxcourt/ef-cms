@@ -296,7 +296,16 @@ export const BeforeStartingCase = connect(
             href="javascript:void(0);"
             secondary={true}
             onClick={() => {
-              window.print();
+              const elements = window.document.querySelectorAll(
+                '[id^="ustc-ui-accordion-item-button"]',
+              );
+
+              elements.forEach((element: any) => {
+                if (element.getAttribute('aria-expanded') !== 'true')
+                  element.click();
+              });
+
+              setTimeout(() => window.print(), 100);
             }}
           >
             Print This Page
