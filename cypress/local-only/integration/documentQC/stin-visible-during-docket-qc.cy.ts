@@ -11,6 +11,21 @@ import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/
  * Then they should see the document title was updated
  */
 describe('Docket clerk QC-ing a paper filing', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
   it('should see the document title was updated when they change the event code while QC-ing', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {

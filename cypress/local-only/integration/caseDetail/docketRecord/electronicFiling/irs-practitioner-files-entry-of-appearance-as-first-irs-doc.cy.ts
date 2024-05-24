@@ -9,6 +9,22 @@ import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhea
 import { uploadFile } from '../../../../../helpers/file/upload-file';
 
 describe('IRS Practitioner files Entry of Appearance as First IRS Document', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   describe('Auto Generate Entry of Appearance', () => {
     it('should allow auto-generation and subsequent filing of the Entry of Appearance', () => {
       const primaryFilerName = 'John';
