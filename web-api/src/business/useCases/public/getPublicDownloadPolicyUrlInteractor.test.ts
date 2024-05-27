@@ -1,10 +1,10 @@
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
 

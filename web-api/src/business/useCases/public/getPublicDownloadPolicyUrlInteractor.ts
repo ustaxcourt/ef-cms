@@ -1,10 +1,17 @@
-import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../../entities/EntityConstants';
-import { Case, isSealedCase } from '../../entities/cases/Case';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Case,
+  isSealedCase,
+} from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     isTerminalUser,
