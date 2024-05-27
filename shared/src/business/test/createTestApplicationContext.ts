@@ -49,7 +49,7 @@ import { createDocketNumber } from '../../../../web-api/src/persistence/dynamo/c
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../../../web-api/src/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/deleteWorkItem';
-import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
+import { documentUrlTranslator } from '../../../../web-api/src/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
 import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
@@ -602,7 +602,6 @@ export const createTestApplicationContext = ({
       workerQueueUrl: 'sqs.aws',
     },
     filterCaseMetadata: jest.fn(),
-    getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
