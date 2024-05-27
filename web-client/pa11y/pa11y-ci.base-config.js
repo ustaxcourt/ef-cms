@@ -17,7 +17,7 @@ const defaults = {
     args: ['--no-sandbox'],
   },
   concurrency: 3,
-  debug: false,
+  debug: true,
   'include-notices': true,
   'include-warnings': true,
   standard: 'WCAG2AA',
