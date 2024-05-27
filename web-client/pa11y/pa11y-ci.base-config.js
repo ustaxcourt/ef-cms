@@ -17,11 +17,12 @@ const defaults = {
     args: ['--no-sandbox'],
   },
   concurrency: 3,
-  debug: true,
+  debug: false,
   'include-notices': true,
   'include-warnings': true,
   standard: 'WCAG2AA',
   timeout: 60000,
+  useIncognitoBrowserContext: false,
   wait: 10000,
 };
 

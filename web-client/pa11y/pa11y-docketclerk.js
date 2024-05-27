@@ -7,7 +7,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/document-qc/section/inbox',
       'wait for td.message-select-control .usa-checkbox>label to be visible',
       'click element td.message-select-control .usa-checkbox>label',
@@ -18,7 +17,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/320-21/documents/6b2bcbcc-bc95-4103-b5fd-3e999395c2d3/edit',
       'wait for .modal-screen to be visible',
     ],
@@ -26,15 +24,11 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-19',
-    ],
+    actions: ['navigate to http://localhost:1234/case-detail/101-19'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-19/edit-details',
       'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
       'click element .usa-radio__label[for=payment-status-paid]',
@@ -46,7 +40,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-19/edit-details',
       'wait for element .usa-radio__label[for=payment-status-unpaid] to be visible',
       'click element .usa-radio__label[for=payment-status-unpaid]',
@@ -58,7 +51,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-19/edit-details',
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
@@ -70,7 +62,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
       'wait for #has-other-filing-party-label to be visible',
       'click element label#has-other-filing-party-label',
@@ -80,15 +71,11 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/reports/pending-report',
-    ],
+    actions: ['navigate to http://localhost:1234/reports/pending-report'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/reports/case-inventory-report',
       'wait for element .case-inventory-report-modal to be visible',
       'wait for #select-case-inventory-status to be visible',
@@ -105,7 +92,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/103-19/add-paper-filing',
       'wait for element #certificate-of-service-label to be visible',
       'click element #certificate-of-service-label',
@@ -116,7 +102,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19&info=case-context-edit',
       'wait for #tab-case-information to be visible',
       'wait for .progress-indicator to be hidden',
@@ -131,7 +116,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-22',
       'wait for #tab-case-information to be visible',
       'wait for .progress-indicator to be hidden',
@@ -145,7 +129,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/999-15',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -162,7 +145,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/999-15',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -179,14 +161,12 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
     ],
     url: 'http://localhost:1234',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/107-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
       'wait for #judge to be visible',
       'set field #judge to Colvin',
@@ -201,7 +181,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/111-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
       'wait for element #document-type to be visible',
       'set field #free-text to Anything',
@@ -217,7 +196,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
       'wait for #tab-order to be visible',
       'click element #tab-order',
@@ -236,7 +214,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
       'wait for #tab-opinion to be visible',
       'click element #tab-opinion',
@@ -255,7 +232,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
       'wait for #tab-order to be visible',
       'click element #tab-order',
@@ -274,7 +250,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
       'wait for #tab-order to be visible',
       'click element #tab-opinion',
@@ -292,15 +267,11 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/print-preview/110-19',
-    ],
+    actions: ['navigate to http://localhost:1234/print-preview/110-19'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/reports/case-deadlines',
       'wait for #deadlineStart-date-start to be visible',
       'set field #deadlineStart-date-start to 01/01/2019',
@@ -315,14 +286,12 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
       'wait for #remove-petitioner-btn to be visible',
       'click element #remove-petitioner-btn',
@@ -333,56 +302,48 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19?openModal=PaperServiceConfirmModal',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/111-19?openModal=UnconsolidateCasesModal',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/104-20/upload-court-issued',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/105-20/document-view?docketEntryId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/103-19/document-view?docketEntryId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/105-20/add-petitioner-to-case',
       'wait for #use-same-address-above-label to be visible',
       'click element #use-same-address-above-label',
@@ -392,7 +353,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/105-20',
       'wait for #docket-record-table to be visible',
       'click element button[data-testid="seal-docket-entry-button-1"]',
@@ -402,15 +362,11 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/maintenance',
-    ],
+    actions: ['navigate to http://localhost:1234/maintenance'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/case-detail/111-19',
       'wait for #docket-record-table to be visible',
       'wait for button[data-testid="document-viewer-link-A"] to be visible',
@@ -424,7 +380,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/reports/custom-case',
       'wait for table#custom-case-report-table to be visible',
       'set field #caseCreationStartDate-date-start to 04/19/1980',
