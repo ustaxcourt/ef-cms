@@ -51,12 +51,6 @@ jobs:
           sleep 20
       - name: Run E2E Pa11y
         run: npm run test:pa11y:${{ matrix.ci_node_index }} --node-flags --max-old-space-size=1024
-      # - name: Run E2E Pa11y 2
-      #   run: npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-      # - name: Run E2E Pa11y 3
-      #   run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-      # - name: Run E2E Pa11y 4
-      #   run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - name: Store Server Logs
         uses: actions/upload-artifact@v4
         with:
