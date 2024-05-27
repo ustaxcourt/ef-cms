@@ -1,42 +1,33 @@
 /* eslint-disable max-lines */
+const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
+const { getOnly, setTimeouts } = require('./helpers.js');
 const { loginAs } = require('./helpers');
 
-module.exports = [
+const tests = [
   {
     actions: [...loginAs({ username: 'privatePractitioner@example.com' })],
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/user/contact/edit',
-    ],
+    actions: ['navigate to http://localhost:1234/user/contact/edit'],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: ['navigate to http://localhost:1234/case-detail/105-19'],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: ['navigate to http://localhost:1234/file-a-petition/step-1'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/case-detail/105-19',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/file-a-petition/step-1',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19/request-access',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-19/request-access',
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
@@ -55,29 +46,21 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/search/no-matches',
-    ],
+    actions: ['navigate to http://localhost:1234/search/no-matches'],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: ['navigate to http://localhost:1234/my-account'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
-      'navigate to http://localhost:1234/my-account',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'navigate to http://localhost:1234/change-login-and-service-email',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
       'wait for #tab-closed to be visible',
       'click element #tab-closed',
       'wait for element #tabContent-closed to be visible',
@@ -86,3 +69,10 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
 ];
+
+const urls = tests.map(jsCheckDecorator);
+
+module.exports = {
+  defaults,
+  urls: getOnly(urls).map(setTimeouts),
+};

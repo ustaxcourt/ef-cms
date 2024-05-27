@@ -1,20 +1,18 @@
+const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
+const { getOnly, setTimeouts } = require('./helpers.js');
 const { loginAs } = require('./helpers');
 
-module.exports = [
+const tests = [
   {
     actions: [...loginAs({ username: 'irspractitioner@example.com' })],
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'irspractitioner@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-19',
-    ],
+    actions: ['navigate to http://localhost:1234/case-detail/101-19'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'irspractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/104-18&info=can-file-document',
       'wait for #button-first-irs-document to be visible',
       'click element #button-first-irs-document',
@@ -25,7 +23,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'irspractitioner@example.com' }),
       'navigate to http://localhost:1234/case-detail/102-20&info=associated-respondent',
       'wait for .sealed-banner to be visible',
       'wait for #case-title to be visible',
@@ -34,10 +31,14 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'irspractitioner@example.com' }),
-      'navigate to http://localhost:1234/search/no-matches',
-    ],
+    actions: ['navigate to http://localhost:1234/search/no-matches'],
     url: 'http://localhost:1234/',
   },
 ];
+
+const urls = tests.map(jsCheckDecorator);
+
+module.exports = {
+  defaults,
+  urls: getOnly(urls).map(setTimeouts),
+};

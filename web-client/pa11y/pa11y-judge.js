@@ -1,34 +1,28 @@
+const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
+const { getOnly, setTimeouts } = require('./helpers.js');
 const { loginAs } = require('./helpers');
 
-module.exports = [
+const tests = [
   {
     actions: [...loginAs({ username: 'judgecolvin@example.com' })],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/reports/judge-activity-report',
     ],
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
-      'navigate to http://localhost:1234/search',
-    ],
+    actions: ['navigate to http://localhost:1234/search'],
+    url: 'http://localhost:1234/',
+  },
+  {
+    actions: ['navigate to http://localhost:1234/search/no-matches'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
-      'navigate to http://localhost:1234/search/no-matches',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/search',
       'wait for #advanced-search-button to be visible',
       'set field #petitioner-name to cairo',
@@ -40,7 +34,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/search&info=practitioner-tab',
       'wait for #tab-practitioner to be visible',
       'click element #tab-practitioner',
@@ -50,29 +43,23 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
   {
-    actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
-      'navigate to http://localhost:1234/trial-sessions',
-    ],
+    actions: ['navigate to http://localhost:1234/trial-sessions'],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/trial-session-detail/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/case-detail/101-19',
       'wait for #tab-notes to be visible',
       'click element #tab-notes',
@@ -84,7 +71,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/case-detail/112-19',
       'wait for #tab-notes to be visible',
       'click element #tab-notes',
@@ -96,7 +82,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       'wait for #print-session-working-copy to be visible',
       'click element #print-session-working-copy',
@@ -108,7 +93,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'wait for [data-testid="tab-case-worksheets"] to be visible',
       'click element [data-testid="tab-case-worksheets"]',
       'wait for button[data-testid="add-edit-case-worksheet"] to be visible',
@@ -122,7 +106,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
       'wait for [data-testid="tab-pending-motions"] to be visible',
       'click element [data-testid="tab-pending-motions"]',
       'wait for button[data-testid="add-edit-pending-motion-worksheet"] to be visible',
@@ -135,3 +118,10 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
 ];
+
+const urls = tests.map(jsCheckDecorator);
+
+module.exports = {
+  defaults,
+  urls: getOnly(urls).map(setTimeouts),
+};

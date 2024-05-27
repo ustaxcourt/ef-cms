@@ -1,6 +1,8 @@
+const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
+const { getOnly, setTimeouts } = require('./helpers.js');
 const { loginAs } = require('./helpers');
 
-module.exports = [
+const tests = [
   {
     actions: [
       ...loginAs({ username: 'irssuperuser@example.com' }),
@@ -14,7 +16,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'irssuperuser@example.com' }),
       'wait for a#advanced-search-button to be visible',
       'click element #advanced-search-button',
       'wait for .advanced-search__form-container to be visible',
@@ -27,7 +28,6 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'irssuperuser@example.com' }),
       'wait for a#advanced-search-button to be visible',
       'click element #advanced-search-button',
       'wait for .advanced-search__form-container to be visible',
@@ -39,3 +39,10 @@ module.exports = [
     url: 'http://localhost:1234/',
   },
 ];
+
+const urls = tests.map(jsCheckDecorator);
+
+module.exports = {
+  defaults,
+  urls: getOnly(urls).map(setTimeouts),
+};
