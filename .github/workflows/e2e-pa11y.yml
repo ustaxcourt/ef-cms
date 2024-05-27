@@ -1,14 +1,22 @@
 name: E2E Pa11y
 
 on:
-  pull_request:
+  push:
+    - containerize-pa11y
 
 jobs:
   e2e_pa11y:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [4]
+        ci_node_index: [1, 2, 3, 4]
     env:
       CI: true
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -42,14 +50,14 @@ jobs:
           npm run start:all:ci >> /tmp/pa11y/pa11y-server.txt &
           URL=http://localhost:1234 ./wait-until.sh
           sleep 20
-      - name: Run E2E Pa11y 1
-        run: npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 2
-        run: npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 3
-        run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-      - name: Run E2E Pa11y 4
-        run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
+      - name: Run E2E Pa11y
+        run: npm run test:pa11y:${{ matrix.ci_node_index }} --node-flags --max-old-space-size=1024
+      # - name: Run E2E Pa11y 2
+      #   run: npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+      # - name: Run E2E Pa11y 3
+      #   run: npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+      # - name: Run E2E Pa11y 4
+      #   run: npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - name: Store Server Logs
         uses: actions/upload-artifact@v4
         with:
