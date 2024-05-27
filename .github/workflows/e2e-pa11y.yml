@@ -2,7 +2,8 @@ name: E2E Pa11y
 
 on:
   push:
-    - containerize-pa11y
+    branches:
+      - containerize-pa11y
 
 jobs:
   e2e_pa11y:
