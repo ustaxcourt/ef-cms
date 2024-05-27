@@ -6,14 +6,19 @@ export const getDocument = async ({
   applicationContext: IApplicationContext;
   key: string;
   useTempBucket?: boolean;
-}) => {
-  const S3 = applicationContext.getStorageClient();
-  return (
-    await S3.getObject({
+}): Promise<Buffer> => {
+  const document = await applicationContext
+    .getStorageClient()
+    .getObject({
       Bucket: useTempBucket
         ? applicationContext.environment.tempDocumentsBucketName
         : applicationContext.environment.documentsBucketName,
       Key: key,
-    }).promise()
-  ).Body;
+    })
+    .promise();
+
+  if (!document.Body) {
+    throw new Error(`Document is empty. Document id is: ${key}`);
+  }
+  return document.Body as Buffer;
 };

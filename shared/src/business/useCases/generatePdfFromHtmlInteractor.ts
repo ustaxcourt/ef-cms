@@ -1,4 +1,3 @@
-import { Body } from 'aws-sdk/clients/s3';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
 export const generatePdfFromHtmlInteractor = async (
@@ -18,7 +17,7 @@ export const generatePdfFromHtmlInteractor = async (
     headerHtml?: string;
     overwriteFooter?: boolean;
   },
-): Promise<Buffer | Body | undefined> => {
+): Promise<Buffer> => {
   if (applicationContext.environment.stage === 'local') {
     const browserLocal = await applicationContext.getChromiumBrowser();
 
