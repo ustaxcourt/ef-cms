@@ -1,8 +1,7 @@
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const generatePdfFromHtmlInteractor = async (
-  applicationContext: ServerApplicationContext,
+  applicationContext: IApplicationContext,
   {
     contentHtml,
     displayHeaderFooter = true,
