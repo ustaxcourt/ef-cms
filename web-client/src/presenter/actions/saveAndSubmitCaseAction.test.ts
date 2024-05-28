@@ -19,7 +19,7 @@ describe('saveAndSubmitCaseAction', () => {
       () =>
         new Promise(resolve => {
           resolve({
-            attachmentToPetitionFileId: 'TEST_attachmentToPetitionFileId',
+            attachmentToPetitionFileIds: ['TEST_attachmentToPetitionFileId'],
             corporateDisclosureFileId: 'TEST_corporateDisclosureFileId',
             petitionFileId: 'INTERACTOR_TEST_petitionFileId',
             stinFileId: 'TEST_stinFileId',
@@ -56,7 +56,7 @@ describe('saveAndSubmitCaseAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          attachmentToPetition: 'TEST_attachmentToPetition',
+          attachmentToPetition: ['TEST_attachmentToPetition'],
           corporateDisclosure: 'TEST_corporateDisclosure',
           petition: 'TEST_petition',
           stin: 'TEST_stin',
@@ -75,7 +75,7 @@ describe('saveAndSubmitCaseAction', () => {
       applicationContext.getUseCases().generateDocumentIds.mock.calls;
     expect(generateDocumentIdsCalls.length).toEqual(1);
     expect(generateDocumentIdsCalls[0][1]).toEqual({
-      attachmentToPetitionUploadProgress: 'TEST_attachmentToPetition',
+      attachmentToPetitionUploadProgress: ['TEST_attachmentToPetition'],
       corporateDisclosureUploadProgress: 'TEST_corporateDisclosure',
       petitionUploadProgress: 'TEST_petition',
       stinUploadProgress: 'TEST_stin',
@@ -85,7 +85,7 @@ describe('saveAndSubmitCaseAction', () => {
       applicationContext.getUseCases().createCaseInteractor.mock.calls;
     expect(createCaseInteractorCalls.length).toEqual(1);
     expect(createCaseInteractorCalls[0][1]).toEqual({
-      attachmentToPetitionFileId: 'TEST_attachmentToPetitionFileId',
+      attachmentToPetitionFileIds: ['TEST_attachmentToPetitionFileId'],
       corporateDisclosureFileId: 'TEST_corporateDisclosureFileId',
       petitionFileId: 'INTERACTOR_TEST_petitionFileId',
       petitionMetadata: {
@@ -138,7 +138,7 @@ describe('saveAndSubmitCaseAction', () => {
       },
       props: {
         fileUploadProgressMap: {
-          attachmentToPetition: 'TEST_attachmentToPetition',
+          attachmentToPetition: ['TEST_attachmentToPetition'],
           corporateDisclosure: 'TEST_corporateDisclosure',
           petition: 'TEST_petition',
           stin: 'TEST_stin',
@@ -157,7 +157,7 @@ describe('saveAndSubmitCaseAction', () => {
       applicationContext.getUseCases().generateDocumentIds.mock.calls;
     expect(generateDocumentIdsCalls.length).toEqual(1);
     expect(generateDocumentIdsCalls[0][1]).toEqual({
-      attachmentToPetitionUploadProgress: 'TEST_attachmentToPetition',
+      attachmentToPetitionUploadProgress: ['TEST_attachmentToPetition'],
       corporateDisclosureUploadProgress: 'TEST_corporateDisclosure',
       petitionUploadProgress: 'TEST_petition',
       stinUploadProgress: 'TEST_stin',
@@ -167,7 +167,7 @@ describe('saveAndSubmitCaseAction', () => {
       applicationContext.getUseCases().createCaseInteractor.mock.calls;
     expect(createCaseInteractorCalls.length).toEqual(1);
     expect(createCaseInteractorCalls[0][1]).toEqual({
-      attachmentToPetitionFileId: 'TEST_attachmentToPetitionFileId',
+      attachmentToPetitionFileIds: ['TEST_attachmentToPetitionFileId'],
       corporateDisclosureFileId: 'TEST_corporateDisclosureFileId',
       petitionFileId: 'STATE_TEST_petitionFileId',
       petitionMetadata: {
