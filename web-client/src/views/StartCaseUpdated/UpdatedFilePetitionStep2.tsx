@@ -292,6 +292,8 @@ function Spouse({
         className={classNames(
           validationErrors.hasSpouseConsent && 'usa-form-group--error',
         )}
+        errorMessageId="has-spouse-consent-error-message"
+        errorText={validationErrors.hasSpouseConsent}
       >
         <input
           checked={hasSpouseConsent || false}
@@ -311,7 +313,11 @@ function Spouse({
             });
           }}
         />
-        <label className="usa-checkbox__label" htmlFor="spouse-consent">
+        <label
+          className="usa-checkbox__label"
+          data-testid="have-spouse-consent-label"
+          htmlFor="spouse-consent"
+        >
           {"I have my spouse's consent"}
         </label>
       </FormGroup>
