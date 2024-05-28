@@ -262,6 +262,8 @@
     "@babel/preset-react": "7.24.1",
     "@babel/preset-typescript": "7.24.1",
     "@babel/register": "7.23.7",
+    "@cypress-audit/lighthouse": "^1.4.2",
+    "@cypress-audit/pa11y": "^1.4.2",
     "@faker-js/faker": "8.4.1",
     "@miovision/eslint-plugin-disallow-date": "2.0.0",
     "@types/aws-lambda": "8.10.138",

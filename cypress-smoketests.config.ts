@@ -14,6 +14,8 @@ import {
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
+const { lighthouse, prepareAudit } = require('@cypress-audit/lighthouse');
+const { pa11y } = require('@cypress-audit/pa11y');
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -47,6 +49,10 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
+        lighthouse: lighthouse(),
+        pa11y: pa11y(pa11yReport => {
+          console.log(pa11yReport); // raw pa11y reports
+        }),
         readAllItemsInBucket({
           bucketName,
           retries,
@@ -71,6 +77,9 @@ export default defineConfig({
             practitionerEmail,
           });
         },
+      });
+      on('before:browser:launch', (browser = {}, launchOptions) => {
+        prepareAudit(launchOptions);
       });
     },
     specPattern:

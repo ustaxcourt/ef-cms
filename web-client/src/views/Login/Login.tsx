@@ -46,9 +46,7 @@ export const Login = connect(
                       Log in to DAWSON
                     </h1>
                     <form className="usa-form margin-top-4 max-width-unset login-form">
-                      <label className="usa-label" htmlFor="email">
-                        Email address
-                      </label>
+                      <label className="usa-label">Email address</label>
                       <input
                         required
                         autoCapitalize="off"
