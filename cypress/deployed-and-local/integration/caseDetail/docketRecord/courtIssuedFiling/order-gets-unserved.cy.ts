@@ -8,24 +8,10 @@ import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/
 
 describe('BUG: order that was served gets unserved', () => {
   before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('DOCKET_NUMBER');
       petitionsClerkServesPetition(docketNumber);
-    });
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
     });
   });
 
