@@ -1,6 +1,6 @@
-import { getFakeFile } from '../../test/getFakeFile';
+import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
 
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { parseAndScrapePdfContents } from './parseAndScrapePdfContents';
 
 describe('parseAndScrapePdfContents', () => {

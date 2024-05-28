@@ -117,7 +117,7 @@ import { serveCaseDocument } from '../utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '../utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setPdfFormFields } from '../useCaseHelper/pdf/setPdfFormFields';
+import { setPdfFormFields } from '../../../../web-api/src/business/useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '../useCases/docketEntry/unsealDocketEntryInteractor';

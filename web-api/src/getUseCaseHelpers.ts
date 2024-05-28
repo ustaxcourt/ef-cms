@@ -26,7 +26,7 @@ import { generateStampedCoversheetInteractor } from '../../shared/src/business/u
 import { getJudgeForUserHelper } from '@shared/business/useCaseHelper/getJudgeForUserHelper';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
-import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
+import { parseAndScrapePdfContents } from './business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { removeCounselFromRemovedPetitioner } from './business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeCoversheet } from '@web-api/business/useCaseHelper/coverSheets/removeCoversheet';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
@@ -39,7 +39,7 @@ import { serveGeneratedNoticesOnCase } from '../../shared/src/business/useCaseHe
 import { setNoticeOfChangeOfTrialJudge } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge';
 import { setNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
-import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/setPdfFormFields';
+import { setPdfFormFields } from './business/useCaseHelper/pdf/setPdfFormFields';
 import { stampDocumentForService } from '../../shared/src/business/useCaseHelper/stampDocumentForService';
 import { updateCaseAndAssociations } from './business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from './business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
