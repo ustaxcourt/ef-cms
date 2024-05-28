@@ -43,7 +43,7 @@ import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/se
 import { stampDocumentForService } from '../../shared/src/business/useCaseHelper/stampDocumentForService';
 import { updateCaseAndAssociations } from './business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from './business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
+import { updateInitialFilingDocuments } from './business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
   acquireLock,

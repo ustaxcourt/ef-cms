@@ -3,11 +3,14 @@ import {
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Case,
+  getContactPrimary,
+} from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updateInitialFilingDocuments } from './updateInitialFilingDocuments';
 
 describe('addNewInitialFilingToCase', () => {
