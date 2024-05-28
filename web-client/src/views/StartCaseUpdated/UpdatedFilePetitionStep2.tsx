@@ -46,43 +46,55 @@ export const UpdatedFilePetitionStep2 = connect(
 
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
 
+    console.log('validationErrors', validationErrors);
     return (
       <>
         <p className="margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <h2>I am filing this petition on behalf of...</h2>
-        <fieldset className="usa-fieldset margin-bottom-2">
-          {updatedFilePetitionHelper.filingOptions.map((filingType, index) => {
-            return (
-              <div className="usa-radio margin-bottom-2" key={filingType}>
-                <input
-                  aria-describedby="filing-type-legend"
-                  checked={form.filingType === filingType}
-                  className="usa-radio__input"
-                  id={filingType}
-                  name="filingType"
-                  type="radio"
-                  value={filingType}
-                  onChange={e => {
-                    updateFilingTypeSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-radio__label"
-                  data-testid={`filing-type-${index}`}
-                  htmlFor={filingType}
-                  id={`${filingType}-radio-option-label`}
-                >
-                  {filingType}
-                </label>
-              </div>
-            );
-          })}{' '}
-        </fieldset>
+        <FormGroup
+          errorMessageId="filling-type-error-message"
+          errorText={validationErrors.filingType}
+        >
+          <fieldset className="usa-fieldset margin-bottom-2">
+            {updatedFilePetitionHelper.filingOptions.map(
+              (filingType, index) => {
+                return (
+                  <div
+                    className="usa-radio margin-bottom-2 filing-type-radio-option"
+                    key={filingType}
+                  >
+                    <input
+                      aria-describedby="filing-type-legend"
+                      checked={form.filingType === filingType}
+                      className="usa-radio__input"
+                      id={filingType}
+                      name="filingType"
+                      type="radio"
+                      value={filingType}
+                      onChange={e => {
+                        updateFilingTypeSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid={`filing-type-${index}`}
+                      htmlFor={filingType}
+                      id={`${filingType}-radio-option-label`}
+                    >
+                      {filingType}
+                    </label>
+                  </div>
+                );
+              },
+            )}{' '}
+          </fieldset>
+        </FormGroup>
+
         {form.filingType === 'Myself' && (
           <ContactPrimaryUpdated
             bind="form"
@@ -147,6 +159,7 @@ export const UpdatedFilePetitionStep2 = connect(
         )}
 
         <Button
+          data-testid="step-2-next-button"
           onClick={e => {
             e.preventDefault();
             resetFocus();
