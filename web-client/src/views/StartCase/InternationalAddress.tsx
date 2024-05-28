@@ -27,7 +27,10 @@ export const InternationalAddress = connect(
   }) {
     return (
       <>
-        <FormGroup errorText={validationErrors?.[type]?.address1}>
+        <FormGroup
+          errorMessageId="address-1-error-message"
+          errorText={validationErrors?.[type]?.address1}
+        >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
           </label>
@@ -103,7 +106,10 @@ export const InternationalAddress = connect(
             }}
           />
         </div>
-        <FormGroup errorText={validationErrors?.[type]?.state}>
+        <FormGroup
+          errorMessageId="state-error-message"
+          errorText={validationErrors?.[type]?.state}
+        >
           <label className="usa-label" htmlFor={`${type}.state`}>
             State/Province/Region <span className="usa-hint">(optional)</span>
           </label>
@@ -129,7 +135,10 @@ export const InternationalAddress = connect(
             }}
           />
         </FormGroup>
-        <FormGroup errorText={validationErrors?.[type]?.city}>
+        <FormGroup
+          errorMessageId="city-error-message"
+          errorText={validationErrors?.[type]?.city}
+        >
           <label className="usa-label" htmlFor={`${type}.city`}>
             City
           </label>
@@ -155,7 +164,10 @@ export const InternationalAddress = connect(
             }}
           />
         </FormGroup>
-        <FormGroup errorText={validationErrors?.[type]?.postalCode}>
+        <FormGroup
+          errorMessageId="postal-code-error-message"
+          errorText={validationErrors?.[type]?.postalCode}
+        >
           <label className="usa-label" htmlFor={`${type}.postalCode`}>
             Postal code
           </label>

@@ -41,6 +41,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
     beforeEach(() => {
       cy.get('[data-testid="filing-type-1"').click();
     });
+
     describe('Country - United States', () => {
       beforeEach(() => {
         cy.get('[data-testid="domestic-country-btn"').click();

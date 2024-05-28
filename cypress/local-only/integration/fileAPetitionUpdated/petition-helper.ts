@@ -10,7 +10,13 @@ type SelectFillType = {
   selectOption: string;
 };
 
-export type InputFillType = TextFillType | SelectFillType;
+type UploadFileFillType = {
+  errorMessage: string;
+  input: string;
+  uploadFile: string;
+};
+
+export type InputFillType = TextFillType | SelectFillType | UploadFileFillType;
 
 export function textInput(
   errorMessageSelector: string,
