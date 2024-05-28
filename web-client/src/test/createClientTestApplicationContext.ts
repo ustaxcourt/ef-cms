@@ -112,7 +112,6 @@ import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument'
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setPdfFormFields } from '@shared/business/useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
@@ -390,7 +389,6 @@ const createTestApplicationContext = () => {
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     sendServedPartiesEmails: jest.fn(),
-    setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
