@@ -43,8 +43,7 @@ RUN_SPECIFIC_TEST=""
 # Get the options
 while getopts ":achloprst:" option; do
    case $option in
-      a) #unset INTEGRATION
-         # SMOKETESTS=-smoketests
+      a) 
          READONLY=-accessibility
          ;;
       c) # run against currently deployed color
