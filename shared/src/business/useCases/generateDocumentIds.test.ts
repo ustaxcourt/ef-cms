@@ -100,21 +100,18 @@ describe('generateDocumentIds', () => {
 
   it('uploads Attachment to Petition file and a Petition file', async () => {
     await generateDocumentIds(applicationContext, {
-      attachmentToPetitionUploadProgress: {
-        file: mockFile,
-        uploadProgress: jest.fn(),
-      },
+      attachmentToPetitionUploadProgress: [
+        {
+          file: mockFile,
+          uploadProgress: jest.fn(),
+        },
+      ],
       petitionMetadata,
       petitionUploadProgress: {
         file: mockFile,
         uploadProgress: jest.fn(),
       },
     } as any);
-    console.log(
-      'mock',
-      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][1].document,
-    );
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
@@ -125,11 +122,11 @@ describe('generateDocumentIds', () => {
     await generateDocumentIds(applicationContext, {
       attachmentToPetitionUploadProgress: [
         {
-          file: { file: mockFile },
+          file: mockFile,
           uploadProgress: jest.fn(),
         },
         {
-          file: { file: mockFile2 },
+          file: mockFile2,
           uploadProgress: jest.fn(),
         },
       ],
