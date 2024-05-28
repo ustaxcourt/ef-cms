@@ -23,21 +23,17 @@ describe('irs superuser integration', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
     console.log('pool name in beforeEach:', `efcms-irs-${getCypressEnv().env}`);
-    cy.task('deleteAllCypressTestAccounts', {
-      poolName: `efcms-irs-${getCypressEnv().env}`,
-    });
+    cy.task('deleteAllIrsCypressTestAccounts');
   });
 
   after(() => {
-    cy.task('deleteAllCypressTestAccounts', {
-      poolName: `efcms-irs-${getCypressEnv().env}`,
-    });
+    cy.task('deleteAllIrsCypressTestAccounts');
   });
 
   it('should let an irs superuser view the reconciliation report and download a STIN', () => {
     cy.task('createAccount', {
+      irsEnv: true,
       password,
-      poolName: `efcms-irs-${getCypressEnv().env}`,
       role: ROLES.irsSuperuser,
       userName,
     });
