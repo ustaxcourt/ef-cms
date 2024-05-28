@@ -4,7 +4,7 @@ import { post } from './requests';
 export const createCaseInteractor = (
   applicationContext,
   requestBody: {
-    attachmentToPetitionFileId: string;
+    attachmentToPetitionFileIds: string[];
     corporateDisclosureFileId: string;
     petitionFileId: string;
     petitionMetadata: ElectronicCreatedCaseType;
