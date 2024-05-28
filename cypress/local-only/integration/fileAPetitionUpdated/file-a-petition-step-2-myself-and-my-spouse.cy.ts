@@ -5,9 +5,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
   beforeEach(() => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
-  });
 
-  beforeEach(() => {
     cy.get('[data-testid="petition-reason--1"]').focus();
     cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
 
