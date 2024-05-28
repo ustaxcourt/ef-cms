@@ -193,6 +193,7 @@ export const ContactSecondaryUpdated = connect(
             />
           </FormGroup>
           <FormGroup
+            errorMessageId="email-error-message"
             errorText={
               validationErrors.contactSecondary &&
               validationErrors.contactSecondary.email
@@ -204,6 +205,7 @@ export const ContactSecondaryUpdated = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
+              data-testid="contact-secondary-email"
               id="email"
               name="contactSecondary.email"
               ref={registerRef && registerRef('contactSecondary.email')}
