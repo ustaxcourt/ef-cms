@@ -17,8 +17,6 @@ import axios from 'axios';
 describe('irs superuser integration', () => {
   const password = getCypressEnv().defaultAccountPass;
   const userName = 'cypress_test_account_irs_super_user@example.com';
-  // let irsClientId: string, irsUserPoolId: string;
-  let idToken: string;
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -38,14 +36,16 @@ describe('irs superuser integration', () => {
       userName,
     });
 
-    // step 2: get user token
-
-    loginAsPetitioner();
-    petitionerCreatesElectronicCase().then(docketNumber => {
-      petitionsClerkQcsAndServesElectronicCase(docketNumber);
-      getReconciliationReport(idToken);
-    });
-    // getReconciliationReport(idToken);
+    cy.task('getBearerToken', { isIrsEnv: true, password, userName }).then(
+      idToken => {
+        console.log("hey heere's our bearer token", idToken);
+        loginAsPetitioner();
+        petitionerCreatesElectronicCase().then(docketNumber => {
+          petitionsClerkQcsAndServesElectronicCase(docketNumber);
+          getReconciliationReport(idToken);
+        });
+      },
+    );
   });
 });
 

@@ -1,4 +1,9 @@
+import {
+  AuthFlowType,
+  ChallengeNameType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { TOTP } from 'totp-generator';
 import { batchWrite, getDocumentClient } from '../dynamo/getDynamoCypress';
 import { getCognito } from './getCognitoCypress';
 import { getCypressEnv } from '../../env/cypressEnvironment';
@@ -47,19 +52,20 @@ const getClientId = async (userPoolId: string): Promise<string> => {
   return clientId;
 };
 
-const getUserPoolId = async (irsEnv = false): Promise<string> => {
+const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
   const results = await getCognito().listUserPools({
     MaxResults: 50,
   });
-  const poolName = irsEnv
+  console.log('is it the irs environment?', isIrsEnv);
+  const poolName = isIrsEnv
     ? `efcms-irs-${getCypressEnv().env}`
     : `efcms-${getCypressEnv().env}`;
+  console.log(`poolName: ${poolName}`);
+  // console.log('the user pools', results.UserPools);
 
   const userPoolId = results?.UserPools?.find(
     pool => pool.Name === poolName,
   )?.Id;
-
-  console.log('id on line 63', userPoolId);
 
   if (!userPoolId) {
     throw new Error('Could not get userPoolId');
@@ -220,3 +226,54 @@ export const deleteAllIrsCypressTestAccounts = async (): Promise<null> => {
   );
   return null;
 };
+
+export async function getBearerToken({
+  isIrsEnv,
+  password,
+  userName,
+}: {
+  password: string;
+  userName: string;
+  isIrsEnv: boolean;
+}): Promise<{ idToken: string }> {
+  console.log('username issss', userName);
+  const userPoolId = await getUserPoolId(isIrsEnv);
+  const clientId = await getClientId(userPoolId);
+  console.log(`clientId=${clientId}`);
+  console.log(`userPoolId=${userPoolId}`);
+  const initiateAuthResult = await getCognito().adminInitiateAuth({
+    AuthFlow: AuthFlowType.ADMIN_USER_PASSWORD_AUTH,
+    AuthParameters: {
+      PASSWORD: password,
+      USERNAME: userName,
+    },
+    ClientId: clientId,
+    UserPoolId: userPoolId,
+  });
+  console.log(`initiateAuthResult:${initiateAuthResult}`);
+  const associateResult = await getCognito().associateSoftwareToken({
+    Session: initiateAuthResult.Session,
+  });
+  console.log(`associateResult:${associateResult}`);
+
+  if (!associateResult.SecretCode) {
+    throw new Error('Could not generate Secret Code');
+  }
+  const { otp } = TOTP.generate(associateResult.SecretCode);
+  const verifyTokenResult = await getCognito().verifySoftwareToken({
+    Session: associateResult.Session,
+    UserCode: otp,
+  });
+  const challengeResponse = await getCognito().respondToAuthChallenge({
+    ChallengeName: ChallengeNameType.MFA_SETUP,
+    ChallengeResponses: {
+      USERNAME: userName,
+    },
+    ClientId: clientId,
+    Session: verifyTokenResult.Session,
+  });
+  if (!challengeResponse.AuthenticationResult?.IdToken) {
+    throw new Error('An ID token was not generated for the IRS Superuser.');
+  }
+  return { idToken: challengeResponse.AuthenticationResult?.IdToken };
+}
