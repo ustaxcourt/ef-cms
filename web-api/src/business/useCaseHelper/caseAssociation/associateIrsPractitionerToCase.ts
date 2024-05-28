@@ -1,7 +1,8 @@
-import { Case } from '../../entities/cases/Case';
-import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
-import { UserCase } from '../../entities/UserCase';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
 /**
  * associateIrsPractitionerToCase
@@ -18,7 +19,7 @@ export const associateIrsPractitionerToCase = async ({
   serviceIndicator,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
   serviceIndicator?: string;
   user: RawUser;

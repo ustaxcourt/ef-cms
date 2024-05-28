@@ -1,8 +1,9 @@
-import { Case } from '../../entities/cases/Case';
-import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { RawUser } from '@shared/business/entities/User';
-import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { UserCase } from '../../entities/UserCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
 /**
  * associatePrivatePractitionerToCase
@@ -21,7 +22,7 @@ export const associatePrivatePractitionerToCase = async ({
   serviceIndicator,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
   serviceIndicator?: string;
   user: RawUser;

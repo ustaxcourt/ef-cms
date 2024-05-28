@@ -2,11 +2,14 @@ import {
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../../test/mockUsers';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import {
+  MOCK_PRACTITIONER,
+  petitionsClerkUser,
+} from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { removeCounselFromRemovedPetitioner } from './removeCounselFromRemovedPetitioner';
 
 describe('removeCounselFromRemovedPetitioner', () => {

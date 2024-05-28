@@ -5,15 +5,15 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { MOCK_USERS } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { RawUser } from '@shared/business/entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {
   getContactPrimary,
   getContactSecondary,
-} from '../../entities/cases/Case';
+} from '../../../../../shared/src/business/entities/cases/Case';
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;

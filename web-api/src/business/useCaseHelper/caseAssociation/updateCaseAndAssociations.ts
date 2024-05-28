@@ -1,11 +1,12 @@
-import { Case } from '../../entities/cases/Case';
-import { CaseDeadline } from '../../entities/CaseDeadline';
-import { Correspondence } from '../../entities/Correspondence';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { IrsPractitioner } from '../../entities/IrsPractitioner';
-import { Message } from '../../entities/Message';
-import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
-import { WorkItem } from '../../entities/WorkItem';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
+import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import { Message } from '../../../../../shared/src/business/entities/Message';
+import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -445,7 +446,7 @@ export const updateCaseAndAssociations = async ({
   applicationContext,
   caseToUpdate,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseToUpdate: any;
 }): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
