@@ -200,6 +200,7 @@ export const UpdatedFilePetitionStep3 = connect(
                         />
                         <label
                           className="usa-checkbox__label"
+                          data-testid="redaction-acknowledgement-label"
                           htmlFor="irs-notices-acknowledgement"
                           id="irs-notices-acknowledgement-label"
                           style={{ marginTop: '0px' }}
@@ -249,6 +250,7 @@ export const UpdatedFilePetitionStep3 = connect(
         </div>
 
         <Button
+          data-testid="step-3-next-button"
           disabled={
             form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
           }
