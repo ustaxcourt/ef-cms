@@ -15,24 +15,6 @@ import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Petitioner Updates e-mail', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-
-    cy.task('deleteAllCypressTestAccounts');
-  });
-
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });

@@ -18,13 +18,6 @@ describe('Document QC Complete', () => {
   const petitionsSectionMessage = 'To CSS under Petitions Section';
 
   before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-
     cy.intercept('GET', '**/users', req => {
       req.on('before:response', res => {
         if (res.body.role === ROLES.caseServicesSupervisor) {
@@ -49,13 +42,6 @@ describe('Document QC Complete', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('UNSERVED_DOCKET_NUMBER');
-    });
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
     });
   });
 

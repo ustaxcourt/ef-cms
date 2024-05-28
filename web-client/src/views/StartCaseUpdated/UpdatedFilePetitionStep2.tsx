@@ -147,6 +147,7 @@ export const UpdatedFilePetitionStep2 = connect(
         )}
 
         <Button
+          data-testid="step-2-next-button"
           onClick={e => {
             e.preventDefault();
             resetFocus();
