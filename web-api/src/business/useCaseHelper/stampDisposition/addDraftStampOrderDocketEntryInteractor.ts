@@ -1,15 +1,15 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { Message } from '../../entities/Message';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Message } from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { Stamp } from '../../entities/Stamp';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 import { withLocking } from '@shared/business/useCaseHelper/acquireLock';

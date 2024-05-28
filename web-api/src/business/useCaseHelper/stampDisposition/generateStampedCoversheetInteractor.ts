@@ -1,5 +1,5 @@
-import { Case } from '../../entities/cases/Case';
-import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { generateCoverSheetData } from '../../../../../shared/src/business/useCases/generateCoverSheetData';
 
 /**
  * a helper function which creates a coversheet with stampData on it, then returns the new coversheet pdf
@@ -11,7 +11,7 @@ import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
  * @param {object} options.stampData the stampData from the form to add to the coversheet pdf
  * @returns {object} the new coversheet pdf
  */
-export const createStampedCoversheetPdf = async ({
+const createStampedCoversheetPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,

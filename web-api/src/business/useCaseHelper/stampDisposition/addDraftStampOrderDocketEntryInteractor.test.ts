@@ -1,18 +1,21 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { MOCK_LOCK } from '../../../test/mockLock';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   MOTION_DISPOSITIONS,
   ORDER_TYPES,
   PETITIONS_SECTION,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDocketEntryInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { clerkOfCourtUser, judgeUser } from '../../../test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  clerkOfCourtUser,
+  judgeUser,
+} from '../../../../../shared/src/test/mockUsers';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   let mockLock;
