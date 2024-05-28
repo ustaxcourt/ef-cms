@@ -1,4 +1,4 @@
-name: E2E Cypress
+name: E2E Cypress Accessibility
 
 on:
   push:
