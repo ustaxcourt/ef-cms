@@ -1,3 +1,4 @@
+import { ATP_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createCaseFromPaperAction } from './createCaseFromPaperAction';
@@ -12,6 +13,11 @@ describe('createCaseFromPaperAction', () => {
     uploadProgress: () => {},
   };
 
+  const MOCK_CASE_WITH_ATP = {
+    ...MOCK_CASE,
+    docketEntries: [...MOCK_CASE.docketEntries, ATP_DOCKET_ENTRY],
+  };
+
   const mockProps = {
     fileUploadProgressMap: {
       applicationForWaiverOfFilingFee: fileMetaData,
@@ -24,7 +30,7 @@ describe('createCaseFromPaperAction', () => {
   };
 
   const mockState = {
-    form: MOCK_CASE,
+    form: MOCK_CASE_WITH_ATP,
   };
 
   beforeAll(() => {
@@ -42,7 +48,7 @@ describe('createCaseFromPaperAction', () => {
   beforeEach(() => {
     applicationContext.getUseCases().generateDocumentIds.mockReturnValue({
       applicationForWaiverOfFilingFeeFileId: '123',
-      attachmentToPetitionFileId: '123',
+      attachmentToPetitionFileIds: ['123'],
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
       requestForPlaceOfTrialFileId: '123',
@@ -56,7 +62,7 @@ describe('createCaseFromPaperAction', () => {
   it('should generate document ids for files selected, then call createCaseFromPaperInteractor with the petition metadata and ids and call the success path when finished', async () => {
     applicationContext
       .getUseCases()
-      .createCaseFromPaperInteractor.mockReturnValue(MOCK_CASE);
+      .createCaseFromPaperInteractor.mockReturnValue(MOCK_CASE_WITH_ATP);
 
     await runAction(createCaseFromPaperAction, {
       modules: {
@@ -70,7 +76,7 @@ describe('createCaseFromPaperAction', () => {
       applicationContext.getUseCases().generateDocumentIds.mock.calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
-      attachmentToPetitionUploadProgress: fileMetaData,
+      attachmentToPetitionUploadProgress: [fileMetaData],
       corporateDisclosureUploadProgress: fileMetaData,
       petitionUploadProgress: fileMetaData,
       requestForPlaceOfTrialUploadProgress: fileMetaData,
@@ -88,7 +94,7 @@ describe('createCaseFromPaperAction', () => {
       attachmentToPetitionFileId: '123',
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
-      petitionMetadata: MOCK_CASE,
+      petitionMetadata: MOCK_CASE_WITH_ATP,
       requestForPlaceOfTrialFileId: '123',
       stinFileId: '123',
     });
@@ -114,7 +120,7 @@ describe('createCaseFromPaperAction', () => {
       applicationContext.getUseCases().generateDocumentIds.mock.calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
-      attachmentToPetitionUploadProgress: fileMetaData,
+      attachmentToPetitionUploadProgress: [fileMetaData],
       corporateDisclosureUploadProgress: fileMetaData,
       petitionUploadProgress: fileMetaData,
       requestForPlaceOfTrialUploadProgress: fileMetaData,
