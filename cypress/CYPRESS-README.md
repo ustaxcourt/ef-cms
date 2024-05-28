@@ -29,7 +29,7 @@ In order to write a realiable cypress test suites, there are some best practices
 - Rely on `after` hooks.
   - Instead any setup should be performed in a `before` hook. Running code in an `after` can potentially not get run because cypress will stop a test early on a failure which means your after will not run.
 - Use aliases
-  - Instead use nesting of chainables in cypress tests.  Please review the `cypress/local-only/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
+  - Instead use nesting of chainables in cypress tests.  Please review the `cypress/local-only/tests/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
 
 
 # Test Organization
