@@ -1,6 +1,10 @@
 import { terminalLog } from '../../../helpers/cypressTasks/logs';
 
 describe('Forgot Password - Accessibility', () => {
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   it('should be free of a11y issues', () => {
     cy.visit('/forgot-password');
 

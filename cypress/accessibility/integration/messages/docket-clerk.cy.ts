@@ -2,6 +2,10 @@ import { loginAsDocketClerk } from '../../../helpers/authentication/login-as-hel
 import { terminalLog } from '../../../helpers/cypressTasks/logs';
 
 describe('Messages', () => {
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   describe('My', () => {
     it('Inbox - should be free of a11y issues', () => {
       loginAsDocketClerk();

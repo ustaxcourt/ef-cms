@@ -2,6 +2,10 @@ import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as
 import { terminalLog } from '../../../helpers/cypressTasks/logs';
 
 describe('Advanced Search', () => {
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
   it('Case - should be free of a11y issues', () => {
     loginAsAdmissionsClerk();
 
