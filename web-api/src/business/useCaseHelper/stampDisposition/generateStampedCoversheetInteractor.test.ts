@@ -1,6 +1,6 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOTION_DISPOSITIONS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateStampedCoversheetInteractor } from './generateStampedCoversheetInteractor';
 
 describe('generateStampedCoversheetInteractor', () => {
