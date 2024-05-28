@@ -316,9 +316,9 @@ Since our system generates a lot of PDFs, we have a set of tests that verify the
 All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  In order to update these, you will need to run the following command:
 
 ```
-docker build -t efcms -f Dockerfile . && \
-docker build -t efcms-local -f Dockerfile-local . && \
-docker run -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
+docker build --platform=linux/amd64 -t efcms -f Dockerfile . && \
+docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . && \
+docker run --platform=linux/amd64 -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
 ```
 
 After inspecting the failed pdfs, override the existing the pdfs by running the following command:
