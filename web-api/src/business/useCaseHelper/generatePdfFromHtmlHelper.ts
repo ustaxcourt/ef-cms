@@ -1,5 +1,5 @@
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
-import { headerFontFace } from '../useCases/headerFontFace';
+import { headerFontFace } from '../../../../shared/src/business/useCases/headerFontFace';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 

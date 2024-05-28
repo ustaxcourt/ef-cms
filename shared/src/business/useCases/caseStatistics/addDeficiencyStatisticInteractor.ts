@@ -5,7 +5,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { Statistic } from '../../entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * addDeficiencyStatistic

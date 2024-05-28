@@ -1,7 +1,7 @@
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
-} from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+} from '../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 export const stampDocumentForService = async ({
   applicationContext,

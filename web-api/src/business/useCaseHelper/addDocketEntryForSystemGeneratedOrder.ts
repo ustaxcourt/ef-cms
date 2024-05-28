@@ -1,9 +1,9 @@
 import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../entities/EntityConstants';
-import { DocketEntry } from '../entities/DocketEntry';
-import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 /**
  *

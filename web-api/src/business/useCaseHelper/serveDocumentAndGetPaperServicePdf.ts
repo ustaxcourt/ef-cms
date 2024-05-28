@@ -1,5 +1,5 @@
-import { Case } from '../entities/cases/Case';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
 /**

@@ -1,12 +1,15 @@
-import { testPdfDoc } from '../test/getFakeFile';
+import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
-import { Case, getContactPrimary } from '../entities/cases/Case';
+import {
+  Case,
+  getContactPrimary,
+} from '../../../../shared/src/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../test/mockCase';
-import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '../../../../shared/src/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {

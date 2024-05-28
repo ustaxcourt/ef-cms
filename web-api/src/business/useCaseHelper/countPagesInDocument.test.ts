@@ -1,6 +1,6 @@
-import { testPdfDoc } from '../test/getFakeFile';
+import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { countPagesInDocument } from './countPagesInDocument';
 
 describe('countPagesInDocument', () => {

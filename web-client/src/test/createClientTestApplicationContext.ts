@@ -28,7 +28,6 @@ import {
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
-import { addDocketEntryForSystemGeneratedOrder } from '@shared/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
@@ -97,7 +96,6 @@ import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCo
 import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
-import { getUserIdForNote } from '@shared/business/useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
@@ -375,11 +373,7 @@ const createTestApplicationContext = () => {
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
-    addDocketEntryForSystemGeneratedOrder: jest
-      .fn()
-      .mockImplementation(addDocketEntryForSystemGeneratedOrder),
     getJudgeInSectionHelper: jest.fn(),
-    getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     sendServedPartiesEmails: jest.fn(),
     updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });

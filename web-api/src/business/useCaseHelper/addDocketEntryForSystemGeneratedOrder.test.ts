@@ -1,11 +1,11 @@
 import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { MOCK_CASE } from '../../test/mockCase';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addDocketEntryForSystemGeneratedOrder } from './addDocketEntryForSystemGeneratedOrder';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { applicationContext });
