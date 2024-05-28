@@ -16,6 +16,13 @@ export const createCaseFromPaperAction = async ({
   const { fileUploadProgressMap } = props;
   let caseDetail: RawCase;
 
+  const attachmentToPetitionUploadProgress =
+    fileUploadProgressMap.attachmentToPetition
+      ? ([
+          fileUploadProgressMap.attachmentToPetition,
+        ] as FileUploadProgressType[])
+      : undefined;
+
   try {
     const {
       applicationForWaiverOfFilingFeeFileId,
@@ -29,9 +36,7 @@ export const createCaseFromPaperAction = async ({
       .generateDocumentIds(applicationContext, {
         applicationForWaiverOfFilingFeeUploadProgress:
           fileUploadProgressMap.applicationForWaiverOfFilingFee,
-        attachmentToPetitionUploadProgress: [
-          fileUploadProgressMap.attachmentToPetition,
-        ],
+        attachmentToPetitionUploadProgress,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure,
         petitionUploadProgress: fileUploadProgressMap.petition,
