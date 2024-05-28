@@ -1,19 +1,5 @@
+import { InputFillType, selectInput, textInput } from './petition-helper';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
-import { selectInput, textInput } from './petition-helper';
-
-type TextFillType = {
-  errorMessage: string;
-  input: string;
-  inputValue: string;
-};
-
-type SelectFillType = {
-  errorMessage: string;
-  input: string;
-  selectOption: string;
-};
-
-type InputFillType = TextFillType | SelectFillType;
 
 describe('File a petition', () => {
   beforeEach(() => {

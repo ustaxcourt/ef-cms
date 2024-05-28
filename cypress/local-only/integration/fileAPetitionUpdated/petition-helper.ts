@@ -1,3 +1,17 @@
+type TextFillType = {
+  errorMessage: string;
+  input: string;
+  inputValue: string;
+};
+
+type SelectFillType = {
+  errorMessage: string;
+  input: string;
+  selectOption: string;
+};
+
+export type InputFillType = TextFillType | SelectFillType;
+
 export function textInput(
   errorMessageSelector: string,
   inputSelector: string,
