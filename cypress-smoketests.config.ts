@@ -1,5 +1,6 @@
 import {
   confirmUser,
+  createAccount,
   deleteAllCypressTestAccounts,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
@@ -26,8 +27,16 @@ export default defineConfig({
         confirmUser({ email }) {
           return confirmUser({ email });
         },
-        deleteAllCypressTestAccounts() {
-          return deleteAllCypressTestAccounts();
+        createAccount({ password, poolName, role, userName }) {
+          return createAccount({
+            password,
+            poolName,
+            role,
+            userName,
+          });
+        },
+        deleteAllCypressTestAccounts(poolName?: string) {
+          return deleteAllCypressTestAccounts(poolName);
         },
         deleteAllItemsInEmailBucket({
           bucketName,
