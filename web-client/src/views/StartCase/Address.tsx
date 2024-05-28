@@ -137,7 +137,10 @@ export const Address = connect(
                 />
                 <div>
                   {validationErrors?.[type]?.state && (
-                    <span className="usa-error-message">
+                    <span
+                      className="usa-error-message"
+                      data-testid="state-error-message"
+                    >
                       {validationErrors[type].state}
                     </span>
                   )}
@@ -173,6 +176,16 @@ export const Address = connect(
                     });
                   }}
                 />
+                <div>
+                  {validationErrors?.[type]?.postalCode && (
+                    <span
+                      className="usa-error-message"
+                      data-testid="postal-code-error-message"
+                    >
+                      {validationErrors[type].postalCode}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -181,7 +194,10 @@ export const Address = connect(
     }
     return (
       <div className="address-info">
-        <FormGroup errorText={validationErrors?.[type]?.address1}>
+        <FormGroup
+          errorMessageId="address-1-error-message"
+          errorText={validationErrors?.[type]?.address1}
+        >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
           </label>
@@ -255,7 +271,10 @@ export const Address = connect(
             }}
           />
         </div>
-        <FormGroup errorText={validationErrors?.[type]?.city}>
+        <FormGroup
+          errorMessageId="city-error-message"
+          errorText={validationErrors?.[type]?.city}
+        >
           <label className="usa-label" htmlFor={`${type}.city`}>
             City
           </label>
