@@ -1,14 +1,14 @@
-import { getFakeFile } from '../../test/getFakeFile';
+import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
 
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createAndServeNoticeDocketEntry } from './createAndServeNoticeDocketEntry';
-import { docketClerk1User } from '../../../test/mockUsers';
+import { docketClerk1User } from '../../../../../shared/src/test/mockUsers';
 
 describe('createAndServeDocketEntry', () => {
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';

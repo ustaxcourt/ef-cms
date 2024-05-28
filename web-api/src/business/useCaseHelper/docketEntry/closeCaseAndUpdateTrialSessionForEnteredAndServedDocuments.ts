@@ -1,9 +1,9 @@
 import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { NotFoundError } from '@web-api/errors/errors';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity, eventCode }) => {

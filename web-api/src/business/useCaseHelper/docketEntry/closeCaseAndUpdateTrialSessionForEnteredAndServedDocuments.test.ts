@@ -1,13 +1,13 @@
 import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from './closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {

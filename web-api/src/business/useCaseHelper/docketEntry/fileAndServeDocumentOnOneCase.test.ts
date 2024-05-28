@@ -4,19 +4,22 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { WorkItem } from '../../entities/WorkItem';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { createISODateString } from '../../utilities/DateHandler';
-import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  docketClerkUser,
+  judgeUser,
+} from '../../../../../shared/src/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 
 describe('fileAndServeDocumentOnOneCase', () => {

@@ -1,8 +1,8 @@
-import { Case } from '../../entities/cases/Case';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { WorkItem } from '../../entities/WorkItem';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 
 export const fileAndServeDocumentOnOneCase = async ({
   applicationContext,

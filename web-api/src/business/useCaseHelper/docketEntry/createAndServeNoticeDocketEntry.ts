@@ -1,12 +1,15 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTIES_CODES,
-} from '../../entities/EntityConstants';
-import { DocketEntry, getServedPartiesCode } from '../../entities/DocketEntry';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  DocketEntry,
+  getServedPartiesCode,
+} from '../../../../../shared/src/business/entities/DocketEntry';
 import { RawUser } from '@shared/business/entities/User';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { createISODateString } from '../../utilities/DateHandler';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const createAndServeNoticeDocketEntry = async (
   applicationContext: IApplicationContext,
