@@ -1,8 +1,8 @@
-import { DocketEntry } from '../../entities/DocketEntry';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { omit } from 'lodash';
 
 const addNewInitialFilingToCase = ({
