@@ -974,6 +974,7 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+            - accessibility-tests
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
