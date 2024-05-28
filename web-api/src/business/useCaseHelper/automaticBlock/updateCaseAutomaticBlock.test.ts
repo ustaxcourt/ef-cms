@@ -1,12 +1,15 @@
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { MOCK_USERS } from '../../../test/mockUsers';
-import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  MOCK_CASE,
+  MOCK_CASE_WITHOUT_PENDING,
+} from '../../../../../shared/src/test/mockCase';
+import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
+import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 

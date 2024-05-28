@@ -123,7 +123,7 @@ import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocume
 import { unsealDocketEntryInteractor } from '../useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateCase } from '../../../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../../../web-api/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateCaseAutomaticBlock } from '../useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseAutomaticBlock } from '../../../../web-api/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseCorrespondence } from '../../../../web-api/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '../../../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '../../../../web-api/src/persistence/dynamo/users/updateUserRecords';

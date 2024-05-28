@@ -117,7 +117,6 @@ import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServi
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
-import { updateCaseAutomaticBlock } from '@shared/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPractitionerUser';
@@ -392,9 +391,6 @@ const createTestApplicationContext = () => {
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     sendServedPartiesEmails: jest.fn(),
     setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
-    updateCaseAutomaticBlock: jest
-      .fn()
-      .mockImplementation(updateCaseAutomaticBlock),
     updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
