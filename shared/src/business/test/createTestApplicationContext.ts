@@ -66,7 +66,7 @@ import {
 } from '../../../src/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
-import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
+import { generateAndServeDocketEntry } from '../../../../web-api/src/business/useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@shared/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {

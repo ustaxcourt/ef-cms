@@ -1,9 +1,9 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
   formatNow,
-} from '../../utilities/DateHandler';
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import { PetitionService } from '@shared/business/utilities/emailGenerator/emailTemplates/PetitionService';
 import React from 'react';
 import ReactDOM from 'react-dom/server';

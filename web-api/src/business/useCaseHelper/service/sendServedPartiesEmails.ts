@@ -1,5 +1,5 @@
-import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocumentService } from '@shared/business/utilities/emailGenerator/emailTemplates/DocumentService';
 import { cloneDeep } from 'lodash';
 import React from 'react';

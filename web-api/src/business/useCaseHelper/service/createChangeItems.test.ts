@@ -1,7 +1,10 @@
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateAndServeDocketEntry } from './createChangeItems';
 
 describe('generateAndServeDocketEntry', () => {

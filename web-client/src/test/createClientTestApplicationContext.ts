@@ -50,7 +50,6 @@ import { createMockDocumentClient } from '@shared/business/test/createMockDocume
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '@shared/business/utilities/documentUrlTranslator';
-import { fileAndServeDocumentOnOneCase } from '@shared/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -65,7 +64,6 @@ import {
   getJudgeLastName,
 } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
-import { generateAndServeDocketEntry } from '@shared/business/useCaseHelper/service/createChangeItems';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@shared/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
@@ -380,12 +378,6 @@ const createTestApplicationContext = () => {
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
-    fileAndServeDocumentOnOneCase: jest
-      .fn()
-      .mockImplementation(fileAndServeDocumentOnOneCase),
-    generateAndServeDocketEntry: jest
-      .fn()
-      .mockImplementation(generateAndServeDocketEntry),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     sendServedPartiesEmails: jest.fn(),

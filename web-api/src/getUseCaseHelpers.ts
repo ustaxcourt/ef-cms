@@ -3,7 +3,7 @@ import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from '../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
-import { appendPaperServiceAddressPageToPdf } from '../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
+import { appendPaperServiceAddressPageToPdf } from './business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
 import { associateIrsPractitionerToCase } from './business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 import { associatePrivatePractitionerToCase } from './business/useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { associateSwingTrialSessions } from '../../shared/src/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
@@ -17,7 +17,7 @@ import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/cre
 import { createUserForContact } from './business/useCaseHelper/caseAssociation/createUserForContact';
 import { fileAndServeDocumentOnOneCase } from './business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { formatConsolidatedCaseCoversheetData } from '@web-api/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
-import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
+import { generateAndServeDocketEntry } from './business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateChangeOfAddressHelper } from '../../shared/src/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
@@ -32,8 +32,8 @@ import { removeCoversheet } from '@web-api/business/useCaseHelper/coverSheets/re
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
 import { sendEmailVerificationLink } from './business/useCaseHelper/email/sendEmailVerificationLink';
-import { sendIrsSuperuserPetitionEmail } from '../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
-import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
+import { sendIrsSuperuserPetitionEmail } from './business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
+import { sendServedPartiesEmails } from './business/useCaseHelper/service/sendServedPartiesEmails';
 import { serveDocumentAndGetPaperServicePdf } from '../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf';
 import { serveGeneratedNoticesOnCase } from '../../shared/src/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase';
 import { setNoticeOfChangeOfTrialJudge } from '../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge';

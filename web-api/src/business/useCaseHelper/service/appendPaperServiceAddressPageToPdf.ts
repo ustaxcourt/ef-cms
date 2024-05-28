@@ -19,7 +19,7 @@ export const appendPaperServiceAddressPageToPdf = async ({
   });
 };
 
-export const getAddressPages = async ({
+const getAddressPages = async ({
   applicationContext,
   caseEntity,
   servedParties,
@@ -39,7 +39,7 @@ export const getAddressPages = async ({
   return addressPages;
 };
 
-export const copyToNewPdf = async ({
+const copyToNewPdf = async ({
   addressPages,
   applicationContext,
   newPdfDoc,
