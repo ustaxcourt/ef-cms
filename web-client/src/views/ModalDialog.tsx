@@ -38,7 +38,7 @@ export const ModalDialog = ({
   confirmLabel?: string;
   confirmSequence: any;
   confirmTarget?: string;
-  dataTestId: string;
+  dataTestId?: string;
   disableSubmit?: boolean;
   message?: string;
   preventCancelOnBlur?: boolean;

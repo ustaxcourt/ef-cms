@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../ustc-ui/If/If';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -41,7 +40,7 @@ const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
     {caseDetailHelper.showFilingFeeExternal && (
       <span data-testid="filling-fee-message">
         *Filing fee status may take 2-3 business days from payment received date
-        or approval of waiver to update
+        or approval of waiver to update.
       </span>
     )}
   </React.Fragment>
@@ -79,11 +78,14 @@ export const CaseInformationExternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
+    showPrintConfirmationLink:
+      state.formattedCaseDetail.showPrintConfirmationLink,
   },
   function CaseInformationExternal({
     caseDetailHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
+    showPrintConfirmationLink,
   }) {
     return (
       <div className="petitions-details">
@@ -95,7 +97,7 @@ export const CaseInformationExternal = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">
                       Case Details
-                      <If bind="formattedCaseDetail.showPrintConfirmationLink">
+                      {showPrintConfirmationLink && (
                         <Button
                           link
                           className="margin-right-0 margin-top-1 padding-0 float-right"
@@ -112,7 +114,7 @@ export const CaseInformationExternal = connect(
                           />
                           Print Confirmation
                         </Button>
-                      </If>
+                      )}
                     </h3>
                     <CaseDetails
                       caseDetail={formattedCaseDetail}
@@ -152,7 +154,7 @@ export const CaseInformationExternal = connect(
             <div className="margin-top-2">
               <div className="case-info-card padding-bottom-3">
                 <h3>Case Details</h3>{' '}
-                <If bind="formattedCaseDetail.showPrintConfirmationLink">
+                {showPrintConfirmationLink && (
                   <Button
                     link
                     onClick={() => {
@@ -168,7 +170,7 @@ export const CaseInformationExternal = connect(
                     />
                     Print Confirmation
                   </Button>
-                </If>
+                )}
                 <CaseDetails
                   caseDetail={formattedCaseDetail}
                   caseDetailHelper={caseDetailHelper}

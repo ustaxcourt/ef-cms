@@ -1,10 +1,25 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const DeleteCaseNoteConfirmModal = connect(
-  {},
-  function DeleteCaseNoteConfirmModal({ onConfirmSequence }) {
+type DeleteCaseNoteConfirmModalProps = {
+  onConfirmSequence: Function;
+};
+
+const deleteCaseNoteConfirmModalDeps = {
+  clearModalSequence: sequences.clearModalSequence,
+};
+
+export const DeleteCaseNoteConfirmModal = connect<
+  DeleteCaseNoteConfirmModalProps,
+  typeof deleteCaseNoteConfirmModalDeps
+>(
+  deleteCaseNoteConfirmModalDeps,
+  function DeleteCaseNoteConfirmModal({
+    clearModalSequence,
+    onConfirmSequence,
+  }) {
     return (
       <ConfirmModal
         noCloseBtn
@@ -12,7 +27,7 @@ export const DeleteCaseNoteConfirmModal = connect(
         confirmLabel="Yes, Delete"
         preventCancelOnBlur={true}
         title="Are You Sure You Want to Delete This Note?"
-        onCancelSequence="clearModalSequence"
+        onCancelSequence={clearModalSequence}
         onConfirmSequence={onConfirmSequence}
       >
         <p>This action cannot be undone.</p>
