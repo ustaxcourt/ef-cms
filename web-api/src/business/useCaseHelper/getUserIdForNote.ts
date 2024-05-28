@@ -1,4 +1,4 @@
-import { User } from '../entities/User';
+import { User } from '../../../../shared/src/business/entities/User';
 
 /**
  * returns the userId of who this note should be stored on.  This is mainly

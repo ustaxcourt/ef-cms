@@ -25,8 +25,8 @@ import {
 } from '../../sharedAppContext';
 import { User } from '../entities/User';
 import { abbreviateState } from '../utilities/abbreviateState';
-import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
-import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { addDocketEntryForSystemGeneratedOrder } from '../../../../web-api/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkIndexRecords';
@@ -67,7 +67,7 @@ import {
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '../../../../web-api/src/business/useCaseHelper/service/createChangeItems';
-import { generateChangeOfAddressHelper } from '@shared/business/useCaseHelper/generateChangeOfAddressHelper';
+import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
@@ -103,7 +103,7 @@ import { getStampBoxCoordinates } from '../../../src/business/utilities/getStamp
 import { getTextByCount } from '../utilities/getTextByCount';
 import { getTrialSessionById } from '../../../../web-api/src/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '../../../../web-api/src/persistence/dynamo/users/getUserById';
-import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
+import { getUserIdForNote } from '../../../../web-api/src/business/useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '../../../../web-api/src/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '../../../../web-api/src/persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '../../../../web-api/src/persistence/dynamo/workitems/putWorkItemInOutbox';

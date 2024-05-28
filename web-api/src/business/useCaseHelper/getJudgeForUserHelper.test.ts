@@ -1,5 +1,5 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgeForUserHelper } from './getJudgeForUserHelper';
 import { validUser } from '@shared/test/mockUsers';
 

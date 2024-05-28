@@ -1,8 +1,8 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../business/entities/EntityConstants';
-import { MOCK_LOCK } from '../../test/mockLock';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 const onLockError = new ServiceUnavailableError('The case is currently locked');
 

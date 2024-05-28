@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { Practitioner } from '../entities/Practitioner';
+import { Practitioner } from '../../../../shared/src/business/entities/Practitioner';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
