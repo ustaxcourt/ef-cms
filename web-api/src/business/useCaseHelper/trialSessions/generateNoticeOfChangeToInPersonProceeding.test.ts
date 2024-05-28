@@ -1,6 +1,6 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToInPersonProceeding } from './generateNoticeOfChangeToInPersonProceeding';
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {

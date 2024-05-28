@@ -1,10 +1,10 @@
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getFakeFile } from '../../test/getFakeFile';
-import { petitionsClerkUser } from '../../../test/mockUsers';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
+import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { setNoticeOfChangeToInPersonProceeding } from './setNoticeOfChangeToInPersonProceeding';
 
 describe('setNoticeOfChangeToInPersonProceeding', () => {

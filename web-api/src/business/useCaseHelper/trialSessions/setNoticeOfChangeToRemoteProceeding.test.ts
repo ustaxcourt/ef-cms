@@ -1,12 +1,12 @@
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
-} from '../../../test/mockTrial';
-import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { petitionsClerkUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/test/mockTrial';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {

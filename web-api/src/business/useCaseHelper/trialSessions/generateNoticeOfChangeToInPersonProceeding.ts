@@ -2,10 +2,10 @@ import {
   FORMATS,
   createISODateString,
   formatDateString,
-} from '../../utilities/DateHandler';
-import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
+import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
 
 export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext: IApplicationContext,

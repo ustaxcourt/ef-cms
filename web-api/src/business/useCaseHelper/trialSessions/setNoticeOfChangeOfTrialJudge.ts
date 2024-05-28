@@ -1,5 +1,5 @@
-import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
-import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
 
 export const setNoticeOfChangeOfTrialJudge = async (
   applicationContext,

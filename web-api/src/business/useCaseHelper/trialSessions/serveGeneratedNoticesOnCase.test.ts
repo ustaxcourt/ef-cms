@@ -1,9 +1,12 @@
-import { getFakeFile, testPdfDoc } from '../../test/getFakeFile';
+import {
+  getFakeFile,
+  testPdfDoc,
+} from '../../../../../shared/src/business/test/getFakeFile';
 
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
 
 describe('serveGeneratedNoticesOnCase', () => {
