@@ -44,7 +44,6 @@ export const AdvancedSearch = connect(
     advancedSearchTab,
     advancedSearchTabChangeSequence,
     cerebralBindSimpleSetStateSequence,
-    practitionerSearchHelper,
     searchTabs,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
@@ -190,7 +189,7 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </>
             )}
-            {practitionerSearchHelper.showPractitionerSearch &&
+            {advancedSearchHelper.showPractitionerSearch &&
               advancedSearchTab === searchTabs.PRACTITIONER && (
                 <>
                   <PractitionerSearchForm

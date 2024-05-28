@@ -41,6 +41,29 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
+const canViewSTIN = (entry, petitionDocketEntry, user) => {
+  if (
+    user.role === ROLES.petitionsClerk &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  } else if (
+    user.role === ROLES.caseServicesSupervisor &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  } else if (
+    user.role === ROLES.irsSuperuser &&
+    DocketEntry.isServed(entry) &&
+    DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export class DocketEntry extends JoiValidationEntity {
   public action?: string;
   public additionalInfo?: string;
@@ -676,22 +699,10 @@ export class DocketEntry extends JoiValidationEntity {
 
     //Only allow STIN download if:
     //  - role Petition Clerk & entry not served, or
+    //  - role Case Services Supervisor & entry not served, or
     //  - role IRS Superuser and entry served.
     if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
-      if (
-        user.role === ROLES.petitionsClerk &&
-        !DocketEntry.isServed(entry) &&
-        !DocketEntry.isServed(petitionDocketEntry)
-      ) {
-        return true;
-      } else if (
-        user.role === ROLES.irsSuperuser &&
-        DocketEntry.isServed(entry) &&
-        DocketEntry.isServed(petitionDocketEntry)
-      ) {
-        return true;
-      }
-      return false;
+      return canViewSTIN(entry, petitionDocketEntry, user);
     }
 
     if (User.isInternalUser(user.role)) return true;
