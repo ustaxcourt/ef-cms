@@ -6,6 +6,7 @@ describe('generateDocumentIds', () => {
   let petitionMetadata: object;
 
   const mockFile = {};
+  const mockFile2 = {};
 
   beforeAll(() => {
     applicationContext
@@ -109,11 +110,55 @@ describe('generateDocumentIds', () => {
         uploadProgress: jest.fn(),
       },
     } as any);
+    console.log(
+      'mock',
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    );
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    ).toEqual(mockFile);
+  });
+
+  it('uploads multiple Attachment to Petition files and a Petition file', async () => {
+    await generateDocumentIds(applicationContext, {
+      attachmentToPetitionUploadProgress: [
+        {
+          file: { file: mockFile },
+          uploadProgress: jest.fn(),
+        },
+        {
+          file: { file: mockFile2 },
+          uploadProgress: jest.fn(),
+        },
+      ],
+      petitionMetadata,
+      petitionUploadProgress: {
+        file: mockFile,
+        uploadProgress: jest.fn(),
+      },
+    } as any);
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls.length,
+    ).toBe(3);
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[0][1].document,
+    ).toEqual(mockFile);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][1].document,
     ).toEqual(mockFile);
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[2][1].document,
+    ).toEqual(mockFile2);
   });
 
   it('throws an error if there is an error uploading documents', async () => {

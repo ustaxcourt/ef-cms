@@ -1612,12 +1612,14 @@ export const JUDGE_TITLES = [
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
 
-export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
-
 export type FileUploadProgressType = {
   file: any;
   uploadProgress: (progressEvent: any) => void;
 };
+
+export type FileUploadProgressValueType =
+  | FileUploadProgressType
+  | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
