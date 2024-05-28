@@ -1005,7 +1005,7 @@ export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
 
 export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
   [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
-  // [CASE_TYPES_MAP.passport]: 'Passport',
+  [CASE_TYPES_MAP.passport]: 'Passport',
   [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',
   [CASE_TYPES_MAP.whistleblower]: 'Whistleblower',
   [CASE_TYPES_MAP.workerClassification]: 'Worker Classification',
@@ -1132,6 +1132,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const ALL_STATE_OPTIONS = {
+  ...US_STATES,
+  ...US_STATES_OTHER,
+  Other: 'Other',
+};
 
 const statesArray = [
   ...Object.values(US_STATES),

@@ -43,8 +43,8 @@ export const setDefaultContactStateAction = ({
 
   if (showContactSecondary) {
     store.set(state.form.contactSecondary, {});
-    store.set(state.form.useSameAsPrimary, true);
     store.set(state.form.hasSpouseConsent, false);
+    store.set(state.form.useSameAsPrimary, true);
   } else {
     store.set(state.form.contactSecondary, {});
     store.set(state.form.hasSpouseConsent, false);

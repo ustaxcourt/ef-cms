@@ -1,5 +1,4 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
@@ -34,7 +33,6 @@ export const UpdatedFilePetitionStep4 = connect(
   }) {
     return (
       <>
-        <ErrorNotification />
         <div className="margin-bottom-5">
           <p className="margin-top-0 required-statement">
             *All fields required

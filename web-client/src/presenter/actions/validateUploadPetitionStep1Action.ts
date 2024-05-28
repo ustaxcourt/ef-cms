@@ -8,13 +8,13 @@ export const validateUploadPetitionStep1Action = ({
 }: ActionProps<{ step1Data: any }>) => {
   const { step1Data } = props;
 
-  // move this logic to entity?
+  // move this logic to new action?
   step1Data.petitionReasons = (arr => (arr.length > 0 ? arr : ['']))(
-    step1Data.petitionReasons.filter(r => r.length > 1),
+    step1Data.petitionReasons.filter(r => r.length >= 1),
   );
 
   step1Data.petitionFacts = (arr => (arr.length > 0 ? arr : ['']))(
-    step1Data.petitionFacts.filter(r => r.length > 1),
+    step1Data.petitionFacts.filter(r => r.length >= 1),
   );
 
   store.set(state.form.petitionReasons, step1Data.petitionReasons);

@@ -24,7 +24,7 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
   public hasSpouseConsent: boolean;
   public estateType: string;
   public minorIncompetentType: string;
-  public contactPrimary: {};
+  public contactPrimary?: {};
   public contactSecondary?: {};
 
   constructor(rawProps) {

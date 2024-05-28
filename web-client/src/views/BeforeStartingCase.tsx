@@ -81,11 +81,10 @@ export const BeforeStartingCase = connect(
                       }
                       <Button
                         link
-                        className="usa-link--external text-left mobile-text-wrap"
+                        className="usa-link--external text-left mobile-text-wrap margin-left-1"
                         href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
                         icon="file-pdf"
                         iconColor="blue"
-                        overrideMargin="margin-right-1"
                         rel="noopener noreferrer"
                         target="_blank"
                       >
@@ -144,7 +143,7 @@ export const BeforeStartingCase = connect(
                     <Button
                       link
                       className="usa-link--external text-left mobile-text-wrap"
-                      href="https://www.ustaxcourt.gov/rules.html"
+                      href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                       iconColor="blue"
                       overrideMargin="margin-right-1"
                       rel="noopener noreferrer"
@@ -273,6 +272,8 @@ export const BeforeStartingCase = connect(
                   link
                   className="usa-link--external text-left mobile-text-wrap"
                   href="https://www.ustaxcourt.gov/resources/forms/Corporate_Disclosure_Statement_Form.pdf"
+                  icon="file-pdf"
+                  iconColor="blue"
                   overrideMargin="margin-right-0"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -282,7 +283,6 @@ export const BeforeStartingCase = connect(
               </AccordionItem>
             </Accordion>
           </div>
-
           <Button
             className="margin-top-5"
             data-testid="go-to-step-1"
@@ -291,7 +291,28 @@ export const BeforeStartingCase = connect(
             {"I'm Ready to Start"}
           </Button>
           <Button
+            className="margin-top-5"
+            data-testid="go-to-step-1"
+            href="javascript:void(0);"
+            secondary={true}
+            onClick={() => {
+              const elements = window.document.querySelectorAll(
+                '[id^="ustc-ui-accordion-item-button"]',
+              );
+
+              elements.forEach((element: any) => {
+                if (element.getAttribute('aria-expanded') !== 'true')
+                  element.click();
+              });
+
+              setTimeout(() => window.print(), 100);
+            }}
+          >
+            Print This Page
+          </Button>
+          <Button
             link
+            href="javascript:void(0);"
             id="cancel"
             onClick={() => {
               formCancelToggleCancelSequence();

@@ -221,9 +221,11 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
-    const focusMain = e => {
+    const focusMain = (e?: any) => {
       e && e.preventDefault();
-      const header = window.document.querySelector('#main-content h1');
+      const header = window.document.querySelector(
+        '#main-content h1',
+      ) as HTMLElement;
       if (header) header.focus();
       return;
     };
