@@ -45,7 +45,7 @@ function getShowContactSecondary(partyType, PARTY_TYPES, props) {
     PARTY_TYPES.petitionerSpouse,
   ].includes(partyType);
   if (!isContactSecondaryPartyType) return false;
-  if (!(props.key === 'isSpouseDeceased')) return false;
-  if (props.value === 'Yes') return true;
-  return false;
+  if (props.key !== 'isSpouseDeceased') return false;
+  if (props.value !== 'Yes') return false;
+  return true;
 }

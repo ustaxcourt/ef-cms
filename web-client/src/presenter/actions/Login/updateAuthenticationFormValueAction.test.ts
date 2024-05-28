@@ -5,6 +5,8 @@ describe('updateAuthenticationFormValueAction', () => {
   const password = 'iodine';
   const confirmPassword = 'state';
   const email = 'isbell@example.com';
+  const code = 'TEST_CODE';
+
   it('should set state.authentication.form.email to the passed in email prop', async () => {
     const result = await runAction(updateAuthenticationFormValueAction, {
       props: {
@@ -65,6 +67,26 @@ describe('updateAuthenticationFormValueAction', () => {
       },
     });
     expect(result.state.authentication.form.email).toEqual(email);
+  });
+
+  it('should set state.authentication.form.code to the passed in code prop', async () => {
+    const result = await runAction(updateAuthenticationFormValueAction, {
+      props: {
+        code,
+      },
+      state: {
+        authentication: {
+          form: {
+            code: '',
+            confirmPassword: '',
+            email: '',
+            password: '',
+          },
+          tempPassword: '',
+        },
+      },
+    });
+    expect(result.state.authentication.form.code).toEqual(code);
   });
 
   it('should set state.authentication.form values to an empty string when values are removed from the form', async () => {

@@ -1,7 +1,8 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import { JudgeActivityReportState } from './judgeActivityReportState';
+import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
@@ -641,6 +642,7 @@ export const baseState = {
   docketRecordIndex: 0,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
+  featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,
@@ -734,13 +736,15 @@ export const baseState = {
     corporateDisclosureFileUrl: undefined,
     hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
-    irsNotices: [] as CreateCaseIrsForm[],
-    noticeIssuedDate: undefined,
+    irsNotices: undefined as
+      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
+      | undefined,
+    noticeIssuedDate: undefined as string | undefined,
     partyType: undefined,
-    petitionFacts: undefined,
+    petitionFacts: [''],
     petitionFile: undefined,
     petitionFileId: undefined,
-    petitionReasons: undefined,
+    petitionReasons: [''],
     petitionRedactionAcknowledgement: false,
     petitionType: undefined,
     preferredTrialCity: undefined,
@@ -804,7 +808,7 @@ export const baseState = {
     selectedFilingOption?: string;
   },
   user: null as any,
-  userContactEditProgress: {},
+  userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,

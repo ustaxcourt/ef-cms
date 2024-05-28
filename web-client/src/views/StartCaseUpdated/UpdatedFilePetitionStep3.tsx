@@ -1,6 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
@@ -8,6 +7,7 @@ import { WarningNotificationComponent } from '@web-client/views/WarningNotificat
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -45,9 +45,36 @@ export const UpdatedFilePetitionStep3 = connect(
     updateFormValueSequence,
     validationErrors,
   }) {
+    // move... somewhere else
+    const handleIrsNoticeErrors = (errors, refs, elementsToFocus, prefix) => {
+      if (!Array.isArray(errors)) {
+        return;
+      }
+
+      errors.forEach(error => {
+        const { index } = error;
+
+        for (const key in error) {
+          if (
+            key !== 'index' &&
+            error[key] &&
+            refs.current[`${prefix}${index}.${key}`]
+          ) {
+            elementsToFocus.push(refs.current[`${prefix}${index}.${key}`]);
+          }
+        }
+      });
+
+      return elementsToFocus;
+    };
+
+    const { registerRef, resetFocus } = useValidationFocus(
+      validationErrors,
+      handleIrsNoticeErrors,
+    );
+
     return (
       <>
-        <ErrorNotification />
         <div className="padding-bottom-0 margin-bottom-1">
           <div>
             <h2>{startCaseHelper.noticeLegend}</h2>
@@ -64,6 +91,7 @@ export const UpdatedFilePetitionStep3 = connect(
                       className="usa-radio__input"
                       id={`hasIrsNotice-${option}`}
                       name="hasIrsNotice"
+                      ref={registerRef && registerRef('hasIrsNotice')}
                       type="radio"
                       value={option === 'Yes'}
                       onChange={e => {
@@ -101,11 +129,13 @@ export const UpdatedFilePetitionStep3 = connect(
                   scrollToTop={false}
                 />
                 {irsNoticeUploadFormInfo.map((info, index) => {
-                  const irsNotices =
+                  const irsNoticeValidationErrors =
                     (validationErrors.irsNotices as unknown as any[]) || [];
 
-                  const validationError = irsNotices
-                    ? irsNotices.find(errors => errors.index === index) || {}
+                  const validationError = irsNoticeValidationErrors
+                    ? irsNoticeValidationErrors.find(
+                        errors => errors.index === index,
+                      ) || {}
                     : {};
 
                   return (
@@ -116,6 +146,13 @@ export const UpdatedFilePetitionStep3 = connect(
                         index={index}
                         key={info.key}
                         noticeIssuedDate={info.noticeIssuedDate}
+                        refProp={
+                          registerRef &&
+                          registerRef(
+                            `irsNotices.${validationError.index}.caseType`,
+                          )
+                        }
+                        registerRef={registerRef}
                         taxYear={info.taxYear}
                         todayDate={info.todayDate}
                         validationError={validationError}
@@ -215,7 +252,9 @@ export const UpdatedFilePetitionStep3 = connect(
           disabled={
             form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
           }
-          onClick={() => {
+          onClick={e => {
+            e.preventDefault();
+            resetFocus();
             updatedFilePetitionCompleteStep3Sequence();
           }}
         >

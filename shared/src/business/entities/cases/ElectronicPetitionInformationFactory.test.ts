@@ -7,6 +7,7 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { ElectronicPetitionInformationFactory } from './ElectronicPetitionInformationFactory';
+import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ElectronicPetitionInformationFactory entity', () => {
@@ -213,6 +214,7 @@ describe('ElectronicPetitionInformationFactory entity', () => {
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
+          petitionType: undefined,
           petitioners: [
             {
               name: 'Something',
@@ -227,6 +229,9 @@ describe('ElectronicPetitionInformationFactory entity', () => {
         },
       );
       expect(electronicPetition.getFormattedValidationErrors()!).toEqual(null);
+      expect(electronicPetition.petitionType).toEqual(
+        PETITION_TYPES.userUploaded,
+      );
     });
   });
 

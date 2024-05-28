@@ -24,6 +24,26 @@ describe('setFormValueAction', () => {
     expect(result.state.form.hasApples).toEqual(false);
   });
 
+  it('sets the state.form[props.key][props.index] to the passed in props.value when props.index exists', async () => {
+    const result = await runAction(setFormValueAction, {
+      props: {
+        index: 1,
+        key: 'appleArray',
+        value: 'This is a different apple',
+      },
+      state: {
+        form: {
+          appleArray: ['This is an apple'],
+        },
+      },
+    });
+
+    expect(result.state.form.appleArray).toEqual([
+      'This is an apple',
+      'This is a different apple',
+    ]);
+  });
+
   it('unsets the state.form[props.key] if the passed in props.value is empty string', async () => {
     const result = await runAction(setFormValueAction, {
       props: {

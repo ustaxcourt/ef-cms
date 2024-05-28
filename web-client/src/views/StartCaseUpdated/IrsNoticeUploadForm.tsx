@@ -26,6 +26,7 @@ export const IrsNoticeUploadForm = connect(
     noticeIssuedDate: props.noticeIssuedDate,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
+    refProp: props.refProp,
     removeIrsNoticeFromFormSequence: sequences.removeIrsNoticeFromFormSequence,
     taxYear: props.taxYear,
     todayDate: props.todayDate,
@@ -44,6 +45,7 @@ export const IrsNoticeUploadForm = connect(
     index,
     noticeIssuedDate,
     petitionGenerationLiveValidationSequence,
+    refProp,
     removeIrsNoticeFromFormSequence,
     taxYear,
     todayDate,
@@ -105,6 +107,7 @@ export const IrsNoticeUploadForm = connect(
             hint="(required)"
             legend="Type of notice/case"
             name={index.toString()}
+            refProp={refProp}
             validationError={validationError}
             value={caseType}
             onBlurSequence={() => {
@@ -118,7 +121,6 @@ export const IrsNoticeUploadForm = connect(
             }}
             onChange={info => {
               updateIrsNoticeIndexPropertySequence(info);
-
               deleteValidationErrorMessageSequence({
                 validationKey: [
                   'irsNotices',

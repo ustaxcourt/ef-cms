@@ -16,7 +16,7 @@ describe('deleteValidationErrorMessageAction', () => {
     expect(validationErrors).toEqual(undefined);
   });
 
-  it('should delete a root level validatio error', async () => {
+  it('should delete a root level validation error', async () => {
     const result = await runAction(deleteValidationErrorMessageAction, {
       props: {
         validationKey: ['test_1'],
