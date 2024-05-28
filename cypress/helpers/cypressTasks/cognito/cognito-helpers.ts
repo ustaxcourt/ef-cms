@@ -47,17 +47,16 @@ const getClientId = async (userPoolId: string): Promise<string> => {
   return clientId;
 };
 
-const getUserPoolId = async (
-  poolName: string = `efcms-${getCypressEnv().env}`,
-): Promise<string> => {
+const getUserPoolId = async (irsEnv = false): Promise<string> => {
   const results = await getCognito().listUserPools({
     MaxResults: 50,
   });
+  const poolName = irsEnv
+    ? `efcms-irs-${getCypressEnv().env}`
+    : `efcms-${getCypressEnv().env}`;
 
-  console.log('results.UserPools', results.UserPools);
-  console.log('pool name', poolName);
   const userPoolId = results?.UserPools?.find(
-    pool => pool.Name === poolName.poolName, // why is this an object?
+    pool => pool.Name === poolName,
   )?.Id;
 
   console.log('id on line 63', userPoolId);
@@ -68,34 +67,18 @@ const getUserPoolId = async (
   return userPoolId;
 };
 
-export const getCognitoUserIdByEmail = async (
-  email: string,
-): Promise<string> => {
-  const userPoolId = await getUserPoolId();
-  const foundUser = await getCognito().adminGetUser({
-    UserPoolId: userPoolId,
-    Username: email.toLowerCase(),
-  });
-
-  const userId = foundUser.UserAttributes?.find(
-    element => element.Name === 'custom:userId',
-  )?.Value!;
-
-  return userId;
-};
-
 export const createAccount = async ({
+  irsEnv,
   password,
-  poolName,
   role,
   userName,
 }: {
   userName: string;
   password: string;
   role: string;
-  poolName: string;
+  irsEnv: boolean;
 }): Promise<string> => {
-  const userPoolId = await getUserPoolId(poolName);
+  const userPoolId = await getUserPoolId(irsEnv);
   await getCognito().adminCreateUser({
     TemporaryPassword: password,
     UserAttributes: [
@@ -196,10 +179,9 @@ const getAllCypressTestAccounts = async (
   userPoolId: string,
 ): Promise<{ email: string; userId: string }[]> => {
   const params = {
-    // Filter: 'email ^= "cypress_test_account"',
+    Filter: 'email ^= "cypress_test_account"',
     UserPoolId: userPoolId,
   };
-  console.log('user pool Id on line 202', userPoolId);
 
   const result = await getCognito().listUsers(params);
   if (!result || !result.Users) return [];
@@ -212,9 +194,6 @@ const getAllCypressTestAccounts = async (
       element => element.Name === 'email',
     )?.Value!;
 
-    console.log('found emails', email);
-    console.log('userId', userId);
-
     return {
       email,
       userId,
@@ -224,14 +203,20 @@ const getAllCypressTestAccounts = async (
   return usernames;
 };
 
-export const deleteAllCypressTestAccounts = async (
-  poolName?: string,
-): Promise<null> => {
-  const userPoolId = await getUserPoolId(poolName);
+export const deleteAllCypressTestAccounts = async (): Promise<null> => {
+  const userPoolId = await getUserPoolId();
   if (!userPoolId) return null;
-  console.log('upID', userPoolId);
   const accounts = await getAllCypressTestAccounts(userPoolId);
-  console.log('accounts', accounts);
   await Promise.all(accounts.map(user => deleteAccount(user, userPoolId)));
+  return null;
+};
+
+export const deleteAllIrsCypressTestAccounts = async (): Promise<null> => {
+  const irsUserPoolId = await getUserPoolId(true);
+  if (!irsUserPoolId) return null;
+  const irsAccounts = await getAllCypressTestAccounts(irsUserPoolId);
+  await Promise.all(
+    irsAccounts.map(user => deleteAccount(user, irsUserPoolId)),
+  );
   return null;
 };
