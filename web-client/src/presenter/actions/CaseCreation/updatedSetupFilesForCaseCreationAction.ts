@@ -6,17 +6,20 @@ export const updatedSetupFilesForCaseCreationAction = ({
   const petitionMetadata = get(state.petitionFormatted);
   const {
     applicationForWaiverOfFilingFeeFile,
-    attachmentToPetitionFile,
     corporateDisclosureFile,
+    hasIrsNotice,
+    irsNotices,
     petitionFile,
     primaryDocumentFile,
     requestForPlaceOfTrialFile,
     stinFile,
   } = petitionMetadata;
+  const attachmentToPetitions =
+    hasIrsNotice && irsNotices?.map(irsNotice => irsNotice.file);
 
   const files = {
     applicationForWaiverOfFilingFee: applicationForWaiverOfFilingFeeFile,
-    attachmentToPetition: attachmentToPetitionFile,
+    attachmentToPetition: attachmentToPetitions,
     corporateDisclosure: corporateDisclosureFile,
     petition: petitionFile || undefined,
     primary: primaryDocumentFile,
