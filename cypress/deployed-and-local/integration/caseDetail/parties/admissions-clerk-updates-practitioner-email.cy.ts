@@ -17,7 +17,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.login('admissionsclerk1');
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
-    cy.get('[data-testid="tab-practitioner"]').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('[data-testid="add-new-practitioner"]').click();
     cy.get('[data-testid="first-name-input"]').type(faker.person.firstName());
     cy.get('[data-testid="last-name-input"]').type(faker.person.lastName());
@@ -66,7 +66,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
 
         loginAsAdmissionsClerk();
         cy.get('[data-testid="search-link"]').click();
-        cy.get('[data-testid="tab-practitioner"]').click();
+        cy.get('[data-testid="practitioner-search-tab"]').click();
         cy.get('[data-testid="bar-number-search-input"]').type(
           practitionerBarNumber,
         );
@@ -101,7 +101,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.login('admissionsclerk1');
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
-    cy.get('[data-testid="tab-practitioner"]').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('[data-testid="add-new-practitioner"]').click();
     cy.get('[data-testid="first-name-input"]').type(faker.person.firstName());
     cy.get('[data-testid="last-name-input"]').type(faker.person.lastName());
@@ -186,7 +186,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           const updatedPractitionerEmail = `${updatedPractitionerUserName}@example.com`;
           loginAsAdmissionsClerk();
           cy.get('[data-testid="search-link"]').click();
-          cy.get('[data-testid="tab-practitioner"]').click();
+          cy.get('[data-testid="practitioner-search-tab"]').click();
           cy.get('[data-testid="bar-number-search-input"]').type(
             practitionerBarNumber,
           );
