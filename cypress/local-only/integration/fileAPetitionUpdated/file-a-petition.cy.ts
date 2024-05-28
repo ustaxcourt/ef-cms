@@ -1,5 +1,19 @@
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 
+type TextFillType = {
+  errorMessage: string;
+  input: string;
+  inputValue: string;
+};
+
+type SelectFillType = {
+  errorMessage: string;
+  input: string;
+  selectOption: string;
+};
+
+type InputFillType = TextFillType | SelectFillType;
+
 describe('File a petition', () => {
   beforeEach(() => {
     loginAsPetitioner();
@@ -174,6 +188,338 @@ describe('File a petition', () => {
 
         cy.get('[data-testid="filling-type-error-message"]').should('exist');
       });
+
+      describe('Myself', () => {
+        beforeEach(() => {
+          cy.get('[data-testid="filing-type-0"').click();
+        });
+
+        it('should display validation error messages to all required fields left empty', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID = [
+            'primary-contact-name-error-message',
+            'address-1-error-message',
+            'city-error-message',
+            'state-error-message',
+            'postal-code-error-message',
+            'place-of-legal-residence-error-message',
+            'phone-error-message',
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+            cy.get(`[data-testid="${selector}"]`).should('not.exist');
+          });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+            cy.get(`[data-testid="${selector}"]`).should('exist');
+          });
+        });
+
+        it('should do live validation when user leaves input with an invalid response and remove messaeg when user fixes it', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+            {
+              errorMessage: 'primary-contact-name-error-message',
+              input: 'contact-primary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'address-1-error-message',
+              input: 'contactPrimary.address1',
+              inputValue: '123 Test Drive',
+            },
+            {
+              errorMessage: 'city-error-message',
+              input: 'contactPrimary.city',
+              inputValue: 'Boulder',
+            },
+            {
+              errorMessage: 'state-error-message',
+              input: 'contactPrimary.state',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'postal-code-error-message',
+              input: 'contactPrimary.postalCode',
+              inputValue: '12345',
+            },
+            {
+              errorMessage: 'place-of-legal-residence-error-message',
+              input: 'contactPrimary.placeOfLegalResidence',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'phone-error-message',
+              input: 'phone',
+              inputValue: 'Test Phone',
+            },
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+            if ('selectOption' in inputInfo) {
+              const { errorMessage, input, selectOption } = inputInfo;
+              selectInput(errorMessage, input, selectOption);
+            } else {
+              const { errorMessage, input, inputValue } = inputInfo;
+              textInput(errorMessage, input, inputValue);
+            }
+          });
+        });
+
+        it('should allow user to go to step 3 if everything is filled out correctly', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+            {
+              errorMessage: 'primary-contact-name-error-message',
+              input: 'contact-primary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'address-1-error-message',
+              input: 'contactPrimary.address1',
+              inputValue: '123 Test Drive',
+            },
+            {
+              errorMessage: 'city-error-message',
+              input: 'contactPrimary.city',
+              inputValue: 'Boulder',
+            },
+            {
+              errorMessage: 'state-error-message',
+              input: 'contactPrimary.state',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'postal-code-error-message',
+              input: 'contactPrimary.postalCode',
+              inputValue: '12345',
+            },
+            {
+              errorMessage: 'place-of-legal-residence-error-message',
+              input: 'contactPrimary.placeOfLegalResidence',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'phone-error-message',
+              input: 'phone',
+              inputValue: 'Test Phone',
+            },
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+            if ('selectOption' in inputInfo) {
+              const { input, selectOption } = inputInfo;
+              cy.get(`[data-testid="${input}"]`).scrollIntoView();
+              cy.get(`select[data-testid="${input}"]`).select(selectOption);
+            } else {
+              const { input, inputValue } = inputInfo;
+              cy.get(`[data-testid="${input}"]`).scrollIntoView();
+              cy.get(`[data-testid="${input}"]`).type(inputValue);
+            }
+          });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+        });
+      });
+    });
+
+    describe('Step 1 is Uploaded', () => {
+      beforeEach(() => {
+        cy.get('[data-testid="upload-a-petition-label"').should('exist');
+        cy.get('[data-testid="upload-a-petition-label"').click();
+
+        cy.get(
+          '[data-testid="petition-redaction-acknowledgement-label"]',
+        ).click();
+        cy.get('#petition-file').attachFile('../../helpers/file/sample.pdf');
+
+        cy.get('[data-testid="step-1-next-button"]').click();
+        cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+      });
+
+      it('should display all the possible options', () => {
+        const EXPECTED_FILING_TYPES: string[] = [
+          'Myself',
+          'Myself and my spouse',
+          'A business',
+          'Other',
+        ];
+        cy.get('.filing-type-radio-option').should('have.length', 4);
+        cy.get('.filing-type-radio-option').each((element, index) => {
+          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
+        });
+      });
+
+      it('should display a validaiton error message if user does not select filing type', () => {
+        cy.get('[data-testid="filling-type-error-message"]').should(
+          'not.exist',
+        );
+
+        cy.get('[data-testid="step-2-next-button"]').click();
+
+        cy.get('[data-testid="filling-type-error-message"]').should('exist');
+      });
+
+      describe('Myself', () => {
+        beforeEach(() => {
+          cy.get('[data-testid="filing-type-0"').click();
+        });
+
+        it('should not display an input for "place of legal residence" since petition was uploaded', () => {
+          cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').should(
+            'not.exist',
+          );
+        });
+
+        it('should display validation error messages to all required fields left empty', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID = [
+            'primary-contact-name-error-message',
+            'address-1-error-message',
+            'city-error-message',
+            'state-error-message',
+            'postal-code-error-message',
+            'phone-error-message',
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+            cy.get(`[data-testid="${selector}"]`).should('not.exist');
+          });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+            cy.get(`[data-testid="${selector}"]`).should('exist');
+          });
+        });
+
+        it('should do live validation when user leaves input with an invalid response and remove messaeg when user fixes it', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+            {
+              errorMessage: 'primary-contact-name-error-message',
+              input: 'contact-primary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'address-1-error-message',
+              input: 'contactPrimary.address1',
+              inputValue: '123 Test Drive',
+            },
+            {
+              errorMessage: 'city-error-message',
+              input: 'contactPrimary.city',
+              inputValue: 'Boulder',
+            },
+            {
+              errorMessage: 'state-error-message',
+              input: 'contactPrimary.state',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'postal-code-error-message',
+              input: 'contactPrimary.postalCode',
+              inputValue: '12345',
+            },
+            {
+              errorMessage: 'phone-error-message',
+              input: 'phone',
+              inputValue: 'Test Phone',
+            },
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+            if ('selectOption' in inputInfo) {
+              const { errorMessage, input, selectOption } = inputInfo;
+              selectInput(errorMessage, input, selectOption);
+            } else {
+              const { errorMessage, input, inputValue } = inputInfo;
+              textInput(errorMessage, input, inputValue);
+            }
+          });
+        });
+
+        it('should allow user to go to step 3 if everything is filled out correctly', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+            {
+              errorMessage: 'primary-contact-name-error-message',
+              input: 'contact-primary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'address-1-error-message',
+              input: 'contactPrimary.address1',
+              inputValue: '123 Test Drive',
+            },
+            {
+              errorMessage: 'city-error-message',
+              input: 'contactPrimary.city',
+              inputValue: 'Boulder',
+            },
+            {
+              errorMessage: 'state-error-message',
+              input: 'contactPrimary.state',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'postal-code-error-message',
+              input: 'contactPrimary.postalCode',
+              inputValue: '12345',
+            },
+            {
+              errorMessage: 'phone-error-message',
+              input: 'phone',
+              inputValue: 'Test Phone',
+            },
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+            if ('selectOption' in inputInfo) {
+              const { input, selectOption } = inputInfo;
+              cy.get(`[data-testid="${input}"]`).scrollIntoView();
+              cy.get(`select[data-testid="${input}"]`).select(selectOption);
+            } else {
+              const { input, inputValue } = inputInfo;
+              cy.get(`[data-testid="${input}"]`).scrollIntoView();
+              cy.get(`[data-testid="${input}"]`).type(inputValue);
+            }
+          });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+        });
+      });
     });
   });
 });
+
+function textInput(
+  errorMessageSelector: string,
+  inputSelector: string,
+  inputValue: string,
+) {
+  cy.get(`[data-testid="${errorMessageSelector}"]`).should('not.exist');
+  cy.get(`[data-testid="${inputSelector}"]`).scrollIntoView();
+  cy.get(`[data-testid="${inputSelector}"]`).should('exist');
+  cy.get(`[data-testid="${inputSelector}"]`).focus();
+  cy.get(`[data-testid="${inputSelector}"]`).blur();
+  cy.get(`[data-testid="${errorMessageSelector}"]`).should('exist');
+  cy.get(`[data-testid="${inputSelector}"]`).focus();
+  cy.get(`[data-testid="${inputSelector}"]`).type(inputValue);
+  cy.get(`[data-testid="${inputSelector}"]`).blur();
+  cy.get(`[data-testid="${errorMessageSelector}"]`).should('not.exist');
+}
+
+function selectInput(
+  errorMessageSelector: string,
+  selectSelector: string,
+  optionValue: string,
+) {
+  cy.get(`[data-testid="${errorMessageSelector}"]`).should('not.exist');
+  cy.get(`[data-testid="${selectSelector}"]`).scrollIntoView();
+  cy.get(`[data-testid="${selectSelector}"]`).should('exist');
+  cy.get(`[data-testid="${selectSelector}"]`).focus();
+  cy.get(`[data-testid="${selectSelector}"]`).blur();
+  cy.get(`[data-testid="${errorMessageSelector}"]`).should('exist');
+  cy.get(`[data-testid="${selectSelector}"]`).focus();
+  cy.get(`select[data-testid="${selectSelector}"]`).select(optionValue);
+  cy.get(`[data-testid="${errorMessageSelector}"]`).should('not.exist');
+}

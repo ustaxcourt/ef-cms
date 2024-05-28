@@ -43,6 +43,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
       <div className="address-info">
         <Mobile>
           <FormGroup
+            errorMessageId="place-of-legal-residence-error-message"
             errorText={validationErrors?.[type]?.placeOfLegalResidence}
           >
             <label
@@ -69,6 +70,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
         </Mobile>
         <NonMobile>
           <FormGroup
+            errorMessageId="place-of-legal-residence-error-message"
             errorText={validationErrors?.[type]?.placeOfLegalResidence}
           >
             <label
