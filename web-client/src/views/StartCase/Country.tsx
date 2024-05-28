@@ -79,7 +79,7 @@ export const Country = connect(
                 });
                 if (onBlurSequence) {
                   onBlurSequence({
-                    validationKey: [type, 'country'],
+                    validationKey: [type, 'countryType'],
                   });
                 }
               }}
@@ -95,7 +95,10 @@ export const Country = connect(
           </div>
         </FormGroup>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <FormGroup errorText={validationErrors?.[type]?.country}>
+          <FormGroup
+            errorMessageId="country-error-message"
+            errorText={validationErrors?.[type]?.country}
+          >
             <label className="usa-label" htmlFor={`${type}.country`}>
               Country name
             </label>
