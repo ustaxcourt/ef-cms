@@ -28,7 +28,7 @@ import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { removeCounselFromRemovedPetitioner } from './business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
-import { removeCoversheet } from '../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet';
+import { removeCoversheet } from '@web-api/business/useCaseHelper/coverSheets/removeCoversheet';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
 import { sendEmailVerificationLink } from '../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink';
