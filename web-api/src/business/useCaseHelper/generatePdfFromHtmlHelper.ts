@@ -1,4 +1,5 @@
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { headerFontFace } from '../../../../shared/src/business/useCases/headerFontFace';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -13,7 +14,7 @@ import ReactDOM from 'react-dom/server';
  * @returns {Buffer} the pdf as a binary buffer
  */
 export const generatePdfFromHtmlHelper = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     contentHtml,
     displayHeaderFooter = true,

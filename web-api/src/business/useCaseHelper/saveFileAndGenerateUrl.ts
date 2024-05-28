@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const saveFileAndGenerateUrl = async ({
   applicationContext,
   contentType = 'application/pdf',
@@ -6,7 +8,7 @@ export const saveFileAndGenerateUrl = async ({
   urlTtl,
   useTempBucket = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   file: Buffer;
   fileNamePrefix?: string;
   contentType?: string;

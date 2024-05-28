@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
-jest.mock('../../entities/Message');
-jest.mock('../../entities/CaseDeadline');
+jest.mock('@shared/business/entities/Message.ts');
+jest.mock('@shared/business/entities/CaseDeadline');
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,

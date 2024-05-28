@@ -1,4 +1,5 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
@@ -18,7 +19,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   electronicParties,
   stampedPdf,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntities: Case[];
   docketEntryId: string;
   stampedPdf?: any;
