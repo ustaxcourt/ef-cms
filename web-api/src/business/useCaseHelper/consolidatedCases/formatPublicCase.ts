@@ -1,10 +1,11 @@
-import { Case, isSealedCase } from '../../entities/cases/Case';
-import { PublicCase } from '../../entities/cases/PublicCase';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
-} from '../../utilities/caseFilter';
-import { decorateForCaseStatus } from '../../useCases/getCaseInteractor';
+} from '@shared/business/utilities/caseFilter';
+import { decorateForCaseStatus } from '@shared/business/useCases/getCaseInteractor';
 
 /**
  * formatPublicCase takes a rawCase and formats to a public case
@@ -19,7 +20,7 @@ export const formatPublicCase = ({
   applicationContext,
   rawCaseRecord,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   rawCaseRecord?: Case;
 }) => {
   if (isSealedCase(rawCaseRecord)) {

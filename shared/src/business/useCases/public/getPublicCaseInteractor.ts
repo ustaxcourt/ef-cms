@@ -1,6 +1,7 @@
 import { Case } from '../../entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
-import { formatPublicCase } from '../../useCaseHelper/consolidatedCases/formatPublicCase';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
 
 /**
  * getPublicCaseInteractor
@@ -11,7 +12,7 @@ import { formatPublicCase } from '../../useCaseHelper/consolidatedCases/formatPu
  * @returns {object} the case data
  */
 export const getPublicCaseInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
   let rawCaseRecord: any = await applicationContext

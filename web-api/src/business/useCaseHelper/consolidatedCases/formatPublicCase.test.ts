@@ -1,9 +1,9 @@
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { formatPublicCase } from './formatPublicCase';
-import { getContactPrimary } from '../../entities/cases/Case';
+import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 
 describe('getPublicCaseInteractor', () => {
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);

@@ -1,5 +1,5 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { formatConsolidatedCaseCoversheetData } from './formatConsolidatedCaseCoversheetData';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
