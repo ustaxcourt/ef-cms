@@ -31,7 +31,7 @@ import { removeCounselFromRemovedPetitioner } from './business/useCaseHelper/cas
 import { removeCoversheet } from '@web-api/business/useCaseHelper/coverSheets/removeCoversheet';
 import { saveFileAndGenerateUrl } from '../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
 import { sealInLowerEnvironment } from '../../shared/src/business/useCaseHelper/sealInLowerEnvironment';
-import { sendEmailVerificationLink } from '../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink';
+import { sendEmailVerificationLink } from './business/useCaseHelper/email/sendEmailVerificationLink';
 import { sendIrsSuperuserPetitionEmail } from '../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { serveDocumentAndGetPaperServicePdf } from '../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf';
