@@ -1,11 +1,11 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
-import { UserCase } from '../../entities/UserCase';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
 /**
  * createUserForContact

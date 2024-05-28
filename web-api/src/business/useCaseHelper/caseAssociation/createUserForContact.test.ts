@@ -2,10 +2,13 @@ import {
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Case,
+  getContactPrimary,
+} from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createUserForContact } from './createUserForContact';
 
 describe('createUserForContact', () => {

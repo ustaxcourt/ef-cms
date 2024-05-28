@@ -46,7 +46,6 @@ import {
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
-import { createCaseAndAssociations } from '@shared/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
@@ -104,7 +103,6 @@ import { getUserIdForNote } from '@shared/business/useCaseHelper/getUserIdForNot
 import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
-import { removeCounselFromRemovedPetitioner } from '@shared/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '@web-api/persistence/dynamo/workitems/saveWorkItem';
@@ -119,7 +117,6 @@ import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServi
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '@shared/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@shared/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
@@ -385,9 +382,6 @@ const createTestApplicationContext = () => {
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
-    createCaseAndAssociations: jest
-      .fn()
-      .mockImplementation(createCaseAndAssociations),
     fileAndServeDocumentOnOneCase: jest
       .fn()
       .mockImplementation(fileAndServeDocumentOnOneCase),
@@ -396,14 +390,8 @@ const createTestApplicationContext = () => {
       .mockImplementation(generateAndServeDocketEntry),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
-    removeCounselFromRemovedPetitioner: jest
-      .fn()
-      .mockImplementation(removeCounselFromRemovedPetitioner),
     sendServedPartiesEmails: jest.fn(),
     setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
-    updateCaseAndAssociations: jest
-      .fn()
-      .mockImplementation(updateCaseAndAssociations),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),

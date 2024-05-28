@@ -1,7 +1,8 @@
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { IrsPractitioner } from '../../entities/IrsPractitioner';
-import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * createCaseDocketEntries
@@ -99,6 +100,9 @@ const connectPrivatePractitioners = ({
 export const createCaseAndAssociations = async ({
   applicationContext,
   caseToCreate,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseToCreate: any;
 }) => {
   const caseEntity = caseToCreate.validate
     ? caseToCreate

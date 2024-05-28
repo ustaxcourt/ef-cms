@@ -1,7 +1,7 @@
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../../src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseAndAssociations } from './createCaseAndAssociations';
 
 describe('createCaseAndAssociations', () => {

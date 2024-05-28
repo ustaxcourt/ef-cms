@@ -44,7 +44,7 @@ import {
 } from '../utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
 import { createCase } from '../../../../web-api/src/persistence/dynamo/cases/createCase';
-import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
+import { createCaseAndAssociations } from '../../../../web-api/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../../../web-api/src/persistence/elasticsearch/deleteRecord';
@@ -107,7 +107,7 @@ import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '../../../../web-api/src/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '../../../../web-api/src/persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '../../../../web-api/src/persistence/dynamo/workitems/putWorkItemInOutbox';
-import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
+import { removeCounselFromRemovedPetitioner } from '../../../../web-api/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
@@ -122,7 +122,7 @@ import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsFo
 import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '../useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateCase } from '../../../../web-api/src/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '../useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseAndAssociations } from '../../../../web-api/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '../useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseCorrespondence } from '../../../../web-api/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '../../../../web-api/src/persistence/dynamo/documents/updateDocketEntry';

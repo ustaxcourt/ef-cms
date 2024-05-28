@@ -5,17 +5,17 @@ import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { CaseDeadline } from '../../entities/CaseDeadline';
-import { MOCK_CASE } from '../../../../src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { MOCK_WORK_ITEM } from '../../../test/mockWorkItem';
-import { Message } from '../../entities/Message';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
+import { MOCK_WORK_ITEM } from '../../../../../shared/src/test/mockWorkItem';
+import { Message } from '../../../../../shared/src/business/entities/Message';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { v4 as uuidv4 } from 'uuid';
 
