@@ -17,6 +17,8 @@ import React from 'react';
 
 export const DocketEntryQc = connect(
   {
+    completeDocketEntryQCAndSendMessageSequence:
+      sequences.completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     confirmWorkItemAlreadyCompleteSequence:
       sequences.confirmWorkItemAlreadyCompleteSequence,
@@ -27,6 +29,7 @@ export const DocketEntryQc = connect(
     showModal: state.modal.showModal,
   },
   function DocketEntryQc({
+    completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     confirmWorkItemAlreadyCompleteSequence,
     docketEntryQcHelper,
@@ -116,7 +119,7 @@ export const DocketEntryQc = connect(
         {showModal === 'CreateMessageModalDialog' && (
           <CreateMessageModalDialog
             title="Complete and Send Message"
-            onConfirmSequence="completeDocketEntryQCAndSendMessageSequence"
+            onConfirmSequence={completeDocketEntryQCAndSendMessageSequence}
           />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}

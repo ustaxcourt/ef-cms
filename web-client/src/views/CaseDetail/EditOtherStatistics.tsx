@@ -12,6 +12,8 @@ import React from 'react';
 export const EditOtherStatistics = connect(
   {
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
+    clearModalSequence: sequences.clearModalSequence,
+    deleteOtherStatisticsSequence: sequences.deleteOtherStatisticsSequence,
     openConfirmDeleteOtherStatisticsModalSequence:
       sequences.openConfirmDeleteOtherStatisticsModalSequence,
     showModal: state.modal.showModal,
@@ -20,6 +22,8 @@ export const EditOtherStatistics = connect(
   },
   function EditOtherStatistics({
     cancelAddStatisticSequence,
+    clearModalSequence,
+    deleteOtherStatisticsSequence,
     openConfirmDeleteOtherStatisticsModalSequence,
     showModal,
     submitEditOtherStatisticsSequence,
@@ -68,8 +72,8 @@ export const EditOtherStatistics = connect(
             cancelLabel="Cancel"
             confirmLabel="Yes, Delete"
             title="Confirm Delete Other Statistics"
-            onCancelSequence="clearModalSequence"
-            onConfirmSequence="deleteOtherStatisticsSequence"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={deleteOtherStatisticsSequence}
           >
             Are you sure you want to delete the other statistics?
           </ConfirmModal>
