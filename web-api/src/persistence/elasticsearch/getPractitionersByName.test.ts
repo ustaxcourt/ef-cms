@@ -15,9 +15,9 @@ describe('getPractitionersByName', () => {
       }),
     );
 
-    const results = await getPractitionersByName({
-      applicationContext,
+    const { results } = await getPractitionersByName(applicationContext, {
       name: 'some practitioner name',
+      searchAfter: [],
     });
     expect(search).toHaveBeenCalledTimes(1);
     expect(results.length).toBe(2);

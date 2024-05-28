@@ -1,18 +1,21 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const SpousePermissionConfirmModal = connect(
-  {},
-  function SpousePermissionConfirmModal() {
+  {
+    clearModalSequence: sequences.clearModalSequence,
+  },
+  function SpousePermissionConfirmModal({ clearModalSequence }) {
     return (
       <ConfirmModal
         noCancel
         confirmLabel="OK"
         preventCancelOnBlur={true}
         title="You Must Have Your Spouse’s Consent to File on Their Behalf"
-        onCancelSequence="clearModalSequence"
-        onConfirmSequence="clearModalSequence"
+        onCancelSequence={clearModalSequence}
+        onConfirmSequence={clearModalSequence}
       >
         <p>
           To file on behalf of your spouse, you must have consent. Both you and
