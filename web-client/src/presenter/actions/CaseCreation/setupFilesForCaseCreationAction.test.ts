@@ -21,7 +21,7 @@ describe('setupFilesForCaseCreationAction', () => {
 
     expect(result.output.files).toEqual({
       applicationForWaiverOfFilingFee: file,
-      attachmentToPetition: [file],
+      attachmentToPetition: file,
       corporateDisclosure: undefined,
       petition: file,
       primary: file,
