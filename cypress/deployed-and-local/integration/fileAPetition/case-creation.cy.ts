@@ -9,22 +9,6 @@ import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/docum
 import { practitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/practitioner-creates-electronic-case';
 
 describe('users should be able to create cases', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   it('a petitioner should be able to create a case and petitions clerk QCs and serves it', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
