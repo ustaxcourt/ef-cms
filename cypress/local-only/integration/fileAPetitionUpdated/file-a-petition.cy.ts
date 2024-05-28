@@ -187,6 +187,10 @@ describe('File a petition', () => {
           });
 
           cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid*="-error-message"]').should(
+            'have.length',
+            ERROR_MESSAGES_DATA_TEST_ID.length,
+          );
 
           ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
             cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -340,6 +344,10 @@ describe('File a petition', () => {
           });
 
           cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid*="-error-message"]').should(
+            'have.length',
+            ERROR_MESSAGES_DATA_TEST_ID.length,
+          );
 
           ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
             cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -476,6 +484,179 @@ describe('File a petition', () => {
         cy.get('[data-testid="step-2-next-button"]').click();
 
         cy.get('[data-testid="filling-type-error-message"]').should('exist');
+      });
+
+      describe('Myself and my spouse', () => {
+        beforeEach(() => {
+          cy.get('[data-testid="filing-type-1"').click();
+        });
+
+        describe('Country - United States', () => {
+          beforeEach(() => {
+            cy.get('[data-testid="domestic-country-btn"').click();
+          });
+
+          it('should display all error validation messages when user leaves form empty', () => {
+            const ERROR_MESSAGES_DATA_TEST_ID = [
+              'primary-contact-name-error-message',
+              'address-1-error-message',
+              'city-error-message',
+              'state-error-message',
+              'postal-code-error-message',
+              'place-of-legal-residence-error-message',
+              'phone-error-message',
+              'is-spouse-deceased-error-message',
+            ];
+
+            ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+              cy.get(`[data-testid="${selector}"]`).should('not.exist');
+            });
+
+            cy.get('[data-testid="step-2-next-button"]').click();
+
+            cy.get('[data-testid*="-error-message"]').should(
+              'have.length',
+              ERROR_MESSAGES_DATA_TEST_ID.length,
+            );
+
+            ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+              cy.get(`[data-testid="${selector}"]`).should('exist');
+            });
+          });
+
+          describe('Spouse is Deceased', () => {
+            beforeEach(() => {
+              const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+                {
+                  errorMessage: 'primary-contact-name-error-message',
+                  input: 'contact-primary-name',
+                  inputValue: 'John Cruz',
+                },
+                {
+                  errorMessage: 'address-1-error-message',
+                  input: 'contactPrimary.address1',
+                  inputValue: '123 Test Drive',
+                },
+                {
+                  errorMessage: 'city-error-message',
+                  input: 'contactPrimary.city',
+                  inputValue: 'Boulder',
+                },
+                {
+                  errorMessage: 'state-error-message',
+                  input: 'contactPrimary.state',
+                  selectOption: 'CO',
+                },
+                {
+                  errorMessage: 'postal-code-error-message',
+                  input: 'contactPrimary.postalCode',
+                  inputValue: '12345',
+                },
+                {
+                  errorMessage: 'place-of-legal-residence-error-message',
+                  input: 'contactPrimary.placeOfLegalResidence',
+                  selectOption: 'CO',
+                },
+                {
+                  errorMessage: 'phone-error-message',
+                  input: 'phone',
+                  inputValue: 'Test Phone',
+                },
+              ];
+
+              ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+                if ('selectOption' in inputInfo) {
+                  const { input, selectOption } = inputInfo;
+                  cy.get(`[data-testid="${input}"]`).scrollIntoView();
+                  cy.get(`select[data-testid="${input}"]`).select(selectOption);
+                } else {
+                  const { input, inputValue } = inputInfo;
+                  cy.get(`[data-testid="${input}"]`).scrollIntoView();
+                  cy.get(`[data-testid="${input}"]`).type(inputValue);
+                }
+              });
+
+              cy.get('[data-testid="is-spouse-deceased-0"]').click();
+            });
+
+            it('should display error validation messages if Spouse is Deceased form is empty', () => {
+              const ERROR_MESSAGES_DATA_TEST_ID = [
+                'secondary-contact-name-error-message',
+                'in-care-of-contactSecondary-error-message',
+              ];
+
+              ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+                cy.get(`[data-testid="${selector}"]`).should('not.exist');
+              });
+
+              cy.get('[data-testid="step-2-next-button"]').click();
+
+              cy.get('[data-testid*="-error-message"]').should(
+                'have.length',
+                ERROR_MESSAGES_DATA_TEST_ID.length,
+              );
+
+              ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
+                cy.get(`[data-testid="${selector}"]`).should('exist');
+              });
+            });
+
+            it('should do live validation when user leaves input with an invalid response and remove message when user fixes it', () => {
+              const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+                {
+                  errorMessage: 'secondary-contact-name-error-message',
+                  input: 'contact-secondary-name',
+                  inputValue: 'John Cruz',
+                },
+                {
+                  errorMessage: 'in-care-of-contactSecondary-error-message',
+                  input: 'contactSecondary-in-care-of',
+                  inputValue: 'In Care Of Value',
+                },
+              ];
+
+              ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+                if ('selectOption' in inputInfo) {
+                  const { errorMessage, input, selectOption } = inputInfo;
+                  selectInput(errorMessage, input, selectOption);
+                } else {
+                  const { errorMessage, input, inputValue } = inputInfo;
+                  textInput(errorMessage, input, inputValue);
+                }
+              });
+            });
+
+            it('should allow user to go to step 3 if everything is filled out correctly', () => {
+              const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+                {
+                  errorMessage: 'secondary-contact-name-error-message',
+                  input: 'contact-secondary-name',
+                  inputValue: 'John Cruz',
+                },
+                {
+                  errorMessage: 'in-care-of-contactSecondary-error-message',
+                  input: 'contactSecondary-in-care-of',
+                  inputValue: 'In Care Of Value',
+                },
+              ];
+
+              ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+                if ('selectOption' in inputInfo) {
+                  const { input, selectOption } = inputInfo;
+                  cy.get(`[data-testid="${input}"]`).scrollIntoView();
+                  cy.get(`select[data-testid="${input}"]`).select(selectOption);
+                } else {
+                  const { input, inputValue } = inputInfo;
+                  cy.get(`[data-testid="${input}"]`).scrollIntoView();
+                  cy.get(`[data-testid="${input}"]`).type(inputValue);
+                }
+              });
+
+              cy.get('[data-testid="step-2-next-button"]').click();
+              cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            });
+          });
+        });
       });
     });
   });
