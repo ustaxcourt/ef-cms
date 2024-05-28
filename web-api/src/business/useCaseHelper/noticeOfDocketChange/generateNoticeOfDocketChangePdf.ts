@@ -2,13 +2,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const generateNoticeOfDocketChangePdf = async ({
   applicationContext,
   docketChangeInfo,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketChangeInfo: {
     caseCaptionExtension: string;
     caseTitle: string;

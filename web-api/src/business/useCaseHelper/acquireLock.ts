@@ -1,4 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 
 export const checkLock = async ({
@@ -7,7 +8,7 @@ export const checkLock = async ({
   onLockError,
   options = {},
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   identifier: string;
   onLockError?: Error | Function;
   options?: any;
@@ -57,7 +58,7 @@ export const acquireLock = async ({
   ttl = 30,
   waitTime = 3000,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   identifiers?: string[];
   onLockError?: Error | Function;
   options?: any;
@@ -110,7 +111,7 @@ export const removeLock = ({
   applicationContext,
   identifiers = [],
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   identifiers: string[];
 }): Promise<void> => {
   return applicationContext.getPersistenceGateway().removeLock({
@@ -128,22 +129,22 @@ export const removeLock = ({
  */
 export function withLocking<InteractorInput, InteractorOutput>(
   interactor: (
-    applicationContext: IApplicationContext,
+    applicationContext: ServerApplicationContext,
     options: InteractorInput,
   ) => Promise<InteractorOutput>,
   getLockInfo: (
-    applicationContext: IApplicationContext,
+    applicationContext: ServerApplicationContext,
     options: any,
   ) =>
     | Promise<{ identifiers: string[]; ttl?: number }>
     | { identifiers: string[]; ttl?: number },
   onLockError?: Error | Function,
 ): (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   options: InteractorInput,
 ) => Promise<InteractorOutput> {
   return async function (
-    applicationContext: IApplicationContext,
+    applicationContext: ServerApplicationContext,
     options: InteractorInput,
   ) {
     const { identifiers, ttl } = await getLockInfo(applicationContext, options);

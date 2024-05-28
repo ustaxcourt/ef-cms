@@ -8,11 +8,12 @@ import {
   getServedPartiesCode,
 } from '../../../../../shared/src/business/entities/DocketEntry';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const createAndServeNoticeDocketEntry = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     additionalDocketEntryInfo = {},
     caseEntity,

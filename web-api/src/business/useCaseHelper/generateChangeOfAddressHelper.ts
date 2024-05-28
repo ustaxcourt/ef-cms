@@ -4,10 +4,11 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TUserContact } from '@shared/business/useCases/users/generateChangeOfAddress';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
-import { generateAndServeDocketEntry } from '@shared/business/useCaseHelper/service/createChangeItems';
+import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 
 /**
  * generateChangeOfAddressHelper
@@ -30,7 +31,7 @@ export const generateChangeOfAddressHelper = async ({
   user,
   websocketMessagePrefix,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;

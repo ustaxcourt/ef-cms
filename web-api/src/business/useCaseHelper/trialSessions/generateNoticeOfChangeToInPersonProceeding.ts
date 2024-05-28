@@ -3,12 +3,13 @@ import {
   createISODateString,
   formatDateString,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
 
 export const generateNoticeOfChangeToInPersonProceeding = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionInformation,

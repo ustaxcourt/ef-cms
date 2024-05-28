@@ -1,9 +1,11 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const countPagesInDocument = async ({
   applicationContext,
   docketEntryId,
   documentBytes,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketEntryId?: string;
   documentBytes?: any;
 }) => {
