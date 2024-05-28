@@ -54,7 +54,7 @@ describe('File a Petition', () => {
     });
 
     it('should navigate to dashboard when cancel is clicked', () => {
-      cy.get('button#cancel').click();
+      cy.get('[data-testid="cancel-before-starting-case"]').click();
 
       cy.get('button.modal-button-confirm').click();
 
@@ -62,7 +62,7 @@ describe('File a Petition', () => {
     });
 
     it('should navigate to dashboard when close is clicked', () => {
-      cy.get('button#cancel').click();
+      cy.get('[data-testid="cancel-before-starting-case"]').click();
 
       cy.get('button.text-no-underline').click();
 
