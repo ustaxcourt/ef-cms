@@ -1,5 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser, irsSuperuserUser } from '../../../test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  irsSuperuserUser,
+} from '../../../../../shared/src/test/mockUsers';
 import { generateNoticeOfDocketChangePdf } from './generateNoticeOfDocketChangePdf';
 
 describe('generateNoticeOfDocketChangePdf', () => {
