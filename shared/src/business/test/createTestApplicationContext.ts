@@ -50,7 +50,7 @@ import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../../../web-api/src/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
-import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { fileAndServeDocumentOnOneCase } from '../../../../web-api/src/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
 import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
 import {
