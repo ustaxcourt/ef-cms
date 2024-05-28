@@ -59,6 +59,7 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
     }
   }
 
+  // need to validate contact primary and secondary
   static VALIDATION_RULES = {
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
@@ -91,6 +92,7 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
         '*': 'Your Corporate Disclosure Statement file size is empty',
         'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+    // COUNTRY_TYPES
     countryType: JoiValidationConstants.STRING.optional(),
     estateType: JoiValidationConstants.STRING.valid(
       ...Object.values(ESTATE_TYPES),
@@ -149,6 +151,7 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({ '*': 'Select an other type of taxpayer' }),
+    // PARTY_TYPES
     partyType: joi.required(), // This will be undefined when any sub radios are not selected
   };
 

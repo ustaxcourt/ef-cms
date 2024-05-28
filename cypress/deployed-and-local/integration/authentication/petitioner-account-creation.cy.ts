@@ -9,15 +9,6 @@ import { verifyPasswordRequirements } from '../../../helpers/authentication/veri
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Petitioner Account Creation', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
   const GUID = Date.now();
   const VALID_PASSWORD_CONFIG: PasswordConfig = {
     digits: 1,
@@ -29,14 +20,6 @@ describe('Petitioner Account Creation', () => {
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-    cy.task('deleteAllCypressTestAccounts');
   });
 
   describe('Form Validation', () => {
