@@ -40,7 +40,7 @@ const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
     {caseDetailHelper.showFilingFeeExternal && (
       <span data-testid="filling-fee-message">
         *Filing fee status may take 2-3 business days from payment received date
-        or approval of waiver to update
+        or approval of waiver to update.
       </span>
     )}
   </React.Fragment>
