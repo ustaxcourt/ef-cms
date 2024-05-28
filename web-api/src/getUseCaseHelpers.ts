@@ -42,7 +42,7 @@ import { setNoticeOfChangeToRemoteProceeding } from '../../shared/src/business/u
 import { setPdfFormFields } from '../../shared/src/business/useCaseHelper/pdf/setPdfFormFields';
 import { stampDocumentForService } from '../../shared/src/business/useCaseHelper/stampDocumentForService';
 import { updateCaseAndAssociations } from './business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseAutomaticBlock } from './business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
