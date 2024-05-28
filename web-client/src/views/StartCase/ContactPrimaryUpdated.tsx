@@ -79,6 +79,7 @@ export const ContactPrimaryUpdated = connect(
       <>
         <div>
           <FormGroup
+            errorMessageId="primary-contact-name-error-message"
             errorText={
               validationErrors.contactPrimary &&
               validationErrors.contactPrimary.name
@@ -248,6 +249,7 @@ export const ContactPrimaryUpdated = connect(
 
           <FormGroup
             className="phone-input"
+            errorMessageId="phone-error-message"
             errorText={
               validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
