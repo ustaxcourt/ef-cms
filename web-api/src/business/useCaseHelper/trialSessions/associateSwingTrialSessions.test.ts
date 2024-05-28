@@ -1,9 +1,12 @@
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { associateSwingTrialSessions } from './associateSwingTrialSessions';
-import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';
+import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
+import {
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../../shared/src/test/mockUsers';
 
 const MOCK_TRIAL_SESSION = {
   ...MOCK_TRIAL_REGULAR,

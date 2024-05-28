@@ -1,6 +1,6 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createTrialSessionAndWorkingCopy } from './createTrialSessionAndWorkingCopy';
 
 const DATE = '2018-11-21T20:49:28.192Z';

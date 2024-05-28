@@ -1,18 +1,7 @@
-import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
-
-export type TrialSessionInformationType = {
-  chambersPhoneNumber: string;
-  joinPhoneNumber: string;
-  judgeName: string;
-  meetingId: string;
-  password: string;
-  startDate: string;
-  startTime: string;
-  trialLocation: string;
-};
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 
 /**
- * setNoticeOfChangeToRemoteProceeding
+ * setNoticeOfChangeToInPersonProceeding
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -21,34 +10,44 @@ export type TrialSessionInformationType = {
  * @param {object} providers.newTrialSessionEntity the new trial session data
  * @param {object} providers.userId the user ID
  */
-export const setNoticeOfChangeToRemoteProceeding = async (
+export const setNoticeOfChangeToInPersonProceeding = async (
   applicationContext,
   { caseEntity, newPdfDoc, newTrialSessionEntity, user },
-): Promise<void> => {
-  const trialSessionInformation: TrialSessionInformationType = {
+) => {
+  const trialSessionInformation = {
+    address1: newTrialSessionEntity.address1,
+    address2: newTrialSessionEntity.address2,
     chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-    joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
+    city: newTrialSessionEntity.city,
+    courthouseName: newTrialSessionEntity.courthouseName,
     judgeName: newTrialSessionEntity.judge.name,
-    meetingId: newTrialSessionEntity.meetingId,
-    password: newTrialSessionEntity.password,
     startDate: newTrialSessionEntity.startDate,
     startTime: newTrialSessionEntity.startTime,
+    state: newTrialSessionEntity.state,
     trialLocation: newTrialSessionEntity.trialLocation,
+    zip: newTrialSessionEntity.postalCode,
   };
 
   const noticePdf = await applicationContext
-    .getUseCases()
-    .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
+    .getUseCaseHelpers()
+    .generateNoticeOfChangeToInPersonProceeding(applicationContext, {
       docketNumber: caseEntity.docketNumber,
       trialSessionInformation,
     });
 
+  const additionalDocketEntryInfo = {
+    date: newTrialSessionEntity.startDate,
+    signedAt: applicationContext.getUtilities().createISODateString(),
+    trialLocation: newTrialSessionEntity.trialLocation,
+  };
+
   await applicationContext
     .getUseCaseHelpers()
     .createAndServeNoticeDocketEntry(applicationContext, {
+      additionalDocketEntryInfo,
       caseEntity,
       documentInfo:
-        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding,
       newPdfDoc,
       noticePdf,
       user,

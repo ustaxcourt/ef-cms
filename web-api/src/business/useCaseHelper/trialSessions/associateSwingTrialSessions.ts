@@ -1,9 +1,9 @@
-import { NotFoundError } from '../../../../../web-api/src/errors/errors';
+import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**

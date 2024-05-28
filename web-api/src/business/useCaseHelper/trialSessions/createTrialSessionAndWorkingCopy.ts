@@ -1,5 +1,5 @@
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 
 /**
  * createTrialSessionAndWorkingCopy
