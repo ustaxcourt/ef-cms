@@ -26,6 +26,13 @@ export const createCaseAction = async ({
   let caseDetail;
   let stinFile;
 
+  const attachmentToPetitionUploadProgress =
+    fileUploadProgressMap.attachmentToPetition
+      ? ([
+          fileUploadProgressMap.attachmentToPetition,
+        ] as FileUploadProgressType[])
+      : undefined;
+
   try {
     const {
       attachmentToPetitionFileIds,
@@ -35,9 +42,7 @@ export const createCaseAction = async ({
     } = await applicationContext
       .getUseCases()
       .generateDocumentIds(applicationContext, {
-        attachmentToPetitionUploadProgress: [
-          fileUploadProgressMap.attachmentToPetition,
-        ] as FileUploadProgressType[],
+        attachmentToPetitionUploadProgress,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure as FileUploadProgressType,
         petitionUploadProgress:
