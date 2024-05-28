@@ -4,10 +4,10 @@ import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 
-jest.mock('../../utilities/getJudgeWithTitle', () => ({
+jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
   getJudgeWithTitle: jest.fn(),
 }));
 
@@ -33,10 +33,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     },
   };
 
-  const mockPdfDocument = {
-    load: () => jest.fn().mockReturnValue(getFakeFile),
-  };
-
   const mockOpenCase = new Case(
     {
       ...MOCK_CASE,
@@ -59,7 +55,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
   it('should retrieve the judge title and fullname for the current and new judges', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession,
       newPdfDoc: getFakeFile,
@@ -79,7 +74,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
   it('should create a docket entry and serve the generated notice', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession,
       newPdfDoc: getFakeFile,
