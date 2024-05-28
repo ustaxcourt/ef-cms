@@ -34,6 +34,7 @@ export const ElectronicServiceConsentCheckbox = connect(
         />
         <label
           className="usa-checkbox__label"
+          data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"
           htmlFor={`electronic-service-consent-${contactType}`}
         >
           Register email address provided above for electronic filing and
