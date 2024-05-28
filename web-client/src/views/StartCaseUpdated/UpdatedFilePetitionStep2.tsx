@@ -198,6 +198,7 @@ function PetitionerAndSpouseInfo({
   updateFormValueSequence,
   validationErrors,
 }) {
+  console.log('validationErrors', validationErrors);
   return (
     <div
       className={classNames(
@@ -235,6 +236,15 @@ function PetitionerAndSpouseInfo({
             </label>
           </div>
         ))}
+
+        {validationErrors.isSpouseDeceased && (
+          <span
+            className="usa-error-message"
+            data-testid="is-spouse-deceased-error-message"
+          >
+            {validationErrors.isSpouseDeceased}
+          </span>
+        )}
       </fieldset>
       {isSpouseDeceasedSelected === 'Yes' && (
         <ContactSecondaryUpdated
