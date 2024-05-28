@@ -166,29 +166,6 @@ describe('File a petition', () => {
         cy.get('[data-testid="step-indicator-current-step-2-icon"]');
       });
 
-      it('should display all the possible options', () => {
-        const EXPECTED_FILING_TYPES: string[] = [
-          'Myself',
-          'Myself and my spouse',
-          'A business',
-          'Other',
-        ];
-        cy.get('.filing-type-radio-option').should('have.length', 4);
-        cy.get('.filing-type-radio-option').each((element, index) => {
-          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
-        });
-      });
-
-      it('should display a validaiton error message if user does not select filing type', () => {
-        cy.get('[data-testid="filling-type-error-message"]').should(
-          'not.exist',
-        );
-
-        cy.get('[data-testid="step-2-next-button"]').click();
-
-        cy.get('[data-testid="filling-type-error-message"]').should('exist');
-      });
-
       describe('Myself', () => {
         beforeEach(() => {
           cy.get('[data-testid="filing-type-0"').click();
@@ -337,29 +314,6 @@ describe('File a petition', () => {
         cy.get('[data-testid="step-indicator-current-step-2-icon"]');
       });
 
-      it('should display all the possible options', () => {
-        const EXPECTED_FILING_TYPES: string[] = [
-          'Myself',
-          'Myself and my spouse',
-          'A business',
-          'Other',
-        ];
-        cy.get('.filing-type-radio-option').should('have.length', 4);
-        cy.get('.filing-type-radio-option').each((element, index) => {
-          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
-        });
-      });
-
-      it('should display a validaiton error message if user does not select filing type', () => {
-        cy.get('[data-testid="filling-type-error-message"]').should(
-          'not.exist',
-        );
-
-        cy.get('[data-testid="step-2-next-button"]').click();
-
-        cy.get('[data-testid="filling-type-error-message"]').should('exist');
-      });
-
       describe('Myself', () => {
         beforeEach(() => {
           cy.get('[data-testid="filing-type-0"').click();
@@ -486,6 +440,42 @@ describe('File a petition', () => {
           cy.get('[data-testid="step-2-next-button"]').click();
           cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
+      });
+    });
+
+    describe('DOES NOT MATTER WHAT STEP 1 IS', () => {
+      beforeEach(() => {
+        cy.get('[data-testid="petition-reason--1"]').focus();
+        cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
+
+        cy.get('[data-testid="petition-fact--1"]').focus();
+        cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
+
+        cy.get('[data-testid="step-1-next-button"]').click();
+        cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+      });
+
+      it('should display all the possible options', () => {
+        const EXPECTED_FILING_TYPES: string[] = [
+          'Myself',
+          'Myself and my spouse',
+          'A business',
+          'Other',
+        ];
+        cy.get('.filing-type-radio-option').should('have.length', 4);
+        cy.get('.filing-type-radio-option').each((element, index) => {
+          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
+        });
+      });
+
+      it('should display a validaiton error message if user does not select filing type', () => {
+        cy.get('[data-testid="filling-type-error-message"]').should(
+          'not.exist',
+        );
+
+        cy.get('[data-testid="step-2-next-button"]').click();
+
+        cy.get('[data-testid="filling-type-error-message"]').should('exist');
       });
     });
   });
