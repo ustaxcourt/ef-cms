@@ -2,8 +2,8 @@ import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   ROLES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseInventoryReportPdf } from './generateCaseInventoryReportPdf';
 
 const mockCases = [
