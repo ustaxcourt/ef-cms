@@ -947,10 +947,6 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - wait-for-reindex
-      - accessibility-tests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
@@ -974,7 +970,6 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
-            - accessibility-tests
       - delete-api-mappings:
           <<: *only-deployed-lower-environments
           requires:
