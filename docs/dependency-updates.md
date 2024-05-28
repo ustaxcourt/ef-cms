@@ -40,19 +40,8 @@ note: we have 2 package.json files, be sure to update them all
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
-
-regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
-
-	- ./web-api/workflow-terraform/glue-cron/main/main.tf
-	- ./web-api/workflow-terraform/migration/main/main.tf
-	- ./web-api/workflow-terraform/migration-cron/main/main.tf
-	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
-	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
-	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
-	- ./web-client/terraform/main/main.tf
-
-	> aws = "<LATEST_VERSION>"
+4. Check if there is an update to the Terraform AWS provider and update to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+  - Big find for the current version and replace with the new version everywhere in the project.
 
 5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
 

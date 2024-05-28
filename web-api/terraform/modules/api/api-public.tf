@@ -3,7 +3,7 @@ module "api_public_lambda" {
   handler_file   = "./web-api/src/lambdas/api-public/api-public.ts"
   handler_method = "handler"
   lambda_name    = "api_public_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
@@ -14,7 +14,7 @@ module "public_api_authorizer_lambda" {
   handler_file   = "./web-api/src/lambdas/publicApiAuthorizer/public-api-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "public_api_authorizer_lambda_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/public_api_authorizer_role_${var.environment}"
+  role           = aws_iam_role.authorizer_lambda.arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
@@ -28,7 +28,7 @@ resource "aws_api_gateway_authorizer" "public_authorizer" {
   type                             = "REQUEST"
   identity_source                  = "context.identity.sourceIp"
   authorizer_result_ttl_in_seconds = 300
-  authorizer_credentials           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
+  authorizer_credentials           = aws_iam_role.api_gateway_invocation_role.arn
 }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api_public" {

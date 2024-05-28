@@ -1,4 +1,5 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
+import { isFirstIrsFiling } from '@web-client/presenter/computeds/completeDocumentTypeSectionHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setDefaultFileDocumentFormValuesAction = ({
@@ -24,6 +25,13 @@ export const setDefaultFileDocumentFormValuesAction = ({
 
   if (user.role === USER_ROLES.petitioner) {
     filersMap[user.userId] = true;
+  }
+
+  if (
+    user.role === USER_ROLES.irsPractitioner &&
+    isFirstIrsFiling(applicationContext, caseDetail)
+  ) {
+    store.set(state.form.partyIrsPractitioner, true);
   }
 
   store.set(state.form.fileAcrossConsolidatedGroup, canFileInConsolidatedGroup);

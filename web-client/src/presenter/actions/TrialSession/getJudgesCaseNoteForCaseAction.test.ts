@@ -15,20 +15,48 @@ describe('getJudgesCaseNoteForCaseAction', () => {
         note: '123',
       });
 
-    await runAction(getJudgesCaseNoteForCaseAction, {
+    const results = await runAction(getJudgesCaseNoteForCaseAction, {
       modules: {
         presenter,
       },
       state: { caseDetail: { docketNumber: '123' } },
     });
 
-    expect(
-      applicationContext.getUseCases().getUserCaseNoteInteractor.mock.calls
-        .length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().getUserCaseNoteInteractor.mock
-        .calls[0][1].docketNumber,
-    ).toEqual('123');
+    const getUserCaseNoteInteractorCalls =
+      applicationContext.getUseCases().getUserCaseNoteInteractor.mock.calls;
+
+    expect(getUserCaseNoteInteractorCalls.length).toEqual(1);
+    expect(getUserCaseNoteInteractorCalls[0][1].docketNumber).toEqual('123');
+
+    expect(results.output).toEqual({
+      userNote: {
+        note: '123',
+      },
+    });
+  });
+
+  it('should use default user note if interactor throws an error', async () => {
+    applicationContext
+      .getUseCases()
+      .getUserCaseNoteInteractor.mockImplementation(
+        () => new Promise((_resolve, reject) => reject(null)),
+      );
+
+    const results = await runAction(getJudgesCaseNoteForCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: { caseDetail: { docketNumber: '123' } },
+    });
+
+    const getUserCaseNoteInteractorCalls =
+      applicationContext.getUseCases().getUserCaseNoteInteractor.mock.calls;
+
+    expect(getUserCaseNoteInteractorCalls.length).toEqual(1);
+    expect(getUserCaseNoteInteractorCalls[0][1].docketNumber).toEqual('123');
+
+    expect(results.output).toEqual({
+      userNote: {},
+    });
   });
 });
