@@ -1,6 +1,6 @@
 # Note: this is debian 11 (bullseye)
 
-FROM cypress/browsers:node-20.13.0-chrome-124.0.6367.155-1-ff-125.0.3-edge-124.0.2478.80-1
+FROM cypress/browsers:node-20.13.1-chrome-125.0.6422.60-1-ff-126.0-edge-125.0.2535.51-1
 
 WORKDIR /home/app
 
@@ -24,7 +24,7 @@ RUN apt-get install -y \
   python3-pip \
   jq \
   graphicsmagick=1.4+really1.3.36+hg16481-2+deb11u1 \
-  ghostscript=9.53.3~dfsg-7+deb11u6 \
+  ghostscript=9.53.3~dfsg-7+deb11u7 \
   chromium \
   openssh-client \
   sudo
@@ -34,13 +34,13 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.46.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.55.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip && \ 
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.8.4/terraform_1.8.4_linux_amd64.zip && \ 
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

@@ -13,19 +13,9 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const ConfirmServeToIrsModal = () => (
-  <ConfirmModal
-    cancelLabel="No, Take Me Back"
-    confirmLabel="Yes, Serve"
-    preventCancelOnBlur={true}
-    title="Are You Sure You Want to Serve This Petition to the IRS?"
-    onCancelSequence="clearModalSequence"
-    onConfirmSequence="serveCaseToIrsSequence"
-  ></ConfirmModal>
-);
-
 export const ReviewSavedPetition = connect(
   {
+    clearModalSequence: sequences.clearModalSequence,
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -34,16 +24,19 @@ export const ReviewSavedPetition = connect(
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
+    serveCaseToIrsSequence: sequences.serveCaseToIrsSequence,
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
   function ReviewSavedPetition({
+    clearModalSequence,
     constants,
     form,
     formCancelToggleCancelSequence,
     leaveCaseForLaterServiceSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
+    serveCaseToIrsSequence,
     showModal,
     startCaseHelper,
   }) {
@@ -276,7 +269,16 @@ export const ReviewSavedPetition = connect(
             </Button>
           </div>
         </section>
-        {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
+        {showModal == 'ConfirmServeToIrsModal' && (
+          <ConfirmModal
+            cancelLabel="No, Take Me Back"
+            confirmLabel="Yes, Serve"
+            preventCancelOnBlur={true}
+            title="Are You Sure You Want to Serve This Petition to the IRS?"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={serveCaseToIrsSequence}
+          ></ConfirmModal>
+        )}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndNavigateSequence" />
         )}

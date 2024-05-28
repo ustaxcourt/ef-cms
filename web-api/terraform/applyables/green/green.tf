@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.48.0"
+    aws = "5.50.0"
   }
 }
 
@@ -94,7 +94,7 @@ module "api-east-green" {
     DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-east-1"
-    
+
   })
   region = "us-east-1"
   providers = {

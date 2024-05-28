@@ -760,43 +760,15 @@ export const mockOpenCasesReceivedOnJulyFourthSearchResult2 = {
 
 export const mockOpenCasesReceivedOnJulyFourthFormattedResults = {
   body: {
-    results: [
-      {
-        _score: null,
-        docketNumber: '14811-22',
-        receivedAt: '2022-07-04T08:01:19.428Z',
-      },
-      {
-        _score: null,
-        docketNumber: '14812-22',
-        receivedAt: '2022-07-04T14:38:28.897Z',
-      },
-      {
-        _score: null,
-        docketNumber: '14813-22',
-        receivedAt: '2022-07-04T15:37:03.358Z',
-      },
-      {
-        _score: null,
-        docketNumber: '14814-22',
-        receivedAt: '2022-07-04T20:09:51.618Z',
-      },
-      {
-        _score: null,
-        docketNumber: '14815-22',
-        receivedAt: '2022-07-04T20:12:17.759Z',
-      },
-      {
-        _score: null,
-        docketNumber: '14816-22',
-        receivedAt: '2022-07-04T22:55:34.927Z',
-      },
-      {
-        _score: null,
-        docketNumber: '14817-22',
-        receivedAt: '2022-07-05T00:47:46.367Z',
-      },
-    ],
+    aggregations: undefined,
+    results: mockOpenCasesReceivedOnJulyFourthSearchHits.map(hit => {
+      return {
+        _score: hit._score,
+        docketNumber: hit._source.docketNumber.S,
+        receivedAt: hit._source.receivedAt.S,
+        sort: hit.sort,
+      };
+    }),
     total: 7,
   },
 };
