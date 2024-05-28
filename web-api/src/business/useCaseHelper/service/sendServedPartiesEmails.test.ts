@@ -3,10 +3,10 @@ jest.mock('react-dom/server');
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { sendServedPartiesEmails } from './sendServedPartiesEmails';
 import React from 'react';
 import ReactDOM from 'react-dom/server';

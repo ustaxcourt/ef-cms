@@ -1,14 +1,14 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { WorkItem } from '../../entities/WorkItem';
-import { addCoverToPdf } from '../../useCases/addCoverToPdf';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -22,7 +22,7 @@ import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
  * @param {object} providers.user the user object that includes userId, barNumber etc.
  * @returns {Promise<User[]>} the internal users
  */
-export const createDocketEntryForChange = async ({
+const createDocketEntryForChange = async ({
   applicationContext,
   caseEntity,
   docketMeta = {},
@@ -121,7 +121,7 @@ export const createDocketEntryForChange = async ({
   };
 };
 
-export const createWorkItemForChange = async ({
+const createWorkItemForChange = async ({
   applicationContext,
   caseEntity,
   changeOfAddressDocketEntry,

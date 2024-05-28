@@ -5,9 +5,9 @@ import {
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { sendIrsSuperuserPetitionEmail } from './sendIrsSuperuserPetitionEmail';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
