@@ -9,7 +9,7 @@ describe('Practitioner Search', () => {
     loginAsTestAdmissionsClerk();
     cy.get('.advanced').contains('Advanced').click();
 
-    cy.get('button#tab-practitioner').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
 
     cy.intercept({
       hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
@@ -23,7 +23,7 @@ describe('Practitioner Search', () => {
 
     cy.wait('@getPractitionerByName').then(isValidRequest);
 
-    cy.get('button#tab-practitioner').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
 
     cy.intercept({
       hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
