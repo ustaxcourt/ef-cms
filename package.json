@@ -291,6 +291,7 @@
     "babel-plugin-cerebral": "1.0.1",
     "babel-plugin-transform-html-import-require-to-string": "0.0.3",
     "checksum": "1.0.0",
+    "chrome-launcher": "^1.1.1",
     "cognito-local": "3.23.3",
     "crypto-browserify": "3.12.0",
     "css-loader": "7.1.2",
@@ -333,6 +334,7 @@
     "jest-environment-node": "29.7.0",
     "jsdom": "24.0.0",
     "json2yaml": "1.1.0",
+    "lighthouse": "^12.0.0",
     "lint-staged": "15.2.4",
     "lint-staged-shellcheck": "0.1.2",
     "livereload": "0.9.3",
@@ -369,6 +371,7 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
+    "tsx": "^4.11.0",
     "typescript": "5.4.5",
     "utf8": "3.0.0"
   }
