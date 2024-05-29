@@ -1,3 +1,4 @@
+import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Login - Accessibility', () => {
@@ -12,10 +13,6 @@ describe('Login - Accessibility', () => {
 
     cy.injectAxe();
 
-    cy.checkA11y(
-      undefined,
-      { includedImpacts: ['serious', 'critical'] }, // minor/moderate/serious/critical
-      terminalLog,
-    );
+    cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
   });
 });

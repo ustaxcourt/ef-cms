@@ -1,3 +1,4 @@
+import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
@@ -17,9 +18,9 @@ describe('Advanced Search', () => {
     cy.checkA11y(
       undefined,
       {
-        includedImpacts: ['serious', 'critical'],
+        includedImpacts: impactLevel,
         rules: { 'nested-interactive': { enabled: false } },
-      }, // minor/moderate/serious/critical
+      },
       terminalLog,
     );
   });
@@ -36,9 +37,9 @@ describe('Advanced Search', () => {
     cy.checkA11y(
       undefined,
       {
-        includedImpacts: ['serious', 'critical'],
+        includedImpacts: impactLevel,
         rules: { 'nested-interactive': { enabled: false } },
-      }, // minor/moderate/serious/critical
+      },
       terminalLog,
     );
   });
@@ -55,9 +56,9 @@ describe('Advanced Search', () => {
     cy.checkA11y(
       undefined,
       {
-        includedImpacts: ['serious', 'critical'],
+        includedImpacts: impactLevel,
         rules: { 'nested-interactive': { enabled: false } },
-      }, // minor/moderate/serious/critical
+      },
       terminalLog,
     );
   });
@@ -74,9 +75,9 @@ describe('Advanced Search', () => {
     cy.checkA11y(
       undefined,
       {
-        includedImpacts: ['serious', 'critical'],
+        includedImpacts: impactLevel,
         rules: { 'nested-interactive': { enabled: false } },
-      }, // minor/moderate/serious/critical
+      },
       terminalLog,
     );
   });
