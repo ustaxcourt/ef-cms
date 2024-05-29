@@ -1,9 +1,9 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserCaseNote } from '../../entities/notes/UserCaseNote';
+import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
 
 /**
  * getUserCaseNoteForCasesInteractor

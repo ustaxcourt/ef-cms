@@ -1,8 +1,8 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { ROLES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserCaseNoteInteractor } from './getUserCaseNoteInteractor';
 import { omit } from 'lodash';
 

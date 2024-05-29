@@ -1,7 +1,8 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -13,7 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {Promise} the promise of the delete call
  */
 export const deleteUserCaseNoteInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();

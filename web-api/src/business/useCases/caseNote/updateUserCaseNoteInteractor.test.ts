@@ -1,7 +1,7 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { omit } from 'lodash';
 import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
 
