@@ -38,4 +38,18 @@ describe('generateCourtIssuedDocumentTitle', () => {
 
     expect(title).toEqual('Order fixing amount of bond at 100 million dollars');
   });
+
+  it('passing an invalid event code returns undefined', async () => {
+    const title = await generateCourtIssuedDocumentTitle({
+      documentMetadata: {
+        documentTitle: 'NOT THE ORIGINAL TITLE',
+        documentType: 'OFAB - Order fixing amount of bond',
+        eventCode: 'YOLO',
+        freeText: '100 million dollars',
+        scenario: 'Type A',
+      },
+    });
+
+    expect(title).toEqual(undefined);
+  });
 });

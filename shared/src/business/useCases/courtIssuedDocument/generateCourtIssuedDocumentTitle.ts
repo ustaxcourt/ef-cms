@@ -13,6 +13,8 @@ export const generateCourtIssuedDocumentTitle = ({ documentMetadata }) => {
     item => documentMetadata.eventCode === item.eventCode,
   );
 
+  if (!filingEvent) return undefined;
+
   // attempt to reset the document title to its default, bracketed
   // state in the case of re-generating a title
   const resetDocumentTitle =
