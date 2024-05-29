@@ -5,8 +5,8 @@ import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
 describe('irs superuser integration', () => {
-  //if local, skip this test
-  if (getCypressEnv().env === 'local') return true;
+  //if local or prod, skip this test
+  if (getCypressEnv().env === 'local' || getCypressEnv().env === 'prod') return;
 
   const password = getCypressEnv().defaultAccountPass;
   const userName = 'cypress_test_account_irs_super_user@example.com';
