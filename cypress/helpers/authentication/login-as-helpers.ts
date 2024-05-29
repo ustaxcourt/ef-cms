@@ -58,3 +58,8 @@ export function loginAsColvinChambers() {
   cy.login('colvinschambers');
   cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
 }
+
+export function loginAsReportersOffice() {
+  cy.login('reportersoffice');
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
