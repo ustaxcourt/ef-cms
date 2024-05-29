@@ -23,7 +23,9 @@ export const DocketHeader = ({
         </div>
         <div id="docket-number">Docket No. {docketNumberWithSuffix}</div>
         <div className="clear"></div>
-        {documentTitle && <h3 className="document-title">{documentTitle}</h3>}
+        {documentTitle && (
+          <h3 className="document-title underline">{documentTitle}</h3>
+        )}
       </div>
     </div>
   );

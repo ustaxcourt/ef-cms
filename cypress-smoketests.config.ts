@@ -14,6 +14,7 @@ import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
+  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
@@ -87,7 +88,9 @@ export default defineConfig({
         }) {
           return readAllItemsInBucket({ bucketName, retries });
         },
-
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
+        },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
         },
