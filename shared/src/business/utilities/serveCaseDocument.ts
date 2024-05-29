@@ -11,52 +11,61 @@ export const serveCaseDocument = async ({
   caseEntity: Case;
   initialDocumentTypeKey: string;
 }) => {
-  const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+  const documentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-  const initialDocketEntries = caseEntity.docketEntries.filter(
-    doc => doc.documentType === initialDocumentType.documentType,
-  );
+  if (
+    documentType.eventCode ===
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+  ) {
+    const docketEntriesByDocumentType = caseEntity.docketEntries.filter(
+      doc => doc.documentType === documentType.documentType,
+    );
 
-  await Promise.all(
-    initialDocketEntries.map(async initialDocketEntry => {
-      if (
-        initialDocketEntry &&
-        !DocketEntry.isUnservable(initialDocketEntry) &&
-        initialDocketEntry.isFileAttached
-      ) {
-        initialDocketEntry.setAsServed([
-          {
-            name: 'IRS',
-            role: ROLES.irsSuperuser,
-          },
-        ]);
-        caseEntity.updateDocketEntry(initialDocketEntry);
-
-        if (
-          initialDocketEntry.documentType ===
-          INITIAL_DOCUMENT_TYPES.petition.documentType
-        ) {
-          return applicationContext
-            .getUseCaseHelpers()
-            .sendIrsSuperuserPetitionEmail({
-              applicationContext,
-              caseEntity,
-              docketEntryId: initialDocketEntry.docketEntryId,
-            });
-        } else {
-          return applicationContext
-            .getUseCaseHelpers()
-            .sendServedPartiesEmails({
-              applicationContext,
-              caseEntity,
-              docketEntryId: initialDocketEntry.docketEntryId,
-              servedParties: {
-                //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-                electronic: [],
-              },
-            });
-        }
-      }
-    }),
-  );
+    for (const docketEntry of docketEntriesByDocumentType) {
+      await serveDocument(docketEntry, caseEntity, applicationContext);
+    }
+  } else {
+    const docketEntry = caseEntity.docketEntries.find(
+      doc => doc.documentType === documentType.documentType,
+    );
+    await serveDocument(docketEntry, caseEntity, applicationContext);
+  }
 };
+
+async function serveDocument(docketEntry, caseEntity, applicationContext) {
+  if (
+    docketEntry &&
+    !DocketEntry.isUnservable(docketEntry) &&
+    docketEntry.isFileAttached
+  ) {
+    docketEntry.setAsServed([
+      {
+        name: 'IRS',
+        role: ROLES.irsSuperuser,
+      },
+    ]);
+    caseEntity.updateDocketEntry(docketEntry);
+
+    if (
+      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType
+    ) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .sendIrsSuperuserPetitionEmail({
+          applicationContext,
+          caseEntity,
+          docketEntryId: docketEntry.docketEntryId,
+        });
+    } else {
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId: docketEntry.docketEntryId,
+        servedParties: {
+          // IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
+          electronic: [],
+        },
+      });
+    }
+  }
+}

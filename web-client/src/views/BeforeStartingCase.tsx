@@ -317,6 +317,7 @@ export const BeforeStartingCase = connect(
           </Button>
           <Button
             link
+            data-testid="cancel-before-starting-case"
             href="javascript:void(0);"
             id="cancel"
             onClick={() => {
