@@ -1,14 +1,15 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { Statistic } from '../../entities/Statistic';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { Statistic } from '../../../../../shared/src/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
- * addDeficiencyStatistic
+ * updateDeficiencyStatistic
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -18,12 +19,13 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
  * @param {number} providers.irsTotalPenalties total penalties amount from the IRS
  * @param {string} providers.lastDateOfPeriod last date of the period for the statistic
+ * @param {string} providers.statisticId id of the statistic on the case to update
  * @param {number} providers.year year for the statistic
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {object} the updated case
  */
-export const addDeficiencyStatistic = async (
-  applicationContext: IApplicationContext,
+export const updateDeficiencyStatistic = async (
+  applicationContext: ServerApplicationContext,
   {
     determinationDeficiencyAmount,
     determinationTotalPenalties,
@@ -32,6 +34,7 @@ export const addDeficiencyStatistic = async (
     irsTotalPenalties,
     lastDateOfPeriod,
     penalties,
+    statisticId,
     year,
     yearOrPeriod,
   }: {
@@ -47,6 +50,7 @@ export const addDeficiencyStatistic = async (
       penaltyAmount: number;
       statisticId?: string;
     }[];
+    statisticId: string;
     year: string;
     yearOrPeriod: string;
   },
@@ -69,6 +73,7 @@ export const addDeficiencyStatistic = async (
       irsTotalPenalties,
       lastDateOfPeriod,
       penalties,
+      statisticId,
       year,
       yearOrPeriod,
     },
@@ -76,7 +81,7 @@ export const addDeficiencyStatistic = async (
   ).validate();
 
   const newCase = new Case(oldCase, { applicationContext });
-  newCase.addStatistic(statisticEntity);
+  newCase.updateStatistic(statisticEntity, statisticId);
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
@@ -88,8 +93,8 @@ export const addDeficiencyStatistic = async (
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
 
-export const addDeficiencyStatisticInteractor = withLocking(
-  addDeficiencyStatistic,
+export const updateDeficiencyStatisticInteractor = withLocking(
+  updateDeficiencyStatistic,
   (_applicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
