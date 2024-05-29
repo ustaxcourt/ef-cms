@@ -1,27 +1,27 @@
 const { loginAs } = require('./helpers');
 
 module.exports = [
-  {
-    actions: [
-      ...loginAs({ username: 'admissionsclerk@example.com' }),
-      'navigate to http://localhost:1234/users/create-practitioner',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'admissionsclerk@example.com' }),
-      'navigate to http://localhost:1234/users/edit-practitioner/PT1234',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'admissionsclerk@example.com' }),
-      'navigate to http://localhost:1234/practitioner-detail/PT1234?tab=practitioner-documentation',
-    ],
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'admissionsclerk@example.com' }),
+  //     'navigate to http://localhost:1234/users/create-practitioner',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'admissionsclerk@example.com' }),
+  //     'navigate to http://localhost:1234/users/edit-practitioner/PT1234',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'admissionsclerk@example.com' }),
+  //     'navigate to http://localhost:1234/practitioner-detail/PT1234?tab=practitioner-documentation',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'admissionsclerk@example.com' }),

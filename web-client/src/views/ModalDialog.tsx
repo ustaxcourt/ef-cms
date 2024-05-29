@@ -117,13 +117,14 @@ export const ModalDialog = ({
       <FocusLock>
         <dialog
           open
+          aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
           role="dialog"
+          title={title}
           onClick={blurDialog}
         >
           <div
-            aria-modal="true"
             className={classNames('modal-dialog padding-205', className)}
             onClick={evt => evt.stopPropagation()}
           >

@@ -40,6 +40,7 @@ export const PractitionerDocumentation = connect(
           <Button
             link
             className="push-right margin-bottom-1"
+            data-testid="add-practitioner-document-button"
             href={`/practitioner-detail/${barNumber}/add-document`}
             icon="plus-circle"
             overrideMargin={true}
