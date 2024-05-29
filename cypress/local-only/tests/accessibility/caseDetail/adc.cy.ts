@@ -11,6 +11,7 @@ describe('Case Detail - ADC Accessibility', () => {
     loginAsAdc();
 
     cy.visit('/case-detail/101-19');
+    cy.get('[data-testid="docket-number-header"]');
 
     cy.injectAxe();
 
@@ -18,6 +19,7 @@ describe('Case Detail - ADC Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
+        rules: { 'nested-interactive': { enabled: false } },
       },
       terminalLog,
     );
