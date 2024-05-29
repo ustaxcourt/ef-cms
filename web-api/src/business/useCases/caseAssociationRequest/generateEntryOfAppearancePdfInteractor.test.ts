@@ -5,7 +5,7 @@ import {
   privatePractitionerUser,
   validUser,
 } from '@shared/test/mockUsers';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateEntryOfAppearancePdfInteractor } from './generateEntryOfAppearancePdfInteractor';
 
 describe('generateEntryOfAppearancePdfInteractor', () => {

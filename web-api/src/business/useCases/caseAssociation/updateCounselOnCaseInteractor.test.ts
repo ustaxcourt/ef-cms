@@ -5,13 +5,13 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { IrsPractitioner } from '../../entities/IrsPractitioner';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
-import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 
 describe('updateCounselOnCaseInteractor', () => {

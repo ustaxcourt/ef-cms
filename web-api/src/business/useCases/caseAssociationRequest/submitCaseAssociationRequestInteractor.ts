@@ -1,8 +1,8 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -15,7 +15,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {string} providers.filers the parties represented by the practitioner
  * @returns {Promise<*>} the promise of the case association request
  */
-export const submitCaseAssociationRequest = async (
+const submitCaseAssociationRequest = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
