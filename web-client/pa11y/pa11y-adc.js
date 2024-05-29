@@ -2,6 +2,7 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
+    // 10382: just messages/my/inbox no need to test
     actions: [...loginAs({ username: 'adc@example.com' })],
     url: 'http://localhost:1234/',
   },
