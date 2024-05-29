@@ -10,7 +10,6 @@ describe('Dashboard Page - Reporters Office Accessibility', () => {
     cy.login('reportersoffice');
 
     cy.injectAxe();
-
     cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
   });
 });
