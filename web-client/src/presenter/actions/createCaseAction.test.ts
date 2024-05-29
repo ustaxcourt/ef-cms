@@ -41,7 +41,7 @@ describe('createCaseAction', () => {
   const { addCoversheetInteractor, createCaseInteractor, generateDocumentIds } =
     applicationContext.getUseCases();
 
-  beforeEach(() => {
+  beforeAll(() => {
     generateDocumentIds.mockReturnValue({
       attachmentToPetitionFileIds: ['123'],
       corporateDisclosureFileId: '123',
@@ -110,21 +110,28 @@ describe('createCaseAction', () => {
   });
 
   it('should call createCaseInteractor and call path.error if it throws an error', async () => {
-    createCaseInteractor.mockImplementation(() => {
+    generateDocumentIds.mockReturnValueOnce({
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      stinFileId: '123',
+    });
+    createCaseInteractor.mockImplementationOnce(() => {
       throw new Error('error');
     });
 
     await runAction(createCaseAction, {
       modules: { presenter },
-      props: { fileUploadProgressMap },
+      props: {
+        fileUploadProgressMap: {
+          ...fileUploadProgressMap,
+          attachmentToPetition: undefined,
+        },
+      },
       state: { form: mockPetitionMetadata },
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
     expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
-      attachmentToPetitionUploadProgress: [
-        fileUploadProgressMap.attachmentToPetition,
-      ],
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
       petitionUploadProgress: fileUploadProgressMap.petition,
@@ -133,7 +140,6 @@ describe('createCaseAction', () => {
 
     expect(createCaseInteractor).toHaveBeenCalled();
     expect(createCaseInteractor).toHaveBeenCalledWith(expect.anything(), {
-      attachmentToPetitionFileIds: ['123'],
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
       petitionMetadata: mockForm,
