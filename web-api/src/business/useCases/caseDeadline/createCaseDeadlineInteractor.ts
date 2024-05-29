@@ -1,14 +1,15 @@
-import { Case } from '../../entities/cases/Case';
-import { CaseDeadline } from '../../entities/CaseDeadline';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const createCaseDeadline = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
   const user = applicationContext.getCurrentUser();

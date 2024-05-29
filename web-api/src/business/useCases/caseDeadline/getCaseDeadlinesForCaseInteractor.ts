@@ -1,4 +1,5 @@
-import { CaseDeadline } from '../../entities/CaseDeadline';
+import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * getCaseDeadlinesForCaseInteractor
@@ -9,7 +10,7 @@ import { CaseDeadline } from '../../entities/CaseDeadline';
  * @returns {Promise} the promise of the getCaseDeadlines call
  */
 export const getCaseDeadlinesForCaseInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
   const caseDeadlines = await applicationContext
