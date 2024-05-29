@@ -107,10 +107,9 @@ export const StatisticsForm = connect(
             </div>
           ))}
         </FormGroup>
-
         <FormGroup
           confirmationText={
-            confirmationText?.statistics[index]?.irsDeficiencyAmount
+            confirmationText?.statistics?.[index]?.irsDeficiencyAmount
           }
           errorText={
             validationErrors.statistics &&
@@ -192,7 +191,6 @@ export const StatisticsForm = connect(
         >
           Calculate Penalties on IRS Notice
         </Button>
-
         <hr />
       </div>
     );
