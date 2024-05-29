@@ -62,9 +62,9 @@ export const IrsNoticeUploadForm = connect(
                 'usa-label ustc-upload-atp with-hint',
                 attachmentToPetitionFile && 'validated',
               )}
-              data-testid="atp-file-upload-label"
-              htmlFor="atp-file-upload"
-              id="atp-file-upload-label"
+              data-testid={`irs-notice-upload-${index}-label`}
+              htmlFor={`irs-notice-upload-${index}`}
+              id="irs-notice-upload-label"
             >
               Choose a PDF (.pdf) of the IRS Notice(s) to upload if you have it.
             </label>
@@ -104,6 +104,7 @@ export const IrsNoticeUploadForm = connect(
           <CaseTypeSelect
             allowDefaultOption={true}
             caseTypes={caseTypeDescriptionHelper.caseTypes}
+            errorMessageId={`case-type-${index}-error-message`}
             hint="(required)"
             legend="Type of notice/case"
             name={index.toString()}

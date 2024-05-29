@@ -148,6 +148,7 @@ export const UpdatedFilePetitionStep4 = connect(
         </div>
         <div>
           <Button
+            data-testid="step-4-next-button"
             onClick={() => {
               updatedFilePetitionCompleteStep4Sequence();
             }}

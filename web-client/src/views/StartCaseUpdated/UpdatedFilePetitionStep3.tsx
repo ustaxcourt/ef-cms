@@ -200,6 +200,7 @@ export const UpdatedFilePetitionStep3 = connect(
                         />
                         <label
                           className="usa-checkbox__label"
+                          data-testid="redaction-acknowledgement-label"
                           htmlFor="irs-notices-acknowledgement"
                           id="irs-notices-acknowledgement-label"
                           style={{ marginTop: '0px' }}
@@ -229,6 +230,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 className="margin-bottom-0"
+                errorMessageId="case-type-root-error-message"
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
                 value={form.caseType}
@@ -249,6 +251,7 @@ export const UpdatedFilePetitionStep3 = connect(
         </div>
 
         <Button
+          data-testid="step-3-next-button"
           disabled={
             form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
           }

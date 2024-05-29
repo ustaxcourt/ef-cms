@@ -108,6 +108,7 @@ export const StateDrivenFileInput = connect<
               onClick={() => {
                 updateFormValueSequence({
                   key: fileInputName,
+                  property: 'file',
                   value: null,
                 });
                 updateFormValueSequence({
@@ -116,6 +117,7 @@ export const StateDrivenFileInput = connect<
                 });
                 updateFormValueSequence({
                   key: `${fileInputName}Size`,
+                  property: 'size',
                   value: null,
                 });
                 inputRef.value = null;

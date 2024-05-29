@@ -66,6 +66,7 @@ export const ContactSecondaryUpdated = connect(
       <>
         <div>
           <FormGroup
+            errorMessageId="secondary-contact-name-error-message"
             errorText={
               validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
@@ -192,6 +193,7 @@ export const ContactSecondaryUpdated = connect(
             />
           </FormGroup>
           <FormGroup
+            errorMessageId="email-error-message"
             errorText={
               validationErrors.contactSecondary &&
               validationErrors.contactSecondary.email
@@ -203,6 +205,7 @@ export const ContactSecondaryUpdated = connect(
             <input
               autoCapitalize="none"
               className="usa-input"
+              data-testid="contact-secondary-email"
               id="email"
               name="contactSecondary.email"
               ref={registerRef && registerRef('contactSecondary.email')}
@@ -283,6 +286,7 @@ export function InCareOf({
 }) {
   return (
     <FormGroup
+      errorMessageId={`in-care-of-${type}-error-message`}
       errorText={validationErrors[type] && validationErrors[type].inCareOf}
     >
       <label className="usa-label" htmlFor="inCareOf">
@@ -297,6 +301,7 @@ export function InCareOf({
       <input
         autoCapitalize="none"
         className="usa-input"
+        data-testid={`${type}-in-care-of`}
         id="inCareOf"
         name={`${type}.inCareOf`}
         ref={registerRef && registerRef(`${type}.inCareOf`)}

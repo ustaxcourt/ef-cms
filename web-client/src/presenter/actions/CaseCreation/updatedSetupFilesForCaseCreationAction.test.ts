@@ -8,8 +8,9 @@ describe('updatedSetupFilesForCaseCreationAction', () => {
         petitionFormatted: {
           applicationForWaiverOfFilingFeeFile:
             'TEST_applicationForWaiverOfFilingFeeFile',
-          attachmentToPetitionFile: 'TEST_attachmentToPetitionFile',
           corporateDisclosureFile: 'TEST_corporateDisclosureFile',
+          hasIrsNotice: true,
+          irsNotices: [{ file: 'TEST_attachmentToPetitionFile' }],
           petitionFile: 'TEST_petitionFile',
           primaryDocumentFile: 'TEST_primaryDocumentFile',
           requestForPlaceOfTrialFile: 'TEST_requestForPlaceOfTrialFile',
@@ -22,7 +23,7 @@ describe('updatedSetupFilesForCaseCreationAction', () => {
       files: {
         applicationForWaiverOfFilingFee:
           'TEST_applicationForWaiverOfFilingFeeFile',
-        attachmentToPetition: 'TEST_attachmentToPetitionFile',
+        attachmentToPetition: ['TEST_attachmentToPetitionFile'],
         corporateDisclosure: 'TEST_corporateDisclosureFile',
         petition: 'TEST_petitionFile',
         primary: 'TEST_primaryDocumentFile',
@@ -38,8 +39,9 @@ describe('updatedSetupFilesForCaseCreationAction', () => {
         petitionFormatted: {
           applicationForWaiverOfFilingFeeFile:
             'TEST_applicationForWaiverOfFilingFeeFile',
-          attachmentToPetitionFile: 'TEST_attachmentToPetitionFile',
           corporateDisclosureFile: 'TEST_corporateDisclosureFile',
+          hasIrsNotice: true,
+          irsNotices: [{ file: 'TEST_attachmentToPetitionFile' }],
           petitionFile: '',
           primaryDocumentFile: 'TEST_primaryDocumentFile',
           requestForPlaceOfTrialFile: 'TEST_requestForPlaceOfTrialFile',
@@ -52,7 +54,7 @@ describe('updatedSetupFilesForCaseCreationAction', () => {
       files: {
         applicationForWaiverOfFilingFee:
           'TEST_applicationForWaiverOfFilingFeeFile',
-        attachmentToPetition: 'TEST_attachmentToPetitionFile',
+        attachmentToPetition: ['TEST_attachmentToPetitionFile'],
         corporateDisclosure: 'TEST_corporateDisclosureFile',
         petition: undefined,
         primary: 'TEST_primaryDocumentFile',
