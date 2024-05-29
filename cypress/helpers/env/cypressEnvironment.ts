@@ -5,6 +5,8 @@ export const getCypressEnv = () => {
       accessKeyId: Cypress.env('AWS_ACCESS_KEY_ID') || 'S3RVER',
       cognitoEndpoint: env === 'local' ? 'http://localhost:9229/' : undefined,
       defaultAccountPass: Cypress.env('DEFAULT_ACCOUNT_PASS') || 'Testing1234$',
+      dynamoDbDeployTableName:
+        Cypress.env('DYNAMODB_DEPLOY_TABLE_NAME') || 'efcms-local',
       dynamoDbTableName: Cypress.env('DYNAMODB_TABLE_NAME') || 'efcms-local',
       env,
       publicSiteUrl:
@@ -23,6 +25,8 @@ export const getCypressEnv = () => {
     cognitoEndpoint: env === 'local' ? 'http://localhost:9229/' : undefined,
     defaultAccountPass:
       process.env.CYPRESS_DEFAULT_ACCOUNT_PASS || 'Testing1234$',
+    dynamoDbDeployTableName:
+      process.env.CYPRESS_DYNAMODB_DEPLOY_TABLE_NAME || 'efcms-local',
     dynamoDbTableName: process.env.CYPRESS_DYNAMODB_TABLE_NAME || 'efcms-local',
     env,
     publicSiteUrl:
