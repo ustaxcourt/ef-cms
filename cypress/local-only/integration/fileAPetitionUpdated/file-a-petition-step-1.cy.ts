@@ -134,6 +134,9 @@ describe('File a petition', () => {
           cy.get('[data-testid="petition-error-message-0"]').should(
             'not.exist',
           );
+
+          cy.get('[data-testid="step-1-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-2-icon"]');
         });
       });
     });
