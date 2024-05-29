@@ -191,6 +191,7 @@ export const CaseDetailHeader = connect<
                           formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
                         )}
                         data-testid="case-status"
+                        role="contentinfo"
                       >
                         <span aria-hidden="true">
                           {formattedCaseDetail.status}

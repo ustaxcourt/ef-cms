@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-disabled-tests */
 import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
