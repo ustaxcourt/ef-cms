@@ -88,10 +88,12 @@ export const getFeatureFlagValue = async ({
       pk: flag,
       sk: flag,
     },
-    TableName: getCypressEnv().dynamoDbTableName,
+    TableName: getCypressEnv().dynamoDbDeployTableName,
   });
 
-  return result?.Item?.current;
+  console.log('result', result);
+
+  return !!result?.Item?.current;
 };
 
 export const getEmailVerificationToken = async ({

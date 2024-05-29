@@ -104,6 +104,7 @@ export const IrsNoticeUploadForm = connect(
           <CaseTypeSelect
             allowDefaultOption={true}
             caseTypes={caseTypeDescriptionHelper.caseTypes}
+            errorMessageId={`case-type-${index}-error-message`}
             hint="(required)"
             legend="Type of notice/case"
             name={index.toString()}
