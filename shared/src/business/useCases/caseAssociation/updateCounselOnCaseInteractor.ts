@@ -17,7 +17,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {string} providers.userId the id of the user to be updated on the case
  * @returns {Promise} the promise of the update case call
  */
-export const updateCounselOnCase = async (
+const updateCounselOnCase = async (
   applicationContext: IApplicationContext,
   {
     docketNumber,
