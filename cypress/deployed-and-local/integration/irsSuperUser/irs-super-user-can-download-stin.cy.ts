@@ -4,9 +4,10 @@ import { loginAsPetitioner } from '../../../helpers/authentication/login-as-help
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
-//if local, skip this test
-
 describe('irs superuser integration', () => {
+  //if local, skip this test
+  if (getCypressEnv().env === 'local') return true;
+
   const password = getCypressEnv().defaultAccountPass;
   const userName = 'cypress_test_account_irs_super_user@example.com';
 
