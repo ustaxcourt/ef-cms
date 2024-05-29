@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 /**
  * sendNotificationToUser
  *
@@ -13,7 +15,7 @@ export const sendNotificationToUser = async ({
   message,
   userId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   clientConnectionId?: string;
   message: any;
   userId: string;

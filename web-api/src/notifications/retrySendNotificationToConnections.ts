@@ -1,4 +1,6 @@
 // eslint-disable-next-line spellcheck/spell-checker
+import { Connection } from '@web-api/notifications/sendNotificationToConnection';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * retrySendNotificationToConnections
@@ -14,8 +16,8 @@ export const retrySendNotificationToConnections = async ({
   deleteGoneConnections = true,
   messageStringified,
 }: {
-  applicationContext: IApplicationContext;
-  connections: TConnection[];
+  applicationContext: ServerApplicationContext;
+  connections: Connection[];
   deleteGoneConnections?: boolean;
   messageStringified: string;
 }) => {
