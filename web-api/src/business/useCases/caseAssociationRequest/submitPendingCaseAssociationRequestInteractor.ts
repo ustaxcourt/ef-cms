@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -13,7 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {Promise<*>} the promise of the pending case association request
  */
 export const submitPendingCaseAssociationRequestInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
