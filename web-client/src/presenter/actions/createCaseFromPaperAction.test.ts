@@ -112,7 +112,12 @@ describe('createCaseFromPaperAction', () => {
       modules: {
         presenter,
       },
-      props: mockProps,
+      props: {
+        fileUploadProgressMap: {
+          ...mockProps.fileUploadProgressMap,
+          attachmentToPetition: undefined,
+        },
+      },
       state: mockState,
     });
 
@@ -120,7 +125,6 @@ describe('createCaseFromPaperAction', () => {
       applicationContext.getUseCases().generateDocumentIds.mock.calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeUploadProgress: fileMetaData,
-      attachmentToPetitionUploadProgress: [fileMetaData],
       corporateDisclosureUploadProgress: fileMetaData,
       petitionUploadProgress: fileMetaData,
       requestForPlaceOfTrialUploadProgress: fileMetaData,
