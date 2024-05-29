@@ -3,12 +3,12 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
-    actions: [...loginAs({ username: 'privatePractitioner@example.com' })],
+    actions: [...loginAs({ username: 'privatePractitioner@example.com' })], // DONE
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'privatePractitioner@example.com' }),
+      ...loginAs({ username: 'privatePractitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/user/contact/edit',
     ],
     url: 'http://localhost:1234/',
