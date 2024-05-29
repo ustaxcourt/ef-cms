@@ -55,7 +55,6 @@ describe('File a petition', () => {
             'city-error-message',
             'state-error-message',
             'postal-code-error-message',
-            'place-of-legal-residence-error-message',
             'phone-error-message',
           ];
 
@@ -102,11 +101,6 @@ describe('File a petition', () => {
               inputValue: '12345',
             },
             {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'phone-error-message',
               input: 'phone',
               inputValue: 'Test Phone',
@@ -150,11 +144,6 @@ describe('File a petition', () => {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
-            },
-            {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
             },
             {
               errorMessage: 'phone-error-message',
