@@ -1,7 +1,10 @@
-import { COUNTRY_TYPES, ROLES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getContactPrimary } from '../../entities/cases/Case';
+import {
+  COUNTRY_TYPES,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
 
 describe('submitCaseAssociationRequest', () => {
