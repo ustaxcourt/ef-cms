@@ -40,14 +40,26 @@ describe('irs superuser integration', () => {
       idToken => {
         console.log("hey heere's our bearer token", idToken);
         loginAsPetitioner();
-        petitionerCreatesElectronicCase().then(docketNumber => {
-          petitionsClerkQcsAndServesElectronicCase(docketNumber);
-          getReconciliationReport(idToken);
-        });
+        petitionerCreatesElectronicCase();
+        requestReconciliationReport(idToken.idToken);
       },
     );
   });
 });
+
+const requestReconciliationReport = (bearerToken: string) => {
+  const url = `https://api-${Cypress.env('DEPLOYING_COLOR')}.${getCypressEnv().env}.ef-cms.ustaxcourt.gov/v2/reconciliation-report/today`;
+  console.log('this is the url', url);
+  cy.request({
+    url,
+    auth: {
+      // header: `Bearer ${bearerToken}`,
+      bearer: bearerToken,
+    },
+  }).then(response => {
+    expect(response.status).to.equal(200);
+  });
+};
 
 const getReconciliationReport = async (bearerToken: string) => {
   const url = `https://api-${Cypress.env('DEPLOYING_COLOR')}.${getCypressEnv().env}.ef-cms.ustaxcourt.gov/v2/reconciliation-report/today`;
