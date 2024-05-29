@@ -21,6 +21,17 @@ export async function initiateAuth(
     ClientId: applicationContext.environment.cognitoClientId,
   });
 
+  let isDeploying = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey: 'pending-color-switch',
+    });
+
+  console.log('isDeploying', isDeploying);
+
+  if (isDeploying) throw new Error('PassiveColorLogin');
+
   if (result.ChallengeName) {
     if (result.ChallengeName === ChallengeNameType.NEW_PASSWORD_REQUIRED) {
       const PasswordChangeError = new Error('NewPasswordRequired');
