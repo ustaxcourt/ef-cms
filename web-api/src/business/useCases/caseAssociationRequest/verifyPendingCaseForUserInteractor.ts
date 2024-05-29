@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 /**
  *
  * @param {object} applicationContext the application context
@@ -7,7 +9,7 @@
  * @returns {Promise<*>} the promise of the pending case verification
  */
 export const verifyPendingCaseForUserInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
   return await applicationContext

@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -16,7 +17,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise<*>} the promise of the case association request
  */
 const submitCaseAssociationRequest = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     filers = [],
