@@ -8,15 +8,15 @@ describe('openPdfInNewTabAction', () => {
   const fakeFile = testPdfDoc;
   const fakeUrl = new URL('http://www.fakeurl.com/test').toString();
 
-  const mockReadArrayBuffer = jest.fn().mockImplementation(async function () {
-    this.result = fakeFile;
-    await this.onload();
-  });
+  class MockFileReader {
+    result: ArrayBuffer | string | null = null;
+    onload: (this, ev: ProgressEvent<FileReader>) => any = jest.fn();
 
-  function MockFileReader() {
-    this.onload = null;
-    this.onerror = null;
-    this.readAsArrayBuffer = mockReadArrayBuffer;
+    readAsArrayBuffer(): void {
+      this.result = fakeFile;
+      const event = new ProgressEvent('load');
+      this.onload(event as ProgressEvent<FileReader>);
+    }
   }
 
   applicationContext.getFileReaderInstance.mockReturnValue(
@@ -24,6 +24,7 @@ describe('openPdfInNewTabAction', () => {
   );
 
   presenter.providers.applicationContext = applicationContext;
+
   presenter.providers.router = {
     createObjectURL: jest.fn().mockImplementation(() => {
       return fakeUrl;
@@ -40,7 +41,6 @@ describe('openPdfInNewTabAction', () => {
       },
     });
 
-    expect(mockReadArrayBuffer).toHaveBeenCalled();
     expect(
       applicationContext.getUtilities().openUrlInNewTab,
     ).toHaveBeenCalledWith({ url: fakeUrl });
