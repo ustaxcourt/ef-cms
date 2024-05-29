@@ -1,62 +1,68 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 
-describe('File a petition', () => {
+describe('File a petition: Step 2 - Petitioner Information', () => {
   beforeEach(() => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
+
+    cy.get('[data-testid="petition-reason--1"]').focus();
+    cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
+
+    cy.get('[data-testid="petition-fact--1"]').focus();
+    cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
+
+    cy.get('[data-testid="step-1-next-button"]').click();
+    cy.get('[data-testid="step-indicator-current-step-2-icon"]');
   });
 
-  describe('Step 2 - Petitioner Information', () => {
-    describe('Step 1 is auto Generated', () => {
+  describe('Business', () => {
+    beforeEach(() => {
+      cy.get('[data-testid="filing-type-2"').click();
+    });
+
+    it('should display all business options', () => {
+      const EXPECTED_FILING_TYPES: string[] = [
+        'Corporation',
+        'Partnership (as the Tax Matters Partner)',
+        'Partnership (as a partner other than Tax Matters Partner)',
+        'Partnership (as a partnership representative under BBA)',
+      ];
+      cy.get('.business-type-radio-option').should('have.length', 4);
+      cy.get('.business-type-radio-option').each((element, index) => {
+        cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
+      });
+    });
+
+    it('should display a validation error message when no business type is selected', () => {
+      cy.get('[data-testid="business-type-error-message"]').should('not.exist');
+
+      cy.get('[data-testid="step-2-next-button"]').click();
+
+      cy.get('[data-testid="business-type-error-message"]').should('exist');
+    });
+
+    describe('Partnership (as a partner other than Tax Matters Partner)', () => {
       beforeEach(() => {
-        cy.get('[data-testid="petition-reason--1"]').focus();
-        cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
-
-        cy.get('[data-testid="petition-fact--1"]').focus();
-        cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
-
-        cy.get('[data-testid="step-1-next-button"]').click();
-        cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+        cy.get('.business-type-radio-option').eq(2).click();
       });
 
-      it('should display all the possible options', () => {
-        const EXPECTED_FILING_TYPES: string[] = [
-          'Myself',
-          'Myself and my spouse',
-          'A business',
-          'Other',
-        ];
-        cy.get('.filing-type-radio-option').should('have.length', 4);
-        cy.get('.filing-type-radio-option').each((element, index) => {
-          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
-        });
-      });
-
-      it('should display a validaiton error message if user does not select filing type', () => {
-        cy.get('[data-testid="filling-type-error-message"]').should(
-          'not.exist',
-        );
-
-        cy.get('[data-testid="step-2-next-button"]').click();
-
-        cy.get('[data-testid="filling-type-error-message"]').should('exist');
-      });
-
-      describe('Myself', () => {
+      describe('Domestic', () => {
         beforeEach(() => {
-          cy.get('[data-testid="filing-type-0"').click();
+          cy.get('[data-testid="domestic-country-btn"]').click();
         });
 
-        it('should display validation error messages to all required fields left empty', () => {
+        it('should display a validation error message when Corporation form is empty', () => {
           const ERROR_MESSAGES_DATA_TEST_ID = [
             'primary-contact-name-error-message',
+            'primary-secondary-contact-name-error-message',
             'address-1-error-message',
             'city-error-message',
             'state-error-message',
             'postal-code-error-message',
             'place-of-legal-residence-error-message',
             'phone-error-message',
+            'corporate-disclosure-file-error-message',
           ];
 
           ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
@@ -64,6 +70,7 @@ describe('File a petition', () => {
           });
 
           cy.get('[data-testid="step-2-next-button"]').click();
+
           cy.get('[data-testid*="-error-message"]').should(
             'have.length',
             ERROR_MESSAGES_DATA_TEST_ID.length,
@@ -82,53 +89,8 @@ describe('File a petition', () => {
               inputValue: 'John Cruz',
             },
             {
-              errorMessage: 'address-1-error-message',
-              input: 'contactPrimary.address1',
-              inputValue: '123 Test Drive',
-            },
-            {
-              errorMessage: 'city-error-message',
-              input: 'contactPrimary.city',
-              inputValue: 'Boulder',
-            },
-            {
-              errorMessage: 'state-error-message',
-              input: 'contactPrimary.state',
-              selectOption: 'CO',
-            },
-            {
-              errorMessage: 'postal-code-error-message',
-              input: 'contactPrimary.postalCode',
-              inputValue: '12345',
-            },
-            {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
-            },
-            {
-              errorMessage: 'phone-error-message',
-              input: 'phone',
-              inputValue: 'Test Phone',
-            },
-          ];
-
-          ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
-            if ('selectOption' in inputInfo) {
-              const { errorMessage, input, selectOption } = inputInfo;
-              selectInput(errorMessage, input, selectOption);
-            } else if ('inputValue' in inputInfo) {
-              const { errorMessage, input, inputValue } = inputInfo;
-              textInput(errorMessage, input, inputValue);
-            }
-          });
-        });
-
-        it('should allow user to go to step 3 if everything is filled out correctly', () => {
-          const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
-            {
-              errorMessage: 'primary-contact-name-error-message',
-              input: 'contact-primary-name',
+              errorMessage: 'primary-secondary-contact-name-error-message',
+              input: 'contact-primary-secondary-name',
               inputValue: 'John Cruz',
             },
             {
@@ -161,6 +123,80 @@ describe('File a petition', () => {
               input: 'phone',
               inputValue: 'Test Phone',
             },
+            {
+              errorMessage: 'corporate-disclosure-file-error-message',
+              input: 'corporate-disclosure-file',
+              uploadFile: '../../helpers/file/sample.pdf',
+            },
+          ];
+
+          ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
+            if ('selectOption' in inputInfo) {
+              const { errorMessage, input, selectOption } = inputInfo;
+              selectInput(errorMessage, input, selectOption);
+            } else if ('inputValue' in inputInfo) {
+              const { errorMessage, input, inputValue } = inputInfo;
+              textInput(errorMessage, input, inputValue);
+            } else if ('uploadFile' in inputInfo) {
+              const { errorMessage, input, uploadFile } = inputInfo;
+              cy.get(`[data-testid="${errorMessage}"]`).should('not.exist');
+              cy.get('[data-testid="step-2-next-button"]').click();
+              cy.get(`[data-testid="${errorMessage}"]`).should('exist');
+              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
+            }
+          });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+        });
+
+        it('should allow user to go to step 3 if everything is filled out correctly', () => {
+          const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
+            {
+              errorMessage: 'primary-contact-name-error-message',
+              input: 'contact-primary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'primary-secondary-contact-name-error-message',
+              input: 'contact-primary-secondary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'address-1-error-message',
+              input: 'contactPrimary.address1',
+              inputValue: '123 Test Drive',
+            },
+            {
+              errorMessage: 'city-error-message',
+              input: 'contactPrimary.city',
+              inputValue: 'Boulder',
+            },
+            {
+              errorMessage: 'state-error-message',
+              input: 'contactPrimary.state',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'postal-code-error-message',
+              input: 'contactPrimary.postalCode',
+              inputValue: '12345',
+            },
+            {
+              errorMessage: 'place-of-legal-residence-error-message',
+              input: 'contactPrimary.placeOfLegalResidence',
+              selectOption: 'CO',
+            },
+            {
+              errorMessage: 'phone-error-message',
+              input: 'phone',
+              inputValue: 'Test Phone',
+            },
+            {
+              errorMessage: 'corporate-disclosure-file-error-message',
+              input: 'corporate-disclosure-file',
+              uploadFile: '../../helpers/file/sample.pdf',
+            },
           ];
 
           ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
@@ -172,6 +208,12 @@ describe('File a petition', () => {
               const { input, inputValue } = inputInfo;
               cy.get(`[data-testid="${input}"]`).scrollIntoView();
               cy.get(`[data-testid="${input}"]`).type(inputValue);
+            } else if ('uploadFile' in inputInfo) {
+              const { errorMessage, input, uploadFile } = inputInfo;
+              cy.get(`[data-testid="${errorMessage}"]`).should('not.exist');
+              cy.get('[data-testid="step-2-next-button"]').click();
+              cy.get(`[data-testid="${errorMessage}"]`).should('exist');
+              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
             }
           });
 
@@ -179,64 +221,23 @@ describe('File a petition', () => {
           cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
       });
-    });
 
-    describe('Step 1 is Uploaded', () => {
-      beforeEach(() => {
-        cy.get('[data-testid="upload-a-petition-label"').should('exist');
-        cy.get('[data-testid="upload-a-petition-label"').click();
-
-        cy.get(
-          '[data-testid="petition-redaction-acknowledgement-label"]',
-        ).click();
-        cy.get('#petition-file').attachFile('../../helpers/file/sample.pdf');
-
-        cy.get('[data-testid="step-1-next-button"]').click();
-        cy.get('[data-testid="step-indicator-current-step-2-icon"]');
-      });
-
-      it('should display all the possible options', () => {
-        const EXPECTED_FILING_TYPES: string[] = [
-          'Myself',
-          'Myself and my spouse',
-          'A business',
-          'Other',
-        ];
-        cy.get('.filing-type-radio-option').should('have.length', 4);
-        cy.get('.filing-type-radio-option').each((element, index) => {
-          cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
-        });
-      });
-
-      it('should display a validaiton error message if user does not select filing type', () => {
-        cy.get('[data-testid="filling-type-error-message"]').should(
-          'not.exist',
-        );
-
-        cy.get('[data-testid="step-2-next-button"]').click();
-
-        cy.get('[data-testid="filling-type-error-message"]').should('exist');
-      });
-
-      describe('Myself', () => {
+      describe('International', () => {
         beforeEach(() => {
-          cy.get('[data-testid="filing-type-0"').click();
+          cy.get('[data-testid="international-country-btn"]').click();
         });
 
-        it('should not display an input for "place of legal residence" since petition was uploaded', () => {
-          cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').should(
-            'not.exist',
-          );
-        });
-
-        it('should display validation error messages to all required fields left empty', () => {
+        it('should display a validation error message when Corporation form is empty', () => {
           const ERROR_MESSAGES_DATA_TEST_ID = [
             'primary-contact-name-error-message',
+            'primary-secondary-contact-name-error-message',
+            'country-error-message',
             'address-1-error-message',
             'city-error-message',
-            'state-error-message',
             'postal-code-error-message',
+            'place-of-legal-residence-error-message',
             'phone-error-message',
+            'corporate-disclosure-file-error-message',
           ];
 
           ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
@@ -244,6 +245,7 @@ describe('File a petition', () => {
           });
 
           cy.get('[data-testid="step-2-next-button"]').click();
+
           cy.get('[data-testid*="-error-message"]').should(
             'have.length',
             ERROR_MESSAGES_DATA_TEST_ID.length,
@@ -262,6 +264,16 @@ describe('File a petition', () => {
               inputValue: 'John Cruz',
             },
             {
+              errorMessage: 'primary-secondary-contact-name-error-message',
+              input: 'contact-primary-secondary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'country-error-message',
+              input: 'international-country-input',
+              inputValue: 'Some Country',
+            },
+            {
               errorMessage: 'address-1-error-message',
               input: 'contactPrimary.address1',
               inputValue: '123 Test Drive',
@@ -272,19 +284,24 @@ describe('File a petition', () => {
               inputValue: 'Boulder',
             },
             {
-              errorMessage: 'state-error-message',
-              input: 'contactPrimary.state',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
             },
             {
+              errorMessage: 'place-of-legal-residence-error-message',
+              input: 'contactPrimary.placeOfLegalResidence',
+              selectOption: 'CO',
+            },
+            {
               errorMessage: 'phone-error-message',
               input: 'phone',
               inputValue: 'Test Phone',
+            },
+            {
+              errorMessage: 'corporate-disclosure-file-error-message',
+              input: 'corporate-disclosure-file',
+              uploadFile: '../../helpers/file/sample.pdf',
             },
           ];
 
@@ -295,8 +312,17 @@ describe('File a petition', () => {
             } else if ('inputValue' in inputInfo) {
               const { errorMessage, input, inputValue } = inputInfo;
               textInput(errorMessage, input, inputValue);
+            } else if ('uploadFile' in inputInfo) {
+              const { errorMessage, input, uploadFile } = inputInfo;
+              cy.get(`[data-testid="${errorMessage}"]`).should('not.exist');
+              cy.get('[data-testid="step-2-next-button"]').click();
+              cy.get(`[data-testid="${errorMessage}"]`).should('exist');
+              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
             }
           });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
 
         it('should allow user to go to step 3 if everything is filled out correctly', () => {
@@ -305,6 +331,16 @@ describe('File a petition', () => {
               errorMessage: 'primary-contact-name-error-message',
               input: 'contact-primary-name',
               inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'primary-secondary-contact-name-error-message',
+              input: 'contact-primary-secondary-name',
+              inputValue: 'John Cruz',
+            },
+            {
+              errorMessage: 'country-error-message',
+              input: 'international-country-input',
+              inputValue: 'Some Country',
             },
             {
               errorMessage: 'address-1-error-message',
@@ -317,19 +353,24 @@ describe('File a petition', () => {
               inputValue: 'Boulder',
             },
             {
-              errorMessage: 'state-error-message',
-              input: 'contactPrimary.state',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
             },
             {
+              errorMessage: 'place-of-legal-residence-error-message',
+              input: 'contactPrimary.placeOfLegalResidence',
+              selectOption: 'CO',
+            },
+            {
               errorMessage: 'phone-error-message',
               input: 'phone',
               inputValue: 'Test Phone',
+            },
+            {
+              errorMessage: 'corporate-disclosure-file-error-message',
+              input: 'corporate-disclosure-file',
+              uploadFile: '../../helpers/file/sample.pdf',
             },
           ];
 
@@ -342,6 +383,12 @@ describe('File a petition', () => {
               const { input, inputValue } = inputInfo;
               cy.get(`[data-testid="${input}"]`).scrollIntoView();
               cy.get(`[data-testid="${input}"]`).type(inputValue);
+            } else if ('uploadFile' in inputInfo) {
+              const { errorMessage, input, uploadFile } = inputInfo;
+              cy.get(`[data-testid="${errorMessage}"]`).should('not.exist');
+              cy.get('[data-testid="step-2-next-button"]').click();
+              cy.get(`[data-testid="${errorMessage}"]`).should('exist');
+              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
             }
           });
 

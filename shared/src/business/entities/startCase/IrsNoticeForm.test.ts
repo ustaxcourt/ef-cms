@@ -47,6 +47,22 @@ describe('IrsNoticeForm', () => {
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({ caseType: 'Select a case type' });
       });
+
+      describe('BUG REPORT', () => {
+        ['Disclosure1', 'Disclosure2'].forEach((caseType: string) => {
+          it(`should support "${caseType}" case type`, () => {
+            const entity = new IrsNoticeForm({
+              ...VALID_ENTITY,
+              caseType,
+            });
+
+            expect(entity).toBeDefined();
+
+            const errors = entity.getFormattedValidationErrors();
+            expect(errors).toEqual(null);
+          });
+        });
+      });
     });
 
     describe('file', () => {

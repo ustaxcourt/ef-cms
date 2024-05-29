@@ -27,7 +27,11 @@ export class IrsNoticeForm extends JoiValidationEntity {
     this.taxYear = rawProps.taxYear;
   }
 
-  static VALID_CASE_TYPES = cloneDeep(CASE_TYPES)
+  static VALID_CASE_TYPES = [
+    ...cloneDeep(CASE_TYPES),
+    'Disclosure1',
+    'Disclosure2',
+  ]
     .map(caseType => {
       const caseDescription = CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];
       if (caseDescription) {

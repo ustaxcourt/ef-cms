@@ -230,6 +230,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 className="margin-bottom-0"
+                errorMessageId="case-type-root-error-message"
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
                 value={form.caseType}

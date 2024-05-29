@@ -349,42 +349,48 @@ function BusinessInfo({
 }) {
   return (
     <div className="ustc-secondary-question">
-      <fieldset className="usa-fieldset" id="business-type-radios">
-        <legend id="business-type-legend">
-          What type of business are you filing for?
-        </legend>
-        {[
-          businessTypes.corporation,
-          businessTypes.partnershipAsTaxMattersPartner,
-          businessTypes.partnershipOtherThanTaxMatters,
-          businessTypes.partnershipBBA,
-        ].map((businessType, idx) => (
-          <div className="usa-radio" key={businessType}>
-            <input
-              aria-describedby="business-type-legend"
-              checked={selectedBusinessType === businessType}
-              className="usa-radio__input"
-              id={`businessType-${businessType}`}
-              name="businessType"
-              type="radio"
-              value={businessType}
-              onChange={e => {
-                updateFilingTypeSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor={`businessType-${businessType}`}
-              id={`is-business-type-${idx}`}
-            >
-              {businessType}
-            </label>
-          </div>
-        ))}
-      </fieldset>
+      <FormGroup
+        errorMessageId="business-type-error-message"
+        errorText={validationErrors.businessType}
+      >
+        <fieldset className="usa-fieldset" id="business-type-radios">
+          <legend id="business-type-legend">
+            What type of business are you filing for?
+          </legend>
+          {[
+            businessTypes.corporation,
+            businessTypes.partnershipAsTaxMattersPartner,
+            businessTypes.partnershipOtherThanTaxMatters,
+            businessTypes.partnershipBBA,
+          ].map((businessType, idx) => (
+            <div className="usa-radio" key={businessType}>
+              <input
+                aria-describedby="business-type-legend"
+                checked={selectedBusinessType === businessType}
+                className="usa-radio__input"
+                id={`businessType-${businessType}`}
+                name="businessType"
+                type="radio"
+                value={businessType}
+                onChange={e => {
+                  updateFilingTypeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label business-type-radio-option"
+                htmlFor={`businessType-${businessType}`}
+                id={`is-business-type-${idx}`}
+              >
+                {businessType}
+              </label>
+            </div>
+          ))}
+        </fieldset>
+      </FormGroup>
+
       {selectedBusinessType && (
         <div>
           <ContactPrimaryUpdated
@@ -442,6 +448,7 @@ function CorporateDisclosureUpload({
       </Button>
       <div className="margin-top-20">
         <FormGroup
+          errorMessageId="corporate-disclosure-file-error-message"
           errorText={
             validationErrors.corporateDisclosureFile ||
             validationErrors.corporateDisclosureFileSize
