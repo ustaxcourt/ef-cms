@@ -18,7 +18,7 @@ module.exports = {
     'prettier',
     'plugin:security/recommended-legacy',
     'plugin:import/typescript',
-    // 'plugin:jsx-a11y/recommended', // todo
+    'plugin:jsx-a11y/recommended',
   ],
   ignorePatterns: ['**/*_.js', 'scripts/run-once-scripts/**/*'],
   overrides: [
