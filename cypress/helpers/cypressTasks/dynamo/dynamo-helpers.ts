@@ -91,8 +91,6 @@ export const getFeatureFlagValue = async ({
     TableName: getCypressEnv().dynamoDbDeployTableName,
   });
 
-  console.log('result', result);
-
   return !!result?.Item?.current;
 };
 
