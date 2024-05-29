@@ -117,7 +117,7 @@ describe('File a petition', () => {
             if ('selectOption' in inputInfo) {
               const { errorMessage, input, selectOption } = inputInfo;
               selectInput(errorMessage, input, selectOption);
-            } else {
+            } else if ('inputValue' in inputInfo) {
               const { errorMessage, input, inputValue } = inputInfo;
               textInput(errorMessage, input, inputValue);
             }
@@ -168,7 +168,7 @@ describe('File a petition', () => {
               const { input, selectOption } = inputInfo;
               cy.get(`[data-testid="${input}"]`).scrollIntoView();
               cy.get(`select[data-testid="${input}"]`).select(selectOption);
-            } else {
+            } else if ('inputValue' in inputInfo) {
               const { input, inputValue } = inputInfo;
               cy.get(`[data-testid="${input}"]`).scrollIntoView();
               cy.get(`[data-testid="${input}"]`).type(inputValue);
@@ -292,7 +292,7 @@ describe('File a petition', () => {
             if ('selectOption' in inputInfo) {
               const { errorMessage, input, selectOption } = inputInfo;
               selectInput(errorMessage, input, selectOption);
-            } else {
+            } else if ('inputValue' in inputInfo) {
               const { errorMessage, input, inputValue } = inputInfo;
               textInput(errorMessage, input, inputValue);
             }
@@ -338,7 +338,7 @@ describe('File a petition', () => {
               const { input, selectOption } = inputInfo;
               cy.get(`[data-testid="${input}"]`).scrollIntoView();
               cy.get(`select[data-testid="${input}"]`).select(selectOption);
-            } else {
+            } else if ('inputValue' in inputInfo) {
               const { input, inputValue } = inputInfo;
               cy.get(`[data-testid="${input}"]`).scrollIntoView();
               cy.get(`[data-testid="${input}"]`).type(inputValue);
