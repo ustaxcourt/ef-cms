@@ -137,6 +137,7 @@ module.exports = {
         },
       },
     ],
+    'jsx-a11y/no-redundant-roles': 'off',
     'max-lines': [
       'error',
       { max: 700, skipBlankLines: true, skipComments: true },
