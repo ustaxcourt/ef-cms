@@ -4,10 +4,13 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { createISODateString } from '../../utilities/DateHandler';
-import { docketClerkUser, petitionerUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  docketClerkUser,
+  petitionerUser,
+} from '../../../../../shared/src/test/mockUsers';
 import { fileCorrespondenceDocumentInteractor } from './fileCorrespondenceDocumentInteractor';
 
 describe('fileCorrespondenceDocumentInteractor', () => {

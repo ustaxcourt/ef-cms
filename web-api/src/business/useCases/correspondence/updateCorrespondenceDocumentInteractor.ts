@@ -1,9 +1,10 @@
-import { Case } from '../../entities/cases/Case';
-import { Correspondence } from '../../entities/Correspondence';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -15,7 +16,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {Promise<*>} the updated case entity after the correspondence document is updated
  */
 export const updateCorrespondenceDocumentInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: TDocumentMetaData },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

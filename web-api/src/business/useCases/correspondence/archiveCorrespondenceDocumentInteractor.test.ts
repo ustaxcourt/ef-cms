@@ -1,9 +1,9 @@
-import { Correspondence } from '../../entities/Correspondence';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
-import { ROLES } from '../../entities/EntityConstants';
+import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
