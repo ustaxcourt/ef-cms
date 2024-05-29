@@ -1,3 +1,12 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
+export type Connection = {
+  connectionId: string;
+  endpoint: string;
+  pk: string;
+  sk: string;
+};
+
 /**
  * sendNotificationToConnection
  *
@@ -11,8 +20,8 @@ export const sendNotificationToConnection = async ({
   connection,
   messageStringified,
 }: {
-  applicationContext: IApplicationContext;
-  connection: TConnection;
+  applicationContext: ServerApplicationContext;
+  connection: Connection;
   messageStringified: string;
 }) => {
   const { connectionId, endpoint } = connection;
