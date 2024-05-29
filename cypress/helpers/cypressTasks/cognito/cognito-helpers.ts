@@ -56,12 +56,9 @@ const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
   const results = await getCognito().listUserPools({
     MaxResults: 50,
   });
-  console.log('is it the irs environment?', isIrsEnv);
   const poolName = isIrsEnv
     ? `efcms-irs-${getCypressEnv().env}`
     : `efcms-${getCypressEnv().env}`;
-  console.log(`poolName: ${poolName}`);
-  // console.log('the user pools', results.UserPools);
 
   const userPoolId = results?.UserPools?.find(
     pool => pool.Name === poolName,
@@ -74,7 +71,7 @@ const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
 };
 
 export const createAccount = async ({
-  irsEnv,
+  isIrsEnv,
   password,
   role,
   userName,
@@ -82,9 +79,9 @@ export const createAccount = async ({
   userName: string;
   password: string;
   role: string;
-  irsEnv: boolean;
+  isIrsEnv: boolean;
 }): Promise<string> => {
-  const userPoolId = await getUserPoolId(irsEnv);
+  const userPoolId = await getUserPoolId(isIrsEnv);
   await getCognito().adminCreateUser({
     TemporaryPassword: password,
     UserAttributes: [
@@ -235,12 +232,9 @@ export async function getBearerToken({
   password: string;
   userName: string;
   isIrsEnv: boolean;
-}): Promise<{ idToken: string }> {
-  console.log('username issss', userName);
+}): Promise<string> {
   const userPoolId = await getUserPoolId(isIrsEnv);
   const clientId = await getClientId(userPoolId);
-  console.log(`clientId=${clientId}`);
-  console.log(`userPoolId=${userPoolId}`);
   const initiateAuthResult = await getCognito().adminInitiateAuth({
     AuthFlow: AuthFlowType.ADMIN_USER_PASSWORD_AUTH,
     AuthParameters: {
@@ -250,11 +244,9 @@ export async function getBearerToken({
     ClientId: clientId,
     UserPoolId: userPoolId,
   });
-  console.log(`initiateAuthResult:${initiateAuthResult}`);
   const associateResult = await getCognito().associateSoftwareToken({
     Session: initiateAuthResult.Session,
   });
-  console.log(`associateResult:${associateResult}`);
 
   if (!associateResult.SecretCode) {
     throw new Error('Could not generate Secret Code');
@@ -275,5 +267,5 @@ export async function getBearerToken({
   if (!challengeResponse.AuthenticationResult?.IdToken) {
     throw new Error('An ID token was not generated for the IRS Superuser.');
   }
-  return { idToken: challengeResponse.AuthenticationResult?.IdToken };
+  return challengeResponse.AuthenticationResult?.IdToken;
 }
