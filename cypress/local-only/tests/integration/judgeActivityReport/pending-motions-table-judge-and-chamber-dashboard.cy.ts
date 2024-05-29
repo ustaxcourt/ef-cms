@@ -1,7 +1,7 @@
 describe('Pending Motions Table', () => {
   it('should display the pending motion table for Judge Colvin', () => {
     cy.login('judgecolvin');
-    cy.get('[data-testid="tab-pending-motions"]').click();
+    cy.get('[data-testid="pending-motions-tab"]').click();
     cy.get('[data-testid^="pending-motion-row-"]')
       .as('pendingMotions')
       .should('have.length.above', 0);
@@ -52,7 +52,7 @@ describe('Pending Motions Table', () => {
 
   it("should display the pending motion table for Judge Colvin Chamber's", () => {
     cy.login('colvinschambers');
-    cy.get('[data-testid="tab-pending-motions"]').click();
+    cy.get('[data-testid="pending-motions-tab"]').click();
     cy.get('[data-testid^="pending-motion-row-"]')
       .as('pendingMotions')
       .should('have.length.above', 0);

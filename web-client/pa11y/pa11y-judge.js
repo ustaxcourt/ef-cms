@@ -123,8 +123,8 @@ module.exports = [
   {
     actions: [
       ...loginAs({ username: 'judgecolvin@example.com' }),
-      'wait for [data-testid="tab-pending-motions"] to be visible',
-      'click element [data-testid="tab-pending-motions"]',
+      'wait for [data-testid="pending-motions-tab"] to be visible',
+      'click element [data-testid="pending-motions-tab"]',
       'wait for button[data-testid="add-edit-pending-motion-worksheet"] to be visible',
       'click element button[data-testid="add-edit-pending-motion-worksheet"]',
       'wait for .modal-screen to be visible',
