@@ -1,9 +1,10 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserCaseNote } from '../../entities/notes/UserCaseNote';
+import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
 
 /**
  * getUserCaseNoteInteractor
@@ -14,7 +15,7 @@ import { UserCaseNote } from '../../entities/notes/UserCaseNote';
  * @returns {object} the case note object if one is found
  */
 export const getUserCaseNoteInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();

@@ -1,8 +1,9 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -16,7 +17,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case note returned from persistence
  */
 export const saveCaseNote = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
