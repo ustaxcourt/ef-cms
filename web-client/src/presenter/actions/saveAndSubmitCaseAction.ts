@@ -82,7 +82,7 @@ export const saveAndSubmitCaseAction = async ({
     alertSuccess: {
       message:
         'Your case has been created and your documents sent to the U.S. Tax Court.',
-      title: `Your case has been assigned docket number ${caseDetail.docketNumber}`,
+      title: `Your case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`,
     },
     caseDetail,
   });
