@@ -112,6 +112,7 @@ export const ContactPrimaryUpdated = connect(
           </FormGroup>
           {secondaryLabel && (
             <FormGroup
+              errorMessageId="primary-secondary-contact-name-error-message"
               errorText={
                 validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.secondaryName
