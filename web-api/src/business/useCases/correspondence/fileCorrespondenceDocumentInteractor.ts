@@ -1,10 +1,11 @@
-import { Case } from '../../entities/cases/Case';
-import { Correspondence } from '../../entities/Correspondence';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -16,7 +17,7 @@ import {
  * @returns {Promise<*>} the raw case object
  */
 export const fileCorrespondenceDocumentInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     documentMetadata,
     primaryDocumentFileId,

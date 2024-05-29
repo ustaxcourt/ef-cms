@@ -4,10 +4,10 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { Correspondence } from '../../entities/Correspondence';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { createISODateString } from '../../utilities/DateHandler';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { updateCorrespondenceDocumentInteractor } from './updateCorrespondenceDocumentInteractor';
 
 describe('updateCorrespondenceDocumentInteractor', () => {

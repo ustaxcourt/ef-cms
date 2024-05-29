@@ -7,7 +7,7 @@ import { addDeficiencyStatisticInteractor } from './business/useCases/caseStatis
 import { addPaperFilingInteractor } from '../../shared/src/business/useCases/docketEntry/addPaperFilingInteractor';
 import { addPetitionerToCaseInteractor } from '../../shared/src/business/useCases/addPetitionerToCaseInteractor';
 import { appendAmendedPetitionFormInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor';
-import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/archiveCorrespondenceDocumentInteractor';
+import { archiveCorrespondenceDocumentInteractor } from './business/useCases/correspondence/archiveCorrespondenceDocumentInteractor';
 import { archiveDraftDocumentInteractor } from '../../shared/src/business/useCases/archiveDraftDocumentInteractor';
 import { assignWorkItemsInteractor } from '../../shared/src/business/useCases/workitems/assignWorkItemsInteractor';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associateIrsPractitionerWithCaseInteractor';
@@ -48,7 +48,7 @@ import { editPractitionerDocumentInteractor } from '../../shared/src/business/us
 import { exportPendingReportInteractor } from '@web-api/business/useCases/pendingItems/exportPendingReportInteractor';
 import { fetchPendingItemsInteractor } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
-import { fileCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor';
+import { fileCorrespondenceDocumentInteractor } from './business/useCases/correspondence/fileCorrespondenceDocumentInteractor';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor';
 import { fileExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor';
@@ -192,7 +192,7 @@ import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor';
 import { updateCaseWorksheetInteractor } from './business/useCases/caseWorksheet/updateCaseWorksheetInteractor';
 import { updateContactInteractor } from '../../shared/src/business/useCases/updateContactInteractor';
-import { updateCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor';
+import { updateCorrespondenceDocumentInteractor } from './business/useCases/correspondence/updateCorrespondenceDocumentInteractor';
 import { updateCounselOnCaseInteractor } from './business/useCases/caseAssociation/updateCounselOnCaseInteractor';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/updateCourtIssuedDocketEntryInteractor';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/updateCourtIssuedOrderInteractor';
