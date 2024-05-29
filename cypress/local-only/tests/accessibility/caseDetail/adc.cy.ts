@@ -1,3 +1,4 @@
+import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsAdc } from '../../../../helpers/authentication/login-as-helpers';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
@@ -16,8 +17,8 @@ describe('Case Detail - ADC Accessibility', () => {
     cy.checkA11y(
       undefined,
       {
-        includedImpacts: ['serious', 'critical'],
-      }, // minor/moderate/serious/critical
+        includedImpacts: impactLevel,
+      },
       terminalLog,
     );
   });
