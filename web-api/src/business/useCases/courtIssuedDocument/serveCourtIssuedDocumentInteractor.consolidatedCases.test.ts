@@ -2,17 +2,17 @@ import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
   TRANSCRIPT_EVENT_CODE,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { testPdfDoc } from '../../test/getFakeFile';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {

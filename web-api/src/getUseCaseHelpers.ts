@@ -2,7 +2,7 @@ import { acquireLock } from './business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from './business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
-import { addServedStampToDocument } from '../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
+import { addServedStampToDocument } from './business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from './business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
 import { associateIrsPractitionerToCase } from './business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 import { associatePrivatePractitionerToCase } from './business/useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';

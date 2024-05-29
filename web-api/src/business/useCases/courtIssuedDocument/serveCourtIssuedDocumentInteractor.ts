@@ -1,42 +1,35 @@
-import { Case } from '../../entities/cases/Case';
-import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_SERVED_MESSAGES,
-} from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DOCUMENT_SERVED_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { createISODateString } from '../../utilities/DateHandler';
-import { omit } from 'lodash';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
- * fileAndServeCourtIssuedDocumentInteractor
- * @param {Object} applicationContext the application context
- * @param {Object} providers the providers object
+ * serveCourtIssuedDocumentInteractor
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
  * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
- * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
- * @param {Object} providers.form the form from the front end that has last minute modifications to the docket entry
- * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- * @returns {Object} the URL of the document that was served
+ * @param {String} providers.docketEntryId the ID of the docket entry being served
+ * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be served on
+ * @param {string} providers.subjectCaseDocketNumber the docket number of the case containing the document to serve
  */
-export const fileAndServeCourtIssuedDocument = async (
-  applicationContext: IApplicationContext,
+export const serveCourtIssuedDocument = async (
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     docketEntryId,
     docketNumbers,
-    form,
     subjectCaseDocketNumber,
   }: {
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    form: any;
     subjectCaseDocketNumber: string;
   },
 ) => {
@@ -54,10 +47,6 @@ export const fileAndServeCourtIssuedDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const subjectCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -65,39 +54,41 @@ export const fileAndServeCourtIssuedDocument = async (
       docketNumber: subjectCaseDocketNumber,
     });
 
+  if (!subjectCase.docketNumber) {
+    throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
+  }
+
   const subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  let error;
   if (!docketEntryToServe) {
-    error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
-  } else if (docketEntryToServe.servedAt) {
-    error = new Error('Docket entry has already been served');
-  } else if (docketEntryToServe.isPendingService) {
-    error = new Error('Docket entry is already being served');
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
-  if (error) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_document_error',
-        error: error.message,
-      },
-      userId: user.userId,
-    });
+  if (docketEntryToServe.servedAt) {
+    throw new Error('Docket entry has already been served');
+  }
 
-    throw error;
+  if (docketEntryToServe.isPendingService) {
+    throw new Error('Docket entry is already being served');
   }
+
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId: docketEntryToServe.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+      status: true,
+    });
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryToServe.docketEntryId,
+      Key: docketEntryId,
     })
     .promise();
 
@@ -105,32 +96,35 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
-      documentToStamp: form,
+      documentToStamp: docketEntryToServe,
       pdfData,
     });
 
-  const numberOfPages = await applicationContext
+  if (docketEntryToServe.shouldAutoGenerateDeadline()) {
+    await applicationContext.getUseCaseHelpers().autoGenerateDeadline({
+      applicationContext,
+      deadlineDate: docketEntryToServe.date,
+      description: docketEntryToServe.getAutoGeneratedDeadlineDescription(),
+      subjectCaseEntity,
+    });
+  }
+
+  docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
       docketEntryId,
-      documentBytes: pdfData,
     });
 
-  await applicationContext
+  const user = await applicationContext
     .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
-      docketNumber: subjectCaseDocketNumber,
-      status: true,
-    });
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities: Case[] = [];
   let serviceResults;
+  let caseEntities = [subjectCaseEntity];
 
   try {
-    for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
+    for (const docketNumber of docketNumbers) {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({
@@ -142,50 +136,17 @@ export const fileAndServeCourtIssuedDocument = async (
     }
 
     caseEntities = await Promise.all(
-      caseEntities.map(async caseEntity => {
+      caseEntities.map(caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
-            ...omit(docketEntryToServe, 'filedBy'),
-            attachments: form.attachments,
-            date: form.date,
-            docketNumber: caseEntity.docketNumber,
-            documentTitle: form.generatedDocumentTitle,
-            documentType: form.documentType,
-            editState: JSON.stringify({
-              ...form,
-              docketEntryId: docketEntryToServe.docketEntryId,
-              docketNumber: caseEntity.docketNumber,
-            }),
-            eventCode: form.eventCode,
+            ...docketEntryToServe,
             filingDate: createISODateString(),
-            freeText: form.freeText,
-            isDraft: false,
-            isFileAttached: true,
             isOnDocketRecord: true,
-            judge: form.judge,
-            numberOfPages,
-            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-            scenario: form.scenario,
-            serviceStamp: form.serviceStamp,
-            trialLocation: form.trialLocation,
           },
-          { applicationContext },
-        );
-
-        docketEntryEntity.setFiledBy(user);
-
-        const isSubjectCase =
-          caseEntity.docketNumber === subjectCaseEntity.docketNumber;
-
-        if (isSubjectCase && docketEntryEntity.shouldAutoGenerateDeadline()) {
-          await applicationContext.getUseCaseHelpers().autoGenerateDeadline({
+          {
             applicationContext,
-            deadlineDate: docketEntryEntity.date,
-            description:
-              docketEntryEntity.getAutoGeneratedDeadlineDescription(),
-            subjectCaseEntity,
-          });
-        }
+          },
+        );
 
         return applicationContext
           .getUseCaseHelpers()
@@ -204,7 +165,7 @@ export const fileAndServeCourtIssuedDocument = async (
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
-        docketEntryId: docketEntryToServe.docketEntryId,
+        docketEntryId,
         stampedPdf,
       });
   } finally {
@@ -214,7 +175,7 @@ export const fileAndServeCourtIssuedDocument = async (
           .getPersistenceGateway()
           .updateDocketEntryPendingServiceStatus({
             applicationContext,
-            docketEntryId: docketEntryToServe.docketEntryId,
+            docketEntryId,
             docketNumber: caseEntity.docketNumber,
             status: false,
           });
@@ -230,7 +191,7 @@ export const fileAndServeCourtIssuedDocument = async (
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: stampedPdf,
-    key: docketEntryToServe.docketEntryId,
+    key: docketEntryId,
   });
 
   const successMessage =
@@ -260,13 +221,13 @@ export const determineEntitiesToLock = (
     subjectCaseDocketNumber,
   }: {
     docketNumbers?: string[];
-    subjectCaseDocketNumber: string;
+    subjectCaseDocketNumber;
   },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
   ),
-  ttl: 900,
+  ttl: 15 * 60,
 });
 
 export const handleLockError = async (applicationContext, originalRequest) => {
@@ -278,14 +239,14 @@ export const handleLockError = async (applicationContext, originalRequest) => {
     message: {
       action: 'retry_async_request',
       originalRequest,
-      requestToRetry: 'file_and_serve_court_issued_document',
+      requestToRetry: 'serve_court_issued_document',
     },
     userId: user.userId,
   });
 };
 
-export const fileAndServeCourtIssuedDocumentInteractor = withLocking(
-  fileAndServeCourtIssuedDocument,
+export const serveCourtIssuedDocumentInteractor = withLocking(
+  serveCourtIssuedDocument,
   determineEntitiesToLock,
   handleLockError,
 );

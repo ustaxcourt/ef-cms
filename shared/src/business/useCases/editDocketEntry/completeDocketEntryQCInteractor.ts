@@ -17,7 +17,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { User } from '../../entities/User';
-import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
+import { addServedStampToDocument } from '../../../../../web-api/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '../../../../../web-api/src/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';

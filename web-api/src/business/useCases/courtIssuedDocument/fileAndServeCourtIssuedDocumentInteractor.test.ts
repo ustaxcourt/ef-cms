@@ -4,12 +4,15 @@ import {
   DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
-} from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
-import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
-import { testPdfDoc } from '../../test/getFakeFile';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  judgeUser,
+} from '../../../../../shared/src/test/mockUsers';
+import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 let MOCK_DATE;
 
