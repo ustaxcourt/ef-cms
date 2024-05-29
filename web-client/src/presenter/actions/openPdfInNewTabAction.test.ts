@@ -19,18 +19,16 @@ describe('openPdfInNewTabAction', () => {
     this.readAsArrayBuffer = mockReadArrayBuffer;
   }
 
-  beforeAll(() => {
-    applicationContext.getFileReaderInstance.mockReturnValue(
-      new MockFileReader(),
-    );
-    presenter.providers.applicationContext = applicationContext;
-    presenter.providers.router = {
-      createObjectURL: jest.fn().mockImplementation(() => {
-        return fakeUrl;
-      }),
-    };
-    window.open = jest.fn();
-  });
+  applicationContext.getFileReaderInstance.mockReturnValue(
+    new MockFileReader(),
+  );
+
+  presenter.providers.applicationContext = applicationContext;
+  presenter.providers.router = {
+    createObjectURL: jest.fn().mockImplementation(() => {
+      return fakeUrl;
+    }),
+  };
 
   it('opens a valid PDF in a new tab', async () => {
     await runAction(openPdfInNewTabAction, {
@@ -43,6 +41,8 @@ describe('openPdfInNewTabAction', () => {
     });
 
     expect(mockReadArrayBuffer).toHaveBeenCalled();
-    expect(window.open).toHaveBeenCalledWith(fakeUrl.toString(), '_blank');
+    expect(
+      applicationContext.getUtilities().openUrlInNewTab,
+    ).toHaveBeenCalledWith({ url: fakeUrl });
   });
 });

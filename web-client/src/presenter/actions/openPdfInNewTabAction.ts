@@ -6,10 +6,10 @@ export const openPdfInNewTabAction = ({
   const { file } = props;
   const reader = applicationContext.getFileReaderInstance();
 
-  reader.onload = () => {
+  reader.onload = async () => {
     const blob = new Blob([reader.result], { type: 'application/pdf' });
     const url = router.createObjectURL(blob);
-    window.open(url, '_blank');
+    await applicationContext.getUtilities().openUrlInNewTab({ url });
   };
 
   reader.readAsArrayBuffer(file);
