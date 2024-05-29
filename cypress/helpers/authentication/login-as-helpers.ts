@@ -3,6 +3,11 @@ export function loginAsTestAdmissionsClerk() {
   cy.get('#inbox-tab-content').should('exist');
 }
 
+export function loginAsAdc(user: 'adc' = 'adc') {
+  cy.login(user);
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+}
+
 export function loginAsAdmissionsClerk(
   user: 'admissionsclerk1' = 'admissionsclerk1',
 ) {
