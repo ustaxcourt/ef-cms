@@ -25,7 +25,7 @@ import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCa
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
 import { confirmSignUpInteractor } from './business/useCases/auth/confirmSignUpInteractor';
-import { createCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/createCaseDeadlineInteractor';
+import { createCaseDeadlineInteractor } from './business/useCases/caseDeadline/createCaseDeadlineInteractor';
 import { createCaseFromPaperInteractor } from '../../shared/src/business/useCases/createCaseFromPaperInteractor';
 import { createCaseInteractor } from '../../shared/src/business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
@@ -34,7 +34,7 @@ import { createMessageInteractor } from '../../shared/src/business/useCases/mess
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from './business/useCases/practitioner/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
-import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
+import { deleteCaseDeadlineInteractor } from './business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from './business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor';
@@ -77,7 +77,7 @@ import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUse
 import { getBlockedCasesInteractor } from '../../shared/src/business/useCases/getBlockedCasesInteractor';
 import { getCachedHealthCheckInteractor } from '../../shared/src/business/useCases/health/getCachedHealthCheckInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
-import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
+import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/getCaseDeadlinesInteractor';
 import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getCaseExistsInteractor';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor';
@@ -187,7 +187,7 @@ import { unsealCaseInteractor } from '../../shared/src/business/useCases/unsealC
 import { unsealDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateAssociatedCaseWorker } from './business/useCases/user/updateAssociatedCaseWorker';
 import { updateCaseContextInteractor } from '../../shared/src/business/useCases/updateCaseContextInteractor';
-import { updateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor';
+import { updateCaseDeadlineInteractor } from './business/useCases/caseDeadline/updateCaseDeadlineInteractor';
 import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/updateCaseDetailsInteractor';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor';
 import { updateCaseWorksheetInteractor } from '../../shared/src/business/useCases/caseWorksheet/updateCaseWorksheetInteractor';

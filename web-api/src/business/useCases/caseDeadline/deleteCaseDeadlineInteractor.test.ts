@@ -1,15 +1,15 @@
 import {
   AUTOMATIC_BLOCKED_REASONS,
   ROLES,
-} from '../../entities/EntityConstants';
-import { MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE_WITHOUT_PENDING } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
 
 describe('deleteCaseDeadlineInteractor', () => {

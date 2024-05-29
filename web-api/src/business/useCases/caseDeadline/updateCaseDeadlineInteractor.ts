@@ -1,8 +1,9 @@
-import { CaseDeadline } from '../../entities/CaseDeadline';
+import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -14,7 +15,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {object} the updated case deadline
  */
 export const updateCaseDeadlineInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
 ) => {
   const user = applicationContext.getCurrentUser();

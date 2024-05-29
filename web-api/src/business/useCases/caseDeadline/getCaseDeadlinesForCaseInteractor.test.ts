@@ -1,6 +1,6 @@
-import { ROLES } from '../../entities/EntityConstants';
-import { User } from '../../entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseDeadlinesForCaseInteractor } from './getCaseDeadlinesForCaseInteractor';
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
