@@ -3,8 +3,8 @@ import {
   addServedStampToDocument,
   computeCoordinates,
 } from './addServedStampToDocument';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { testPdfDoc } from '../../test/getFakeFile';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('addServedStampToDocument', () => {
   let rotationReturnValue;

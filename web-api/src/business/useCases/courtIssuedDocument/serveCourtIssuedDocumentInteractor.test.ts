@@ -1,11 +1,14 @@
-import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
+import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  judgeUser,
+} from '../../../../../shared/src/test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { testPdfDoc } from '../../test/getFakeFile';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
