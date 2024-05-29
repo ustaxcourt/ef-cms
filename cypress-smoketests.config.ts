@@ -41,7 +41,7 @@ export default defineConfig({
           userName: string;
         }) {
           return createAccount({
-            irsEnv,
+            isIrsEnv: irsEnv,
             password,
             role,
             userName,
