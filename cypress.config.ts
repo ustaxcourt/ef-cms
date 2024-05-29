@@ -46,6 +46,11 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
+        log(message) {
+          console.log(message);
+
+          return null;
+        },
         table(message) {
           console.table(message);
 
