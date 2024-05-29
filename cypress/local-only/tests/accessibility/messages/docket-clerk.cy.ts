@@ -1,3 +1,4 @@
+import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
@@ -17,9 +18,9 @@ describe('Messages', () => {
       cy.checkA11y(
         undefined,
         {
-          includedImpacts: ['serious', 'critical'],
+          includedImpacts: impactLevel,
           rules: { 'nested-interactive': { enabled: false } },
-        }, // minor/moderate/serious/critical
+        },
         terminalLog,
       );
     });
@@ -35,9 +36,9 @@ describe('Messages', () => {
       cy.checkA11y(
         undefined,
         {
-          includedImpacts: ['serious', 'critical'],
+          includedImpacts: impactLevel,
           rules: { 'nested-interactive': { enabled: false } },
-        }, // minor/moderate/serious/critical
+        },
         terminalLog,
       );
     });
@@ -53,9 +54,9 @@ describe('Messages', () => {
       cy.checkA11y(
         undefined,
         {
-          includedImpacts: ['serious', 'critical'],
+          includedImpacts: impactLevel,
           rules: { 'nested-interactive': { enabled: false } },
-        }, // minor/moderate/serious/critical
+        },
         terminalLog,
       );
     });
@@ -73,9 +74,9 @@ describe('Messages', () => {
       cy.checkA11y(
         undefined,
         {
-          includedImpacts: ['serious', 'critical'],
+          includedImpacts: impactLevel,
           rules: { 'nested-interactive': { enabled: false } },
-        }, // minor/moderate/serious/critical
+        },
         terminalLog,
       );
     });
@@ -91,9 +92,9 @@ describe('Messages', () => {
       cy.checkA11y(
         undefined,
         {
-          includedImpacts: ['serious', 'critical'],
+          includedImpacts: impactLevel,
           rules: { 'nested-interactive': { enabled: false } },
-        }, // minor/moderate/serious/critical
+        },
         terminalLog,
       );
     });
@@ -109,9 +110,9 @@ describe('Messages', () => {
       cy.checkA11y(
         undefined,
         {
-          includedImpacts: ['serious', 'critical'],
+          includedImpacts: impactLevel,
           rules: { 'nested-interactive': { enabled: false } },
-        }, // minor/moderate/serious/critical
+        },
         terminalLog,
       );
     });
