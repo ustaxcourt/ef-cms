@@ -173,7 +173,7 @@ export const ContactSecondaryUpdated = connect(
             <input
               autoCapitalize="none"
               className="usa-input max-width-200"
-              data-testid="phone"
+              data-testid="contact-secondary-phone"
               id="secondary-phone"
               name="contactSecondary.phone"
               ref={registerRef && registerRef('contactSecondary.phone')}
