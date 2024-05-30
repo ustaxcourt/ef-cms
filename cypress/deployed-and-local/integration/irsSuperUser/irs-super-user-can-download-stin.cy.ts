@@ -24,6 +24,8 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
         password,
         role: ROLES.irsSuperuser,
         userName,
+      }).then(confirmationMessage => {
+        expect(confirmationMessage).to.equal(`created user ${userName}`);
       });
 
       cy.task('getBearerToken', { isIrsEnv: true, password, userName }).then(
