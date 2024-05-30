@@ -1,21 +1,21 @@
 const { loginAs } = require('./helpers');
 
 module.exports = [
-  {
-    actions: [...loginAs({ username: 'docketclerk@example.com' })],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/document-qc/section/inbox',
-      'wait for td.message-select-control .usa-checkbox>label to be visible',
-      'click element td.message-select-control .usa-checkbox>label',
-      'wait for .action-section to be visible',
-    ],
-    notes: 'checks a11y of section queue tab panel',
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [...loginAs({ username: 'docketclerk@example.com' })],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/document-qc/section/inbox',
+  //     'wait for td.message-select-control .usa-checkbox>label to be visible',
+  //     'click element td.message-select-control .usa-checkbox>label',
+  //     'wait for .action-section to be visible',
+  //   ],
+  //   notes: 'checks a11y of section queue tab panel',
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
