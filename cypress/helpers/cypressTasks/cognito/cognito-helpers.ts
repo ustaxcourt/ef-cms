@@ -80,7 +80,7 @@ export const createAccount = async ({
   password: string;
   role: string;
   isIrsEnv: boolean;
-}): Promise<string> => {
+}): Promise<null> => {
   const userPoolId = await getUserPoolId(isIrsEnv);
   await getCognito().adminCreateUser({
     TemporaryPassword: password,
@@ -99,15 +99,15 @@ export const createAccount = async ({
       },
     ],
     UserPoolId: userPoolId,
-    Username: userName,
+    Username: userName.toLowerCase(),
   });
   await getCognito().adminSetUserPassword({
     Password: password,
     Permanent: true,
     UserPoolId: userPoolId,
-    Username: userName,
+    Username: userName.toLowerCase(),
   });
-  return `created user ${userName}`;
+  return null;
 };
 
 const deleteAccount = async (
