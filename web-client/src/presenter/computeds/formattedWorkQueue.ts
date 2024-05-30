@@ -206,6 +206,13 @@ const getDocketEntryEditLink = ({
   qcWorkItemsUntouched,
   result,
   workQueueToDisplay,
+}: {
+  applicationContext: ClientApplicationContext;
+  formattedDocument: any;
+  isInProgress: boolean;
+  qcWorkItemsUntouched: boolean;
+  result: any;
+  workQueueToDisplay: any;
 }) => {
   const { FROM_PAGES, UNSERVABLE_EVENT_CODES } =
     applicationContext.getConstants();
@@ -272,9 +279,15 @@ export const getWorkItemDocumentLink = ({
   const baseDocumentLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
+  const { USER_ROLES } = applicationContext.getConstants();
   let editLink = documentViewLink;
   if (showDocumentEditLink) {
-    if (permissions.DOCKET_ENTRY) {
+    if (
+      permissions.DOCKET_ENTRY &&
+      (applicationContext.getCurrentUser().role !==
+        USER_ROLES.caseServicesSupervisor ||
+        !formattedDocketEntry.isPetition)
+    ) {
       const editLinkExtension = getDocketEntryEditLink({
         applicationContext,
         formattedDocument: formattedDocketEntry,
