@@ -15,10 +15,6 @@ import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Petitioner Updates e-mail', () => {
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
-
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
