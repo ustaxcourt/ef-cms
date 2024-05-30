@@ -41,7 +41,12 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
-const canViewSTIN = (entry, petitionDocketEntry, user) => {
+/* eslint-disable max-lines */
+const canDownloadSTIN = (
+  entry: RawDocketEntry,
+  petitionDocketEntry: RawDocketEntry,
+  user: RawUser,
+): boolean => {
   if (
     user.role === ROLES.petitionsClerk &&
     !DocketEntry.isServed(entry) &&
@@ -696,7 +701,7 @@ export class DocketEntry extends JoiValidationEntity {
     //  - role Case Services Supervisor & entry not served, or
     //  - role IRS Superuser and entry served.
     if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
-      return canViewSTIN(entry, petitionDocketEntry, user);
+      return canDownloadSTIN(entry, petitionDocketEntry, user);
     }
 
     if (User.isInternalUser(user.role)) return true;
