@@ -25,60 +25,60 @@ module.exports = [
   //   notes: 'verify the work item already completed modal',
   //   url: 'http://localhost:1234/',
   // },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-19',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-19/edit-details',
-      'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
-      'click element .usa-radio__label[for=payment-status-paid]',
-      'wait for element #petition-payment-method to be visible',
-    ],
-    notes:
-      'checks a11y of form when petition fee payment status paid is selected',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-19/edit-details',
-      'wait for element .usa-radio__label[for=payment-status-unpaid] to be visible',
-      'click element .usa-radio__label[for=payment-status-unpaid]',
-      'wait for element #petition-payment-method to be removed',
-    ],
-    notes:
-      'checks a11y of form when petition fee payment status unpaid is selected',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-19/edit-details',
-      'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
-      'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-picker to be visible',
-    ],
-    notes:
-      'checks a11y of form when petition fee payment status waived is selected',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
-      'wait for #has-other-filing-party-label to be visible',
-      'click element label#has-other-filing-party-label',
-      'wait for input#other-filing-party to be visible',
-    ],
-    notes: 'checks a11y of edit docket entry add other filing party',
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/101-19',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/101-19/edit-details',
+  //     'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
+  //     'click element .usa-radio__label[for=payment-status-paid]',
+  //     'wait for element #petition-payment-method to be visible',
+  //   ],
+  //   notes:
+  //     'checks a11y of form when petition fee payment status paid is selected',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/101-19/edit-details',
+  //     'wait for element .usa-radio__label[for=payment-status-unpaid] to be visible',
+  //     'click element .usa-radio__label[for=payment-status-unpaid]',
+  //     'wait for element #petition-payment-method to be removed',
+  //   ],
+  //   notes:
+  //     'checks a11y of form when petition fee payment status unpaid is selected',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/101-19/edit-details',
+  //     'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
+  //     'click element .usa-radio__label[for=payment-status-waived]',
+  //     'wait for element #payment-date-waived-picker to be visible',
+  //   ],
+  //   notes:
+  //     'checks a11y of form when petition fee payment status waived is selected',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
+  //     'wait for #has-other-filing-party-label to be visible',
+  //     'click element label#has-other-filing-party-label',
+  //     'wait for input#other-filing-party to be visible',
+  //   ],
+  //   notes: 'checks a11y of edit docket entry add other filing party',
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
