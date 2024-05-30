@@ -41,7 +41,7 @@ describe('clearAdvancedSearchFormAction', () => {
       },
       currentPage: 83,
       orderSearch: { keyword: '' },
-      practitionerSearchByName: {},
+      practitionerSearchByName: { lastKeysOfPages: [], total: 0 },
     });
   });
 
