@@ -8,6 +8,7 @@ import { DocketEntry } from './DocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   casePetitioner,
+  caseServicesSupervisorUser,
   docketClerk1User,
   irsSuperuserUser,
   petitionerUser,
@@ -418,6 +419,51 @@ describe('isDownloadable', () => {
           options,
         ),
       ).toEqual(true);
+    });
+  });
+
+  describe('Case Services Supervisor', () => {
+    let options;
+    let petitionDocketEntry;
+    beforeEach(() => {
+      petitionDocketEntry = getPetitionDocketEntry(rawCase);
+      options = {
+        isTerminalUser: false,
+        rawCase,
+        user: caseServicesSupervisorUser,
+        visibilityChangeDate,
+      };
+    });
+
+    it('returns true if event code is STIN and is not served', () => {
+      expect(petitionDocketEntry).toBeDefined();
+      petitionDocketEntry.servedAt = undefined;
+      expect(DocketEntry.isServed(petitionDocketEntry)).toEqual(false);
+
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+          },
+          options,
+        ),
+      ).toEqual(true);
+    });
+
+    it('returns false if event code is STIN and is served', () => {
+      expect(petitionDocketEntry).toBeDefined();
+      expect(DocketEntry.isServed(petitionDocketEntry)).toEqual(true);
+
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...baseDocketEntry,
+            eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+          },
+          options,
+        ),
+      ).toEqual(false);
     });
   });
 });

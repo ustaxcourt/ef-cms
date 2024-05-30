@@ -790,7 +790,9 @@ export class Case extends JoiValidationEntity {
       if (
         filtered &&
         applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
-        (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
+        ((applicationContext.getCurrentUser().role !== ROLES.petitionsClerk &&
+          applicationContext.getCurrentUser().role !==
+            ROLES.caseServicesSupervisor) ||
           this.getIrsSendDate())
       ) {
         this.docketEntries = this.docketEntries.filter(
