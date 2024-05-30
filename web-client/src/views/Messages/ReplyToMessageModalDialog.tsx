@@ -8,14 +8,18 @@ import React from 'react';
 
 export const ReplyToMessageModalDialog = connect(
   {
+    clearModalFormSequence: sequences.clearModalFormSequence,
     form: state.modal.form,
+    replyToMessageSequence: sequences.replyToMessageSequence,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
   },
   function ReplyToMessageModalDialog({
+    clearModalFormSequence,
     form,
+    replyToMessageSequence,
     updateModalValueSequence,
     validateCreateMessageInModalSequence,
     validationErrors,
@@ -26,8 +30,8 @@ export const ReplyToMessageModalDialog = connect(
         confirmLabel="Send"
         preventCancelOnBlur={true}
         title="Reply to Message"
-        onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="replyToMessageSequence"
+        onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={replyToMessageSequence}
       >
         <FormGroup>
           <span className="usa-label">Recipient</span>

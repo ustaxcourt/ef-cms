@@ -577,7 +577,10 @@ export class Case extends JoiValidationEntity {
         then: joi.required(),
       })
       .description('How the petitioner paid the case fee.')
-      .messages({ '*': 'Enter payment method' }),
+      .messages({
+        '*': 'Enter payment method',
+        'string.max': 'Payment method must contain 50 or fewer characters',
+      }),
     petitionPaymentStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(PAYMENT_STATUS),
     )
@@ -786,7 +789,9 @@ export class Case extends JoiValidationEntity {
       if (
         filtered &&
         applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
-        (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
+        ((applicationContext.getCurrentUser().role !== ROLES.petitionsClerk &&
+          applicationContext.getCurrentUser().role !==
+            ROLES.caseServicesSupervisor) ||
           this.getIrsSendDate())
       ) {
         this.docketEntries = this.docketEntries.filter(
