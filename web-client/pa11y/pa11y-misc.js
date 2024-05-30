@@ -1,5 +1,5 @@
 module.exports = [
-  'http://localhost:1234/login',
+  'http://localhost:1234/login', // DONE
   'http://localhost:1234/create-account/petitioner',
   {
     actions: [
@@ -17,7 +17,7 @@ module.exports = [
     notes: 'checks a11y of create petitioner account success message',
     url: 'http://localhost:1234/create-account/petitioner',
   },
-  'http://localhost:1234/forgot-password',
+  'http://localhost:1234/forgot-password', // DONE + IMPROVED
   {
     actions: [
       'wait for [data-testid="email-input"] to be visible',
