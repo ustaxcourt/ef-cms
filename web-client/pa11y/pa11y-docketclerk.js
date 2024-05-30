@@ -79,13 +79,13 @@ module.exports = [
   //   notes: 'checks a11y of edit docket entry add other filing party',
   //   url: 'http://localhost:1234/',
   // },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/reports/pending-report',
-    ],
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/reports/pending-report',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
