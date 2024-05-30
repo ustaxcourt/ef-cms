@@ -59,6 +59,11 @@ export function loginAsFloater() {
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
+export function loginAsGeneral() {
+  cy.login('general');
+  cy.get('[data-testid="section-inbox-tab"]').should('exist');
+}
+
 export function loginAsColvin() {
   cy.login('judgecolvin');
   cy.get('h1:contains("Trial Sessions")').should('exist');
