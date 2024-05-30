@@ -898,7 +898,10 @@ workflows:
   version: 2
 
   build-and-deploy:
-    when: << pipeline.parameters.run_build_and_deploy >>
+    when:
+      and:
+        - equal: [api, <<pipeline.trigger_source>>] # Only trigger a pipeline build when a user clicks "trigger pipeline"
+        - equal: [true, <<pipeline.parameters.run_build_and_deploy>>] # Allow build-and-deploy to be disabled programmatically
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
