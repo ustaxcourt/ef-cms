@@ -199,22 +199,22 @@ module.exports = [
   //   notes: 'checks a11y of confirm-initiate-service-modal dialog',
   //   url: 'http://localhost:1234/',
   // },
-  // {
-  //   actions: [
-  //     ...loginAs({ username: 'docketclerk@example.com' }),
-  //     'navigate to http://localhost:1234/case-detail/111-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
-  //     'wait for element #document-type to be visible',
-  //     'set field #free-text to Anything',
-  //     'check field #free-text',
-  //     'set field #date-received-picker to 01/01/2022',
-  //     'check field #date-received-picker',
-  //     'wait for #save-entry-button to be visible',
-  //     'click element #save-entry-button',
-  //     'wait for .confirm-initiate-save-modal to be visible',
-  //   ],
-  //   notes: 'checks a11y of confirm-initiate-save-modal dialog',
-  //   url: 'http://localhost:1234/',
-  // },
+  {
+    actions: [
+      ...loginAs({ username: 'docketclerk@example.com' }),
+      'navigate to http://localhost:1234/case-detail/111-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+      'wait for element #document-type to be visible',
+      'set field #free-text to Anything',
+      'check field #free-text',
+      'set field #date-received-picker to 01/01/2022',
+      'check field #date-received-picker',
+      'wait for #save-entry-button to be visible',
+      'click element #save-entry-button',
+      'wait for .confirm-initiate-save-modal to be visible',
+    ],
+    notes: 'checks a11y of confirm-initiate-save-modal dialog',
+    url: 'http://localhost:1234/',
+  },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),

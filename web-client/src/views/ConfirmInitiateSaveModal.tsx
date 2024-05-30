@@ -30,7 +30,6 @@ export const ConfirmInitiateSaveModal = connect(
           setIsSubmitting(true);
           submitCourtIssuedDocketEntrySequence();
         }}
-        dataTestId="confirm-initiate-save-modal"
         disableSubmit={isSubmitting}
         title="Are You Ready to Save This Document to the Docket Record?"
       >
