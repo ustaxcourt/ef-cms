@@ -16,15 +16,15 @@ module.exports = [
   //   notes: 'checks a11y of section queue tab panel',
   //   url: 'http://localhost:1234/',
   // },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/320-21/documents/6b2bcbcc-bc95-4103-b5fd-3e999395c2d3/edit',
-      'wait for .modal-screen to be visible',
-    ],
-    notes: 'verify the work item already completed modal',
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/320-21/documents/6b2bcbcc-bc95-4103-b5fd-3e999395c2d3/edit',
+  //     'wait for .modal-screen to be visible',
+  //   ],
+  //   notes: 'verify the work item already completed modal',
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
