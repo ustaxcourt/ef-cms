@@ -43,7 +43,6 @@ export function petitionerCreatesElectronicCase() {
   return cy
     .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
     .then(updatedFlow => {
-      console.log('updatedFlow', updatedFlow);
       if (updatedFlow) {
         return petitionerCreatesElectronicCaseUpdated();
       } else {
