@@ -91,7 +91,7 @@ export const createAccount = async ({
       },
       {
         Name: 'email',
-        Value: userName,
+        Value: userName.toLowerCase(),
       },
       {
         Name: 'email_verified',
