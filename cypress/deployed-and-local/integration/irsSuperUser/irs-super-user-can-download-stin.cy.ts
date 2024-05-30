@@ -4,41 +4,46 @@ import { loginAsPetitioner } from '../../../helpers/authentication/login-as-help
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
-describe('irs superuser integration', () => {
-  //if local or prod, skip this test
-  if (getCypressEnv().env === 'local' || getCypressEnv().env === 'prod') return;
+if (!Cypress.env('SMOKETESTS_LOCAL')) {
+  describe('irs superuser integration', () => {
+    const password = getCypressEnv().defaultAccountPass;
+    const userName = 'cypress_test_account_irs_super_user@example.com';
 
-  const password = getCypressEnv().defaultAccountPass;
-  const userName = 'cypress_test_account_irs_super_user@example.com';
-
-  beforeEach(() => {
-    Cypress.session.clearCurrentSessionData();
-    cy.task('deleteAllIrsCypressTestAccounts');
-  });
-
-  after(() => {
-    cy.task('deleteAllIrsCypressTestAccounts');
-  });
-
-  it('should let an irs superuser view the reconciliation report and download a STIN', () => {
-    cy.task('createAccount', {
-      irsEnv: true,
-      password,
-      role: ROLES.irsSuperuser,
-      userName,
+    beforeEach(() => {
+      Cypress.session.clearCurrentSessionData();
+      cy.task('deleteAllIrsCypressTestAccounts');
     });
 
-    cy.task('getBearerToken', { isIrsEnv: true, password, userName }).then(
-      idToken => {
-        loginAsPetitioner();
-        petitionerCreatesElectronicCase().then(docketNumber => {
-          petitionsClerkQcsAndServesElectronicCase(docketNumber);
-          verifyReconciliationReportAndStinUrl(idToken as string);
-        });
-      },
-    );
+    after(() => {
+      cy.task('deleteAllIrsCypressTestAccounts');
+    });
+
+    it('should let an irs superuser view the reconciliation report and download a STIN', () => {
+      cy.task('createAccount', {
+        irsEnv: true,
+        password,
+        role: ROLES.irsSuperuser,
+        userName,
+      });
+
+      cy.task('getBearerToken', { isIrsEnv: true, password, userName }).then(
+        idToken => {
+          loginAsPetitioner();
+          petitionerCreatesElectronicCase().then(docketNumber => {
+            petitionsClerkQcsAndServesElectronicCase(docketNumber);
+            verifyReconciliationReportAndStinUrl(idToken as string);
+          });
+        },
+      );
+    });
   });
-});
+} else {
+  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
+    it('should skip', () => {
+      expect(true).to.equal(true);
+    });
+  });
+}
 
 /**
  *
