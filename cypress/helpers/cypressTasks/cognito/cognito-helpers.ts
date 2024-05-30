@@ -224,16 +224,14 @@ export const deleteAllIrsCypressTestAccounts = async (): Promise<null> => {
   return null;
 };
 
-export async function getBearerToken({
-  isIrsEnv,
+export async function getIrsBearerToken({
   password,
   userName,
 }: {
   password: string;
   userName: string;
-  isIrsEnv: boolean;
 }): Promise<string> {
-  const userPoolId = await getUserPoolId(isIrsEnv);
+  const userPoolId = await getUserPoolId(true);
   const clientId = await getClientId(userPoolId);
   const initiateAuthResult = await getCognito().adminInitiateAuth({
     AuthFlow: AuthFlowType.ADMIN_USER_PASSWORD_AUTH,
@@ -265,7 +263,7 @@ export async function getBearerToken({
     Session: verifyTokenResult.Session,
   });
   if (!challengeResponse.AuthenticationResult?.IdToken) {
-    throw new Error('An ID token was not generated for the IRS Superuser.');
+    throw new Error(`Failed to generate token for user:${userName}`);
   }
   return challengeResponse.AuthenticationResult?.IdToken;
 }
