@@ -28,15 +28,13 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
         expect(confirmationMessage).to.equal(`created user ${userName}`);
       });
 
-      cy.task('getBearerToken', { isIrsEnv: true, password, userName }).then(
-        idToken => {
-          loginAsPetitioner();
-          petitionerCreatesElectronicCase().then(docketNumber => {
-            petitionsClerkQcsAndServesElectronicCase(docketNumber);
-            verifyReconciliationReportAndStinUrl(idToken as string);
-          });
-        },
-      );
+      cy.task('getIrsBearerToken', { password, userName }).then(idToken => {
+        loginAsPetitioner();
+        petitionerCreatesElectronicCase().then(docketNumber => {
+          petitionsClerkQcsAndServesElectronicCase(docketNumber);
+          verifyReconciliationReportAndStinUrl(idToken as string);
+        });
+      });
     });
   });
 } else {
@@ -53,7 +51,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
  * at least one downloadable STIN record. Method fails test if either of these conditions is
  * not met.
  *
- * @param bearerToken bearer token for IRS superuser session (see tasks::getBearerToken)
+ * @param bearerToken bearer token for IRS superuser session (see tasks::getIrsBearerToken)
  */
 const verifyReconciliationReportAndStinUrl = (bearerToken: string) => {
   const url = `https://api-${Cypress.env('DEPLOYING_COLOR')}.${getCypressEnv().env}.ef-cms.ustaxcourt.gov/v2/reconciliation-report/today`;

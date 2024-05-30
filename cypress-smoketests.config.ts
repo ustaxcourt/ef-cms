@@ -3,7 +3,7 @@ import {
   createAccount,
   deleteAllCypressTestAccounts,
   deleteAllIrsCypressTestAccounts,
-  getBearerToken,
+  getIrsBearerToken,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
@@ -65,15 +65,14 @@ export default defineConfig({
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
         },
-        getBearerToken({ isIrsEnv, password, userName }) {
-          return getBearerToken({
-            isIrsEnv,
+        getEmailVerificationToken({ email }) {
+          return getEmailVerificationToken({ email });
+        },
+        getIrsBearerToken({ password, userName }) {
+          return getIrsBearerToken({
             password,
             userName,
           });
-        },
-        getEmailVerificationToken({ email }) {
-          return getEmailVerificationToken({ email });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
