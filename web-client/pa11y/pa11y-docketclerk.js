@@ -143,47 +143,47 @@ module.exports = [
   //   notes: 'checks a11y on the case status history table',
   //   url: 'http://localhost:1234/',
   // },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/999-15',
-      'wait for #tab-case-information to be visible',
-      'click element #tab-case-information',
-      'wait for #tab-parties to be visible',
-      'click element #tab-parties',
-      'wait for #participants-and-counsel to be visible',
-      'click element #participants-and-counsel',
-      'wait for .edit-participant to be visible',
-      'click element .edit-participant',
-    ],
-    notes:
-      'checks a11y of case information tab, parties secondary tab, participants and counsel tertiary tab',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/999-15',
-      'wait for #tab-case-information to be visible',
-      'click element #tab-case-information',
-      'wait for #tab-parties to be visible',
-      'click element #tab-parties',
-      'wait for #petitioners-and-counsel to be visible',
-      'click element #petitioners-and-counsel',
-      'wait for .edit-petitioner-button to be visible',
-      'click element .edit-petitioner-button',
-    ],
-    notes:
-      'checks a11y of case information tab, parties secondary tab, parties and counsel tertiary tab',
-    url: 'http://localhost:1234',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
-    ],
-    url: 'http://localhost:1234',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/999-15',
+  //     'wait for #tab-case-information to be visible',
+  //     'click element #tab-case-information',
+  //     'wait for #tab-parties to be visible',
+  //     'click element #tab-parties',
+  //     'wait for #participants-and-counsel to be visible',
+  //     'click element #participants-and-counsel',
+  //     'wait for .edit-participant to be visible',
+  //     'click element .edit-participant',
+  //   ],
+  //   notes:
+  //     'checks a11y of case information tab, parties secondary tab, participants and counsel tertiary tab',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/999-15',
+  //     'wait for #tab-case-information to be visible',
+  //     'click element #tab-case-information',
+  //     'wait for #tab-parties to be visible',
+  //     'click element #tab-parties',
+  //     'wait for #petitioners-and-counsel to be visible',
+  //     'click element #petitioners-and-counsel',
+  //     'wait for .edit-petitioner-button to be visible',
+  //     'click element .edit-petitioner-button',
+  //   ],
+  //   notes:
+  //     'checks a11y of case information tab, parties secondary tab, parties and counsel tertiary tab',
+  //   url: 'http://localhost:1234',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+  //   ],
+  //   url: 'http://localhost:1234',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),

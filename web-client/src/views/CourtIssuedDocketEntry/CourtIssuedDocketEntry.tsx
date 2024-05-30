@@ -91,7 +91,10 @@ export const CourtIssuedDocketEntry = connect(
           )}
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
-              <h1 className="margin-bottom-105">
+              <h1
+                className="margin-bottom-105"
+                data-testid="court-issued-docket-entry-title"
+              >
                 {isEditingDocketEntry ? 'Edit' : 'Add'} Docket Entry
               </h1>
             </div>
