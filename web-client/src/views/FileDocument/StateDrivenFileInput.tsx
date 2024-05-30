@@ -21,6 +21,7 @@ type StateDriveFileInputProps = {
 const deps = {
   constants: state.constants,
   form: state.form,
+  ignoreSizeKey: props.ignoreSizeKey,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
 };
@@ -37,6 +38,7 @@ export const StateDrivenFileInput = connect<
     file,
     form,
     id,
+    ignoreSizeKey,
     name: fileInputName,
     updateFormValueSequence,
     validationSequence,
@@ -69,13 +71,15 @@ export const StateDrivenFileInput = connect<
                 .then(clonedFile => {
                   updateFormValueSequence({
                     key: inputName,
+                    property: 'file',
                     value: clonedFile,
                   });
                   updateFormValueSequence({
-                    key: `${inputName}Size`,
+                    key: ignoreSizeKey ? inputName : `${inputName}Size`,
+                    property: 'size',
                     value: clonedFile.size,
                   });
-                  return validationSequence();
+                  return validationSequence ? validationSequence() : null;
                 })
                 .catch(() => {
                   /* no-op */
@@ -104,6 +108,7 @@ export const StateDrivenFileInput = connect<
               onClick={() => {
                 updateFormValueSequence({
                   key: fileInputName,
+                  property: 'file',
                   value: null,
                 });
                 updateFormValueSequence({
@@ -112,6 +117,7 @@ export const StateDrivenFileInput = connect<
                 });
                 updateFormValueSequence({
                   key: `${fileInputName}Size`,
+                  property: 'size',
                   value: null,
                 });
                 inputRef.value = null;
