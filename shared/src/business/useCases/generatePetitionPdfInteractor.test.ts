@@ -150,4 +150,48 @@ describe('generatePetitionPdfInteractor', () => {
 
     expect(results).toEqual('RESULTS_saveFileAndGenerateUrl');
   });
+
+  it('should generate petition with correct irsNotice information', async () => {
+    const irsNotices: any[] = [
+      {
+        caseType: CASE_TYPES_MAP.deficiency,
+        key: 'TEST_KEY',
+        noticeIssuedDate: '2024-05-02T00:00:00.000-04:00',
+        taxYear: 'TEST_TAX_YEAR',
+      },
+    ];
+
+    await generatePetitionPdfInteractor(applicationContext, {
+      caseCaptionExtension: 'TEST_caseCaptionExtension',
+      caseTitle: 'TEST_caseTitle',
+      caseType: CASE_TYPES_MAP.deficiency,
+      contactPrimary: 'TEST_contactPrimary',
+      contactSecondary: 'TEST_contactSecondary',
+      irsNotices,
+      isDraft: false,
+      noticeIssuedDate: 'TEST_noticeIssuedDate',
+      partyType: 'TEST_partyType',
+      petitionFacts: 'TEST_petitionFacts',
+      petitionReasons: 'TEST_petitionReasons',
+      preferredTrialCity: 'TEST_preferredTrialCity',
+      procedureType: 'TEST_procedureType',
+      taxYear: 'TEST_taxYear',
+    });
+
+    const petitionCalls =
+      applicationContext.getDocumentGenerators().petition.mock.calls;
+    expect(petitionCalls.length).toEqual(1);
+    expect(petitionCalls[0][0].data).toMatchObject({
+      irsNotices: [
+        {
+          caseDescription: 'Notice of Deficiency',
+          caseType: 'Deficiency',
+          key: 'TEST_KEY',
+          noticeIssuedDate: '2024-05-02T00:00:00.000-04:00',
+          noticeIssuedDateFormatted: '05/02/24',
+          taxYear: 'TEST_TAX_YEAR',
+        },
+      ],
+    });
+  });
 });
