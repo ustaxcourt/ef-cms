@@ -140,7 +140,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/102-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -159,7 +159,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/103-19/edit-respondent-counsel/RT6789',
       'wait for #submit-edit-respondent-information to be visible',
     ],
@@ -168,7 +168,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/109-19',
       'wait for #tab-drafts to be visible',
       'click element #tab-drafts',
@@ -181,7 +181,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-19',
       'wait for #case-detail-menu-button to be visible',
       'wait for .progress-indicator to be hidden',
@@ -196,7 +196,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-19',
       'wait for #case-detail-menu-button to be visible',
       'wait for .progress-indicator to be hidden',
@@ -211,7 +211,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/107-19',
       'wait for #tab-tracked-items to be visible',
       'click element #tab-tracked-items',
@@ -221,7 +221,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-19',
       'wait for #case-detail-menu-button to be visible',
       'wait for .progress-indicator to be hidden',
@@ -236,7 +236,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/109-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -248,7 +248,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/109-19',
       'wait for #tab-drafts to be visible',
       'click element #tab-drafts',
@@ -258,7 +258,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/109-19',
       'wait for #tab-case-messages to be visible',
       'click element #tab-case-messages',
