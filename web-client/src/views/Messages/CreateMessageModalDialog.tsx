@@ -6,27 +6,39 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const CreateMessageModalDialog = connect(
-  {
-    constants: state.constants,
-    createMessageModalHelper: state.createMessageModalHelper,
-    form: state.modal.form,
-    messageModalHelper: state.messageModalHelper,
-    showChambersSelect: state.modal.showChambersSelect,
-    updateChambersInCreateMessageModalSequence:
-      sequences.updateChambersInCreateMessageModalSequence,
-    updateModalFormValueSequence: sequences.updateModalFormValueSequence,
-    updateSectionInCreateMessageModalSequence:
-      sequences.updateSectionInCreateMessageModalSequence,
-    validateCreateMessageInModalSequence:
-      sequences.validateCreateMessageInModalSequence,
-    validationErrors: state.validationErrors,
-  },
+type CreateMessageModalDialogProps = {
+  onConfirmSequence: Function;
+  title?: string;
+};
+
+const createMessageModalDialogDeps = {
+  clearModalFormSequence: sequences.clearModalFormSequence,
+  constants: state.constants,
+  createMessageModalHelper: state.createMessageModalHelper,
+  form: state.modal.form,
+  messageModalHelper: state.messageModalHelper,
+  showChambersSelect: state.modal.showChambersSelect,
+  updateChambersInCreateMessageModalSequence:
+    sequences.updateChambersInCreateMessageModalSequence,
+  updateModalFormValueSequence: sequences.updateModalFormValueSequence,
+  updateSectionInCreateMessageModalSequence:
+    sequences.updateSectionInCreateMessageModalSequence,
+  validateCreateMessageInModalSequence:
+    sequences.validateCreateMessageInModalSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const CreateMessageModalDialog = connect<
+  CreateMessageModalDialogProps,
+  typeof createMessageModalDialogDeps
+>(
+  createMessageModalDialogDeps,
   function CreateMessageModalDialog({
+    clearModalFormSequence,
     createMessageModalHelper,
     form,
     messageModalHelper,
-    onConfirmSequence = 'createMessageSequence',
+    onConfirmSequence,
     showChambersSelect,
     title = 'Create Message',
     updateChambersInCreateMessageModalSequence,
@@ -42,7 +54,7 @@ export const CreateMessageModalDialog = connect(
         confirmLabel="Send"
         preventCancelOnBlur={true}
         title={title}
-        onCancelSequence="clearModalFormSequence"
+        onCancelSequence={clearModalFormSequence}
         onConfirmSequence={onConfirmSequence}
       >
         <FormGroup

@@ -23,14 +23,19 @@ const NoCaseFound = () => (
 export const AddConsolidatedCaseModal = connect(
   {
     caseDetail: state.modal.caseDetail,
+    clearModalSequence: sequences.clearModalSequence,
     confirmSelection: state.modal.confirmSelection,
     error: state.modal.error,
+    submitAddConsolidatedCaseSequence:
+      sequences.submitAddConsolidatedCaseSequence,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function AddConsolidatedCaseModal({
     caseDetail,
+    clearModalSequence,
     confirmSelection,
     error,
+    submitAddConsolidatedCaseSequence,
     updateModalValueSequence,
   }) {
     return (
@@ -41,8 +46,8 @@ export const AddConsolidatedCaseModal = connect(
         preventCancelOnBlur={true}
         showModalWhen="AddConsolidatedCaseModal"
         title="Consolidate Cases"
-        onCancelSequence="clearModalSequence"
-        onConfirmSequence="submitAddConsolidatedCaseSequence"
+        onCancelSequence={clearModalSequence}
+        onConfirmSequence={submitAddConsolidatedCaseSequence}
       >
         <ModalCaseSearchBox />
 

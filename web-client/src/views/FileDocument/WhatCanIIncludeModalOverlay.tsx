@@ -114,8 +114,8 @@ export const WhatCanIIncludeModalOverlay = connect(
             className="what-can-i-include"
             confirmLabel="Close"
             title="What can I include with my document?"
-            onCancelSequence="clearModalSequence"
-            onConfirmSequence="clearModalSequence"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={clearModalSequence}
           >
             {content()}
           </ConfirmModal>

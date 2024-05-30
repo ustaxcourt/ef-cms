@@ -419,45 +419,30 @@ describe('advancedSearchHelper', () => {
     ]);
   });
 
-  it('does not attempt to format results but only returns results that should be currently shown based on form.currentPage for a practitioner search', () => {
-    pageSizeOverride = 1;
-
-    let result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'practitioner',
-        searchResults: {
-          practitioner: [{ barNumber: '1111' }, { barNumber: '2222' }],
-        },
+  it('should return without formatting if on the practitioner tab', () => {
+    const initialState = {
+      ...getBaseState(globalUser),
+      advancedSearchForm: { currentPage: 1 },
+      advancedSearchTab: 'practitioner',
+      searchResults: {
+        practitioner: [
+          {
+            admissionsDate: '2012-03-13',
+            barNumber: '1111',
+            contact: { state: 'WA' },
+            name: 'pablo escobar',
+          },
+          { barNumber: '2222', name: 'ricardo diaz' },
+        ],
       },
+    };
+    const result = runCompute(advancedSearchHelper, {
+      state: initialState,
     });
-
-    expect(result.showLoadMore).toEqual(true);
-    expect(result.formattedSearchResults.length).toEqual(1);
-    expect(result.formattedSearchResults).toMatchObject([
-      { barNumber: '1111' },
-    ]);
-
-    pageSizeOverride = 3;
-
-    result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: 'practitioner',
-        searchResults: {
-          practitioner: [{ barNumber: '1111' }, { barNumber: '2222' }],
-        },
-      },
+    expect(result).toMatchObject({
+      showPractitionerSearch: true,
+      showStateSelect: false,
     });
-
-    expect(result.showLoadMore).toEqual(false);
-    expect(result.formattedSearchResults.length).toEqual(2);
-    expect(result.formattedSearchResults).toMatchObject([
-      { barNumber: '1111' },
-      { barNumber: '2222' },
-    ]);
   });
 
   describe('paginationHelper', () => {

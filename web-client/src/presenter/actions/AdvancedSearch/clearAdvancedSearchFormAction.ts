@@ -24,6 +24,8 @@ export const clearAdvancedSearchFormAction = ({
     opinionTypes?: {
       [key: string]: boolean;
     };
+    lastKeysOfPages?: Array<string | number>;
+    total?: number;
   };
   if (formType === 'caseSearchByName') {
     defaultForm.countryType = ALL_COUNTRY_TYPE;
@@ -31,6 +33,10 @@ export const clearAdvancedSearchFormAction = ({
   if (formType === 'orderSearch' || formType === 'opinionSearch') {
     defaultForm.keyword = '';
     defaultForm.dateRange = DATE_RANGE_SEARCH_OPTIONS.ALL_DATES;
+  }
+  if (formType === 'practitionerSearchByName') {
+    defaultForm.lastKeysOfPages = [];
+    defaultForm.total = 0;
   }
   if (formType === 'opinionSearch') {
     defaultForm.opinionTypes = {
