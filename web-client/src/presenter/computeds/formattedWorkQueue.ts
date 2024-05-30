@@ -206,6 +206,13 @@ const getDocketEntryEditLink = ({
   qcWorkItemsUntouched,
   result,
   workQueueToDisplay,
+}: {
+  applicationContext: ClientApplicationContext;
+  formattedDocument: any;
+  isInProgress: boolean;
+  qcWorkItemsUntouched: boolean;
+  result: any;
+  workQueueToDisplay: any;
 }) => {
   const { FROM_PAGES, UNSERVABLE_EVENT_CODES } =
     applicationContext.getConstants();
