@@ -88,7 +88,7 @@ export function fillPetitionerInformation() {
     },
     {
       errorMessage: 'phone-error-message',
-      input: 'phone',
+      input: 'contact-primary-phone',
       inputValue: 'Test Phone',
     },
   ];

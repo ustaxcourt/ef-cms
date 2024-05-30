@@ -165,6 +165,7 @@ export const ContactPrimaryUpdated = connect(
 
           {titleLabel && (
             <FormGroup
+              errorMessageId="primary-contact-title-error-message"
               errorText={
                 validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.title
@@ -265,7 +266,7 @@ export const ContactPrimaryUpdated = connect(
             <input
               autoCapitalize="none"
               className="usa-input max-width-200"
-              data-testid="phone"
+              data-testid="contact-primary-phone"
               id="primary-phone"
               name="contactPrimary.phone"
               ref={registerRef && registerRef('contactPrimary.phone')}

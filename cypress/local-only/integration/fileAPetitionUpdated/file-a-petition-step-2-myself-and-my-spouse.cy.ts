@@ -110,7 +110,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
             },
             {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -243,7 +243,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
             },
             {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -284,7 +284,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
           });
         });
 
-        describe('I have Spouse Concent - do not register email', () => {
+        describe('I have Spouse Consent - do not register email', () => {
           beforeEach(() => {
             cy.get('[data-testid="have-spouse-consent-label"').click();
           });
@@ -356,7 +356,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
           });
         });
 
-        describe('I have Spouse Concent - register email', () => {
+        describe('I have Spouse Consent - register email', () => {
           beforeEach(() => {
             cy.get('[data-testid="have-spouse-consent-label"').click();
             cy.get(
