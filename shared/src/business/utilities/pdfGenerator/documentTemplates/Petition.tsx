@@ -16,6 +16,7 @@ export const Petition = ({
   caseTitle,
   contactPrimary,
   contactSecondary,
+  irsNotices,
   noticeIssuedDate,
   partyType,
   petitionFacts,
@@ -29,6 +30,7 @@ export const Petition = ({
   caseTitle: string;
   procedureType: string;
   taxYear: string;
+  irsNotices: any[];
   noticeIssuedDate: string;
   partyType: string;
   petitionFacts: string[];
@@ -49,17 +51,47 @@ export const Petition = ({
       <div className="petition-pdf">
         <ol>
           <li className="list-bold">Which IRS ACTION(S) do you dispute?</li>
-          <p>{caseDescription}</p>
+          {irsNotices.length > 1 ? (
+            <ol className="list-disc">
+              {irsNotices.map(irsNotice => (
+                <li key={irsNotice.caseDescription}>
+                  <span>{irsNotice.caseDescription}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p>{caseDescription}</p>
+          )}
           <li className="list-bold">
             If applicable, provide the date(s) the IRS issued the NOTICE(S) for
             the above:
           </li>
-          <p>{noticeIssuedDate ? `${noticeIssuedDate}` : 'N/A'}</p>
+          {irsNotices.length > 1 ? (
+            <ol className="list-disc">
+              {irsNotices.map(irsNotice => (
+                <li key={irsNotice.noticeIssuedDateFormatted}>
+                  <span>{irsNotice.noticeIssuedDateFormatted || 'N/A'}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p>{noticeIssuedDate ? `${noticeIssuedDate}` : 'N/A'}</p>
+          )}
           <li className="list-bold">
             Provide the year(s) or period(s) for which the NOTICE(S) was/were
             issued:
           </li>
-          <p> {taxYear || 'N/A'}</p>
+          {irsNotices.length > 1 ? (
+            <ol className="list-disc">
+              {irsNotices.map(irsNotice => (
+                <li key={irsNotice.taxYear}>
+                  <span>{irsNotice.taxYear || 'N/A'}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p>{taxYear || 'N/A'}</p>
+          )}
           <li className="list-bold">
             Which case procedure and trial location are you requesting?
           </li>

@@ -2,6 +2,7 @@ import {
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
 } from '@shared/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,6 +19,7 @@ export const generatePetitionPdfInteractor = async (
     caseType,
     contactPrimary,
     contactSecondary,
+    irsNotices,
     isDraft,
     noticeIssuedDate,
     partyType,
@@ -46,6 +48,15 @@ export const generatePetitionPdfInteractor = async (
       caseTitle,
       contactPrimary,
       contactSecondary,
+      irsNotices: irsNotices.map(irsNotice => ({
+        ...irsNotice,
+        caseDescription:
+          CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[irsNotice.caseType] ||
+          CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[irsNotice.caseType],
+        noticeIssuedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
+      })),
       noticeIssuedDate,
       partyType,
       petitionFacts,
