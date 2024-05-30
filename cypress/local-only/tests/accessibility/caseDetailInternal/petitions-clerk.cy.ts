@@ -102,6 +102,31 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         terminalLog,
       );
     });
+
+    describe('Document view tab', () => {
+      it('should be free of a11y issues', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit(
+          '/case-detail/103-20/document-view?docketEntryId=ac62f25a-49f9-46a5-aed7-d6b955a2dc34',
+        );
+        cy.get('#tabContent-documentView').should('exist');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+              'nested-interactive': { enabled: false }, // TODO LINK
+            },
+          },
+          terminalLog,
+        );
+      });
+    });
   });
 
   describe('Case information tab', () => {
@@ -150,17 +175,138 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       );
     });
 
-    describe('Parties tab', () => {
-      it('should be free of a11y issues when adding practitioner', () => {
+    // TODO Modal Issues
+    it('should be free of a11y issues when adding and editing calendar note', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/108-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-case-information').click();
+      cy.get('#edit-case-trial-information-btn').click();
+      cy.get('#add-edit-calendar-note').click();
+      cy.get('.add-edit-calendar-note-modal').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when adding trial session', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/104-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-case-information').click();
+      cy.get('#add-to-trial-session-btn').click();
+      cy.get('#add-to-trial-session-modal').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when removing trial session', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/108-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-case-information').click();
+      cy.get('#edit-case-trial-information-btn').click();
+      cy.get('#remove-from-trial-session-btn').click();
+      cy.get('#remove-from-trial-session-modal').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when prioritizing case', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/101-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-case-information').click();
+      cy.get('.high-priority-btn').click();
+      cy.get('#prioritize-case-modal').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when unprioritizing case', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/110-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-case-information').click();
+      cy.get('#remove-high-priority-btn').click();
+      cy.get('#unprioritize-modal').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    describe('Statistics tab', () => {
+      it('should be free of a11y issues', () => {
         loginAsPetitionsClerk();
 
-        cy.visit('/case-detail/102-19');
+        cy.visit('/case-detail/110-19');
         cy.get('[data-testid="docket-record-table"]').should('exist');
         cy.get('#tab-case-information').click();
-        cy.get('#tab-parties').click();
-        cy.get('#practitioner-search-field').type('GL1111');
-        cy.get('#search-for-practitioner').click();
-        cy.get('#counsel-matches-legend').should('exist');
+        cy.get('#tab-statistics').click();
+        cy.get('#tabContent-statistics').should('exist');
 
         cy.injectAxe();
 
@@ -177,6 +323,135 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         );
       });
 
+      it('should be free of a11y issues when adding other statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/101-19/add-other-statistics');
+        cy.contains('Add Other Statistics');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            },
+          },
+          terminalLog,
+        );
+      });
+
+      it('should be free of a11y issues when editing other statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/101-19/edit-other-statistics');
+        cy.contains('Edit Other Statistics');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+          },
+          terminalLog,
+        );
+      });
+
+      // TODO Dialog Aria Issues
+      it('should be free of a11y issues when deleting other statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/101-19/edit-other-statistics');
+        cy.contains('Edit Other Statistics');
+        cy.get('button.red-warning').click();
+        cy.get('#modal-root').should('exist');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            },
+          },
+          terminalLog,
+        );
+      });
+
+      it('should be free of a11y issues when adding deficiency statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/105-20/add-deficiency-statistics');
+        cy.get('.add-deficiency-statistics-form').should('exist');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            },
+          },
+          terminalLog,
+        );
+      });
+
+      it('should be free of a11y issues when editing deficiency statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit(
+          '/case-detail/105-20/edit-deficiency-statistic/cb557361-50ee-4440-aaff-0a9f1bfa30ed',
+        );
+        cy.get('.add-deficiency-statistics-form').should('exist');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            },
+          },
+          terminalLog,
+        );
+      });
+
+      // TODO Dialog Aria Issues
+      it('should be free of a11y issues when deleting deficiency statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit(
+          '/case-detail/105-20/edit-deficiency-statistic/cb557361-50ee-4440-aaff-0a9f1bfa30ed',
+        );
+        cy.get('.add-deficiency-statistics-form').should('exist');
+        cy.get('button.red-warning').click();
+        cy.get('#modal-root').should('exist');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            },
+          },
+          terminalLog,
+        );
+      });
+    });
+
+    describe('Parties tab', () => {
       it('should be free of a11y issues', () => {
         loginAsPetitionsClerk();
 
@@ -184,6 +459,32 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('[data-testid="docket-record-table"]').should('exist');
         cy.get('#tab-case-information').click();
         cy.get('#tab-parties').click();
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+              'nested-interactive': { enabled: false }, // TODO LINK
+            },
+          },
+          terminalLog,
+        );
+      });
+
+      it('should be free of a11y issues when adding practitioner', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/102-19');
+        cy.get('[data-testid="docket-record-table"]').should('exist');
+        cy.get('#tab-case-information').click();
+        cy.get('#tab-parties').click();
+        cy.get('#practitioner-search-field').type('GL1111');
+        cy.get('#search-for-practitioner').click();
+        cy.get('#counsel-matches-legend').should('exist');
 
         cy.injectAxe();
 
@@ -268,6 +569,31 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
           terminalLog,
         );
       });
+
+      // TODO Sealed Icon need role img
+      it('should be free of a11y issues for sealed addresses', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/102-19');
+        cy.get('[data-testid="docket-record-table"]').should('exist');
+        cy.get('#tab-case-information').click();
+        cy.get('#tab-parties').click();
+        cy.get('.sealed-address').should('exist');
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+              'nested-interactive': { enabled: false }, // TODO LINK
+            },
+          },
+          terminalLog,
+        );
+      });
     });
   });
 
@@ -343,6 +669,31 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         terminalLog,
       );
     });
+
+    describe('Pending report tab', () => {
+      it('should be free of a11y issues', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/107-19');
+        cy.get('[data-testid="docket-record-table"]').should('exist');
+        cy.get('#tab-tracked-items').click();
+        cy.get('#tab-pending-report').click();
+
+        cy.injectAxe();
+
+        cy.checkA11y(
+          undefined,
+          {
+            includedImpacts: impactLevel,
+            rules: {
+              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+              'nested-interactive': { enabled: false }, // TODO LINK
+            },
+          },
+          terminalLog,
+        );
+      });
+    });
   });
 
   describe('Case messages tab', () => {
@@ -352,6 +703,73 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19');
       cy.get('[data-testid="docket-record-table"]').should('exist');
       cy.get('#tab-case-messages').click();
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+  });
+
+  describe('Correspondence tab', () => {
+    it('should be free of a11y issues', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/103-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-correspondence').click();
+      cy.get('.document-viewer--documents').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when uploading correspondence', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/103-19/upload-correspondence');
+      cy.get('#upload-correspondence').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when editing correspondence', () => {
+      loginAsPetitionsClerk();
+
+      cy.visit('/case-detail/103-19');
+      cy.get('[data-testid="docket-record-table"]').should('exist');
+      cy.get('#tab-correspondence').click();
+      cy.get('.document-viewer--documents').should('exist');
+      cy.get('.edit-correspondence-button').click();
+      cy.get('#edit-correspondence-header').should('exist');
 
       cy.injectAxe();
 

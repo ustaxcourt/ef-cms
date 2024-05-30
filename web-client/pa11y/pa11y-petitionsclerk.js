@@ -268,7 +268,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/109-19',
       'wait for #tab-tracked-items to be visible',
       'click element #tab-tracked-items',
@@ -280,7 +280,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/103-19',
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
@@ -291,7 +291,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/103-19/upload-correspondence',
       'wait for element #upload-correspondence to be visible',
     ],
@@ -300,7 +300,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/103-19',
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
@@ -313,7 +313,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/case-detail/103-20/document-view?docketEntryId=ac62f25a-49f9-46a5-aed7-d6b955a2dc34',
     ],
     notes: '',
@@ -321,7 +321,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/108-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -336,7 +336,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/108-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -351,7 +351,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/101-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -364,7 +364,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/110-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -377,7 +377,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/104-19',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -390,7 +390,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-20',
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
@@ -403,7 +403,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/101-19/add-other-statistics',
     ],
     notes: '',
@@ -411,7 +411,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-20/add-deficiency-statistics',
     ],
     notes: '',
@@ -419,7 +419,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/101-19/edit-other-statistics',
     ],
     notes: '',
@@ -427,7 +427,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-20/edit-deficiency-statistic/cb557361-50ee-4440-aaff-0a9f1bfa30ed',
     ],
     notes: '',
@@ -435,7 +435,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/105-20/edit-deficiency-statistic/cb557361-50ee-4440-aaff-0a9f1bfa30ed',
       'wait for button.red-warning to be visible',
       'click element button.red-warning',
@@ -446,7 +446,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/101-19/edit-other-statistics',
       'wait for button.red-warning to be visible',
       'click element button.red-warning',
@@ -457,7 +457,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/102-19/case-information',
       'wait for element #tab-parties to be visible',
       'click element #tab-parties',
