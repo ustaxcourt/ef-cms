@@ -29,7 +29,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
 
   if (
     user.role === USER_ROLES.irsPractitioner &&
-    Case.isFirstIrsFiling(applicationContext, caseDetail)
+    Case.isFirstIrsFiling(caseDetail)
   ) {
     store.set(state.form.partyIrsPractitioner, true);
   }
