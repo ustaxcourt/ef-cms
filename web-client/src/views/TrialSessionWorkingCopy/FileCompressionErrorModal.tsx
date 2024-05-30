@@ -1,14 +1,22 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const FileCompressionErrorModal = connect(
   {
     allowRetry: state.batchDownloads.allowRetry,
+    batchDownloadTrialSessionSequence:
+      sequences.batchDownloadTrialSessionSequence,
+    clearModalSequence: sequences.clearModalSequence,
     trialSession: state.trialSession,
   },
-  function FileCompressionErrorModal({ allowRetry, trialSession }) {
+  function FileCompressionErrorModal({
+    allowRetry,
+    batchDownloadTrialSessionSequence,
+    clearModalSequence,
+    trialSession,
+  }) {
     const trialSessionTitle = trialSession.trialLocation;
 
     return (
@@ -22,8 +30,8 @@ export const FileCompressionErrorModal = connect(
         noConfirm={!allowRetry}
         preventCancelOnBlur={true}
         title="Unable to Compress Files"
-        onCancelSequence="clearModalSequence"
-        onConfirmSequence="batchDownloadTrialSessionSequence"
+        onCancelSequence={clearModalSequence}
+        onConfirmSequence={batchDownloadTrialSessionSequence}
       >
         {(allowRetry && (
           <>

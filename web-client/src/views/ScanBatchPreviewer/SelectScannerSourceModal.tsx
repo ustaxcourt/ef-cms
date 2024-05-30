@@ -6,14 +6,18 @@ import React from 'react';
 
 export const SelectScannerSourceModal = connect(
   {
+    clearModalSequence: sequences.clearModalSequence,
     modal: state.modal,
     scanModeOptions: state.scanHelper.scanModeOptions,
+    selectScannerSequence: sequences.selectScannerSequence,
     sources: state.scanHelper.sources,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function SelectScannerSourceModal({
+    clearModalSequence,
     modal,
     scanModeOptions,
+    selectScannerSequence,
     sources,
     updateModalValueSequence,
   }) {
@@ -23,8 +27,8 @@ export const SelectScannerSourceModal = connect(
         confirmLabel="Select"
         noConfirm={sources.length === 0}
         title="Select a Scanner"
-        onCancelSequence="clearModalSequence"
-        onConfirmSequence="selectScannerSequence"
+        onCancelSequence={clearModalSequence}
+        onConfirmSequence={selectScannerSequence}
       >
         <div className="usa-form-group margin-top-1">
           <legend className="usa-legend" id="scanner-select">
