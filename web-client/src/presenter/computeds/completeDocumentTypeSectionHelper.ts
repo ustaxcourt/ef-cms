@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   getDocumentTypesForSelect,
   getSortFunction,
@@ -8,23 +9,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-
-export const isFirstIrsFiling = (
-  applicationContext: ClientApplicationContext,
-  caseDetail: RawCase,
-): boolean => {
-  const isCaseSealed = applicationContext
-    .getUtilities()
-    .isSealedCase(caseDetail);
-
-  const caseHasRespondent = !!(
-    !!(caseDetail as unknown as PublicCase).hasIrsPractitioner ||
-    caseDetail.irsPractitioners?.length
-  );
-
-  return !caseHasRespondent && !isCaseSealed;
-};
 
 export const completeDocumentTypeSectionHelper = (
   get: Get,
@@ -57,7 +41,7 @@ export const completeDocumentTypeSectionHelper = (
       currentUser.role === USER_ROLES.irsPractitioner &&
       documentType.eventCode === 'EA'
     ) {
-      if (!isFirstIrsFiling(applicationContext, caseDetail)) return false;
+      if (!Case.isFirstIrsFiling(caseDetail)) return false;
       documentType.documentTitle += ' for Respondent';
     } else if (documentType.eventCode === 'EA') return false;
 
