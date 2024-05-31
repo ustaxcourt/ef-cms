@@ -5,6 +5,7 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
+import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
   back,
@@ -261,8 +262,6 @@ const app = {
       returnSequencePromise: true,
     });
 
-    const container = window.document.querySelector('#app');
-    const root = createRoot(container);
     applicationContext
       .getUseCases()
       .getCurrentVersionInteractor(applicationContext)
@@ -274,20 +273,23 @@ const app = {
           console.log('currentVersion', currentVersion);
           console.log('version', version);
           if (currentVersion !== version) {
-            // await cerebralApp.getSequence('signOutSequence')();
-            window.location.reload();
+            await cerebralApp.getSequence('openAppUpdatedModalSequence')();
           }
-        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
+        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 5000);
       });
+
+    const container = window.document.querySelector('#app');
+    const root = createRoot(container);
+
     root.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (
           <>
             <IdleActivityMonitor />
             <AppInstanceManager />
+            <GlobalModalWrapper />
           </>
         )}
-
         <AppComponent />
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
