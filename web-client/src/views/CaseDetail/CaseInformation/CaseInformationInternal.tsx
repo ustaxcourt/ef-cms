@@ -168,6 +168,7 @@ export const CaseInformationInternal = connect(
                         link
                         aria-label="unconsolidate cases"
                         className="red-warning margin-right-0 margin-left-205 margin-top-1 padding-0 float-right"
+                        data-testid="unconsolidate-cases-button"
                         icon="minus-circle"
                         onClick={() => {
                           openCleanModalSequence({
