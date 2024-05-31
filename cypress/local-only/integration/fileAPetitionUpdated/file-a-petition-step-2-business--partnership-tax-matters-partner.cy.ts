@@ -60,7 +60,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
             'city-error-message',
             'state-error-message',
             'postal-code-error-message',
-            'place-of-legal-residence-error-message',
             'phone-error-message',
             'corporate-disclosure-file-error-message',
           ];
@@ -112,11 +111,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
-            },
-            {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
             },
             {
               errorMessage: 'phone-error-message',
@@ -181,11 +175,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
-            },
-            {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
             },
             {
               errorMessage: 'phone-error-message',
@@ -235,7 +224,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
             'address-1-error-message',
             'city-error-message',
             'postal-code-error-message',
-            'place-of-legal-residence-error-message',
             'phone-error-message',
             'corporate-disclosure-file-error-message',
           ];
@@ -287,11 +275,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
-            },
-            {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
             },
             {
               errorMessage: 'phone-error-message',
@@ -356,11 +339,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               errorMessage: 'postal-code-error-message',
               input: 'contactPrimary.postalCode',
               inputValue: '12345',
-            },
-            {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
             },
             {
               errorMessage: 'phone-error-message',

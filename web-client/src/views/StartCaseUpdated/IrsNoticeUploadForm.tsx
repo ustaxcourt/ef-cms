@@ -88,7 +88,7 @@ export const IrsNoticeUploadForm = connect(
               {index !== 0 && (
                 <Button
                   link
-                  className="margin-left-10"
+                  className="margin-left-10 irs-notice-remove-button"
                   onClick={() => removeIrsNoticeFromFormSequence({ index })}
                 >
                   <Icon

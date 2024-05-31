@@ -5,6 +5,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -17,24 +18,16 @@ export const UpdatedFilePetitionStep2 = connect(
   {
     constants: state.constants,
     form: state.form,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep2Sequence:
-      sequences.updatedFilePetitionCompleteStep2Sequence,
-    updatedFilePetitionGoBackAStepSequence:
-      sequences.updatedFilePetitionGoBackAStepSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep2({
     constants,
     form,
-    formCancelToggleCancelSequence,
     resetSecondaryAddressSequence,
-    updatedFilePetitionCompleteStep2Sequence,
-    updatedFilePetitionGoBackAStepSequence,
     updatedFilePetitionHelper,
     updateFilingTypeSequence,
     updateFormValueSequence,
@@ -46,7 +39,6 @@ export const UpdatedFilePetitionStep2 = connect(
 
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
 
-    console.log('validationErrors', validationErrors);
     return (
       <>
         <p className="margin-top-0 required-statement">
@@ -159,32 +151,9 @@ export const UpdatedFilePetitionStep2 = connect(
           />
         )}
 
-        <Button
-          data-testid="step-2-next-button"
-          onClick={e => {
-            e.preventDefault();
-            resetFocus();
-            updatedFilePetitionCompleteStep2Sequence();
-          }}
-        >
-          Next
-        </Button>
-        <Button
-          secondary
-          onClick={() => {
-            updatedFilePetitionGoBackAStepSequence();
-          }}
-        >
-          Back
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+        <UpdatedFilePetitionButtons
+          resetFocus={resetFocus}
+        ></UpdatedFilePetitionButtons>
       </>
     );
   },
@@ -199,7 +168,6 @@ function PetitionerAndSpouseInfo({
   updateFormValueSequence,
   validationErrors,
 }) {
-  console.log('validationErrors', validationErrors);
   return (
     <div
       className={classNames(

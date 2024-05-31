@@ -3,6 +3,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
 import { TrialCity } from '@web-client/views/StartCase/TrialCity';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -13,22 +14,14 @@ export const UpdatedFilePetitionStep4 = connect(
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
     form: state.form,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep4Sequence:
-      sequences.updatedFilePetitionCompleteStep4Sequence,
-    updatedFilePetitionGoBackAStepSequence:
-      sequences.updatedFilePetitionGoBackAStepSequence,
   },
   function UpdatedFilePetitionStep4({
     deleteValidationErrorMessageSequence,
     form,
-    formCancelToggleCancelSequence,
     petitionGenerationLiveValidationSequence,
-    updatedFilePetitionCompleteStep4Sequence,
-    updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -147,30 +140,7 @@ export const UpdatedFilePetitionStep4 = connect(
           )}
         </div>
         <div>
-          <Button
-            data-testid="step-4-next-button"
-            onClick={() => {
-              updatedFilePetitionCompleteStep4Sequence();
-            }}
-          >
-            Next
-          </Button>
-          <Button
-            secondary
-            onClick={() => {
-              updatedFilePetitionGoBackAStepSequence();
-            }}
-          >
-            Back
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
+          <UpdatedFilePetitionButtons></UpdatedFilePetitionButtons>
         </div>
       </>
     );

@@ -72,7 +72,7 @@ export const PetitionFormResponse = connect(
                 {count > 0 && (
                   <Button
                     link
-                    className="reason-button"
+                    className="reason-button remove-fact-reason-button"
                     icon="times"
                     onClick={() =>
                       removeFactOrReasonSequence({
@@ -112,7 +112,7 @@ export const PetitionFormResponse = connect(
               {count > 0 && (
                 <Button
                   link
-                  className="reason-button"
+                  className="reason-button remove-fact-reason-button"
                   icon="times"
                   onClick={() =>
                     removeFactOrReasonSequence({

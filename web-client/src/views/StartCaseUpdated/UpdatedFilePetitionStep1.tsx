@@ -3,6 +3,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -14,20 +15,19 @@ export const UpdatedFilePetitionStep1 = connect(
   {
     constants: state.constants,
     form: state.form,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep1Sequence:
-      sequences.updatedFilePetitionCompleteStep1Sequence,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep1({
     constants,
     form,
-    formCancelToggleCancelSequence,
-    updatedFilePetitionCompleteStep1Sequence,
     updateFormValueSequence,
     validationErrors,
   }) {
+    const isNextButtonDisabled =
+      form.petitionType === PETITION_TYPES.userUploaded &&
+      !form.petitionRedactionAcknowledgement;
+
     return (
       <>
         <p className="margin-top-0 required-statement">*All fields required</p>
@@ -181,26 +181,9 @@ export const UpdatedFilePetitionStep1 = connect(
             </div>
           </div>
         )}
-        <Button
-          data-testid="step-1-next-button"
-          disabled={
-            form.petitionType === PETITION_TYPES.userUploaded &&
-            !form.petitionRedactionAcknowledgement
-          }
-          onClick={() => {
-            updatedFilePetitionCompleteStep1Sequence();
-          }}
-        >
-          Next
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+        <UpdatedFilePetitionButtons
+          isNextButtonDisabled={isNextButtonDisabled}
+        ></UpdatedFilePetitionButtons>
       </>
     );
   },

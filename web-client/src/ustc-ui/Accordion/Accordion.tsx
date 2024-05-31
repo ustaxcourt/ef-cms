@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   decorateWithPostCallback,
@@ -70,6 +71,12 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     const baseTitleClassName = 'accordion-item-title grid-col-8';
     const titleClassName = classNames(baseTitleClassName, customTitleClassName);
 
+    const mobileBaseTitleClassName = 'accordion-item-title grid-col-11';
+    const mobileTitleClassName = classNames(
+      mobileBaseTitleClassName,
+      customTitleClassName,
+    );
+
     return (
       <>
         <HeadingElement className={customClassName || 'usa-accordion__heading'}>
@@ -86,7 +93,12 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
                   </span>
                 </span>
               )}
-              <div className={titleClassName}>{title}</div>
+              <Mobile>
+                <div className={mobileTitleClassName}>{title}</div>
+              </Mobile>
+              <NonMobile>
+                <div className={titleClassName}>{title}</div>
+              </NonMobile>
             </div>
           </a>
         </HeadingElement>
