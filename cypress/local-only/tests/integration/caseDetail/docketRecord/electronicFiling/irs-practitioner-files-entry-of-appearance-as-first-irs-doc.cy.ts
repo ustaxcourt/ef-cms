@@ -1,6 +1,6 @@
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import {
-  loginAsIrsPractitioner,
+  loginAsIrsPractitioner1,
   loginAsPetitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
@@ -17,7 +17,7 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
       petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
-        loginAsIrsPractitioner();
+        loginAsIrsPractitioner1();
         externalUserSearchesDocketNumber(docketNumber);
 
         cy.get('[data-testid="button-first-irs-document"]').click();
@@ -56,7 +56,7 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
       loginAsPetitioner();
       petitionerCreatesElectronicCase(primaryFilerName).then(docketNumber => {
         petitionsClerkServesPetition(docketNumber);
-        loginAsIrsPractitioner();
+        loginAsIrsPractitioner1();
         externalUserSearchesDocketNumber(docketNumber);
         cy.get('[data-testid="button-first-irs-document"]').click();
 
