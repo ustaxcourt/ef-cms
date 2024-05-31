@@ -21,7 +21,7 @@ describe('Advanced Search', () => {
       /** Assert */
       // need to wait for elasticsearch potentially
       retry(() => {
-        cy.get('[data-testid="case-search-by-name-container"]').click();
+        cy.get('[data-testid="submit-case-search-by-name-button"]').click();
         return assertExists(`[data-testid="case-result-${docketNumber}"]`);
       });
     });
