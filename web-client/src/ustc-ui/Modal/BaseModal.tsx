@@ -10,7 +10,9 @@ export const BaseModal = ({
   className,
   onBlurSequence,
   preventCancelOnBlur,
+  title,
 }: {
+  title: string;
   children?: React.ReactNode;
   className?: string;
   onBlurSequence: Function;
@@ -70,14 +72,14 @@ export const BaseModal = ({
       <FocusLock>
         <dialog
           open
+          aria-modal="true"
           className={classNames('modal-screen', className)}
           role="dialog"
+          title={title}
           onClick={blurDialog}
         >
           <div
-            aria-modal="true"
             className="modal-dialog padding-205"
-            role="status"
             onClick={event => event.stopPropagation()}
           >
             {children}
