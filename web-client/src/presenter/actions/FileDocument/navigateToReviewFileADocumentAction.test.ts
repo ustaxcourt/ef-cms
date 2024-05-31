@@ -1,3 +1,4 @@
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { navigateToReviewFileADocumentAction } from './navigateToReviewFileADocumentAction';
 import { presenter } from '../../presenter-mock';
@@ -45,5 +46,24 @@ describe('navigateToReviewFileADocumentAction', () => {
     });
 
     expect(result.state.form.redactionAcknowledgement).toEqual(false);
+  });
+
+  it('should not set form.redactionAcknowledgement for auto generated entry of appearance', async () => {
+    let result = await runAction(navigateToReviewFileADocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        form: {
+          eventCode: 'EA',
+          generationType: GENERATION_TYPES.AUTO,
+        },
+      },
+    });
+
+    expect(result.state.form.redactionAcknowledgement).toEqual(undefined);
   });
 });
