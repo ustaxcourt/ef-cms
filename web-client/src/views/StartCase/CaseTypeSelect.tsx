@@ -10,6 +10,7 @@ export const CaseTypeSelect = connect(
   {
     allowDefaultOption: props.allowDefaultOption,
     caseTypes: props.caseTypes,
+    errorMessageId: props.errorMessageId,
     hint: props.hint,
     legend: props.legend,
     name: props.name,
@@ -27,6 +28,7 @@ export const CaseTypeSelect = connect(
     allowDefaultOption,
     caseTypes,
     className,
+    errorMessageId,
     hint,
     legend,
     name,
@@ -44,6 +46,7 @@ export const CaseTypeSelect = connect(
       <div className={classNames('subsection', className)}>
         <FormGroup
           className="case-type-select"
+          errorMessageId={errorMessageId}
           errorText={(validationError || validationErrors).caseType}
         >
           <fieldset className="usa-fieldset margin-bottom-0">

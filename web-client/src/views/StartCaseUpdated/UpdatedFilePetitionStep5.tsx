@@ -72,10 +72,7 @@ export const UpdatedFilePetitionStep5 = connect(
               ]}
             >
               <label
-                className={classNames(
-                  'usa-label ustc-upload-stin with-hint',
-                  'validated',
-                )}
+                className={classNames('usa-label ustc-upload-stin with-hint')}
                 data-testid="stin-file-label"
                 htmlFor="stin-file"
                 id="stin-file-label"
@@ -100,6 +97,7 @@ export const UpdatedFilePetitionStep5 = connect(
         </div>
         <div>
           <Button
+            data-testid="step-5-next-button"
             onClick={() => {
               updatedFilePetitionCompleteStep5Sequence();
             }}

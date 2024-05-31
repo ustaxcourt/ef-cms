@@ -735,6 +735,7 @@ export const baseState = {
     contactSecondary: undefined,
     corporateDisclosureFile: undefined,
     corporateDisclosureFileUrl: undefined,
+    hasIrsNotice: undefined,
     irsNoticeFileUrl: undefined,
     irsNotices: undefined as
       | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
@@ -836,4 +837,5 @@ export type CreateCaseIrsForm = {
   caseType?: string;
   noticeIssuedDate?: string;
   taxYear?: number;
+  irsNoticeFileUrl?: string;
 };

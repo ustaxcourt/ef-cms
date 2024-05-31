@@ -1,5 +1,8 @@
 import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import {
+  FileUploadProgressType,
+  FileUploadProgressValueType,
+} from '@shared/business/entities/EntityConstants';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -9,9 +12,10 @@ export const saveAndSubmitCaseAction = async ({
   path,
   props,
 }: ActionProps<{
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: Record<string, FileUploadProgressValueType>;
 }>) => {
   const { fileUploadProgressMap } = props;
+
   const petitionMetadata: ElectronicCreatedCaseType = get(
     state.petitionFormatted,
   );
@@ -21,7 +25,7 @@ export const saveAndSubmitCaseAction = async ({
 
   try {
     let {
-      attachmentToPetitionFileId,
+      attachmentToPetitionFileIds,
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
@@ -29,11 +33,13 @@ export const saveAndSubmitCaseAction = async ({
       .getUseCases()
       .generateDocumentIds(applicationContext, {
         attachmentToPetitionUploadProgress:
-          fileUploadProgressMap.attachmentToPetition,
+          fileUploadProgressMap.attachmentToPetition as FileUploadProgressType[],
         corporateDisclosureUploadProgress:
-          fileUploadProgressMap.corporateDisclosure,
-        petitionUploadProgress: fileUploadProgressMap.petition,
-        stinUploadProgress: fileUploadProgressMap.stin,
+          fileUploadProgressMap.corporateDisclosure as FileUploadProgressType,
+        petitionUploadProgress:
+          fileUploadProgressMap.petition as FileUploadProgressType,
+        stinUploadProgress:
+          fileUploadProgressMap.stin as FileUploadProgressType,
       });
 
     stinFile = stinFileId;
@@ -41,7 +47,7 @@ export const saveAndSubmitCaseAction = async ({
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
-        attachmentToPetitionFileId,
+        attachmentToPetitionFileIds,
         corporateDisclosureFileId,
         petitionFileId:
           petitionMetadata.petitionType === PETITION_TYPES.userUploaded
@@ -76,7 +82,7 @@ export const saveAndSubmitCaseAction = async ({
     alertSuccess: {
       message:
         'Your case has been created and your documents sent to the U.S. Tax Court.',
-      title: `Your case has been assigned docket number ${caseDetail.docketNumber}`,
+      title: `Your case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`,
     },
     caseDetail,
   });

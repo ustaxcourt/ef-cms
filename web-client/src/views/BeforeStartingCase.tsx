@@ -1,4 +1,7 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+} from '../../../shared/src/business/entities/EntityConstants';
 import {
   Accordion,
   AccordionItem,
@@ -17,17 +20,19 @@ export const BeforeStartingCase = connect(
     featureFlags: state.featureFlags,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
+    user: state.user,
   },
   function BeforeStartingCase({
     featureFlags,
     formCancelToggleCancelSequence,
     showModal,
+    user,
   }) {
-    const redirectUrl = featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key
-    ]
-      ? '/file-a-petition/new'
-      : '/file-a-petition/step-1';
+    const redirectUrl =
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key] &&
+      ROLES.petitioner === user.role
+        ? '/file-a-petition/new'
+        : '/file-a-petition/step-1';
     return (
       <>
         <div className="big-blue-header">
@@ -283,7 +288,6 @@ export const BeforeStartingCase = connect(
               </AccordionItem>
             </Accordion>
           </div>
-
           <Button
             className="margin-top-5"
             data-testid="go-to-step-1"
@@ -292,7 +296,29 @@ export const BeforeStartingCase = connect(
             {"I'm Ready to Start"}
           </Button>
           <Button
+            className="margin-top-5"
+            data-testid="print-this-page"
+            href="javascript:void(0);"
+            secondary={true}
+            onClick={() => {
+              const elements = window.document.querySelectorAll(
+                '[id^="ustc-ui-accordion-item-button"]',
+              );
+
+              elements.forEach((element: any) => {
+                if (element.getAttribute('aria-expanded') !== 'true')
+                  element.click();
+              });
+
+              setTimeout(() => window.print(), 100);
+            }}
+          >
+            Print This Page
+          </Button>
+          <Button
             link
+            data-testid="cancel-before-starting-case"
+            href="javascript:void(0);"
             id="cancel"
             onClick={() => {
               formCancelToggleCancelSequence();

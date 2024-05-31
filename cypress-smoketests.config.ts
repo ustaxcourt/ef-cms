@@ -13,6 +13,7 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
+  getFeatureFlagValue,
   getNewAccountVerificationCode,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
@@ -74,6 +75,8 @@ export default defineConfig({
             password,
             userName,
           });
+        getFeatureFlagValue({ flag }) {
+          return getFeatureFlagValue({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
