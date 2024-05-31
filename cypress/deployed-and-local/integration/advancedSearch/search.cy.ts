@@ -17,10 +17,13 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="petitioner-name"]').type(name);
-      cy.get('[data-testid="case-search-by-name-container"]').click();
 
       /** Assert */
-      cy.get(`[data-testid="case-result-${docketNumber}"]`);
+      // need to wait for elasticsearch potentially
+      retry(() => {
+        cy.get('[data-testid="case-search-by-name-container"]').click();
+        return assertExists(`[data-testid="case-result-${docketNumber}"]`);
+      });
     });
   });
 
