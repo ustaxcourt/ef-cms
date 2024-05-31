@@ -2,9 +2,6 @@ name: Node.js Client Integration Tests
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   client_integration_public:
