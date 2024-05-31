@@ -7,7 +7,7 @@ export const AppUpdatedModal = connect(
   {
     confirmSequence: sequences.redirectToDashboardSequence,
   },
-  function AppTimeoutModal({ confirmSequence }) {
+  function AppUpdatedModal({ confirmSequence }) {
     return (
       <ModalDialog
         preventCancelOnBlur
