@@ -263,7 +263,22 @@ const app = {
 
     const container = window.document.querySelector('#app');
     const root = createRoot(container);
-
+    applicationContext
+      .getUseCases()
+      .getCurrentVersionInteractor(applicationContext)
+      .then(version => {
+        setInterval(async () => {
+          const currentVersion = await applicationContext
+            .getUseCases()
+            .getCurrentVersionInteractor(applicationContext);
+          console.log('currentVersion', currentVersion);
+          console.log('version', version);
+          if (currentVersion !== version) {
+            await cerebralApp.getSequence('signOutSequence')();
+            window.location.reload();
+          }
+        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
+      });
     root.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (

@@ -21,16 +21,17 @@ export async function initiateAuth(
     ClientId: applicationContext.environment.cognitoClientId,
   });
 
-  let isDeploying = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey: 'pending-color-switch',
-    });
+  // 10368 OPTION 3
+  // let isDeploying = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getConfigurationItemValue({
+  //     applicationContext,
+  //     configurationItemKey: 'pending-color-switch',
+  //   });
 
-  console.log('isDeploying', isDeploying);
+  // console.log('isDeploying', isDeploying);
 
-  if (isDeploying) throw new Error('PassiveColorLogin');
+  // if (isDeploying) throw new Error('PassiveColorLogin');
 
   if (result.ChallengeName) {
     if (result.ChallengeName === ChallengeNameType.NEW_PASSWORD_REQUIRED) {
