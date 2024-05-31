@@ -237,7 +237,7 @@ export async function getIrsBearerToken({
     AuthFlow: AuthFlowType.ADMIN_USER_PASSWORD_AUTH,
     AuthParameters: {
       PASSWORD: password,
-      USERNAME: userName,
+      USERNAME: userName.toLowerCase(),
     },
     ClientId: clientId,
     UserPoolId: userPoolId,
@@ -257,13 +257,13 @@ export async function getIrsBearerToken({
   const challengeResponse = await getCognito().respondToAuthChallenge({
     ChallengeName: ChallengeNameType.MFA_SETUP,
     ChallengeResponses: {
-      USERNAME: userName,
+      USERNAME: userName.toLowerCase(),
     },
     ClientId: clientId,
     Session: verifyTokenResult.Session,
   });
   if (!challengeResponse.AuthenticationResult?.IdToken) {
-    throw new Error(`Failed to generate token for user:${userName}`);
+    throw new Error(`Failed to generate token for user: ${userName}`);
   }
   return challengeResponse.AuthenticationResult?.IdToken;
 }
