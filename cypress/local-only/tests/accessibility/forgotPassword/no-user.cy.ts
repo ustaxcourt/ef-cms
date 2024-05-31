@@ -21,6 +21,7 @@ describe('Forgot Password - Accessibility', () => {
     cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
   });
 
+  // TODO: Clean up later?
   it('should be free of a11y issues when resetting password', () => {
     const email = `example${Date.now()}@pa11y.com`;
     createAPetitioner({

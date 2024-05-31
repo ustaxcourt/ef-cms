@@ -78,3 +78,8 @@ export function loginAsReportersOffice() {
   cy.login('reportersoffice');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
+
+export function loginAsIrsSuperUser() {
+  cy.login('irssuperuser');
+  cy.get('[data-testid="advanced-search-link"]').should('exist');
+}

@@ -21,6 +21,7 @@ describe('Create Petitioner Page Accessibility', () => {
     cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
   });
 
+  // TODO: Clean up later?
   it('should be free of a11y issues when creating petitioner and showing success message', () => {
     createAPetitioner({
       email: `example${Date.now()}@pa11y.com`,
