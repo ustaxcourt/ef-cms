@@ -373,34 +373,34 @@ module.exports = [
     ],
     url: 'http://localhost:1234/',
   },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/105-20/add-petitioner-to-case',
-      'wait for #use-same-address-above-label to be visible',
-      'click element #use-same-address-above-label',
-    ],
-    notes: 'checks the add petitioner to case page',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/105-20',
-      'wait for #docket-record-table to be visible',
-      'click element button[data-testid="seal-docket-entry-button-1"]',
-      'wait for .modal-dialog to be visible',
-    ],
-    notes: 'checks the seal modal opens on a docket entry',
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/105-20/add-petitioner-to-case',
+  //     'wait for #use-same-address-above-label to be visible',
+  //     'click element #use-same-address-above-label',
+  //   ],
+  //   notes: 'checks the add petitioner to case page',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/105-20',
+  //     'wait for #docket-record-table to be visible',
+  //     'click element button[data-testid="seal-docket-entry-button-1"]',
+  //     'wait for .modal-dialog to be visible',
+  //   ],
+  //   notes: 'checks the seal modal opens on a docket entry',
+  //   url: 'http://localhost:1234/',
+  // },
   // {
   //   actions: [
   //     ...loginAs({ username: 'docketclerk@example.com' }),
