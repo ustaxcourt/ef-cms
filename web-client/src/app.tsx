@@ -275,7 +275,7 @@ const app = {
           if (currentVersion !== version) {
             await cerebralApp.getSequence('openAppUpdatedModalSequence')();
           }
-        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 5000);
+        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 5000); // TODO confirm interval length
       });
 
     const container = window.document.querySelector('#app');
