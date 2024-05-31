@@ -471,7 +471,7 @@ module.exports = [
   /* petition qc */
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/104-19/petition-qc?tab=partyInfo',
     ],
     notes: '',
@@ -479,7 +479,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/104-19/petition-qc?tab=caseInfo',
     ],
     notes: '',
@@ -487,7 +487,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/102-19/petition-qc?tab=irsNotice',
       'wait for button#tab-irs-notice to be visible',
       'click element button#tab-irs-notice',
@@ -500,7 +500,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition/step-1',
       'wait for #tab-irs-notice to be visible',
       'click element #tab-irs-notice',
@@ -516,7 +516,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition/step-1',
       'wait for #tab-irs-notice to be visible',
       'click element #tab-irs-notice',
@@ -534,7 +534,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/121-20/petition-qc',
       'wait for .remove-pdf-button to be visible',
       'click element .remove-pdf-button',
@@ -547,7 +547,7 @@ module.exports = [
   /* review petition */
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b/review',
     ],
     notes: '',
@@ -557,7 +557,7 @@ module.exports = [
   /* trial sessions */
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/trial-sessions',
       'wait for #trial-sessions-tabs to be visible',
     ],
@@ -566,7 +566,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/add-a-trial-session',
       'wait for #start-date-picker to be visible',
       'wait for #meeting-id to be visible',
@@ -576,7 +576,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/add-a-trial-session',
       'wait for #standaloneRemote-session-scope-label to be visible',
       'click element #standaloneRemote-session-scope-label',
@@ -586,7 +586,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/add-a-trial-session',
       'wait for #start-date-picker to be visible',
       'click element #inPerson-proceeding-label',
@@ -597,7 +597,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5',
     ],
     notes: '',
