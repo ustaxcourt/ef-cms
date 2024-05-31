@@ -1,5 +1,5 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { GENERATION_TYPES } from '@web-client/getConstants';
-import { isFirstIrsFiling } from '@web-client/presenter/computeds/completeDocumentTypeSectionHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setDefaultFileDocumentFormValuesAction = ({
@@ -29,7 +29,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
 
   if (
     user.role === USER_ROLES.irsPractitioner &&
-    isFirstIrsFiling(applicationContext, caseDetail)
+    Case.isFirstIrsFiling(caseDetail)
   ) {
     store.set(state.form.partyIrsPractitioner, true);
   }

@@ -309,7 +309,12 @@ export const FileDocumentReview = connect(
                           <ul className="ustc-unstyled-list without-margins">
                             {fileDocumentHelper.formattedFilingParties.map(
                               party => (
-                                <li key={party}>{party}</li>
+                                <li
+                                  data-testid={`filingParty-${party}`}
+                                  key={party}
+                                >
+                                  {party}
+                                </li>
                               ),
                             )}
                             {form.partyIrsPractitioner && <li>Respondent</li>}
