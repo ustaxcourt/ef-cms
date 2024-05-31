@@ -29,6 +29,7 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
             'address1',
             'address2',
             'address3',
+            'country',
             'city',
             'countryType',
             'placeOfLegalResidence',

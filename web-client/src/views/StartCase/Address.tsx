@@ -61,7 +61,7 @@ export const Address = connect(
               }
             />
           </FormGroup>
-          <FormGroup>
+          <FormGroup errorText={validationErrors?.[type]?.postalCode}>
             <label
               aria-hidden
               className="usa-label"

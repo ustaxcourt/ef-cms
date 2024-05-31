@@ -3,12 +3,20 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+let PREVIOUS_STEP = 0;
+
 export const StepIndicator = connect(
   {
     stepIndicatorInfo: state.stepIndicatorInfo,
   },
   function StepIndicator({ stepIndicatorInfo }) {
     const { currentStep, steps } = stepIndicatorInfo;
+
+    if (PREVIOUS_STEP !== currentStep) {
+      PREVIOUS_STEP = currentStep;
+      window.scrollTo(0, 0);
+    }
+
     return (
       <>
         <div aria-label="progress" className="usa-step-indicator">

@@ -37,7 +37,7 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="petition-pdf-preview"]').should('exist');
   cy.get('[data-testid="atp-preview-button"]').should('exist');
 
-  cy.get('[data-testid="petition-review-submit-document"]').click();
+  cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
     .get('[data-testid="case-link"]')

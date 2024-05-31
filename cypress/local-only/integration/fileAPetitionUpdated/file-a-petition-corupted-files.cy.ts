@@ -27,7 +27,7 @@ describe('File a petition - Corrupted Files', () => {
 
     fillStinInformation(VALID_FILE);
 
-    cy.get('[data-testid="petition-review-submit-document"]').click();
+    cy.get('[data-testid="step-6-next-button"]').click();
     cy.get('[data-testid="file-upload-error-modal"]').should('exist');
   });
 
@@ -42,7 +42,7 @@ describe('File a petition - Corrupted Files', () => {
 
     fillStinInformation(VALID_FILE);
 
-    cy.get('[data-testid="petition-review-submit-document"]').click();
+    cy.get('[data-testid="step-6-next-button"]').click();
     cy.get('[data-testid="file-upload-error-modal"]').should('exist');
   });
 
@@ -57,7 +57,7 @@ describe('File a petition - Corrupted Files', () => {
 
     fillStinInformation(CORRUPTED_FILE);
 
-    cy.get('[data-testid="petition-review-submit-document"]').click();
+    cy.get('[data-testid="step-6-next-button"]').click();
     cy.get('[data-testid="file-upload-error-modal"]').should('exist');
   });
 
@@ -72,7 +72,7 @@ describe('File a petition - Corrupted Files', () => {
 
     fillStinInformation(VALID_FILE);
 
-    cy.get('[data-testid="petition-review-submit-document"]').click();
+    cy.get('[data-testid="step-6-next-button"]').click();
 
     cy.get('[data-testid="success-alert"]').contains(
       'Your case has been assigned docket number',

@@ -117,7 +117,7 @@ export function fillIrsNoticeInformation(filePath: string) {
 }
 
 export function fillCaseProcedureInformation() {
-  cy.get('[data-testid="procedure-type-0"]').click();
+  cy.get('[data-testid="procedure-type-1"]').click();
   cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 }

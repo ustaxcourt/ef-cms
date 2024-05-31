@@ -40,6 +40,7 @@ export const AutoGeneratePetitionForm = connect(
             </ol>
             <Button
               link
+              className="add-another-reason-button"
               data-testid="add-another-reason-link-button"
               icon="plus"
               onClick={() =>
@@ -76,6 +77,7 @@ export const AutoGeneratePetitionForm = connect(
           <div>
             <Button
               link
+              className="add-another-fact-button"
               data-testid="add-another-fact-link-button"
               icon="plus"
               onClick={() => {
