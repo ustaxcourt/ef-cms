@@ -54,4 +54,28 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
       });
     });
   });
+
+  describe('Case messages tab', () => {
+    it('message detail - should be free of a11y issues', () => {
+      loginAsDocketClerk();
+
+      cy.visit(
+        '/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
+      );
+      cy.get('[data-testid="message-detail-container"]');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+  });
 });
