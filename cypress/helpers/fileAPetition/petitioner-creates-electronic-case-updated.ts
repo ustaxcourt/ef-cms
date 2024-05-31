@@ -16,7 +16,7 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
   cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
-  cy.get('[data-testid="phone"]').type('1111111111');
+  cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
   cy.get('[data-testid="step-2-next-button"]').click();
 
   cy.get('[data-testid="irs-notice-Yes"]').click();
