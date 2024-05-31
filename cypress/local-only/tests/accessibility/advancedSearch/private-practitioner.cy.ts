@@ -2,7 +2,7 @@ import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
-describe('Case Search, No Matches Page - Private Practitioner Accessibility', () => {
+describe('Advanced Search - Private Practitioner Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });

@@ -2,26 +2,26 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
-    actions: [...loginAs({ username: 'judgecolvin@example.com' })],
+    actions: [...loginAs({ username: 'judgecolvin@example.com' })], // DONE
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/reports/judge-activity-report',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/search',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/search/no-matches',
     ],
     url: 'http://localhost:1234/',
