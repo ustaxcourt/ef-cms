@@ -139,7 +139,7 @@ export const CaseDetailHeader = connect<
     return (
       <>
         {caseDetailHeaderHelper.showSealedCaseBanner && (
-          <div className="red-warning-header sealed-banner">
+          <div className="red-warning-header" data-testid="sealed-case-banner">
             <div className="grid-container text-bold">
               <Icon
                 aria-label="sealed case"
