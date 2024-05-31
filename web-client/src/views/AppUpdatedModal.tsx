@@ -13,10 +13,13 @@ export const AppUpdatedModal = connect(
         preventCancelOnBlur
         className="app-updated-modal"
         closeLink={false}
-        confirmLabel="Return to Dashboard"
+        confirmLabel="Close and Refresh"
         confirmSequence={confirmSequence}
       >
-        <div>The app has been updated.</div>
+        <div>
+          DAWSON has been updated. Click the button to refresh the app and
+          navigate to your home page.
+        </div>
       </ModalDialog>
     );
   },
