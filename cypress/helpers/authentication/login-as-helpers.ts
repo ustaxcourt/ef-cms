@@ -30,6 +30,13 @@ export function loginAsPrivatePractitioner(
 }
 
 export function loginAsIrsPractitioner() {
+  cy.login('irsPractitioner');
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
+  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+}
+
+export function loginAsIrsPractitioner1() {
   cy.login('irsPractitioner1');
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
   cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
