@@ -5,6 +5,7 @@ import {
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
 } from '../EntityConstants';
 import { ExternalDocumentBase } from '@shared/business/entities/externalDocument/ExternalDocumentBase';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { SecondaryDocumentInformationFactory } from './SecondaryDocumentInformationFactory';
@@ -38,6 +39,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public secondarySupportingDocuments?: object[];
   public selectedCases?: string[];
   public supportingDocuments?: object[];
+  public generationType: string;
 
   private scenario: string;
   private freeText2: string;
@@ -66,6 +68,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
     this.selectedCases = rawProps.selectedCases;
     this.supportingDocuments = rawProps.supportingDocuments;
+    this.generationType = rawProps.generationType;
 
     this.scenario = rawProps.scenario;
     this.freeText2 = rawProps.freeText2;
@@ -125,10 +128,14 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         .object()
         .optional()
         .messages({ '*': 'Select a document' }),
-      primaryDocumentFile: joi
-        .object()
-        .required()
-        .messages({ '*': 'Upload a document' }),
+      primaryDocumentFile: joi.when('generationType', {
+        is: GENERATION_TYPES.AUTO,
+        otherwise: joi
+          .object()
+          .required()
+          .messages({ '*': 'Upload a document' }),
+        then: joi.object().optional(),
+      }),
     };
 
     let schemaOptionalItems = {
