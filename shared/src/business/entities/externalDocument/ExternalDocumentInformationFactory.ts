@@ -39,7 +39,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public secondarySupportingDocuments?: object[];
   public selectedCases?: string[];
   public supportingDocuments?: object[];
-  public generationType?: string;
+  public generationType: string;
 
   private scenario: string;
   private freeText2: string;
