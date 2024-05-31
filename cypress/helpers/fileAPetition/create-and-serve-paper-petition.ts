@@ -16,8 +16,8 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="contactPrimary.state"]').select('TN');
   cy.get('[data-testid="contactPrimary.postalCode"]').clear();
   cy.get('[data-testid="contactPrimary.postalCode"]').type('33333');
-  cy.get('[data-testid="contact-primary-phone"]').clear();
-  cy.get('[data-testid="contact-primary-phone"]').type('n/a');
+  cy.get('[data-testid="phone"]').clear();
+  cy.get('[data-testid="phone"]').type('n/a');
   cy.get('#tab-case-info > .button-text').click();
   cy.get('#date-received-picker').clear();
   cy.get('#date-received-picker').type(`01/02/${options.yearReceived}`);
