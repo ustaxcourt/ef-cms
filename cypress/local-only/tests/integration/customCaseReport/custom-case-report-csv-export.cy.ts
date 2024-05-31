@@ -16,7 +16,7 @@ describe('Custom Case Report CSV export', () => {
     createAndServePaperPetition({ yearReceived: '1950' }).then(caseRecord => {
       cy.login('docketclerk', '/reports/custom-case');
       cy.get('[data-testid="export-pending-report"]').should('be.disabled');
-      cy.get('[data-testid="run-custom-case-report"]').click();
+      cy.get('[data-testid="submit-custom-case-report-button"]').click();
 
       cy.get(
         `[data-testid="custom-case-report-row-${caseRecord.docketNumber}"]`,

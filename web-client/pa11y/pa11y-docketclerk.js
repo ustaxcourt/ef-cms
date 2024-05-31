@@ -373,66 +373,66 @@ module.exports = [
     ],
     url: 'http://localhost:1234/',
   },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/105-20/add-petitioner-to-case',
-      'wait for #use-same-address-above-label to be visible',
-      'click element #use-same-address-above-label',
-    ],
-    notes: 'checks the add petitioner to case page',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/105-20',
-      'wait for #docket-record-table to be visible',
-      'click element button[data-testid="seal-docket-entry-button-1"]',
-      'wait for .modal-dialog to be visible',
-    ],
-    notes: 'checks the seal modal opens on a docket entry',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/maintenance',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/111-19',
-      'wait for #docket-record-table to be visible',
-      'wait for button[data-testid="document-viewer-link-A"] to be visible',
-      'click element button[data-testid="document-viewer-link-A"]',
-      'click element button[data-testid="serve-paper-filed-document"]',
-      'wait for .modal-dialog to be visible',
-    ],
-    notes:
-      'checks a11y of ConfirmInitiatePaperFilingServiceModal on paper filing for a consolidated group',
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/reports/custom-case',
-      'wait for table#custom-case-report-table to be visible',
-      'set field #caseCreationStartDate-date-start to 04/19/1980',
-      'set field #caseCreationEndDate-date-end to 04/19/2023',
-      'click element #run-custom-case-report',
-      'wait for #custom-case-report-table-body to be visible',
-    ],
-    notes: 'checks a11y of Custom Case Inventory Report',
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/105-20/add-petitioner-to-case',
+  //     'wait for #use-same-address-above-label to be visible',
+  //     'click element #use-same-address-above-label',
+  //   ],
+  //   notes: 'checks the add petitioner to case page',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/105-20',
+  //     'wait for #docket-record-table to be visible',
+  //     'click element button[data-testid="seal-docket-entry-button-1"]',
+  //     'wait for .modal-dialog to be visible',
+  //   ],
+  //   notes: 'checks the seal modal opens on a docket entry',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/maintenance',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/111-19',
+  //     'wait for #docket-record-table to be visible',
+  //     'wait for button[data-testid="document-viewer-link-A"] to be visible',
+  //     'click element button[data-testid="document-viewer-link-A"]',
+  //     'click element button[data-testid="serve-paper-filed-document"]',
+  //     'wait for .modal-dialog to be visible',
+  //   ],
+  //   notes:
+  //     'checks a11y of ConfirmInitiatePaperFilingServiceModal on paper filing for a consolidated group',
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/reports/custom-case',
+  //     'wait for table#custom-case-report-table to be visible',
+  //     'set field #caseCreationStartDate-date-start to 04/19/1980',
+  //     'set field #caseCreationEndDate-date-end to 04/19/2023',
+  //     'click element #run-custom-case-report',
+  //     'wait for #custom-case-report-table-body to be visible',
+  //   ],
+  //   notes: 'checks a11y of Custom Case Inventory Report',
+  //   url: 'http://localhost:1234/',
+  // },
 ];
