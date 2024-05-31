@@ -2,40 +2,40 @@ const { loginAs } = require('./helpers');
 
 module.exports = [
   {
-    actions: [...loginAs({ username: 'petitioner@example.com' })],
+    actions: [...loginAs({ username: 'petitioner@example.com' })], // DONE
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE + FIXED
       'navigate to http://localhost:1234/before-starting-a-case',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-1',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/my-account',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/change-login-and-service-email',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-2',
       'wait for element label#hasIrsNotice-0 to be visible',
       'click element label#hasIrsNotice-0',
@@ -47,7 +47,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-2',
       'wait for element label#hasIrsNotice-1 to be visible',
       'click element label#hasIrsNotice-1',
@@ -58,7 +58,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-0 to be visible',
       'click element label#filing-type-0',
@@ -69,7 +69,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-1 to be visible',
       'click element label#filing-type-1',
@@ -83,7 +83,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for label#filing-type-1 to be visible',
       'click element label#filing-type-1',
@@ -104,7 +104,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE + IMPROVED
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-1 to be visible',
       'click element label#filing-type-1',
@@ -118,7 +118,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
@@ -131,7 +131,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
@@ -145,7 +145,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
@@ -159,7 +159,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-2 to be visible',
       'click element label#filing-type-2',
@@ -173,7 +173,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
@@ -189,7 +189,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
@@ -205,7 +205,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitioner@example.com' }),
+      ...loginAs({ username: 'petitioner@example.com' }), // DONE
       'navigate to http://localhost:1234/file-a-petition-pa11y/step-3',
       'wait for element label#filing-type-3 to be visible',
       'click element label#filing-type-3',
