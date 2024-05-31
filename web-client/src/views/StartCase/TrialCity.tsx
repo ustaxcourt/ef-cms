@@ -34,6 +34,7 @@ export const TrialCity = connect(
   }) {
     return (
       <FormGroup
+        errorMessageId="trial-city-error-message"
         errorText={[
           validationErrors.preferredTrialCity,
           !!validationErrors['object.missing'],
