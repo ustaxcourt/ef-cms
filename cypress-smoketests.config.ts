@@ -70,13 +70,14 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
+        getFeatureFlagValue({ flag }) {
+          return getFeatureFlagValue({ flag });
+        },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({
             password,
             userName,
           });
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
