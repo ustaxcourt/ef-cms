@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
@@ -188,10 +187,7 @@ export const SecondarySupportingDocumentForm = connect(
                   htmlFor={`secondary-supporting-document-file-${index}`}
                   id={`secondary-supporting-document-file-${index}-label`}
                 >
-                  Upload supporting document PDF (.pdf){' '}
-                  <span className="success-message padding-left-1">
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
-                  </span>
+                  Upload supporting document PDF (.pdf)
                 </label>
                 <span className="usa-hint">
                   Make sure file is not encrypted or password protected. Max

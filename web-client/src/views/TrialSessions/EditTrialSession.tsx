@@ -40,7 +40,7 @@ export const EditTrialSession = connect(
             role="form"
           >
             {showModal === 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
+              <FormCancelModalDialog onCancelSequence="closeModalAndNavigateBackSequence" />
             )}
             <ErrorNotification />
 

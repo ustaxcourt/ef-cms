@@ -3,6 +3,7 @@ import { ExternalConsolidatedCaseGroupFilingCard } from './ExternalConsolidatedC
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
+import { PrimaryDocumentGeneratedTypeForm } from '@web-client/views/FileDocument/PrimaryDocumentGeneratedTypeForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SecondarySupportingDocuments } from './SecondarySupportingDocuments';
 import { SupportingDocuments } from './SupportingDocuments';
@@ -14,12 +15,15 @@ import React from 'react';
 
 export const FileDocument = connect(
   {
+    constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
     showModal: state.modal.showModal,
+    updateCaseAssociationFormValueSequence:
+      sequences.updateCaseAssociationFormValueSequence,
   },
   function FileDocument({
     fileDocumentHelper,
@@ -44,18 +48,21 @@ export const FileDocument = connect(
           *All fields required unless otherwise noted
         </p>
 
-        <PrimaryDocumentForm />
-
-        <SupportingDocuments />
-
-        {fileDocumentHelper.showSecondaryDocument && (
+        {fileDocumentHelper.showGenerationTypeForm ? (
+          <PrimaryDocumentGeneratedTypeForm />
+        ) : (
           <>
-            <SecondaryDocumentForm />
-            <SecondarySupportingDocuments />
+            <PrimaryDocumentForm />
+            <SupportingDocuments />
+            {fileDocumentHelper.showSecondaryDocument && (
+              <>
+                <SecondaryDocumentForm />
+                <SecondarySupportingDocuments />
+              </>
+            )}
+            {fileDocumentHelper.showPartiesFiling && <PartiesFiling />}
           </>
         )}
-
-        <PartiesFiling />
 
         {fileDocumentHelper.allowExternalConsolidatedGroupFiling && (
           <ExternalConsolidatedCaseGroupFilingCard />
@@ -63,6 +70,7 @@ export const FileDocument = connect(
 
         <div className="margin-top-4">
           <Button
+            data-testid="file-document-submit-document"
             id="submit-document"
             type="submit"
             onClick={() => {
