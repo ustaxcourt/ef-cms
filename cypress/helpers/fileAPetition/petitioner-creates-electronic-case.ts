@@ -22,7 +22,7 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="phone"]').type('1111111111');
+  cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
   cy.get('[data-testid="use-same-address-above-label"]').click();
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get('[data-testid="procedure-type-1"]').click();
@@ -69,7 +69,7 @@ function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="phone"]').type('1111111111');
+  cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
 
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get('[data-testid="procedure-type-1"]').click();
@@ -111,7 +111,7 @@ export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="phone"]').type('1111111111');
+  cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
 
   cy.get('[data-testid="complete-step-3"]').click();
   cy.get('[data-testid="procedure-type-1"]').click();
