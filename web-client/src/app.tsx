@@ -274,7 +274,7 @@ const app = {
           console.log('currentVersion', currentVersion);
           console.log('version', version);
           if (currentVersion !== version) {
-            await cerebralApp.getSequence('signOutSequence')();
+            // await cerebralApp.getSequence('signOutSequence')();
             window.location.reload();
           }
         }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
