@@ -169,6 +169,9 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               textInput(errorMessage, input, inputValue);
             }
           });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
 
         it('should allow user to go to step 3 if everything is filled out correctly', () => {
@@ -317,6 +320,9 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 textInput(errorMessage, input, inputValue);
               }
             });
+
+            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
           });
 
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
@@ -382,6 +388,11 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 input: 'contact-secondary-name',
                 inputValue: 'John Cruz',
               },
+              {
+                errorMessage: 'email-error-message',
+                input: 'contact-secondary-email',
+                inputValue: 'test@test.com',
+              },
             ];
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
@@ -393,6 +404,9 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 textInput(errorMessage, input, inputValue);
               }
             });
+
+            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
           });
 
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
