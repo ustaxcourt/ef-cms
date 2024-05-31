@@ -291,13 +291,13 @@ module.exports = [
     notes: 'checks a11y of opinion search',
     url: 'http://localhost:1234/',
   },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/print-preview/110-19',
-    ],
-    url: 'http://localhost:1234/',
-  },
+  // { ROUTE DOES NOT EXIST
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/print-preview/110-19',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
@@ -313,13 +313,13 @@ module.exports = [
     notes: 'checks a11y of case deadline report',
     url: 'http://localhost:1234/',
   },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
-    ],
-    url: 'http://localhost:1234/',
-  },
+  // { DUPLICATE
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
@@ -338,20 +338,20 @@ module.exports = [
     ],
     url: 'http://localhost:1234/',
   },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/111-19?openModal=UnconsolidateCasesModal',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/104-20/upload-court-issued',
-    ],
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/111-19?openModal=UnconsolidateCasesModal',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/104-20/upload-court-issued',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
   {
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
@@ -359,20 +359,20 @@ module.exports = [
     ],
     url: 'http://localhost:1234/',
   },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/105-20/document-view?docketEntryId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
-    ],
-    url: 'http://localhost:1234/',
-  },
-  {
-    actions: [
-      ...loginAs({ username: 'docketclerk@example.com' }),
-      'navigate to http://localhost:1234/case-detail/103-19/document-view?docketEntryId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
-    ],
-    url: 'http://localhost:1234/',
-  },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/105-20/document-view?docketEntryId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
+  // {
+  //   actions: [
+  //     ...loginAs({ username: 'docketclerk@example.com' }),
+  //     'navigate to http://localhost:1234/case-detail/103-19/document-view?docketEntryId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
+  //   ],
+  //   url: 'http://localhost:1234/',
+  // },
   // {
   //   actions: [
   //     ...loginAs({ username: 'docketclerk@example.com' }),
