@@ -284,7 +284,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     path_pattern     = "/deployed-date.txt"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "group-${var.current_color}.${var.dns_domain}"
+    target_origin_id = "group-app-${var.current_color}.${var.dns_domain}"
 
     lambda_function_association {
       event_type   = "origin-response"
