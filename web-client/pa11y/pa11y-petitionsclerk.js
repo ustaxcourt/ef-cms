@@ -638,7 +638,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
     ],
     notes: '',
