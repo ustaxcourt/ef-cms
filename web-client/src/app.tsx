@@ -270,8 +270,6 @@ const app = {
           const currentVersion = await applicationContext
             .getUseCases()
             .getCurrentVersionInteractor(applicationContext);
-          console.log('currentVersion', currentVersion);
-          console.log('version', version);
           if (currentVersion !== version) {
             await cerebralApp.getSequence('openAppUpdatedModalSequence')();
           }
