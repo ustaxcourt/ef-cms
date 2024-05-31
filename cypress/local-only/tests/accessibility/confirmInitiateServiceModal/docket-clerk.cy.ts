@@ -1,5 +1,8 @@
 import { impactLevel } from '../../../../helpers/accessibility-impact';
-import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsDocketClerk,
+  loginAsDocketClerk1,
+} from '../../../../helpers/authentication/login-as-helpers';
 import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
@@ -28,5 +31,27 @@ describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
       },
       terminalLog,
     );
+  });
+
+  describe('Multi-docketable filings', () => {
+    it('should be free of a11y issues', () => {
+      loginAsDocketClerk();
+
+      cy.visit('/case-detail/111-19');
+      cy.get('[data-testid="docket-record-table"]');
+      cy.get('[data-testid="document-viewer-link-A"]').click();
+      cy.get('[data-testid="serve-paper-filed-document"]').click();
+      cy.get('[data-testid="confirm-initiate-service-modal"]');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+        },
+        terminalLog,
+      );
+    });
   });
 });
