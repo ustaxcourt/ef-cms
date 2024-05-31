@@ -646,7 +646,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DUPLICATE, DONE.
       'navigate to http://localhost:1234/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5',
     ],
     notes: '',
@@ -654,7 +654,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/search',
       'wait for [data-testid="practitioner-search-tab"] to be visible',
       'click element [data-testid="practitioner-search-tab"]',
@@ -668,7 +668,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/practitioner-detail/PT1234',
     ],
     notes: '',
@@ -677,7 +677,7 @@ module.exports = [
   /* messages */
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/my/inbox',
     ],
     notes: '',
@@ -685,7 +685,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/my/outbox',
     ],
     notes: '',
@@ -693,7 +693,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/section/inbox',
     ],
     notes: '',
@@ -701,7 +701,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/section/outbox',
     ],
     notes: '',
@@ -709,7 +709,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105',
     ],
     notes: '',
@@ -717,7 +717,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105',
       'wait for #button-forward to be visible',
       'click element #button-forward',
@@ -728,7 +728,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105',
       'wait for #button-reply to be visible',
       'click element #button-reply',
@@ -739,7 +739,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE + FIXED
       'navigate to http://localhost:1234/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105',
       'wait for #button-complete to be visible',
       'click element #button-reply',
