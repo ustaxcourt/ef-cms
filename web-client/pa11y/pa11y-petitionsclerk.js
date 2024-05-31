@@ -617,7 +617,7 @@ module.exports = [
   // this url probably needs to be moved to calendaring when those users are created
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/reports/case-deadlines',
     ],
     notes: '',
@@ -625,7 +625,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/search',
       'wait for #reports-btn to be visible',
       'click element #reports-btn',
@@ -638,7 +638,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'petitionsclerk@example.com' }),
+      ...loginAs({ username: 'petitionsclerk@example.com' }), // DONE
       'navigate to http://localhost:1234/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
     ],
     notes: '',

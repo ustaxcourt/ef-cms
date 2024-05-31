@@ -91,6 +91,27 @@ describe('Trial Sessions Page - Petitions Clerk Accessibility', () => {
     });
   });
 
+  describe('Edit trial session', () => {
+    it('should be free of a11y issues', () => {
+      loginAsPetitionsClerk();
+      cy.visit('/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1');
+      cy.get('#start-date-picker').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+          },
+        },
+        terminalLog,
+      );
+    });
+  });
+
   describe('Trial session details', () => {
     it('should be free of a11y issues', () => {
       loginAsPetitionsClerk();
