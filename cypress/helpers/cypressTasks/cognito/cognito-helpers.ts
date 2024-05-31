@@ -52,6 +52,22 @@ const getClientId = async (userPoolId: string): Promise<string> => {
   return clientId;
 };
 
+export const getCognitoUserIdByEmail = async (
+  email: string,
+): Promise<string> => {
+  const userPoolId = await getUserPoolId();
+  const foundUser = await getCognito().adminGetUser({
+    UserPoolId: userPoolId,
+    Username: email.toLowerCase(),
+  });
+
+  const userId = foundUser.UserAttributes?.find(
+    element => element.Name === 'custom:userId',
+  )?.Value!;
+
+  return userId;
+};
+
 const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
   const results = await getCognito().listUserPools({
     MaxResults: 50,
