@@ -31,6 +31,8 @@ jobs:
           sudo sysctl -w vm.max_map_count=262144
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
+        with:
+          opensearch-version: 2.11
       - name: Setup DynamoDB Local
         uses: rrainn/dynamodb-action@v4.0.0
         with:
