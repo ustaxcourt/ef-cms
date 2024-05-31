@@ -28,7 +28,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/search',
       'wait for #advanced-search-button to be visible',
       'set field #petitioner-name to cairo',
@@ -40,7 +40,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE + IMPROVED
       'navigate to http://localhost:1234/search&info=practitioner-tab',
       'wait for [data-testid="practitioner-search-tab"] to be visible',
       'click element [data-testid="practitioner-search-tab"]',
@@ -51,28 +51,28 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/trial-sessions',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/trial-session-detail/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     ],
     url: 'http://localhost:1234/',
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/101-19',
       'wait for #tab-notes to be visible',
       'click element #tab-notes',
@@ -84,7 +84,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/case-detail/112-19',
       'wait for #tab-notes to be visible',
       'click element #tab-notes',
@@ -96,7 +96,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'navigate to http://localhost:1234/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       'wait for #print-session-working-copy to be visible',
       'click element #print-session-working-copy',
@@ -108,7 +108,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'wait for [data-testid="tab-case-worksheets"] to be visible',
       'click element [data-testid="tab-case-worksheets"]',
       'wait for button[data-testid="add-edit-case-worksheet"] to be visible',
@@ -122,7 +122,7 @@ module.exports = [
   },
   {
     actions: [
-      ...loginAs({ username: 'judgecolvin@example.com' }),
+      ...loginAs({ username: 'judgecolvin@example.com' }), // DONE
       'wait for [data-testid="pending-motions-tab"] to be visible',
       'click element [data-testid="pending-motions-tab"]',
       'wait for button[data-testid="add-edit-pending-motion-worksheet"] to be visible',
