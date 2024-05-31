@@ -76,6 +76,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
       <BaseModal
         className={classNames(className, hasErrorState && 'modal-error')}
         preventCancelOnBlur={preventCancelOnBlur}
+        title={title}
         onBlurSequence={onCancelSequence} // NEED TO PASS IN FUNCTION
       >
         <div className={classNames('modal-header grid-container padding-x-0')}>
