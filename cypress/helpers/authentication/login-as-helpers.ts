@@ -1,6 +1,6 @@
 export function loginAsTestAdmissionsClerk() {
   cy.login('testAdmissionsClerk');
-  cy.get('#inbox-tab-content').should('exist');
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsAdmissionsClerk(
