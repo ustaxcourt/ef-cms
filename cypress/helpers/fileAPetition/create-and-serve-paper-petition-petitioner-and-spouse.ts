@@ -25,7 +25,7 @@ export function createAndServePaperPetitionMultipleParties(
   cy.get('[data-testid="contactPrimary.postalCode"]').type(
     faker.location.zipCode(),
   );
-  cy.get('[data-testid="phone"]').type(faker.phone.number());
+  cy.get('[data-testid="contact-primary-phone"]').type(faker.phone.number());
   cy.get('[data-testid="contact-secondary-name"]').type(spouseName);
   cy.get('[data-testid="contactSecondary.address1"]').type(
     faker.location.streetAddress(),
