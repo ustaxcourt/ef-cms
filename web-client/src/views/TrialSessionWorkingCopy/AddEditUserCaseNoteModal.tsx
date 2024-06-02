@@ -6,13 +6,24 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const AddEditUserCaseNoteModal = connect(
-  {
-    modal: state.modal,
-    validateNoteSequence: sequences.validateNoteSequence,
-    validationErrors: state.validationErrors,
-  },
+type AddEditUserCaseNoteModalProps = {
+  onConfirmSequence: Function;
+};
+
+const addEditUserCaseNoteModalDeps = {
+  clearModalFormSequence: sequences.clearModalFormSequence,
+  modal: state.modal,
+  validateNoteSequence: sequences.validateNoteSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const AddEditUserCaseNoteModal = connect<
+  AddEditUserCaseNoteModalProps,
+  typeof addEditUserCaseNoteModalDeps
+>(
+  addEditUserCaseNoteModalDeps,
   function AddEditUserCaseNoteModal({
+    clearModalFormSequence,
     modal,
     onConfirmSequence,
     validateNoteSequence,
@@ -25,7 +36,7 @@ export const AddEditUserCaseNoteModal = connect(
         confirmLabel="Save"
         preventCancelOnBlur={true}
         title="Add/Edit Notes"
-        onCancelSequence="clearModalFormSequence"
+        onCancelSequence={clearModalFormSequence}
         onConfirmSequence={onConfirmSequence}
       >
         <h5 className="margin-bottom-4">

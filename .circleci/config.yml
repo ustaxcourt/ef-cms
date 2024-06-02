@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.6
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.8
 
 parameters:
   run_build_and_deploy:
@@ -898,7 +898,10 @@ workflows:
   version: 2
 
   build-and-deploy:
-    when: << pipeline.parameters.run_build_and_deploy >>
+    when:
+      and:
+        - equal: [api, <<pipeline.trigger_source>>] # Only trigger a pipeline build when a user clicks "trigger pipeline"
+        - equal: [true, <<pipeline.parameters.run_build_and_deploy>>] # Allow build-and-deploy to be disabled programmatically
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
