@@ -19,6 +19,7 @@ import classNames from 'classnames';
 export function AccordionItem(properties: {
   children: React.ReactNode;
   customClassName?: string;
+  customTitleClassName?: string;
   displayIcon?: boolean;
   iconClassName?: string;
   iconSize?: string;
@@ -34,6 +35,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     const {
       children,
       customClassName,
+      customTitleClassName,
       displayIcon = false,
       iconClassName,
       iconSize,
@@ -56,7 +58,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     if (!title) {
       return null;
     }
-    const buttonProps = {
+    const anchorProps = {
       'aria-controls': itemContentId,
       'aria-expanded': expandedText,
       className: 'usa-accordion__button grid-container',
@@ -65,10 +67,13 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
       type: 'button',
     };
 
+    const baseTitleClassName = 'accordion-item-title grid-col-8';
+    const titleClassName = classNames(baseTitleClassName, customTitleClassName);
+
     return (
       <>
         <HeadingElement className={customClassName || 'usa-accordion__heading'}>
-          <button {...buttonProps}>
+          <a {...anchorProps}>
             <div className="grid-row">
               {displayIcon && (
                 <span className="grid-col-auto">
@@ -81,9 +86,9 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
                   </span>
                 </span>
               )}
-              <div className="accordion-item-title grid-col-8">{title}</div>
+              <div className={titleClassName}>{title}</div>
             </div>
-          </button>
+          </a>
         </HeadingElement>
         {isActiveItem && (
           <div
