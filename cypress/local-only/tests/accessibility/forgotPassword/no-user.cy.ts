@@ -21,7 +21,6 @@ describe('Forgot Password - Accessibility', () => {
     cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
   });
 
-  // TODO: Clean up later?
   it('should be free of a11y issues when resetting password', () => {
     const email = `example${Date.now()}@pa11y.com`;
     createAPetitioner({
@@ -29,6 +28,7 @@ describe('Forgot Password - Accessibility', () => {
       name: 'pa11y',
       password: generatePassword(VALID_PASSWORD_CONFIG),
     });
+
     cy.visit('/forgot-password');
     cy.get('[data-testid="email-input"]').type(email);
     cy.get('[data-testid="send-password-reset-button"]').click();

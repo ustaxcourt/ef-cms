@@ -76,7 +76,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
       cy.get('#react-select-5-option-0').click();
       cy.get('[data-testid="save-and-serve"]').click();
 
-      cy.get('[data-testid="modal-dialog"]').contains(
+      cy.get('[data-testid="confirm-initiate-service-modal"]').contains(
         'Motion for Leave to File Answer',
       );
     });

@@ -19,7 +19,6 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
       {
         includedImpacts: impactLevel,
         rules: {
-          'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
           'nested-interactive': { enabled: false }, // TODO LINK
         },
       },
@@ -40,7 +39,6 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
         {
           includedImpacts: impactLevel,
           rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
             'nested-interactive': { enabled: false }, // TODO LINK
           },
         },
@@ -52,6 +50,7 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
   describe('Trial session working copy', () => {
     it('should be free of a11y issues', () => {
       loginAsColvin();
+
       cy.visit(
         '/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       );
@@ -63,10 +62,6 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
         undefined,
         {
           includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
-          },
         },
         terminalLog,
       );
@@ -74,6 +69,7 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
 
     it('should be free of a11y issues when printing', () => {
       loginAsColvin();
+
       cy.visit(
         '/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       );
@@ -89,10 +85,6 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
         undefined,
         {
           includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
-          },
         },
         terminalLog,
       );
