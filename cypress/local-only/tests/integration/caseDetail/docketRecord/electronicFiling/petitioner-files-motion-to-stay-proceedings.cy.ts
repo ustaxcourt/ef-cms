@@ -71,7 +71,7 @@ describe('Private Practitioner requests access to case', () => {
 
       cy.get('[data-testid="save-and-serve"]').click();
 
-      cy.get('[data-testid="modal-dialog"]').contains(
+      cy.get('[data-testid="confirm-initiate-service-modal"]').contains(
         'Motion to Lift Stay of Proceedings',
       );
     });
