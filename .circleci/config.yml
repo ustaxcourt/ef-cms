@@ -347,29 +347,6 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
-  accessibility-tests:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-and-cypress-install
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Cypress Accessibility Tests'
-          command: npm run cypress:accessibility
-      - store_artifacts:
-          path: /root/project/cypress/deployed-and-local/videos/
-
   smoketests-readonly:
     docker:
       - image: *efcms-docker-image
