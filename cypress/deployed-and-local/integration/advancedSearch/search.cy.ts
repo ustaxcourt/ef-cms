@@ -17,10 +17,13 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="petitioner-name"]').type(name);
-      cy.get('[data-testid="case-search-by-name"]').click();
 
       /** Assert */
-      cy.get(`[data-testid="case-result-${docketNumber}"]`);
+      // need to wait for elasticsearch potentially
+      retry(() => {
+        cy.get('[data-testid="submit-case-search-by-name-button"]').click();
+        return assertExists(`[data-testid="case-result-${docketNumber}"]`);
+      });
     });
   });
 
@@ -30,7 +33,7 @@ describe('Advanced Search', () => {
     createAPractitioner().then(({ barNumber, firstName }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
-      cy.get('[data-testid="tab-practitioner"]').click();
+      cy.get('[data-testid="practitioner-search-tab"]').click();
       cy.get('[data-testid="practitioner-name-input"]').type(firstName);
 
       /** Assert */
@@ -54,7 +57,7 @@ describe('Advanced Search', () => {
 
     /** Act */
     cy.get('[data-testid="search-link"]').click();
-    cy.get('[data-testid="tab-practitioner"]').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('[data-testid="practitioner-name-input"]').type('doesNotExist');
 
     /** Assert */
@@ -72,7 +75,7 @@ describe('Advanced Search', () => {
     createAPractitioner().then(({ barNumber }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
-      cy.get('[data-testid="tab-practitioner"]').click();
+      cy.get('[data-testid="practitioner-search-tab"]').click();
       cy.get('[data-testid="bar-number-search-input"]').type(barNumber);
       cy.get(
         '[data-testid="practitioner-search-by-bar-number-button"]',
@@ -114,7 +117,7 @@ describe('Advanced Search', () => {
 
       /** Act */
       cy.get('[data-testid="search-link"]').click();
-      cy.get('[data-testid="tab-opinion"]').click();
+      cy.get('[data-testid="opinion-search-tab"]').click();
       cy.get('[data-testid="keyword-search"]').type(opinionTitle);
       // need to wait for elasticsearch potentially
       retry(() => {
