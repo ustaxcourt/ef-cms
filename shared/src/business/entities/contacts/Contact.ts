@@ -36,6 +36,7 @@ export class Contact extends JoiValidationEntity {
   public title?: string;
   public additionalName?: string;
   public hasEAccess?: boolean;
+  public placeOfLegalResidence?: string;
 
   constructor(
     rawContact,
@@ -70,6 +71,7 @@ export class Contact extends JoiValidationEntity {
     this.title = rawContact.title;
     this.additionalName = rawContact.additionalName;
     this.hasEAccess = rawContact.hasEAccess || undefined;
+    this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
   }
 
   static SHARED_VALIDATION_RULES = {
