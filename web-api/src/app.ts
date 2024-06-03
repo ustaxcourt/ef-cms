@@ -256,6 +256,10 @@ app.use((req, res, next) => {
   }
   next();
 });
+app.use((req, res, next) => {
+  // process.env.PREVENT_ALL_TRAFFIC
+  next();
+});
 app.use(logger());
 
 /**
