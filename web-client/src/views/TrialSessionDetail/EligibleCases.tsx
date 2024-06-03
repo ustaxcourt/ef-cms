@@ -129,28 +129,29 @@ export const EligibleCases = connect(
                 {trialSessionDetailsHelper.showQcComplete && (
                   <td>
                     <div className="text-center">
-                      <input
-                        aria-label="qc complete"
-                        checked={
-                          item.qcCompleteForTrial[trialSessionId] === true
-                        }
-                        className="usa-checkbox__input"
-                        data-testid={`${item.docketNumber}-complete`}
-                        id={`${item.docketNumber}-complete`}
-                        name={`${item.docketNumber}Complete`}
-                        type="checkbox"
-                        onChange={() => {
-                          updateQcCompleteForTrialSequence({
-                            docketNumber: item.docketNumber,
-                            qcCompleteForTrial:
-                              !item.qcCompleteForTrial[trialSessionId],
-                          });
-                        }}
-                      />
                       <label
                         className="usa-checkbox__label"
                         htmlFor={`${item.docketNumber}-complete`}
-                      ></label>
+                      >
+                        <input
+                          aria-label="qc complete"
+                          checked={
+                            item.qcCompleteForTrial[trialSessionId] === true
+                          }
+                          className="usa-checkbox__input"
+                          data-testid={`${item.docketNumber}-complete`}
+                          id={`${item.docketNumber}-complete`}
+                          name={`${item.docketNumber}Complete`}
+                          type="checkbox"
+                          onChange={() => {
+                            updateQcCompleteForTrialSequence({
+                              docketNumber: item.docketNumber,
+                              qcCompleteForTrial:
+                                !item.qcCompleteForTrial[trialSessionId],
+                            });
+                          }}
+                        />
+                      </label>
                     </div>
                   </td>
                 )}
