@@ -15,15 +15,15 @@ describe('Custom Case Report CSV export', () => {
   it('should download the Custom Case Report data in CSV format', () => {
     createAndServePaperPetition({ yearReceived: '1950' }).then(caseRecord => {
       cy.login('docketclerk', '/reports/custom-case');
-      cy.get('[data-testid="export-pending-report"]').should('be.disabled');
+      cy.get('[data-testid="export-custom-case-report"]').should('be.disabled');
       cy.get('[data-testid="submit-custom-case-report-button"]').click();
 
       cy.get(
         `[data-testid="custom-case-report-row-${caseRecord.docketNumber}"]`,
       ).should('exist');
 
-      cy.get('[data-testid="export-pending-report"]').should('be.enabled');
-      cy.get('[data-testid="export-pending-report"]').click();
+      cy.get('[data-testid="export-custom-case-report"]').should('be.enabled');
+      cy.get('[data-testid="export-custom-case-report"]').click();
 
       const downloadPath = Cypress.config('downloadsFolder');
 
