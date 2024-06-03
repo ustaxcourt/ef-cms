@@ -1,7 +1,7 @@
 module.exports = [
   {
     actions: [
-      'wait for #tab-case to be visible',
+      'wait for #tab-case to be visible', // DONE
       'set field #docket-number to 103-20',
       'click element button#docket-search-button',
       'wait for table.ustc-table to be visible',
@@ -11,7 +11,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for [data-testid="order-search-tab"] to be visible',
+      'wait for [data-testid="order-search-tab"] to be visible', // DONE
       'click element [data-testid="order-search-tab"]',
       'wait for #clear-search to be visible',
       'click element #clear-search',
@@ -33,7 +33,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for [data-testid="order-search-tab"] to be visible',
+      'wait for [data-testid="order-search-tab"] to be visible', // DONE
       'click element [data-testid="order-search-tab"]',
       'wait for #clear-search to be visible',
       'click element #clear-search',
@@ -49,7 +49,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for [data-testid="opinion-search-tab"] to be visible',
+      'wait for [data-testid="opinion-search-tab"] to be visible', // DONE
       'click element [data-testid="opinion-search-tab"]',
       'wait for #clear-search to be visible',
       'click element #clear-search',
