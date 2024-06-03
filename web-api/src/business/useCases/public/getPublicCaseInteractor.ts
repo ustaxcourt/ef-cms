@@ -1,4 +1,4 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
