@@ -2,8 +2,8 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-jest.mock('../addCoverToPdf');
-import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+jest.mock('@shared/business/useCases/addCoverToPdf');
+import { addCoverToPdf } from '@shared/business/useCases/addCoverToPdf';
 import {
   determineEntitiesToLock,
   handleLockError,

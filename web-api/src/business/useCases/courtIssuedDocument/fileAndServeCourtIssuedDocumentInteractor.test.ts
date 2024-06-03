@@ -16,8 +16,10 @@ import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile'
 
 let MOCK_DATE;
 
-jest.mock('../../utilities/DateHandler', () => {
-  const originalModule = jest.requireActual('../../utilities/DateHandler');
+jest.mock('@shared/business/utilities/DateHandler', () => {
+  const originalModule = jest.requireActual(
+    '@shared/business/utilities/DateHandler',
+  );
   return {
     __esModule: true,
     ...originalModule,
