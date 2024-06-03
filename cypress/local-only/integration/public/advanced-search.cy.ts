@@ -1,5 +1,4 @@
 import {
-  clickOnSearchTab,
   docketRecordTable,
   enterDocumentDocketNumber,
   enterDocumentKeywordForAdvancedSearch,
@@ -42,7 +41,7 @@ describe('Advanced search', () => {
   describe('opinion', () => {
     it('should display results when a keyword and docketNumberWithSuffix is provided', () => {
       navigateToDashboard();
-      clickOnSearchTab('opinion');
+      cy.get('[data-testid="opinion-search-tab"]').click();
       enterDocumentKeywordForAdvancedSearch('opinion');
       enterDocumentDocketNumber('124-20L');
       searchForDocuments();
@@ -51,7 +50,7 @@ describe('Advanced search', () => {
 
     it('should display results with a judge name', () => {
       navigateToDashboard();
-      clickOnSearchTab('opinion');
+      cy.get('[data-testid="opinion-search-tab"]').click();
       enterDocumentDocketNumber('107-19');
 
       unselectOpinionTypesExceptBench();
@@ -68,7 +67,7 @@ describe('Advanced search', () => {
       const wantedLegacyJudge = 'Fieri';
 
       navigateToDashboard();
-      clickOnSearchTab('order');
+      cy.get('[data-testid="order-search-tab"]').click();
       searchForOrderByJudge(wantedLegacyJudge);
       searchForDocuments();
 

@@ -61,7 +61,7 @@ export const PublicSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab id="tab-order" tabName="order" title={'Order'}>
+            <Tab data-testid="order-search-tab" tabName="order" title={'Order'}>
               <SearchBoilerplateText formTypeText="an order" />
               <OrderSearchForm
                 submitAdvancedSearchSequence={
@@ -70,7 +70,11 @@ export const PublicSearch = connect(
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab id="tab-opinion" tabName="opinion" title={'Opinion'}>
+            <Tab
+              data-testid="opinion-search-tab"
+              tabName="opinion"
+              title={'Opinion'}
+            >
               <SearchBoilerplateText
                 formTypeText="an opinion"
                 isOpinion="true"
