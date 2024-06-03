@@ -7,9 +7,9 @@ describe('Before Starting Case - Petitioner Accessibility', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  // TODO aria issue
   it('should be free of a11y issues', () => {
     loginAsPetitioner();
+
     cy.visit('/before-filing-a-petition');
     cy.get('[data-testid="go-to-step-1"]').should('exist');
 
@@ -19,9 +19,6 @@ describe('Before Starting Case - Petitioner Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
-        rules: {
-          'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-        },
       },
       terminalLog,
     );

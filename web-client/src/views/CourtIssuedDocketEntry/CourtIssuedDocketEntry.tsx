@@ -280,7 +280,7 @@ export const CourtIssuedDocketEntry = connect(
                   )}
                   <Button
                     secondary
-                    id="save-entry-button"
+                    data-testid="save-docket-entry-button"
                     onClick={() => {
                       saveCourtIssuedDocketEntrySequence();
                     }}
