@@ -15,6 +15,7 @@ export const MessagesIndividualInbox = connect(
     formattedMessages: state.formattedMessages,
     messagesIndividualInboxHelper: state.messagesIndividualInboxHelper,
     screenMetadata: state.screenMetadata,
+    setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -24,6 +25,7 @@ export const MessagesIndividualInbox = connect(
     formattedMessages,
     messagesIndividualInboxHelper,
     screenMetadata,
+    setSelectedMessagesSequence,
     sortTableSequence,
     tableSort,
     updateScreenMetadataSequence,
@@ -34,10 +36,12 @@ export const MessagesIndividualInbox = connect(
       if (!selectAllCheckboxRef.current) return;
 
       selectAllCheckboxRef.current.indeterminate =
-        !!messagesIndividualInboxHelper.someMessagesSelected;
+        !!messagesIndividualInboxHelper.someMessagesSelected &&
+        !messagesIndividualInboxHelper.allMessagesSelected;
     }, [
       selectAllCheckboxRef.current,
       messagesIndividualInboxHelper.someMessagesSelected,
+      messagesIndividualInboxHelper.allMessagesSelected,
     ]);
     return (
       <>
@@ -97,12 +101,12 @@ export const MessagesIndividualInbox = connect(
                   id="all-messages-checkbox"
                   ref={selectAllCheckboxRef}
                   type="checkbox"
-                  // onChange={() => {
-                  //   setSelectedDocumentsForDownloadSequence({
-                  //     documentIds:
-                  //       formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
-                  //   });
-                  // }}
+                  onChange={() => {
+                    setSelectedMessagesSequence({
+                      selectAll:
+                        !messagesIndividualInboxHelper.someMessagesSelected,
+                    });
+                  }}
                 />
               </th>
               <th aria-hidden="true" className="consolidated-case-column"></th>
@@ -165,14 +169,11 @@ export const MessagesIndividualInbox = connect(
                       checked={message.isSelected}
                       id={`${message.caseTitle}-message-checkbox`}
                       type="checkbox"
-                      // onChange={() => {
-                      //   const documentIdSelected = {
-                      //     docketEntryId: entry.docketEntryId,
-                      //   };
-                      //   setSelectedDocumentsForDownloadSequence({
-                      //     documentIds: [documentIdSelected],
-                      //   });
-                      // }}
+                      onChange={() => {
+                        setSelectedMessagesSequence({
+                          messageId: message.messageId,
+                        });
+                      }}
                     />
                   </td>
                   <td className="consolidated-case-column">
