@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -24,6 +25,13 @@ export const setDefaultFileDocumentFormValuesAction = ({
 
   if (user.role === USER_ROLES.petitioner) {
     filersMap[user.userId] = true;
+  }
+
+  if (
+    user.role === USER_ROLES.irsPractitioner &&
+    Case.isFirstIrsFiling(caseDetail)
+  ) {
+    store.set(state.form.partyIrsPractitioner, true);
   }
 
   store.set(state.form.fileAcrossConsolidatedGroup, canFileInConsolidatedGroup);

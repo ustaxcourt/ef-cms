@@ -9,7 +9,7 @@ import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 export const DocketRecord = connect(
@@ -34,16 +34,17 @@ export const DocketRecord = connect(
     setSelectedDocumentsForDownloadSequence,
     showModal,
   }) {
+    const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
+
     useEffect(() => {
       if (!docketRecordHelper.showBatchDownloadControls) return;
+      if (!selectAllCheckboxRef.current) return;
 
-      const documentsSelectorHeaderInput = window.document.getElementById(
-        'all-selectable-docket-entries-checkbox',
-      ) as HTMLInputElement;
-      documentsSelectorHeaderInput.indeterminate =
+      selectAllCheckboxRef.current.indeterminate =
         !!formattedDocketEntriesHelper.someDocumentsSelectedForDownload;
     }, [
       docketRecordHelper.showBatchDownloadControls,
+      selectAllCheckboxRef.current,
       formattedDocketEntriesHelper.someDocumentsSelectedForDownload,
     ]);
 
@@ -70,6 +71,7 @@ export const DocketRecord = connect(
                         }
                         data-testid="all-selectable-docket-entries-checkbox"
                         id="all-selectable-docket-entries-checkbox"
+                        ref={selectAllCheckboxRef}
                         type="checkbox"
                         onChange={() => {
                           setSelectedDocumentsForDownloadSequence({

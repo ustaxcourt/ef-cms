@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
@@ -35,9 +34,6 @@ export const SecondaryDocumentForm = connect(
               id="secondary-document-label"
             >
               Upload supporting document PDF (.pdf){' '}
-              <span className="success-message padding-left-1">
-                <FontAwesomeIcon icon="check-circle" size="sm" />
-              </span>{' '}
               {fileDocumentHelper.isSecondaryDocumentUploadOptional && (
                 <span className="usa-hint">(optional)</span>
               )}

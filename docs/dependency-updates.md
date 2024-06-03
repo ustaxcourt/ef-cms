@@ -40,14 +40,23 @@ note: we have 2 package.json files, be sure to update them all
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-4. Check if there is an update to the Terraform AWS provider and update to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
-  - Big find for the current version and replace with the new version everywhere in the project.
+4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
-6. Check through the list of caveats to see if any of the documented issues have been resolved.
+	- ./web-api/workflow-terraform/glue-cron/main/main.tf
+	- ./web-api/workflow-terraform/migration/main/main.tf
+	- ./web-api/workflow-terraform/migration-cron/main/main.tf
+	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
+	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
+	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
+	- ./web-client/terraform/main/main.tf
 
-7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+	> aws = "<LATEST_VERSION>"
+
+5. Check through the list of caveats to see if any of the documented issues have been resolved.
+
+6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
 
