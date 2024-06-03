@@ -36,7 +36,7 @@ export const MessagesIndividualInbox = connect(
       if (!selectAllCheckboxRef.current) return;
 
       selectAllCheckboxRef.current.indeterminate =
-        !!messagesIndividualInboxHelper.someMessagesSelected &&
+        messagesIndividualInboxHelper.someMessagesSelected &&
         !messagesIndividualInboxHelper.allMessagesSelected;
     }, [
       selectAllCheckboxRef.current,
@@ -104,7 +104,8 @@ export const MessagesIndividualInbox = connect(
                   onChange={() => {
                     setSelectedMessagesSequence({
                       selectAll:
-                        !messagesIndividualInboxHelper.someMessagesSelected,
+                        messagesIndividualInboxHelper.someMessagesSelected ||
+                        !messagesIndividualInboxHelper.allMessagesSelected,
                     });
                   }}
                 />
