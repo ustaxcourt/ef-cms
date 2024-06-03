@@ -11,8 +11,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-order to be visible',
-      'click element #tab-order',
+      'wait for [data-testid="order-search-tab"] to be visible',
+      'click element [data-testid="order-search-tab"]',
       'wait for #clear-search to be visible',
       'click element #clear-search',
       'wait for #keyword-search to be visible',
@@ -33,8 +33,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-order to be visible',
-      'click element #tab-order',
+      'wait for [data-testid="order-search-tab"] to be visible',
+      'click element [data-testid="order-search-tab"]',
       'wait for #clear-search to be visible',
       'click element #clear-search',
       'wait for #keyword-search to be visible',
@@ -49,8 +49,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-opinion to be visible',
-      'click element #tab-opinion',
+      'wait for [data-testid="opinion-search-tab"] to be visible',
+      'click element [data-testid="opinion-search-tab"]',
       'wait for #clear-search to be visible',
       'click element #clear-search',
       'wait for #keyword-search to be visible',
