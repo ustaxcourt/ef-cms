@@ -931,7 +931,7 @@ export const presenterSequences = {
     gotoUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
-  gotoVerifyEmailSequence: gotoVerifyEmailSequence as unknown as Function,
+  gotoVerifyEmailSequence,
   gotoViewAllDocumentsSequence:
     gotoViewAllDocumentsSequence as unknown as Function,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
@@ -1081,7 +1081,7 @@ export const presenterSequences = {
     openGainElectronicAccessToCaseModalSequence as unknown as Function,
   openItemizedPenaltiesModalSequence:
     openItemizedPenaltiesModalSequence as unknown as Function,
-  openPdfInNewTabSequence: openPdfInNewTabSequence as unknown as Function,
+  openPdfInNewTabSequence,
   openPdfPreviewModalSequence:
     openPdfPreviewModalSequence as unknown as Function,
   openPractitionerDocumentDownloadUrlSequence:
