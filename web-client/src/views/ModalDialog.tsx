@@ -122,12 +122,8 @@ export const ModalDialog = ({
           data-testid={dataTestId}
           role="dialog"
           title={title}
-          onClick={blurDialog}
         >
-          <div
-            className={classNames('modal-dialog padding-205', className)}
-            onClick={evt => evt.stopPropagation()}
-          >
+          <div className={classNames('modal-dialog padding-205', className)}>
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
                 <div
