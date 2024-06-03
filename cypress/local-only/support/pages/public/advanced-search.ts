@@ -4,10 +4,6 @@ export const navigateTo = () => {
   cy.visit('/');
 };
 
-export const clickOnSearchTab = tabName => {
-  cy.get(`button#tab-${tabName}`).click();
-};
-
 export const searchForCaseByDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
   cy.get('button#docket-search-button').click();

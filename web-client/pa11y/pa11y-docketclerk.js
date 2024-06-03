@@ -219,8 +219,8 @@ module.exports = [
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
-      'wait for #tab-order to be visible',
-      'click element #tab-order',
+      'wait for [data-testid="order-search-tab"] to be visible',
+      'click element [data-testid="order-search-tab"]',
       'wait for #keyword-search to be visible',
       'set field #keyword-search to dismissal',
       'wait for #date-range to be visible',
@@ -238,8 +238,8 @@ module.exports = [
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
-      'wait for #tab-opinion to be visible',
-      'click element #tab-opinion',
+      'wait for [data-testid="opinion-search-tab"] to be visible',
+      'click element [data-testid="opinion-search-tab"]',
       'wait for #keyword-search to be visible',
       'set field #keyword-search to opinion',
       'wait for #date-range to be visible',
@@ -257,8 +257,8 @@ module.exports = [
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
-      'wait for #tab-order to be visible',
-      'click element #tab-order',
+      'wait for [data-testid="order-search-tab"] to be visible',
+      'click element [data-testid="order-search-tab"]',
       'wait for #keyword-search to be visible',
       'set field #keyword-search to meow',
       'wait for #date-range to be visible',
@@ -276,8 +276,8 @@ module.exports = [
     actions: [
       ...loginAs({ username: 'docketclerk@example.com' }),
       'navigate to http://localhost:1234/search',
-      'wait for #tab-order to be visible',
-      'click element #tab-opinion',
+      'wait for [data-testid="opinion-search-tab"] to be visible',
+      'click element [data-testid="opinion-search-tab"]',
       'wait for #keyword-search to be visible',
       'set field #keyword-search to sunglasses',
       'wait for #date-range to be visible',
