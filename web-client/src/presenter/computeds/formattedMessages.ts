@@ -60,6 +60,15 @@ export const formattedMessages = (
     screenMetadata: get(state.screenMetadata),
   });
 
+  const returnedMessages = messageFilterResults.filteredMessages.map(
+    message => {
+      const isSelected = get(state.messagesPage.selectedMessages).includes(
+        message.messageId,
+      );
+      return { ...message, isSelected };
+    },
+  );
+
   const completedMessageFilterResults = applyFiltersToCompletedMessages({
     completedMessages,
     screenMetadata: get(state.screenMetadata),
@@ -70,7 +79,7 @@ export const formattedMessages = (
     ...completedMessageFilterResults.filterValues,
     completedMessages: completedMessageFilterResults.filteredCompletedMessages,
     hasMessages,
-    messages: messageFilterResults.filteredMessages,
+    messages: returnedMessages,
   };
 
   return sharedComputedResult;

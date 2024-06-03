@@ -677,6 +677,9 @@ export const baseState = {
   login: {} as any,
   maintenanceMode: false,
   messagesInboxCount: 0,
+  messagesPage: {
+    selectedMessages: [] as string[],
+  },
   messagesSectionCount: 0,
   modal: {
     docketEntry: undefined,
