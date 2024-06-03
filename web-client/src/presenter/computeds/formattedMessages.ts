@@ -15,6 +15,7 @@ type FormattedMessageResult = MessageResult & {
   consolidatedIconTooltipText: string;
   messageDetailLink: string;
   fromSectionFormatted: string;
+  isSelected: boolean;
 };
 
 export const formattedMessages = (

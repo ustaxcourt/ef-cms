@@ -13,6 +13,7 @@ export const MessagesIndividualInbox = connect(
   {
     constants: state.constants,
     formattedMessages: state.formattedMessages,
+    messagesIndividualInboxHelper: state.messagesIndividualInboxHelper,
     screenMetadata: state.screenMetadata,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
@@ -21,6 +22,7 @@ export const MessagesIndividualInbox = connect(
   function MessagesIndividualInbox({
     constants,
     formattedMessages,
+    messagesIndividualInboxHelper,
     screenMetadata,
     sortTableSequence,
     tableSort,
@@ -31,11 +33,11 @@ export const MessagesIndividualInbox = connect(
     useEffect(() => {
       if (!selectAllCheckboxRef.current) return;
 
-      // selectAllCheckboxRef.current.indeterminate =
-      //   !!messagesIndividualInboxHelper.partialSelectedMessages;
+      selectAllCheckboxRef.current.indeterminate =
+        !!messagesIndividualInboxHelper.someMessagesSelected;
     }, [
       selectAllCheckboxRef.current,
-      // messagesIndividualInboxHelper.partialSelectedMessages,
+      messagesIndividualInboxHelper.someMessagesSelected,
     ]);
     return (
       <>
@@ -89,13 +91,10 @@ export const MessagesIndividualInbox = connect(
             <tr>
               <th>
                 <input
-                  aria-label="all-selectable-docket-entries-checkbox"
-                  checked={
-                    // messagesIndividualInboxHelper.allDocumentsSelectedForDownload
-                    false
-                  }
-                  data-testid="all-selectable-messages-checkbox"
-                  id="all-selectable-messages-checkbox"
+                  aria-label="all-messages-checkbox"
+                  checked={messagesIndividualInboxHelper.allMessagesSelected}
+                  data-testid="all-messages-checkbox"
+                  id="all-messages-checkbox"
                   ref={selectAllCheckboxRef}
                   type="checkbox"
                   // onChange={() => {
@@ -163,10 +162,7 @@ export const MessagesIndividualInbox = connect(
                   <td>
                     <input
                       aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
-                      checked={
-                        // message.isSelected
-                        false
-                      }
+                      checked={message.isSelected}
                       id={`${message.caseTitle}-message-checkbox`}
                       type="checkbox"
                       // onChange={() => {
