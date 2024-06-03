@@ -60,6 +60,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { type RawUser, User } from '../User';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
@@ -789,7 +790,9 @@ export class Case extends JoiValidationEntity {
       if (
         filtered &&
         applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
-        (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
+        ((applicationContext.getCurrentUser().role !== ROLES.petitionsClerk &&
+          applicationContext.getCurrentUser().role !==
+            ROLES.caseServicesSupervisor) ||
           this.getIrsSendDate())
       ) {
         this.docketEntries = this.docketEntries.filter(
@@ -1850,6 +1853,15 @@ export class Case extends JoiValidationEntity {
     this.blockedDate = undefined;
     return this;
   }
+
+  static isFirstIrsFiling = (rawCase: RawCase): boolean => {
+    const isCaseSealed = isSealedCase(rawCase);
+    const caseHasRespondent = !!(
+      !!(rawCase as unknown as PublicCase).hasIrsPractitioner ||
+      rawCase.irsPractitioners?.length
+    );
+    return !caseHasRespondent && !isCaseSealed;
+  };
 
   static isPetitionerRepresented(rawCase, userId: string): boolean {
     return !!rawCase.privatePractitioners?.find(practitioner =>

@@ -175,7 +175,7 @@ describe('Admissions Clerk Grants E-Access', () => {
     cy.login('admissionsclerk1');
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
-    cy.get('[data-testid="tab-practitioner"]').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('[data-testid="add-new-practitioner"]').click();
     cy.get('[data-testid="first-name-input"]').type('Hyper');
     cy.get('[data-testid="middle-name-input"]').type('Specific');

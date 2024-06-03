@@ -1,26 +1,24 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
-import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
-import { TextView } from '@web-client/ustc-ui/Text/TextView';
-import { WhatCanIIncludeModalOverlay } from '../FileDocument/WhatCanIIncludeModalOverlay';
+import { StateDrivenFileInput } from './StateDrivenFileInput';
+import { WhatCanIIncludeModalOverlay } from '@web-client/views/FileDocument/WhatCanIIncludeModalOverlay';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const RequestAccessDocumentForm = connect(
+export const PrimaryDocumentGeneratedTypeForm = connect(
   {
     constants: state.constants,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
-    requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
@@ -28,12 +26,12 @@ export const RequestAccessDocumentForm = connect(
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  function RequestAccessDocumentForm({
+  function PrimaryDocumentGeneratedTypeForm({
     constants,
+    fileDocumentHelper,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
-    requestAccessHelper,
     showModal,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
@@ -41,61 +39,64 @@ export const RequestAccessDocumentForm = connect(
   }) {
     return (
       <>
-        <h2 className="margin-top-4">Tell Us About This Document</h2>
+        <h2 className="margin-top-4">{form.documentTitle}</h2>
         <PIIRedactedWarning />
-        {requestAccessHelper.showGenerationTypeForm && (
-          <div className="usa-form-group">
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <div className="usa-radio usa-radio__inline">
+
+        {fileDocumentHelper.showGenerationTypeForm && (
+          <>
+            <div className="usa-form-group">
+              <fieldset className="usa-fieldset margin-bottom-0">
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    checked={
+                      form.generationType === constants.GENERATION_TYPES.AUTO
+                    }
+                    className="usa-radio__input"
+                    id="auto-generation"
+                    name="generationType"
+                    type="radio"
+                    onChange={() => {
+                      updateCaseAssociationFormValueSequence({
+                        key: 'generationType',
+                        value: constants.GENERATION_TYPES.AUTO,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    data-testid="auto-generation"
+                    htmlFor="auto-generation"
+                  >
+                    Auto-generate Entry of Appearance PDF (Use only if you do
+                    not need to add attachments or a Certificate of Service.)
+                  </label>
+                </div>
+
                 <input
                   checked={
-                    form.generationType === constants.GENERATION_TYPES.AUTO
+                    form.generationType === constants.GENERATION_TYPES.MANUAL
                   }
                   className="usa-radio__input"
-                  id="auto-generation"
+                  id="manual-generation"
                   name="generationType"
                   type="radio"
                   onChange={() => {
                     updateCaseAssociationFormValueSequence({
                       key: 'generationType',
-                      value: constants.GENERATION_TYPES.AUTO,
+                      value: constants.GENERATION_TYPES.MANUAL,
                     });
                   }}
                 />
                 <label
                   className="usa-radio__label"
-                  data-testid="auto-generation"
-                  htmlFor="auto-generation"
+                  data-testid="manual-generation-label"
+                  htmlFor="manual-generation"
                 >
-                  Auto-generate Entry of Appearance PDF (Use only if you do not
-                  need to add attachments or a Certificate of Service.)
+                  Upload PDF form
                 </label>
-              </div>
-
-              <input
-                checked={
-                  form.generationType === constants.GENERATION_TYPES.MANUAL
-                }
-                className="usa-radio__input"
-                id="manual-generation"
-                name="generationType"
-                type="radio"
-                onChange={() => {
-                  updateCaseAssociationFormValueSequence({
-                    key: 'generationType',
-                    value: constants.GENERATION_TYPES.MANUAL,
-                  });
-                }}
-              />
-              <label
-                className="usa-radio__label"
-                data-testid="manual-generation-label"
-                htmlFor="manual-generation"
-              >
-                Upload PDF form
-              </label>
-            </fieldset>
-          </div>
+              </fieldset>
+            </div>
+          </>
         )}
         {form.generationType === constants.GENERATION_TYPES.MANUAL && (
           <>
@@ -104,13 +105,16 @@ export const RequestAccessDocumentForm = connect(
                 <label
                   className={classNames(
                     'usa-label ustc-upload with-hint',
-                    requestAccessHelper.showPrimaryDocumentValid && 'validated',
+                    fileDocumentHelper.showPrimaryDocumentValid && 'validated',
                   )}
                   data-testid="primary-document-label"
                   htmlFor="primary-document"
                   id="primary-document-label"
                 >
                   Upload your document
+                  <span className="success-message padding-left-1">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
                 </label>
                 <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
@@ -210,53 +214,7 @@ export const RequestAccessDocumentForm = connect(
                   />
                 )}
               </div>
-
-              {requestAccessHelper.documentWithObjections && (
-                <FormGroup errorText={validationErrors?.objections}>
-                  <fieldset className="usa-fieldset margin-top-2">
-                    <legend id="objections-legend">
-                      Are there any objections to this document?
-                    </legend>
-                    {constants.OBJECTIONS_OPTIONS.map(option => (
-                      <div className="usa-radio usa-radio__inline" key={option}>
-                        <input
-                          aria-describedby="objections-legend"
-                          checked={form.objections === option}
-                          className="usa-radio__input"
-                          id={`objections-${option}`}
-                          name="objections"
-                          type="radio"
-                          value={option}
-                          onChange={e => {
-                            updateCaseAssociationFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            validateCaseAssociationRequestSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-radio__label"
-                          htmlFor={`objections-${option}`}
-                        >
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                  </fieldset>
-                </FormGroup>
-              )}
             </div>
-
-            {requestAccessHelper.documentWithSupportingDocuments && (
-              <div>
-                <SupportingDocuments />
-                <TextView
-                  bind="validationErrors.hasSupportingDocuments"
-                  className="usa-error-message"
-                />
-              </div>
-            )}
 
             {showModal === 'WhatCanIIncludeModalOverlay' && (
               <WhatCanIIncludeModalOverlay />
@@ -268,4 +226,5 @@ export const RequestAccessDocumentForm = connect(
   },
 );
 
-RequestAccessDocumentForm.displayName = 'RequestAccessDocumentForm';
+PrimaryDocumentGeneratedTypeForm.displayName =
+  'PrimaryDocumentGeneratedTypeForm';
