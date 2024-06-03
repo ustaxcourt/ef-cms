@@ -54,11 +54,9 @@ regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to 
 
 	> aws = "<LATEST_VERSION>"
 
-5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
-6. Check through the list of caveats to see if any of the documented issues have been resolved.
-
-7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
 

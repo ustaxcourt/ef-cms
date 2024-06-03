@@ -42,8 +42,8 @@ module.exports = [
     actions: [
       ...loginAs({ username: 'judgecolvin@example.com' }),
       'navigate to http://localhost:1234/search&info=practitioner-tab',
-      'wait for #tab-practitioner to be visible',
-      'click element #tab-practitioner',
+      'wait for [data-testid="practitioner-search-tab"] to be visible',
+      'click element [data-testid="practitioner-search-tab"]',
       'wait for #practitioner-name to be visible',
     ],
     notes: 'checks a11y of advanced search practitioner tab',
