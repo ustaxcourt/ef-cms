@@ -29,6 +29,15 @@ fi
 UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${DEPLOYING_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
 aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --enabled
 
+# For the following lambdas, set PREVENT_ALL_TRAFFIC=true in env
+# - API
+# - async API
+# - Websockets
+
+# API_FUNCTION_NAME="api-${ENV}-${CURRENT_COLOR}"
+# Run a .ts script that appends an env variable to the lambda without
+# destroying other env variables
+
 npx ts-node --transpile-only ./web-client/switch-public-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-api-colors.ts
