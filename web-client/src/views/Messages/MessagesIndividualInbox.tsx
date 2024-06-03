@@ -6,7 +6,7 @@ import { TableFilters } from '../../ustc-ui/Table/TableFilters';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
@@ -26,35 +26,86 @@ export const MessagesIndividualInbox = connect(
     tableSort,
     updateScreenMetadataSequence,
   }) {
+    const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (!selectAllCheckboxRef.current) return;
+
+      // selectAllCheckboxRef.current.indeterminate =
+      //   !!messagesIndividualInboxHelper.partialSelectedMessages;
+    }, [
+      selectAllCheckboxRef.current,
+      // messagesIndividualInboxHelper.partialSelectedMessages,
+    ]);
     return (
       <>
-        <TableFilters
-          filters={[
-            {
-              isSelected: screenMetadata.caseStatus,
-              key: 'caseStatus',
-              label: 'Case Status',
-              options: formattedMessages.caseStatuses,
-            },
-            {
-              isSelected: screenMetadata.fromUser,
-              key: 'fromUser',
-              label: 'From',
-              options: formattedMessages.fromUsers,
-            },
-            {
-              isSelected: screenMetadata.fromSection,
-              key: 'fromSection',
-              label: 'Section',
-              options: formattedMessages.fromSections,
-            },
-          ]}
-          onSelect={updateScreenMetadataSequence}
-        ></TableFilters>
+        <div className="grid-row grid-gap margin-bottom-2">
+          <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
+            <TableFilters
+              filters={[
+                {
+                  isSelected: screenMetadata.caseStatus,
+                  key: 'caseStatus',
+                  label: 'Case Status',
+                  options: formattedMessages.caseStatuses,
+                },
+                {
+                  isSelected: screenMetadata.fromUser,
+                  key: 'fromUser',
+                  label: 'From',
+                  options: formattedMessages.fromUsers,
+                },
+                {
+                  isSelected: screenMetadata.fromSection,
+                  key: 'fromSection',
+                  label: 'Section',
+                  options: formattedMessages.fromSections,
+                },
+              ]}
+              onSelect={updateScreenMetadataSequence}
+            ></TableFilters>
+          </div>
+
+          <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+            <Button
+              link
+              className="action-button"
+              data-testid="message-batch-mark-as-complete"
+              disabled={
+                // !messagesIndividualInboxHelper.isDownloadLinkEnabled
+                true
+              }
+              icon="check-circle"
+              id="button-batch-complete"
+              // onClick={}
+            >
+              Complete
+            </Button>
+          </div>
+        </div>
 
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th>
+                <input
+                  aria-label="all-selectable-docket-entries-checkbox"
+                  checked={
+                    // messagesIndividualInboxHelper.allDocumentsSelectedForDownload
+                    false
+                  }
+                  data-testid="all-selectable-messages-checkbox"
+                  id="all-selectable-messages-checkbox"
+                  ref={selectAllCheckboxRef}
+                  type="checkbox"
+                  // onChange={() => {
+                  //   setSelectedDocumentsForDownloadSequence({
+                  //     documentIds:
+                  //       formattedDocketEntriesHelper.allEligibleDocumentsForDownload,
+                  //   });
+                  // }}
+                />
+              </th>
               <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small" colSpan={2}>
                 <SortableColumn
@@ -109,6 +160,25 @@ export const MessagesIndividualInbox = connect(
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
+                  <td>
+                    <input
+                      aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
+                      checked={
+                        // message.isSelected
+                        false
+                      }
+                      id={`${message.caseTitle}-message-checkbox`}
+                      type="checkbox"
+                      // onChange={() => {
+                      //   const documentIdSelected = {
+                      //     docketEntryId: entry.docketEntryId,
+                      //   };
+                      //   setSelectedDocumentsForDownloadSequence({
+                      //     documentIds: [documentIdSelected],
+                      //   });
+                      // }}
+                    />
+                  </td>
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
