@@ -11,7 +11,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep, uniq } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
