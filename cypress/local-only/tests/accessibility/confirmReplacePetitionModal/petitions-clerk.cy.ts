@@ -1,0 +1,28 @@
+import { impactLevel } from '../../../../helpers/accessibility-impact';
+import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
+import { terminalLog } from '../../../../helpers/cypressTasks/logs';
+
+describe('Confirm Replace Petition Modal - Petitions Clerk Accessibility', () => {
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
+  it('should be free of a11y issues for confirm replace petition modal', () => {
+    loginAsPetitionsClerk();
+
+    cy.visit('/case-detail/121-20/petition-qc');
+    cy.contains('Petition').should('exist');
+    cy.get('.remove-pdf-button').click();
+    cy.get('.confirm-replace-petition-modal').should('exist');
+
+    cy.injectAxe();
+
+    cy.checkA11y(
+      undefined,
+      {
+        includedImpacts: impactLevel,
+      },
+      terminalLog,
+    );
+  });
+});
