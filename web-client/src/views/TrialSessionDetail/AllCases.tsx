@@ -69,6 +69,7 @@ export const AllCases = connect(
                       <FontAwesomeIcon
                         className="mini-success"
                         icon="calendar-plus"
+                        title="Manually added"
                       />
                     </span>
                   )}

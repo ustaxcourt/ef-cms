@@ -1,4 +1,5 @@
 import { ExternalDocumentInformationFactory } from './ExternalDocumentInformationFactory';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { OBJECTIONS_OPTIONS_MAP } from '../EntityConstants';
 import {
   calculateISODate,
@@ -44,9 +45,13 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    it('should require primary document file', () => {
+    it('should require primary document file unless generationType is auto', () => {
       expect(errors().primaryDocumentFile).toEqual('Upload a document');
       baseDoc.primaryDocumentFile = {};
+      expect(errors().primaryDocumentFile).toEqual(undefined);
+      baseDoc.primaryDocumentFile = undefined;
+      expect(errors().primaryDocumentFile).toEqual('Upload a document');
+      baseDoc.generationType = GENERATION_TYPES.AUTO;
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 

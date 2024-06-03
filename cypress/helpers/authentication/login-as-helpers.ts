@@ -1,10 +1,5 @@
-export function loginAsTestAdmissionsClerk() {
-  cy.login('testAdmissionsClerk');
-  cy.get('#inbox-tab-content').should('exist');
-}
-
 export function loginAsAdmissionsClerk(
-  user: 'admissionsclerk1' = 'admissionsclerk1',
+  user: 'testAdmissionsClerk' | 'admissionsclerk1' = 'admissionsclerk1',
 ) {
   cy.login(user);
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
@@ -24,9 +19,21 @@ export function loginAsPrivatePractitioner(
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
+export function loginAsIrsPractitioner() {
+  cy.login('irsPractitioner1');
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
+  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+}
+
 export function loginAsPetitioner() {
   cy.login('petitioner1');
   cy.get('[data-testid="file-a-petition"]').should('exist');
+}
+
+export function loginAsCaseServicesSupervisor() {
+  cy.login('caseservicessupervisor');
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsPetitionsClerk() {
