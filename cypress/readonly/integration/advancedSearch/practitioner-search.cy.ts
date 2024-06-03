@@ -1,12 +1,13 @@
 import { isValidRequest } from '../../support/helpers';
-import { loginAsTestAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
+import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
 
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Practitioner Search', () => {
   it('should do a practitioner search by name and bar number', () => {
-    loginAsTestAdmissionsClerk();
+    loginAsAdmissionsClerk('testAdmissionsClerk');
+
     cy.get('.advanced').contains('Advanced').click();
 
     cy.get('[data-testid="practitioner-search-tab"]').click();

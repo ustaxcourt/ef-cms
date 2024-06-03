@@ -9,7 +9,7 @@ export function loginAsAdc(user: 'adc' = 'adc') {
 }
 
 export function loginAsAdmissionsClerk(
-  user: 'admissionsclerk1' = 'admissionsclerk1',
+  user: 'testAdmissionsClerk' | 'admissionsclerk1' = 'admissionsclerk1',
 ) {
   cy.login(user);
   cy.get('[data-testid="inbox-tab-content"]').should('exist');

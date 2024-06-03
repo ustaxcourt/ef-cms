@@ -476,7 +476,7 @@ export const CaseSearchByName = connect(
                   <Button
                     aria-describedby="case-search-by-name"
                     className="advanced-search__button"
-                    data-testid="case-search-by-name"
+                    data-testid="submit-case-search-by-name-button"
                     id="advanced-search-button"
                     onClick={e => {
                       e.preventDefault();
