@@ -118,7 +118,7 @@ import { getPractitionerDocumentInteractor } from '../../shared/src/business/use
 import { getPractitionerDocumentsInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor';
 import { getPractitionersByNameInteractor } from './business/useCases/practitioner/getPractitionersByNameInteractor';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/business/useCases/users/getPrivatePractitionersBySearchKeyInteractor';
-import { getPublicCaseInteractor } from '../../shared/src/business/useCases/public/getPublicCaseInteractor';
+import { getPublicCaseInteractor } from './business/useCases/public/getPublicCaseInteractor';
 import { getPublicDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
 import { getTodaysOpinionsInteractor } from '../../shared/src/business/useCases/public/getTodaysOpinionsInteractor';

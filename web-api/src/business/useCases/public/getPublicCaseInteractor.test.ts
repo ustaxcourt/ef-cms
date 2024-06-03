@@ -1,11 +1,11 @@
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTY_TYPES,
-} from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { getContactPrimary } from '../../entities/cases/Case';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 import { getPublicCaseInteractor } from './getPublicCaseInteractor';
 
 describe('getPublicCaseInteractor', () => {
