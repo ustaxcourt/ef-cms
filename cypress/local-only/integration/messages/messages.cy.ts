@@ -632,7 +632,7 @@ function sendMessagesToCompletedTab(
     cy.get('[data-testid="message-mark-as-complete"]').click();
     cy.get('[data-testid="complete-message-body"]').type('MARK AS COMPLETE');
     cy.get('[data-testid="modal-confirm"]').click();
-    cy.get('[data-testid="message-detail-warning-alert"]').should('exist');
+    cy.get('[data-testid="message-detail-success-alert"]').should('exist');
     cy.get('[data-testid="header-messages-link"]').click();
     retry(() => {
       cy.reload(true);
