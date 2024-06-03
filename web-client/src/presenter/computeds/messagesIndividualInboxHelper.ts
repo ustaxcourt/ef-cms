@@ -9,6 +9,7 @@ export const messagesIndividualInboxHelper = (
 
   return {
     allMessagesSelected: messagesInboxCount === messagesSelectedCount,
-    someMessagesSelected: messagesSelectedCount > 0,
+    someMessagesSelected:
+      messagesSelectedCount > 0 && messagesSelectedCount < messagesInboxCount,
   };
 };
