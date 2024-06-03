@@ -332,7 +332,218 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
         terminalLog,
       );
     });
+
+    it('should be free of a11y issues when filing for conservator', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-1').click();
+      cy.get('#is-minorIncompetent-type-0').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for guardian', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-1').click();
+      cy.get('#is-minorIncompetent-type-1').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for custodian', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-1').click();
+      cy.get('#is-minorIncompetent-type-2').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for minor', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-1').click();
+      cy.get('#is-minorIncompetent-type-3').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for legally incompetent person', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-1').click();
+      cy.get('#is-minorIncompetent-type-4').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for donor', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-2').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for transferee', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-3').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+
+    it('should be free of a11y issues when filing for surviving spouse', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-3');
+      cy.get('[data-testid="complete-step-3"]').should('exist');
+      cy.get('label#filing-type-3').click();
+      cy.get('#is-other-type-4').click();
+      cy.get('.contact-group').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
   });
 
-  describe('Step 4', () => {});
+  describe('Step 4', () => {
+    it('should be free of a11y issues when filing for surviving spouse', () => {
+      loginAsPetitioner();
+      cy.visit('/file-a-petition-pa11y/step-4');
+      cy.get('[data-testid="complete-step-4"]').should('exist');
+      cy.get('#procedure-type-0').click();
+      cy.get('#preferred-trial-city').should('exist');
+
+      cy.injectAxe();
+
+      cy.checkA11y(
+        undefined,
+        {
+          includedImpacts: impactLevel,
+          rules: {
+            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+            'nested-interactive': { enabled: false }, // TODO LINK
+          },
+        },
+        terminalLog,
+      );
+    });
+  });
 });

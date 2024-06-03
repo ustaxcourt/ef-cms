@@ -23,4 +23,23 @@ describe('Dashboard - Petitioner Accessibility', () => {
       terminalLog,
     );
   });
+
+  it('should be free of a11y issues when viewing payment options', () => {
+    loginAsPetitioner();
+    cy.get('.payment-options').click();
+    cy.get('a.usa-link--external').should('exist');
+
+    cy.injectAxe();
+
+    cy.checkA11y(
+      undefined,
+      {
+        includedImpacts: impactLevel,
+        rules: {
+          'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
+        },
+      },
+      terminalLog,
+    );
+  });
 });

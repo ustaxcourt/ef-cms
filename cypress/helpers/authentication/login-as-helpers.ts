@@ -43,8 +43,10 @@ export function loginAsIrsPractitioner1() {
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
-export function loginAsPetitioner() {
-  cy.login('petitioner1');
+export function loginAsPetitioner(
+  petitionerUser: 'petitioner' | 'petitioner1' = 'petitioner1',
+) {
+  cy.login(petitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
 }
 
