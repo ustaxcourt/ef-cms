@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  caseServicesSupervisorUser,
   docketClerkUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
@@ -414,5 +415,62 @@ describe('getWorkItemDocumentLink', () => {
     });
 
     expect(result).toEqual(`${baseWorkItemEditLink}/review`);
+  });
+
+  it('should return editLink as /review if the box is my inProgress and user is caseServicesSupervisor', () => {
+    const { permissions } = getBaseState(caseServicesSupervisorUser);
+
+    const result = getWorkItemDocumentLink({
+      applicationContext,
+      permissions,
+      workItem: {
+        ...baseWorkItem,
+        caseIsInProgress: true,
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Petition',
+          eventCode: 'P',
+          isFileAttached: true,
+          isInProgress: true,
+          pending: false,
+          servedAt: null,
+        },
+        isInitializeCase: false,
+        section: PETITIONS_SECTION,
+      },
+      workQueueToDisplay: {
+        box: 'inProgress',
+        queue: 'my',
+      },
+    });
+
+    expect(result).toEqual(`${baseWorkItemEditLink}/review`);
+  });
+
+  it('should return editLink as petition qc page if document is petition, case is not in progress, and user is caseServicesSupervisor viewing a QC box', () => {
+    const { permissions } = getBaseState(caseServicesSupervisorUser);
+
+    const result = getWorkItemDocumentLink({
+      applicationContext,
+      permissions,
+      workItem: {
+        ...baseWorkItem,
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Petition',
+          eventCode: 'P',
+          pending: false,
+        },
+        isInitializeCase: true,
+        section: PETITIONS_SECTION,
+      },
+      workQueueToDisplay: {
+        box: 'inbox',
+        queue: 'section',
+      },
+    });
+    expect(result).toEqual(
+      `/case-detail/${baseWorkItem.docketNumber}/petition-qc`,
+    );
   });
 });

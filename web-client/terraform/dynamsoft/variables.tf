@@ -11,7 +11,7 @@ variable "ami" {
 }
 
 variable "availability_zones" {
-  type = list
+  type = list(any)
 }
 
 variable "dynamsoft_s3_zip_path" {
@@ -27,9 +27,8 @@ variable "dynamsoft_product_keys" {
 }
 
 variable "is_dynamsoft_enabled" {
-  default = "1"
   type = string
- }
+}
 
 variable "zone_name" {
   type = string
