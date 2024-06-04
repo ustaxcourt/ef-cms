@@ -36,6 +36,7 @@ export class Contact extends JoiValidationEntity {
   public title?: string;
   public additionalName?: string;
   public hasEAccess?: boolean;
+  public placeOfLegalResidence?: string;
 
   constructor(
     rawContact,
@@ -70,6 +71,7 @@ export class Contact extends JoiValidationEntity {
     this.title = rawContact.title;
     this.additionalName = rawContact.additionalName;
     this.hasEAccess = rawContact.hasEAccess || undefined;
+    this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
   }
 
   static SHARED_VALIDATION_RULES = {
@@ -114,7 +116,11 @@ export class Contact extends JoiValidationEntity {
       .description('Email provided by the petitioner on their petition form')
       .messages({ '*': 'Enter email address in format: yourname@example.com' }),
     phone: JoiValidationConstants.STRING.max(100)
-      .required()
+      .when('contactType', {
+        is: CONTACT_TYPES.secondary,
+        otherwise: joi.required(),
+        then: joi.optional(),
+      })
       .messages({ '*': 'Enter phone number' }),
     sealedAndUnavailable: joi.boolean().optional(),
     secondaryName: JoiValidationConstants.STRING.max(100).optional(),

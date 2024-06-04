@@ -31,9 +31,6 @@ export const Address = connect(
     usStatesOther,
     validationErrors,
   }) {
-    /**
-     * @returns {function} MobileCityAndState template
-     */
     function MobileCityAndState() {
       return (
         <Mobile>
@@ -95,9 +92,6 @@ export const Address = connect(
       );
     }
 
-    /**
-     * @returns {function} NonMobileCityAndState template
-     */
     function NonMobileCityAndState() {
       return (
         <NonMobile>
@@ -105,6 +99,7 @@ export const Address = connect(
           <div
             className={classNames(
               'usa-form-group',
+              'usa-form-group-horizontal',
               (validationErrors?.[type]?.state ||
                 validationErrors?.[type]?.postalCode) &&
                 'usa-form-group--error',
@@ -193,7 +188,7 @@ export const Address = connect(
       );
     }
     return (
-      <div className="address-info">
+      <>
         <FormGroup
           errorMessageId="address-1-error-message"
           errorText={validationErrors?.[type]?.address1}
@@ -303,7 +298,7 @@ export const Address = connect(
 
         {NonMobileCityAndState()}
         {MobileCityAndState()}
-      </div>
+      </>
     );
   },
 );

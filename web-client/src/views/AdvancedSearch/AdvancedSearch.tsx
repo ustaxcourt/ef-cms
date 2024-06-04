@@ -81,7 +81,11 @@ export const AdvancedSearch = connect(
                 />
                 <SearchResults />
               </Tab>
-              <Tab id="tab-order" tabName={searchTabs.ORDER} title={'Order'}>
+              <Tab
+                data-testid="order-search-tab"
+                tabName={searchTabs.ORDER}
+                title={'Order'}
+              >
                 <SearchBoilerplateText formTypeText="an order" />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
@@ -91,8 +95,7 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                data-testid="tab-opinion"
-                id="tab-opinion"
+                data-testid="opinion-search-tab"
                 tabName={searchTabs.OPINION}
                 title={'Opinion'}
               >
@@ -109,8 +112,7 @@ export const AdvancedSearch = connect(
               </Tab>
               {advancedSearchHelper.showPractitionerSearch && (
                 <Tab
-                  data-testid="tab-practitioner"
-                  id="tab-practitioner"
+                  data-testid="practitioner-search-tab"
                   tabName={searchTabs.PRACTITIONER}
                   title="Practitioner"
                 >

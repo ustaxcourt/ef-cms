@@ -11,8 +11,8 @@
   }
 
   .big-blue-header {
-    background-color: color($theme-color-base-lightest);
-    color: color($theme-color-base-ink);
+    background-color: color($theme-color-primary-darker);
+    color: $color-white;
     text-decoration: none;
 
     *,

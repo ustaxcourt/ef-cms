@@ -449,7 +449,6 @@ describe('ElectronicPetitionInformationFactory entity', () => {
             countryType: 'Enter country type',
             index: 1,
             name: 'Enter name',
-            phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
           },
