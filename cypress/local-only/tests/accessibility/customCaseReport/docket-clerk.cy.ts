@@ -12,8 +12,8 @@ describe('Custom Case Report - Docket Clerk Accessibility', () => {
 
     cy.visit('/reports/custom-case');
     cy.get('[data-testid="custom-case-report-table"]');
-    cy.get('#caseCreationStartDate-date-start').type('04/19/1980'); // TODO - use data-testid
-    cy.get('#caseCreationEndDate-date-end').type('04/19/2023'); // TODO - use data-testid
+    cy.get('#caseCreationStartDate-date-start').type('04/19/1980');
+    cy.get('#caseCreationEndDate-date-end').type('04/19/2023');
     cy.get('[data-testid="submit-custom-case-report-button"]').click();
     cy.get('[data-testid="custom-case-result-count"]');
 
@@ -23,7 +23,7 @@ describe('Custom Case Report - Docket Clerk Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
-        rules: { listitem: { enabled: false } }, // TODO LINK
+        rules: { listitem: { enabled: false } }, // This error is occurring because of an accessibility issues with the 3rd party library `ReactPaginate`
       },
       terminalLog,
     );

@@ -7,7 +7,6 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
     Cypress.session.clearCurrentSessionData();
   });
   describe('Case detail menu', () => {
-    // TODO Fix 2 modal issues
     it('should be free of a11y issues when adding message', () => {
       loginAsPetitionsClerk();
 
@@ -175,7 +174,6 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       );
     });
 
-    // TODO Modal Issues
     it('should be free of a11y issues when adding and editing calendar note', () => {
       loginAsPetitionsClerk();
 
@@ -360,7 +358,6 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         );
       });
 
-      // TODO Dialog Aria Issues
       it('should be free of a11y issues when deleting other statistics', () => {
         loginAsPetitionsClerk();
 
@@ -425,7 +422,6 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         );
       });
 
-      // TODO Dialog Aria Issues
       it('should be free of a11y issues when deleting deficiency statistics', () => {
         loginAsPetitionsClerk();
 

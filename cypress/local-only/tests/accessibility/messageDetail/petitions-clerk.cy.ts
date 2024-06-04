@@ -26,7 +26,6 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     );
   });
 
-  // TODO fix aria issues
   it('should be free of a11y issues when forwarding', () => {
     loginAsPetitionsClerk();
     cy.visit(
@@ -47,7 +46,6 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     );
   });
 
-  // TODO fix aria issues
   it('should be free of a11y issues when replying', () => {
     loginAsPetitionsClerk();
     cy.visit(
@@ -68,7 +66,6 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     );
   });
 
-  // TODO fix aria issues
   it('should be free of a11y issues when completing', () => {
     loginAsPetitionsClerk();
     cy.visit(

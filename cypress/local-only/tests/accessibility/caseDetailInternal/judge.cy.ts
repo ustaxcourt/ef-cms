@@ -11,7 +11,6 @@ describe('Case Detail Internal - Judge Accessibility', () => {
   });
 
   describe('Notes tab', () => {
-    // TODO modal aria issues
     it('should be free of a11y issues when adding/editing note', () => {
       loginAsColvin();
 
@@ -35,7 +34,6 @@ describe('Case Detail Internal - Judge Accessibility', () => {
       );
     });
 
-    // TODO modal aria issues
     it('should be free of a11y issues when deleting note', () => {
       loginAsColvin();
 
