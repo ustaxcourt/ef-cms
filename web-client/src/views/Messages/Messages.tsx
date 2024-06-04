@@ -34,10 +34,7 @@ export const Messages = connect(
             <h1 data-testid="messages-banner" tabIndex={-1}>
               {messagesHelper.messagesTitle}
             </h1>
-            <span
-              aria-label="unread messages count"
-              className="unread margin-right-2"
-            ></span>
+            <span className="unread margin-right-2"></span>
             {messagesHelper.showSwitchToSectionMessagesButton && (
               <Button
                 link
@@ -82,7 +79,7 @@ export const Messages = connect(
               tabName="inbox"
               title={`Inbox (${messagesHelper.inboxCount})`}
             >
-              <div data-testid="inbox-tab-content" id="inbox-tab-content">
+              <div data-testid="inbox-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualInbox />
                 )}
@@ -96,7 +93,7 @@ export const Messages = connect(
               tabName="outbox"
               title="Sent"
             >
-              <div id="sent-tab-content">
+              <div data-testid="sent-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualOutbox />
                 )}
@@ -112,7 +109,7 @@ export const Messages = connect(
               tabName="completed"
               title="Completed"
             >
-              <div id="completed-tab-content">
+              <div data-testid="completed-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualCompleted />
                 )}

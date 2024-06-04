@@ -1,4 +1,5 @@
 import { navigateTo as navigateToDashboard } from '../../../../support/pages/dashboard';
+import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 
 describe('Filing an Answer', function () {
   it('should have a file first IRS document button', () => {
@@ -7,8 +8,7 @@ describe('Filing an Answer', function () {
   });
 
   it('can select a document type and go to the next step in the wizard', () => {
-    cy.get('#react-select-2-input').click({ force: true });
-    cy.get('#react-select-2-option-6').click({ force: true });
+    selectTypeaheadInput('document-type', 'Answer');
     cy.get('button#submit-document').click();
   });
 
@@ -22,8 +22,7 @@ describe('Filing an Answer', function () {
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });
 
-  it('can select a party and go to the review page', () => {
-    cy.get('label[for="party-irs-practitioner"]').click();
+  it('can go to the review page without selecting party', () => {
     cy.get('button#submit-document').click();
   });
 
