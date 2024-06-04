@@ -157,6 +157,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 <Button
                   link
                   className={classNames('padding-top-0', 'text-left')}
+                  data-testid="add-another-irs-notice-button"
                   onClick={() => addAnotherIrsNoticeToFormSequence()}
                 >
                   <Icon

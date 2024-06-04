@@ -4,7 +4,7 @@ module "zip_handle_bounce" {
   handler_file   = "./web-api/src/lambdas/email/handleBounceNotificationsLambda.ts"
   handler_method = "handleBounceNotificationsLambda"
   lambda_name    = "bounce_handler_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "60"
 }
