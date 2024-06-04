@@ -2,6 +2,22 @@ import { loginAsPrivatePractitioner } from '../../../helpers/authentication/logi
 import { practitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/practitioner-creates-electronic-case';
 
 describe('Private practitioner views dashboard', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should display filing fee column', () => {
     loginAsPrivatePractitioner();
     practitionerCreatesElectronicCase().then(docketNumber => {
