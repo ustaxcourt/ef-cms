@@ -173,7 +173,7 @@ export const IrsNoticeUploadForm = connect(
               <DateSelector
                 defaultValue={noticeIssuedDate}
                 errorText={validationError.noticeIssuedDate}
-                id="notice-issued-date"
+                id={`notice-issued-date-${index}`}
                 label="Date IRS issued the notice"
                 maxDate={todayDate}
                 onBlur={() => {
@@ -216,6 +216,7 @@ export const IrsNoticeUploadForm = connect(
                 <input
                   autoCapitalize="none"
                   className="usa-input"
+                  data-testid={`irs-notice-tax-year-${index}`}
                   id="noticeIssuesTaxYear"
                   name="taxYear"
                   type="text"
@@ -250,7 +251,7 @@ export const IrsNoticeUploadForm = connect(
                 <DateSelector
                   defaultValue={noticeIssuedDate}
                   errorText={validationError.noticeIssuedDate}
-                  id="notice-issued-date"
+                  id={`notice-issued-date-${index}`}
                   label="Date IRS issued the notice"
                   maxDate={todayDate}
                   onBlur={() => {
