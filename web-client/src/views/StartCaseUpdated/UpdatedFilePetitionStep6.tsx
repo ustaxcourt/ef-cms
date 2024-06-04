@@ -183,6 +183,7 @@ function CaseInformation({ pdfPreviewUrl, petitionFormatted }) {
                         <Button
                           link
                           className="usa-link--external text-left mobile-text-wrap"
+                          data-testid="preview-petition-file-button-link"
                           href={pdfPreviewUrl}
                           rel="noopener noreferrer"
                           target="_blank"
