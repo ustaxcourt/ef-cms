@@ -12,7 +12,11 @@ export class BusinessContact extends ContactUpdated {
     return {
       ...super.getValidationRules(),
       placeOfLegalResidence: JoiValidationConstants.STRING.optional()
-        .valid(...Object.keys(US_STATES), ...Object.keys(US_STATES_OTHER))
+        .valid(
+          ...Object.keys(US_STATES),
+          ...Object.keys(US_STATES_OTHER),
+          'Other',
+        )
 
         .messages({ '*': 'Enter a place of business' }),
       secondaryName: JoiValidationConstants.STRING.max(500)
