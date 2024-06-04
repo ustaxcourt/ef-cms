@@ -4,7 +4,7 @@ module "api_lambda" {
   handler_file   = "./web-api/src/lambdas/api/api.ts"
   handler_method = "handler"
   lambda_name    = "api_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
@@ -134,7 +134,7 @@ module "cognito_authorizer_lambda" {
   handler_file   = "./web-api/src/lambdas/cognitoAuthorizer/cognito-authorizer.ts"
   handler_method = "handler"
   lambda_name    = "cognito_authorizer_lambda_${var.environment}_${var.current_color}"
-  role           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
+  role           = aws_iam_role.authorizer_lambda.arn
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
@@ -175,7 +175,7 @@ resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
   rest_api_id            = aws_api_gateway_rest_api.gateway_for_api.id
   authorizer_uri         = module.cognito_authorizer_lambda.invoke_arn
-  authorizer_credentials = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
+  authorizer_credentials = aws_iam_role.api_gateway_invocation_role.arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_get" {

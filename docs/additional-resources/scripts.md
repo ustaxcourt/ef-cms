@@ -10,7 +10,6 @@ The following scripts are used for local development and managing deployments to
 |`npm run init:api -- ENV`|Initializes the API code in your workspace to AWS.|
 |`npm run init:ui -- ENV`|Initializes the UI code in your workspace to AWS.|
 |`npm run deploy:api -- ENV`|Deploys the API code in your workspace to AWS.|
-|`npm run deploy:ui -- ENV`|Deploys the UI code in your workspace to AWS.|
 |`npm run reset-cases ENV DYNAMO_TABLE_NAME ELASTICSEARCH_ENDPOINT`|Removes all cases from DynamoDB and ElasticSearch for an environment in AWS.|
 |`npm run reindex:elasticsearch -- ENV DYNAMO_TABLE_NAME ELASTICSEARCH_ENDPOINT`|Deletes and recreates ElasticSearch indices and reindexes all DynamoDB records for an environment in AWS.|
 |`npm run destroy:ENV`|Removes all infrastructure resources and data for an environment in AWS.|

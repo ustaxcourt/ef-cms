@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "public_redirect" {
+resource "aws_s3_bucket" "public_redirect" { #DONE ALL COLORS
   bucket = "www.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.www_redirect_policy_bucket.json
@@ -10,15 +10,15 @@ resource "aws_s3_bucket" "public_redirect" {
   tags = {
     environment = var.environment
   }
-    server_side_encryption_configuration {
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-          sse_algorithm = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
-  
+
 }
 
 data "aws_iam_policy_document" "www_redirect_policy_bucket" {
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "www_redirect_policy_bucket" {
   }
 }
 
-resource "aws_cloudfront_distribution" "public_distribution_www" {
+resource "aws_cloudfront_distribution" "public_distribution_www" { #DONE ALL COLORS
   origin {
     domain_name = aws_s3_bucket.public_redirect.website_endpoint
     origin_id   = "www.${var.dns_domain}"
@@ -98,7 +98,7 @@ data "aws_route53_zone" "public_zone_www" {
   name = "${var.zone_name}."
 }
 
-resource "aws_route53_record" "public_www_redirect" {
+resource "aws_route53_record" "public_www_redirect" { #DONE ALL COLORS
   zone_id = data.aws_route53_zone.public_zone_www.zone_id
   name    = "www.${var.dns_domain}"
   type    = "A"

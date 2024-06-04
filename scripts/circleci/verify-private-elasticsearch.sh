@@ -12,7 +12,7 @@
 
 ENV="${1}"
 
-MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
+MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh "${ENV}")
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
 function check_es_exists() {
