@@ -36,6 +36,7 @@ export const OrderSearchForm = connect(
     return (
       <>
         <form
+          data-testid="order-search-container"
           onSubmit={e => {
             e.preventDefault();
             submitAdvancedSearchSequence();
