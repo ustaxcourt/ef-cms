@@ -122,7 +122,7 @@ else
   export CYPRESS_SMOKETEST_BUCKET="${EFCMS_DOMAIN}-email-inbox-${ENV}-us-east-1"
   DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
   export CYPRESS_DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
-  CYPRESS_MIGRATE=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
+  CYPRESS_MIGRATE=$(./scripts/migration/get-migrate-flag.sh "${ENV}")
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
 fi
 
