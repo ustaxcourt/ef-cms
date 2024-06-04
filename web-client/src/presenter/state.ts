@@ -678,7 +678,7 @@ export const baseState = {
   maintenanceMode: false,
   messagesInboxCount: 0,
   messagesPage: {
-    selectedMessages: [] as string[],
+    selectedMessages: new Map() as Map<string, boolean>,
   },
   messagesSectionCount: 0,
   modal: {

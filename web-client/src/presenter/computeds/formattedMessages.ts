@@ -62,9 +62,9 @@ export const formattedMessages = (
 
   const returnedMessages = messageFilterResults.filteredMessages.map(
     message => {
-      const isSelected = get(state.messagesPage.selectedMessages).includes(
-        message.messageId,
-      );
+      const isSelected =
+        get(state.messagesPage.selectedMessages).get(message.messageId) ||
+        false;
       return { ...message, isSelected };
     },
   );

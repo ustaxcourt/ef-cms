@@ -9,12 +9,11 @@ export const messagesIndividualInboxHelper = (
   isCompletionButtonEnabled: boolean;
 } => {
   const messagesInboxCount = get(state.messagesInboxCount);
-  const messagesSelectedCount = get(state.messagesPage.selectedMessages).length;
+  const messagesSelectedCount = get(state.messagesPage.selectedMessages).size;
 
   const allMessagesSelected = messagesInboxCount === messagesSelectedCount;
-  const someMessagesSelected =
-    messagesSelectedCount > 0 && messagesSelectedCount < messagesInboxCount;
-  const isCompletionButtonEnabled = allMessagesSelected || someMessagesSelected;
+  const someMessagesSelected = messagesSelectedCount > 0;
+  const isCompletionButtonEnabled = someMessagesSelected;
 
   return {
     allMessagesSelected,

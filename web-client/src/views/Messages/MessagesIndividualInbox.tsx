@@ -101,11 +101,18 @@ export const MessagesIndividualInbox = connect(
                   ref={selectAllCheckboxRef}
                   type="checkbox"
                   onChange={() => {
-                    setSelectedMessagesSequence({
-                      selectAll:
-                        messagesIndividualInboxHelper.someMessagesSelected ||
-                        !messagesIndividualInboxHelper.allMessagesSelected,
-                    });
+                    if (messagesIndividualInboxHelper.allMessagesSelected) {
+                      const selectNone = [];
+                      setSelectedMessagesSequence({ messages: selectNone });
+                      return;
+                    }
+                    const selectAll = formattedMessages.messages.map(
+                      message => ({
+                        messageId: message.messageId,
+                        selected: true,
+                      }),
+                    );
+                    setSelectedMessagesSequence({ messages: selectAll });
                   }}
                 />
               </th>
@@ -171,7 +178,12 @@ export const MessagesIndividualInbox = connect(
                       type="checkbox"
                       onChange={() => {
                         setSelectedMessagesSequence({
-                          messageId: message.messageId,
+                          messages: [
+                            {
+                              messageId: message.messageId,
+                              selected: !message.isSelected,
+                            },
+                          ],
                         });
                       }}
                     />
