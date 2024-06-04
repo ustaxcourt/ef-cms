@@ -48,7 +48,6 @@ import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
-import { documentUrlTranslator } from '@shared/business/utilities/documentUrlTranslator';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -527,9 +526,7 @@ const createTestApplicationContext = () => {
     convertBlobToUInt8Array: jest
       .fn()
       .mockImplementation(() => new Uint8Array([])),
-    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     filterCaseMetadata: jest.fn(),
-    getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),

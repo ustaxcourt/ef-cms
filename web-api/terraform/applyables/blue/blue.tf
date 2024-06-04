@@ -198,3 +198,16 @@ module "worker-west-blue" {
   }
   environment = var.environment
 }
+
+module "ui-blue" {
+  source                 = "../../modules/ui"
+  current_color          = "blue"
+  environment            = var.environment
+  dns_domain             = var.dns_domain
+  zone_name              = var.zone_name
+  viewer_protocol_policy = var.viewer_protocol_policy
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}

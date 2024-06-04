@@ -13,15 +13,10 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {
-    bucket         = "ustc-case-mgmt.flexion.us.terraform.deploys"
-    key            = "permissions-account.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "efcms-terraform-lock"
-  }
+  backend "s3" {}
 
   required_providers {
-    aws = "5.49.0"
+    aws = "5.52.0"
     opensearch = {
       source  = "opensearch-project/opensearch"
       version = "2.2.0"
@@ -73,7 +68,7 @@ module "dawson-developer-permissions" {
 }
 
 module "dynamsoft" {
-  source    = "../../modules/dynamsoft"
+  source    = "../../modules/dynamsoft-permissions"
   zone_name = var.zone_name
 }
 

@@ -32,5 +32,9 @@ export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
  
 npm run build:assets
 
-terraform init -upgrade
-terraform plan
+terraform init -upgrade -backend=true \
+ -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
+ -backend-config=key="permissions-account.tfstate" \
+ -backend-config=dynamodb_table="efcms-terraform-lock" \
+ -backend-config=region="us-east-1"
+terraform apply
