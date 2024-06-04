@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -7,6 +7,6 @@ terraform {
   }
 
   required_providers {
-    aws = "5.50.0"
+    aws = "5.52.0"
   }
 }

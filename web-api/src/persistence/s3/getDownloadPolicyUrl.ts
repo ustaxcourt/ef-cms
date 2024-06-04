@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const getDownloadPolicyUrl = ({
   applicationContext,
   filename,
@@ -5,7 +7,7 @@ export const getDownloadPolicyUrl = ({
   urlTtl = 120,
   useTempBucket = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   filename?: string;
   key: string;
   urlTtl?: number;
@@ -35,7 +37,7 @@ export const getDownloadPolicyUrl = ({
           return reject(new Error(err));
         }
         resolve({
-          url: applicationContext.documentUrlTranslator({
+          url: applicationContext.getUtilities().documentUrlTranslator({
             applicationContext,
             documentUrl: data,
             useTempBucket,

@@ -1,5 +1,5 @@
 import { isValidRequest } from '../../support/helpers';
-import { loginAsTestAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
+import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
 
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
@@ -11,7 +11,7 @@ describe('Messages UI Smoketests', () => {
       method: 'GET',
       url: '/messages/inbox/*',
     }).as('getMyMessages');
-    loginAsTestAdmissionsClerk();
+    loginAsAdmissionsClerk('testAdmissionsClerk');
     cy.wait('@getMyMessages').then(isValidRequest);
 
     cy.intercept({
