@@ -9,10 +9,12 @@ describe('Advanced Search - Judge Accessibility', () => {
 
   it('should be free of a11y issues', () => {
     loginAsColvin();
+
     cy.visit('/search');
-    cy.get('[data-testid="case-search-by-name"]').should('exist');
+    cy.get('[data-testid="case-search-by-name-container"]').should('exist');
 
     cy.injectAxe();
+
     cy.checkA11y(
       undefined,
       {
@@ -28,10 +30,12 @@ describe('Advanced Search - Judge Accessibility', () => {
 
   it('should be free of a11y issues when no matches', () => {
     loginAsColvin();
+
     cy.visit('/search/no-matches');
     cy.contains('No Matches Found');
 
     cy.injectAxe();
+
     cy.checkA11y(
       undefined,
       {
@@ -46,6 +50,7 @@ describe('Advanced Search - Judge Accessibility', () => {
 
   it('should be free of a11y issues when searching by petitioner name', () => {
     loginAsColvin();
+
     cy.visit('/search');
     cy.get('#petitioner-name').type('cairo');
     cy.get('#advanced-search-button').click();
@@ -65,6 +70,7 @@ describe('Advanced Search - Judge Accessibility', () => {
 
   it('should be free of a11y issues when searching by practitioner name', () => {
     loginAsColvin();
+
     cy.visit('/search');
     cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('#practitioner-name').type('test');
