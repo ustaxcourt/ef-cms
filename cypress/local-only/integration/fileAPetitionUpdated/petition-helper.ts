@@ -58,6 +58,14 @@ export function fillPetitionFileInformation(filePath: string) {
   cy.get('[data-testid="step-1-next-button"]').click();
 }
 
+export function fillGeneratePetitionFileInformation() {
+  cy.get('[data-testid="petition-reason--1"]').focus();
+  cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
+  cy.get('[data-testid="petition-fact--1"]').focus();
+  cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
+  cy.get('[data-testid="step-1-next-button"]').click();
+}
+
 export function fillPetitionerInformation() {
   cy.get('[data-testid="filing-type-0"').click();
   const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
@@ -114,6 +122,17 @@ export function fillIrsNoticeInformation(filePath: string) {
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
+}
+
+export function fillIrsNotice(index: number, filePath: string) {
+  cy.get(`[data-testid="irs-notice-upload-${index}"]`).attachFile(filePath);
+  cy.get('[data-testid="case-type-select"]').eq(index).select('Deficiency');
+  cy.get(`[data-testid="irs-notice-tax-year-${index}"]`).type(
+    `Tax Year ${index}`,
+  );
+  cy.get(`input[data-testid="notice-issued-date-${index}-picker"]`)
+    .eq(1)
+    .type('05/02/2024');
 }
 
 export function fillCaseProcedureInformation() {
