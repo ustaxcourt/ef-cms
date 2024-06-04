@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,

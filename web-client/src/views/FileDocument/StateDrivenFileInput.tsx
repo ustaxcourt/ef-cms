@@ -22,6 +22,7 @@ type StateDriveFileInputProps = {
 const deps = {
   constants: state.constants,
   form: state.form,
+  ignoreSizeKey: props.ignoreSizeKey,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
 };
