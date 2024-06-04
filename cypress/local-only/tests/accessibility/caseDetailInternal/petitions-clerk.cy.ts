@@ -345,7 +345,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         loginAsPetitionsClerk();
 
         cy.visit('/case-detail/101-19/edit-other-statistics');
-        cy.contains('Edit Other Statistics');
+        cy.contains('Edit Other Statistics').should('exist');
 
         cy.injectAxe();
 

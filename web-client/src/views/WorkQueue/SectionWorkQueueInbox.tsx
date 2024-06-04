@@ -47,24 +47,23 @@ const SectionWorkQueueTable = connect(
               <th className="message-select-control select-all-checkbox">
                 {showSelectAllCheckbox && (
                   <>
+                    <input
+                      aria-label="select all work items"
+                      checked={workitemAllCheckbox}
+                      className="usa-checkbox__input"
+                      id="workitem-select-all-checkbox"
+                      name="workitem-select-all-checkbox"
+                      type="checkbox"
+                      value="workitem-select-all-checkbox"
+                      onChange={() => toggleAllWorkItemCheckboxChangeSequence()}
+                    />
                     <label
                       className="padding-top-05 usa-checkbox__label"
                       data-testid="checkbox-select-all-workitems"
                       htmlFor="workitem-select-all-checkbox"
                       id="label-workitem-select-all-checkbox"
                     >
-                      <input
-                        aria-label="select all work items"
-                        checked={workitemAllCheckbox}
-                        className="usa-checkbox__input"
-                        id="workitem-select-all-checkbox"
-                        name="workitem-select-all-checkbox"
-                        type="checkbox"
-                        value="workitem-select-all-checkbox"
-                        onChange={() =>
-                          toggleAllWorkItemCheckboxChangeSequence()
-                        }
-                      />
+                      {''}
                     </label>
                   </>
                 )}
@@ -119,25 +118,26 @@ SectionWorkQueueTable.Row = React.memo(
           {showSelectColumn && (
             <td className="message-select-control">
               <div className="usa-checkbox">
+                <input
+                  aria-label="Select work item"
+                  checked={item.selected}
+                  className="usa-checkbox__input"
+                  data-testid="select-work-item"
+                  id={item.workItemId}
+                  type="checkbox"
+                  onChange={() => {
+                    selectWorkItemSequence({
+                      workItem: item,
+                    });
+                  }}
+                />
                 <label
                   className="padding-top-05 usa-checkbox__label"
                   data-testid="checkbox-assign-work-item"
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
                 >
-                  <input
-                    aria-label="Select work item"
-                    checked={item.selected}
-                    className="usa-checkbox__input"
-                    data-testid="select-work-item"
-                    id={item.workItemId}
-                    type="checkbox"
-                    onChange={() => {
-                      selectWorkItemSequence({
-                        workItem: item,
-                      });
-                    }}
-                  />
+                  {''}
                 </label>
               </div>
             </td>
