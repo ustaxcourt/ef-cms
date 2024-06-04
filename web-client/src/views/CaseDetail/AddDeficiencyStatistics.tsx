@@ -11,20 +11,15 @@ import React from 'react';
 
 export const AddDeficiencyStatistics = connect(
   {
-    calculatePenaltiesSequence: sequences.calculatePenaltiesSequence,
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     showModal: state.modal.showModal,
     submitAddDeficiencyStatisticsSequence:
       sequences.submitAddDeficiencyStatisticsSequence,
-    validateAddDeficiencyStatisticsSequence:
-      sequences.validateAddDeficiencyStatisticsSequence,
   },
   function AddDeficiencyStatistics({
-    calculatePenaltiesSequence,
     cancelAddStatisticSequence,
     showModal,
     submitAddDeficiencyStatisticsSequence,
-    validateAddDeficiencyStatisticsSequence,
   }) {
     return (
       <>
@@ -54,14 +49,7 @@ export const AddDeficiencyStatistics = connect(
             </Button>
           </div>
         </section>
-        {showModal === 'CalculatePenaltiesModal' && (
-          <CalculatePenaltiesModal
-            confirmSequenceOverride={async ({ penaltyAmountType }) => {
-              await calculatePenaltiesSequence({ penaltyAmountType });
-              await validateAddDeficiencyStatisticsSequence();
-            }}
-          />
-        )}
+        {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
       </>
     );
   },
