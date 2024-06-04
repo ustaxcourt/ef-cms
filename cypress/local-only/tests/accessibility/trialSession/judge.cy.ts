@@ -77,7 +77,7 @@ describe('Trial Sessions Page - Judge Accessibility', () => {
       cy.get('#print-session-working-copy').click();
       cy.get('.modal-screen').should('exist');
       cy.get('#modal-button-confirm').click();
-      cy.get('.pdf-preview-viewer').should('exist');
+      cy.get('[data-testid="back-to-working-copy-button"]').should('exist');
 
       cy.injectAxe();
 
