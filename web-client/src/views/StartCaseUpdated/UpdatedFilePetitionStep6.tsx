@@ -187,7 +187,8 @@ function CaseInformation({ pdfPreviewUrl, petitionFormatted }) {
                           rel="noopener noreferrer"
                           target="_blank"
                         >
-                          Preview in full screen
+                          {petitionFormatted?.petitionFile?.name ||
+                            'Preview in full screen'}
                         </Button>
                       </div>
                     </div>
