@@ -78,8 +78,7 @@ export const MessagesIndividualInbox = connect(
               className="action-button"
               data-testid="message-batch-mark-as-complete"
               disabled={
-                // !messagesIndividualInboxHelper.isDownloadLinkEnabled
-                true
+                !messagesIndividualInboxHelper.isCompletionButtonEnabled
               }
               icon="check-circle"
               id="button-batch-complete"
