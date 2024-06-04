@@ -261,12 +261,16 @@ app.use((req, res, next) => {
    * This env variable is manually set right before a color switch via the disable-old-traffic.ts file
    * to prevent any traffic from hitting certain colors during a deployment.
    */
-  if (process.env.PREVENT_ALL_TRAFFIC) {
+  const shouldForceRefresh =
+    process.env.DISABLE_ALL_TRAFFIC === 'true' && !req.headers['x-test-user'];
+
+  if (shouldForceRefresh) {
     res.set('X-Force-Refresh', 'true');
     res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
     res.status(500).send('this api is disabled due to a deployment');
     return;
   }
+
   next();
 });
 app.use(logger());
