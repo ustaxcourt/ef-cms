@@ -32,16 +32,6 @@ This deployment sets up the back end of the application.
 npm run deploy:api ${environment}
 ```
 
-### Web Client
-
-This deployment publishes the web client to CloudFront.
-
-`/web-client/terraform/bin/deploy-app.sh` may be executed from the project root with this command:
-
-```shell
-npm run deploy:ui ${environment}
-```
-
 ## AWS Secrets Manager
 
 To enable painless deployments from a developer's local machine, environment variables used for the various environments 
