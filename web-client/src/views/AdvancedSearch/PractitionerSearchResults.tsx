@@ -13,7 +13,6 @@ export const PractitionerSearchResults = connect(
       sequences.submitPractitionerNameSearchSequence,
   },
   function PractitionerSearchResults({
-    PRACTITIONER_SEARCH_PAGE_SIZE,
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
@@ -25,23 +24,21 @@ export const PractitionerSearchResults = connect(
           <>
             <h1 className="margin-top-4">Search Results</h1>
             <div ref={paginatorTop}>
-              {practitionerSearchHelper.numberOfResults &&
-                practitionerSearchHelper.numberOfResults >
-                  PRACTITIONER_SEARCH_PAGE_SIZE && (
-                  <Paginator
-                    breakClassName="hide"
-                    forcePage={practitionerSearchHelper.activePage || 0}
-                    marginPagesDisplayed={0}
-                    pageCount={practitionerSearchHelper.pageCount || 0}
-                    pageRangeDisplayed={0}
-                    onPageChange={pageChange => {
-                      submitPractitionerNameSearchSequence({
-                        selectedPage: pageChange.selected,
-                      });
-                      focusPaginatorTop(paginatorTop);
-                    }}
-                  />
-                )}
+              {practitionerSearchHelper.showPaginator && (
+                <Paginator
+                  breakClassName="hide"
+                  forcePage={practitionerSearchHelper.activePage}
+                  marginPagesDisplayed={0}
+                  pageCount={practitionerSearchHelper.pageCount}
+                  pageRangeDisplayed={0}
+                  onPageChange={pageChange => {
+                    submitPractitionerNameSearchSequence({
+                      selectedPage: pageChange.selected,
+                    });
+                    focusPaginatorTop(paginatorTop);
+                  }}
+                />
+              )}
             </div>
             <div className="text-right margin-bottom-2">
               <span className="text-bold" id="custom-case-result-count">
@@ -99,23 +96,21 @@ export const PractitionerSearchResults = connect(
               </tbody>
             </table>
             <div ref={paginatorBottom}>
-              {practitionerSearchHelper.numberOfResults &&
-                practitionerSearchHelper.numberOfResults >
-                  PRACTITIONER_SEARCH_PAGE_SIZE && (
-                  <Paginator
-                    breakClassName="hide"
-                    forcePage={practitionerSearchHelper.activePage || 0}
-                    marginPagesDisplayed={0}
-                    pageCount={practitionerSearchHelper.pageCount || 0}
-                    pageRangeDisplayed={0}
-                    onPageChange={pageChange => {
-                      submitPractitionerNameSearchSequence({
-                        selectedPage: pageChange.selected,
-                      });
-                      focusPaginatorTop(paginatorTop);
-                    }}
-                  />
-                )}
+              {practitionerSearchHelper.showPaginator && (
+                <Paginator
+                  breakClassName="hide"
+                  forcePage={practitionerSearchHelper.activePage}
+                  marginPagesDisplayed={0}
+                  pageCount={practitionerSearchHelper.pageCount}
+                  pageRangeDisplayed={0}
+                  onPageChange={pageChange => {
+                    submitPractitionerNameSearchSequence({
+                      selectedPage: pageChange.selected,
+                    });
+                    focusPaginatorTop(paginatorTop);
+                  }}
+                />
+              )}
             </div>
           </>
         )}
