@@ -10,9 +10,11 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
 
   it('should be free of a11y issues', () => {
     loginAsPrivatePractitioner();
+
     cy.visit('/case-detail/102-19/request-access');
     cy.get('[data-testid="request-access-submit-document"]').should('exist');
     cy.injectAxe();
+
     cy.checkA11y(
       undefined,
       {
@@ -27,11 +29,13 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
 
   it('should be free of a11y issues when requesting access with supporting document', () => {
     loginAsPrivatePractitioner();
+
     cy.visit('/case-detail/102-19/request-access');
     cy.get('[data-testid="request-access-submit-document"]').should('exist');
-    cy.get('.select-react-element__input-container').should('exist');
-    cy.get('.select-react-element__input-container').click({ force: true });
-    cy.get('#react-select-2-option-2').click({ force: true });
+    cy.get('[data-testid="document-type"]').click();
+    cy.get('[data-testid="document-type"]').type(
+      'Motion to Substitute Parties and Change Caption{enter}',
+    );
     cy.get('#add-supporting-document-button').click();
     cy.get('#supporting-document-0').select('Affidavit in Support');
     cy.get('#supportingDocuments-0-certificateOfService').click({
@@ -40,6 +44,7 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
     cy.get('#supportingDocuments-0-service-date-picker').should('exist');
 
     cy.injectAxe();
+
     cy.checkA11y(
       undefined,
       {
