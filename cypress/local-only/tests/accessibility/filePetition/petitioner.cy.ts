@@ -98,7 +98,6 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       );
     });
 
-    // TODO aria modal issues
     it('should be free of a11y issues when filing with spouse', () => {
       loginAsPetitioner();
       cy.visit('/file-a-petition-pa11y/step-3');
