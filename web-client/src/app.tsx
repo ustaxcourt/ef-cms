@@ -262,6 +262,10 @@ const app = {
       returnSequencePromise: true,
     });
 
+    applicationContext.setForceRefreshCallback(async () => {
+      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+    });
+
     applicationContext
       .getUseCases()
       .getCurrentVersionInteractor(applicationContext)

@@ -389,6 +389,8 @@ const setCurrentUserToken = newToken => {
   token = newToken;
 };
 
+let forceRefreshCallback: () => {};
+
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
@@ -660,7 +662,12 @@ const applicationContext = {
   getCurrentUserToken,
   getEnvironment,
   getFileReaderInstance: () => new FileReader(),
-  getHttpClient,
+  getForceRefreshCallback() {
+    return forceRefreshCallback;
+  },
+  getHttpClient: () => {
+    return getHttpClient(forceRefreshCallback);
+  },
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
@@ -816,6 +823,9 @@ const applicationContext = {
   },
   setCurrentUser,
   setCurrentUserToken,
+  setForceRefreshCallback(callback) {
+    forceRefreshCallback = callback;
+  },
   setTimeout: (callback, timeout) => setTimeout(callback, timeout),
 };
 
