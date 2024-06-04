@@ -78,7 +78,7 @@ export const UpdatedFilePetitionStep5 = connect(
                 data-testid="stin-file"
                 id="stin-file"
                 name="stinFile"
-                updateFormValueSequence="updateStartCaseFormValueSequence"
+                updateFormValueSequence="updateFormValueUpdatedSequence"
                 validationSequence="validateUpdatedFilePetitionStep5Sequence"
               />
             </FormGroup>
