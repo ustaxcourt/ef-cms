@@ -39,7 +39,7 @@ module "elasticsearch_alpha" {
   alert_sns_topic_arn = var.alert_sns_topic_arn
 
   providers = {
-    aws.us-east-1 = aws.us-east-1
+    aws = aws.us-east-1
   }
 }
 
@@ -62,7 +62,7 @@ module "elasticsearch_beta" {
   alert_sns_topic_arn = var.alert_sns_topic_arn
 
   providers = {
-    aws.us-east-1 = aws.us-east-1
+    aws = aws.us-east-1
   }
 }
 
