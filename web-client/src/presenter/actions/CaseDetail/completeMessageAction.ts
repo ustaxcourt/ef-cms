@@ -16,14 +16,18 @@ export const completeMessageAction = async ({
   const form = get(state.modal.form);
   const { mostRecentMessage } = props;
 
-  const { parentMessageId } = await applicationContext
+  await applicationContext
     .getUseCases()
     .completeMessageInteractor(applicationContext, {
-      parentMessageId: mostRecentMessage.parentMessageId,
-      ...form,
+      messages: [
+        {
+          messageId: form.messageId,
+          parentMessageId: mostRecentMessage.parentMessageId,
+        },
+      ],
     });
 
   return {
-    parentMessageId,
+    parentMessageId: mostRecentMessage.parentMessageId,
   };
 };

@@ -17,8 +17,10 @@ import { orderBy } from 'lodash';
  */
 export const completeMessageInteractor = async (
   applicationContext: IApplicationContext,
-  { message, parentMessageId }: { message: string; parentMessageId: string },
-) => {
+  { messages }: { messages: { messageId: string; parentMessageId: string }[] },
+): Promise<void> => {
+  const { messageId } = messages[0];
+  const { parentMessageId } = messages[0];
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -34,20 +36,20 @@ export const completeMessageInteractor = async (
     parentMessageId,
   });
 
-  const messages = await applicationContext
+  const messageThread = await applicationContext
     .getPersistenceGateway()
     .getMessageThreadByParentId({
       applicationContext,
       parentMessageId,
     });
 
-  const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+  const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
 
   const updatedMessage = new Message(mostRecentMessage, {
     applicationContext,
   }).validate();
 
-  updatedMessage.markAsCompleted({ message, user });
+  updatedMessage.markAsCompleted({ message: messageId, user });
 
   const validatedRawMessage = updatedMessage.validate().toRawObject();
 
@@ -55,6 +57,4 @@ export const completeMessageInteractor = async (
     applicationContext,
     message: validatedRawMessage,
   });
-
-  return validatedRawMessage;
 };
