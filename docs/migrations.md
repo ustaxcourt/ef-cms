@@ -15,7 +15,7 @@ Our team invested a lot of time designing and implementing something we call the
 We are going to do a walkthrough tutorial in this section to explain how you can write a migration script.  For the sake of this walk through, let's pretend we need to write a migration script which adds a new required field to a Case adjourned.
 
 
-First, we'd want to create a new migration script called `0005-add-case-adjourned-field.js` and put it in the `web-api/workflow-terraform/migration/main/lambdas/migrations` directory.  Note that the `0005` numeric prefix is just for us developers to understand the ordering of these scripts; our system doesn't automatically sort these scripts by that prefix.  We will name the script with a numeric prefix and also a descriptive name.
+First, we'd want to create a new migration script called `0005-add-case-adjourned-field.js` and put it in the `web-api/src/lambdas/migration/migrations` directory.  Note that the `0005` numeric prefix is just for us developers to understand the ordering of these scripts; our system doesn't automatically sort these scripts by that prefix.  We will name the script with a numeric prefix and also a descriptive name.
 
 Second, we will need to implement a `migrateItems` function which will take in an array of dynamo records and modify them based on certain criteria.  In this scenario, we only care about modifying the records that are cases.  Often when dealing with case migrations we want to fetch the entire case and aggregate the items together into a single case object so we can validate the entity.  
 
@@ -87,7 +87,7 @@ exports.migrateItems = migrateItems;
 
 Keep in mind this migration script processes each dynamo record individually; therefore, any item put into that `itemsAfter` array must be a dynamodb record containing a `pk`, `sk`.  The main reason we fetch the entire case is so we can validate the case after modifying it's properties.
 
-After you write your migration script, there is one more additional step you must do to get everything setup.  There is a file called `web-api/workflow-terraform/migration/main/lambdas/migrationsToRun.ts` which contains an array of objects that must be in the order of which you want the migration scripts invoked.  Be sure to add your new migration script to this file so that the blue-green migration knows what to run.
+After you write your migration script, there is one more additional step you must do to get everything setup.  There is a file called `web-api/src/lambdas/migration/migrationsToRun.ts` which contains an array of objects that must be in the order of which you want the migration scripts invoked.  Be sure to add your new migration script to this file so that the blue-green migration knows what to run.
 
 Here is an example of that file:
 
@@ -113,7 +113,7 @@ If learning via a video if more your style, we have a short recording explaining
 
 ## Keeping Track of Migrations
 
-When our CI/CD process runs the migration process, it keeps track of which migration scripts have ran inside our `efcms-$ENV-$VERSION` table using the `./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts` node script.  This script looks at the migration directory and writes entries into dynamo to track the migrations that have ran.  An example of one of these records looks like this:
+When our CI/CD process runs the migration process, it keeps track of which migration scripts have ran inside our `efcms-$ENV-$VERSION` table using the `./scripts/migration/track-successful-migrations.ts` node script.  This script looks at the migration directory and writes entries into dynamo to track the migrations that have ran.  An example of one of these records looks like this:
 
 ```javascript
 {
@@ -193,7 +193,7 @@ To help further understand these terms, take a look at the following diagram whi
 
 ![Blue-Green Migration Architecture](https://user-images.githubusercontent.com/1868782/117465361-9f83e400-af1f-11eb-8844-b14fefa2c3d2.png)
 
-As an overview of this diagram, when we do a deploy in circle, part of the CI/CD pipeline will check using the `./web-api/workflow-terraform/migration/bin/is-migration-needed.ts` script if we need to run a new migration script.  If a new migration is needed, CI/CD will run our  `npm run deploy:migration` script which will run terraform and create some of the resources displayed in this diagram above.  For example, this terraform deploy will create the SQS queues, the dead letter queues, the migration lambda, the live migration streams, and the segment migration lambda, etc.  
+As an overview of this diagram, when we do a deploy in circle, part of the CI/CD pipeline will check using the `./scripts/migration/is-migration-needed.ts` script if we need to run a new migration script.  If a new migration is needed, CI/CD will run our  `npm run deploy:migration` script which will run terraform and create some of the resources displayed in this diagram above.  For example, this terraform deploy will create the SQS queues, the dead letter queues, the migration lambda, the live migration streams, and the segment migration lambda, etc.  
 
 ?> Please checkout our [Dawson's Terraform documentation](terraform?id=migration-terraform) for more information about terraform and our project.
 
