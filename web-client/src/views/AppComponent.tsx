@@ -48,6 +48,7 @@ import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
+import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -151,6 +152,7 @@ const pages = {
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
+  ErrorView500,
   FileDocumentWizard,
   FilePetitionSuccess,
   ForgotPassword,
