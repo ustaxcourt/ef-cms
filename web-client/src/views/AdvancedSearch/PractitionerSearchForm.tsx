@@ -29,7 +29,10 @@ export const PractitionerSearchForm = connect(
             </div>
           </div>
         )}
-        <div className="grid-row grid-gap-6">
+        <div
+          className="grid-row grid-gap-6"
+          data-testid="practitioner-search-container"
+        >
           <div className="grid-col-6 right-gray-border">
             <PractitionerSearchByName
               submitPractitionerBarNumberSearchSequence={

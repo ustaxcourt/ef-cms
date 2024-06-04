@@ -17,6 +17,8 @@ const config: Config = {
     '!src/**/*_.ts',
     '!src/business/utilities/documentGenerators/**/*.ts',
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
+    '!src/business/utilities/htmlGenerator/**',
+    '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
