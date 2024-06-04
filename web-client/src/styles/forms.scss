@@ -228,16 +228,28 @@ select.case-status {
 }
 
 div.usa-radio.usa-radio__inline {
-  display: inline;
+  display: inline; 
 
   .usa-radio__label {
-    padding-right: 2rem;
+    padding-right: 2rem; 
 
     &.smaller-padding-right {
-      padding-right: 1rem;
+      padding-right: 1rem; 
     }
   }
 }
+
+@media (max-width: ($medium-screen - 280px)) { 
+  div.usa-radio.usa-radio__inline {
+    display: block;
+  }
+  
+    .usa-radio__label {
+      padding-right: 0; 
+    }
+
+}
+
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
