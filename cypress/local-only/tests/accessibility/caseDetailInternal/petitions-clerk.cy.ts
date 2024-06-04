@@ -570,7 +570,6 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         );
       });
 
-      // TODO Sealed Icon need role img
       it('should be free of a11y issues for sealed addresses', () => {
         loginAsPetitionsClerk();
 
