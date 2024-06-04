@@ -47,7 +47,7 @@ export const BeforeStartingCase = connect(
           </div>
         </div>
         <section className="usa-section grid-container">
-          <h3>How to Create a Case</h3>
+          <h2>How to Create a Case</h2>
           <WarningNotificationComponent
             alertWarning={{
               message:
@@ -76,42 +76,45 @@ export const BeforeStartingCase = connect(
                     Internal Revenue Service (IRS). There are three methods to
                     add the Petition:
                   </li>
-                  <ul className="margin-top-0">
-                    <li>
-                      Answer some questions and have DAWSON create the Petition.
-                    </li>
-                    <li>
-                      {
-                        "Complete and upload the Court's standard Petition form. "
-                      }
-                      <Button
-                        link
-                        className="usa-link--external text-left mobile-text-wrap margin-left-1"
-                        href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
-                        icon="file-pdf"
-                        iconColor="blue"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Petition form (T.C. Form 2)
-                      </Button>
-                    </li>
-                    <li>
-                      Upload your own Petition that complies with the
-                      requirements of the{' '}
-                      <Button
-                        link
-                        className="usa-link--external text-left mobile-text-wrap"
-                        href="https://www.ustaxcourt.gov/rules.html"
-                        iconColor="blue"
-                        overrideMargin="margin-right-1"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Tax Court Rules of Practice and Procedure.
-                      </Button>
-                    </li>
-                  </ul>
+                  <li className="no-list-style">
+                    <ul className="margin-top-0">
+                      <li>
+                        Answer some questions and have DAWSON create the
+                        Petition.
+                      </li>
+                      <li>
+                        {
+                          "Complete and upload the Court's standard Petition form. "
+                        }
+                        <Button
+                          link
+                          className="usa-link--external text-left mobile-text-wrap margin-left-1"
+                          href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
+                          icon="file-pdf"
+                          iconColor="blue"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          Petition form (T.C. Form 2)
+                        </Button>
+                      </li>
+                      <li>
+                        Upload your own Petition that complies with the
+                        requirements of the{' '}
+                        <Button
+                          link
+                          className="usa-link--external text-left mobile-text-wrap"
+                          href="https://www.ustaxcourt.gov/rules.html"
+                          iconColor="blue"
+                          overrideMargin="margin-right-1"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          Tax Court Rules of Practice and Procedure.
+                        </Button>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
               <div className="petitioner-label">2. Upload IRS Notice(s)</div>
@@ -197,11 +200,7 @@ export const BeforeStartingCase = connect(
             </div>
           </div>
           <div className="grid-row grid-gap margin-top-20">
-            <Accordion
-              className="petitioner-accordion-title"
-              headingLevel="3"
-              role="listitem"
-            >
+            <Accordion className="petitioner-accordion-title" headingLevel="3">
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"
                 key="Are you filing jointly with a spouse?"
@@ -225,11 +224,7 @@ export const BeforeStartingCase = connect(
                 </div>
               </AccordionItem>
             </Accordion>
-            <Accordion
-              className="petitioner-accordion-title"
-              headingLevel="3"
-              role="listitem"
-            >
+            <Accordion className="petitioner-accordion-title" headingLevel="3">
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"
                 key="Are you filing on behalf of someone else?"
@@ -254,11 +249,7 @@ export const BeforeStartingCase = connect(
                 </div>
               </AccordionItem>
             </Accordion>
-            <Accordion
-              className="petitioner-accordion-title"
-              headingLevel="3"
-              role="listitem"
-            >
+            <Accordion className="petitioner-accordion-title" headingLevel="3">
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"
                 key="Are you filing for a business?"
