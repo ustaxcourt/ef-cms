@@ -25,6 +25,13 @@ const getAllCasesOpenedInYear = async ({
           bool: {
             must: [
               {
+                term: {
+                  'entityName.S': {
+                    value: 'Case',
+                  },
+                },
+              },
+              {
                 range: {
                   'receivedAt.S': {
                     gte: validateDateAndCreateISO({
