@@ -1204,8 +1204,7 @@ export const presenterSequences = {
   setSelectedBatchIndexSequence:
     setSelectedBatchIndexSequence as unknown as Function,
   setSelectedDocumentsForDownloadSequence,
-  setSelectedMessagesSequence:
-    setSelectedMessagesSequence as unknown as Function,
+  setSelectedMessagesSequence,
   setTrialSessionCalendarSequence:
     setTrialSessionCalendarSequence as unknown as Function,
   setViewerCorrespondenceToDisplaySequence:
