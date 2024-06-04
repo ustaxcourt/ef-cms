@@ -1,7 +1,11 @@
-import type { SES } from 'aws-sdk';
+import {
+  type SESClient,
+  SendEmailCommand,
+  type SendEmailCommandOutput,
+} from '@aws-sdk/client-ses';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const sendEmailToUser = async (
+export const sendEmailToUser = (
   applicationContext: ServerApplicationContext,
   {
     body,
@@ -12,23 +16,30 @@ export const sendEmailToUser = async (
     subject: string;
     to: string;
   },
-): Promise<void> => {
-  await (applicationContext.getEmailClient() as SES)
-    .sendEmail({
-      Destination: {
-        ToAddresses: [to],
-      },
-      Message: {
-        Body: {
-          Html: {
-            Data: body,
-          },
-        },
-        Subject: {
-          Data: subject,
+): Promise<SendEmailCommandOutput> => {
+  const charset = 'UTF-8';
+  const cmd = new SendEmailCommand({
+    Destination: {
+      CcAddresses: [],
+      ToAddresses: [to],
+    },
+    Message: {
+      Body: {
+        Html: {
+          Charset: charset,
+          Data: body,
         },
       },
-      Source: applicationContext.environment.emailFromAddress,
-    })
-    .promise();
+      Subject: {
+        Charset: charset,
+        Data: subject,
+      },
+    },
+    ReplyToAddresses: [],
+    Source: applicationContext.environment.emailFromAddress,
+  });
+
+  const sesClient = applicationContext.getEmailClient() as SESClient;
+  const ret = sesClient.send(cmd);
+  return ret;
 };
