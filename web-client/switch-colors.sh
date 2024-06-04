@@ -30,9 +30,9 @@ UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-
 aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --enabled
 
 # For the following lambdas, set PREVENT_ALL_TRAFFIC=true in env
-npx ts-node --transpile-only ./scripts/deployment/disable-old-traffic.ts "api_async_${ENV}_${CURRENT_COLOR}"
-npx ts-node --transpile-only ./scripts/deployment/disable-old-traffic.ts "api_${ENV}_${CURRENT_COLOR}"
-npx ts-node --transpile-only ./scripts/deployment/disable-old-traffic.ts "websockets_connect_${ENV}_${CURRENT_COLOR}"
+npx ts-node --transpile-only ./scripts/deployment/enable-new-traffic.ts "api_async_${ENV}_${DEPLOYING_COLOR}"
+npx ts-node --transpile-only ./scripts/deployment/enable-new-traffic.ts "api_${ENV}_${DEPLOYING_COLOR}"
+npx ts-node --transpile-only ./scripts/deployment/enable-new-traffic.ts "websockets_connect_${ENV}_${DEPLOYING_COLOR}"
 
 # API_FUNCTION_NAME="api-${ENV}-${CURRENT_COLOR}"
 # Run a .ts script that appends an env variable to the lambda without
