@@ -59,7 +59,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     if (!title) {
       return null;
     }
-    const anchorProps = {
+    const buttonProps = {
       'aria-controls': itemContentId,
       'aria-expanded': expandedText,
       className: 'usa-accordion__button grid-container',
@@ -80,7 +80,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     return (
       <>
         <HeadingElement className={customClassName || 'usa-accordion__heading'}>
-          <a {...anchorProps}>
+          <button {...buttonProps}>
             <div className="grid-row">
               {displayIcon && (
                 <span className="grid-col-auto">
@@ -100,7 +100,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
                 <div className={titleClassName}>{title}</div>
               </NonMobile>
             </div>
-          </a>
+          </button>
         </HeadingElement>
         {isActiveItem && (
           <div

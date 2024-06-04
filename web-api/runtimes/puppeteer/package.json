@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@sparticuz/chromium": "123.0.1",
-    "pug": "3.0.2",
+    "pug": "3.0.3",
     "puppeteer-core": "22.6.5",
-    "sass": "1.77.0"
+    "sass": "1.77.4"
   },
   "scripts": {},
   "main": "index.js",
