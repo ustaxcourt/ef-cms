@@ -75,4 +75,7 @@ variable "slack_webhook_url" {
   type = string
 }
 
-
+variable "viewer_protocol_policy" {
+  type    = string
+  default = "redirect-to-https"
+}
