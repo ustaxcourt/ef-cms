@@ -12,7 +12,6 @@ import React from 'react';
 
 export const EditDeficiencyStatistic = connect(
   {
-    calculatePenaltiesSequence: sequences.calculatePenaltiesSequence,
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     clearModalSequence: sequences.clearModalSequence,
     deleteDeficiencyStatisticsSequence:
@@ -23,11 +22,8 @@ export const EditDeficiencyStatistic = connect(
     showModal: state.modal.showModal,
     submitEditDeficiencyStatisticSequence:
       sequences.submitEditDeficiencyStatisticSequence,
-    validateAddDeficiencyStatisticsSequence:
-      sequences.validateAddDeficiencyStatisticsSequence,
   },
   function EditDeficiencyStatistic({
-    calculatePenaltiesSequence,
     cancelAddStatisticSequence,
     clearModalSequence,
     deleteDeficiencyStatisticsSequence,
@@ -35,7 +31,6 @@ export const EditDeficiencyStatistic = connect(
     openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal,
     submitEditDeficiencyStatisticSequence,
-    validateAddDeficiencyStatisticsSequence,
   }) {
     return (
       <>
@@ -81,14 +76,7 @@ export const EditDeficiencyStatistic = connect(
             </Button>
           </div>
         </section>
-        {showModal === 'CalculatePenaltiesModal' && (
-          <CalculatePenaltiesModal
-            confirmSequenceOverride={async () => {
-              await calculatePenaltiesSequence();
-              await validateAddDeficiencyStatisticsSequence();
-            }}
-          />
-        )}
+        {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
         {showModal === 'ConfirmDeleteDeficiencyStatisticsModal' && (
           <ConfirmModal
             cancelLabel="Cancel"

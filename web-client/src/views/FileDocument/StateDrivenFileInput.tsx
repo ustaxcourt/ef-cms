@@ -116,7 +116,7 @@ export const StateDrivenFileInput = connect<
                   value: null,
                 });
                 updateFormValueSequence({
-                  key: `${fileInputName}Size`,
+                  key: ignoreSizeKey ? fileInputName : `${fileInputName}Size`,
                   property: 'size',
                   value: null,
                 });

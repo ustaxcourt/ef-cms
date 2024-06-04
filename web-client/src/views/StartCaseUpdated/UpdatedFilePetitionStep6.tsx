@@ -183,11 +183,13 @@ function CaseInformation({ pdfPreviewUrl, petitionFormatted }) {
                         <Button
                           link
                           className="usa-link--external text-left mobile-text-wrap padding-0"
+                          data-testid="preview-petition-file-button-link"
                           href={pdfPreviewUrl}
                           rel="noopener noreferrer"
                           target="_blank"
                         >
-                          Preview in full screen
+                          {petitionFormatted?.petitionFile?.name ||
+                            'Preview in full screen'}
                         </Button>
                       </div>
                     </div>
