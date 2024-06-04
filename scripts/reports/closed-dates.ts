@@ -50,7 +50,7 @@ const getAllCasesOpenedInYear = async ({
             ],
           },
         },
-        sort: [{ 'receivedAt.S': 'asc' }],
+        sort: [{ 'sortableDocketNumber.N': 'asc' }],
       },
       index: 'efcms-case',
     },
