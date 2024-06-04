@@ -25,6 +25,7 @@ import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitio
 import { Message } from '../../shared/src/business/entities/Message';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { SESClient } from '@aws-sdk/client-ses';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -71,7 +72,7 @@ import pug from 'pug';
 import sass from 'sass';
 
 let s3Cache: AWS.S3 | undefined;
-let sesCache;
+let sesCache: SESClient;
 let sqsCache;
 let searchClientCache: Client;
 let notificationServiceCache;
@@ -180,25 +181,6 @@ export const createApplicationContext = (
     getEmailClient: () => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
-          getSendStatistics: () => {
-            // mock this out so the health checks pass on smoke tests
-            return {
-              promise: () => ({
-                SendDataPoints: [
-                  {
-                    Rejects: 0,
-                  },
-                ],
-              }),
-            };
-          },
-          sendBulkTemplatedEmail: () => {
-            return {
-              promise: () => {
-                return { Status: [] };
-              },
-            };
-          },
           sendEmail: () => {
             return {
               promise: (): SES.SendEmailResponse => {
@@ -209,12 +191,8 @@ export const createApplicationContext = (
         };
       } else {
         if (!sesCache) {
-          sesCache = new SES({
-            httpOptions: {
-              connectTimeout: 3000,
-              timeout: 5000,
-            },
-            maxRetries: 3,
+          sesCache = new SESClient({
+            maxAttempts: 3,
             region: 'us-east-1',
           });
         }
