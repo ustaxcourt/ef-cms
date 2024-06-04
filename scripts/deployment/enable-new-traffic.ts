@@ -7,7 +7,7 @@ import {
 const REGION = 'us-east-1';
 const FUNCTION_NAME = process.argv[2];
 const ENV_VARS_KEY_VALUE_UPSERT: { [key: string]: string } = {
-  DISABLE_ALL_TRAFFIC: 'true',
+  DISABLE_ALL_TRAFFIC: 'false',
 };
 
 if (!FUNCTION_NAME) {
