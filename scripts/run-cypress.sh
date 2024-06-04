@@ -123,9 +123,9 @@ else
   DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
   export CYPRESS_DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
   export CYPRESS_DYNAMODB_DEPLOY_TABLE_NAME="efcms-deploy-${ENV}"
-  CYPRESS_MIGRATE=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
+  CYPRESS_MIGRATE=$(./scripts/migration/get-migrate-flag.sh "${ENV}")
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
-fi
+fi	
 
 if [ -n "${OPEN}" ]; then
   ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}"
