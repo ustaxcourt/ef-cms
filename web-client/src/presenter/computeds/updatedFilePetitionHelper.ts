@@ -57,8 +57,8 @@ function getBusinessFieldLabels(businessType): IBusinessFields | {} {
     case 'Corporation':
       return {
         primary: 'Business name',
-        secondary: 'In care of',
-        secondaryNote: 'optional',
+        showInCareOf: true,
+        showInCareOfOptional: true,
       };
     case 'Partnership (as the Tax Matters Partner)':
       return {

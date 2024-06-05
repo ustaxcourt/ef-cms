@@ -368,7 +368,8 @@ function BusinessInfo({
             placeOfLegalResidenceTitle="Place of business"
             registerRef={registerRef}
             secondaryLabel={businessFieldNames.secondary}
-            secondaryLabelNote={businessFieldNames.secondaryNote}
+            showInCareOf={businessFieldNames.showInCareOf}
+            showInCareOfOptional={businessFieldNames.showInCareOfOptional}
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
             onBlur="petitionGenerationLiveValidationSequence"
             onChange="updateFormValueUpdatedSequence"

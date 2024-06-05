@@ -140,7 +140,7 @@ export const UpdatedFilePetitionStep4 = connect(
           )}
         </div>
         <div>
-          <UpdatedFilePetitionButtons></UpdatedFilePetitionButtons>
+          <UpdatedFilePetitionButtons />
         </div>
       </>
     );
