@@ -167,4 +167,68 @@ describe('getPractitionerByBarNumberInteractor', () => {
       expect(practitioner).toBeUndefined();
     });
   });
+
+  describe('Public User', () => {
+    beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(undefined);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockReturnValue({
+          admissionsDate: '2019-03-01',
+          admissionsStatus: 'Active',
+          barNumber: 'PP1234',
+          birthYear: '1983',
+          firmName: 'GW Law Offices',
+          firstName: 'Private',
+          lastName: 'Practitioner',
+          name: 'Private Practitioner',
+          originalBarState: 'IL',
+          practiceType: 'Private',
+          practitionerType: 'Attorney',
+          role: ROLES.privatePractitioner,
+          section: ROLES.privatePractitioner,
+
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+    });
+
+    it('should not throw an error when a public user access interactor', async () => {
+      applicationContext.getCurrentUser.mockReturnValue(undefined);
+
+      const results = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'BN0000',
+        },
+      );
+
+      expect(results).toBeDefined();
+    });
+
+    it('should return an array with Practitioner result', async () => {
+      applicationContext.getCurrentUser.mockReturnValue(undefined);
+
+      const results = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'BN0000',
+        },
+      );
+
+      expect(results).toEqual([
+        {
+          admissionsDate: '2019-03-01',
+          admissionsStatus: 'Active',
+          barNumber: 'PP1234',
+          contact: {
+            state: 'IL',
+          },
+          name: 'Private Practitioner',
+          practiceType: 'Private',
+          practitionerType: 'Attorney',
+        },
+      ]);
+    });
+  });
 });
