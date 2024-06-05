@@ -124,12 +124,14 @@ describe('UploadPetitionStep1', () => {
       it('should return an error for "petitionFacts" when a fact is over the limit', () => {
         const entity = new UploadPetitionStep1({
           ...VALID_ENTITY_GENERATED,
-          petitionFacts: ['a'.repeat(1001)],
+          petitionFacts: [
+            'a'.repeat(UploadPetitionStep1.PETITION_FACT_MAX_LENGTH + 1),
+          ],
         });
 
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors).toEqual({
-          'petitionFacts[0]': 'Facts cannot exceed 1000 characters',
+          'petitionFacts[0]': 'Facts cannot exceed 9000 characters',
         });
       });
 
@@ -174,12 +176,14 @@ describe('UploadPetitionStep1', () => {
       it('should return an error for "petitionReasons" when a fact is over the limit', () => {
         const entity = new UploadPetitionStep1({
           ...VALID_ENTITY_GENERATED,
-          petitionReasons: ['a'.repeat(1001)],
+          petitionReasons: [
+            'a'.repeat(UploadPetitionStep1.PETITION_REASON_MAX_LENGTH) + 1,
+          ],
         });
 
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors).toEqual({
-          'petitionReasons[0]': 'Reasons cannot exceed 1000 characters',
+          'petitionReasons[0]': 'Reasons cannot exceed 9000 characters',
         });
       });
 
