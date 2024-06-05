@@ -1,9 +1,10 @@
-import {
-  type SESClient,
-  SendEmailCommand,
-  type SendEmailCommandOutput,
-} from '@aws-sdk/client-ses';
+import { type SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+
+export type EmailResponse = {
+  MessageId: string | undefined;
+  [key: string]: any;
+};
 
 export const sendEmailToUser = (
   applicationContext: ServerApplicationContext,
@@ -16,7 +17,8 @@ export const sendEmailToUser = (
     subject: string;
     to: string;
   },
-): Promise<SendEmailCommandOutput> => {
+  //todo: return promise<void> instead?
+): Promise<EmailResponse> => {
   const charset = 'UTF-8';
   const cmd = new SendEmailCommand({
     Destination: {
@@ -40,6 +42,5 @@ export const sendEmailToUser = (
   });
 
   const sesClient = applicationContext.getEmailClient() as SESClient;
-  const ret = sesClient.send(cmd);
-  return ret;
+  return sesClient.send(cmd);
 };

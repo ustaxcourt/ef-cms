@@ -21,6 +21,10 @@ import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import {
+  EmailResponse,
+  sendEmailToUser,
+} from '@web-api/persistence/messages/sendEmailToUser';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
@@ -58,7 +62,6 @@ import { retrySendNotificationToConnections } from '../../shared/src/notificatio
 import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
-import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
@@ -66,7 +69,7 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SES, SQS } from 'aws-sdk';
+import AWS, { S3, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
@@ -182,11 +185,9 @@ export const createApplicationContext = (
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
           sendEmail: () => {
-            return {
-              promise: (): SES.SendEmailResponse => {
-                return { MessageId: '' };
-              },
-            };
+            return new Promise<EmailResponse>(resolve => {
+              resolve({ MessageId: '' });
+            });
           },
         };
       } else {
