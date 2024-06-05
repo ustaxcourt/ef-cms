@@ -84,7 +84,7 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
     "Authorization": "$input.params('Authorization')",
     "asyncsyncid": "$input.params('Asyncsyncid')",
     "content-type": "$input.params('Content-Type')",
-    "x-test-user": "$input.paramas('x-test-user')"
+    "x-test-user": "$input.params('x-test-user')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -139,7 +139,7 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
     "Authorization": "$input.params('Authorization')",
     "asyncsyncid": "$input.params('Asyncsyncid')",
     "content-type": "$input.params('Content-Type')",
-    "x-test-user": "$input.paramas('x-test-user')"
+    "x-test-user": "$input.params('x-test-user')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -194,7 +194,7 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
     "Authorization": "$input.params('Authorization')",
     "asyncsyncid": "$input.params('Asyncsyncid')",
     "content-type": "$input.params('Content-Type')",
-    "x-test-user": "$input.paramas('x-test-user')"
+    "x-test-user": "$input.params('x-test-user')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
