@@ -40,7 +40,7 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="step-6-next-button"]').click();
 
   return cy
-    .get('[data-testid="case-link"]')
+    .get('[data-testid="case-link-docket-number"]')
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="case-link"]').click();

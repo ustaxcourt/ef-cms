@@ -24,7 +24,10 @@ export const PetitionSuccessHeader = connect(
             tabIndex={-1}
           >
             <CaseLink formattedCase={caseDetail}>
-              Docket Number: {caseDetail.docketNumberWithSuffix}
+              Docket Number:{' '}
+              <span data-testid="case-link-docket-number">
+                {caseDetail.docketNumberWithSuffix}
+              </span>
             </CaseLink>
           </h1>
           <p className="margin-y-0" id="case-title">
