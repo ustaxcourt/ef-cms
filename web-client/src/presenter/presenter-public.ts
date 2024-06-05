@@ -36,6 +36,8 @@ import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDec
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
+import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
+import { submitPractitionerNameSearchSequence } from '@web-client/presenter/sequences/submitPractitionerNameSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
@@ -55,6 +57,8 @@ import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCase
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
+import { validatePractitionerSearchByBarNumberFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByBarNumberFormSequence';
+import { validatePractitionerSearchByNameFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByNameFormSequence';
 
 export const presenterSequences = {
   advancedSearchTabChangeSequence,
@@ -100,6 +104,8 @@ export const presenterSequences = {
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,
+  submitPractitionerBarNumberSearchSequence,
+  submitPractitionerNameSearchSequence,
   submitPublicCaseAdvancedSearchSequence,
   submitPublicCaseDocketNumberSearchSequence,
   submitPublicOpinionAdvancedSearchSequence,
@@ -119,6 +125,8 @@ export const presenterSequences = {
   validateCaseDocketNumberSearchFormSequence,
   validateOpinionSearchSequence,
   validateOrderSearchSequence,
+  validatePractitionerSearchByBarNumberFormSequence,
+  validatePractitionerSearchByNameFormSequence,
 };
 
 export const presenter = {

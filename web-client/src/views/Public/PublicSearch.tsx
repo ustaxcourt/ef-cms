@@ -4,6 +4,8 @@ import { DocumentSearchResults } from '../AdvancedSearch/DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from '../AdvancedSearch/OpinionSearchForm';
 import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
+import { PractitionerSearchForm } from '@web-client/views/AdvancedSearch/PractitionerSearchForm';
+import { PractitionerSearchResults } from '@web-client/views/AdvancedSearch/PractitionerSearchResults';
 import { SearchBoilerplateText } from './SearchBoilerplateText';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
@@ -85,6 +87,40 @@ export const PublicSearch = connect(
                 }
               />
               <DocumentSearchResults />
+            </Tab>
+            <Tab
+              data-testid="practitioner-search-tab"
+              tabName="practitioner"
+              title={'Practitioner'}
+            >
+              <>
+                <p className="margin-top-0">
+                  The information provided in the search results below is
+                  maintained by the Admissions Clerk of the U.S. Tax Court.
+                  Practitioners may:
+                </p>
+                <ul>
+                  <li>
+                    Update their contact information by logging into DAWSON and
+                    updating their practitioner accounts.
+                  </li>{' '}
+                  <li>
+                    Change thier practitioner type, practice type, or admission
+                    status by contacting the Admissions Clerk at{' '}
+                    <a href="mailto:admissions@ustaxcourt.gov">
+                      admissions@ustaxcourt.gov
+                    </a>
+                    .
+                  </li>
+                </ul>
+              </>
+              <PractitionerSearchForm
+                isPublicUser={true}
+              ></PractitionerSearchForm>
+
+              <PractitionerSearchResults
+                isPublicUser={true}
+              ></PractitionerSearchResults>
             </Tab>
           </Tabs>
         </section>

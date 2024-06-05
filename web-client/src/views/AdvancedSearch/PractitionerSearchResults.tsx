@@ -1,6 +1,7 @@
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 
@@ -8,11 +9,13 @@ export const PractitionerSearchResults = connect(
   {
     PRACTITIONER_SEARCH_PAGE_SIZE:
       state.constants.PRACTITIONER_SEARCH_PAGE_SIZE,
+    isPublicUser: props.isPublicUser,
     practitionerSearchHelper: state.practitionerSearchHelper,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
   },
   function PractitionerSearchResults({
+    isPublicUser,
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
@@ -56,7 +59,9 @@ export const PractitionerSearchResults = connect(
                 <tr>
                   <th aria-label="bar number">Bar No.</th>
                   <th data-testid="results-table-header-name">Name</th>
-                  <th data-testid="results-table-header-state">State</th>
+                  <th data-testid="results-table-header-state">
+                    {isPublicUser ? 'Original Bar State' : 'State'}
+                  </th>
                   <th data-testid="results-table-header-admission-status">
                     Admission Status
                   </th>
@@ -80,9 +85,13 @@ export const PractitionerSearchResults = connect(
                       key={result.barNumber}
                     >
                       <td>
-                        <a href={`/practitioner-detail/${result.barNumber}`}>
-                          {result.barNumber}
-                        </a>
+                        {isPublicUser ? (
+                          <span>{result.barNumber}</span>
+                        ) : (
+                          <a href={`/practitioner-detail/${result.barNumber}`}>
+                            {result.barNumber}
+                          </a>
+                        )}
                       </td>
                       <td>{result.name}</td>
                       <td>{result.contact?.stateFullName}</td>

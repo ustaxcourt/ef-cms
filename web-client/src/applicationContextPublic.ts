@@ -66,6 +66,8 @@ import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
+import { getPractitionerByBarNumberInteractor } from '@shared/proxies/users/getPractitionerByBarNumberProxy';
+import { getPractitionersByNameInteractor } from '@shared/proxies/practitioners/getPractitionersByNameProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
@@ -106,6 +108,8 @@ const allUseCases = {
   getHealthCheckInteractor,
   getItemInteractor,
   getMaintenanceModePublicInteractor,
+  getPractitionerByBarNumberInteractor,
+  getPractitionersByNameInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,

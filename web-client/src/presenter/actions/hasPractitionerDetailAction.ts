@@ -8,11 +8,15 @@ import { isEmpty } from 'lodash';
  * @returns {Function} the next path in the sequence
  */
 export const hasPractitionerDetailAction = ({ path, props }: ActionProps) => {
-  const { practitionerDetail } = props;
+  const { isPublicUser, practitionerDetail } = props;
 
-  if (!isEmpty(practitionerDetail)) {
-    return path.success();
-  } else {
-    return path.noResults({ searchResults: [] });
-  }
+  if (isEmpty(practitionerDetail))
+    return path.setResultsInState({ searchResults: [] });
+
+  if (isPublicUser)
+    return path.setResultsInState({
+      searchResults: { practitioners: practitionerDetail, total: 1 },
+    });
+
+  return path.navigateToPractitionerDetails();
 };
