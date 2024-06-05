@@ -23,7 +23,7 @@ describe('Custom Case Report - Docket Clerk Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
-        rules: { listitem: { enabled: false } }, // This error is occurring because of an accessibility issues with the 3rd party library `ReactPaginate`
+        rules: { listitem: { enabled: false } }, // https://github.com/flexion/ef-cms/issues/10397
       },
       terminalLog,
     );
