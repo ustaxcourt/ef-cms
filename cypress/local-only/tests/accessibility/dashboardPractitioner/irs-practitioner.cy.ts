@@ -12,7 +12,7 @@ describe('Dashboard Practitioner - Irs Practitioner Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } }, // TODO LINK
+        rules: { 'nested-interactive': { enabled: false } }, // https://github.com/flexion/ef-cms/issues/10396
       },
       terminalLog,
     );

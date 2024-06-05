@@ -21,7 +21,7 @@ describe('Practitioner Details - Petition Clerk Accessibility', () => {
 
         rules: {
           'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-          'nested-interactive': { enabled: false }, // TODO link
+          'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
         },
       },
       terminalLog,

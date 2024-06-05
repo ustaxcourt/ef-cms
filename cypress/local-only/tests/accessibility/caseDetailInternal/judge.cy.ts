@@ -27,7 +27,7 @@ describe('Case Detail Internal - Judge Accessibility', () => {
         {
           includedImpacts: impactLevel,
           rules: {
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -50,7 +50,7 @@ describe('Case Detail Internal - Judge Accessibility', () => {
         {
           includedImpacts: impactLevel,
           rules: {
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -75,7 +75,7 @@ describe('Case Detail Internal - Judge Accessibility', () => {
           {
             includedImpacts: impactLevel,
             rules: {
-              'nested-interactive': { enabled: false }, // TODO LINK
+              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
             },
           },
           terminalLog,
