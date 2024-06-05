@@ -150,11 +150,11 @@ export const Petition = ({
           filed with the Court, including this petition and any IRS Notice that
           you enclose with this petition, will become part of the Court’s public
           files. To protect your privacy, omit or redact (e.g., black out or
-          cover) from this petition, any enclosed IRS Notice, and any other
-          document (other than Form 4) your taxpayer identification number
-          (e.g., your Social Security number) and certain other confidential
-          information as specified in the Tax Court’s &quot;Notice Regarding
-          Privacy and Public Access to Case Files,&quot; available at{' '}
+          cover) from any submitted IRS Notice, and any other document (other
+          than Form 4) your taxpayer identification number (e.g., your Social
+          Security number) and certain other confidential information as
+          specified in the Tax Court’s &quot;Notice Regarding Privacy and Public
+          Access to Case Files,&quot; available at{' '}
           <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>.
         </div>
         <div>
