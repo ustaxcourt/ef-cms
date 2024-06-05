@@ -29,10 +29,9 @@ Cypress.Commands.add('login', (username, route = '/') => {
 before(() => {
   // Skip subsequent tests in spec when one fails.
   (cy.state('runnable').ctx as Mocha.Context).currentTest?.parent?.bail(true);
-});
 
-beforeEach(() => {
   cy.intercept('*', req => {
     req.headers['x-test-user'] = 'true';
+    req.continue();
   });
 });
