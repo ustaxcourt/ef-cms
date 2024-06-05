@@ -1,4 +1,4 @@
-name: E2E Cypress
+name: E2E Cypress Accessibility
 
 on:
   pull_request:
@@ -42,11 +42,5 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts accessibility)
           npm run cypress:integration:file $TESTFILES
-      - name: Store Cypress Videos
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-videos-${{ matrix.ci_node_index }}
-          path: ${{ github.workspace }}/cypress/local-only/videos
