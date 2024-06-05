@@ -164,7 +164,7 @@ export const Petition = ({
             {contactPrimary.secondaryName && (
               <div>
                 {(!BUSINESS_TYPE_VALUES.includes(partyType) ||
-                  partyType === PARTY_TYPES.corporation) && <b>C/O: </b>}
+                  partyType === PARTY_TYPES.corporation) && <span>c/o </span>}
                 {contactPrimary.secondaryName}
                 {contactPrimary.title && <span>, {contactPrimary.title}</span>}
               </div>
