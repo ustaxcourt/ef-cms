@@ -14,12 +14,19 @@ export const updatedSetupFilesForCaseCreationAction = ({
     requestForPlaceOfTrialFile,
     stinFile,
   } = petitionMetadata;
-  const attachmentsToPetition =
-    hasIrsNotice && irsNotices?.map(irsNotice => irsNotice.file);
+  // need to do this elsewhere?
+  const attachmentsToPetition: File[] | undefined = hasIrsNotice
+    ? (irsNotices
+        ?.map(irsNotice => irsNotice.file)
+        .filter(file => !!file) as File[])
+    : undefined;
 
   const files = {
     applicationForWaiverOfFilingFee: applicationForWaiverOfFilingFeeFile,
-    attachmentToPetition: attachmentsToPetition,
+    attachmentToPetition:
+      attachmentsToPetition && attachmentsToPetition.length
+        ? attachmentsToPetition
+        : undefined,
     corporateDisclosure: corporateDisclosureFile,
     petition: petitionFile || undefined,
     primary: primaryDocumentFile,

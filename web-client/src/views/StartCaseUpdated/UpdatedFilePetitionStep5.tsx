@@ -3,8 +3,8 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -12,20 +12,9 @@ import classNames from 'classnames';
 export const UpdatedFilePetitionStep5 = connect(
   {
     constants: state.constants,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    updatedFilePetitionCompleteStep5Sequence:
-      sequences.updatedFilePetitionCompleteStep5Sequence,
-    updatedFilePetitionGoBackAStepSequence:
-      sequences.updatedFilePetitionGoBackAStepSequence,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep5({
-    constants,
-    formCancelToggleCancelSequence,
-    updatedFilePetitionCompleteStep5Sequence,
-    updatedFilePetitionGoBackAStepSequence,
-    validationErrors,
-  }) {
+  function UpdatedFilePetitionStep5({ constants, validationErrors }) {
     return (
       <>
         <div className="margin-bottom-5">
@@ -89,37 +78,14 @@ export const UpdatedFilePetitionStep5 = connect(
                 data-testid="stin-file"
                 id="stin-file"
                 name="stinFile"
-                updateFormValueSequence="updateStartCaseFormValueSequence"
+                updateFormValueSequence="updateFormValueUpdatedSequence"
                 validationSequence="validateUpdatedFilePetitionStep5Sequence"
               />
             </FormGroup>
           </div>
         </div>
         <div>
-          <Button
-            data-testid="step-5-next-button"
-            onClick={() => {
-              updatedFilePetitionCompleteStep5Sequence();
-            }}
-          >
-            Next
-          </Button>
-          <Button
-            secondary
-            onClick={() => {
-              updatedFilePetitionGoBackAStepSequence();
-            }}
-          >
-            Back
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
+          <UpdatedFilePetitionButtons></UpdatedFilePetitionButtons>
         </div>
       </>
     );

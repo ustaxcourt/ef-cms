@@ -55,7 +55,6 @@ describe('File a petition', () => {
             'city-error-message',
             'state-error-message',
             'postal-code-error-message',
-            'place-of-legal-residence-error-message',
             'phone-error-message',
           ];
 
@@ -74,7 +73,7 @@ describe('File a petition', () => {
           });
         });
 
-        it('should do live validation when user leaves input with an invalid response and remove messaeg when user fixes it', () => {
+        it('should do live validation when user leaves input with an invalid response and remove message when user fixes it', () => {
           const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
             {
               errorMessage: 'primary-contact-name-error-message',
@@ -102,13 +101,8 @@ describe('File a petition', () => {
               inputValue: '12345',
             },
             {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -152,13 +146,8 @@ describe('File a petition', () => {
               inputValue: '12345',
             },
             {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -254,7 +243,7 @@ describe('File a petition', () => {
           });
         });
 
-        it('should do live validation when user leaves input with an invalid response and remove messaeg when user fixes it', () => {
+        it('should do live validation when user leaves input with an invalid response and remove message when user fixes it', () => {
           const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
             {
               errorMessage: 'primary-contact-name-error-message',
@@ -283,7 +272,7 @@ describe('File a petition', () => {
             },
             {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -328,7 +317,7 @@ describe('File a petition', () => {
             },
             {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];

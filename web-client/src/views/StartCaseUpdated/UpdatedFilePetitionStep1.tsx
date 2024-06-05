@@ -2,7 +2,9 @@ import { AutoGeneratePetitionForm } from '@web-client/views/StartCaseUpdated/Aut
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -14,20 +16,19 @@ export const UpdatedFilePetitionStep1 = connect(
   {
     constants: state.constants,
     form: state.form,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep1Sequence:
-      sequences.updatedFilePetitionCompleteStep1Sequence,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep1({
     constants,
     form,
-    formCancelToggleCancelSequence,
-    updatedFilePetitionCompleteStep1Sequence,
     updateFormValueSequence,
     validationErrors,
   }) {
+    const isNextButtonDisabled =
+      form.petitionType === PETITION_TYPES.userUploaded &&
+      !form.petitionRedactionAcknowledgement;
+
     return (
       <>
         <p className="margin-top-0 required-statement">*All fields required</p>
@@ -140,67 +141,21 @@ export const UpdatedFilePetitionStep1 = connect(
                 </b>
               </span>
               <div className="tablet:grid-col-12">
-                <div className="card" style={{ maxWidth: 'fit-content' }}>
-                  <div className="content-wrapper usa-checkbox">
-                    <input
-                      aria-describedby="petition-redaction-acknowledgement-label"
-                      checked={form.petitionRedactionAcknowledgement || false}
-                      className="usa-checkbox__input"
-                      id="petition-redaction-acknowledgement"
-                      name="petitionRedactionAcknowledgement"
-                      type="checkbox"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label"
-                      data-testid="petition-redaction-acknowledgement-label"
-                      htmlFor="petition-redaction-acknowledgement"
-                      id="petition-redaction-acknowledgement-label"
-                    >
-                      <b>
-                        All documents I am filing have been redacted in
-                        accordance with{' '}
-                        <a
-                          href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
-                          rel="noreferrer"
-                          target="_blank"
-                        >
-                          Rule 27
-                        </a>
-                        .
-                      </b>
-                    </label>
-                  </div>
-                </div>
+                <RedactionAcknowledgement
+                  handleChange={updateFormValueSequence}
+                  id="petition-redaction"
+                  name="petitionRedactionAcknowledgement"
+                  redactionAcknowledgement={
+                    form.petitionRedactionAcknowledgement
+                  }
+                />
               </div>
             </div>
           </div>
         )}
-        <Button
-          data-testid="step-1-next-button"
-          disabled={
-            form.petitionType === PETITION_TYPES.userUploaded &&
-            !form.petitionRedactionAcknowledgement
-          }
-          onClick={() => {
-            updatedFilePetitionCompleteStep1Sequence();
-          }}
-        >
-          Next
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+        <UpdatedFilePetitionButtons
+          isNextButtonDisabled={isNextButtonDisabled}
+        ></UpdatedFilePetitionButtons>
       </>
     );
   },

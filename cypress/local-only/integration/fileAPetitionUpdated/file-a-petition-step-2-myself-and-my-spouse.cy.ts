@@ -54,7 +54,6 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
           'city-error-message',
           'state-error-message',
           'postal-code-error-message',
-          'place-of-legal-residence-error-message',
           'phone-error-message',
           'is-spouse-deceased-error-message',
         ];
@@ -104,13 +103,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               inputValue: '12345',
             },
             {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -175,6 +169,9 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               textInput(errorMessage, input, inputValue);
             }
           });
+
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
 
         it('should allow user to go to step 3 if everything is filled out correctly', () => {
@@ -237,13 +234,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               inputValue: '12345',
             },
             {
-              errorMessage: 'place-of-legal-residence-error-message',
-              input: 'contactPrimary.placeOfLegalResidence',
-              selectOption: 'CO',
-            },
-            {
               errorMessage: 'phone-error-message',
-              input: 'phone',
+              input: 'contact-primary-phone',
               inputValue: 'Test Phone',
             },
           ];
@@ -284,7 +276,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
           });
         });
 
-        describe('I have Spouse Concent - do not register email', () => {
+        describe('I have Spouse Consent - do not register email', () => {
           beforeEach(() => {
             cy.get('[data-testid="have-spouse-consent-label"').click();
           });
@@ -328,6 +320,9 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 textInput(errorMessage, input, inputValue);
               }
             });
+
+            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
           });
 
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
@@ -356,7 +351,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
           });
         });
 
-        describe('I have Spouse Concent - register email', () => {
+        describe('I have Spouse Consent - register email', () => {
           beforeEach(() => {
             cy.get('[data-testid="have-spouse-consent-label"').click();
             cy.get(
@@ -393,6 +388,11 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 input: 'contact-secondary-name',
                 inputValue: 'John Cruz',
               },
+              {
+                errorMessage: 'email-error-message',
+                input: 'contact-secondary-email',
+                inputValue: 'test@test.com',
+              },
             ];
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach(inputInfo => {
@@ -404,6 +404,9 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 textInput(errorMessage, input, inputValue);
               }
             });
+
+            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
           });
 
           it('should allow user to go to step 3 if everything is filled out correctly', () => {

@@ -3,6 +3,8 @@ import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
+import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -19,16 +21,11 @@ export const UpdatedFilePetitionStep3 = connect(
     deleteValidationErrorMessageSequence:
       sequences.deleteValidationErrorMessageSequence,
     form: state.form,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep3Sequence:
-      sequences.updatedFilePetitionCompleteStep3Sequence,
-    updatedFilePetitionGoBackAStepSequence:
-      sequences.updatedFilePetitionGoBackAStepSequence,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep3({
@@ -36,12 +33,9 @@ export const UpdatedFilePetitionStep3 = connect(
     caseTypeDescriptionHelper,
     deleteValidationErrorMessageSequence,
     form,
-    formCancelToggleCancelSequence,
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
     startCaseHelper,
-    updatedFilePetitionCompleteStep3Sequence,
-    updatedFilePetitionGoBackAStepSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -163,6 +157,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 <Button
                   link
                   className={classNames('padding-top-0', 'text-left')}
+                  data-testid="add-another-irs-notice-button"
                   onClick={() => addAnotherIrsNoticeToFormSequence()}
                 >
                   <Icon
@@ -180,46 +175,14 @@ export const UpdatedFilePetitionStep3 = connect(
                     </b>
                   </span>
                   <div className="tablet:grid-col-12">
-                    <div className="card" style={{ maxWidth: 'fit-content' }}>
-                      <div className="content-wrapper usa-checkbox">
-                        <input
-                          aria-describedby="redaction-acknowledgement-label"
-                          checked={
-                            form.irsNoticesRedactionAcknowledgement || false
-                          }
-                          className="usa-checkbox__input"
-                          id="irs-notices-acknowledgement"
-                          name="irsNoticesRedactionAcknowledgement"
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          data-testid="redaction-acknowledgement-label"
-                          htmlFor="irs-notices-acknowledgement"
-                          id="irs-notices-acknowledgement-label"
-                          style={{ marginTop: '0px' }}
-                        >
-                          <div className="font-weight-600">
-                            All documents I am filing have been redacted in
-                            accordance with{' '}
-                            <a
-                              href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
-                              rel="noreferrer"
-                              target="_blank"
-                            >
-                              Rule 27
-                            </a>
-                            .
-                          </div>
-                        </label>
-                      </div>
-                    </div>
+                    <RedactionAcknowledgement
+                      handleChange={updateFormValueSequence}
+                      id="redaction"
+                      name="irsNoticesRedactionAcknowledgement"
+                      redactionAcknowledgement={
+                        form.irsNoticesRedactionAcknowledgement
+                      }
+                    />
                   </div>
                 </div>
               </>
@@ -250,35 +213,12 @@ export const UpdatedFilePetitionStep3 = connect(
           </div>
         </div>
 
-        <Button
-          data-testid="step-3-next-button"
-          disabled={
+        <UpdatedFilePetitionButtons
+          isNextButtonDisabled={
             form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
           }
-          onClick={e => {
-            e.preventDefault();
-            resetFocus();
-            updatedFilePetitionCompleteStep3Sequence();
-          }}
-        >
-          Next
-        </Button>
-        <Button
-          secondary
-          onClick={() => {
-            updatedFilePetitionGoBackAStepSequence();
-          }}
-        >
-          Back
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+          resetFocus={resetFocus}
+        ></UpdatedFilePetitionButtons>
       </>
     );
   },

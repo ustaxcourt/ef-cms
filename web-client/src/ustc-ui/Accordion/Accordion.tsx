@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   decorateWithPostCallback,
@@ -58,7 +59,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     if (!title) {
       return null;
     }
-    const anchorProps = {
+    const buttonProps = {
       'aria-controls': itemContentId,
       'aria-expanded': expandedText,
       className: 'usa-accordion__button grid-container',
@@ -70,10 +71,16 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     const baseTitleClassName = 'accordion-item-title grid-col-8';
     const titleClassName = classNames(baseTitleClassName, customTitleClassName);
 
+    const mobileBaseTitleClassName = 'accordion-item-title grid-col-11';
+    const mobileTitleClassName = classNames(
+      mobileBaseTitleClassName,
+      customTitleClassName,
+    );
+
     return (
       <>
         <HeadingElement className={customClassName || 'usa-accordion__heading'}>
-          <a {...anchorProps}>
+          <button {...buttonProps}>
             <div className="grid-row">
               {displayIcon && (
                 <span className="grid-col-auto">
@@ -86,9 +93,14 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
                   </span>
                 </span>
               )}
-              <div className={titleClassName}>{title}</div>
+              <Mobile>
+                <div className={mobileTitleClassName}>{title}</div>
+              </Mobile>
+              <NonMobile>
+                <div className={titleClassName}>{title}</div>
+              </NonMobile>
             </div>
-          </a>
+          </button>
         </HeadingElement>
         {isActiveItem && (
           <div

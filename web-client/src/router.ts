@@ -1197,7 +1197,7 @@ const router = {
     registerRoute(
       '/file-a-petition/new',
       ifHasAccess({ app }, () => {
-        setPageTitle('File a petition UPDATED');
+        setPageTitle('File a petition');
         return app.getSequence('gotoUpdatedPetitionFlowSequence')();
       }),
     );

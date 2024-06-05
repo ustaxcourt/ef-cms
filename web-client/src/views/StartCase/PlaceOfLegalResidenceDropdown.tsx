@@ -51,7 +51,7 @@ export const PlaceOfLegalResidenceDropdown = connect(
               className="usa-label"
               htmlFor={`${type}.placeOfLegalResidence`}
             >
-              Place of legal residence{' '}
+              {placeOfLegalResidenceTitle || 'Place of legal residence'}{' '}
               <span className="usa-hint">
                 (if different from mailing address)
               </span>

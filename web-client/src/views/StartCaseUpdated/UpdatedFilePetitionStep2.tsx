@@ -5,6 +5,7 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
+import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -17,24 +18,16 @@ export const UpdatedFilePetitionStep2 = connect(
   {
     constants: state.constants,
     form: state.form,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatedFilePetitionCompleteStep2Sequence:
-      sequences.updatedFilePetitionCompleteStep2Sequence,
-    updatedFilePetitionGoBackAStepSequence:
-      sequences.updatedFilePetitionGoBackAStepSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep2({
     constants,
     form,
-    formCancelToggleCancelSequence,
     resetSecondaryAddressSequence,
-    updatedFilePetitionCompleteStep2Sequence,
-    updatedFilePetitionGoBackAStepSequence,
     updatedFilePetitionHelper,
     updateFilingTypeSequence,
     updateFormValueSequence,
@@ -46,7 +39,6 @@ export const UpdatedFilePetitionStep2 = connect(
 
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
 
-    console.log('validationErrors', validationErrors);
     return (
       <>
         <p className="margin-top-0 required-statement">
@@ -155,35 +147,13 @@ export const UpdatedFilePetitionStep2 = connect(
             }
             showPlaceOfLegalResidence={showPlaceOfLegalResidence}
             updateFilingTypeSequence={updateFilingTypeSequence}
+            validationErrors={validationErrors}
           />
         )}
 
-        <Button
-          data-testid="step-2-next-button"
-          onClick={e => {
-            e.preventDefault();
-            resetFocus();
-            updatedFilePetitionCompleteStep2Sequence();
-          }}
-        >
-          Next
-        </Button>
-        <Button
-          secondary
-          onClick={() => {
-            updatedFilePetitionGoBackAStepSequence();
-          }}
-        >
-          Back
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+        <UpdatedFilePetitionButtons
+          resetFocus={resetFocus}
+        ></UpdatedFilePetitionButtons>
       </>
     );
   },
@@ -198,7 +168,6 @@ function PetitionerAndSpouseInfo({
   updateFormValueSequence,
   validationErrors,
 }) {
-  console.log('validationErrors', validationErrors);
   return (
     <div
       className={classNames(
@@ -491,51 +460,59 @@ function OtherInfo({
   showContactInformationForOtherPartyType,
   showPlaceOfLegalResidence,
   updateFilingTypeSequence,
+  validationErrors,
 }) {
   return (
     <div className="ustc-secondary-question">
-      <fieldset className="usa-fieldset" id="other-type-radios">
-        <legend id="other-type-legend">
-          What other type of taxpayer are you filing for?
-        </legend>
-        {[
-          'An estate or trust',
-          'A minor or legally incompetent person',
-          'Donor',
-          'Transferee',
-          'Deceased Spouse',
-        ].map((otherType, idx) => (
-          <div className="usa-radio" key={otherType}>
-            <input
-              aria-describedby="other-type-legend"
-              checked={selectedOtherType === otherType}
-              className="usa-radio__input"
-              id={`otherType-${otherType}`}
-              name="otherType"
-              type="radio"
-              value={otherType}
-              onChange={e => {
-                updateFilingTypeSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor={`otherType-${otherType}`}
-              id={`is-other-type-${idx}`}
-            >
-              {otherType}
-            </label>
-          </div>
-        ))}
-      </fieldset>
+      <FormGroup
+        errorMessageId="other-type-error-message"
+        errorText={validationErrors.otherType}
+      >
+        <fieldset className="usa-fieldset" id="other-type-radios">
+          <legend id="other-type-legend">
+            What other type of taxpayer are you filing for?
+          </legend>
+          {[
+            'An estate or trust',
+            'A minor or legally incompetent person',
+            'Donor',
+            'Transferee',
+            'Deceased Spouse',
+          ].map((otherType, idx) => (
+            <div className="usa-radio" key={otherType}>
+              <input
+                aria-describedby="other-type-legend"
+                checked={selectedOtherType === otherType}
+                className="usa-radio__input"
+                id={`otherType-${otherType}`}
+                name="otherType"
+                type="radio"
+                value={otherType}
+                onChange={e => {
+                  updateFilingTypeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                data-testid="other-radio-option"
+                htmlFor={`otherType-${otherType}`}
+                id={`is-other-type-${idx}`}
+              >
+                {otherType}
+              </label>
+            </div>
+          ))}
+        </fieldset>
+      </FormGroup>
       {selectedOtherType === 'An estate or trust' && (
         <SecondaryEstateOptions
           estateTypes={estateTypes}
           selectedEstateType={selectedEstateType}
           updateFilingTypeSequence={updateFilingTypeSequence}
+          validationErrors={validationErrors}
         />
       )}
       {selectedOtherType === 'A minor or legally incompetent person' && (
@@ -543,6 +520,7 @@ function OtherInfo({
           minorIncompetentTypes={minorIncompetentTypes}
           selectedMinorIncompetentType={selectedMinorIncompetentType}
           updateFilingTypeSequence={updateFilingTypeSequence}
+          validationErrors={validationErrors}
         />
       )}
       {showContactInformationForOtherPartyType && (
@@ -582,44 +560,51 @@ function SecondaryEstateOptions({
   estateTypes,
   selectedEstateType,
   updateFilingTypeSequence,
+  validationErrors,
 }) {
   return (
     <div className="ustc-secondary-question">
-      <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
-        <legend id="estate-type-legend">
-          What type of estate or trust are you filing for?
-        </legend>
-        {[
-          estateTypes.estate,
-          estateTypes.estateWithoutExecutor,
-          estateTypes.trust,
-        ].map((estateType, idx) => (
-          <div className="usa-radio" key={estateType}>
-            <input
-              aria-describedby="estate-type-legend"
-              checked={selectedEstateType === estateType}
-              className="usa-radio__input"
-              id={`estateType-${estateType}`}
-              name="estateType"
-              type="radio"
-              value={estateType}
-              onChange={e => {
-                updateFilingTypeSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor={`estateType-${estateType}`}
-              id={`is-estate-type-${idx}`}
-            >
-              {estateType}
-            </label>
-          </div>
-        ))}
-      </fieldset>
+      <FormGroup
+        errorMessageId="estate-type-error-message"
+        errorText={validationErrors.estateType}
+      >
+        <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
+          <legend id="estate-type-legend">
+            What type of estate or trust are you filing for?
+          </legend>
+          {[
+            estateTypes.estate,
+            estateTypes.estateWithoutExecutor,
+            estateTypes.trust,
+          ].map((estateType, idx) => (
+            <div className="usa-radio" key={estateType}>
+              <input
+                aria-describedby="estate-type-legend"
+                checked={selectedEstateType === estateType}
+                className="usa-radio__input"
+                id={`estateType-${estateType}`}
+                name="estateType"
+                type="radio"
+                value={estateType}
+                onChange={e => {
+                  updateFilingTypeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                data-testid="estate-type-radio-option"
+                htmlFor={`estateType-${estateType}`}
+                id={`is-estate-type-${idx}`}
+              >
+                {estateType}
+              </label>
+            </div>
+          ))}
+        </fieldset>
+      </FormGroup>
     </div>
   );
 }
@@ -628,48 +613,55 @@ function SecondaryMinorIncompetentOptions({
   minorIncompetentTypes,
   selectedMinorIncompetentType,
   updateFilingTypeSequence,
+  validationErrors,
 }) {
   return (
     <div className="ustc-secondary-question">
-      <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
-        <legend id="estate-type-legend">
-          What is your role in filing for this minor or legally incompetent
-          person?
-        </legend>
-        {[
-          minorIncompetentTypes.conservator,
-          minorIncompetentTypes.guardian,
-          minorIncompetentTypes.custodian,
-          minorIncompetentTypes.nextFriendForMinor,
-          minorIncompetentTypes.nextFriendForIncompetentPerson,
-        ].map((minorIncompetentType, idx) => (
-          <div className="usa-radio" key={minorIncompetentType}>
-            <input
-              aria-describedby="minorIncompetent-type-legend"
-              checked={selectedMinorIncompetentType === minorIncompetentType}
-              className="usa-radio__input"
-              id={`minorIncompetentType-${minorIncompetentType}`}
-              name="minorIncompetentType"
-              type="radio"
-              value={minorIncompetentType}
-              onChange={e => {
-                updateFilingTypeSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                // validateStartCaseWizardSequence();
-              }}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor={`minorIncompetentType-${minorIncompetentType}`}
-              id={`is-minorIncompetent-type-${idx}`}
-            >
-              {minorIncompetentType}
-            </label>
-          </div>
-        ))}
-      </fieldset>
+      <FormGroup
+        errorMessageId="minor-incompetent-type-error-message"
+        errorText={validationErrors.minorIncompetentType}
+      >
+        <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
+          <legend id="estate-type-legend">
+            What is your role in filing for this minor or legally incompetent
+            person?
+          </legend>
+          {[
+            minorIncompetentTypes.conservator,
+            minorIncompetentTypes.guardian,
+            minorIncompetentTypes.custodian,
+            minorIncompetentTypes.nextFriendForMinor,
+            minorIncompetentTypes.nextFriendForIncompetentPerson,
+          ].map((minorIncompetentType, idx) => (
+            <div className="usa-radio" key={minorIncompetentType}>
+              <input
+                aria-describedby="minorIncompetent-type-legend"
+                checked={selectedMinorIncompetentType === minorIncompetentType}
+                className="usa-radio__input"
+                id={`minorIncompetentType-${minorIncompetentType}`}
+                name="minorIncompetentType"
+                type="radio"
+                value={minorIncompetentType}
+                onChange={e => {
+                  updateFilingTypeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  // validateStartCaseWizardSequence();
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                data-testid="minor-incompetent-type-radio-option"
+                htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                id={`is-minorIncompetent-type-${idx}`}
+              >
+                {minorIncompetentType}
+              </label>
+            </div>
+          ))}
+        </fieldset>
+      </FormGroup>
     </div>
   );
 }
