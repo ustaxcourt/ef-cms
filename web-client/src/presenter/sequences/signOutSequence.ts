@@ -5,7 +5,6 @@ import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeActio
 import { clearUserAction } from '../actions/clearUserAction';
 import { deleteAuthCookieAction } from '../actions/deleteAuthCookieAction';
 import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
-// import { reloadPageAction } from '@web-client/presenter/actions/reloadPageAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/stopWebSocketConnectionAction';
 
@@ -19,5 +18,4 @@ export const signOutSequence = [
   clearMaintenanceModeAction,
   clearLoginFormAction,
   navigateToLoginSequence,
-  // reloadPageAction,
 ];

@@ -266,20 +266,6 @@ const app = {
       await cerebralApp.getSequence('openAppUpdatedModalSequence')();
     });
 
-    applicationContext
-      .getUseCases()
-      .getCurrentVersionInteractor(applicationContext)
-      .then(version => {
-        setInterval(async () => {
-          const currentVersion = await applicationContext
-            .getUseCases()
-            .getCurrentVersionInteractor(applicationContext);
-          if (currentVersion !== version) {
-            await cerebralApp.getSequence('openAppUpdatedModalSequence')();
-          }
-        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 5000); // TODO confirm interval length
-      });
-
     const container = window.document.querySelector('#app');
     const root = createRoot(container);
 

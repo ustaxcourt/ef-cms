@@ -11,11 +11,11 @@ resource "aws_s3_bucket" "frontend" {
   tags = {
     environment = var.environment
   }
-    server_side_encryption_configuration {
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-          sse_algorithm = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -40,7 +40,7 @@ resource "aws_s3_bucket" "failover" {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-          sse_algorithm = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -278,33 +278,6 @@ resource "aws_cloudfront_distribution" "distribution" {
         forward = "none"
       }
     }
-  }
-
-  ordered_cache_behavior {
-    path_pattern     = "/deployed-date.txt"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "group-app-${var.current_color}.${var.dns_domain}"
-
-    lambda_function_association {
-      event_type   = "origin-response"
-      lambda_arn   = var.header_security_arn
-      include_body = false
-    }
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
-    }
-
-    min_ttl                = 0
-    default_ttl            = 180
-    max_ttl                = 180
-    compress               = true
-    viewer_protocol_policy = var.viewer_protocol_policy
   }
 
   ordered_cache_behavior {
