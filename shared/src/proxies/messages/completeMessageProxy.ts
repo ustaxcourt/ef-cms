@@ -3,7 +3,9 @@ import { post } from '../requests';
 
 export const completeMessageInteractor = (
   applicationContext: ClientApplicationContext,
-  { messages }: { messages: { messageId: string; parentMessageId: string }[] },
+  {
+    messages,
+  }: { messages: { messageBody: string; parentMessageId: string }[] },
 ) => {
   const { parentMessageId } = messages[0];
   return post({
