@@ -1,6 +1,9 @@
 import {
   confirmUser,
+  createAccount,
   deleteAllCypressTestAccounts,
+  deleteAllIrsCypressTestAccounts,
+  getIrsBearerToken,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
@@ -26,8 +29,29 @@ export default defineConfig({
         confirmUser({ email }) {
           return confirmUser({ email });
         },
+        createAccount({
+          irsEnv,
+          password,
+          role,
+          userName,
+        }: {
+          irsEnv: boolean;
+          password: string;
+          role: string;
+          userName: string;
+        }) {
+          return createAccount({
+            isIrsEnv: irsEnv,
+            password,
+            role,
+            userName,
+          });
+        },
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
+        },
+        deleteAllIrsCypressTestAccounts() {
+          return deleteAllIrsCypressTestAccounts();
         },
         deleteAllItemsInEmailBucket({
           bucketName,
@@ -44,6 +68,12 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
+        getIrsBearerToken({ password, userName }) {
+          return getIrsBearerToken({
+            password,
+            userName,
+          });
+        },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
@@ -56,6 +86,7 @@ export default defineConfig({
         }) {
           return readAllItemsInBucket({ bucketName, retries });
         },
+
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
         },
