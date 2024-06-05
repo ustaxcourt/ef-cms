@@ -21,7 +21,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -45,7 +45,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -67,7 +67,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -91,7 +91,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -114,7 +114,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -137,7 +137,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -161,7 +161,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -184,7 +184,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -207,7 +207,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -230,7 +230,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -253,7 +253,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -277,7 +277,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -301,7 +301,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -325,7 +325,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -349,7 +349,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -373,7 +373,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -397,7 +397,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -421,7 +421,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -445,7 +445,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -468,7 +468,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -491,7 +491,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -514,7 +514,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,
@@ -538,7 +538,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
           includedImpacts: impactLevel,
           rules: {
             'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // TODO LINK
+            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
           },
         },
         terminalLog,

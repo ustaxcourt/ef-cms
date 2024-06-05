@@ -21,7 +21,7 @@ describe('Advanced Search - Petition Clerk Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } }, // TODO link
+        rules: { 'nested-interactive': { enabled: false } }, // https://github.com/flexion/ef-cms/issues/10396
       },
       terminalLog,
     );
