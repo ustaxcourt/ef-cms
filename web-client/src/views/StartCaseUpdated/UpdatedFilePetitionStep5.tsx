@@ -85,7 +85,7 @@ export const UpdatedFilePetitionStep5 = connect(
           </div>
         </div>
         <div>
-          <UpdatedFilePetitionButtons></UpdatedFilePetitionButtons>
+          <UpdatedFilePetitionButtons />
         </div>
       </>
     );
