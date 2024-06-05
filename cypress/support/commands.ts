@@ -32,6 +32,11 @@ before(() => {
 
   cy.intercept('*', req => {
     req.headers['x-test-user'] = 'true';
-    req.continue();
+  });
+});
+
+beforeEach(() => {
+  cy.intercept('*', req => {
+    req.headers['x-test-user'] = 'true';
   });
 });
