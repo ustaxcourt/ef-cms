@@ -1,5 +1,4 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
 import { PDFPreviewModal } from './PDFPreviewModal';
@@ -10,6 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const pdfPreviewButtonDeps = {
+  openPdfInNewTabSequence: sequences.openPdfInNewTabSequence,
   openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
   pdfPreviewModalHelper: state.pdfPreviewModalHelper,
   showModal: state.modal.showModal,
@@ -22,6 +22,8 @@ export const PDFPreviewButton = connect<
     id?: string;
     shouldAbbreviateTitle?: boolean;
     shouldWrapText?: boolean;
+    showIcon?: boolean;
+    showModal?: boolean;
   },
   typeof pdfPreviewButtonDeps
 >(
@@ -29,6 +31,7 @@ export const PDFPreviewButton = connect<
   function PDFPreviewButton({
     file,
     id,
+    openPdfInNewTabSequence,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
     shouldAbbreviateTitle = true,
@@ -42,26 +45,33 @@ export const PDFPreviewButton = connect<
     const fullTitle = file.name || file.documentType || title;
     const abbrevTitle = getStringAbbreviation(fullTitle, 50);
     const displayTitle = shouldAbbreviateTitle ? abbrevTitle : fullTitle;
+    const buttonProps = {
+      children: displayTitle,
+      className: 'pdf-preview-btn padding-0',
+      'data-testid': props['data-testid'],
+      icon: showIcon && ['fas', 'file-pdf'],
+      iconColor: showIcon && 'blue',
+      id,
+      link: true,
+      shouldWrapText,
+      title: fullTitle,
+    };
 
     return (
       <>
         <Mobile>
-          <FontAwesomeIcon
-            className="fa-icon-blue"
-            icon={['fas', 'file-pdf']}
-          />
-          {displayTitle}
+          <Button
+            {...buttonProps}
+            onClick={() => {
+              return openPdfInNewTabSequence({ file });
+            }}
+          >
+            {displayTitle}
+          </Button>
         </Mobile>
         <NonMobile>
           <Button
-            link
-            className="pdf-preview-btn padding-0"
-            data-testid={props['data-testid']}
-            icon={showIcon && ['fas', 'file-pdf']}
-            iconColor={showIcon && 'blue'}
-            id={id}
-            shouldWrapText={shouldWrapText}
-            title={fullTitle}
+            {...buttonProps}
             onClick={() => {
               return openPdfPreviewModalSequence({ file, modalId });
             }}
