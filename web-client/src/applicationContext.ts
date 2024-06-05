@@ -175,7 +175,6 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
-import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getCustomCaseReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import {
@@ -476,7 +475,6 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-  getCurrentVersionInteractor,
   getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,

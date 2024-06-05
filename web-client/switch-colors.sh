@@ -34,10 +34,6 @@ npx ts-node --transpile-only ./scripts/deployment/enable-new-traffic.ts "api_asy
 npx ts-node --transpile-only ./scripts/deployment/enable-new-traffic.ts "api_${ENV}_${DEPLOYING_COLOR}"
 npx ts-node --transpile-only ./scripts/deployment/enable-new-traffic.ts "websockets_connect_${ENV}_${DEPLOYING_COLOR}"
 
-# API_FUNCTION_NAME="api-${ENV}-${CURRENT_COLOR}"
-# Run a .ts script that appends an env variable to the lambda without
-# destroying other env variables
-
 npx ts-node --transpile-only ./web-client/switch-public-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-api-colors.ts
