@@ -2,21 +2,22 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { PractitionerSearchByBarNumber } from './PractitionerSearchByBarNumber';
 import { PractitionerSearchByName } from './PractitionerSearchByName';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PractitionerSearchForm = connect(
   {
+    isPublicUser: props.isPublicUser,
     practitionerSearchFormHelper: state.practitionerSearchFormHelper,
   },
   function PractitionerSearchForm({
+    isPublicUser,
     practitionerSearchFormHelper,
-    submitPractitionerBarNumberSearchSequence,
-    submitPractitionerNameSearchSequence,
   }) {
     return (
       <>
-        {practitionerSearchFormHelper.showAddPractitioner && (
+        {!isPublicUser && practitionerSearchFormHelper.showAddPractitioner && (
           <div className="grid-row margin-bottom-2">
             <div className="grid-col-12 text-right">
               <Button
@@ -34,19 +35,13 @@ export const PractitionerSearchForm = connect(
           data-testid="practitioner-search-container"
         >
           <div className="grid-col-6 right-gray-border">
-            <PractitionerSearchByName
-              submitPractitionerBarNumberSearchSequence={
-                submitPractitionerBarNumberSearchSequence
-              }
-            />
+            <PractitionerSearchByName />
           </div>
 
           <div className="grid-col-6">
             <PractitionerSearchByBarNumber
-              submitPractitionerNameSearchSequence={
-                submitPractitionerNameSearchSequence
-              }
-            />
+              isPublicUser={isPublicUser}
+            ></PractitionerSearchByBarNumber>
           </div>
         </div>
       </>
