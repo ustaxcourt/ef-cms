@@ -1,3 +1,7 @@
+import {
+  type SESClient,
+  SendBulkTemplatedEmailCommand,
+} from '@aws-sdk/client-ses';
 import { backOff } from '../../../../shared/src/tools/helpers';
 
 /**
@@ -30,6 +34,7 @@ export const sendBulkTemplatedEmail = async ({
   templateName,
 }) => {
   try {
+    //todo: should we refactor emailParams here, or in the lambda where it's dequeued and actually sent
     await applicationContext.getMessageGateway().sendEmailEventToQueue({
       applicationContext,
       emailParams: {
@@ -66,20 +71,22 @@ export const sendWithRetry = async ({
   params,
   retryCount = 0,
 }) => {
-  const SES = applicationContext.getEmailClient();
+  const sesClient: SESClient = applicationContext.getEmailClient();
   const { MAX_SES_RETRIES } = applicationContext.getConstants();
 
   applicationContext.logger.info('Bulk Email Params', params);
-  const response = await SES.sendBulkTemplatedEmail(params).promise();
+
+  const cmd = new SendBulkTemplatedEmailCommand(params);
+  const response = await sesClient.send(cmd);
   applicationContext.logger.info('Bulk Email Response', response);
 
   // parse response from AWS
-  const needToRetry = response.Status.map((attempt, index) => {
+  const needToRetry = response.Status?.map((attempt, index) => {
     // AWS returns 'Success' and helpful identifier upon successful delivery
     return attempt.Status !== 'Success' ? params.Destinations[index] : false;
   }).filter(Boolean);
 
-  if (needToRetry.length === 0) {
+  if (!needToRetry || needToRetry.length === 0) {
     return;
   }
 
