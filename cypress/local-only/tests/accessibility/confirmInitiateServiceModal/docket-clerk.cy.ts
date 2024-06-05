@@ -1,9 +1,7 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import {
   loginAsDocketClerk,
   loginAsDocketClerk1,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -22,15 +20,7 @@ describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="serve-to-parties-btn"]').click();
     cy.get('[data-testid="confirm-initiate-service-modal"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   describe('Multi-docketable filings', () => {
@@ -43,15 +33,7 @@ describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="serve-paper-filed-document"]').click();
       cy.get('[data-testid="confirm-initiate-service-modal"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

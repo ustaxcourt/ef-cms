@@ -1,6 +1,3 @@
-import { impactLevel } from '../../../../../helpers/accessibility-impact';
-import { terminalLog } from '../../../../../helpers/cypressTasks/logs';
-
 describe('Health Check - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -10,14 +7,6 @@ describe('Health Check - Accessibility', () => {
     cy.visit('/health');
     cy.contains('Health Check');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Case Deadlines - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,14 +13,6 @@ describe('Case Deadlines - Docket Clerk Accessibility', () => {
     cy.get('#deadlineEnd-date-end').type('12/01/2019');
     cy.get('[data-testid="submit-case-deadlines-report-button"]').click();
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

@@ -1,6 +1,3 @@
-import { impactLevel } from '../../../../../helpers/accessibility-impact';
-import { terminalLog } from '../../../../../helpers/cypressTasks/logs';
-
 describe('Email Verification - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -10,14 +7,6 @@ describe('Email Verification - Accessibility', () => {
     cy.visit('/email-verification-instructions');
     cy.contains('Log In').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('File a Petition Page - Petitioner Accessibility', () => {
   beforeEach(() => {
@@ -13,19 +11,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.visit('/file-a-petition/step-1');
       cy.get('[data-testid="complete-step-1"]').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -37,19 +23,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#hasIrsNotice-0').click();
       cy.get('label#atp-file-upload-label').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues without irs notice', () => {
@@ -59,19 +33,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#hasIrsNotice-1').click();
       cy.get('.case-type-select').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -83,19 +45,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#filing-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing with spouse', () => {
@@ -106,19 +56,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-spouse-deceased-1').click();
       cy.get('.modal-dialog').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing with deceased spouse', () => {
@@ -129,19 +67,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-spouse-deceased-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing with deceased spouse with international address', () => {
@@ -153,19 +79,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#contactSecondary-country-radio-label-international').click();
       cy.get('.contactSecondary-country').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing as corporation', () => {
@@ -176,19 +90,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for partnership as tax matters', () => {
@@ -199,19 +101,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-1').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for partnership as other than tax matters', () => {
@@ -222,19 +112,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for partnership as BBA', () => {
@@ -245,19 +123,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-3').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for estate with executor', () => {
@@ -269,19 +135,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-estate-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for estate without executor', () => {
@@ -293,19 +147,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-estate-type-1').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for estate as trust', () => {
@@ -317,19 +159,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-estate-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for conservator', () => {
@@ -341,19 +171,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for guardian', () => {
@@ -365,19 +183,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-1').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for custodian', () => {
@@ -389,19 +195,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for minor', () => {
@@ -413,19 +207,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-3').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for legally incompetent person', () => {
@@ -437,19 +219,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-4').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for donor', () => {
@@ -460,19 +230,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-other-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for transferee', () => {
@@ -483,19 +241,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-other-type-3').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when filing for surviving spouse', () => {
@@ -506,19 +252,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-other-type-4').click();
       cy.get('.contact-group').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -530,19 +264,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#procedure-type-0').click();
       cy.get('#preferred-trial-city').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

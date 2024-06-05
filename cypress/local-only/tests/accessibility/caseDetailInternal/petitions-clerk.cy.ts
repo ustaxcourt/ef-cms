@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Case Detail Page - Petitions Clerk Accessibility', () => {
   beforeEach(() => {
@@ -16,19 +14,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#menu-button-add-new-message').click();
       cy.get('.ustc-create-message-modal').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when creating order', () => {
@@ -40,19 +26,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#menu-button-create-order').click();
       cy.get('#eventCode').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when adding deadline', () => {
@@ -64,19 +38,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#menu-button-add-deadline').click();
       cy.get('#deadline-date-picker').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -87,19 +49,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19');
       cy.get('[data-testid="docket-record-table"]').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     describe('Document view tab', () => {
@@ -111,19 +61,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         );
         cy.get('#tabContent-documentView').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
     });
   });
@@ -136,19 +74,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('[data-testid="docket-record-table"]').should('exist');
       cy.get('#tab-case-information').click();
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues for manual and automatic block', () => {
@@ -159,19 +85,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#tab-case-information').click();
       cy.get('#blocked-from-trial-header').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when adding and editing calendar note', () => {
@@ -184,19 +98,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#add-edit-calendar-note').click();
       cy.get('.add-edit-calendar-note-modal').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when adding trial session', () => {
@@ -208,19 +110,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#add-to-trial-session-btn').click();
       cy.get('#add-to-trial-session-modal').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when removing trial session', () => {
@@ -233,19 +123,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#remove-from-trial-session-btn').click();
       cy.get('#remove-from-trial-session-modal').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when prioritizing case', () => {
@@ -257,19 +135,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('.high-priority-btn').click();
       cy.get('#prioritize-case-modal').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when unprioritizing case', () => {
@@ -281,19 +147,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#remove-high-priority-btn').click();
       cy.get('#unprioritize-modal').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     describe('Statistics tab', () => {
@@ -306,19 +160,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#tab-statistics').click();
         cy.get('#tabContent-statistics').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when adding other statistics', () => {
@@ -327,18 +169,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.visit('/case-detail/101-19/add-other-statistics');
         cy.contains('Add Other Statistics');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when editing other statistics', () => {
@@ -347,15 +178,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.visit('/case-detail/101-19/edit-other-statistics');
         cy.contains('Edit Other Statistics').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when deleting other statistics', () => {
@@ -366,18 +189,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('button.red-warning').click();
         cy.get('#modal-root').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when adding deficiency statistics', () => {
@@ -386,18 +198,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.visit('/case-detail/105-20/add-deficiency-statistics');
         cy.get('.add-deficiency-statistics-form').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when editing deficiency statistics', () => {
@@ -408,18 +209,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         );
         cy.get('.add-deficiency-statistics-form').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when deleting deficiency statistics', () => {
@@ -432,18 +222,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('button.red-warning').click();
         cy.get('#modal-root').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
     });
 
@@ -456,19 +235,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#tab-case-information').click();
         cy.get('#tab-parties').click();
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when adding practitioner', () => {
@@ -482,19 +249,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#search-for-practitioner').click();
         cy.get('#counsel-matches-legend').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when viewing respondent counsel tertiary tabs', () => {
@@ -507,19 +262,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#respondent-counsel').click();
         cy.get('#edit-respondent-counsel').click();
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when adding respondent', () => {
@@ -534,19 +277,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#search-for-respondent').click();
         cy.get('#counsel-matches-legend').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues when editing respondent', () => {
@@ -555,15 +286,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.visit('/case-detail/103-19/edit-respondent-counsel/RT6789');
         cy.get('#submit-edit-respondent-information').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('should be free of a11y issues for sealed addresses', () => {
@@ -575,19 +298,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#tab-parties').click();
         cy.get('.sealed-address').should('exist');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
     });
   });
@@ -601,19 +312,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#tab-case-information').click();
       cy.get('#tab-drafts').click();
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when editing signed draft', () => {
@@ -626,19 +325,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#edit-order-button').click();
       cy.get('.modal-button-confirm').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -650,19 +337,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('[data-testid="docket-record-table"]').should('exist');
       cy.get('#tab-tracked-items').click();
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     describe('Pending report tab', () => {
@@ -674,19 +349,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         cy.get('#tab-tracked-items').click();
         cy.get('#tab-pending-report').click();
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
     });
   });
@@ -699,19 +362,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('[data-testid="docket-record-table"]').should('exist');
       cy.get('#tab-case-messages').click();
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -724,19 +375,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('#tab-correspondence').click();
       cy.get('.document-viewer--documents').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when uploading correspondence', () => {
@@ -745,15 +384,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.visit('/case-detail/103-19/upload-correspondence');
       cy.get('#upload-correspondence').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     it('should be free of a11y issues when editing correspondence', () => {
@@ -766,19 +397,7 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       cy.get('.edit-correspondence-button').click();
       cy.get('#edit-correspondence-header').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

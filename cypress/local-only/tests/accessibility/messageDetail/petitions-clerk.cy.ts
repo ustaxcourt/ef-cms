@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Message Detail - Petitions Clerk Accessibility', () => {
   beforeEach(() => {
@@ -14,16 +12,7 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     );
     cy.contains('Message');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('should be free of a11y issues when forwarding', () => {
@@ -34,16 +23,7 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     cy.get('#button-forward').click();
     cy.get('.modal-dialog').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('should be free of a11y issues when replying', () => {
@@ -54,16 +34,7 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     cy.get('#button-reply').click();
     cy.get('.modal-dialog').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('should be free of a11y issues when completing', () => {
@@ -74,15 +45,6 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     cy.get('#button-complete').click();
     cy.get('.modal-dialog').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

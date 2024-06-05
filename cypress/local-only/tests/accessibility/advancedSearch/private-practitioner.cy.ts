@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Advanced Search - Private Practitioner Accessibility', () => {
   beforeEach(() => {
@@ -10,15 +8,8 @@ describe('Advanced Search - Private Practitioner Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsPrivatePractitioner();
     cy.visit('/search/no-matches');
-    cy.contains('No Matches Found');
+    cy.get('[data-testid="search-by-name-link"]').should('exist');
 
-    cy.injectAxe();
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

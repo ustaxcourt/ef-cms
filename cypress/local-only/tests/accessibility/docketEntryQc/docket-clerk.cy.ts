@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Docket Entry QC - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,15 +13,7 @@ describe('Docket Entry QC - Docket Clerk Accessibility', () => {
     );
     cy.get('[data-testid="docket-entry-qc-container"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   describe('Work item already completed modal', () => {
@@ -35,15 +25,7 @@ describe('Docket Entry QC - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="work-item-already-completed-modal"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

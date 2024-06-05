@@ -1,6 +1,3 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
-
 describe('Login - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -11,8 +8,6 @@ describe('Login - Accessibility', () => {
 
     cy.get('[data-testid="email-input"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
+    cy.runA11y();
   });
 });

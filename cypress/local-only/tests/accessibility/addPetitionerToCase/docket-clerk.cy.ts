@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Add Petitioner To Case - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -14,14 +12,6 @@ describe('Add Petitioner To Case - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="add-petitioner-to-case-container"]');
     cy.get('[data-testid="use-existing-address-checkbox"]').click();
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

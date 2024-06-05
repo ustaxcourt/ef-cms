@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Unconsolidate Cases Modal - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -16,14 +14,6 @@ describe('Unconsolidate Cases Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="unconsolidate-cases-button"]').click();
     cy.get('[data-testid="modal-confirm"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });
