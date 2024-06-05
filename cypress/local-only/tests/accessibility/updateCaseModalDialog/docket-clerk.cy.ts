@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Update Case Modal Dialog - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -14,13 +12,6 @@ describe('Update Case Modal Dialog - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="tab-case-information"]').click();
     cy.get('[data-testid="menu-edit-case-context-button"]').click();
 
-    cy.injectAxe();
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsIrsPractitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Case Detail - IRS Practitioner Accessibility', () => {
   beforeEach(() => {
@@ -13,18 +11,7 @@ describe('Case Detail - IRS Practitioner Accessibility', () => {
     cy.visit('/case-detail/105-19');
     cy.get('[data-testid="docket-record-table"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: {
-          'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-        },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   describe('Sealed cases', () => {
@@ -34,18 +21,7 @@ describe('Case Detail - IRS Practitioner Accessibility', () => {
       cy.visit('/case-detail/102-20');
       cy.get('[data-testid="sealed-case-banner"]').should('exist');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

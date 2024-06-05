@@ -1,7 +1,6 @@
 /* eslint-disable jest/no-disabled-tests */
-import { impactLevel } from '../../../../helpers/accessibility-impact';
+
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Request Case Access Page - Private Practitioner Accessibility', () => {
   beforeEach(() => {
@@ -13,18 +12,7 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
 
     cy.visit('/case-detail/102-19/request-access');
     cy.get('[data-testid="request-access-submit-document"]').should('exist');
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: {
-          'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-        },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('should be free of a11y issues when requesting access with supporting document', () => {
@@ -43,14 +31,6 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
     });
     cy.get('#supportingDocuments-0-service-date-picker').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

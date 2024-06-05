@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Maintenance - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -13,14 +11,6 @@ describe('Maintenance - Docket Clerk Accessibility', () => {
     cy.visit('/maintenance');
     cy.get('[data-testid="maintenance-container"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

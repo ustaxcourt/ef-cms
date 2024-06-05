@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Advanced Search - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -19,16 +17,7 @@ describe('Advanced Search - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="submit-order-advanced-search-button"]').click();
       cy.get('[data-testid="advanced-document-search-results-table"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: { 'nested-interactive': { enabled: false } },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -44,16 +33,7 @@ describe('Advanced Search - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="advanced-search-button"]').click();
       cy.get('[data-testid="advanced-document-search-results-table"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: { 'nested-interactive': { enabled: false } },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

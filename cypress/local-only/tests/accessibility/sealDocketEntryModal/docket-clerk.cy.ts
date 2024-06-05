@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Seal Docket Entry Modal - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,14 +13,6 @@ describe('Seal Docket Entry Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="seal-docket-entry-button-1"]').click();
     cy.get('[data-testid="seal-docket-entry-modal"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });
