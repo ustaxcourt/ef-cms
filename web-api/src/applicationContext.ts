@@ -184,7 +184,7 @@ export const createApplicationContext = (
     getEmailClient: () => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
-          sendEmail: () => {
+          send: () => {
             return new Promise<EmailResponse>(resolve => {
               resolve({ MessageId: '' });
             });
