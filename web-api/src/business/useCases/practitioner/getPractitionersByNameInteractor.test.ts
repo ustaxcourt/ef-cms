@@ -1,5 +1,4 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
 
@@ -21,7 +20,7 @@ describe('getPractitionersByNameInteractor', () => {
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
-          {} as RawPractitioner,
+          {} as { name: string; searchAfter: string },
         ),
       ).rejects.toThrow('Unauthorized for searching practitioners');
     });
@@ -30,7 +29,7 @@ describe('getPractitionersByNameInteractor', () => {
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
-          {} as RawPractitioner,
+          {} as { name: string; searchAfter: string },
         ),
       ).rejects.toThrow('Name must be provided to search');
     });
@@ -63,6 +62,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
+          searchAfter: undefined as unknown as string,
         },
       );
 
