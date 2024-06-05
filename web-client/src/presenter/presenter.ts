@@ -386,6 +386,7 @@ import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequ
 import { setPDFStampDataSequence } from './sequences/setPDFStampDataSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
+import { setPetitionTypeSequence } from '@web-client/presenter/sequences/setPetitionTypeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
@@ -1233,6 +1234,7 @@ export const presenterSequences = {
   setPdfPreviewUrlSequence: setPdfPreviewUrlSequence as unknown as Function,
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
+  setPetitionTypeSequence: setPetitionTypeSequence as unknown as Function,
   setSelectedAddressOnFormSequence:
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
