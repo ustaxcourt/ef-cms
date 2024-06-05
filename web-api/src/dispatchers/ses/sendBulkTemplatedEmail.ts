@@ -1,6 +1,7 @@
 import {
   type SESClient,
   SendBulkTemplatedEmailCommand,
+  SendTemplatedEmailCommand,
 } from '@aws-sdk/client-ses';
 import { backOff } from '../../../../shared/src/tools/helpers';
 
@@ -34,23 +35,21 @@ export const sendBulkTemplatedEmail = async ({
   templateName,
 }) => {
   try {
-    //todo: should we refactor emailParams here, or in the lambda where it's dequeued and actually sent
+    const cmd = new SendTemplatedEmailCommand({
+      Destination: destinations.map(destination => ({
+        Destination: {
+          ToAddresses: [destination.email],
+        },
+        ReplacementTemplateData: JSON.stringify(destination.templateData),
+      })),
+      Source: applicationContext.environment.emailFromAddress,
+      Template: templateName,
+      TemplateData: JSON.stringify(defaultTemplateData),
+    });
+
     await applicationContext.getMessageGateway().sendEmailEventToQueue({
       applicationContext,
-      emailParams: {
-        DefaultTemplateData: JSON.stringify(defaultTemplateData),
-        Destinations: destinations.map(destination => ({
-          Destination: {
-            ToAddresses: [destination.email],
-          },
-          ReplacementTemplateData: JSON.stringify(destination.templateData),
-        })),
-        ReturnPath:
-          process.env.BOUNCED_EMAIL_RECIPIENT ||
-          applicationContext.environment.emailFromAddress,
-        Source: applicationContext.environment.emailFromAddress,
-        Template: templateName,
-      },
+      emailParams: cmd,
     });
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err}`, err);
