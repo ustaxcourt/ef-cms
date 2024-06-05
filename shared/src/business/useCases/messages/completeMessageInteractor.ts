@@ -17,10 +17,10 @@ import { orderBy } from 'lodash';
  */
 export const completeMessageInteractor = async (
   applicationContext: IApplicationContext,
-  { messages }: { messages: { messageId: string; parentMessageId: string }[] },
+  {
+    messages,
+  }: { messages: { messageBody: string; parentMessageId: string }[] },
 ): Promise<void> => {
-  const { messageId } = messages[0];
-  const { parentMessageId } = messages[0];
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -31,30 +31,34 @@ export const completeMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
-    applicationContext,
-    parentMessageId,
-  });
+  for (const message of messages) {
+    await applicationContext
+      .getPersistenceGateway()
+      .markMessageThreadRepliedTo({
+        applicationContext,
+        parentMessageId: message.parentMessageId,
+      });
 
-  const messageThread = await applicationContext
-    .getPersistenceGateway()
-    .getMessageThreadByParentId({
+    const messageThread = await applicationContext
+      .getPersistenceGateway()
+      .getMessageThreadByParentId({
+        applicationContext,
+        parentMessageId: message.parentMessageId,
+      });
+
+    const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
+
+    const updatedMessage = new Message(mostRecentMessage, {
       applicationContext,
-      parentMessageId,
+    }).validate();
+
+    updatedMessage.markAsCompleted({ message: message.messageBody, user });
+
+    const validatedRawMessage = updatedMessage.validate().toRawObject();
+
+    await applicationContext.getPersistenceGateway().updateMessage({
+      applicationContext,
+      message: validatedRawMessage,
     });
-
-  const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
-
-  const updatedMessage = new Message(mostRecentMessage, {
-    applicationContext,
-  }).validate();
-
-  updatedMessage.markAsCompleted({ message: messageId, user });
-
-  const validatedRawMessage = updatedMessage.validate().toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateMessage({
-    applicationContext,
-    message: validatedRawMessage,
-  });
+  }
 };

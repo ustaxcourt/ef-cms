@@ -21,7 +21,7 @@ export const completeMessageAction = async ({
     .completeMessageInteractor(applicationContext, {
       messages: [
         {
-          messageId: form.messageId,
+          messageBody: form?.message,
           parentMessageId: mostRecentMessage.parentMessageId,
         },
       ],
