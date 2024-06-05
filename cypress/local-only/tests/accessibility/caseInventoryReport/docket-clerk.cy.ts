@@ -10,10 +10,12 @@ describe('Case Inventory Report - Docket Clerk Accessibility', () => {
 
     cy.visit('/reports/case-inventory-report');
     cy.get('[data-testid="case-inventory-report-modal"]');
-    cy.get('[data-testid="case-inventory-status-select"]').select('New');
+    cy.get('[data-testid="case-inventory-status-select"]')
+      .should('not.be.disabled')
+      .select('New', { force: true });
     cy.get('[data-testid="case-inventory-judge-select"]')
-      .should('be.enabled')
-      .select('Chief Judge');
+      .should('not.be.disabled')
+      .select('Chief Judge', { force: true });
     cy.get('[data-testid="modal-button-confirm"]').click();
     cy.get('[data-testid="case-inventory-report-table"]');
 
