@@ -22,6 +22,14 @@ export const generatePetitionPreviewPdfUrlAction = async ({
     store.set(state.petitionFormatted.stinFileUrl, url);
   }
 
+  if (petitionFormatted.petitionFile) {
+    const url = await generatePdfUrl(
+      petitionFormatted.petitionFile,
+      applicationContext,
+    );
+    store.set(state.petitionFormatted.petitionFileUrl, url);
+  }
+
   if (petitionFormatted.hasIrsNotice && petitionFormatted.irsNotices?.length) {
     petitionFormatted.irsNotices.forEach(async (irsNotice, index) => {
       if (irsNotice.file) {
