@@ -10,7 +10,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 ### Do the following for all package.json files
 
-note: we have 2 package.json files, be sure to update them all
+note: we have 2 package.json files, be sure to update both
   - ./package.json
   - ./web-api/runtimes/puppeteer/package.json
 
