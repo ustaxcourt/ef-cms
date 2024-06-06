@@ -18,7 +18,6 @@ import classNames from 'classnames';
 export const UpdatedFilePetitionStep6 = connect(
   {
     form: state.form,
-    pdfGeneratedUrl: state.pdfGeneratedUrl,
     pdfPreviewUrl: state.pdfPreviewUrl,
     petitionFormatted: state.petitionFormatted,
     showModal: state.modal.showModal,
@@ -182,9 +181,11 @@ function CaseInformation({ pdfPreviewUrl, petitionFormatted }) {
                       <div className="grid-col flex-auto">
                         <Button
                           link
-                          className="usa-link--external text-left mobile-text-wrap padding-0"
+                          className="text-left mobile-text-wrap padding-0"
                           data-testid="preview-petition-file-button-link"
-                          href={pdfPreviewUrl}
+                          href={
+                            petitionFormatted.petitionFileUrl || pdfPreviewUrl
+                          }
                           rel="noopener noreferrer"
                           target="_blank"
                         >

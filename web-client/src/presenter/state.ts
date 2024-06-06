@@ -744,6 +744,7 @@ export const baseState = {
     petitionFacts: [''],
     petitionFile: undefined,
     petitionFileId: undefined,
+    petitionFileUrl: undefined,
     petitionReasons: [''],
     petitionRedactionAcknowledgement: false,
     petitionType: undefined,
