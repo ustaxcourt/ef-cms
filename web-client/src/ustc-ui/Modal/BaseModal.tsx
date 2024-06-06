@@ -32,19 +32,11 @@ export const BaseModal = ({
       }
     };
 
-    const keydownTriggered = event => {
-      if (event.keyCode === 27) {
-        return blurDialog(event);
-      }
-    };
-
     modalRoot.appendChild(getEl());
-    window.document.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      window.document.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
