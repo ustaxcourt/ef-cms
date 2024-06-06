@@ -80,24 +80,16 @@ export const ModalDialog = ({
     confirmSequence.call();
   };
 
-  // const keydownTriggered = evt => {
-  //   if (evt.keyCode === 27) {
-  //     return blurDialog(evt);
-  //   }
-  // };
-
   const touchmoveTriggered = evt => {
     return evt.preventDefault();
   };
 
   useEffect(() => {
     modalRoot.appendChild(getEl());
-    // window.document.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      // window.document.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
