@@ -139,6 +139,7 @@ module "api-west-green" {
     DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-west-1"
+    DISABLE_ALL_TRAFFIC    = "true"
   })
   region = "us-west-1"
   providers = {

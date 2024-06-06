@@ -33,6 +33,7 @@ aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --ena
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_async_${ENV}_${DEPLOYING_COLOR}" -k DISABLE_ALL_TRAFFIC -v false
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_${ENV}_${DEPLOYING_COLOR}" -k DISABLE_ALL_TRAFFIC -v false
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "websockets_connect_${ENV}_${DEPLOYING_COLOR}" -k DISABLE_ALL_TRAFFIC -v false
+./web-api/terraform/bin/edit-lambda-environment.sh -l "api_public_${ENV}_${DEPLOYING_COLOR}" -k DISABLE_ALL_TRAFFIC -v false
 
 npx ts-node --transpile-only ./web-client/switch-public-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-ui-colors.ts
@@ -44,6 +45,7 @@ npx ts-node --transpile-only ./web-api/switch-health-check-domain.ts
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_async_${ENV}_${CURRENT_COLOR}" -k DISABLE_ALL_TRAFFIC -v true
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_${ENV}_${CURRENT_COLOR}" -k DISABLE_ALL_TRAFFIC -v true
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "websockets_connect_${ENV}_${CURRENT_COLOR}" -k DISABLE_ALL_TRAFFIC -v true
+./web-api/terraform/bin/edit-lambda-environment.sh -l "api_public_${ENV}_${CURRENT_COLOR}" -k DISABLE_ALL_TRAFFIC -v true
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'"${DEPLOYING_COLOR}"'"}}'
 
