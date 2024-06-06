@@ -5,16 +5,20 @@ export const setProgressForFileUploadAction = ({
   props,
   store,
 }: ActionProps<{
-  files: {
-    size: string;
-    name: string;
-  };
+  files:
+    | {
+        size: number;
+        name: string;
+      }
+    | {
+        size: number;
+        name: string;
+      }[];
 }>): {
   fileUploadProgressMap: FileUploadProgressMapType;
 } => {
   const { files } = props;
   const loadedAmounts: Record<string, number> = {};
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const startTime = new Date();
   const sizeOfFiles: Record<string, number> = {};
 
@@ -23,6 +27,7 @@ export const setProgressForFileUploadAction = ({
       return sizeOfFiles[key] + acc;
     }, 0);
   };
+
   const calculateTotalLoaded = () => {
     return Object.keys(loadedAmounts).reduce((acc, key) => {
       return loadedAmounts[key] + acc;
@@ -31,11 +36,22 @@ export const setProgressForFileUploadAction = ({
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    sizeOfFiles[key] = files[key].size;
+
+    if (Array.isArray(files[key])) {
+      (files[key] as { size: number; name: string }[]).forEach(
+        (file, index) => {
+          const uniqueKey = `${key}-${index}`;
+          sizeOfFiles[uniqueKey] = file.size;
+          loadedAmounts[uniqueKey] = 0;
+        },
+      );
+    } else {
+      sizeOfFiles[key] = (files[key] as { size: number; name: string }).size;
+      loadedAmounts[key] = 0;
+    }
   });
 
   const createOnUploadProgress = (key: string) => {
-    loadedAmounts[key] = 0;
     return progressEvent => {
       const { isDone, isHavingSystemIssues, loaded, total } = progressEvent;
       if (total) {
@@ -44,8 +60,6 @@ export const setProgressForFileUploadAction = ({
 
       loadedAmounts[key] = isDone ? sizeOfFiles[key] : loaded;
       const totalSize = calculateTotalSize();
-      // O.K. to use Date constructor for calculating time duration
-      // eslint-disable-next-line @miovision/disallow-date/no-new-date
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
@@ -70,10 +84,25 @@ export const setProgressForFileUploadAction = ({
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    fileUploadProgressMap[key] = {
-      file: files[key],
-      uploadProgress: createOnUploadProgress(key),
-    };
+
+    if (Array.isArray(files[key])) {
+      const uploadMaps = (files[key] as { size: number; name: string }[]).map(
+        (file, index) => {
+          const uniqueKey = `${key}-${index}`;
+          return {
+            file,
+            uploadProgress: createOnUploadProgress(uniqueKey),
+          };
+        },
+      );
+
+      fileUploadProgressMap[key] = uploadMaps;
+    } else {
+      fileUploadProgressMap[key] = {
+        file: files[key] as { size: number; name: string },
+        uploadProgress: createOnUploadProgress(key),
+      };
+    }
   });
 
   return { fileUploadProgressMap };

@@ -8,7 +8,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
 import { omit } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  *
