@@ -8,15 +8,11 @@ const modalRoot = window.document.getElementById('modal-root');
 export const BaseModal = ({
   children,
   className,
-  onBlurSequence,
-  preventCancelOnBlur,
   title,
 }: {
   title: string;
   children?: React.ReactNode;
   className?: string;
-  onBlurSequence: Function;
-  preventCancelOnBlur?: boolean;
 }) => {
   const elRef = React.useRef(null);
 
@@ -25,20 +21,6 @@ export const BaseModal = ({
       elRef.current = window.document.createElement('div');
     }
     return elRef.current;
-  };
-
-  const runBlurSequence = event => {
-    event.stopPropagation();
-    if (onBlurSequence) {
-      onBlurSequence();
-    }
-  };
-
-  const blurDialog = event => {
-    if (preventCancelOnBlur) {
-      return;
-    }
-    return runBlurSequence(event);
   };
 
   useEffect(() => {
@@ -76,14 +58,8 @@ export const BaseModal = ({
           className={classNames('modal-screen', className)}
           role="dialog"
           title={title}
-          onClick={blurDialog}
         >
-          <div
-            className="modal-dialog padding-205"
-            onClick={event => event.stopPropagation()}
-          >
-            {children}
-          </div>
+          <div className="modal-dialog padding-205">{children}</div>
         </dialog>
       </FocusLock>
     );
