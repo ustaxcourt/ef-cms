@@ -110,7 +110,7 @@ export class ContactUpdated extends JoiValidationEntity {
       .messages({ '*': 'Enter country type' }),
     postalCode: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages({ '*': 'Enter ZIP code' }),
+      .messages({ '*': 'Enter postal code' }),
   } as const;
 
   getValidationRules() {
