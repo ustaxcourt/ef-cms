@@ -5,6 +5,7 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { ElectronicPetition } from './ElectronicPetition';
+import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ElectronicPetition entity', () => {
@@ -16,6 +17,7 @@ describe('ElectronicPetition entity', () => {
           caseType: CASE_TYPES_MAP.other,
           filingType: 'A business',
           hasIrsNotice: false,
+          petitionType: undefined,
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
         },
@@ -393,6 +395,10 @@ describe('ElectronicPetition entity', () => {
         electronicPetition.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toBeUndefined();
+
+      expect(electronicPetition.petitionType).toEqual(
+        PETITION_TYPES.userUploaded,
+      );
     });
 
     it('should error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {

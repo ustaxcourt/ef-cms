@@ -11,4 +11,13 @@ describe('incrementCurrentPageAction', () => {
 
     expect(result.state.advancedSearchForm.currentPage).toEqual(3);
   });
+
+  it('increments state.advancedSearchForm.currentPage by 1 even when it is not set on state', async () => {
+    const result = await runAction(incrementCurrentPageAction, {
+      modules: { presenter },
+      state: { advancedSearchForm: {} },
+    });
+
+    expect(result.state.advancedSearchForm.currentPage).toEqual(2);
+  });
 });
