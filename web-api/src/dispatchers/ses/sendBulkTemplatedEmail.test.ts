@@ -33,7 +33,7 @@ describe('sendBulkTemplatedEmail', () => {
 
     expect(
       applicationContext.getMessageGateway().sendEmailEventToQueue.mock
-        .calls[0][0].emailParams.input,
+        .calls[0][0].emailParams,
     ).toMatchObject({
       Destinations: [
         {
