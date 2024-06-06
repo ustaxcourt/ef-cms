@@ -22,7 +22,6 @@ type ConfirmModalProps = {
   onCancelSequence: Function;
   onConfirmSequence: Function;
   onDeleteSequence?: Function;
-  preventCancelOnBlur?: boolean;
   showDelete?: boolean;
   showModalWhen?: string;
   title: string;
@@ -50,7 +49,6 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
     onCancelSequence,
     onConfirmSequence,
     onDeleteSequence,
-    preventCancelOnBlur,
     showDelete = false,
     showModal,
     showModalWhen,
@@ -75,9 +73,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
     return (
       <BaseModal
         className={classNames(className, hasErrorState && 'modal-error')}
-        preventCancelOnBlur={preventCancelOnBlur}
         title={title}
-        onBlurSequence={onCancelSequence} // NEED TO PASS IN FUNCTION
       >
         <div className={classNames('modal-header grid-container padding-x-0')}>
           <div className="grid-row">
@@ -94,7 +90,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
                     size="lg"
                   />
                 )}{' '}
-                {title}
+                {title} - confirm modal
               </h3>
             </div>
             {!noCloseBtn && (

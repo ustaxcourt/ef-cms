@@ -181,7 +181,6 @@ export const PractitionerDocumentation = connect(
           <ConfirmModal
             cancelLabel="No, Cancel"
             confirmLabel="Yes, Delete"
-            preventCancelOnBlur={true}
             title="Are You Sure You Want to Delete This Document?"
             onCancelSequence={clearModalSequence}
             onConfirmSequence={deletePractitionerDocumentSequence}
