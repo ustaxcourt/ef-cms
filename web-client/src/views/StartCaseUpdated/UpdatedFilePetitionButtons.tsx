@@ -7,8 +7,7 @@ import React from 'react';
 
 export const UpdatedFilePetitionButtons = connect(
   {
-    closeModalAndReturnToDashboardSequence:
-      sequences.closeModalAndReturnToDashboardSequence,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isNextButtonDisabled: props.isNextButtonDisabled,
     primaryLabel: props.primaryLabel,
     resetFocus: props.resetFocus,
@@ -30,7 +29,7 @@ export const UpdatedFilePetitionButtons = connect(
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetition({
-    closeModalAndReturnToDashboardSequence,
+    formCancelToggleCancelSequence,
     isNextButtonDisabled,
     primaryLabel,
     resetFocus,
@@ -81,7 +80,7 @@ export const UpdatedFilePetitionButtons = connect(
         <Button
           link
           onClick={() => {
-            closeModalAndReturnToDashboardSequence();
+            formCancelToggleCancelSequence();
           }}
         >
           Cancel
