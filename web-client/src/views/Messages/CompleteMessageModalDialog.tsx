@@ -19,7 +19,6 @@ export const CompleteMessageModalDialog = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Complete"
-        preventCancelOnBlur={true}
         title="Complete Message"
         onCancelSequence={clearModalFormSequence}
         onConfirmSequence={completeMessageSequence}
