@@ -7,7 +7,6 @@ export const WorkItemAlreadyCompletedModal = connect(
   function WorkItemAlreadyCompletedModal({ confirmSequence }) {
     return (
       <ModalDialog
-        preventCancelOnBlur
         cancelLink={false}
         closeLink={false}
         confirmLabel="Close and Refresh"
