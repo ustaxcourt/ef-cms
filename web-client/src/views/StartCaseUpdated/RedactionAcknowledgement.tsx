@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export function RedactionAcknowledgement({
   handleChange,
@@ -7,7 +8,7 @@ export function RedactionAcknowledgement({
   redactionAcknowledgement,
 }) {
   return (
-    <div className="card" style={{ maxWidth: 'fit-content' }}>
+    <div className={classNames('card', 'max-width-fit-content')}>
       <div className="content-wrapper usa-checkbox">
         <input
           aria-describedby={`${id}-acknowledgement-label`}
@@ -24,11 +25,10 @@ export function RedactionAcknowledgement({
           }}
         />
         <label
-          className="usa-checkbox__label"
+          className="usa-checkbox__label margin-top-0"
           data-testid={`${id}-acknowledgement-label`}
           htmlFor={`${id}-acknowledgement`}
           id={`${id}-acknowledgement-label`}
-          style={{ marginTop: '0px' }}
         >
           <b>
             All documents I am filing have been redacted in accordance with{' '}
