@@ -90,7 +90,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
                     size="lg"
                   />
                 )}{' '}
-                {title} - confirm modal
+                {title}
               </h3>
             </div>
             {!noCloseBtn && (

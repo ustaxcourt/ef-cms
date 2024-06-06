@@ -187,7 +187,7 @@ export const CaseDetailHeader = connect<
                         </span>
                       )}
                       <label
-                        // aria-label={`status: ${formattedCaseDetail.status}`}
+                        aria-label={`status: ${formattedCaseDetail.status}`}
                         className={classNames(
                           'usa-tag',
                           formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
