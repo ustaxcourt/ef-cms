@@ -648,7 +648,6 @@ function SecondaryMinorIncompetentOptions({
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  // validateStartCaseWizardSequence();
                 }}
               />
               <label

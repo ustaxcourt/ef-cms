@@ -7,7 +7,6 @@ import {
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
-import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -17,15 +16,15 @@ import React from 'react';
 
 export const BeforeStartingCase = connect(
   {
+    closeModalAndReturnToDashboardSequence:
+      sequences.closeModalAndReturnToDashboardSequence,
     featureFlags: state.featureFlags,
-    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     user: state.user,
   },
   function BeforeStartingCase({
+    closeModalAndReturnToDashboardSequence,
     featureFlags,
-    formCancelToggleCancelSequence,
-    showModal,
     user,
   }) {
     const redirectUrl =
@@ -312,18 +311,12 @@ export const BeforeStartingCase = connect(
             href="javascript:void(0);"
             id="cancel"
             onClick={() => {
-              formCancelToggleCancelSequence();
+              closeModalAndReturnToDashboardSequence();
             }}
           >
             Cancel
           </Button>
         </section>
-        {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog
-            useRunConfirmSequence={true}
-            onCancelSequence="closeModalAndReturnToDashboardSequence"
-          />
-        )}
       </>
     );
   },
