@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   sendBulkTemplatedEmail,
   sendWithRetry,
@@ -26,7 +26,7 @@ describe('sendBulkTemplatedEmail', () => {
     ];
     await sendBulkTemplatedEmail({
       applicationContext,
-      defaultTemplateData: null,
+      defaultTemplateData: {},
       destinations: testDestinations,
       templateName: 'case_served',
     });
@@ -72,7 +72,7 @@ describe('sendBulkTemplatedEmail', () => {
     await expect(
       sendBulkTemplatedEmail({
         applicationContext,
-        defaultTemplateData: null,
+        defaultTemplateData: {},
         destinations: testDestinations,
         templateName: 'case_served',
       }),
@@ -132,32 +132,40 @@ describe('sendBulkTemplatedEmail', () => {
       params: {
         Destinations: [
           {
-            email: 'test.email@example.com',
-            templateData: {
+            Destination: {
+              ToAddresses: ['test.email@example.com'],
+            },
+            ReplacementTemplateData: JSON.stringify({
               name: 'Guy Fieri',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
-            },
+            }),
           },
           {
-            email: 'test.email2@example.com',
-            templateData: {
+            Destination: {
+              ToAddresses: ['test.email2@example.com'],
+            },
+            ReplacementTemplateData: JSON.stringify({
               name: 'Guy Fieri',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
-            },
+            }),
           },
           {
-            email: 'test.email3@example.com',
-            templateData: {
+            Destination: {
+              ToAddresses: ['test.email3@example.com'],
+            },
+            ReplacementTemplateData: JSON.stringify({
               name: 'Guy Fieri',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
-            },
+            }),
           },
         ],
-        TemplateName: 'case_served',
+        Source: 'jest@example.com',
+        Template: 'case_served',
       },
+      retryCount: 0,
     });
     expect(applicationContext.getEmailClient().send).toHaveBeenCalledTimes(2);
   });
@@ -209,8 +217,10 @@ describe('sendBulkTemplatedEmail', () => {
               },
             },
           ],
-          TemplateName: 'case_served',
+          Source: 'jest@example.com',
+          Template: 'case_served',
         },
+        retryCount: 0,
       }),
     ).rejects.toEqual(
       'Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
