@@ -11,6 +11,7 @@ export const presenter = {
   providers: {
     applicationContext: ClientApplicationContext;
     path: any;
+    router: any;
   };
   sequences: any;
   state: typeof baseState;
