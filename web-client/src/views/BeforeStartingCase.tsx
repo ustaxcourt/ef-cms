@@ -40,7 +40,7 @@ export const BeforeStartingCase = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <h1 className="captioned" tabIndex={-1}>
-                  Create a case
+                  Create a Case
                 </h1>
               </div>
             </div>
