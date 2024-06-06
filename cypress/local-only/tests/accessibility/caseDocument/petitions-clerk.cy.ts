@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Case Documents Page - Petitions Clerk Accessibility', () => {
   beforeEach(() => {
@@ -14,18 +12,6 @@ describe('Case Documents Page - Petitions Clerk Accessibility', () => {
     );
     cy.get('#file-a-document-header').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: {
-          'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-          'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-        },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Court Issued Docket Entry - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,14 +13,6 @@ describe('Court Issued Docket Entry - Docket Clerk Accessibility', () => {
     );
     cy.get('[data-testid="court-issued-docket-entry-title"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

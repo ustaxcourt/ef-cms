@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Case Detail Internal - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -14,18 +12,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19');
       cy.get('[data-testid="docket-number-header"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
 
     describe('Document view tab', () => {
@@ -37,18 +24,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
         );
         cy.get('[data-testid="document-view-container"]');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
 
       it('sealed case - should be free of a11y issues', () => {
@@ -59,18 +35,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
         );
         cy.get('[data-testid="document-view-container"]');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
     });
   });
@@ -85,18 +50,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
         cy.get('[data-testid="case-status-history-tab"]').click();
         cy.get('[data-testid="case-status-history-container"]');
 
-        cy.injectAxe();
-
-        cy.checkA11y(
-          undefined,
-          {
-            includedImpacts: impactLevel,
-            rules: {
-              'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-            },
-          },
-          terminalLog,
-        );
+        cy.runA11y();
       });
     });
   });
@@ -110,18 +64,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="message-detail-container"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-          rules: {
-            'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-          },
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

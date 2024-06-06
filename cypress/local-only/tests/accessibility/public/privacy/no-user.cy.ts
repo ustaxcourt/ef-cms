@@ -1,6 +1,3 @@
-import { impactLevel } from '../../../../../helpers/accessibility-impact';
-import { terminalLog } from '../../../../../helpers/cypressTasks/logs';
-
 describe('Privacy - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -10,17 +7,6 @@ describe('Privacy - Accessibility', () => {
     cy.visit('/privacy');
     cy.contains('Privacy').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: {
-          'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-        },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

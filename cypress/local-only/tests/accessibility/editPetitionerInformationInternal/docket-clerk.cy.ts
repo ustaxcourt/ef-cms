@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -16,15 +14,7 @@ describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="edit-petitioner-contact-type-select"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -37,15 +27,7 @@ describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="edit-petitioner-contact-type-select"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

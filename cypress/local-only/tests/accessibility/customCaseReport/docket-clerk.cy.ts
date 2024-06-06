@@ -23,6 +23,7 @@ describe('Custom Case Report - Docket Clerk Accessibility', () => {
       undefined,
       {
         includedImpacts: impactLevel,
+        retries: 3,
         rules: { listitem: { enabled: false } }, // https://github.com/flexion/ef-cms/issues/10397
       },
       terminalLog,

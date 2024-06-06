@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Advanced Search', () => {
   beforeEach(() => {
@@ -12,17 +10,9 @@ describe('Advanced Search', () => {
 
     cy.visit('search');
     cy.get('[data-testid="case-search-by-name-container"]').should('exist');
+    cy.get('[data-testid="footer-misuse-warning-text"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('Order - should be free of a11y issues', () => {
@@ -32,16 +22,7 @@ describe('Advanced Search', () => {
     cy.get('[data-testid="order-search-tab"]').click();
     cy.get('[data-testid="order-search-container"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('Opinion - should be free of a11y issues', () => {
@@ -51,16 +32,7 @@ describe('Advanced Search', () => {
     cy.get('[data-testid="opinion-search-tab"]').click();
     cy.get('[data-testid="opinion-search-container"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   it('Practitioner - should be free of a11y issues', () => {
@@ -70,15 +42,6 @@ describe('Advanced Search', () => {
     cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('[data-testid="practitioner-search-container"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

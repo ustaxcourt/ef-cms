@@ -3,8 +3,6 @@ import {
   generatePassword,
 } from '../../../../helpers/authentication/generate-password';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
-import { impactLevel } from '../../../../helpers/accessibility-impact';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Forgot Password - Accessibility', () => {
   beforeEach(() => {
@@ -16,9 +14,7 @@ describe('Forgot Password - Accessibility', () => {
 
     cy.get('[data-testid="email-input"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
+    cy.runA11y();
   });
 
   it('should be free of a11y issues when resetting password', () => {
@@ -34,8 +30,6 @@ describe('Forgot Password - Accessibility', () => {
     cy.get('[data-testid="send-password-reset-button"]').click();
     cy.contains('We’ve sent you an email');
 
-    cy.injectAxe();
-
-    cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
+    cy.runA11y();
   });
 });
