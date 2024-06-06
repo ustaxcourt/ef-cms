@@ -169,6 +169,12 @@ export const Petition = ({
                 {contactPrimary.title && <span>, {contactPrimary.title}</span>}
               </div>
             )}
+            {contactPrimary.inCareOf && (
+              <div>
+                <span>c/o </span>
+                {contactPrimary.inCareOf}
+              </div>
+            )}
             <div>{contactPrimary.address1}</div>
             {contactPrimary.address2 && <div>{contactPrimary.address2}</div>}
             {contactPrimary.address3 && <div>{contactPrimary.address3}</div>}
