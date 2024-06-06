@@ -7,7 +7,7 @@ export const setSelectedMessagesAction = ({
 }: ActionProps<{ messages: { messageId: string; selected: boolean }[] }>) => {
   let selectedMap = get(state.messagesPage.selectedMessages);
   if (props.messages.length === 0) {
-    selectedMap = new Map<string, boolean>();
+    selectedMap = new Map<string, boolean>(); // why a map tho
   }
   props.messages.forEach(message => {
     if (message.selected) {
