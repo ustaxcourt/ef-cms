@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Practitioner Details - Petition Clerk Accessibility', () => {
   beforeEach(() => {
@@ -12,19 +10,6 @@ describe('Practitioner Details - Petition Clerk Accessibility', () => {
     cy.visit('/practitioner-detail/PT1234');
     cy.get('[data-testid="print-practitioner-case-list"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-
-        rules: {
-          'color-contrast': { enabled: false }, // Ignore contrast as it's good enough for now
-          'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-        },
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

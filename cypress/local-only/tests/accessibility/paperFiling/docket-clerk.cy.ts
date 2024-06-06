@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Paper Filing - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -13,14 +11,7 @@ describe('Paper Filing - Docket Clerk Accessibility', () => {
     cy.visit('/case-detail/103-19/add-paper-filing');
     cy.get('[data-testid="paper-filing-container"]');
 
-    cy.injectAxe();
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   describe('Certificate of service date picker', () => {
@@ -32,14 +23,7 @@ describe('Paper Filing - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="certificate-of-service-label"]').click();
       cy.get('[data-testid="service-date-picker"]');
 
-      cy.injectAxe();
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

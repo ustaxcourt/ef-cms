@@ -3,8 +3,6 @@ import {
   generatePassword,
 } from '../../../../helpers/authentication/generate-password';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
-import { impactLevel } from '../../../../helpers/accessibility-impact';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Create Petitioner Page Accessibility', () => {
   beforeEach(() => {
@@ -16,9 +14,7 @@ describe('Create Petitioner Page Accessibility', () => {
 
     cy.get('[data-testid="create-petitioner-account-container"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
+    cy.runA11y();
   });
 
   it('should be free of a11y issues when creating petitioner and showing success message', () => {
@@ -29,8 +25,6 @@ describe('Create Petitioner Page Accessibility', () => {
     });
     cy.get('[data-testid="verification-sent-message"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(undefined, { includedImpacts: impactLevel }, terminalLog);
+    cy.runA11y();
   });
 });

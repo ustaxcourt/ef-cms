@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,15 +13,7 @@ describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
     );
     cy.get('[data-testid="edit-petitioner-contact-type-select"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 
   describe('Matching Email Found Modal', () => {
@@ -45,15 +35,7 @@ describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
       ).click();
       cy.get('[data-testid="matching-email-found-modal"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 
@@ -76,15 +58,7 @@ describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
       ).click();
       cy.get('[data-testid="no-matching-email-found-modal"]');
 
-      cy.injectAxe();
-
-      cy.checkA11y(
-        undefined,
-        {
-          includedImpacts: impactLevel,
-        },
-        terminalLog,
-      );
+      cy.runA11y();
     });
   });
 });

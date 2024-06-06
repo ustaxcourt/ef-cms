@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Advanced Search - Petition Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,15 +13,6 @@ describe('Advanced Search - Petition Clerk Accessibility', () => {
     cy.get('#practitioner-search-by-name-button').click();
     cy.get('.search-results').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-        rules: { 'nested-interactive': { enabled: false } }, // https://github.com/flexion/ef-cms/issues/10396
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

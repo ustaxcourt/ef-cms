@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Case Inventory Report - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -12,21 +10,15 @@ describe('Case Inventory Report - Docket Clerk Accessibility', () => {
 
     cy.visit('/reports/case-inventory-report');
     cy.get('[data-testid="case-inventory-report-modal"]');
-    cy.get('[data-testid="case-inventory-status-select"]').select('New');
+    cy.get('[data-testid="case-inventory-status-select"]')
+      .should('not.be.disabled')
+      .select('New', { force: true });
     cy.get('[data-testid="case-inventory-judge-select"]')
-      .should('be.enabled')
-      .select('Chief Judge');
+      .should('not.be.disabled')
+      .select('Chief Judge', { force: true });
     cy.get('[data-testid="modal-button-confirm"]').click();
     cy.get('[data-testid="case-inventory-report-table"]');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

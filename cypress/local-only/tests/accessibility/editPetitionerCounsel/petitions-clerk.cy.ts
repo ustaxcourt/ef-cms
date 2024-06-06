@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Edit Petitioner Counsel - Petitions Clerk Accessibility', () => {
   beforeEach(() => {
@@ -13,13 +11,6 @@ describe('Edit Petitioner Counsel - Petitions Clerk Accessibility', () => {
     cy.visit('/case-detail/105-19/edit-petitioner-counsel/PT1234');
     cy.get('#practitioner-representing').should('exist');
 
-    cy.injectAxe();
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

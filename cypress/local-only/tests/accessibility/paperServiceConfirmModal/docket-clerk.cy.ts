@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Paper Service Confirm Modal - Docket Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,14 +13,6 @@ describe('Paper Service Confirm Modal - Docket Clerk Accessibility', () => {
     cy.get('#save-and-finish').click();
     cy.get('[data-testid="modal-confirm"]').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });

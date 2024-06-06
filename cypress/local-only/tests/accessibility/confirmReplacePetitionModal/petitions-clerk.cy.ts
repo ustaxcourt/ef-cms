@@ -1,6 +1,4 @@
-import { impactLevel } from '../../../../helpers/accessibility-impact';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { terminalLog } from '../../../../helpers/cypressTasks/logs';
 
 describe('Confirm Replace Petition Modal - Petitions Clerk Accessibility', () => {
   beforeEach(() => {
@@ -15,14 +13,6 @@ describe('Confirm Replace Petition Modal - Petitions Clerk Accessibility', () =>
     cy.get('.remove-pdf-button').click();
     cy.get('.confirm-replace-petition-modal').should('exist');
 
-    cy.injectAxe();
-
-    cy.checkA11y(
-      undefined,
-      {
-        includedImpacts: impactLevel,
-      },
-      terminalLog,
-    );
+    cy.runA11y();
   });
 });
