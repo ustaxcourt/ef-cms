@@ -1,7 +1,6 @@
 import {
   type SESClient,
   SendBulkTemplatedEmailCommand,
-  SendTemplatedEmailCommand,
 } from '@aws-sdk/client-ses';
 import { backOff } from '../../../../shared/src/tools/helpers';
 
@@ -35,16 +34,16 @@ export const sendBulkTemplatedEmail = async ({
   templateName,
 }) => {
   try {
-    const cmd = new SendTemplatedEmailCommand({
-      Destination: destinations.map(destination => ({
+    const cmd = new SendBulkTemplatedEmailCommand({
+      Destinations: destinations.map(destination => ({
         Destination: {
           ToAddresses: [destination.email],
         },
         ReplacementTemplateData: JSON.stringify(destination.templateData),
+        TemplateData: JSON.stringify(defaultTemplateData),
       })),
       Source: applicationContext.environment.emailFromAddress,
       Template: templateName,
-      TemplateData: JSON.stringify(defaultTemplateData),
     });
 
     await applicationContext.getMessageGateway().sendEmailEventToQueue({
