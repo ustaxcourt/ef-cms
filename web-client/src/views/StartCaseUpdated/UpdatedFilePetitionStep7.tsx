@@ -15,20 +15,20 @@ export function UpdatedFilePetitionStep7() {
         the status of your case, submit new documents and view activity on the
         case on the docket record.
       </div>
-      <h3 style={{ marginTop: '20px' }}>Pay $60 filing fee</h3>
+      <h3 className="margin-top-20">Pay $60 filing fee</h3>
       <div className="petitioner-flow-text">
         Pay by credit/debit card, Amazon, PayPal or ACH (bank account) online.
         You’ll need your docket number.
       </div>
-      <div className="petitioner-flow-text" style={{ marginTop: '3px' }}>
+      <div className="petitioner-flow-text margin-top-3">
         Your case’s filing fee status may take 24-48 hours from payment date to
         update in your case.
       </div>
 
       <Button
+        className="margin-top-20"
         href="https://www.pay.gov/public/form/start/60485840"
         rel="noopener noreferrer"
-        style={{ marginTop: '20px' }}
         target="_blank"
       >
         Pay Now Online
@@ -45,14 +45,14 @@ export function UpdatedFilePetitionStep7() {
             key="Mail-in payment"
             title="Mail-in payment"
           >
-            <div>
-              <div style={{ marginBottom: '5px' }}>
+            <div className="line-height-24">
+              <div className="margin-bottom-5">
                 Make checks/money orders payable to:{' '}
               </div>
               <div>Clerk, United States Tax Court</div>
               <div>400 Second Street, NW </div>
               <div>Washington, DC 20217 </div>
-              <div style={{ marginTop: '8px' }}>
+              <div className="margin-bottom-8">
                 {`On the memo line of the check or money order, write "filing
                   fee" and your docket number.`}
               </div>
@@ -69,7 +69,7 @@ export function UpdatedFilePetitionStep7() {
             key="Can’t afford to pay the filing fee?"
             title="Can’t afford to pay the filing fee?"
           >
-            <div>
+            <div className="line-height-24">
               <span>Submit an </span>
               <Button
                 link
@@ -86,7 +86,7 @@ export function UpdatedFilePetitionStep7() {
                 This form requires detailed information and must be signed under
                 penalty of perjury.
               </span>
-              <ol style={{ marginTop: '5px', paddingLeft: '25px' }}>
+              <ol className="margin-top-5 padding-left-25">
                 <li>Download and fill in the form.</li>
                 <li>
                   Print the completed form or save a PDF of the form to your
@@ -94,14 +94,14 @@ export function UpdatedFilePetitionStep7() {
                 </li>
                 <li>
                   File the form to your case:
-                  <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                  <ul className="list-style-disc padding-left-20">
                     <li>
                       You may electronically file the form after your Petition
                       has been processed by the Court.
                     </li>
                     <li>
                       <div>You may mail or bring the form to:</div>
-                      <div style={{ marginTop: '3px' }}>
+                      <div className="margin-top-3">
                         Clerk, United States Tax Court
                       </div>
                       <div>400 Second Street, NW</div>
@@ -115,7 +115,7 @@ export function UpdatedFilePetitionStep7() {
         </Accordion>
       </div>
 
-      <Button secondary href="/" style={{ marginTop: '20px' }}>
+      <Button secondary className="margin-top-20" href="/">
         Go to My Cases
       </Button>
     </>

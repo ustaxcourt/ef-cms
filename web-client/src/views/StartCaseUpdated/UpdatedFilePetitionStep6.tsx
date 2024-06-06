@@ -93,7 +93,7 @@ export const UpdatedFilePetitionStep6 = connect(
                   <div className="content-header bg-accent-cool-dark text-white heading-3">
                     A Few Reminders Before You Submit
                   </div>
-                  <div className="content-wrapper">
+                  <div className="content-wrapper line-height-21">
                     <ol className="numbered-list">
                       <li>
                         Double check your IRS Notice to ensure your Petition is
