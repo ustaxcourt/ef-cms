@@ -36,13 +36,16 @@ export const sendBulkTemplatedEmail = async ({
 }) => {
   try {
     const params: SendBulkTemplatedEmailCommandInput = {
+      DefaultTemplateData: JSON.stringify(defaultTemplateData),
       Destinations: destinations.map(destination => ({
         Destination: {
           ToAddresses: [destination.email],
         },
         ReplacementTemplateData: JSON.stringify(destination.templateData),
-        TemplateData: JSON.stringify(defaultTemplateData),
       })),
+      ReturnPath:
+        process.env.BOUNCED_EMAIL_RECIPIENT ||
+        applicationContext.environment.emailFromAddress,
       Source: applicationContext.environment.emailFromAddress,
       Template: templateName,
     };
