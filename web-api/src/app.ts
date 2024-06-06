@@ -258,8 +258,10 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
   /**
-   * This env variable is manually set right before a color switch via the disable-old-traffic.ts file
-   * to prevent any traffic from hitting certain colors during a deployment.
+   * This environment variable is set to true by default on deployment of the API lambdas
+   * to prevent traffic from hitting the deploying color during deployment.
+   * It is also set to true on the newly-passive color at the end of a deployment as we switch colors
+   * to prevent traffic to the inactive color.
    */
   const shouldForceRefresh =
     process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];

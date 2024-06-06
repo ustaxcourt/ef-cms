@@ -126,20 +126,6 @@ const appPublic = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    // applicationContext
-    //   .getUseCases()
-    //   .getCurrentVersionInteractor(applicationContext)
-    //   .then(version => {
-    //     setInterval(async () => {
-    //       const currentVersion = await applicationContext
-    //         .getUseCases()
-    //         .getCurrentVersionInteractor(applicationContext);
-    //       if (currentVersion !== version) {
-    //         await cerebralApp.getSequence('persistFormsOnReloadSequence')();
-    //       }
-    //     }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
-    //   });
-
     applicationContext.setForceRefreshCallback(async () => {
       await cerebralApp.getSequence('openAppUpdatedModalSequence')();
     });
