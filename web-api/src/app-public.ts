@@ -53,8 +53,8 @@ app.use((req, res, next) => {
    * This env variable is manually set right before a color switch via the disable-old-traffic.ts file
    * to prevent any traffic from hitting certain colors during a deployment.
    */
-  const shouldForceRefresh = true;
-  // process.env.DISABLE_ALL_TRAFFIC === 'true' && !req.headers['x-test-user'];
+  const shouldForceRefresh =
+    process.env.DISABLE_ALL_TRAFFIC === 'true' && !req.headers['x-test-user'];
 
   if (shouldForceRefresh) {
     res.set('X-Force-Refresh', 'true');
