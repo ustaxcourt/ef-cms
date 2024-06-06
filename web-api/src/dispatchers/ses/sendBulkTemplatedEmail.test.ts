@@ -35,7 +35,7 @@ describe('sendBulkTemplatedEmail', () => {
       applicationContext.getMessageGateway().sendEmailEventToQueue.mock
         .calls[0][0].emailParams.input,
     ).toMatchObject({
-      Destination: [
+      Destinations: [
         {
           Destination: {
             ToAddresses: ['test.email@example.com'],
