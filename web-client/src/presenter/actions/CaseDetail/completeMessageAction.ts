@@ -12,7 +12,9 @@ export const completeMessageAction = async ({
   applicationContext,
   get,
   props,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  parentMessageId: any;
+}> => {
   const form = get(state.modal.form);
   const { mostRecentMessage } = props;
 
