@@ -262,7 +262,7 @@ app.use((req, res, next) => {
    * to prevent any traffic from hitting certain colors during a deployment.
    */
   const shouldForceRefresh =
-    process.env.DISABLE_ALL_TRAFFIC === 'true' && !req.headers['x-test-user'];
+    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
 
   if (shouldForceRefresh) {
     res.set('X-Force-Refresh', 'true');
