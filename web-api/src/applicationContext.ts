@@ -189,7 +189,7 @@ export const createApplicationContext = (
               resolve({ MessageId: '' });
             });
           },
-        };
+        } as unknown as SESClient;
       } else {
         if (!sesCache) {
           sesCache = new SESClient({

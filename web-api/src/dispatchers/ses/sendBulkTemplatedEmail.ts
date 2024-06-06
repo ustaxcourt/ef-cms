@@ -1,9 +1,11 @@
 import {
+  type BulkEmailDestination,
   type SESClient,
   SendBulkTemplatedEmailCommand,
-  SendBulkTemplatedEmailCommandInput,
+  type SendBulkTemplatedEmailCommandInput,
 } from '@aws-sdk/client-ses';
-import { backOff } from '../../../../shared/src/tools/helpers';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { backOff } from '@shared/tools/helpers';
 
 /**
  * calls SES.sendBulkTemplatedEmail
@@ -20,20 +22,18 @@ import { backOff } from '../../../../shared/src/tools/helpers';
  *   myCustomVar1: 'undefined',
  *   myCustomVar2: 'undefined'
  * }
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext application context
- * @param {object} providers.defaultTemplateData default values correlated with templateData matching the format described above
- * @param {Array} providers.destinations array of destinations matching the format described above
- * @param {string} providers.templateName name of the SES template
- * @returns {void}
  */
 export const sendBulkTemplatedEmail = async ({
   applicationContext,
   defaultTemplateData,
   destinations,
   templateName,
-}) => {
+}: {
+  applicationContext: ServerApplicationContext;
+  defaultTemplateData: { [key: string]: any };
+  destinations: { email: string; templateData: { [key: string]: any } }[];
+  templateName: string;
+}): Promise<void> => {
   try {
     const params: SendBulkTemplatedEmailCommandInput = {
       DefaultTemplateData: JSON.stringify(defaultTemplateData),
@@ -60,18 +60,14 @@ export const sendBulkTemplatedEmail = async ({
   }
 };
 
-/**
- * Sends the email via SES, and retry `MAX_SES_RETRIES` number of times
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext application context
- * @param {object} providers.params the parameters to send to SES
- * @param {number} providers.retryCount the number of retries attempted
- */
 export const sendWithRetry = async ({
   applicationContext,
   params,
   retryCount = 0,
+}: {
+  applicationContext: ServerApplicationContext;
+  params: SendBulkTemplatedEmailCommandInput;
+  retryCount: number;
 }) => {
   const sesClient: SESClient = applicationContext.getEmailClient();
   const { MAX_SES_RETRIES } = applicationContext.getConstants();
@@ -83,10 +79,16 @@ export const sendWithRetry = async ({
   applicationContext.logger.info('Bulk Email Response', response);
 
   // parse response from AWS
-  const needToRetry = response.Status?.map((attempt, index) => {
+  const needToRetry: BulkEmailDestination[] = [];
+  response.Status?.map((attempt, index) => {
     // AWS returns 'Success' and helpful identifier upon successful delivery
-    return attempt.Status !== 'Success' ? params.Destinations[index] : false;
-  }).filter(Boolean);
+    if (
+      attempt.Status !== 'Success' &&
+      !!(params.Destinations && params.Destinations[index])
+    ) {
+      needToRetry.push(params.Destinations[index]);
+    }
+  });
 
   if (!needToRetry || needToRetry.length === 0) {
     return;
@@ -94,7 +96,11 @@ export const sendWithRetry = async ({
 
   if (retryCount >= MAX_SES_RETRIES) {
     const failures = needToRetry
-      .map(dest => dest.Destination.ToAddresses[0])
+      .map(dest =>
+        dest.Destination?.ToAddresses && dest.Destination.ToAddresses[0]
+          ? dest.Destination.ToAddresses[0]
+          : 'undefined',
+      )
       .join(',');
     throw `Could not complete service to ${failures}`;
   }
