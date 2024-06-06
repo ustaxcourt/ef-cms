@@ -8,7 +8,6 @@ export const GlobalModalWrapper = connect(
     modal: state.modal,
   },
   function GlobalModalWrapper({ modal }) {
-    console.log(modal.showModal);
     return <>{modal.showModal === 'AppUpdatedModal' && <AppUpdatedModal />}</>;
   },
 );
