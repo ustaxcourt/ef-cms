@@ -7,10 +7,9 @@ export const PetitionWelcomePage = () => (
     <ErrorBanner
       showSingleMessage
       messages={[
-        `Do not start a new case. Email <a href={
-        'mailto:dawson.support@ustaxcourt.gov?subject=eAccess to existing case'
-      }>
-      dawson.support@ustaxcourt.gov</a> with your case's docket number (e.g. 12345-67) to get access to
+        `Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov">
+        dawson.support@ustaxcourt.gov
+      </a> with your case's docket number (e.g. 12345-67) to get access to
     your existing case.`,
       ]}
       title="Have you already filed a petition by mail or want electronic access to
