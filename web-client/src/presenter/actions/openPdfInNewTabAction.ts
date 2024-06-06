@@ -2,7 +2,7 @@ export const openPdfInNewTabAction = ({
   applicationContext,
   props,
   router,
-}: ActionProps) => {
+}: ActionProps<{ file: Blob }>) => {
   const { file } = props;
   const reader = applicationContext.getFileReaderInstance();
 
