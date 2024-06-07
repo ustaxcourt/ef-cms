@@ -52,7 +52,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
  * @param bearerToken bearer token for IRS superuser session (see tasks::getIrsBearerToken)
  */
 const verifyReconciliationReportAndStinUrl = (bearerToken: string) => {
-  const url = `https://api-${Cypress.env('DEPLOYING_COLOR')}.${getCypressEnv().env}.ef-cms.ustaxcourt.gov/v2/reconciliation-report/today`;
+  const url = `https://api-${getCypressEnv().deployingColor}.${getCypressEnv().efcmsDomain}/v2/reconciliation-report/today`;
   cy.request({
     auth: {
       bearer: bearerToken,
@@ -68,7 +68,7 @@ const verifyReconciliationReportAndStinUrl = (bearerToken: string) => {
       entry => entry.eventCode === 'STIN',
     );
 
-    const docDownloadUrl = `https://api-${Cypress.env('DEPLOYING_COLOR')}.${getCypressEnv().env}.ef-cms.ustaxcourt.gov/v2/cases/${docketNumber}/entries/${docketEntryId}/document-download-url`;
+    const docDownloadUrl = `https://api-${getCypressEnv().deployingColor}.${getCypressEnv().efcmsDomain}/v2/cases/${docketNumber}/entries/${docketEntryId}/document-download-url`;
     // get the download link for the stin
     cy.request({
       auth: {
