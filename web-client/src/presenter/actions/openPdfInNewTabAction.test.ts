@@ -12,16 +12,15 @@ describe('openPdfInNewTabAction', () => {
     result: ArrayBuffer | string | null = null;
     onload: (this, ev: ProgressEvent<FileReader>) => any = jest.fn();
 
+    constructor(result) {
+      this.result = result;
+    }
+
     readAsArrayBuffer(): void {
-      this.result = fakeFile;
       const event = new ProgressEvent('load');
       this.onload(event as ProgressEvent<FileReader>);
     }
   }
-
-  applicationContext.getFileReaderInstance.mockReturnValue(
-    new MockFileReader(),
-  );
 
   presenter.providers.applicationContext = applicationContext;
 
@@ -32,6 +31,10 @@ describe('openPdfInNewTabAction', () => {
   };
 
   it('opens a valid PDF in a new tab', async () => {
+    applicationContext.getFileReaderInstance.mockReturnValue(
+      new MockFileReader(fakeFile),
+    );
+
     await runAction(openPdfInNewTabAction, {
       modules: {
         presenter,
@@ -44,5 +47,24 @@ describe('openPdfInNewTabAction', () => {
     expect(
       applicationContext.getUtilities().openUrlInNewTab,
     ).toHaveBeenCalledWith({ url: fakeUrl });
+  });
+
+  it('does not open a PDF if reader.result is null', async () => {
+    applicationContext.getFileReaderInstance.mockReturnValue(
+      new MockFileReader(null),
+    );
+
+    await runAction(openPdfInNewTabAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        file: fakeFile,
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().openUrlInNewTab,
+    ).not.toHaveBeenCalled();
   });
 });
