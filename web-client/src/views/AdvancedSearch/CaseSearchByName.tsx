@@ -43,7 +43,7 @@ export const CaseSearchByName = connect(
       <>
         <div
           className="header-with-blue-background display-flex flex-justify"
-          id="case-search-by-name"
+          data-testid="case-search-by-name-container"
         >
           <h3>Search by Name</h3>
         </div>
@@ -441,7 +441,7 @@ export const CaseSearchByName = connect(
                   <Button
                     aria-describedby="case-search-by-name"
                     className="advanced-search__button"
-                    data-testid="case-search-by-name"
+                    data-testid="submit-search-for-case-by-name-button"
                     id="advanced-search-button"
                     onClick={e => {
                       e.preventDefault();
@@ -455,7 +455,7 @@ export const CaseSearchByName = connect(
                       link
                       aria-describedby="case-search-by-name"
                       className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                      data-testid="clear-search-by-name"
+                      data-testid="clear-case-search-by-name-button"
                       onClick={e => {
                         e.preventDefault();
                         clearAdvancedSearchFormSequence({
@@ -476,7 +476,7 @@ export const CaseSearchByName = connect(
                   <Button
                     aria-describedby="case-search-by-name"
                     className="advanced-search__button"
-                    data-testid="case-search-by-name"
+                    data-testid="submit-case-search-by-name-button"
                     id="advanced-search-button"
                     onClick={e => {
                       e.preventDefault();

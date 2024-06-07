@@ -289,6 +289,7 @@ import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleM
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
+import { openPdfInNewTabSequence } from './sequences/openPdfInNewTabSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintGeneratedPaperServiceSequence } from '@web-client/presenter/sequences/openPrintGeneratedPaperServiceSequence';
@@ -902,7 +903,7 @@ export const presenterSequences = {
     gotoUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
-  gotoVerifyEmailSequence: gotoVerifyEmailSequence as unknown as Function,
+  gotoVerifyEmailSequence,
   gotoViewAllDocumentsSequence:
     gotoViewAllDocumentsSequence as unknown as Function,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
@@ -1052,6 +1053,7 @@ export const presenterSequences = {
     openGainElectronicAccessToCaseModalSequence as unknown as Function,
   openItemizedPenaltiesModalSequence:
     openItemizedPenaltiesModalSequence as unknown as Function,
+  openPdfInNewTabSequence,
   openPdfPreviewModalSequence:
     openPdfPreviewModalSequence as unknown as Function,
   openPractitionerDocumentDownloadUrlSequence:

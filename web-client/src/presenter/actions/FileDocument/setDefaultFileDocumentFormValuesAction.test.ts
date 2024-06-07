@@ -6,6 +6,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  irsPractitionerUser,
   petitionerUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
@@ -114,6 +115,24 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
     expect(result.state.form.filersMap).toEqual({
       [petitionerUser.userId]: true,
     });
+  });
+
+  it('should set partyIrsPractitioner to true when first IRS filing', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
+
+    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        form: {
+          eventCode: 'EA',
+        },
+      },
+    });
+
+    expect(result.state.form.partyIrsPractitioner).toEqual(true);
   });
 
   it('should default the generationType to manual', async () => {
