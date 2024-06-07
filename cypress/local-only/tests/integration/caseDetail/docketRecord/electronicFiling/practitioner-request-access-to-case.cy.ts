@@ -15,6 +15,22 @@ import { selectTypeaheadInput } from '../../../../../../helpers/components/typeA
 import { uploadFile } from '../../../../../../helpers/file/upload-file';
 
 describe('Private Practitioner requests access to case', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   describe('Auto Generate Entry of Appearance', () => {
     it('should have access to auto generate entry of appearance if a party service preference is paper', () => {
       const primaryFilerName = 'John';
