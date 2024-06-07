@@ -1,3 +1,4 @@
+import { X_FORCE_REFRESH } from '@shared/utils/headers';
 import axios, { AxiosInstance } from 'axios';
 
 let axiosClient: AxiosInstance;
@@ -14,11 +15,10 @@ export const getHttpClient = (
 
   axiosClient.interceptors.response.use(undefined, async error => {
     const shouldForceRefresh =
-      error.response.headers.get('x-force-refresh') === 'true';
+      error.response.headers.get(X_FORCE_REFRESH) === 'true';
 
     if (shouldForceRefresh) {
       await forceRefreshCallback();
-      return;
     }
 
     error.stack = stackError.stack;

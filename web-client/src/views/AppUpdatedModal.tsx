@@ -15,6 +15,7 @@ export const AppUpdatedModal = connect(
         closeLink={false}
         confirmLabel="Close and Refresh"
         confirmSequence={confirmSequence}
+        title="DAWSON Update"
       >
         <div>
           DAWSON has been updated. Click the button to refresh the app and
