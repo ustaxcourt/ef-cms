@@ -3,5 +3,5 @@ import { setSelectedMessagesAction } from '../actions/Messages/setSelectedMessag
 export const setSelectedMessagesSequence = [
   setSelectedMessagesAction,
 ] as unknown as (props: {
-  messages: { messageId: string; selected: boolean }[];
+  messages: { messageId: string; parentMessageId: string }[];
 }) => void;

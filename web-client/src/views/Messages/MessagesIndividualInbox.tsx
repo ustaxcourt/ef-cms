@@ -109,7 +109,7 @@ export const MessagesIndividualInbox = connect(
                     const selectAll = formattedMessages.messages.map(
                       message => ({
                         messageId: message.messageId,
-                        selected: true,
+                        parentMessageId: message.parentMessageId,
                       }),
                     );
                     setSelectedMessagesSequence({ messages: selectAll });
@@ -181,7 +181,7 @@ export const MessagesIndividualInbox = connect(
                           messages: [
                             {
                               messageId: message.messageId,
-                              selected: !message.isSelected,
+                              parentMessageId: message.parentMessageId,
                             },
                           ],
                         });
