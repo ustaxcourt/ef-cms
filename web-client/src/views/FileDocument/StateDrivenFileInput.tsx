@@ -16,7 +16,7 @@ type StateDriveFileInputProps = {
   validationSequence: string;
   name: string;
   accept?: string;
-  ignoreSizeKey: boolean;
+  ignoreSizeKey?: boolean;
 };
 
 const deps = {

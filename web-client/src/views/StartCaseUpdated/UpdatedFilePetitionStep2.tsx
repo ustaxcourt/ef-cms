@@ -151,9 +151,7 @@ export const UpdatedFilePetitionStep2 = connect(
           />
         )}
 
-        <UpdatedFilePetitionButtons
-          resetFocus={resetFocus}
-        ></UpdatedFilePetitionButtons>
+        <UpdatedFilePetitionButtons resetFocus={resetFocus} />
       </>
     );
   },

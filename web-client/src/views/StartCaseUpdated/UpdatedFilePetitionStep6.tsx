@@ -132,7 +132,7 @@ export const UpdatedFilePetitionStep6 = connect(
                 />
 
                 <div className="margin-top-4">
-                  <UpdatedFilePetitionButtons primaryLabel="Submit Documents & Create Case"></UpdatedFilePetitionButtons>
+                  <UpdatedFilePetitionButtons primaryLabel="Submit Documents & Create Case" />
                 </div>
               </div>
             </div>

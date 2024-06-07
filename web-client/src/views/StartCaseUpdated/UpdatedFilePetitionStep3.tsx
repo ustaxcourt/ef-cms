@@ -218,7 +218,7 @@ export const UpdatedFilePetitionStep3 = connect(
             form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
           }
           resetFocus={resetFocus}
-        ></UpdatedFilePetitionButtons>
+        />
       </>
     );
   },
