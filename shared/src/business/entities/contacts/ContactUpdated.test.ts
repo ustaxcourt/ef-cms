@@ -439,7 +439,7 @@ describe('ContactUpdated', () => {
           );
 
           const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({ postalCode: 'Enter ZIP code' });
+          expect(errors).toEqual({ postalCode: 'Enter postal code' });
         });
 
         it('should return an error message for "postalCode" if its over the character limit', () => {
@@ -455,7 +455,7 @@ describe('ContactUpdated', () => {
           );
 
           const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({ postalCode: 'Enter ZIP code' });
+          expect(errors).toEqual({ postalCode: 'Enter postal code' });
         });
       });
     });
