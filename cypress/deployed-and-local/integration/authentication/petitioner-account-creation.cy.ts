@@ -1,5 +1,5 @@
 import {
-  PasswordConfig,
+  VALID_PASSWORD_CONFIG,
   generatePassword,
 } from '../../../helpers/authentication/generate-password';
 import { createAPetitioner } from '../../../helpers/accountCreation/create-a-petitioner';
@@ -10,13 +10,6 @@ import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-
 
 describe('Petitioner Account Creation', () => {
   const GUID = Date.now();
-  const VALID_PASSWORD_CONFIG: PasswordConfig = {
-    digits: 1,
-    length: 8,
-    lower: 1,
-    special: 1,
-    upper: 1,
-  };
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
