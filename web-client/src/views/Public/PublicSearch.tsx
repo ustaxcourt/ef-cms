@@ -77,7 +77,7 @@ export const PublicSearch = connect(
             >
               <SearchBoilerplateText
                 formTypeText="an opinion"
-                isOpinion="true"
+                isOpinion={true}
               />
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
