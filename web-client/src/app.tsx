@@ -5,7 +5,6 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
-import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
   back,
@@ -262,10 +261,6 @@ const app = {
       returnSequencePromise: true,
     });
 
-    applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
-    });
-
     const container = window.document.querySelector('#app');
     const root = createRoot(container);
 
@@ -275,9 +270,9 @@ const app = {
           <>
             <IdleActivityMonitor />
             <AppInstanceManager />
-            <GlobalModalWrapper />
           </>
         )}
+
         <AppComponent />
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}

@@ -495,6 +495,25 @@ jobs:
               npm run backup:dynamo-table -- $SOURCE_TABLE
             fi
 
+  delete-api-mappings:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Delete Source API Gateway Mappings
+          command: |
+            npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
+
   cleanup:
     docker:
       - image: *efcms-docker-image
@@ -926,6 +945,10 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+      - delete-api-mappings:
+          <<: *only-deployed-lower-environments
+          requires:
+            - switch-colors
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -987,10 +1010,15 @@ workflows:
           <<: *only-prod
           requires:
             - switch-colors
+      - delete-api-mappings:
+          <<: *only-prod
+          requires:
+            - switch-colors
       - cleanup:
           <<: *only-prod
           requires:
             - backup-source-dynamo-table
+            - delete-api-mappings
 
   build-and-deploy-empty:
     when: << pipeline.parameters.run_build_and_deploy_empty >>
@@ -1001,6 +1029,10 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
+      - delete-api-mappings:
+          <<: *only-deployed-lower-environments
+          requires:
+            - switch-colors
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:

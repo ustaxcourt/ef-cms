@@ -14,14 +14,10 @@ export const setupCurrentPageAction =
    */
   async ({ applicationContext, get, store }: ActionProps) => {
     if (!get(state.featureFlags)) {
-      try {
-        const featureFlags = await applicationContext
-          .getUseCases()
-          .getAllFeatureFlagsInteractor(applicationContext);
-        store.set(state.featureFlags, featureFlags);
-      } catch (err) {
-        page = 'ErrorView500';
-      }
+      const featureFlags = await applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor(applicationContext);
+      store.set(state.featureFlags, featureFlags);
     }
 
     store.set(state.currentPage, page);
