@@ -68,54 +68,49 @@ export const BeforeStartingCase = connect(
           <div className="petitioner-flow-text">
             <span>
               <div className="petitioner-label">1. Complete the Petition</div>
-              <div className="petitioner-flow-text">
-                <ul className="margin-top-0">
-                  <li>
-                    This is the document that explains why you disagree with the
-                    Internal Revenue Service (IRS). There are three methods to
-                    add the Petition:
-                  </li>
-                  <li className="no-list-style">
-                    <ul className="margin-top-0">
-                      <li>
-                        Answer some questions and have DAWSON create the
-                        Petition.
-                      </li>
-                      <li>
-                        {
-                          "Complete and upload the Court's standard Petition form. "
-                        }
-                        <Button
-                          link
-                          className="usa-link--external text-left mobile-text-wrap margin-left-1"
-                          href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
-                          icon="file-pdf"
-                          iconColor="blue"
-                          rel="noopener noreferrer"
-                          target="_blank"
-                        >
-                          Petition form (T.C. Form 2)
-                        </Button>
-                      </li>
-                      <li>
-                        Upload your own Petition that complies with the
-                        requirements of the{' '}
-                        <Button
-                          link
-                          className="usa-link--external text-left mobile-text-wrap"
-                          href="https://www.ustaxcourt.gov/rules.html"
-                          iconColor="blue"
-                          overrideMargin="margin-right-1"
-                          rel="noopener noreferrer"
-                          target="_blank"
-                        >
-                          Tax Court Rules of Practice and Procedure.
-                        </Button>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
+              <div
+                className="petitioner-flow-text"
+                style={{ marginBottom: '5px' }}
+              >
+                This is the document that explains why you disagree with the
+                Internal Revenue Service (IRS). There are three methods to add
+                the Petition:
               </div>
+              <ul className="margin-top-0">
+                <li>
+                  Answer some questions and have DAWSON create the Petition.
+                </li>
+                <li>
+                  {"Complete and upload the Court's standard Petition form. "}
+                  <Button
+                    link
+                    className="usa-link--external text-left mobile-text-wrap margin-left-1"
+                    href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
+                    icon="file-pdf"
+                    iconColor="blue"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Petition form (T.C. Form 2)
+                  </Button>
+                </li>
+                <li>
+                  Upload your own Petition that complies with the requirements
+                  of the{' '}
+                  <Button
+                    link
+                    className="usa-link--external text-left mobile-text-wrap"
+                    href="https://www.ustaxcourt.gov/rules.html"
+                    iconColor="blue"
+                    overrideMargin="margin-right-1"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Tax Court Rules of Practice and Procedure.
+                  </Button>
+                </li>
+              </ul>
+
               <div className="petitioner-label">2. Upload IRS Notice(s)</div>
               <div
                 className="petitioner-flow-text"
