@@ -4,8 +4,10 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const defaultAdvancedSearchFormAction = ({
   applicationContext,
   get,
+  props,
   store,
 }: ActionProps) => {
+  const { mobileSelection } = props;
   const { ADVANCED_SEARCH_OPINION_TYPES } = applicationContext.getConstants();
   const advancedSearchForm = get(state.advancedSearchForm);
   // do not overwrite existing state so the form is still filled in when returning to the page
@@ -44,4 +46,6 @@ export const defaultAdvancedSearchFormAction = ({
     store.set(state.opinionDocumentTypes, []);
   }
   store.set(state.advancedSearchForm.currentPage, 1);
+  if (mobileSelection)
+    store.set(state.advancedSearchForm.mobileSelection, mobileSelection);
 };
