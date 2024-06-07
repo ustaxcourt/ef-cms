@@ -14,7 +14,6 @@ export const PaperServiceStatusModal = connect(
       <ModalDialog
         className="file-upload-status-modal"
         closeLink={false}
-        preventCancelOnBlur={true}
         preventScrolling={true}
         showButtons={false}
       >
