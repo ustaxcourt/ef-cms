@@ -1,24 +1,41 @@
 import { batchCompleteMessageAction } from '../actions/batchCompleteMessageAction';
-// import { batchGetMostRecentMessageInThreadAction } from './batchGetMostRecentMessageInThreadAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
-// combining goToMessageDetailSequence and completeMessageSequence
+// kinda combines goToMessageDetailSequence and completeMessageSequence
 export const batchCompleteMessageSequence = showProgressSequenceDecorator([
-  // only the most recent message in a thread is displayed in the inbox,
-  // so we might not need this next action. I can't really figure out what
-  // the purpose of getting the latest message in the thread is (referencing
-  // completeMessageSequence). looks like we do it once in the action based
-  // on what's loaded in the inbox, and once more by reloading the data from
-  // persistence in the interactor.
-  // batchGetMostRecentMessageInThreadAction,
+  /**
+   * I used completeMessageSequence as reference for my work here.
+   *
+   * The purpose of getMostRecentMessageInThreadAction is unclear to me,
+   * but from what I can gather:
+   *
+   * When you click a message in the inbox, it takes you to the most recent
+   * message in it but you can also see all the messages in the thread.
+   * You're able to complete the thread from any of the messages, but the
+   * LATEST message is the one that is marked for completion in the
+   * interactor.
+   *
+   * getMostRecentMessageInThreadAction gets the last message via
+   * messageDetail that's saved in state.
+   *
+   * The interactor later gets the latest message again, but instead by
+   * getting it via the last message of the thread from persistence.
+   *
+   * The interactor really only needs a parentMessageId to complete a
+   * message because it can use that to find the most recent message in
+   * the thread. The most recent message of any thread is displayed in
+   * the inbox, and it has parentMessageId.
+   * So I think we should change setSelectedMessageAction to set
+   * { messageId, parentMessageId } in state and pass parentMessageId to
+   * the interactor.
+   *
+   * I got pretty far with this but now setSelectedMessageAction doesn't work.
+   *
+   * Feel free to change this if you think it's dumb. Also, working with the
+   * map() was interesting. Was wondering why we did that instead of an object.
+   * Might make sense to change back to an object now.
+   */
 
-  // honestly it'd be easiest if we stored { messageId, parentMessageId }
-  // when selecting check boxes. I started working on this but it got messy
-  // so I went home instead.
-  // the change broke setSelectedMessagesAction.
-
-  // complete all the messages at once. realistically the only thing
-  // this action needs is a list of parentMessageIds
   batchCompleteMessageAction,
 
   // display success / failure banner

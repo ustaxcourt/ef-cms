@@ -5,6 +5,8 @@ export const batchCompleteMessageAction = async ({
   get,
 }: ActionProps): Promise<void> => {
   const messages = get(state.messagesPage.selectedMessages);
+
+  // we can do this in another action if we really want to
   const messagesToComplete = Array.from(messages, ([, parentMessageId]) => ({
     messageBody: '',
     parentMessageId,
