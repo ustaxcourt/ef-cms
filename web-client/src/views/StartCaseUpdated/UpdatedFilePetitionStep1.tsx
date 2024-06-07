@@ -157,7 +157,7 @@ export const UpdatedFilePetitionStep1 = connect(
         )}
         <UpdatedFilePetitionButtons
           isNextButtonDisabled={isNextButtonDisabled}
-        ></UpdatedFilePetitionButtons>
+        />
       </>
     );
   },
