@@ -7,7 +7,6 @@
 * Cypress
 * ESLint
 * Jest
-* Pa11y
 * Stylelint
 * Voiceover
 * ZenHub
@@ -32,10 +31,10 @@ For each user story that’s completed, the following testing is performed.
 | Lint                   | Style and catching common coding mistakes                                                                  | Automated            | Mock data defined in tests.                                                             | Eslint, stylelint             | Engineer      | * Every environment * Every PR and deploy        |
 | *Unit                  | Verifying a small piece of code in isolation                                                               | Automated            | Mock data defined in tests.                                                             | jest                          | Engineer      | * Every environment * Every PR and deploy        |
 | *Integration           | Verifying two or more pieces of code are working together as expected                                      | Automated            | Mock data defined in tests.                                                             | jest                          | Engineer      | * Every environment * Every PR and deploy        |
-| E2E                    | Testing of features before deployment                                                                      | Automated            | Mock data defined in tests.                                                             | Cypress and Pa11y             | Engineer      | * Every environment * Before every PR and deploy |
-| Smoke                  | Verifying that the entire system is working as expected from the perspective of the user with the browser. | Automated            | TestTest data defined in the smoke tests.  Any data created stays in the environment.   | Cypress and Pa11y             | Engineer      | * Every environment * After after every deploy   |
+| E2E                    | Testing of features before deployment                                                                      | Automated            | Mock data defined in tests.                                                             | Cypress             | Engineer      | * Every environment * Before every PR and deploy |
+| Smoke                  | Verifying that the entire system is working as expected from the perspective of the user with the browser. | Automated            | TestTest data defined in the smoke tests.  Any data created stays in the environment.   | Cypress             | Engineer      | * Every environment * After after every deploy   |
 | Mobile                 | Features identified as external or public                                                                  | Manual               | Test data manually created.                                                             |                               | UX Designer   | Flexion dev  Per GitHub story as needed          |
-| Accessibility          | Features identified as external or public                                                                  | Automated and Manual | Mock data defined in automated tests for Pa11y.  Test data manually added for Voiceover | Pa11y, Voiceover              | Engineer      | * Flexion local env * Per GitHub story as needed |
+| Accessibility          | Features identified as external or public                                                                  | Automated and Manual | Mock data defined in automated tests for Cypress.  Test data manually added for Voiceover | Cypress, Voiceover              | Engineer      | * Flexion local env * Per GitHub story as needed |
 | Functional             | Targeted testing done when a new feature / story is completed and prior to QA                              | Manual               | Test data manually created.                                                             |                               | UX Designer   | * Flexion dev * Per GitHub story                 |
 | Quality Assurance (QA) | Targeted testing done when a new feature / story is completed                                              | Manual               | Test data manually created.                                                             |                               | Product Owner | * Flexion prod * Per GitHub story                |
 
@@ -55,7 +54,7 @@ https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX
 | Type             | Used for                                                 | Automated or Manual | Test Data Creation                               | Tool              | Responsible | Frequency / Environment          |
 |------------------|----------------------------------------------------------|---------------------|--------------------------------------------------|-------------------|-------------|----------------------------------|
 | "Key regression" | Testing of key features and workflows (as defined below) | Manual              | Test data manually created                       |                   | UX Designer | Flexion prod End of each sprint  |
-| "Key" smoke      | Testing of key features and workflows after deployment   | Automated           | Manually created data w/in a pool of "like" data | Cypress and Pa11y | Engineer    | Flexion prod End of each sprint  |
+| "Key" smoke      | Testing of key features and workflows after deployment   | Automated           | Manually created data w/in a pool of "like" data | Cypress | Engineer    | Flexion prod End of each sprint  |
 
 ### Testing of Low Priority Features and Workflows
 For low priority features, testing will be done on an as-needed basis.
