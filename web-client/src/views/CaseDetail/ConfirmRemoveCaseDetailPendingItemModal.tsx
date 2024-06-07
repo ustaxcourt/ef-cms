@@ -19,7 +19,6 @@ export const ConfirmRemoveCaseDetailPendingItemModal = connect(
       <ConfirmModal
         cancelLabel="No, Take Me Back"
         confirmLabel="Yes, Continue"
-        preventCancelOnBlur={true}
         title={`Remove ${documentTitle} From Pending Report`}
         onCancelSequence={clearModalSequence}
         onConfirmSequence={removeCaseDetailPendingItemSequence}

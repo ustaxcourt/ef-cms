@@ -7,6 +7,7 @@ export function DocketRecordSort({ name, onChange, value }) {
       className="usa-select margin-top-0 sort"
       id="docket-record-sort"
       name={name}
+      role="listbox"
       value={value}
       onChange={e => {
         onChange({
