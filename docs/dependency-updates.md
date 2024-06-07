@@ -86,10 +86,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### eslint
 - Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
+See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
 - Keep eslint-plugin-security at 2.1.1 since upgrading makes it only compatible with v9.0.0
-
-### esbuild
-- Keep esbuild pinned to 0.20.2 because esbuild-sass-plugin is not yet compatible with esbuild 0.21.0: https://github.com/glromeo/esbuild-sass-plugin/issues/176
 
 ## Incrementing the Node Cache Key Version
 
