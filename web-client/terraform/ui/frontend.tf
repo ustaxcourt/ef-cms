@@ -11,15 +11,15 @@ resource "aws_s3_bucket" "frontend" {
   tags = {
     environment = var.environment
   }
-  server_side_encryption_configuration {
+    server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
+          sse_algorithm = "AES256"
       }
     }
   }
-
+  
 }
 
 resource "aws_s3_bucket" "failover" {
@@ -40,7 +40,7 @@ resource "aws_s3_bucket" "failover" {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
+          sse_algorithm = "AES256"
       }
     }
   }
