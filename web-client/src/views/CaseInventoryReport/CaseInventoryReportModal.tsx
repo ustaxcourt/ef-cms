@@ -28,9 +28,9 @@ export const CaseInventoryReportModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className="case-inventory-report-modal"
         confirmLabel="Run Report"
         confirmSequence={confirmSequence}
+        dataTestId="case-inventory-report-modal"
         title="Run Case Inventory Report"
       >
         <p className="margin-top-0">
@@ -48,7 +48,7 @@ export const CaseInventoryReportModal = connect(
                   'usa-select',
                   validationErrors.status && 'usa-select--error',
                 )}
-                id="select-case-inventory-status"
+                data-testid="case-inventory-status-select"
                 name="status"
                 onChange={e => {
                   updateScreenMetadataSequence({
@@ -81,7 +81,7 @@ export const CaseInventoryReportModal = connect(
                   'usa-select',
                   validationErrors.associatedJudge && 'usa-select--error',
                 )}
-                id="select-case-inventory-judge"
+                data-testid="case-inventory-judge-select"
                 name="associatedJudge"
                 onChange={e => {
                   updateScreenMetadataSequence({

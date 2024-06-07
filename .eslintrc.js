@@ -18,7 +18,7 @@ module.exports = {
     'prettier',
     'plugin:security/recommended-legacy',
     'plugin:import/typescript',
-    // 'plugin:jsx-a11y/recommended', // todo
+    'plugin:jsx-a11y/recommended',
   ],
   ignorePatterns: ['**/*_.js', 'scripts/run-once-scripts/**/*'],
   overrides: [
@@ -137,6 +137,7 @@ module.exports = {
         },
       },
     ],
+    'jsx-a11y/no-redundant-roles': 'off',
     'max-lines': [
       'error',
       { max: 700, skipBlankLines: true, skipComments: true },

@@ -52,7 +52,6 @@ export const CreateMessageModalDialog = connect<
         cancelLabel="Cancel"
         className="ustc-create-message-modal"
         confirmLabel="Send"
-        preventCancelOnBlur={true}
         title={title}
         onCancelSequence={clearModalFormSequence}
         onConfirmSequence={onConfirmSequence}

@@ -26,7 +26,6 @@ export const UnconsolidateCasesModal = connect(
         cancelLabel="Cancel"
         className="unconsolidated-case-search-modal"
         confirmLabel="Unconsolidate Cases"
-        preventCancelOnBlur={true}
         showModalWhen="UnconsolidateCasesModal"
         title="What Cases Would You Like to Unconsolidate?"
         onCancelSequence={clearModalSequence}
