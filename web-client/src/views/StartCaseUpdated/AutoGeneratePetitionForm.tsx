@@ -27,7 +27,7 @@ export const AutoGeneratePetitionForm = connect(
           <div className="margin-bottom-2-rem">
             <ol>
               {form.petitionReasons &&
-                form.petitionReasons.map((reason, index) => {
+                form.petitionReasons.map((_reason, index) => {
                   return (
                     <PetitionFormResponse
                       count={index}
@@ -62,7 +62,7 @@ export const AutoGeneratePetitionForm = connect(
           <div>
             <ol>
               {form.petitionFacts &&
-                form.petitionFacts.map((fact, index) => {
+                form.petitionFacts.map((_fact, index) => {
                   return (
                     <PetitionFormResponse
                       count={index}

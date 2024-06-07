@@ -41,6 +41,8 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
+type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
+
 /* eslint-disable max-lines */
 const canDownloadSTIN = (
   entry: RawDocketEntry,
@@ -619,7 +621,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
       !!filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        filedByRole as PractitionerRole,
+      )
     );
   }
 

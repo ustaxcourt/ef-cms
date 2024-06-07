@@ -1,9 +1,15 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  isNextButtonDisabled: boolean;
+  primaryLabel: string;
+  resetFocus: () => void;
+};
 
 export const UpdatedFilePetitionButtons = connect(
   {

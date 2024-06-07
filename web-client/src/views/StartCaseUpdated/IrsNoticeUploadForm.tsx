@@ -5,12 +5,28 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
+import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const props = cerebralProps as unknown as {
+  attachmentToPetitionFile: File;
+  index: number;
+  noticeIssuedDate: string;
+  taxYear: string;
+  todayDate: string;
+  validationError: {
+    file?: string;
+    size?: string;
+    noticeIssuedDate?: string;
+    taxYear?: string;
+  };
+  caseType: string;
+  file: File;
+};
 
 export const IrsNoticeUploadForm = connect(
   {
