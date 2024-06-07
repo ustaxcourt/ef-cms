@@ -1,4 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 
 export type TUserContact = {
   address1: string;
@@ -88,33 +89,29 @@ const generateChangeOfAddressForPractitioner = async ({
   applicationContext.logger.info(`creating change of address job of ${jobId}`);
 
   if (isChangeOfAddressLambdaEnabled) {
-    const sqs = await applicationContext.getMessagingClient();
-
-    await Promise.all(
-      associatedUserCases.map(caseInfo => {
-        return sqs
-          .sendMessage({
-            MessageBody: JSON.stringify({
-              bypassDocketEntry,
-              contactInfo,
-              docketNumber: caseInfo.docketNumber,
-              firmName,
-              jobId,
-              requestUser: {
-                ...applicationContext.getCurrentUser(),
-                token: undefined,
-              },
-              requestUserId,
-              updatedEmail,
-              updatedName,
-              user,
-              websocketMessagePrefix,
-            }),
-            QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/change_of_address_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-          })
-          .promise();
-      }),
-    );
+    const sqs: SQSClient = await applicationContext.getMessagingClient();
+    const cmds = associatedUserCases.map(caseInfo => {
+      return new SendMessageCommand({
+        MessageBody: JSON.stringify({
+          bypassDocketEntry,
+          contactInfo,
+          docketNumber: caseInfo.docketNumber,
+          firmName,
+          jobId,
+          requestUser: {
+            ...applicationContext.getCurrentUser(),
+            token: undefined,
+          },
+          requestUserId,
+          updatedEmail,
+          updatedName,
+          user,
+          websocketMessagePrefix,
+        }),
+        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/change_of_address_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+      });
+    });
+    await Promise.all(cmds.map(cmd => sqs.send(cmd)));
   } else {
     await Promise.all(
       associatedUserCases.map(async caseInfo => {
