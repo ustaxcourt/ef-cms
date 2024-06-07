@@ -69,6 +69,7 @@ describe('irsSuperUser', () => {
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${idToken}`,
+        'x-test-user': 'true',
       },
     });
 
