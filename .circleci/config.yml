@@ -989,23 +989,24 @@ workflows:
           <<: *only-prod
           requires:
             - loadtests
-      - deploy-switch-colors-cron:
-          <<: *only-prod
-          requires:
-            - smoketests-readonly
-      - wait-for-switch:
-          <<: *only-prod
-          type: approval
-          requires:
-            - deploy-switch-colors-cron
-      - disable-switch-colors-cron:
-          <<: *only-prod
-          requires:
-            - wait-for-switch
+      # - deploy-switch-colors-cron:
+      #     <<: *only-prod
+      #     requires:
+      #       - smoketests-readonly
+      # - wait-for-switch:
+      #     <<: *only-prod
+      #     type: approval
+      #     requires:
+      #       - deploy-switch-colors-cron
+      # - disable-switch-colors-cron:
+      #     <<: *only-prod
+      #     requires:
+      #       - wait-for-switch
       - switch-colors:
           <<: *only-prod
           requires:
-            - disable-switch-colors-cron
+            # - disable-switch-colors-cron
+            - smoketests-readonly
       - backup-source-dynamo-table:
           <<: *only-prod
           requires:
