@@ -7,7 +7,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.50.0"
+    aws = "5.52.0"
   }
 }
 
@@ -41,7 +41,7 @@ data "aws_route53_zone" "zone" {
   name = "${var.zone_name}."
 }
 
-module "dynamsoft_us_east" {
+module "dynamsoft_us_east" { # DONE, AllColors
   source = "../dynamsoft"
 
   environment = var.environment
@@ -58,7 +58,7 @@ module "dynamsoft_us_east" {
   dynamsoft_product_keys = var.dynamsoft_product_keys
 }
 
-module "dynamsoft_us_west" {
+module "dynamsoft_us_west" { # DONE, AllColors
   source = "../dynamsoft"
 
   environment = var.environment
@@ -75,8 +75,7 @@ module "dynamsoft_us_west" {
   dynamsoft_product_keys = var.dynamsoft_product_keys
 }
 
-
-resource "aws_route53_record" "record_certs" {
+resource "aws_route53_record" "record_certs" { # DONE, AllColors
   for_each = {
     for dvo in module.dynamsoft_us_east.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -92,8 +91,7 @@ resource "aws_route53_record" "record_certs" {
   allow_overwrite = true
 }
 
-
-resource "aws_route53_record" "record_east_www" {
+resource "aws_route53_record" "record_east_www" { # DONE, AllColors
   name           = "dynamsoft-lib.${var.dns_domain}"
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
@@ -108,7 +106,7 @@ resource "aws_route53_record" "record_east_www" {
   ttl = 60
 }
 
-resource "aws_route53_record" "record_west_www" {
+resource "aws_route53_record" "record_west_www" { # DONE, AllColors
   name           = "dynamsoft-lib.${var.dns_domain}"
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
@@ -123,19 +121,19 @@ resource "aws_route53_record" "record_west_www" {
   ttl = 60
 }
 
-resource "aws_acm_certificate_validation" "dns_validation_east" {
+resource "aws_acm_certificate_validation" "dns_validation_east" { # DONE, AllColors
   certificate_arn         = module.dynamsoft_us_east.cert_arn
   validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
   provider                = aws.us-east-1
 }
 
-resource "aws_acm_certificate_validation" "dns_validation_west" {
+resource "aws_acm_certificate_validation" "dns_validation_west" { # DONE, AllColors
   certificate_arn         = module.dynamsoft_us_west.cert_arn
   validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
   provider                = aws.us-west-1
 }
 
-resource "aws_route53_record" "statuspage" {
+resource "aws_route53_record" "statuspage" { # 10345 Deleted as it was not in use
   count   = var.statuspage_dns_record != "" ? 1 : 0
   name    = "status.${var.dns_domain}"
   type    = "CNAME"
@@ -151,7 +149,7 @@ data "aws_sns_topic" "system_health_alarms" {
   name = "system_health_alarms"
 }
 
-resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
+resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" { # DONE, AllColors
   alarm_name          = "${var.dns_domain} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
@@ -171,7 +169,7 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
   ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
-resource "aws_route53_health_check" "public_ui_health_check" {
+resource "aws_route53_health_check" "public_ui_health_check" { # DONE, AllColors
   fqdn              = var.dns_domain
   port              = 443
   type              = "HTTPS"
@@ -182,7 +180,7 @@ resource "aws_route53_health_check" "public_ui_health_check" {
   regions           = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
 
-resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
+resource "aws_cloudwatch_metric_alarm" "ui_health_check" { # DONE, AllColors
   alarm_name          = "app.${var.dns_domain} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
@@ -201,7 +199,7 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
   ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
-resource "aws_route53_health_check" "ui_health_check" {
+resource "aws_route53_health_check" "ui_health_check" { # DONE, AllColors
   fqdn              = "app.${var.dns_domain}"
   port              = 443
   count             = var.enable_health_checks

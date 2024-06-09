@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.8
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.0.9
 
 parameters:
   run_build_and_deploy:
@@ -144,11 +144,6 @@ jobs:
               npm run deploy:green $ENV
             fi
       - run:
-          no_output_timeout: 20m
-          name: 'Deploy - Web Client - Terraform'
-          command: |
-            npm run deploy:ui $ENV
-      - run:
           name: Setup Elasticsearch Index Settings
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV
@@ -242,7 +237,7 @@ jobs:
       - run:
           name: Enable Check Migration Status Cron
           command: |
-            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
+            ./scripts/migration/enable-migration-cron.sh
 
   prepare-for-reindex:
     docker:
@@ -271,18 +266,18 @@ jobs:
       - run:
           name: Disable Check Migration Status Cron
           command: |
-            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
+            ./scripts/migration/disable-migration-cron.sh
       - run:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npx ts-node --transpile-only ./web-api/workflow-terraform/migration/bin/track-successful-migrations.ts
+              npx ts-node --transpile-only ./scripts/migration/track-successful-migrations.ts
             fi
       - run:
           name: Set Marker to Indicate Migration is Complete
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              JOB_NAME="wait-for-reindex" ./scripts/dynamo/set-migration-complete-marker.sh
+              JOB_NAME="wait-for-reindex" ./scripts/migration/set-migration-complete-marker.sh
             fi
       - run:
           name: Begin Reindexing
@@ -297,7 +292,7 @@ jobs:
       - run:
           name: Enable Check Reindex Status Cron
           command: |
-            ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
+            ./scripts/reindex/enable-reindex-cron.sh
       - run:
           name: Enable Destination Table Stream
           command: |
@@ -322,7 +317,7 @@ jobs:
       - run:
           name: Disable Check Reindex Status Cron
           command: |
-            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
+            ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
     docker:
@@ -635,7 +630,7 @@ jobs:
       - run:
           name: Enable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
 
   initiate-glue-job:
     docker:
@@ -664,7 +659,7 @@ jobs:
       - run:
           name: Disable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
       - run:
           name: Destroy Wait for Workflow Lambda
           command: |
@@ -674,7 +669,7 @@ jobs:
       - run:
           name: Disable Dynamodb Streams
           command: |
-            ./scripts/dynamo/toggle-streams.sh --off
+            ./scripts/migration/toggle-streams.sh --off
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -695,7 +690,7 @@ jobs:
       - run:
           name: Enable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
@@ -727,7 +722,7 @@ jobs:
       - run:
           name: Disable Wait for Workflow Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
       - run:
           name: Destroy Wait for Workflow Lambda
           command: |
@@ -737,11 +732,11 @@ jobs:
       - run:
           name: Set Marker to Indicate Data is Finished Gluing
           command: |
-            JOB_NAME="wait-for-glued-data-to-index" ./scripts/dynamo/set-migration-complete-marker.sh
+            JOB_NAME="wait-for-glued-data-to-index" ./scripts/migration/set-migration-complete-marker.sh
       - run:
           name: Enable Dynamodb Streams
           command: |
-            ./scripts/dynamodb/toggle-streams.sh --on
+            ./scripts/migration/toggle-streams.sh --on
 
   cleanup-glue-job:
     docker:
@@ -841,7 +836,7 @@ jobs:
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |
-            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
+            ./scripts/glue/enable-glue-cron.sh
 
   finish-glue-job:
     docker:
@@ -860,7 +855,7 @@ jobs:
       - run:
           name: Disable Check Glue Job Run State Cron
           command: |
-            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
+            ./scripts/glue/disable-glue-cron.sh
       - run:
           name: Destroy Check Glue Job Run State Cron Lambda
           command: |

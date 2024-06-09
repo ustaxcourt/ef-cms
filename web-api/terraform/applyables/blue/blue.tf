@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.50.0"
+    aws = "5.52.0"
   }
 }
 
@@ -81,6 +81,13 @@ data "null_data_source" "locals" {
   }
 }
 
+module "lambda_role_blue" {
+  source      = "../../modules/lambda-role"
+  role_name   = "lambda_role_${var.environment}_blue"
+  environment = var.environment
+  dns_domain  = var.dns_domain
+}
+
 module "api-east-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
@@ -88,6 +95,7 @@ module "api-east-blue" {
   pool_arn            = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
+  lambda_role_arn     = module.lambda_role_blue.role_arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -121,6 +129,7 @@ module "api-west-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
   environment         = var.environment
+  lambda_role_arn     = module.lambda_role_blue.role_arn
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
@@ -160,6 +169,7 @@ module "worker-east-blue" {
   source              = "../../modules/worker"
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
+  lambda_role_arn     = module.lambda_role_blue.role_arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
@@ -176,6 +186,7 @@ module "worker-west-blue" {
   source              = "../../modules/worker"
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
+  lambda_role_arn     = module.lambda_role_blue.role_arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
@@ -186,4 +197,17 @@ module "worker-west-blue" {
     aws = aws.us-west-1
   }
   environment = var.environment
+}
+
+module "ui-blue" {
+  source                 = "../../modules/ui"
+  current_color          = "blue"
+  environment            = var.environment
+  dns_domain             = var.dns_domain
+  zone_name              = var.zone_name
+  viewer_protocol_policy = var.viewer_protocol_policy
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
 }
