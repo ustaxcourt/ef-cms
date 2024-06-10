@@ -93,6 +93,7 @@ const ADVANCED_SEARCH_TABS = {
   CASE: 'case',
   OPINION: 'opinion',
   ORDER: 'order',
+  PRACTITIONER: 'practitioner',
 };
 
 const allUseCases = {

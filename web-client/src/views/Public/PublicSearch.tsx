@@ -19,8 +19,11 @@ import React from 'react';
 
 export const PublicSearch = connect(
   {
+    advancedSearchTab: state.advancedSearchTab,
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
-    mobileSelection: state.advancedSearchForm.mobileSelection,
+    cerebralBindSimpleSetStateSequence:
+      sequences.cerebralBindSimpleSetStateSequence,
+    searchTabs: state.constants.ADVANCED_SEARCH_TABS,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence:
@@ -31,8 +34,10 @@ export const PublicSearch = connect(
       sequences.submitPublicOrderAdvancedSearchSequence,
   },
   function PublicSearch({
+    advancedSearchTab,
     advancedSearchTabChangeSequence,
-    mobileSelection,
+    cerebralBindSimpleSetStateSequence,
+    searchTabs,
     submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
@@ -167,23 +172,25 @@ export const PublicSearch = connect(
                 aria-label="additional case info"
                 className="usa-select margin-bottom-2"
                 onChange={e => {
-                  console.log({ tabName: e.target.value });
-                  advancedSearchTabChangeSequence({
-                    mobileSelection: e.target.value,
+                  advancedSearchTabChangeSequence();
+                  cerebralBindSimpleSetStateSequence({
+                    key: 'advancedSearchTab',
+                    value: e.target.value,
                   });
                 }}
               >
-                <option value="case">Case</option>
-                <option value="order">Order</option>
-                <option value="opinion">Opinion</option>
-                <option value="practitioner">Practitioner</option>
+                <option value={searchTabs.CASE}>Case</option>
+                <option value={searchTabs.ORDER}>Order</option>
+                <option value={searchTabs.OPINION}>Opinion</option>
+                <option value={searchTabs.PRACTITIONER}>Practitioner</option>
               </select>
             </div>
 
-            {mobileSelection === 'case' && CaseRender()}
-            {mobileSelection === 'order' && OrderRender()}
-            {mobileSelection === 'opinion' && OpinionRender()}
-            {(!mobileSelection || mobileSelection === 'practitioner') &&
+            {advancedSearchTab === searchTabs.CASE && CaseRender()}
+            {advancedSearchTab === searchTabs.ORDER && OrderRender()}
+            {advancedSearchTab === searchTabs.OPINION && OpinionRender()}
+            {(!advancedSearchTab ||
+              advancedSearchTab === searchTabs.PRACTITIONER) &&
               PractitionerRender()}
           </Mobile>
         </section>
