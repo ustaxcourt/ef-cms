@@ -1,5 +1,7 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const setHealthCheckCacheInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ) => {
   // The scope of how we consider the application to be "healthy" will grow.
   // Currently we consider an application region to be "healthy" if a web request can be made to API Gateway, and the lambda can retrieve the stored application health from Dynamo
