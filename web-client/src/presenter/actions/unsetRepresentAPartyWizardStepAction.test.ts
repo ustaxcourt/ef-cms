@@ -1,9 +1,9 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { unsetRequestAccessWizardStepAction } from './unsetRequestAccessWizardStepAction';
+import { unsetRepresentAPartyWizardStepAction } from './unsetRepresentAPartyWizardStepAction';
 
-describe('unsetRequestAccessWizardStepAction', () => {
+describe('unsetRepresentAPartyWizardStepAction', () => {
   it('should clear wizardStep from state', async () => {
-    const { state } = await runAction(unsetRequestAccessWizardStepAction, {
+    const { state } = await runAction(unsetRepresentAPartyWizardStepAction, {
       state: {
         wizardStep: 'TestWizardStep',
       },
