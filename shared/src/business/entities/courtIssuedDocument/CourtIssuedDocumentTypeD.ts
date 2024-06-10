@@ -42,8 +42,8 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
       })
       .messages({
         '*': 'Enter a date',
-        'date.max': 'Enter a valid date',
-        'date.min': 'Enter a valid date',
+        'date.min':
+          'Date must be no earlier than yesterday. Enter a valid date.',
       }),
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',

@@ -31,8 +31,6 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.required().messages({
       '*': 'Enter a date',
-      'date.max': 'Enter a valid date',
-      'date.min': 'Enter a valid date',
     }),
     trialLocation: JoiValidationConstants.STRING.required().messages({
       '*': 'Select a trial location',

@@ -45,7 +45,7 @@ describe('CourtIssuedDocumentTypeE', () => {
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: 'Enter a valid date',
+        date: 'Date must be no earlier than yesterday. Enter a valid date.',
       });
     });
 
