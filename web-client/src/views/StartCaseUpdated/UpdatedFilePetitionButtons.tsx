@@ -61,6 +61,7 @@ export const UpdatedFilePetitionButtons = connect(
     return (
       <>
         <Button
+          className="margin-top-5"
           data-testid={`step-${currentStep}-next-button`}
           disabled={isNextButtonDisabled}
           onClick={e => {
@@ -76,6 +77,7 @@ export const UpdatedFilePetitionButtons = connect(
         {currentStep > 1 && (
           <Button
             secondary
+            className="margin-top-5"
             onClick={() => {
               updatedFilePetitionGoBackAStepSequence();
             }}
@@ -85,6 +87,7 @@ export const UpdatedFilePetitionButtons = connect(
         )}
         <Button
           link
+          className="margin-top-5"
           onClick={() => {
             formCancelToggleCancelSequence();
           }}
