@@ -47,7 +47,10 @@ export const DocumentViewer = connect(
 
     return (
       <>
-        <div className="grid-row grid-gap-5">
+        <div
+          className="grid-row grid-gap-5"
+          data-testid="document-view-container"
+        >
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list-container">
               <div className="grid-row padding-left-205 grid-header">

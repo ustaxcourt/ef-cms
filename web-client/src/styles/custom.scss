@@ -56,6 +56,14 @@ hr {
   max-width: 150px;
 }
 
+.max-width-180 {
+  max-width: 180px;
+}
+
+.max-width-900 {
+  max-width: 900px;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -2242,4 +2250,73 @@ button.change-scanner-button {
   @media only screen and (max-width: ($medium-screen - 1)) {
     padding-bottom: 2rem;
   }
+}
+
+.address-info {
+  max-width: 30rem;
+}
+
+.info-alert {
+  max-width: 42rem !important;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-left-5 {
+  margin-left: 5px;
+}
+
+.display-flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.font-weight-600 {
+  font-weight: 600;
+}
+
+.margin-right-5 {
+  margin-right: 5px;
+}
+
+.margin-left-10 {
+  margin-left: 10px;
+}
+
+.max-width-fit-content {
+  max-width: fit-content;
+}
+
+.margin-bottom-8 {
+  margin-bottom: 8px;
+}
+
+.margin-top-5 {
+  margin-top: 5px;
+}
+
+.padding-left-25 {
+  padding-left: 25px;
+}
+
+.padding-left-20 {
+  padding-left: 20px;
+}
+
+.list-style-disc {
+  list-style-type: disc;
+}
+
+.line-height-24 {
+  line-height: 24px;
+}
+
+.line-height-21 {
+  line-height: 21px;
 }

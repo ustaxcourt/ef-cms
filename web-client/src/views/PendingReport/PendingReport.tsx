@@ -3,7 +3,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { PendingReportList } from './PendingReportList';
 import { SuccessNotification } from '../SuccessNotification';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
@@ -31,12 +30,17 @@ export const PendingReport = connect(
     return (
       <>
         <BigHeader text="Reports" />
-        <section className="usa-section grid-container">
+        <section
+          className="usa-section grid-container"
+          data-testid="pending-report-container"
+        >
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs bind="reportsTab.group" defaultActiveTab="pendingReport">
-            <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              {hasPendingItemsResults && (
+          <div className="title">
+            <h1>Pending Report</h1>
+
+            {hasPendingItemsResults && (
+              <div className="float-right">
                 <>
                   <Button
                     link
@@ -63,17 +67,13 @@ export const PendingReport = connect(
                     Printable Report
                   </Button>
                 </>
-              )}
-            </div>
+              </div>
+            )}
+          </div>
 
-            <Tab
-              id="pending-report-tab"
-              tabName="pendingReport"
-              title="Pending Report"
-            >
-              <PendingReportList />
-            </Tab>
-          </Tabs>
+          <div className="margin-top-5">
+            <PendingReportList />
+          </div>
         </section>
       </>
     );

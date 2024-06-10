@@ -118,7 +118,7 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="opinion-search-tab"]').click();
-      cy.get('[data-testid="keyword-search"]').type(opinionTitle);
+      cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
       // need to wait for elasticsearch potentially
       retry(() => {
         cy.get('[data-testid="advanced-search-button"]').click();
