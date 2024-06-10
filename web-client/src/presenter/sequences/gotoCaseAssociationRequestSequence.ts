@@ -26,7 +26,8 @@ export const gotoCaseAssociationRequestSequence =
     setCaseAssociationAction,
     canRequestAccessAction,
     {
-      proceed: [
+      no: [navigateToCaseDetailAction],
+      yes: [
         setDefaultFileDocumentFormValuesAction,
         runPathForUserRoleAction,
         {
@@ -42,6 +43,5 @@ export const gotoCaseAssociationRequestSequence =
           ],
         },
       ],
-      unauthorized: [navigateToCaseDetailAction],
     },
   ]);
