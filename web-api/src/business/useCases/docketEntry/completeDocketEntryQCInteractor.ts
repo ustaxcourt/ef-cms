@@ -16,6 +16,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { addServedStampToDocument } from '../courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
@@ -59,7 +60,7 @@ export const needsNewCoversheet = ({
  * @returns {object} the updated case after the documents are added
  */
 const completeDocketEntryQC = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -392,7 +393,7 @@ const completeDocketEntryQC = async (
 
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
-  (_applicationContext: IApplicationContext, { entryMetadata }) => ({
+  (_applicationContext: ServerApplicationContext, { entryMetadata }) => ({
     identifiers: [`docket-entry|${entryMetadata.docketEntryId}`],
   }),
   new InvalidRequest('The document is currently being updated'),
