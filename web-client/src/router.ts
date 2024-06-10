@@ -795,34 +795,36 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/request-access',
+      '/case-detail/*/represent-a-party',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Request access`,
+          `${getPageTitleDocketPrefix(docketNumber)} Represent a Party`,
         );
-        if (app.getState('wizardStep') === 'RequestAccessReview') {
+        if (app.getState('wizardStep') === 'RepresentAPartyReview') {
           return app.getSequence('chooseWizardStepSequence')({
-            value: 'RequestAccess',
+            value: 'RepresentAParty',
           });
         } else {
-          return app.getSequence('gotoRequestAccessSequence')({ docketNumber });
+          return app.getSequence('gotoRequestToRepresentAPartySequence')({
+            docketNumber,
+          });
         }
       }),
     );
 
     registerRoute(
-      '/case-detail/*/request-access/review',
+      '/case-detail/*/represent-a-party/review',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Request access review`,
+          `${getPageTitleDocketPrefix(docketNumber)} Represent a Party review`,
         );
         if (!app.getState('wizardStep')) {
           return app.getSequence('navigateToPathSequence')({
-            path: `/case-detail/${docketNumber}/request-access`,
+            path: `/case-detail/${docketNumber}/represent-a-party`,
           });
         } else {
           return app.getSequence('chooseWizardStepSequence')({
-            value: 'RequestAccessReview',
+            value: 'RepresentAPartyReview',
           });
         }
       }),

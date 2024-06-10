@@ -78,7 +78,7 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
-import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
+import { RepresentAPartyWizard } from './RepresentAParty/RepresentAPartyWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -176,7 +176,7 @@ const pages = {
   PrintableTrialCalendar,
   PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
-  RequestAccessWizard,
+  RepresentAPartyWizard,
   ReviewSavedPetition,
   SealedCaseDetail,
   SelectDocumentType,

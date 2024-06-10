@@ -52,15 +52,14 @@ export const CaseDetailHeader = connect<
             </Button>
           )}
 
-          {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
+          {caseDetailHeaderHelper.showRepresentAPartyButton && (
             <Button
               secondary
               className="tablet-full-width push-right margin-right-0"
-              data-testid="button-request-access"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-              id="button-request-access"
+              data-testid="request-represent-a-party-button"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/represent-a-party`}
             >
-              Request Access to Case
+              Represent a Party
             </Button>
           )}
 
@@ -69,6 +68,7 @@ export const CaseDetailHeader = connect<
               aria-label="Request for Access Pending"
               className="usa-tag push-right margin-right-0 padding-x-3"
             >
+              {/*  TODO 10389: RENAME??? */}
               <span aria-hidden="true">Request for Access Pending</span>
             </span>
           )}
@@ -102,14 +102,13 @@ export const CaseDetailHeader = connect<
             </Button>
           )}
 
-          {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
+          {caseDetailHeaderHelper.showRepresentAPartyButton && (
             <Button
               className="tablet-full-width margin-right-0"
-              data-testid="button-request-access-mobile"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-              id="button-request-access"
+              data-testid="request-represent-a-party-button-mobile"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/represent-a-party`}
             >
-              Request Access to Case
+              Represent a Party
             </Button>
           )}
 

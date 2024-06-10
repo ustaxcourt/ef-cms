@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
-import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
+import { RepresentAPartyDocumentForm } from './RepresentAPartyDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
@@ -11,11 +11,11 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const RequestAccess = connect(
+export const RepresentAParty = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    requestAccessHelper: state.requestAccessHelper,
+    representAPartyHelper: state.representAPartyHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence:
@@ -24,10 +24,10 @@ export const RequestAccess = connect(
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  function RequestAccess({
+  function RepresentAParty({
     form,
     formCancelToggleCancelSequence,
-    requestAccessHelper,
+    representAPartyHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
@@ -41,7 +41,7 @@ export const RequestAccess = connect(
             id="file-a-document-header"
             tabIndex={-1}
           >
-            Request Access to This Case
+            Represent a Party to this Case
           </h1>
         </Focus>
         <p className="margin-bottom-3 margin-top-0 required-statement">
@@ -76,9 +76,9 @@ export const RequestAccess = connect(
               data-testid="document-type"
               id="document-type"
               name="documentType"
-              options={requestAccessHelper.documentsForSelect}
+              options={representAPartyHelper.documentsForSelect}
               value={reactSelectValue({
-                documentTypes: requestAccessHelper.documentsForSelect,
+                documentTypes: representAPartyHelper.documentsForSelect,
                 selectedEventCode: form.eventCode,
               })}
               onChange={e => {
@@ -102,10 +102,10 @@ export const RequestAccess = connect(
               }}
             />
           </FormGroup>
-          {requestAccessHelper.showPartiesRepresenting && (
+          {representAPartyHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
-          <RequestAccessDocumentForm />
+          <RepresentAPartyDocumentForm />
 
           <div className="margin-top-5">
             <Button
@@ -133,4 +133,4 @@ export const RequestAccess = connect(
   },
 );
 
-RequestAccess.displayName = 'RequestAccess';
+RepresentAParty.displayName = 'RepresentAParty';

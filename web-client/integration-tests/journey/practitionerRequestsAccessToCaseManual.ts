@@ -1,7 +1,7 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
-import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
+import { representAPartyHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/representAPartyHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
