@@ -1,8 +1,13 @@
 import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 import { Case } from './cases/Case';
+import {
+  FORMATS,
+  createISODateAtStartOfDayEST,
+  createISODateString,
+  formatDateString,
+} from '../utilities/DateHandler';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
@@ -36,6 +41,11 @@ export class CaseDeadline extends JoiValidationEntity {
       Case.getSortableDocketNumber(this.docketNumber);
   }
 
+  static TODAY = formatDateString(
+    createISODateAtStartOfDayEST(),
+    FORMATS.MMDDYY,
+  );
+
   static VALIDATION_RULES = {
     associatedJudge: JoiValidationConstants.STRING.max(50)
       .required()
@@ -54,9 +64,17 @@ export class CaseDeadline extends JoiValidationEntity {
     createdAt: JoiValidationConstants.ISO_DATE.required().description(
       'When the Case Deadline was added to the system.',
     ),
-    deadlineDate: JoiValidationConstants.ISO_DATE.required()
+    deadlineDate: joi
+      .date()
+      .iso()
+      .min(CaseDeadline.TODAY)
+      .required()
       .description('When the Case Deadline expires.')
-      .messages({ '*': 'Enter a valid deadline date' }),
+      .messages({
+        '*': 'Enter a valid deadline date',
+        'date.min':
+          'Deadline date cannot be prior to today. Enter a valid date.',
+      }),
     description: JoiValidationConstants.STRING.max(120)
       .min(1)
       .required()

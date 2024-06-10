@@ -1,4 +1,5 @@
 import { CaseDeadline } from './CaseDeadline';
+import { FORMATS, formatNow } from '../utilities/DateHandler';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('CaseDeadline', () => {
@@ -58,7 +59,7 @@ describe('CaseDeadline', () => {
         {
           associatedJudge: 'Judge Buch',
           associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
+          deadlineDate: '2099-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
           leadDocketNumber: DOCKET_NUMBER,
@@ -74,7 +75,7 @@ describe('CaseDeadline', () => {
         {
           associatedJudge: 'Judge Buch',
           associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
+          deadlineDate: '2099-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
           leadDocketNumber: undefined, /// Optional property
@@ -90,7 +91,7 @@ describe('CaseDeadline', () => {
         {
           associatedJudge: 'Judge Buch',
           associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
-          deadlineDate: '2019-03-01T21:42:29.073Z',
+          deadlineDate: '2099-03-01T21:42:29.073Z',
           description: `I got the horses in the back
             Horse tack is attached
             Hat is matte black
@@ -108,6 +109,41 @@ describe('CaseDeadline', () => {
         description:
           'The description is too long. Please enter a valid description.',
       });
+    });
+
+    it('should be invalid and return a helpful message when the user provides a deadline date that is in the past', () => {
+      const caseDeadline = new CaseDeadline(
+        {
+          associatedJudge: 'Judge Buch',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+          deadlineDate: '2000-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
+        },
+        { applicationContext },
+      );
+
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual({
+        deadlineDate:
+          'Deadline date cannot be prior to today. Enter a valid date.',
+      });
+    });
+
+    it('should be valid when the user provides the current date as a deadline date', () => {
+      const mockToday = formatNow(FORMATS.ISO);
+
+      const caseDeadline = new CaseDeadline(
+        {
+          associatedJudge: 'Judge Buch',
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+          deadlineDate: mockToday,
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
+        },
+        { applicationContext },
+      );
+
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });
