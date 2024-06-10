@@ -1,19 +1,19 @@
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { RequestAccess } from './RequestAccess';
-import { RequestAccessReview } from './RequestAccessReview';
+import { RepresentAParty } from './RepresentAParty';
+import { RepresentAPartyReview } from './RepresentAPartyReview';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const RequestAccessWizard = connect(
+export const RepresentAPartyWizard = connect(
   {
     showModal: state.modal.showModal,
   },
-  function RequestAccessWizard({ showModal }) {
+  function RepresentAPartyWizard({ showModal }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -23,12 +23,12 @@ export const RequestAccessWizard = connect(
           )}
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs asSwitch bind="wizardStep" defaultActiveTab="RequestAccess">
-            <Tab tabName="RequestAccess">
-              <RequestAccess />
+          <Tabs asSwitch bind="wizardStep" defaultActiveTab="RepresentAParty">
+            <Tab tabName="RepresentAParty">
+              <RepresentAParty />
             </Tab>
-            <Tab tabName="RequestAccessReview">
-              <RequestAccessReview />
+            <Tab tabName="RepresentAPartyReview">
+              <RepresentAPartyReview />
             </Tab>
           </Tabs>
         </section>
@@ -37,4 +37,4 @@ export const RequestAccessWizard = connect(
   },
 );
 
-RequestAccessWizard.displayName = 'RequestAccessWizard';
+RepresentAPartyWizard.displayName = 'RepresentAPartyWizard';

@@ -13,7 +13,7 @@ import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhea
  * When a docket clerk adds a paper filing,
  * Then they can choose MLSP option
  */
-describe('Private Practitioner requests access to case', () => {
+describe('Private Practitioner requests to represent a party to a case', () => {
   it('should have access to auto generate entry of appearance if there are no parties with paper service preference', () => {
     const primaryFilerName = 'John';
 

@@ -115,7 +115,7 @@ import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { reportMenuHelper } from './computeds/reportMenuHelper';
-import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { representAPartyHelper } from './computeds/representAPartyHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -468,8 +468,8 @@ export const computeds = {
   reportMenuHelper: reportMenuHelper as unknown as ReturnType<
     typeof reportMenuHelper
   >,
-  requestAccessHelper: requestAccessHelper as unknown as ReturnType<
-    typeof requestAccessHelper
+  representAPartyHelper: representAPartyHelper as unknown as ReturnType<
+    typeof representAPartyHelper
   >,
   reviewSavedPetitionHelper: reviewSavedPetitionHelper as unknown as ReturnType<
     typeof reviewSavedPetitionHelper

@@ -5,7 +5,7 @@ import { getFilerParties } from './getFilerParties';
 import { showGenerationType } from '@web-client/presenter/actions/setDefaultGenerationTypeAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const requestAccessHelper = (
+export const representAPartyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
