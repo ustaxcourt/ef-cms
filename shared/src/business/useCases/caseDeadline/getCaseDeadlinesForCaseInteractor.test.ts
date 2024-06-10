@@ -7,7 +7,7 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
   const mockCaseDeadline = {
     associatedJudge: 'Buch',
     associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
-    deadlineDate: '2019-03-01T21:42:29.073Z',
+    deadlineDate: '2099-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '123-20',
   };
