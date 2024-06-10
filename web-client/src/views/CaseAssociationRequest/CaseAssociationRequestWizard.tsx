@@ -23,11 +23,15 @@ export const CaseAssociationRequestWizard = connect(
           )}
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs asSwitch bind="wizardStep" defaultActiveTab="RepresentAParty">
-            <Tab tabName="RepresentAParty">
+          <Tabs
+            asSwitch
+            bind="wizardStep"
+            defaultActiveTab="CaseAssociationRequest"
+          >
+            <Tab tabName="CaseAssociationRequest">
               <CaseAssociationRequest />
             </Tab>
-            <Tab tabName="RepresentAPartyReview">
+            <Tab tabName="CaseAssociationRequestReview">
               <CaseAssociationRequestReview />
             </Tab>
           </Tabs>

@@ -14,7 +14,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCaseAssociationRequestAction } from '../actions/validateCaseAssociationRequestAction';
 
-export const reviewRequestAccessInformationSequence =
+export const reviewCaseAssociationRequestSequence =
   showProgressSequenceDecorator([
     clearAlertsAction,
     startShowValidationAction,

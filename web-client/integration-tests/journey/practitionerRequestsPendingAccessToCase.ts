@@ -10,7 +10,7 @@ export const practitionerRequestsPendingAccessToCase = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       documentTitleTemplate: 'Select a document',
@@ -74,7 +74,7 @@ export const practitionerRequestsPendingAccessToCase = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Motion to Substitute Parties and Change Caption',

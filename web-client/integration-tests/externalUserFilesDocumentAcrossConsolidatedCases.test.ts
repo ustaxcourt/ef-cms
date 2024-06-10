@@ -193,7 +193,7 @@ describe('External User files a document across a consolidated case group', () =
       await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+      await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
