@@ -60,6 +60,32 @@ describe('navigateToDocketQcAction', () => {
     );
   });
 
+  it('uses docketNumber from props.caseDetail if props.docketNumber is undefined', async () => {
+    await runAction(navigateToDocketQcAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        docketEntryId: 'abc',
+      },
+      state: {
+        caseDetail: {},
+        constants: {
+          FROM_PAGES: {
+            caseDetail: 'case-detail',
+          },
+        },
+      },
+    });
+
+    expect(mockRouter).toHaveBeenCalledWith(
+      '/case-detail/101-20/documents/abc/edit?fromPage=case-detail',
+    );
+  });
+
   it('does not try to navigate if docket number is undefined', async () => {
     await runAction(navigateToDocketQcAction, {
       modules: {

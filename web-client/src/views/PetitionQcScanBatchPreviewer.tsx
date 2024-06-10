@@ -23,6 +23,7 @@ import classNames from 'classnames';
 export const PetitionQcScanBatchPreviewer = connect(
   {
     constants: state.constants,
+    deleteUploadedPdfSequence: sequences.deleteUploadedPdfSequence,
     generatePdfFromScanSessionSequence:
       sequences.generatePdfFromScanSessionSequence,
     openChangeScannerSourceModalSequence:
@@ -52,6 +53,7 @@ export const PetitionQcScanBatchPreviewer = connect(
   },
   function PetitionQcScanBatchPreviewer({
     constants,
+    deleteUploadedPdfSequence,
     documentTabs,
     documentType,
     generatePdfFromScanSessionSequence,
@@ -143,6 +145,7 @@ export const PetitionQcScanBatchPreviewer = connect(
 
           <div className="preview-container--image-area">
             <img
+              alt="preview"
               src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
             />
           </div>
@@ -290,7 +293,7 @@ export const PetitionQcScanBatchPreviewer = connect(
           )}
           {showModal === 'ConfirmDeletePDFModal' && (
             <ConfirmDeletePDFModal
-              confirmSequence="deleteUploadedPdfSequence"
+              confirmSequence={deleteUploadedPdfSequence}
               confirmText="Yes, Remove"
               modalContent="The current PDF will be permanently removed, and you will need to add a new PDF."
               title="Are You Sure You Want to Remove this PDF?"
@@ -437,8 +440,8 @@ export const PetitionQcScanBatchPreviewer = connect(
           <Tabs
             bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
-            onSelect={() => {
-              setDocumentForPreviewSequence();
+            onSelect={documentId => {
+              setDocumentForPreviewSequence({ documentId });
             }}
           >
             {documentTabsList.map(documentTab => {
@@ -456,8 +459,8 @@ export const PetitionQcScanBatchPreviewer = connect(
                       />
                     )
                   }
-                  key={documentTab.documentType}
-                  tabName={documentTab.fileName}
+                  key={documentTab.documentId}
+                  tabName={documentTab.documentId}
                   title={documentTab.tabTitle}
                 />
               );

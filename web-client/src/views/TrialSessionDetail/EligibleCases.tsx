@@ -106,6 +106,7 @@ export const EligibleCases = connect(
                       <FontAwesomeIcon
                         className="mini-success"
                         icon="calendar-plus"
+                        title="Manually added"
                       />
                     </span>
                   )}
@@ -149,7 +150,9 @@ export const EligibleCases = connect(
                       <label
                         className="usa-checkbox__label"
                         htmlFor={`${item.docketNumber}-complete`}
-                      ></label>
+                      >
+                        {''}
+                      </label>
                     </div>
                   </td>
                 )}

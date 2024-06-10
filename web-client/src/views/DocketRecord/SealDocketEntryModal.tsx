@@ -25,6 +25,7 @@ export const SealDocketEntryModal = connect(
         cancelSequence={cancelSequence}
         confirmLabel="Seal"
         confirmSequence={confirmSequence}
+        dataTestId="seal-docket-entry-modal"
         title="Seal Document"
       >
         <fieldset

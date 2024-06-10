@@ -41,6 +41,36 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
+type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
+
+/* eslint-disable max-lines */
+const canDownloadSTIN = (
+  entry: RawDocketEntry,
+  petitionDocketEntry: RawDocketEntry,
+  user: RawUser,
+): boolean => {
+  if (
+    user.role === ROLES.petitionsClerk &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  } else if (
+    user.role === ROLES.caseServicesSupervisor &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  } else if (
+    user.role === ROLES.irsSuperuser &&
+    DocketEntry.isServed(entry) &&
+    DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export class DocketEntry extends JoiValidationEntity {
   public action?: string;
   public additionalInfo?: string;
@@ -48,6 +78,9 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
+  public caseType?: string;
+  public taxYear?: string;
+  public noticeIssuedDate?: string;
   public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
@@ -162,6 +195,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
     this.archived = rawDocketEntry.archived;
     this.attachments = rawDocketEntry.attachments;
+    this.caseType = rawDocketEntry.caseType;
+    this.taxYear = rawDocketEntry.taxYear;
+    this.noticeIssuedDate = rawDocketEntry.noticeIssuedDate;
     this.certificateOfService = rawDocketEntry.certificateOfService;
     this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
     this.createdAt = rawDocketEntry.createdAt || createISODateString();
@@ -585,7 +621,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
       !!filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        filedByRole as PractitionerRole,
+      )
     );
   }
 
@@ -668,12 +706,12 @@ export class DocketEntry extends JoiValidationEntity {
 
     const petitionDocketEntry = getPetitionDocketEntry(rawCase);
 
+    //Only allow STIN download if:
+    //  - role Petition Clerk & entry not served, or
+    //  - role Case Services Supervisor & entry not served, or
+    //  - role IRS Superuser and entry served.
     if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
-      return (
-        user.role === ROLES.petitionsClerk &&
-        !DocketEntry.isServed(entry) &&
-        !DocketEntry.isServed(petitionDocketEntry)
-      );
+      return canDownloadSTIN(entry, petitionDocketEntry, user);
     }
 
     if (User.isInternalUser(user.role)) return true;

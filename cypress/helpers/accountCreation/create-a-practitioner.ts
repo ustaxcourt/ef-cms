@@ -6,7 +6,7 @@ export function createAPractitioner() {
   const lastName = faker.person.lastName();
 
   cy.get('[data-testid="search-link"]').click();
-  cy.get('[data-testid="tab-practitioner"] > .button-text').click();
+  cy.get('[data-testid="practitioner-search-tab"] > .button-text').click();
   cy.get('[data-testid="add-new-practitioner"]').click();
 
   cy.get('[data-testid="first-name-input"]').type(firstName);

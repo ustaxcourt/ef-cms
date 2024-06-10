@@ -10,7 +10,6 @@ export const GenericErrorModal = connect(
   function GenericErrorModal({ clearModalSequence }) {
     return (
       <ModalDialog
-        preventCancelOnBlur
         cancelLink={false}
         closeLink={false}
         confirmLabel="Close"
