@@ -1,15 +1,18 @@
-import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   CasesClosedReturnType,
   getCasesClosedByJudgeInteractor,
 } from './getCasesClosedByJudgeInteractor';
-import { JudgeActivityStatisticsRequest } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../utilities/DateHandler';
-import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  judgeUser,
+  petitionsClerkUser,
+} from '../../../../../shared/src/test/mockUsers';
 
 const mockClosedCases = 3;
 const mockClosedDismissedCases = 2;

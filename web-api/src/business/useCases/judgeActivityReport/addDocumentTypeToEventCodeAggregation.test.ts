@@ -1,4 +1,4 @@
-import { COURT_ISSUED_EVENT_CODES } from '../../entities/EntityConstants';
+import { COURT_ISSUED_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
 describe('addDocumentTypeToEventCodeAggregation', () => {
