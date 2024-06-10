@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  *
@@ -14,7 +15,7 @@ import {
  * @param {string} providers.docketEntryId the docketEntryId of the document
  */
 export const appendAmendedPetitionFormInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketEntryId }: { docketEntryId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

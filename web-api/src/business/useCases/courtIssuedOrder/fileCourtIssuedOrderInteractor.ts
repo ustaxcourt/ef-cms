@@ -6,6 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -19,7 +20,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise<*>} the updated case entity after the document is added
  */
 export const fileCourtIssuedOrder = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     documentMetadata,
     primaryDocumentFileId,
@@ -155,7 +156,7 @@ export const fileCourtIssuedOrder = async (
 
 export const fileCourtIssuedOrderInteractor = withLocking(
   fileCourtIssuedOrder,
-  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+  (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
     identifiers: [`case|${documentMetadata.docketNumber}`],
   }),
 );
