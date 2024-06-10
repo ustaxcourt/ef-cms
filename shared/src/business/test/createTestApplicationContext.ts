@@ -118,7 +118,7 @@ import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '@web-api/persistence/dynamo/workitems/saveWorkItem';
 import { sealCaseInteractor } from '@shared/business/useCases/sealCaseInteractor';
-import { sealDocketEntryInteractor } from '@shared/business/useCases/docketEntry/sealDocketEntryInteractor';
+import { sealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/sealDocketEntryInteractor';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
@@ -126,7 +126,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/t
 import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
-import { unsealDocketEntryInteractor } from '@shared/business/useCases/docketEntry/unsealDocketEntryInteractor';
+import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';

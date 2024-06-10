@@ -1,17 +1,17 @@
 import {
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../test/mockCase';
+} from '../../../../../shared/src/test/mockCase';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('addPaperFilingInteractor', () => {
   const mockClientConnectionId = '987654';

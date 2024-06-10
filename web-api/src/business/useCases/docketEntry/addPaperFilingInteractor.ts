@@ -1,17 +1,20 @@
-import { Case, isLeadCase } from '../../entities/cases/Case';
+import {
+  Case,
+  isLeadCase,
+} from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**

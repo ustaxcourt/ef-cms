@@ -1,5 +1,5 @@
-import { DocketEntry } from '../../entities/DocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { shouldGenerateCoversheetForDocketEntry } from './updateDocketEntryMetaInteractor';
 
 describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry', () => {
