@@ -1,14 +1,14 @@
-import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { ROLES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser } from '../../../test/mockUsers';
-import { getContactPrimary } from '../../entities/cases/Case';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 
 describe('updateDocketEntryMetaInteractor', () => {

@@ -1,12 +1,12 @@
-import { Case } from '../../entities/cases/Case';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { WorkItem } from '../../entities/WorkItem';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { omit } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 

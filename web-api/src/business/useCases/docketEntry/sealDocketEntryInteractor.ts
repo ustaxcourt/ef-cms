@@ -1,31 +1,40 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 
 /**
- * strikes a given docket entry on a case
+ * seals a given docket entry on a case
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id to strike
+ * @param {string} providers.docketEntryId the docket entry id to seal
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the updated case after the docket entry is stricken
+ * @returns {object} the updated docket entry after it has been sealed
  */
-export const strikeDocketEntryInteractor = async (
+export const sealDocketEntryInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketEntryId,
+    docketEntrySealedTo,
     docketNumber,
-  }: { docketEntryId: string; docketNumber: string },
+  }: {
+    docketEntryId: string;
+    docketEntrySealedTo: string;
+    docketNumber: string;
+  },
 ) => {
+  if (!docketEntrySealedTo) {
+    throw new Error('Docket entry sealed to is required');
+  }
+
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission = isAuthorized(
     authorizedUser,
-    ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY,
+    ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY,
   );
 
   if (!hasPermission) {
@@ -49,13 +58,7 @@ export const strikeDocketEntryInteractor = async (
     throw new NotFoundError('Docket entry not found');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
-
-  caseEntity.updateDocketEntry(docketEntryEntity);
+  docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
 
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
@@ -64,5 +67,5 @@ export const strikeDocketEntryInteractor = async (
     document: docketEntryEntity.validate().toRawObject(),
   });
 
-  return caseEntity.toRawObject();
+  return docketEntryEntity.toRawObject();
 };

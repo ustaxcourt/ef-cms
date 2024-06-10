@@ -1,16 +1,16 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   UNSERVABLE_EVENT_CODES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { createISODateString } from '../../utilities/DateHandler';
-import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import { getDocumentTitleWithAdditionalInfo } from '../../../../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**

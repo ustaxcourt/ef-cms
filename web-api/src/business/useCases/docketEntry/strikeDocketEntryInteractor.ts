@@ -1,20 +1,20 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 
 /**
- * unseals a given docket entry on a case
+ * strikes a given docket entry on a case
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id to unseal
+ * @param {string} providers.docketEntryId the docket entry id to strike
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the updated docket entry after it has been unsealed
+ * @returns {object} the updated case after the docket entry is stricken
  */
-export const unsealDocketEntryInteractor = async (
+export const strikeDocketEntryInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketEntryId,
@@ -25,7 +25,7 @@ export const unsealDocketEntryInteractor = async (
 
   const hasPermission = isAuthorized(
     authorizedUser,
-    ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY,
+    ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY,
   );
 
   if (!hasPermission) {
@@ -49,7 +49,13 @@ export const unsealDocketEntryInteractor = async (
     throw new NotFoundError('Docket entry not found');
   }
 
-  docketEntryEntity.unsealEntry();
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
+
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
@@ -58,5 +64,5 @@ export const unsealDocketEntryInteractor = async (
     document: docketEntryEntity.validate().toRawObject(),
   });
 
-  return docketEntryEntity.toRawObject();
+  return caseEntity.toRawObject();
 };

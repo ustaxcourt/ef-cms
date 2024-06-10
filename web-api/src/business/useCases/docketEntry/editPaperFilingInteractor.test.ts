@@ -3,12 +3,15 @@ import {
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser, petitionerUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  petitionerUser,
+} from '../../../../../shared/src/test/mockUsers';
 import { editPaperFilingInteractor } from './editPaperFilingInteractor';
-import { getContactPrimary } from '../../entities/cases/Case';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
