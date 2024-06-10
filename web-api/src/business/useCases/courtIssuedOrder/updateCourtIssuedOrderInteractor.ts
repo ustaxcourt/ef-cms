@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -137,7 +138,7 @@ export const updateCourtIssuedOrder = async (
 
 export const updateCourtIssuedOrderInteractor = withLocking(
   updateCourtIssuedOrder,
-  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+  (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
     identifiers: [`case|${documentMetadata.docketNumber}`],
   }),
 );
