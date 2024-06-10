@@ -3,26 +3,26 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   FORMATS,
   dateStringsCompared,
   formatDateString,
-} from '../../utilities/DateHandler';
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { User } from '../../entities/User';
-import { addServedStampToDocument } from '../../../../../web-api/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { generateNoticeOfDocketChangePdf } from '../../../../../web-api/src/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
-import { replaceBracketed } from '../../utilities/replaceBracketed';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { addServedStampToDocument } from '../courtIssuedDocument/addServedStampToDocument';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
+import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getDocumentTitleForNoticeOfChange } from '../../../../../shared/src/business/utilities/getDocumentTitleForNoticeOfChange';
+import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const needsNewCoversheet = ({

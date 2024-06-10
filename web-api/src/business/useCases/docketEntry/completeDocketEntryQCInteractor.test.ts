@@ -4,16 +4,16 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
-import { MOCK_ACTIVE_LOCK } from '../../../test/mockLock';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_ACTIVE_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
   docketClerkUser,
-} from '../../../test/mockUsers';
+} from '../../../../../shared/src/test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import { testPdfDoc } from '../../test/getFakeFile';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
