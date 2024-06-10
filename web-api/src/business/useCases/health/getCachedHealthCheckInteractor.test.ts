@@ -1,5 +1,5 @@
 import { StoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCachedHealthCheckInteractor } from './getCachedHealthCheckInteractor';
 
 describe('getCachedHealthCheckInteractor', () => {
