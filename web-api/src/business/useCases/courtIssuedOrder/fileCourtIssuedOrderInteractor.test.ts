@@ -6,11 +6,11 @@ import {
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
-import { MOCK_LOCK } from '../../../test/mockLock';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 
 describe('fileCourtIssuedOrderInteractor', () => {
