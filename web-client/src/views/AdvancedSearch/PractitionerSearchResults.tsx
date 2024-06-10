@@ -113,7 +113,7 @@ export const PractitionerSearchResults = connect(
             <Mobile>
               {practitionerSearchHelper.formattedSearchResults?.map(result => (
                 <div
-                  className="search-result width-full margin-bottom-1 shadow-1 border border-base-lightest padding-2"
+                  className="search-result width-full margin-bottom-2 shadow-3 border border-base-lightest padding-2"
                   key={result.barNumber}
                 >
                   <h2 className="padding-bottom-2 border-bottom border-base-lightest">
