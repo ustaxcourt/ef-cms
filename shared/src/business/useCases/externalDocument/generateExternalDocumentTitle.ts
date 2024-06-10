@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { ExternalDocumentFactory } from '../../entities/externalDocument/ExternalDocumentFactory';
 import { cloneDeep } from 'lodash';
 
@@ -10,7 +11,7 @@ import { cloneDeep } from 'lodash';
  * @returns {string|void} document title
  */
 export const generateExternalDocumentTitle = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   { documentMetadata },
 ) => {
   documentMetadata = cloneDeep(documentMetadata);
