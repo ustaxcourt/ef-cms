@@ -2,12 +2,12 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
-import { MOCK_CASE } from '../../../test/mockCase';
-import { docketClerkUser } from '../../../test/mockUsers';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
