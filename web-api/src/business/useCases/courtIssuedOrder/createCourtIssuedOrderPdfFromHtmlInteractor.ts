@@ -5,9 +5,9 @@ import {
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,

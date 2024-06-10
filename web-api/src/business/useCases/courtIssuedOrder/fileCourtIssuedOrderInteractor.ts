@@ -1,11 +1,11 @@
-import { Case } from '../../entities/cases/Case';
-import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
-import { Message } from '../../entities/Message';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DOCUMENT_RELATIONSHIPS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Message } from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
