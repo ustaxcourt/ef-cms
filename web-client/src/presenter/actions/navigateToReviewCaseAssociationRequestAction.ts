@@ -1,7 +1,7 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const navigateToRepresentAPartyReviewAction = async ({
+export const navigateToReviewCaseAssociationRequestAction = async ({
   get,
   router,
   store,

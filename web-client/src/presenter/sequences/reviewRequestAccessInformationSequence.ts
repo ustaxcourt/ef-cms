@@ -2,7 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
 import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
-import { navigateToRepresentAPartyReviewAction } from '../actions/navigateToRepresentAPartyReviewAction';
+import { navigateToReviewCaseAssociationRequestAction } from '../actions/navigateToReviewCaseAssociationRequestAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -34,7 +34,7 @@ export const reviewRequestAccessInformationSequence =
         generateTitleForSupportingDocumentsAction,
         stopShowValidationAction,
         clearAlertsAction,
-        navigateToRepresentAPartyReviewAction,
+        navigateToReviewCaseAssociationRequestAction,
       ],
     },
   ]);

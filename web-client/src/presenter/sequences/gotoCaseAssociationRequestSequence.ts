@@ -7,14 +7,14 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
+import { setCaseAssociationRequestStepActionGenerator } from '../actions/setCaseAssociationRequestStepActionGenerator';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
-import { setRepresentAPartyWizardStepActionGenerator } from '../actions/setRepresentAPartyWizardStepActionGenerator';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoRequestToRepresentAPartySequence =
+export const gotoCaseAssociationRequestSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -32,12 +32,12 @@ export const gotoRequestToRepresentAPartySequence =
         {
           irsPractitioner: [
             setFormPartyTrueAction('partyIrsPractitioner'),
-            setRepresentAPartyWizardStepActionGenerator('RequestAccess'),
+            setCaseAssociationRequestStepActionGenerator('RequestAccess'),
             setupCurrentPageAction('RequestAccessWizard'),
           ],
           privatePractitioner: [
             setFormPartyTrueAction('partyPrivatePractitioner'),
-            setRepresentAPartyWizardStepActionGenerator('RequestAccess'),
+            setCaseAssociationRequestStepActionGenerator('RequestAccess'),
             setupCurrentPageAction('RequestAccessWizard'),
           ],
         },
