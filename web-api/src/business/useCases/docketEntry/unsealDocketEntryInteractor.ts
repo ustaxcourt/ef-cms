@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * unseals a given docket entry on a case
@@ -15,7 +16,7 @@ import {
  * @returns {object} the updated docket entry after it has been unsealed
  */
 export const unsealDocketEntryInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,

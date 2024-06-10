@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../../../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -22,7 +23,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case after the documents are added
  */
 export const updateDocketEntryMeta = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketEntryMeta,
     docketNumber,
@@ -216,7 +217,7 @@ export const shouldGenerateCoversheetForDocketEntry = ({
 
 export const updateDocketEntryMetaInteractor = withLocking(
   updateDocketEntryMeta,
-  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
 );

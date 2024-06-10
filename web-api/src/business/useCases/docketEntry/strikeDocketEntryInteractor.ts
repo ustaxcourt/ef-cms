@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * strikes a given docket entry on a case
@@ -15,7 +16,7 @@ import {
  * @returns {object} the updated case after the docket entry is stricken
  */
 export const strikeDocketEntryInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,

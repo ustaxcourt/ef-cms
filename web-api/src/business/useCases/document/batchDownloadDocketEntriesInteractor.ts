@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@shared/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
@@ -15,7 +16,7 @@ export type DownloadDocketEntryRequestType = {
 };
 
 const batchDownloadDocketEntriesHelper = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     docketNumber,
@@ -89,8 +90,8 @@ const batchDownloadDocketEntriesHelper = async (
     extraFileNames.push(pdfTitle);
   }
 
-  const onEntry = entryData => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onEntry = async entryData => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
@@ -103,9 +104,9 @@ const batchDownloadDocketEntriesHelper = async (
     });
   };
 
-  const onError = error => {
+  const onError = async error => {
     applicationContext.logger.error('Archive Error', { error });
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
@@ -116,8 +117,8 @@ const batchDownloadDocketEntriesHelper = async (
     });
   };
 
-  const onProgress = progressData => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onProgress = async progressData => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
@@ -130,8 +131,8 @@ const batchDownloadDocketEntriesHelper = async (
     });
   };
 
-  const onUploadStart = () => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onUploadStart = async () => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
@@ -176,7 +177,7 @@ const batchDownloadDocketEntriesHelper = async (
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
 ) => {
   try {

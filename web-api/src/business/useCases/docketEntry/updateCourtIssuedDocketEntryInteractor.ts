@@ -5,6 +5,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -15,7 +16,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case after the documents are added
  */
 export const updateCourtIssuedDocketEntry = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { documentMeta }: { documentMeta: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -112,7 +113,7 @@ export const updateCourtIssuedDocketEntry = async (
 
 export const updateCourtIssuedDocketEntryInteractor = withLocking(
   updateCourtIssuedDocketEntry,
-  (_applicationContext: IApplicationContext, { documentMeta }) => ({
+  (_applicationContext: ServerApplicationContext, { documentMeta }) => ({
     identifiers: [`case|${documentMeta.docketNumber}`],
   }),
 );
