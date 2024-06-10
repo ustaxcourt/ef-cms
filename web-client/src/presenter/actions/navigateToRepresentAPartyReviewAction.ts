@@ -1,18 +1,11 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * navigates to the request access review page
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral function for getting values from the store
- * @param {object} providers.router the riot.router object that is used for changing the route
- * @returns {Promise} async action
- */
-export const navigateToRequestAccessReviewAction = async ({
+export const navigateToRepresentAPartyReviewAction = async ({
   get,
   router,
   store,
-}: ActionProps) => {
+}: ActionProps): Promise<void> => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
   if (

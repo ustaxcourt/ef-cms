@@ -1,25 +1,21 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { navigateToRequestAccessReviewAction } from './navigateToRequestAccessReviewAction';
+import { navigateToRepresentAPartyReviewAction } from './navigateToRepresentAPartyReviewAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('navigateToRequestAccessReviewAction', () => {
-  let routerStub;
-
+describe('navigateToRepresentAPartyReviewAction', () => {
   const mockDocketNumber = '123-45';
 
-  beforeAll(() => {
-    routerStub = jest.fn();
-    presenter.providers.applicationContext = applicationContext;
+  const routerStub = jest.fn();
+  presenter.providers.router = {
+    route: routerStub,
+  };
 
-    presenter.providers.router = {
-      route: routerStub,
-    };
-  });
+  presenter.providers.applicationContext = applicationContext;
 
-  it('should route to the request access review page using state.caseDetail.docketNumber', async () => {
-    await runAction(navigateToRequestAccessReviewAction, {
+  it('should route to the represent a party review page using state.caseDetail.docketNumber', async () => {
+    await runAction(navigateToRepresentAPartyReviewAction, {
       modules: {
         presenter,
       },
@@ -36,7 +32,7 @@ describe('navigateToRequestAccessReviewAction', () => {
   });
 
   it('should set the redactionAcknowledgement to false when the eventCode is EA and generation is manual', async () => {
-    const results = await runAction(navigateToRequestAccessReviewAction, {
+    const results = await runAction(navigateToRepresentAPartyReviewAction, {
       modules: {
         presenter,
       },
@@ -55,7 +51,7 @@ describe('navigateToRequestAccessReviewAction', () => {
   });
 
   it('should unset the redactionAcknowledgement state value when generationType is auto', async () => {
-    const results = await runAction(navigateToRequestAccessReviewAction, {
+    const results = await runAction(navigateToRepresentAPartyReviewAction, {
       modules: {
         presenter,
       },
@@ -74,7 +70,7 @@ describe('navigateToRequestAccessReviewAction', () => {
   });
 
   it('should unset the redactionAcknowledgement state value when eventCode is not EA', async () => {
-    const results = await runAction(navigateToRequestAccessReviewAction, {
+    const results = await runAction(navigateToRepresentAPartyReviewAction, {
       modules: {
         presenter,
       },

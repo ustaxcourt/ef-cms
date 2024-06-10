@@ -194,7 +194,7 @@ import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrint
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoPrintableTrialSessionWorkingCopySequence } from './sequences/gotoPrintableTrialSessionWorkingCopySequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
-import { gotoRequestToRepresentAPartySequence } from './sequences/gotoRequestRepresentAPartySequence';
+import { gotoRequestToRepresentAPartySequence } from './sequences/gotoRequestToRepresentAPartySequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
