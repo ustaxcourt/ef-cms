@@ -15,7 +15,7 @@ import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
 
 describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
-    deadlineDate: '2019-03-01T21:42:29.073Z',
+    deadlineDate: '2099-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: MOCK_CASE.docketNumber,
   };
