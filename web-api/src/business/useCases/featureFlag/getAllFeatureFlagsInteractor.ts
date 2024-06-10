@@ -1,10 +1,11 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { isEmpty } from 'lodash';
 
 const allFeatureFlags = {};
 
 export const getAllFeatureFlagsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ) => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     (flag: any) => flag.key,
