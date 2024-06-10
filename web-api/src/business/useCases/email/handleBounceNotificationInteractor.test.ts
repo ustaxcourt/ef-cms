@@ -1,5 +1,5 @@
-import { BOUNCE_NOTIFICATION } from '../../../test/mockBounceNotification';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { BOUNCE_NOTIFICATION } from '../../../../../shared/src/test/mockBounceNotification';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   handleBounceNotificationInteractor,
   parseBounceNotification,
