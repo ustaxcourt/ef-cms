@@ -10,6 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -22,7 +23,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  */
 export const serveExternallyFiledDocument = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     docketEntryId,
@@ -218,7 +219,7 @@ export const serveExternallyFiledDocument = async (
 };
 
 export const determineEntitiesToLock = (
-  _applicationContext: IApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
@@ -234,7 +235,7 @@ export const determineEntitiesToLock = (
 });
 
 export const handleLockError = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest: any,
 ) => {
   const user = applicationContext.getCurrentUser();

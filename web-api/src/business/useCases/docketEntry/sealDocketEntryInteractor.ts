@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * seals a given docket entry on a case
@@ -15,7 +16,7 @@ import {
  * @returns {object} the updated docket entry after it has been sealed
  */
 export const sealDocketEntryInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketEntrySealedTo,

@@ -13,6 +13,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -31,7 +32,7 @@ interface IEditPaperFilingRequest {
  * @returns {object} The paper service PDF url
  */
 export const editPaperFiling = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   request: IEditPaperFilingRequest,
 ) => {
   request.consolidatedGroupDocketNumbers =
@@ -91,7 +92,7 @@ const saveForLaterStrategy = async ({
   docketEntryEntity,
   request,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   request: IEditPaperFilingRequest;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
@@ -144,7 +145,7 @@ const multiDocketServeStrategy = async ({
   docketEntryEntity,
   request,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
@@ -193,7 +194,7 @@ const singleDocketServeStrategy = async ({
   docketEntryEntity,
   request,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
@@ -229,7 +230,7 @@ const serveDocketEntry = async ({
   subjectCaseEntity,
   userId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntitiesToFileOn: Case[];
   clientConnectionId: string;
   docketEntryEntity: DocketEntry;
@@ -366,7 +367,9 @@ const validateMultiDocketPaperFilingRequest = ({
   });
 };
 
-const authorizeRequest = (applicationContext: IApplicationContext): void => {
+const authorizeRequest = (
+  applicationContext: ServerApplicationContext,
+): void => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
@@ -381,7 +384,7 @@ const updateDocketEntry = async ({
   documentMetadata,
   userId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntry: DocketEntry;
   documentMetadata: any;
@@ -446,7 +449,7 @@ const updateAndSaveWorkItem = async ({
   docketEntry,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketEntry: DocketEntry;
   user: RawUser;
 }): Promise<void> => {
@@ -474,7 +477,7 @@ const getDocketEntryToEdit = async ({
   docketEntryId,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
   docketEntryId: string;
 }): Promise<{
@@ -498,7 +501,7 @@ const getDocketEntryToEdit = async ({
 };
 
 export const determineEntitiesToLock = (
-  _applicationContext: IApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     consolidatedGroupDocketNumbers = [],
     documentMetadata,

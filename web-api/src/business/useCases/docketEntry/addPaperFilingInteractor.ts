@@ -12,6 +12,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
@@ -29,7 +30,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case after the documents are added
  */
 export const addPaperFiling = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     consolidatedGroupDocketNumbers,
@@ -278,7 +279,7 @@ type DocumentMetadata = {
 };
 
 export const determineEntitiesToLock = (
-  _applicationContext: IApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     consolidatedGroupDocketNumbers = [],
     documentMetadata,

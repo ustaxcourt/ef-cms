@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -13,7 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {string} url for the generated document on the storage client
  */
 export const getDocumentContentsForDocketEntryInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { documentContentsId }: { documentContentsId: string },
 ) => {
   const user = applicationContext.getCurrentUser();

@@ -6,6 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { omit } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -18,7 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case after the documents are added
  */
 export const fileCourtIssuedDocketEntry = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumbers,
     documentMeta,
@@ -209,7 +210,7 @@ export const fileCourtIssuedDocketEntry = async (
 export const fileCourtIssuedDocketEntryInteractor = withLocking(
   fileCourtIssuedDocketEntry,
   (
-    _applicationContext: IApplicationContext,
+    _applicationContext: ServerApplicationContext,
     { docketNumbers = [], subjectDocketNumber },
   ) => ({
     identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
