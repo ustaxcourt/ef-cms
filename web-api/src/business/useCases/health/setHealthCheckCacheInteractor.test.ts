@@ -1,4 +1,4 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { setHealthCheckCacheInteractor } from './setHealthCheckCacheInteractor';
 
 describe('setHealthCheckCacheInteractor', () => {
