@@ -12,7 +12,7 @@ import { archiveDraftDocumentInteractor } from '../../shared/src/business/useCas
 import { assignWorkItemsInteractor } from '../../shared/src/business/useCases/workitems/assignWorkItemsInteractor';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associateIrsPractitionerWithCaseInteractor';
 import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src/business/useCases/manualAssociation/associatePrivatePractitionerWithCaseInteractor';
-import { batchDownloadDocketEntriesInteractor } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
+import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from '../../shared/src/business/useCases/blockCaseFromTrialInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/business/useCases/caseAdvancedSearchInteractor';
@@ -90,7 +90,7 @@ import { getCompletedMessagesForSectionInteractor } from '../../shared/src/busin
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
+import { getDocumentContentsForDocketEntryInteractor } from './business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor';
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor';
@@ -168,7 +168,7 @@ import { sealDocketEntryInteractor } from './business/useCases/docketEntry/sealD
 import { sendMaintenanceNotificationsInteractor } from '../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor';
 import { serveCaseToIrsInteractor } from '../../shared/src/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';
 import { serveCourtIssuedDocumentInteractor } from './business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor';
-import { serveExternallyFiledDocumentInteractor } from '../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
+import { serveExternallyFiledDocumentInteractor } from './business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { serveThirtyDayNoticeInteractor } from '../../shared/src/business/useCases/trialSessions/serveThirtyDayNoticeInteractor';
 import { setForHearingInteractor } from '../../shared/src/business/useCases/trialSessions/setForHearingInteractor';
 import { setHealthCheckCacheInteractor } from '../../shared/src/business/useCases/health/setHealthCheckCacheInteractor';

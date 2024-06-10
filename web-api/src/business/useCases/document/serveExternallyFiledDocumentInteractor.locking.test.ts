@@ -1,16 +1,16 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 jest.mock('../addCoverToPdf');
-import { addCoverToPdf } from '../addCoverToPdf';
+import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
 import {
   determineEntitiesToLock,
   handleLockError,
   serveExternallyFiledDocumentInteractor,
 } from './serveExternallyFiledDocumentInteractor';
-import { docketClerkUser } from '../../../test/mockUsers';
-import { testPdfDoc } from '../../test/getFakeFile';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;

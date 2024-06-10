@@ -1,15 +1,15 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../entities/EntityConstants';
-import { DocketEntry } from '../../entities/DocketEntry';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**

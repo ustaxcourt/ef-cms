@@ -6,8 +6,8 @@ import {
 } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { batchDownloadDocketEntriesInteractor } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 
 describe('batchDownloadDocketEntriesInteractor', () => {
   let user;
