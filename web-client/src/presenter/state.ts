@@ -20,6 +20,7 @@ import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
+import { caseAssociationRequestHelper } from './computeds/caseAssociationRequestHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
@@ -115,7 +116,6 @@ import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { reportMenuHelper } from './computeds/reportMenuHelper';
-import { representAPartyHelper } from './computeds/representAPartyHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -196,6 +196,10 @@ export const computeds = {
   blockedCasesReportHelper: blockedCasesReportHelper as unknown as ReturnType<
     typeof blockedCasesReportHelper
   >,
+  caseAssociationRequestHelper:
+    caseAssociationRequestHelper as unknown as ReturnType<
+      typeof caseAssociationRequestHelper
+    >,
   caseDeadlineReportHelper: caseDeadlineReportHelper as unknown as ReturnType<
     typeof caseDeadlineReportHelper
   >,
@@ -467,9 +471,6 @@ export const computeds = {
     >,
   reportMenuHelper: reportMenuHelper as unknown as ReturnType<
     typeof reportMenuHelper
-  >,
-  representAPartyHelper: representAPartyHelper as unknown as ReturnType<
-    typeof representAPartyHelper
   >,
   reviewSavedPetitionHelper: reviewSavedPetitionHelper as unknown as ReturnType<
     typeof reviewSavedPetitionHelper

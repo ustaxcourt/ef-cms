@@ -140,6 +140,7 @@ import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequen
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
+import { gotoCaseAssociationRequestSequence } from './sequences/gotoCaseAssociationRequestSequence';
 import { gotoCaseDeadlineReportSequence } from './sequences/gotoCaseDeadlineReportSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
@@ -194,7 +195,6 @@ import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrint
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoPrintableTrialSessionWorkingCopySequence } from './sequences/gotoPrintableTrialSessionWorkingCopySequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
-import { gotoRequestToRepresentAPartySequence } from './sequences/gotoRequestToRepresentAPartySequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
@@ -794,6 +794,8 @@ export const presenterSequences = {
     gotoBeforeYouFileDocumentSequence as unknown as Function,
   gotoBlockedCasesReportSequence:
     gotoBlockedCasesReportSequence as unknown as Function,
+  gotoCaseAssociationRequestSequence:
+    gotoCaseAssociationRequestSequence as unknown as Function,
   gotoCaseDeadlineReportSequence:
     gotoCaseDeadlineReportSequence as unknown as Function,
   gotoCaseDetailSequence: gotoCaseDetailSequence as unknown as Function,
@@ -883,8 +885,6 @@ export const presenterSequences = {
   gotoPrintableTrialSessionWorkingCopySequence:
     gotoPrintableTrialSessionWorkingCopySequence as unknown as Function,
   gotoPrivacySequence: gotoPrivacySequence as unknown as Function,
-  gotoRequestAccessSequence:
-    gotoRequestToRepresentAPartySequence as unknown as Function,
   gotoReviewSavedPetitionSequence:
     gotoReviewSavedPetitionSequence as unknown as Function,
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,

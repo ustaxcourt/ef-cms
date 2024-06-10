@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseAssociationRequestDocumentForm } from './CaseAssociationRequestDocumentForm';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
-import { RepresentAPartyDocumentForm } from './RepresentAPartyDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
@@ -11,11 +11,11 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const RepresentAParty = connect(
+export const CaseAssociationRequest = connect(
   {
+    caseAssociationRequestHelper: state.caseAssociationRequestHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    representAPartyHelper: state.representAPartyHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence:
@@ -24,10 +24,10 @@ export const RepresentAParty = connect(
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  function RepresentAParty({
+  function CaseAssociationRequest({
+    caseAssociationRequestHelper,
     form,
     formCancelToggleCancelSequence,
-    representAPartyHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
@@ -76,9 +76,9 @@ export const RepresentAParty = connect(
               data-testid="document-type"
               id="document-type"
               name="documentType"
-              options={representAPartyHelper.documentsForSelect}
+              options={caseAssociationRequestHelper.documentsForSelect}
               value={reactSelectValue({
-                documentTypes: representAPartyHelper.documentsForSelect,
+                documentTypes: caseAssociationRequestHelper.documentsForSelect,
                 selectedEventCode: form.eventCode,
               })}
               onChange={e => {
@@ -102,10 +102,10 @@ export const RepresentAParty = connect(
               }}
             />
           </FormGroup>
-          {representAPartyHelper.showPartiesRepresenting && (
+          {caseAssociationRequestHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
-          <RepresentAPartyDocumentForm />
+          <CaseAssociationRequestDocumentForm />
 
           <div className="margin-top-5">
             <Button
@@ -133,4 +133,4 @@ export const RepresentAParty = connect(
   },
 );
 
-RepresentAParty.displayName = 'RepresentAParty';
+CaseAssociationRequest.displayName = 'CaseAssociationRequest';

@@ -1,10 +1,10 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { navigateToRepresentAPartyReviewAction } from './navigateToRepresentAPartyReviewAction';
+import { navigateToReviewCaseAssociationRequestAction } from './navigateToReviewCaseAssociationRequestAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('navigateToRepresentAPartyReviewAction', () => {
+describe('navigateToReviewCaseAssociationRequestAction', () => {
   const mockDocketNumber = '123-45';
 
   const routerStub = jest.fn();
@@ -14,8 +14,8 @@ describe('navigateToRepresentAPartyReviewAction', () => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  it('should route to the represent a party review page using state.caseDetail.docketNumber', async () => {
-    await runAction(navigateToRepresentAPartyReviewAction, {
+  it('should route to the review case association request page using state.caseDetail.docketNumber', async () => {
+    await runAction(navigateToReviewCaseAssociationRequestAction, {
       modules: {
         presenter,
       },
@@ -32,58 +32,67 @@ describe('navigateToRepresentAPartyReviewAction', () => {
   });
 
   it('should set the redactionAcknowledgement to false when the eventCode is EA and generation is manual', async () => {
-    const results = await runAction(navigateToRepresentAPartyReviewAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
+    const results = await runAction(
+      navigateToReviewCaseAssociationRequestAction,
+      {
+        modules: {
+          presenter,
         },
-        form: {
-          eventCode: 'EA',
-          generationType: GENERATION_TYPES.MANUAL,
+        state: {
+          caseDetail: {
+            docketNumber: mockDocketNumber,
+          },
+          form: {
+            eventCode: 'EA',
+            generationType: GENERATION_TYPES.MANUAL,
+          },
         },
       },
-    });
+    );
 
     expect(results.state.form.redactionAcknowledgement).toBe(false);
   });
 
   it('should unset the redactionAcknowledgement state value when generationType is auto', async () => {
-    const results = await runAction(navigateToRepresentAPartyReviewAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
+    const results = await runAction(
+      navigateToReviewCaseAssociationRequestAction,
+      {
+        modules: {
+          presenter,
         },
-        form: {
-          eventCode: 'EA',
-          generationType: GENERATION_TYPES.AUTO,
+        state: {
+          caseDetail: {
+            docketNumber: mockDocketNumber,
+          },
+          form: {
+            eventCode: 'EA',
+            generationType: GENERATION_TYPES.AUTO,
+          },
         },
       },
-    });
+    );
 
     expect(results.state.form.redactionAcknowledgement).toBe(undefined);
   });
 
   it('should unset the redactionAcknowledgement state value when eventCode is not EA', async () => {
-    const results = await runAction(navigateToRepresentAPartyReviewAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
+    const results = await runAction(
+      navigateToReviewCaseAssociationRequestAction,
+      {
+        modules: {
+          presenter,
         },
-        form: {
-          eventCode: 'A',
-          generationType: GENERATION_TYPES.MANUAL,
+        state: {
+          caseDetail: {
+            docketNumber: mockDocketNumber,
+          },
+          form: {
+            eventCode: 'A',
+            generationType: GENERATION_TYPES.MANUAL,
+          },
         },
       },
-    });
+    );
 
     expect(results.state.form.redactionAcknowledgement).toBe(undefined);
   });
