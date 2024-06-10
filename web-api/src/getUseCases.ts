@@ -137,7 +137,7 @@ import { getUserPendingEmailStatusInteractor } from '../../shared/src/business/u
 import { getUsersInSectionInteractor } from '../../shared/src/business/useCases/users/getUsersInSectionInteractor';
 import { getUsersPendingEmailInteractor } from '../../shared/src/business/useCases/users/getUsersPendingEmailInteractor';
 import { getWorkItemInteractor } from '../../shared/src/business/useCases/workitems/getWorkItemInteractor';
-import { handleBounceNotificationInteractor } from '../../shared/src/business/useCases/email/handleBounceNotificationInteractor';
+import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logOldLoginAttemptInteractor } from '@web-api/business/useCases/logOldLoginAttemptInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
 import { onConnectInteractor } from '../../shared/src/business/useCases/notifications/onConnectInteractor';

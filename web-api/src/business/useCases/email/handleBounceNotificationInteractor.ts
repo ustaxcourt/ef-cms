@@ -1,4 +1,5 @@
 import { BouncedEmailAlert } from '@shared/business/utilities/emailGenerator/emailTemplates/BouncedEmailAlert';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
@@ -29,7 +30,7 @@ export const parseBounceNotification = ({ bounce, mail }) => {
  * @returns {Promise<object>} resolves upon completion
  */
 export const handleBounceNotificationInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   notification: TNotification,
 ) => {
   const { bounceRecipient, bounceSubType, bounceType, errorMessage, subject } =
