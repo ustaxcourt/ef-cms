@@ -16,8 +16,8 @@ export const CaseAssociationRequest = connect(
     caseAssociationRequestHelper: state.caseAssociationRequestHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    reviewRequestAccessInformationSequence:
-      sequences.reviewRequestAccessInformationSequence,
+    reviewCaseAssociationRequestSequence:
+      sequences.reviewCaseAssociationRequestSequence,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
@@ -28,7 +28,7 @@ export const CaseAssociationRequest = connect(
     caseAssociationRequestHelper,
     form,
     formCancelToggleCancelSequence,
-    reviewRequestAccessInformationSequence,
+    reviewCaseAssociationRequestSequence,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
@@ -113,7 +113,7 @@ export const CaseAssociationRequest = connect(
               id="submit-document"
               type="submit"
               onClick={() => {
-                reviewRequestAccessInformationSequence();
+                reviewCaseAssociationRequestSequence();
               }}
             >
               Review Filing

@@ -48,7 +48,7 @@ describe('Practitioner Dashboard', () => {
         docketNumber: docketNumberToAssociateWith,
       });
 
-      await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+      await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
         key: 'documentType',
@@ -92,7 +92,7 @@ describe('Practitioner Dashboard', () => {
         value: true,
       });
 
-      await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+      await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
       await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
     }
   });

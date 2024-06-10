@@ -335,8 +335,8 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
+import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
-import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveCourtIssuedDocketEntrySequence } from './sequences/saveCourtIssuedDocketEntrySequence';
 import { saveDocketEntryForLaterCompleteSequence } from './sequences/saveDocketEntryForLaterCompleteSequence';
@@ -1132,10 +1132,10 @@ export const presenterSequences = {
   resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
+  reviewCaseAssociationRequestSequence:
+    reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  reviewRequestAccessInformationSequence:
-    reviewRequestAccessInformationSequence as unknown as Function,
   runTrialSessionPlanningReportSequence:
     runTrialSessionPlanningReportSequence as unknown as Function,
   saveCourtIssuedDocketEntrySequence:
