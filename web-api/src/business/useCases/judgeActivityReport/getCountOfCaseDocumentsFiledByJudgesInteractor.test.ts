@@ -1,11 +1,11 @@
-import { AggregatedEventCodesType } from '../../../../../web-api/src/persistence/elasticsearch/fetchEventCodesCountForJudges';
+import { AggregatedEventCodesType } from '../../../persistence/elasticsearch/fetchEventCodesCountForJudges';
 import {
   JudgeActivityReportFilters,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
 } from './getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 import {
   mockCountOfOpinionsIssuedByJudge,
