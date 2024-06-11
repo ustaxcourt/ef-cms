@@ -99,11 +99,12 @@ export const AddressDisplay = connect<
 
     return (
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
-        <p className="margin-top-0 margin-bottom-2 position-relative">
+        <div className="margin-top-0 position-relative">
           {contact.isAddressSealed && (
             <span
               aria-label="sealed address"
               className="sealed-address sealed-contact-icon"
+              role="img"
             >
               <FontAwesomeIcon
                 className="margin-right-05"
@@ -137,8 +138,10 @@ export const AddressDisplay = connect<
                 </span>
               ),
           )}
-        </p>
-        {!contact.sealedAndUnavailable && contactDetails()}
+        </div>
+        <div className="margin-bottom-2">
+          {!contact.sealedAndUnavailable && contactDetails()}
+        </div>
         {contact.sealedAndUnavailable && (
           <div className="sealed-address">Address sealed</div>
         )}
