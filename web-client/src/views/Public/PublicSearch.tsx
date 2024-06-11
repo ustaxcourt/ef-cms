@@ -91,10 +91,10 @@ export const PublicSearch = connect(
     function PractitionerRender() {
       return (
         <>
-          <>
+          <div>
             <p className="margin-top-0">
-              The information provided in the search results below is maintained
-              by the Admissions Clerk of the U.S. Tax Court. Practitioners may:
+              The information in the search results below is maintained by the
+              Admissions Clerk of the U.S.T.C. Practitioners may:
             </p>
             <ul>
               <li>
@@ -102,7 +102,7 @@ export const PublicSearch = connect(
                 updating their practitioner accounts.
               </li>{' '}
               <li>
-                Change thier practitioner type, practice type, or admission
+                Change their practitioner type, practice type, or admission
                 status by contacting the Admissions Clerk at{' '}
                 <a href="mailto:admissions@ustaxcourt.gov">
                   admissions@ustaxcourt.gov
@@ -110,7 +110,7 @@ export const PublicSearch = connect(
                 .
               </li>
             </ul>
-          </>
+          </div>
           <PractitionerSearchForm isPublicUser={true}></PractitionerSearchForm>
 
           <PractitionerSearchResults
