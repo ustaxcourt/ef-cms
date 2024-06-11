@@ -148,7 +148,7 @@ export const UpdatedFilePetitionStep6 = connect(
                   className="padding-top-1"
                   data-testid="petition-pdf-preview"
                 >
-                  <PdfPreview heightOverride={true} />
+                  <PdfPreview heightOverride={true} removeToolbar={true} />
                 </div>
               </div>
             </NonMobile>

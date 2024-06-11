@@ -9,8 +9,14 @@ export const PdfPreview = connect(
     heightOverride: props.heightOverride,
     noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    removeToolbar: props.removeToolbar,
   },
-  function PdfPreview({ heightOverride, noDocumentText, pdfPreviewUrl }) {
+  function PdfPreview({
+    heightOverride,
+    noDocumentText,
+    pdfPreviewUrl,
+    removeToolbar = false,
+  }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
       return noDocumentText || '';
@@ -19,6 +25,7 @@ export const PdfPreview = connect(
     return (
       <PdfViewer
         className={!heightOverride && 'pdf-preview-viewer'}
+        removeToolbar={removeToolbar}
         src={pdfPreviewUrl}
         title="pdf-preview-viewer"
       />
