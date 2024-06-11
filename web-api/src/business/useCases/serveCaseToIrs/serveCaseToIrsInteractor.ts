@@ -1,12 +1,12 @@
 /* eslint-disable complexity */
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
-} from '../../utilities/DateHandler';
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
@@ -15,16 +15,16 @@ import {
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
+import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 

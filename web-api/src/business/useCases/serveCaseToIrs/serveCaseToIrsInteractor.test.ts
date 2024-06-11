@@ -11,23 +11,32 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  Case,
+  getContactPrimary,
+} from '../../../../../shared/src/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
-} from '../../utilities/DateHandler';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
-import { getFakeFile, testPdfDoc } from '../../test/getFakeFile';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  petitionsClerkUser,
+} from '../../../../../shared/src/test/mockUsers';
+import {
+  getFakeFile,
+  testPdfDoc,
+} from '../../../../../shared/src/business/test/getFakeFile';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 
 describe('serveCaseToIrsInteractor', () => {

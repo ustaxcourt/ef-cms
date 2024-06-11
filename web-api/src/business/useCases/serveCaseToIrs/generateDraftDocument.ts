@@ -1,4 +1,5 @@
-import { replaceBracketed } from '../../../business/utilities/replaceBracketed';
+import { Case } from '@shared/business/entities/cases/Case';
+import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
 
 /**
  * @param {object} providers the providers object containing applicationContext, caseEntity, document, replacements
