@@ -96,7 +96,7 @@ export const PublicSearch = connect(
               The information in the search results below is maintained by the
               Admissions Clerk of the U.S.T.C. Practitioners may:
             </p>
-            <ul className="grid-col-6">
+            <ul>
               <li>
                 Update their contact information by logging into DAWSON and
                 updating their practitioner accounts.
