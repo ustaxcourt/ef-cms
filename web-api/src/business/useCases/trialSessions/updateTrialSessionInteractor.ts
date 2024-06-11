@@ -9,6 +9,7 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -16,7 +17,7 @@ import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateTrialSession = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     trialSession,
@@ -217,7 +218,7 @@ const updateCasesAndSetNoticeOfChange = async ({
   updatedTrialSessionEntity,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   currentTrialSession: RawTrialSession;
   paperServicePdfsCombined: any;
   updatedTrialSessionEntity: TrialSession;
@@ -345,7 +346,7 @@ const getPaperServicePdfName = ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: TrialSession },
 ) => {
   const { caseOrder } = await applicationContext
@@ -368,7 +369,7 @@ export const determineEntitiesToLock = async (
 };
 
 export const handleLockError = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest: any,
 ) => {
   const user = applicationContext.getCurrentUser();

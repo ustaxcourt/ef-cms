@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 /**
  * sendMaintenanceNotificationsInteractor
  *
@@ -6,7 +8,7 @@
  * @param {string} providers.maintenanceMode true or false depending on whether we are turning maintenance mode on or off
  */
 export const sendMaintenanceNotificationsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { maintenanceMode }: { maintenanceMode: boolean },
 ) => {
   const allWebsocketConnections = await applicationContext

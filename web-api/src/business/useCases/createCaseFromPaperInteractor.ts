@@ -10,6 +10,7 @@ import {
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
@@ -20,7 +21,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   docketEntryEntity,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
@@ -63,7 +64,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 };
 
 export const createCaseFromPaperInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
     attachmentToPetitionFileId,

@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
@@ -16,7 +17,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
  * @param {string} providers.workItemId the id of the work item to assign
  */
 export const assignWorkItemsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     assigneeId,
     assigneeName,

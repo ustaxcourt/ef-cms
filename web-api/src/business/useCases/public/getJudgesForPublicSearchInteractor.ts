@@ -1,5 +1,6 @@
 import { PublicUser } from '../../../../../shared/src/business/entities/PublicUser';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * getJudgesForPublicSearchInteractor
@@ -8,7 +9,7 @@ import { ROLES } from '../../../../../shared/src/business/entities/EntityConstan
  * @returns {object} the list of judges
  */
 export const getJudgesForPublicSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ) => {
   const rawJudges = await applicationContext
     .getPersistenceGateway()

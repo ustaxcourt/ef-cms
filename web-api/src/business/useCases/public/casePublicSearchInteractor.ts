@@ -1,12 +1,13 @@
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const casePublicSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     countryType,
     endDate,

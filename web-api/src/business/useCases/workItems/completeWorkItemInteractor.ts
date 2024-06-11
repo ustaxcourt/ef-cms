@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
@@ -18,7 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     completedMessage,
     workItemId,
@@ -92,7 +93,7 @@ export const completeWorkItem = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
   const originalWorkItem: RawWorkItem = await applicationContext

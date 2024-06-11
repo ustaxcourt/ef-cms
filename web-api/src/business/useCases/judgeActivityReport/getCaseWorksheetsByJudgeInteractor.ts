@@ -5,6 +5,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 
 export type GetCasesByStatusAndByJudgeRequest = {
@@ -18,7 +19,7 @@ export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
 };
 
 export const getCaseWorksheetsByJudgeInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
@@ -56,7 +57,7 @@ export const getCaseWorksheetsByJudgeInteractor = async (
 };
 
 const getCases = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   searchEntity: JudgeActivityReportSearch,
 ) => {
   const allCaseRecords = await applicationContext
@@ -79,7 +80,7 @@ const getCases = async (
 };
 
 const calculateNumberOfConsolidatedCases = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   caseInfo: { leadDocketNumber?: string },
 ) => {
   if (!caseInfo.leadDocketNumber) {
@@ -95,7 +96,7 @@ const calculateNumberOfConsolidatedCases = async (
 };
 
 async function attachCaseWorkSheets(
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   cases: SubmittedCAVTableFields[],
 ) {
   const caseWorksheets = await applicationContext

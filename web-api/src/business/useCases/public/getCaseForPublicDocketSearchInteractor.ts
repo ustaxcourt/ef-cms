@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { PublicCase } from '../../../../../shared/src/business/entities/cases/PublicCase';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * getCaseForPublicDocketSearchInteractor
@@ -14,7 +15,7 @@ import { PublicCase } from '../../../../../shared/src/business/entities/cases/Pu
  * @returns {object} the case data
  */
 export const getCaseForPublicDocketSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
   const caseRecord = await applicationContext

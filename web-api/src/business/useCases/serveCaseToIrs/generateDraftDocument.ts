@@ -1,4 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
 
 /**
@@ -15,7 +16,7 @@ export const generateDraftDocument = async ({
   document,
   replacements,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   document: any;
   replacements: string[];

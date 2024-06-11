@@ -4,12 +4,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const removeCaseFromTrial = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     associatedJudge,
     associatedJudgeId,
@@ -111,7 +112,7 @@ export const removeCaseFromTrial = async (
 export const removeCaseFromTrialInteractor = withLocking(
   removeCaseFromTrial,
   (
-    _applicationContext: IApplicationContext,
+    _applicationContext: ServerApplicationContext,
     { docketNumber }: { docketNumber: string },
   ) => ({
     identifiers: [`case|${docketNumber}`],

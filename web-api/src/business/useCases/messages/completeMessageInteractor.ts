@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 
@@ -16,7 +17,7 @@ import { orderBy } from 'lodash';
  * @returns {object} the message
  */
 export const completeMessageInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { message, parentMessageId }: { message: string; parentMessageId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

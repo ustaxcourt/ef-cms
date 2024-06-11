@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -17,7 +18,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {*} the result
  */
 export const associatePrivatePractitionerWithCase = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     representing,
@@ -53,7 +54,7 @@ export const associatePrivatePractitionerWithCase = async (
 
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(
   associatePrivatePractitionerWithCase,
-  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
 );

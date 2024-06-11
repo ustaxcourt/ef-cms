@@ -4,6 +4,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   calculateDifferenceInDays,
@@ -31,7 +32,7 @@ export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
 };
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   params: { judgeIds: string[] },
 ): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];
@@ -78,7 +79,7 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 };
 
 async function attachDocketEntryWorkSheets(
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   docketEntries: FormattedPendingMotion[],
 ): Promise<FormattedPendingMotionWithWorksheet[]> {
   const docketEntryIds = docketEntries.map(
@@ -152,7 +153,7 @@ function removeMotionsThatHaveBeenHandledInDynamo(
 
 async function getLatestDataForPendingMotions(
   docketEntry: RawDocketEntry,
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   currentDate: string,
 ): Promise<FormattedPendingMotion> {
   const [caseMetadata, latestDocketEntry] = await Promise.all([
@@ -187,7 +188,7 @@ async function getLatestDataForPendingMotions(
 }
 
 async function getCaseMetadata(
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   docketEntry: RawDocketEntry,
 ): Promise<RawCase & { consolidatedCaseCount: number }> {
   const caseMetadata: RawCase = await applicationContext

@@ -1,8 +1,10 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const processRemoveEntries = async ({
   applicationContext,
   removeRecords,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   removeRecords: any[];
 }) => {
   if (!removeRecords.length) return;

@@ -6,6 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type CasesClosedReturnType = {
   aggregations: {
@@ -16,7 +17,7 @@ export type CasesClosedReturnType = {
 };
 
 export const getCasesClosedByJudgeInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   params: JudgeActivityStatisticsRequest,
 ): Promise<CasesClosedReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();

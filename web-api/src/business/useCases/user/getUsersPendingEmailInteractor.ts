@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
 
@@ -14,7 +15,7 @@ import { User } from '../../../../../shared/src/business/entities/User';
  * @returns {object} a map of userIds and their corresponding emails
  */
 export const getUsersPendingEmailInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { userIds }: { userIds: string[] },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

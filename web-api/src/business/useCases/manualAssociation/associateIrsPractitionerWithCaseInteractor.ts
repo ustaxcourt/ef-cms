@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 
@@ -16,7 +17,7 @@ import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociat
  * @returns {*} the result
  */
 export const associateIrsPractitionerWithCaseInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     serviceIndicator,

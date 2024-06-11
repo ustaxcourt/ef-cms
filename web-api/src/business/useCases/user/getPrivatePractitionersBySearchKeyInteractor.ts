@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -14,7 +15,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {*} the result
  */
 export const getPrivatePractitionersBySearchKeyInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { searchKey }: { searchKey: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();

@@ -5,6 +5,7 @@ import {
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
@@ -20,7 +21,7 @@ import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/
  * @returns {Uint8Array} notice of trial session pdf
  */
 export const generateStandingPretrialOrderForSmallCaseInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionId,

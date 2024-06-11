@@ -8,10 +8,11 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const replyToMessage = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -77,7 +78,7 @@ export const replyToMessage = async (
 };
 
 export const replyToMessageInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,

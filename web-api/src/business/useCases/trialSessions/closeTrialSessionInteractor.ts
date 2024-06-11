@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -16,7 +17,7 @@ import { isEmpty, isEqual } from 'lodash';
  * @returns {Promise} the promise of the updateTrialSession call
  */
 export const closeTrialSessionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();

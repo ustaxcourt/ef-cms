@@ -1,4 +1,5 @@
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
   createISODateString,
@@ -7,7 +8,7 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const getTodaysOpinionsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ) => {
   const { day, month, year } = deconstructDate(createISODateString());
   const currentDateStart = createStartOfDayISO({ day, month, year });

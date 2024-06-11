@@ -11,6 +11,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
@@ -24,7 +25,7 @@ import sanitize from 'sanitize-filename';
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
 const batchDownloadTrialSessionInteractorHelper = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -146,8 +147,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     await generateDocumentAndDocketRecordForCase(sessionCase);
   }
 
-  const onEntry = entryData => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onEntry = async entryData => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_entry',
@@ -159,9 +160,9 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  const onError = error => {
+  const onError = async error => {
     applicationContext.logger.error('Archive Error', { error });
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_error',
@@ -171,8 +172,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  const onProgress = progressData => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onProgress = async progressData => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_progress',
@@ -184,8 +185,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
   };
 
-  const onUploadStart = () => {
-    applicationContext.getNotificationGateway().sendNotificationToUser({
+  const onUploadStart = async () => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_upload_start',
@@ -253,7 +254,7 @@ export const generateValidDocketEntryFilename = ({
  * @param {string} providers.trialSessionId the id of the trial session
  */
 export const batchDownloadTrialSessionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
   try {

@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 
 /**
@@ -14,7 +15,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
  * @returns {object} the work item data
  */
 export const getWorkItemInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
   const workItem = await applicationContext

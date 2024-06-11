@@ -1,5 +1,6 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
@@ -14,7 +15,7 @@ import { addCoverToPdf } from './addCoverToPdf';
  * @returns {Promise<*>} updated docket entry entity
  */
 export const addCoversheetInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseEntity,
     docketEntryId,

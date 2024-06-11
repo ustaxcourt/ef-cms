@@ -3,12 +3,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const setNoticesForCalendaredTrialSession = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     trialSessionId,
@@ -179,7 +180,7 @@ const waitForJobToFinish = async ({
   applicationContext,
   jobId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   jobId: string;
 }): Promise<void> => {
   const { unfinishedCases } = await applicationContext
@@ -197,7 +198,7 @@ const waitForJobToFinish = async ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
   const calendaredCases = await applicationContext
@@ -213,7 +214,7 @@ export const determineEntitiesToLock = async (
 };
 
 export const handleLockError = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest: any,
 ) => {
   const user = applicationContext.getCurrentUser();

@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   calculateISODate,
@@ -18,7 +19,7 @@ import {
  * @returns {object} the work items in the section document served inbox
  */
 export const getDocumentQCServedForSectionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { section }: { section: string },
 ) => {
   const user = applicationContext.getCurrentUser();

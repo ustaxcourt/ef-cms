@@ -9,12 +9,12 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../entities/EntityConstants';
-import { MOCK_LOCK } from '../../../test/mockLock';
-import { MOCK_USERS, docketClerkUser } from '../../../test/mockUsers';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_USERS, docketClerkUser } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
 
 describe('fileExternalDocumentInteractor', () => {

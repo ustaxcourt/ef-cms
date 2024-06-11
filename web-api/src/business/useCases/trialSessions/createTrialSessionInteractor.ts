@@ -6,6 +6,7 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -17,7 +18,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {object} the created trial session
  */
 export const createTrialSessionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: RawTrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();

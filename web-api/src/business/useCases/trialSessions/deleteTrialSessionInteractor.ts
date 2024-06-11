@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -15,7 +16,7 @@ import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise} the promise of the deleteTrialSession call
  */
 export const deleteTrialSessionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();

@@ -3,6 +3,7 @@ import {
   createISODateString,
   formatDateString,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSessionInformationType } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
@@ -15,7 +16,7 @@ export type TrialInfoType = TrialSessionInformationType & {
 };
 
 export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionInformation,

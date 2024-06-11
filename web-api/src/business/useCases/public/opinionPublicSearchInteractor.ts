@@ -5,10 +5,11 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { MAX_SEARCH_RESULTS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 
 export const opinionPublicSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,

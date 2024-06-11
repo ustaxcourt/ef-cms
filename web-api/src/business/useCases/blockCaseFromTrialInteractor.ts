@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -15,7 +16,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the case data
  */
 export const blockCaseFromTrial = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, reason }: { docketNumber: string; reason: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

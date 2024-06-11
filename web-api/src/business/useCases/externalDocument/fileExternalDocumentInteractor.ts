@@ -2,17 +2,17 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-} from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { TDocumentMetaData } from 'types/TEntity';
+} from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -24,7 +24,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case after the documents have been added
  */
 export const fileExternalDocument = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -240,7 +240,7 @@ export const fileExternalDocument = async (
 
 export const fileExternalDocumentInteractor = withLocking(
   fileExternalDocument,
-  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+  (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
     identifiers: [`case|${documentMetadata.docketNumber}`],
   }),
 );

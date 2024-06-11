@@ -1,5 +1,6 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
 /**
@@ -20,7 +21,7 @@ export const addCoverToPdf = async ({
   replaceCoversheet = false,
   useInitialData = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   pdfData: any;
