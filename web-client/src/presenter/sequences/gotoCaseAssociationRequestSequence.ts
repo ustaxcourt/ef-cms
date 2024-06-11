@@ -33,13 +33,17 @@ export const gotoCaseAssociationRequestSequence =
         {
           irsPractitioner: [
             setFormPartyTrueAction('partyIrsPractitioner'),
-            setCaseAssociationRequestStepActionGenerator('RequestAccess'),
-            setupCurrentPageAction('RequestAccessWizard'),
+            setCaseAssociationRequestStepActionGenerator(
+              'CaseAssociationRequest',
+            ),
+            setupCurrentPageAction('CaseAssociationRequestWizard'),
           ],
           privatePractitioner: [
             setFormPartyTrueAction('partyPrivatePractitioner'),
-            setCaseAssociationRequestStepActionGenerator('RequestAccess'),
-            setupCurrentPageAction('RequestAccessWizard'),
+            setCaseAssociationRequestStepActionGenerator(
+              'CaseAssociationRequest',
+            ),
+            setupCurrentPageAction('CaseAssociationRequestWizard'),
           ],
         },
       ],
