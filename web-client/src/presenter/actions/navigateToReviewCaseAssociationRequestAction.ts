@@ -17,5 +17,7 @@ export const navigateToReviewCaseAssociationRequestAction = async ({
     store.unset(state.form.redactionAcknowledgement);
   }
 
-  await router.route(`/case-detail/${docketNumber}/request-access/review`);
+  await router.route(
+    `/case-detail/${docketNumber}/case-association-request/review`,
+  );
 };

@@ -57,7 +57,7 @@ export const CaseDetailHeader = connect<
               secondary
               className="tablet-full-width push-right margin-right-0"
               data-testid="request-represent-a-party-button"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/represent-a-party`}
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/case-association-request`}
             >
               Represent a Party
             </Button>
@@ -106,7 +106,7 @@ export const CaseDetailHeader = connect<
             <Button
               className="tablet-full-width margin-right-0"
               data-testid="request-represent-a-party-button-mobile"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/represent-a-party`}
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/case-association-request`}
             >
               Represent a Party
             </Button>
