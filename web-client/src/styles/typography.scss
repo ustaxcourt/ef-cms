@@ -196,6 +196,20 @@ a:hover {
   line-height: 1.3em;
 }
 
-.what-to-expect-text {
+.petitioner-flow-text {
+  max-width: 1000px;
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.petitioner-label {
   font-size: 17px;
+  font-weight: bold;
+}
+
+.petitioner-accordion-title {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  line-height: normal;
 }

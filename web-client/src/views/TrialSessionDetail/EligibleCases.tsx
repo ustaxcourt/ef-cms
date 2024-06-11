@@ -150,7 +150,9 @@ export const EligibleCases = connect(
                       <label
                         className="usa-checkbox__label"
                         htmlFor={`${item.docketNumber}-complete`}
-                      ></label>
+                      >
+                        {''}
+                      </label>
                     </div>
                   </td>
                 )}

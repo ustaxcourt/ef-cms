@@ -39,18 +39,16 @@ These tests run locally on developer machines and in CI against a locally-runnin
 | Lint | [eslint](https://eslint.org/), [stylelint](https://stylelint.io/) | Ensures consistent formatting of code, and catches common errors in syntax. Covers all layers of the application.
 | Unit | [jest](https://jestjs.io/) | Ensures functions and code paths behave as expected in isolation. There are separate test runs against `web-api`, `web-client`, and `shared`, and cover their area of code (Event, Sequence, Handler, Interactor, Gateway, or Client).
 | Integration | [jest](https://jestjs.io/) | Covers layers from Events to Data storage and back, using a simulated browser environment. Ensures layers interact with each other and mocked data storage layers correctly.
-| Accessibility | [pa11y](https://pa11y.org/) | Scanning of web interfaces to catch common accessibility mistakes.
+| Accessibility | [axe-core](https://github.com/dequelabs/axe-core) | Scanning of web interfaces to catch common accessibility mistakes.
 | Accessibility | [Manual](#accessibility) | Manual testing of the application ensures it is accessible through common screen readers.
 
-### Testing run in an AWS environment
+
+#### Production testing
 
 | Type | Tool | Purpose and notes
 |------|------|------------------
 | Smoke (end-to-end) | [cypress](https://www.cypress.io/) | Run daily. Ensures user flows work from browser down through application components using real AWS services.
 | End-to-end | [Manual](#manual-end-of-sprint-qa) | Manual testing of common user workflows happens at the end of sprints.
-| Smoke (security) | [pa11y](https://pa11y.org/) | Run daily. Assets security headers are appropriately configured. Would be included in the Cypress test suite, but cannot due to Cypress stripping the security headers.
-
-#### Production testing
 
 The above tests run before code is introduced into the production environment to ensure the code meets quality standards. In the production environment, monitoring and alerting ensures the application is configured and available.
 
