@@ -14,6 +14,7 @@ resource "aws_instance" "dynamsoft" {
   count = var.is_dynamsoft_enabled
 
   user_data = data.template_file.setup_dynamsoft.rendered
+  user_data_replace_on_change = true
 
   iam_instance_profile = "dynamsoft_s3_download_role"
 }
