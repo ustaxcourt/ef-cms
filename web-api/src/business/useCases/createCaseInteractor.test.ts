@@ -12,14 +12,16 @@ import { PrivatePractitioner } from '../../../../shared/src/business/entities/Pr
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseInteractor } from './createCaseInteractor';
-import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import {
   getContactPrimary,
   getContactSecondary,
 } from '../../../../shared/src/business/entities/cases/Case';
 
-jest.mock('../utilities/DateHandler', () => {
-  const originalModule = jest.requireActual('../utilities/DateHandler');
+jest.mock('@shared/business/utilities/DateHandler', () => {
+  const originalModule = jest.requireActual(
+    '@shared/business/utilities/DateHandler',
+  );
   return {
     __esModule: true,
     ...originalModule,

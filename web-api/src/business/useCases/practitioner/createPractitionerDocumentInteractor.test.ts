@@ -2,7 +2,7 @@ import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createPractitionerDocumentInteractor } from './createPractitionerDocumentInteractor';
-jest.mock('../users/generateChangeOfAddress');
+jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;

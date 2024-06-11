@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { processCompletionMarkers } from './processCompletionMarkers';
 import type { DynamoDBRecord } from 'aws-lambda';
 
-jest.mock('../../../../admin-tools/circleci/circleci-helper');
+jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper');
 const approvePendingJob = jest.spyOn(circleCiHelper, 'approvePendingJob');
 
 describe('processCompletionMarker', () => {
