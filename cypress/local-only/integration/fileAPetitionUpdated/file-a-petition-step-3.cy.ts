@@ -32,6 +32,10 @@ describe('File a petition - Step 3 IRS Notices', () => {
       cy.get('[data-testid="irs-notice-Yes"]').click();
 
       cy.get('[data-testid="step-3-next-button"]').should('exist');
+      cy.get('[data-testid="step-3-next-button"]').should('not.be.disabled');
+
+      cy.get('[data-testid="irs-notice-upload-0"]').attachFile(VALID_FILE);
+      cy.get('[data-testid="step-3-next-button"]').should('exist');
       cy.get('[data-testid="step-3-next-button"]').should('be.disabled');
 
       cy.get('[data-testid="redaction-acknowledgement-label"]').should('exist');

@@ -16,6 +16,11 @@ export const PdfPreview = connect(
     noDocumentText,
     pdfPreviewUrl,
     removeToolbar = false,
+  }: {
+    heightOverride: boolean;
+    noDocumentText: string;
+    pdfPreviewUrl: string;
+    removeToolbar: boolean;
   }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
