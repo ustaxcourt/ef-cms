@@ -12,22 +12,22 @@ describe('caseDeadlineReportHelper', () => {
   const caseDeadlines = [
     {
       associatedJudge: 'Special Trial Judge Hale',
-      deadlineDate: '2019-08-22T04:00:00.000Z',
+      deadlineDate: '2099-08-22T04:00:00.000Z',
       docketNumber: '101-19',
     },
     {
       associatedJudge: 'In Training Judge Brandeis',
-      deadlineDate: '2019-08-24T04:00:00.000Z',
+      deadlineDate: '2099-08-24T04:00:00.000Z',
       docketNumber: '103-19',
     },
     {
       associatedJudge: 'Judge of Madea Rummy',
-      deadlineDate: '2019-08-21T04:00:00.000Z',
+      deadlineDate: '2099-08-21T04:00:00.000Z',
       docketNumber: '101-19',
     },
     {
       associatedJudge: 'Not A Judge Barney',
-      deadlineDate: '2019-08-21T04:00:00.000Z',
+      deadlineDate: '2099-08-21T04:00:00.000Z',
       docketNumber: '102-19',
     },
   ];
@@ -98,19 +98,19 @@ describe('caseDeadlineReportHelper', () => {
     const consolidatedCaseDeadlines = [
       {
         associatedJudge: 'Judge of Madea Rummy',
-        deadlineDate: '2019-08-21T04:00:00.000Z',
+        deadlineDate: '2099-08-21T04:00:00.000Z',
         docketNumber: '101-19',
         leadDocketNumber: '101-19',
       },
       {
         associatedJudge: 'Not A Judge Barney',
-        deadlineDate: '2019-08-21T04:00:00.000Z',
+        deadlineDate: '2099-08-21T04:00:00.000Z',
         docketNumber: '102-19',
         leadDocketNumber: '101-19',
       },
       {
         associatedJudge: 'In Training Judge Brandeis',
-        deadlineDate: '2019-08-24T04:00:00.000Z',
+        deadlineDate: '2099-08-24T04:00:00.000Z',
         docketNumber: '103-19',
       },
     ];

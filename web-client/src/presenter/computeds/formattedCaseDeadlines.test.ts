@@ -12,13 +12,13 @@ describe('formattedCaseDeadlines', () => {
   it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
     const caseDeadlines = [
       {
-        deadlineDate: '2019-06-30T04:00:00.000Z',
+        deadlineDate: '2029-06-30T04:00:00.000Z',
       },
       {
-        deadlineDate: '2019-01-30T05:00:00.000Z',
+        deadlineDate: '2029-01-30T05:00:00.000Z',
       },
       {
-        deadlineDate: '2025-07-30T04:00:00.000Z',
+        deadlineDate: '2035-07-30T04:00:00.000Z',
       },
     ];
 
@@ -30,17 +30,17 @@ describe('formattedCaseDeadlines', () => {
     expect(result.length).toEqual(3);
     expect(result).toEqual([
       {
-        deadlineDate: '2019-01-30T05:00:00.000Z',
+        deadlineDate: '2029-01-30T05:00:00.000Z',
         deadlineDateFormatted: '01/30/19',
         overdue: true,
       },
       {
-        deadlineDate: '2019-06-30T04:00:00.000Z',
+        deadlineDate: '2029-06-30T04:00:00.000Z',
         deadlineDateFormatted: '06/30/19',
         overdue: true,
       },
       {
-        deadlineDate: '2025-07-30T04:00:00.000Z',
+        deadlineDate: '2035-07-30T04:00:00.000Z',
         deadlineDateFormatted: '07/30/25',
       },
     ]);

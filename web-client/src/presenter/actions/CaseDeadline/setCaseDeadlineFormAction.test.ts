@@ -16,7 +16,7 @@ describe('setCaseDeadlineFormAction', () => {
         caseDeadlines: [
           {
             caseDeadlineId: 'a1d66d94-2dec-4ad1-87f3-b7e694a6ae7d',
-            deadlineDate: '2019-07-25T13:03:20.316Z',
+            deadlineDate: '2099-07-25T13:03:20.316Z',
             description: 'Case Deadline Description',
           },
         ],
@@ -38,7 +38,7 @@ describe('setCaseDeadlineFormAction', () => {
         caseDeadlines: [
           {
             caseDeadlineId: mockCaseDeadlineId,
-            deadlineDate: '2019-07-25T13:03:20.316Z',
+            deadlineDate: '2099-07-25T13:03:20.316Z',
             description: 'Case Deadline Description',
           },
         ],
@@ -47,7 +47,7 @@ describe('setCaseDeadlineFormAction', () => {
 
     expect(result.state.form).toMatchObject({
       caseDeadlineId: mockCaseDeadlineId,
-      deadlineDate: '2019-07-25T13:03:20.316Z',
+      deadlineDate: '2099-07-25T13:03:20.316Z',
       deadlineDateFormatted: '07/25/19',
       description: 'Case Deadline Description',
     });

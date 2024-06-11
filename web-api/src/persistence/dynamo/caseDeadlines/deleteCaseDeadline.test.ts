@@ -6,7 +6,7 @@ describe('deleteCaseDeadline', () => {
 
   const mockCaseDeadline = {
     caseDeadlineId: CASE_DEADLINE_ID,
-    deadlineDate: '2019-03-01T21:42:29.073Z',
+    deadlineDate: '2099-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '123-20',
   };
