@@ -14,6 +14,7 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
   public irsNotices?: CreateCaseIrsForm[];
   public caseType?: string;
   public irsNoticesRedactionAcknowledgement?: boolean;
+  public hasUploadedIrsNotice: boolean;
 
   static VALID_CASE_TYPES = cloneDeep(CASE_TYPES)
     .map(caseType => {
@@ -34,6 +35,7 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
     this.caseType = rawProps.caseType;
     this.irsNoticesRedactionAcknowledgement =
       rawProps.irsNoticesRedactionAcknowledgement;
+    this.hasUploadedIrsNotice = rawProps.hasUploadedIrsNotice;
   }
 
   static VALIDATION_RULES = {
@@ -54,12 +56,13 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
     hasIrsNotice: joi.boolean().required().valid(true, false).messages({
       '*': 'Indicate whether you received an IRS notice',
     }),
+    hasUploadedIrsNotice: joi.boolean().required(),
     irsNotices: joi.when('hasIrsNotice', {
       is: true,
       otherwise: joi.array().optional(),
       then: joi.array().min(1).required().items(IrsNoticeForm.VALIDATION_RULES),
     }),
-    irsNoticesRedactionAcknowledgement: joi.when('hasIrsNotice', {
+    irsNoticesRedactionAcknowledgement: joi.when('hasUploadedIrsNotice', {
       is: true,
       otherwise: joi.optional(),
       then: joi.boolean().required().valid(true),

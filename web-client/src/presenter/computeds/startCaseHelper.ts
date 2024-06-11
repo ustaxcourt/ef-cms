@@ -65,6 +65,10 @@ export const startCaseHelper = (
     })
     .sort((a, b) => a.sort - b.sort);
 
+  const irsNoticeRequiresRedactionAcknowledgement = get(
+    state.irsNoticeUploadFormInfo,
+  )?.some(notice => 'file' in notice);
+
   return {
     caseTitle,
     contactPrimaryLabel,
@@ -77,6 +81,7 @@ export const startCaseHelper = (
     filingTypes: FILING_TYPES[user.role] || FILING_TYPES[USER_ROLES.petitioner],
     formattedCaseType,
     hasContactSecondary,
+    irsNoticeRequiresRedactionAcknowledgement,
     minorIncompetentLegend:
       user.role === USER_ROLES.petitioner
         ? 'What is your role in filing for this minor or legally incompetent person?'

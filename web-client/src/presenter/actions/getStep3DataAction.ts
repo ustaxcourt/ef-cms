@@ -7,10 +7,12 @@ export const getStep3DataAction = ({
     state.form,
   );
   const irsNotices = get(state.irsNoticeUploadFormInfo);
+  const hasUploadedIrsNotice = irsNotices.some(notice => 'file' in notice);
 
   const step3Data = {
     caseType: hasIrsNotice ? irsNotices[0].caseType : caseType,
     hasIrsNotice,
+    hasUploadedIrsNotice,
     irsNotices,
     irsNoticesRedactionAcknowledgement,
   };
