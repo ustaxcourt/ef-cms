@@ -6,16 +6,16 @@ jest.mock('./processStreamRecords/processRemoveEntries');
 jest.mock('./processStreamRecords/processWorkItemEntries');
 jest.mock('./processStreamRecords/processCaseEntries');
 jest.mock('./processStreamRecords/processOtherEntries');
-import { applicationContext } from '../test/createTestApplicationContext';
-import { partitionRecords } from './processStreamRecords/processStreamUtilities';
-import { processCaseEntries } from './processStreamRecords/processCaseEntries';
-import { processDocketEntries } from './processStreamRecords/processDocketEntries';
-import { processMessageEntries } from './processStreamRecords/processMessageEntries';
-import { processOtherEntries } from './processStreamRecords/processOtherEntries';
-import { processPractitionerMappingEntries } from './processStreamRecords/processPractitionerMappingEntries';
-import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { partitionRecords } from '../../../../../shared/src/business/useCases/processStreamRecords/processStreamUtilities';
+import { processCaseEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processCaseEntries';
+import { processDocketEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processDocketEntries';
+import { processMessageEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processMessageEntries';
+import { processOtherEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processOtherEntries';
+import { processPractitionerMappingEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processPractitionerMappingEntries';
+import { processRemoveEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
-import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
+import { processWorkItemEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processWorkItemEntries';
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {

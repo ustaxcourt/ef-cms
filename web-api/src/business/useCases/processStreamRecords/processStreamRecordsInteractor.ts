@@ -1,12 +1,12 @@
-import { partitionRecords } from './processStreamRecords/processStreamUtilities';
-import { processCaseEntries } from './processStreamRecords/processCaseEntries';
-import { processCompletionMarkers } from './processStreamRecords/processCompletionMarkers';
-import { processDocketEntries } from './processStreamRecords/processDocketEntries';
-import { processMessageEntries } from './processStreamRecords/processMessageEntries';
-import { processOtherEntries } from './processStreamRecords/processOtherEntries';
-import { processPractitionerMappingEntries } from './processStreamRecords/processPractitionerMappingEntries';
-import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
-import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
+import { partitionRecords } from '../../../../../shared/src/business/useCases/processStreamRecords/processStreamUtilities';
+import { processCaseEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processCaseEntries';
+import { processCompletionMarkers } from '../../../../../shared/src/business/useCases/processStreamRecords/processCompletionMarkers';
+import { processDocketEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processDocketEntries';
+import { processMessageEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processMessageEntries';
+import { processOtherEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processOtherEntries';
+import { processPractitionerMappingEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processPractitionerMappingEntries';
+import { processRemoveEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processRemoveEntries';
+import { processWorkItemEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
 
 export const processStreamRecordsInteractor = async (
