@@ -2,8 +2,8 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { WorkItem } from '../../entities/WorkItem';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 
 /**
  * getWorkItemInteractor
