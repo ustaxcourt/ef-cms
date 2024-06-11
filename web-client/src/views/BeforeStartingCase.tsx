@@ -18,18 +18,18 @@ export const BeforeStartingCase = connect(
   {
     closeModalAndReturnToDashboardSequence:
       sequences.closeModalAndReturnToDashboardSequence,
-    featureFlags: state.featureFlags,
+    petitionFlowUpdated:
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key],
     showModal: state.modal.showModal,
     user: state.user,
   },
   function BeforeStartingCase({
     closeModalAndReturnToDashboardSequence,
-    featureFlags,
+    petitionFlowUpdated,
     user,
   }) {
     const redirectUrl =
-      featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_PETITION_FLOW.key] &&
-      ROLES.petitioner === user.role
+      petitionFlowUpdated && ROLES.petitioner === user.role
         ? '/file-a-petition/new'
         : '/file-a-petition/step-1';
     return (
@@ -73,13 +73,16 @@ export const BeforeStartingCase = connect(
                 style={{ marginBottom: '5px' }}
               >
                 This is the document that explains why you disagree with the
-                Internal Revenue Service (IRS). There are three methods to add
-                the Petition:
+                Internal Revenue Service (IRS). There are{' '}
+                {petitionFlowUpdated ? 'three' : 'two'} methods to add the
+                Petition:
               </div>
               <ul className="margin-top-0">
-                <li>
-                  Answer some questions and have DAWSON create the Petition.
-                </li>
+                {petitionFlowUpdated && (
+                  <li>
+                    Answer some questions and have DAWSON create the Petition.
+                  </li>
+                )}
                 <li>
                   {"Complete and upload the Court's standard Petition form. "}
                   <Button
