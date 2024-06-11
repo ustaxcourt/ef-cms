@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -14,7 +15,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {object} the message
  */
 export const getMessageThreadInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { parentMessageId }: { parentMessageId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

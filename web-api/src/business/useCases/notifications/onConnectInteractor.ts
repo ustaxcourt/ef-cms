@@ -1,5 +1,7 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const onConnectInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     connectionId,

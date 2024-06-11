@@ -9,6 +9,7 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { sum } from 'lodash';
 
 export type TrialSessionTypes = {
@@ -25,7 +26,7 @@ export type TrialSessionReturnType = {
 };
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { endDate, judges, startDate }: JudgeActivityStatisticsRequest,
 ): Promise<TrialSessionReturnType> => {
   const user = applicationContext.getCurrentUser();

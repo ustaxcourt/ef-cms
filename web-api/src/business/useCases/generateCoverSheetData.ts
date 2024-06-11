@@ -8,6 +8,7 @@ import {
   FORMATS,
   formatDateString,
 } from '../../../../shared/src/business/utilities/DateHandler';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -22,7 +23,7 @@ export const formatCaseTitle = ({
   caseEntity,
   useInitialData,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   useInitialData?: boolean;
 }) => {
@@ -56,7 +57,7 @@ export const generateCoverSheetData = async ({
   stampData,
   useInitialData = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;

@@ -20,6 +20,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
@@ -668,7 +669,7 @@ export const serveCaseToIrs = async (
 
 export const serveCaseToIrsInteractor = withLocking(
   serveCaseToIrs,
-  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
 );

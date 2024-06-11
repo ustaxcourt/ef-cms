@@ -11,6 +11,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
@@ -67,7 +68,7 @@ const addPetitionDocketEntryToCase = ({
  * @returns {object} the created case
  */
 export const createCaseInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     attachmentToPetitionFileId,
     corporateDisclosureFileId,

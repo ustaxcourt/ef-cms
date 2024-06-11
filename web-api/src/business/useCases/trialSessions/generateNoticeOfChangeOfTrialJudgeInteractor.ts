@@ -4,12 +4,13 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionInformation,

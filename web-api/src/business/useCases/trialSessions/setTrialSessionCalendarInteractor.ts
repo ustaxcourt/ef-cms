@@ -8,13 +8,14 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { flatten, partition, uniq } from 'lodash';
 
 export const setTrialSessionCalendarInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ): Promise<RawTrialSession> => {
   const user = applicationContext.getCurrentUser();
@@ -190,7 +191,7 @@ const removeManuallyAddedCaseFromTrialSession = ({
   caseRecord,
   trialSessionEntity,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseRecord: RawCase;
   trialSessionEntity: TrialSession;
 }): Promise<RawCase> => {

@@ -8,10 +8,11 @@ import {
   ORDER_EVENT_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 
 export const orderPublicSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,

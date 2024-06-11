@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { partition } from 'lodash';
 import type { AttributeValue, DynamoDBRecord, StreamRecord } from 'aws-lambda';
 
@@ -112,7 +113,7 @@ export const getApproximateCreationDateTime = ({
   applicationContext,
   record,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   record: DynamoDBRecord;
 }): number => {
   let approximateCreationDateTime: number = 0;
@@ -151,7 +152,7 @@ export const shouldProcessRecord = ({
   deploymentTimestamp,
   record,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   deploymentTimestamp: number;
   record: DynamoDBRecord;
 }): boolean => {

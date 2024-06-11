@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -15,7 +16,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  */
 
 export const getJudgeInSectionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { section }: { section: string },
 ): Promise<RawUser> => {
   const user = applicationContext.getCurrentUser();

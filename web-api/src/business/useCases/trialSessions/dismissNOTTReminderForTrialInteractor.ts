@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
@@ -13,7 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @param {object} providers.trialSessionId the trial session ID
  */
 export const dismissNOTTReminderForTrialInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();

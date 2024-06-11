@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { StringDecoder } from 'string_decoder';
 
 export const removePdf = async ({
@@ -21,7 +22,7 @@ export const removePdf = async ({
  * @throws {Error} if pdf is invalid
  */
 export const validatePdfInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { key }: { key: string },
 ) => {
   const { Body: pdfData } = await applicationContext

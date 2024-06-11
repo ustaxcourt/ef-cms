@@ -6,6 +6,7 @@ import {
   RawTrialSessionWorkingCopy,
   TrialSessionWorkingCopy,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
@@ -17,7 +18,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {TrialSessionWorkingCopy} the updated trial session working copy returned from persistence
  */
 export const updateTrialSessionWorkingCopyInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     trialSessionWorkingCopyToUpdate,
   }: { trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy },

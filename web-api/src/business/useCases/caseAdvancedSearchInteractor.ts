@@ -7,6 +7,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
 import {
@@ -23,7 +24,7 @@ export type CaseAdvancedSearchParamsRequestType = {
 };
 
 export const caseAdvancedSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     countryType,
     endDate,

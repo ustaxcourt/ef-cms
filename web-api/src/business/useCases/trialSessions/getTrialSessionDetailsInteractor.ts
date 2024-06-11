@@ -7,9 +7,10 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getTrialSessionDetailsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ): Promise<RawTrialSession> => {
   const user = applicationContext.getCurrentUser();

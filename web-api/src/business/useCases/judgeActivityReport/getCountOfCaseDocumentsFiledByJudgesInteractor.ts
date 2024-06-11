@@ -5,6 +5,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
 export type JudgeActivityReportFilters = {
@@ -27,7 +28,7 @@ export type GetCountOfCaseDocumentsFiledByJudgesRequest = {
 };
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   params: GetCountOfCaseDocumentsFiledByJudgesRequest,
 ): Promise<AggregatedEventCodesType> => {
   const authorizedUser = applicationContext.getCurrentUser();

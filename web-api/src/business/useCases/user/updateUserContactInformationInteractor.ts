@@ -5,6 +5,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
@@ -20,7 +21,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise} an object is successful
  */
 const updateUserContactInformationHelper = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     contactInfo,
     firmName,
@@ -130,7 +131,7 @@ const updateUserContactInformationHelper = async (
  * @param {string} providers.userId the userId to update the contact info
  */
 export const updateUserContactInformation = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     contactInfo,
     firmName,
@@ -167,7 +168,7 @@ export const updateUserContactInformation = async (
 };
 
 export const handleLockError = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest: any,
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -184,7 +185,7 @@ export const handleLockError = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
 ) => {
   const cases = await applicationContext

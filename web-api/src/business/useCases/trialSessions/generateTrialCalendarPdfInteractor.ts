@@ -1,11 +1,12 @@
 import { NotFoundError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { compact } from 'lodash';
 import { compareCasesByDocketNumberFactory } from '../../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
 export const generateTrialCalendarPdfInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ): Promise<{ fileId: string; url: string }> => {
   const trialSession = await applicationContext

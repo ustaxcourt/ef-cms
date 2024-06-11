@@ -8,6 +8,7 @@ import {
   TRIAL_CITIES,
   US_STATES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { capitalize, invert } from 'lodash';
 
@@ -27,7 +28,7 @@ export type TrialLocationData = {
 };
 
 export const runTrialSessionPlanningReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { term, year }: { term: string; year: string },
 ): Promise<{
   fileId: string;
@@ -68,7 +69,7 @@ const getTrialSessionPlanningReportData = async ({
   term,
   year,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   term: string;
   year: string;
 }): Promise<{
@@ -133,7 +134,7 @@ const getPreviousTerm = (
 };
 
 const getTrialLocation = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     allTrialSessions,
     previousTerms,

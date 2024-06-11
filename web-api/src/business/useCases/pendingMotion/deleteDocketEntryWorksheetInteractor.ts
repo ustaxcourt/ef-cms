@@ -2,10 +2,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const deleteDocketEntryWorksheetInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   docketEntryId: string,
 ): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();

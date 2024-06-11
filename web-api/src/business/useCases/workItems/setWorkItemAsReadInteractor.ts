@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * setWorkItemAsReadInteractor
@@ -14,7 +15,7 @@ import {
  * @returns {Promise} the promise of the setWorkItemAsRead call
  */
 export const setWorkItemAsReadInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
   const user = applicationContext.getCurrentUser();

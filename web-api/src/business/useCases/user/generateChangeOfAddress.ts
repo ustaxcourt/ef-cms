@@ -1,4 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type TUserContact = {
   address1: string;
@@ -38,7 +39,7 @@ const generateChangeOfAddressForPractitioner = async ({
   user,
   websocketMessagePrefix = 'user',
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   bypassDocketEntry?: boolean;
   contactInfo: TUserContact;
   firmName: string;

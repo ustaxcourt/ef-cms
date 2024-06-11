@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
@@ -16,7 +17,7 @@ export type FormattedTrialInfoType = RawTrialSession & {
 };
 
 export const generateNoticeOfTrialIssuedInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionId,

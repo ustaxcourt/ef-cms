@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { partitionRecords } from './processStreamUtilities';
 import { processCaseEntries } from './processCaseEntries';
 import { processCompletionMarkers } from './processCompletionMarkers';
@@ -10,7 +11,7 @@ import { processWorkItemEntries } from './processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
 
 export const processStreamRecordsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { recordsToProcess }: { recordsToProcess: DynamoDBRecord[] },
 ): Promise<void> => {
   const {

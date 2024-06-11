@@ -6,10 +6,11 @@ import {
   RawUser,
   User,
 } from '../../../../../shared/src/business/entities/User';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 
 export const getUsersInSectionInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { section }: { section: string },
 ): Promise<RawUser[]> => {
   const user = applicationContext.getCurrentUser();

@@ -7,6 +7,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type MessageType = {
@@ -29,7 +30,7 @@ export type ReplyMessageType = MessageType & {
 };
 
 export const createMessageInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,

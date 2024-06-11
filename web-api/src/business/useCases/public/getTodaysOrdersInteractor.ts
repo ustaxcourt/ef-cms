@@ -2,6 +2,7 @@ import {
   ORDER_EVENT_CODES,
   TODAYS_ORDERS_PAGE_SIZE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
   createISODateString,
@@ -10,7 +11,7 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const getTodaysOrdersInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { page, todaysOrdersSort }: { page: number; todaysOrdersSort: string },
 ) => {
   const { day, month, year } = deconstructDate(createISODateString());

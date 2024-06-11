@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 
@@ -14,7 +15,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
  * @returns {object} the work items in the user document inbox
  */
 export const getDocumentQCInboxForUserInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

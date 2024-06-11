@@ -8,6 +8,7 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { copyPagesAndAppendToTargetPdf } from '../../../../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
 import { shouldAppendClinicLetter } from '../../../../../shared/src/business/utilities/shouldAppendClinicLetter';
@@ -323,7 +324,7 @@ const setNoticeForCase = async ({
 };
 
 export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     jobId,

@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -18,7 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise} the promise of the addCaseToTrialSession call
  */
 export const addCaseToTrialSession = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     calendarNotes,
     docketNumber,
@@ -106,7 +107,7 @@ export const addCaseToTrialSession = async (
 
 export const addCaseToTrialSessionInteractor = withLocking(
   addCaseToTrialSession,
-  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
 );
