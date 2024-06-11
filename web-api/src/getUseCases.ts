@@ -147,7 +147,7 @@ import { opinionPublicSearchInteractor } from '../../shared/src/business/useCase
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
 import { orderPublicSearchInteractor } from '../../shared/src/business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
-import { processStreamRecordsInteractor } from '../../shared/src/business/useCases/processStreamRecordsInteractor';
+import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from '../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor';
 import { removeCasePendingItemInteractor } from '../../shared/src/business/useCases/removeCasePendingItemInteractor';
