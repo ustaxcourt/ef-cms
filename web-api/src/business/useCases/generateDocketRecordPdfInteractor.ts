@@ -1,10 +1,13 @@
-import { Case, getPractitionersRepresenting } from '../entities/cases/Case';
+import {
+  Case,
+  getPractitionersRepresenting,
+} from '../../../../shared/src/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 /**
  * generateDocketRecordPdfInteractor

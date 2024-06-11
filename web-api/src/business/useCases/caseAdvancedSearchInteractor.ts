@@ -2,17 +2,17 @@ import {
   AbbrevatedStates,
   CountryTypes,
   MAX_SEARCH_RESULTS,
-} from '../entities/EntityConstants';
+} from '../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { caseSearchFilter } from '../utilities/caseFilter';
+import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../utilities/DateHandler';
+} from '../../../../shared/src/business/utilities/DateHandler';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;

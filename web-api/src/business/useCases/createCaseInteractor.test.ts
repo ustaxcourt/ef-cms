@@ -7,13 +7,16 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
-import { PrivatePractitioner } from '../entities/PrivatePractitioner';
-import { User } from '../entities/User';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { PrivatePractitioner } from '../../../../shared/src/business/entities/PrivatePractitioner';
+import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseInteractor } from './createCaseInteractor';
-import { createISODateString } from '../utilities/DateHandler';
-import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
+import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import {
+  getContactPrimary,
+  getContactSecondary,
+} from '../../../../shared/src/business/entities/cases/Case';
 
 jest.mock('../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../utilities/DateHandler');

@@ -8,12 +8,12 @@ import {
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   ROLES,
-} from '../entities/EntityConstants';
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../entities/User';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
-import { createISODateString } from '../utilities/DateHandler';
+import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
 
 jest.mock('../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../utilities/DateHandler');

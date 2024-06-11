@@ -1,18 +1,18 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
-} from '../entities/EntityConstants';
-import { DocketEntry } from '../entities/DocketEntry';
-import { PaperPetition } from '../entities/cases/PaperPetition';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { PaperPetition } from '../../../../shared/src/business/entities/cases/PaperPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
-import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
-import { WorkItem } from '../entities/WorkItem';
-import { replaceBracketed } from '../utilities/replaceBracketed';
+import { UnauthorizedError } from '../../errors/errors';
+import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
+import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   applicationContext,

@@ -1,21 +1,21 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../entities/EntityConstants';
-import { DocketEntry } from '../entities/DocketEntry';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserCase } from '../entities/UserCase';
+import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { WorkItem } from '../entities/WorkItem';
-import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
+import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
+import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 

@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { formatCaseTitle } from '@shared/business/useCases/generateCoverSheetData';
+import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
 
 /**
  * Formats consolidated cases coversheet data

@@ -1,5 +1,5 @@
-import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
 /**
