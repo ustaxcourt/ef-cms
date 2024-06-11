@@ -26,6 +26,7 @@ describe('validateUploadPetitionStep3Action', () => {
         step3Data: {
           caseType: CASE_TYPES_MAP.cdp,
           hasIrsNotice: false,
+          hasUploadedIrsNotice: false,
         },
       },
     });
