@@ -3,7 +3,7 @@ import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 jest.mock('../addCoverToPdf');
-import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { addCoverToPdf } from '../addCoverToPdf';
 import {
   determineEntitiesToLock,
   handleLockError,

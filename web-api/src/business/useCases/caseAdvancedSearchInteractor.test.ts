@@ -1,5 +1,8 @@
-import { MAX_SEARCH_RESULTS, ROLES } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  MAX_SEARCH_RESULTS,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseAdvancedSearchInteractor } from './caseAdvancedSearchInteractor';
 
 describe('caseAdvancedSearchInteractor', () => {

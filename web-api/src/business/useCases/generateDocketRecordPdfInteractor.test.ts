@@ -3,15 +3,15 @@ import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} from '../entities/EntityConstants';
+} from '../../../../shared/src/business/entities/EntityConstants';
 import {
   MOCK_PRACTITIONER,
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
   privatePractitionerUser,
-} from '../../test/mockUsers';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '../../../../shared/src/test/mockUsers';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 
 describe('generateDocketRecordPdfInteractor', () => {

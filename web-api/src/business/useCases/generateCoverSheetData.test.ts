@@ -4,9 +4,9 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   MULTI_DOCKET_FILING_EVENT_CODES,
   PARTY_TYPES,
-} from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
 describe('generateCoverSheetData', () => {

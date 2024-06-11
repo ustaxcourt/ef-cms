@@ -1,4 +1,4 @@
-import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
 

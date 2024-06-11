@@ -1,8 +1,8 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
-import { MOCK_USERS } from '../../test/mockUsers';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
+import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { checkForReadyForTrialCasesInteractor } from './checkForReadyForTrialCasesInteractor';
 
 describe('checkForReadyForTrialCasesInteractor', () => {

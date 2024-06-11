@@ -21,7 +21,7 @@ import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
-import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { addCoverToPdf } from '../addCoverToPdf';
 import { addExistingUserToCase } from '../../useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';

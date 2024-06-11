@@ -1,5 +1,5 @@
-import { Case } from '../entities/cases/Case';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
