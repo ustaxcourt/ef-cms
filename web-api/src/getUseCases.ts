@@ -38,7 +38,7 @@ import { deleteCaseDeadlineInteractor } from './business/useCases/caseDeadline/d
 import { deleteCaseNoteInteractor } from './business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from './business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
 import { deleteDeficiencyStatisticInteractor } from './business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor';
-import { deleteDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
+import { deleteDocketEntryWorksheetInteractor } from '@web-api/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
 import { deletePractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/deletePractitionerDocumentInteractor';
 import { deleteTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor';
 import { deleteUserCaseNoteInteractor } from './business/useCases/caseNote/deleteUserCaseNoteInteractor';
@@ -111,7 +111,7 @@ import { getNotificationsInteractor } from '../../shared/src/business/useCases/g
 import { getOutboxMessagesForSectionInteractor } from './business/useCases/messages/getOutboxMessagesForSectionInteractor';
 import { getOutboxMessagesForUserInteractor } from './business/useCases/messages/getOutboxMessagesForUserInteractor';
 import { getPaperServicePdfUrlInteractor } from '@shared/business/useCases/getPaperServicePdfUrlInteractor';
-import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor';
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor';
 import { getPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerDocumentInteractor';
@@ -198,7 +198,7 @@ import { updateCourtIssuedDocketEntryInteractor } from './business/useCases/dock
 import { updateCourtIssuedOrderInteractor } from './business/useCases/courtIssuedOrder/updateCourtIssuedOrderInteractor';
 import { updateDeficiencyStatisticInteractor } from './business/useCases/caseStatistics/updateDeficiencyStatisticInteractor';
 import { updateDocketEntryMetaInteractor } from './business/useCases/docketEntry/updateDocketEntryMetaInteractor';
-import { updateDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
+import { updateDocketEntryWorksheetInteractor } from '@web-api/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
 import { updateOtherStatisticsInteractor } from './business/useCases/caseStatistics/updateOtherStatisticsInteractor';
 import { updatePetitionerInformationInteractor } from './business/useCases/user/updatePetitionerInformationInteractor';
 import { updatePractitionerUserInteractor } from './business/useCases/practitioner/updatePractitionerUserInteractor';
