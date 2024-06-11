@@ -16,9 +16,9 @@ import {
   testPdfDoc,
 } from '../../../../../shared/src/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
-import { shouldAppendClinicLetter } from '../../../../../shared/src/business/utilities/shouldAppendClinicLetter';
+import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 
-jest.mock('../../utilities/shouldAppendClinicLetter');
+jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const trialSession = {

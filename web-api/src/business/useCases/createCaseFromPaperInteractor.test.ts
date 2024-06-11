@@ -13,10 +13,12 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
-import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
-jest.mock('../utilities/DateHandler', () => {
-  const originalModule = jest.requireActual('../utilities/DateHandler');
+jest.mock('@shared/business/utilities/DateHandler', () => {
+  const originalModule = jest.requireActual(
+    '@shared/business/utilities/DateHandler',
+  );
   return {
     __esModule: true,
     ...originalModule,
