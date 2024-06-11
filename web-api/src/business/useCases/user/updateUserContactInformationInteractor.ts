@@ -1,10 +1,10 @@
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { Practitioner } from '../../entities/Practitioner';
-import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
+import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';

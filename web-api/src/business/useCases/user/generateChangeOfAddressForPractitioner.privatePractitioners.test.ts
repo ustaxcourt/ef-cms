@@ -3,11 +3,11 @@ import {
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { calculateISODate } from '../../utilities/DateHandler';
-import { docketClerkUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 
 jest.mock('../addCoversheetInteractor', () => ({

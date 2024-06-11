@@ -1,11 +1,11 @@
-import { Practitioner } from '../../entities/Practitioner';
-import { ROLES } from '../../entities/EntityConstants';
+import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
+import { User } from '../../../../../shared/src/business/entities/User';
 
 /**
  * updateUserPendingEmailInteractor

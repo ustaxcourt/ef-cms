@@ -1,5 +1,5 @@
-import { ROLES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPrivatePractitionersBySearchKeyInteractor } from './getPrivatePractitionersBySearchKeyInteractor';
 
 let user;

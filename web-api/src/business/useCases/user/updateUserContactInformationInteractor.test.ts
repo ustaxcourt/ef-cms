@@ -4,10 +4,10 @@ import {
   PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { irsPractitionerUser } from '../../../test/mockUsers';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { irsPractitionerUser } from '../../../../../shared/src/test/mockUsers';
 import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
 
 jest.mock('./generateChangeOfAddress');

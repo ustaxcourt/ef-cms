@@ -1,9 +1,12 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { RawUser, User } from '../../entities/User';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import {
+  RawUser,
+  User,
+} from '../../../../../shared/src/business/entities/User';
+import { UnauthorizedError } from '../../../errors/errors';
 
 export const getUsersInSectionInteractor = async (
   applicationContext: IApplicationContext,

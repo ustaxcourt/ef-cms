@@ -1,19 +1,19 @@
-import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
- * getPrivatePractitionersBySearchKeyInteractor
+ * getIrsPractitionersBySearchKeyInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} params the params object
  * @param {string} params.searchKey the search string entered by the user
  * @returns {*} the result
  */
-export const getPrivatePractitionersBySearchKeyInteractor = async (
+export const getIrsPractitionersBySearchKeyInteractor = async (
   applicationContext: IApplicationContext,
   { searchKey }: { searchKey: string },
 ) => {
@@ -30,10 +30,10 @@ export const getPrivatePractitionersBySearchKeyInteractor = async (
     .getUsersBySearchKey({
       applicationContext,
       searchKey,
-      type: 'privatePractitioner',
+      type: 'irsPractitioner',
     });
 
-  return PrivatePractitioner.validateRawCollection(users, {
+  return IrsPractitioner.validateRawCollection(users, {
     applicationContext,
   });
 };

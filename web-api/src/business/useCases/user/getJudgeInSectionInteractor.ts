@@ -1,7 +1,7 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { UnauthorizedError } from '@web-api/errors/errors';
 

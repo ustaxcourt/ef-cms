@@ -5,7 +5,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { generateChangeOfAddress } from '../../../../../shared/src/business/useCases/users/generateChangeOfAddress';
+import { generateChangeOfAddress } from '../user/generateChangeOfAddress';
 import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
 jest.mock(
   '../../../../../shared/src/business/useCases/users/generateChangeOfAddress',

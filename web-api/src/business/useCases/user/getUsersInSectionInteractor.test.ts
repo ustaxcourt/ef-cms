@@ -1,6 +1,9 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { PETITIONS_SECTION, ROLES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  PETITIONS_SECTION,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUsersInSectionInteractor } from './getUsersInSectionInteractor';
 
 describe('Get users in section', () => {

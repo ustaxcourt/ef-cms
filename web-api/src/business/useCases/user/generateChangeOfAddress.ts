@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
 
 export type TUserContact = {
   address1: string;
