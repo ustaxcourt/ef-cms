@@ -3,7 +3,7 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 import type {
   AttributeValueWithName,
   IDynamoDBRecord,
-} from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+} from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processPractitionerMappingEntries = async ({

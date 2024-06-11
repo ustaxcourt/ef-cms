@@ -1,4 +1,4 @@
-import { approvePendingJob } from '../../../../admin-tools/circleci/circleci-helper';
+import { approvePendingJob } from '../../../../../shared/admin-tools/circleci/circleci-helper';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const processCompletionMarkers = async ({

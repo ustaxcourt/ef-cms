@@ -7,15 +7,15 @@ jest.mock('./processStreamRecords/processWorkItemEntries');
 jest.mock('./processStreamRecords/processCaseEntries');
 jest.mock('./processStreamRecords/processOtherEntries');
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { partitionRecords } from '../../../../../shared/src/business/useCases/processStreamRecords/processStreamUtilities';
-import { processCaseEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processCaseEntries';
-import { processDocketEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processDocketEntries';
-import { processMessageEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processMessageEntries';
-import { processOtherEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processOtherEntries';
-import { processPractitionerMappingEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processPractitionerMappingEntries';
-import { processRemoveEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processRemoveEntries';
+import { partitionRecords } from './processStreamUtilities';
+import { processCaseEntries } from './processCaseEntries';
+import { processDocketEntries } from './processDocketEntries';
+import { processMessageEntries } from './processMessageEntries';
+import { processOtherEntries } from './processOtherEntries';
+import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
+import { processRemoveEntries } from './processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
-import { processWorkItemEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processWorkItemEntries';
+import { processWorkItemEntries } from './processWorkItemEntries';
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {

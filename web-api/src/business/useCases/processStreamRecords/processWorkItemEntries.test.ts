@@ -1,4 +1,4 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processWorkItemEntries } from './processWorkItemEntries';
 jest.mock('./processEntries');
 
