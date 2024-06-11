@@ -1,6 +1,9 @@
-import { Case, isSealedCase } from '../../entities/cases/Case';
+import {
+  Case,
+  isSealedCase,
+} from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { PublicCase } from '../../entities/cases/PublicCase';
+import { PublicCase } from '../../../../../shared/src/business/entities/cases/PublicCase';
 
 /**
  * getCaseForPublicDocketSearchInteractor

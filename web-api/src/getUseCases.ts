@@ -16,7 +16,7 @@ import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { blockCaseFromTrialInteractor } from '../../shared/src/business/useCases/blockCaseFromTrialInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/business/useCases/caseAdvancedSearchInteractor';
-import { casePublicSearchInteractor } from '../../shared/src/business/useCases/public/casePublicSearchInteractor';
+import { casePublicSearchInteractor } from './business/useCases/public/casePublicSearchInteractor';
 import { changePasswordInteractor } from '@web-api/business/useCases/auth/changePasswordInteractor';
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
@@ -80,7 +80,7 @@ import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/bu
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/getCaseDeadlinesInteractor';
 import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getCaseExistsInteractor';
-import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor';
+import { getCaseForPublicDocketSearchInteractor } from './business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
 import { getCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
 import { getCaseWorksheetsByJudgeInteractor } from './business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -103,7 +103,7 @@ import { getInboxMessagesForUserInteractor } from './business/useCases/messages/
 import { getInternalUsersInteractor } from '../../shared/src/business/useCases/users/getInternalUsersInteractor';
 import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor';
 import { getJudgeInSectionInteractor } from '../../shared/src/business/useCases/users/getJudgeInSectionInteractor';
-import { getJudgesForPublicSearchInteractor } from '../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor';
+import { getJudgesForPublicSearchInteractor } from './business/useCases/public/getJudgesForPublicSearchInteractor';
 import { getMaintenanceModeInteractor } from '../../shared/src/business/useCases/getMaintenanceModeInteractor';
 import { getMessageThreadInteractor } from './business/useCases/messages/getMessageThreadInteractor';
 import { getMessagesForCaseInteractor } from './business/useCases/messages/getMessagesForCaseInteractor';
@@ -121,8 +121,8 @@ import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/b
 import { getPublicCaseInteractor } from './business/useCases/public/getPublicCaseInteractor';
 import { getPublicDownloadPolicyUrlInteractor } from './business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
-import { getTodaysOpinionsInteractor } from '../../shared/src/business/useCases/public/getTodaysOpinionsInteractor';
-import { getTodaysOrdersInteractor } from '../../shared/src/business/useCases/public/getTodaysOrdersInteractor';
+import { getTodaysOpinionsInteractor } from './business/useCases/public/getTodaysOpinionsInteractor';
+import { getTodaysOrdersInteractor } from './business/useCases/public/getTodaysOrdersInteractor';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
@@ -143,9 +143,9 @@ import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor
 import { onConnectInteractor } from './business/useCases/notifications/onConnectInteractor';
 import { onDisconnectInteractor } from './business/useCases/notifications/onDisconnectInteractor';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/opinionAdvancedSearchInteractor';
-import { opinionPublicSearchInteractor } from '../../shared/src/business/useCases/public/opinionPublicSearchInteractor';
+import { opinionPublicSearchInteractor } from './business/useCases/public/opinionPublicSearchInteractor';
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
-import { orderPublicSearchInteractor } from '../../shared/src/business/useCases/public/orderPublicSearchInteractor';
+import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
 import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
 import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';

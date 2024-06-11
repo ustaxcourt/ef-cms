@@ -1,6 +1,6 @@
 import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { casePublicSearchInteractor } from './casePublicSearchInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {

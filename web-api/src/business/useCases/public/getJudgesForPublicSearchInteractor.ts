@@ -1,5 +1,5 @@
-import { PublicUser } from '../../entities/PublicUser';
-import { ROLES } from '../../entities/EntityConstants';
+import { PublicUser } from '../../../../../shared/src/business/entities/PublicUser';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 
 /**
  * getJudgesForPublicSearchInteractor
