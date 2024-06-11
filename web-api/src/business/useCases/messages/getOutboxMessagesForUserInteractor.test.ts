@@ -1,15 +1,14 @@
 import {
   CASE_STATUS_TYPES,
-  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getOutboxMessagesForSectionInteractor } from './getOutboxMessagesForSectionInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
 import { omit } from 'lodash';
 
-describe('getOutboxMessagesForSectionInteractor', () => {
+describe('getOutboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -17,8 +16,8 @@ describe('getOutboxMessagesForSectionInteractor', () => {
     });
 
     await expect(
-      getOutboxMessagesForSectionInteractor(applicationContext, {
-        section: DOCKET_SECTION,
+      getOutboxMessagesForUserInteractor(applicationContext, {
+        userId: 'bob',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -54,17 +53,17 @@ describe('getOutboxMessagesForSectionInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getSectionOutboxMessages.mockReturnValue([messageData]);
+      .getUserOutboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getOutboxMessagesForSectionInteractor(
+    const returnedMessages = await getOutboxMessagesForUserInteractor(
       applicationContext,
       {
-        section: DOCKET_SECTION,
+        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getSectionOutboxMessages,
+      applicationContext.getPersistenceGateway().getUserOutboxMessages,
     ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });

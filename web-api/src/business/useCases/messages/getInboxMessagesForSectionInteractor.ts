@@ -1,21 +1,21 @@
-import { MessageResult } from '../../entities/MessageResult';
+import { MessageResult } from '../../../../../shared/src/business/entities/MessageResult';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
- * getInboxMessagesForUserInteractor
+ * getInboxMessagesForSectionInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.userId the user to get the inbox messages
- * @returns {object} the messages in the user inbox
+ * @param {string} providers.section the section to get the inbox messages
+ * @returns {object} the messages in the section inbox
  */
-export const getInboxMessagesForUserInteractor = async (
+export const getInboxMessagesForSectionInteractor = async (
   applicationContext: IApplicationContext,
-  { userId }: { userId: string },
+  { section }: { section: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,9 +25,9 @@ export const getInboxMessagesForUserInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getUserInboxMessages({
+    .getSectionInboxMessages({
       applicationContext,
-      userId,
+      section,
     });
 
   return MessageResult.validateRawCollection(messages, {

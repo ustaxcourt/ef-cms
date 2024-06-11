@@ -1,14 +1,15 @@
 import {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getCompletedMessagesForUserInteractor } from './getCompletedMessagesForUserInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getCompletedMessagesForSectionInteractor } from './getCompletedMessagesForSectionInteractor';
 import { omit } from 'lodash';
 
-describe('getCompletedMessagesForUserInteractor', () => {
+describe('getCompletedMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -16,8 +17,8 @@ describe('getCompletedMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getCompletedMessagesForUserInteractor(applicationContext, {
-        userId: 'abc',
+      getCompletedMessagesForSectionInteractor(applicationContext, {
+        section: DOCKET_SECTION,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -56,17 +57,18 @@ describe('getCompletedMessagesForUserInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCompletedUserInboxMessages.mockReturnValue([messageData]);
+      .getCompletedSectionInboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getCompletedMessagesForUserInteractor(
+    const returnedMessages = await getCompletedMessagesForSectionInteractor(
       applicationContext,
       {
-        userId: messageData.completedByUserId,
+        section: DOCKET_SECTION,
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,
+      applicationContext.getPersistenceGateway()
+        .getCompletedSectionInboxMessages,
     ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });

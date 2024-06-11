@@ -1,19 +1,19 @@
-import { MessageResult } from '../../entities/MessageResult';
+import { MessageResult } from '../../../../../shared/src/business/entities/MessageResult';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
- * getCompletedMessagesForUserInteractor
+ * getOutboxMessagesForUserInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.userId the user to get the inbox messages
- * @returns {object} the messages in the user inbox
+ * @param {string} providers.userId the user to get the outbox messages
+ * @returns {object} the messages in the user outbox
  */
-export const getCompletedMessagesForUserInteractor = async (
+export const getOutboxMessagesForUserInteractor = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
 ) => {
@@ -25,7 +25,7 @@ export const getCompletedMessagesForUserInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCompletedUserInboxMessages({
+    .getUserOutboxMessages({
       applicationContext,
       userId,
     });

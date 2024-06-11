@@ -2,13 +2,12 @@ import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
-import { omit } from 'lodash';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getMessageThreadInteractor } from './getMessageThreadInteractor';
 
-describe('getOutboxMessagesForUserInteractor', () => {
+describe('getMessageThreadInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -16,21 +15,21 @@ describe('getOutboxMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getOutboxMessagesForUserInteractor(applicationContext, {
-        userId: 'bob',
+      getMessageThreadInteractor(applicationContext, {
+        parentMessageId: 'abc',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the messages from persistence and returns them', async () => {
-    const messageData = {
+  it('retrieves the message thread from persistence and returns it', async () => {
+    const mockMessage = {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
-      entityName: 'MessageResult',
+      entityName: 'Message',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
@@ -38,14 +37,10 @@ describe('getOutboxMessagesForUserInteractor', () => {
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
-      trialDate: '2028-03-01T21:40:46.415Z',
-      trialLocation: 'El Paso, Texas',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -53,18 +48,18 @@ describe('getOutboxMessagesForUserInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getUserOutboxMessages.mockReturnValue([messageData]);
+      .getMessageThreadByParentId.mockReturnValue([mockMessage]);
 
-    const returnedMessages = await getOutboxMessagesForUserInteractor(
+    const returnedMessage = await getMessageThreadInteractor(
       applicationContext,
       {
-        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+        parentMessageId: 'abc',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getUserOutboxMessages,
+      applicationContext.getPersistenceGateway().getMessageThreadByParentId,
     ).toHaveBeenCalled();
-    expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
+    expect(returnedMessage).toMatchObject([mockMessage]);
   });
 });

@@ -1,9 +1,9 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { associatePrivatePractitionerToCase } from '../../../../../web-api/src/business/useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**

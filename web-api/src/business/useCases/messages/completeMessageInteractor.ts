@@ -1,8 +1,8 @@
-import { Message } from '../../entities/Message';
+import { Message } from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 

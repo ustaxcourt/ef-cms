@@ -1,21 +1,21 @@
-import { Message } from '../../entities/Message';
+import { Message } from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
- * gets a message thread by parent id
+ * gets messages for a case
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.parentMessageId the id of the parent message for the thread
+ * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the message
  */
-export const getMessageThreadInteractor = async (
+export const getMessagesForCaseInteractor = async (
   applicationContext: IApplicationContext,
-  { parentMessageId }: { parentMessageId: string },
+  { docketNumber }: { docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,9 +25,9 @@ export const getMessageThreadInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getMessageThreadByParentId({
+    .getMessagesByDocketNumber({
       applicationContext,
-      parentMessageId,
+      docketNumber,
     });
 
   return Message.validateRawCollection(messages, {

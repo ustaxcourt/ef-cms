@@ -1,10 +1,13 @@
-import { Case } from '../../entities/cases/Case';
-import { Message, RawMessage } from '../../entities/Message';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  Message,
+  RawMessage,
+} from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const replyToMessage = async (

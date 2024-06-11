@@ -1,9 +1,12 @@
-import { Case } from '../../entities/cases/Case';
-import { Message, RawMessage } from '../../entities/Message';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  Message,
+  RawMessage,
+} from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type MessageType = {

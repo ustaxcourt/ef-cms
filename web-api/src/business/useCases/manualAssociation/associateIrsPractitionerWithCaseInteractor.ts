@@ -1,9 +1,9 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { associateIrsPractitionerToCase } from '../../../../../web-api/src/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
+import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 
 /**
  * associateIrsPractitionerWithCaseInteractor
