@@ -837,4 +837,5 @@ export type CreateCaseIrsForm = {
   noticeIssuedDate?: string;
   taxYear?: number;
   irsNoticeFileUrl?: string;
+  cityAndStateIssuingOffice?: string;
 };

@@ -136,6 +136,9 @@ export const UpdatedFilePetitionStep3 = connect(
                     <>
                       <IrsNoticeUploadForm
                         caseType={info.caseType}
+                        cityAndStateIssuingOffice={
+                          info.cityAndStateIssuingOffice
+                        }
                         file={info.file}
                         index={index}
                         key={info.key}
