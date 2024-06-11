@@ -5,7 +5,7 @@ import { setCaseDeadlinesAction } from './setCaseDeadlinesAction';
 describe('setCaseDeadlinesAction', () => {
   it('sets state.caseDeadlineReport.caseDeadlines to the props.caseDeadlines passed in', async () => {
     const caseDeadlines = [
-      { caseDeadlineId: '123', deadlineDate: '2018-03-01T00:00:00.000Z' },
+      { caseDeadlineId: '123', deadlineDate: '2088-03-01T00:00:00.000Z' },
     ];
 
     const result = await runAction(setCaseDeadlinesAction, {
@@ -28,7 +28,7 @@ describe('setCaseDeadlinesAction', () => {
 
   it('appends props.caseDeadlines onto state.caseDeadlineReport.caseDeadlines if state.caseDeadlineReport.caseDeadlines is already set', async () => {
     const caseDeadlines = [
-      { caseDeadlineId: '123', deadlineDate: '2018-03-01T00:00:00.000Z' },
+      { caseDeadlineId: '123', deadlineDate: '2088-03-01T00:00:00.000Z' },
     ];
 
     const result = await runAction(setCaseDeadlinesAction, {
@@ -40,7 +40,7 @@ describe('setCaseDeadlinesAction', () => {
       state: {
         caseDeadlineReport: {
           caseDeadlines: [
-            { caseDeadlineId: '234', deadlineDate: '2019-03-01T00:00:00.000Z' },
+            { caseDeadlineId: '234', deadlineDate: '2099-03-01T00:00:00.000Z' },
           ],
         },
       },
@@ -51,7 +51,7 @@ describe('setCaseDeadlinesAction', () => {
 
   it('increments state.caseDeadlineReport.page by 1', async () => {
     const caseDeadlines = [
-      { caseDeadlineId: '123', deadlineDate: '2018-03-01T00:00:00.000Z' },
+      { caseDeadlineId: '123', deadlineDate: '2088-03-01T00:00:00.000Z' },
     ];
 
     const result = await runAction(setCaseDeadlinesAction, {

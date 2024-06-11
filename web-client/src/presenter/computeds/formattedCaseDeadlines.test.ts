@@ -31,17 +31,17 @@ describe('formattedCaseDeadlines', () => {
     expect(result).toEqual([
       {
         deadlineDate: '2029-01-30T05:00:00.000Z',
-        deadlineDateFormatted: '01/30/19',
+        deadlineDateFormatted: '01/30/29',
         overdue: true,
       },
       {
         deadlineDate: '2029-06-30T04:00:00.000Z',
-        deadlineDateFormatted: '06/30/19',
+        deadlineDateFormatted: '06/30/29',
         overdue: true,
       },
       {
         deadlineDate: '2035-07-30T04:00:00.000Z',
-        deadlineDateFormatted: '07/30/25',
+        deadlineDateFormatted: '07/30/35',
       },
     ]);
   });
