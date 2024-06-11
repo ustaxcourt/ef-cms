@@ -21,11 +21,11 @@ describe('View and manage the deadlines of a case', () => {
 
   const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;
   const randomMonth = `0${Math.floor(Math.random() * 9) + 1}`;
-  const randomYear = `200${Math.floor(Math.random() * 9) + 1}`;
+  const year = '2099';
   const overrides = {
     day: randomDay,
     month: randomMonth,
-    year: randomYear,
+    year,
   };
 
   beforeAll(() => {

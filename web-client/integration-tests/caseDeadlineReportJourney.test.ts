@@ -16,12 +16,12 @@ describe('Case deadline report journey', () => {
   });
 
   const randomDay = `1${Math.floor(Math.random() * 9) + 1}`;
-  const randomYear = `200${Math.floor(Math.random() * 9) + 1}`;
+  const year = '2099';
 
   const overrides = {
     day: randomDay,
     month: '01',
-    year: randomYear,
+    year,
   };
 
   beforeAll(() => {
