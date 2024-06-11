@@ -1,19 +1,19 @@
-import { PractitionerDocument } from '../../entities/PractitionerDocument';
+import { PractitionerDocument } from '../../../../../shared/src/business/entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
- * createPractitionerDocumentInteractor
+ * editPractitionerDocumentInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-export const createPractitionerDocumentInteractor = async (
+export const editPractitionerDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
     barNumber,
@@ -27,6 +27,7 @@ export const createPractitionerDocumentInteractor = async (
       location?: string;
       practitionerDocumentFileId: string;
       fileName: string;
+      uploadDate: string;
     };
   },
 ) => {
@@ -46,11 +47,12 @@ export const createPractitionerDocumentInteractor = async (
       fileName: documentMetadata.fileName,
       location: documentMetadata.location,
       practitionerDocumentFileId: documentMetadata.practitionerDocumentFileId,
+      uploadDate: documentMetadata.uploadDate,
     },
     { applicationContext },
   );
 
-  await applicationContext.getPersistenceGateway().createPractitionerDocument({
+  await applicationContext.getPersistenceGateway().editPractitionerDocument({
     applicationContext,
     barNumber,
     practitionerDocument: documentEntity.validate().toRawObject(),

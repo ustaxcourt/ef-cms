@@ -1,25 +1,24 @@
+import { PractitionerDocument } from '../../../../../shared/src/business/entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
- * deletePractitionerDocumentInteractor
+ * getPractitionerDocumentsInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.user the user data
- * @returns {Promise} the promise of the delete call
+ * @returns {Promise} the promise of the createUser call
  */
-export const deletePractitionerDocumentInteractor = async (
+export const getPractitionerDocumentsInteractor = async (
   applicationContext: IApplicationContext,
   {
     barNumber,
-    practitionerDocumentFileId,
   }: {
     barNumber: string;
-    practitionerDocumentFileId: string;
   },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
@@ -28,20 +27,18 @@ export const deletePractitionerDocumentInteractor = async (
     !isAuthorized(requestUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {
     throw new UnauthorizedError(
-      'Unauthorized for deleting practitioner documents',
+      'Unauthorized for getting practitioner documents',
     );
   }
 
-  await applicationContext.getPersistenceGateway().deleteDocumentFile({
-    applicationContext,
-    key: practitionerDocumentFileId,
-  });
-
-  return await applicationContext
+  const practitionerDocuments = await applicationContext
     .getPersistenceGateway()
-    .deletePractitionerDocument({
+    .getPractitionerDocuments({
       applicationContext,
       barNumber,
-      practitionerDocumentFileId,
     });
+
+  return PractitionerDocument.validateRawCollection(practitionerDocuments, {
+    applicationContext,
+  });
 };
