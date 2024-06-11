@@ -1,5 +1,5 @@
-import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseForPublicDocketSearchInteractor } from './getCaseForPublicDocketSearchInteractor';
 
 describe('Get case for public docket record search', () => {

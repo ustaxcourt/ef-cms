@@ -2,8 +2,8 @@ import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { opinionPublicSearchInteractor } from './opinionPublicSearchInteractor';
 
 describe('opinionPublicSearchInteractor', () => {

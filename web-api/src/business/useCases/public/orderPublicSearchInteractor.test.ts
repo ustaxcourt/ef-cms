@@ -2,8 +2,8 @@ import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { orderPublicSearchInteractor } from './orderPublicSearchInteractor';
 
 describe('orderPublicSearchInteractor', () => {

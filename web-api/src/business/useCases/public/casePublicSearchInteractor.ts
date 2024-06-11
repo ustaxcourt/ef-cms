@@ -3,7 +3,7 @@ import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../utilities/DateHandler';
+} from '../../../../../shared/src/business/utilities/DateHandler';
 
 export const casePublicSearchInteractor = async (
   applicationContext: IApplicationContext,
