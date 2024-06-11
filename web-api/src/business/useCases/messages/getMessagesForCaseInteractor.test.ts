@@ -2,9 +2,9 @@ import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getMessagesForCaseInteractor } from './getMessagesForCaseInteractor';
 
 describe('getMessagesForCaseInteractor', () => {

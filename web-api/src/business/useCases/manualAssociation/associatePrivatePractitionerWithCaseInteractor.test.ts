@@ -4,8 +4,8 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {

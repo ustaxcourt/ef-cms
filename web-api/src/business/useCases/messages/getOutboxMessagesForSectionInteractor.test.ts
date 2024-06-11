@@ -3,13 +3,13 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { getInboxMessagesForSectionInteractor } from './getInboxMessagesForSectionInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getOutboxMessagesForSectionInteractor } from './getOutboxMessagesForSectionInteractor';
 import { omit } from 'lodash';
 
-describe('getInboxMessagesForSectionInteractor', () => {
+describe('getOutboxMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -17,7 +17,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
     });
 
     await expect(
-      getInboxMessagesForSectionInteractor(applicationContext, {
+      getOutboxMessagesForSectionInteractor(applicationContext, {
         section: DOCKET_SECTION,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -54,9 +54,9 @@ describe('getInboxMessagesForSectionInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getSectionInboxMessages.mockReturnValue([messageData]);
+      .getSectionOutboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getInboxMessagesForSectionInteractor(
+    const returnedMessages = await getOutboxMessagesForSectionInteractor(
       applicationContext,
       {
         section: DOCKET_SECTION,
@@ -64,7 +64,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getSectionInboxMessages,
+      applicationContext.getPersistenceGateway().getSectionOutboxMessages,
     ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
