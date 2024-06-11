@@ -1,9 +1,9 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../entities/User';
+import { User } from '../../../../../shared/src/business/entities/User';
 
 /**
  * getUserPendingEmailInteractor
@@ -13,21 +13,14 @@ import { User } from '../../entities/User';
  * @param {string} providers.userId the userId
  * @returns {Promise} the user's pending email
  */
-export const getUserPendingEmailStatusInteractor = async (
+export const getUserPendingEmailInteractor = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (
-    !isAuthorized(
-      authorizedUser,
-      ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL_STATUS,
-    )
-  ) {
-    throw new UnauthorizedError(
-      'Unauthorized to get user pending email status',
-    );
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL)) {
+    throw new UnauthorizedError('Unauthorized to get user pending email');
   }
 
   const userRaw = await applicationContext.getPersistenceGateway().getUserById({
@@ -39,5 +32,5 @@ export const getUserPendingEmailStatusInteractor = async (
 
   const validatedUserRaw = new User(userRaw).validate().toRawObject();
 
-  return !!validatedUserRaw.pendingEmail;
+  return validatedUserRaw.pendingEmail;
 };

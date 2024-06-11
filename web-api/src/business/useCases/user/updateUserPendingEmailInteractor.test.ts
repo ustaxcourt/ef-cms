@@ -1,8 +1,8 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
-import { validUser } from '../../../test/mockUsers';
+import { validUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('updateUserPendingEmailInteractor', () => {
   const pendingEmail = 'hello@example.com';
