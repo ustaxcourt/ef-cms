@@ -74,7 +74,7 @@ import { formatPendingItem } from '@shared/business/utilities/formatPendingItem'
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
-import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@shared/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
+import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
