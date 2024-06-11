@@ -1,8 +1,8 @@
-import { Case } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { PAYMENT_STATUS } from '../../entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { PAYMENT_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addDocketEntryForPaymentStatus } from './serveCaseToIrsInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('addDocketEntryForPaymentStatus', () => {
   let user;
