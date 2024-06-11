@@ -208,7 +208,7 @@ import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/busine
 import { updateUserCaseNoteInteractor } from './business/useCases/caseNote/updateUserCaseNoteInteractor';
 import { updateUserContactInformationInteractor } from '../../shared/src/business/useCases/users/updateUserContactInformationInteractor';
 import { updateUserPendingEmailInteractor } from '../../shared/src/business/useCases/users/updateUserPendingEmailInteractor';
-import { validatePdfInteractor } from '../../shared/src/business/useCases/pdf/validatePdfInteractor';
+import { validatePdfInteractor } from './business/useCases/pdf/validatePdfInteractor';
 import { verifyPendingCaseForUserInteractor } from './business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
 import { verifyUserPendingEmailInteractor } from './business/useCases/user/verifyUserPendingEmailInteractor';
 
