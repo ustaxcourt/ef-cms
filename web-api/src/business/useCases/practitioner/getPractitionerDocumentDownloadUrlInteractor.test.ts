@@ -1,6 +1,6 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentDownloadUrlInteractor } from './getPractitionerDocumentDownloadUrlInteractor';
 
 describe('getPractitionerDocumentDownloadUrlInteractor', () => {

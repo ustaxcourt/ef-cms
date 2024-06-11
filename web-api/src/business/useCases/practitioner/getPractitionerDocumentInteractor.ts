@@ -1,17 +1,19 @@
+import { PractitionerDocument } from '../../../../../shared/src/business/entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {string} providers.barNumber the bar number of the practitioner
  * @param {string} providers.practitionerDocumentFileId the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
-export const getPractitionerDocumentDownloadUrlInteractor = async (
+export const getPractitionerDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
     barNumber,
@@ -27,7 +29,7 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const practitionerDocument = await applicationContext
+  let practitionerDocument = await applicationContext
     .getPersistenceGateway()
     .getPractitionerDocumentByFileId({
       applicationContext,
@@ -35,13 +37,11 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
       fileId: practitionerDocumentFileId,
     });
 
-  const policyUrl = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      filename: practitionerDocument.fileName,
-      key: practitionerDocumentFileId,
-    });
+  practitionerDocument = new PractitionerDocument(practitionerDocument, {
+    applicationContext,
+  })
+    .validate()
+    .toRawObject();
 
-  return policyUrl;
+  return practitionerDocument;
 };

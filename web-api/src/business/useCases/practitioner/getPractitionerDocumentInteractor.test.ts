@@ -1,9 +1,9 @@
 import {
   PRACTITIONER_DOCUMENT_TYPES_MAP,
   ROLES,
-} from '../../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentInteractor } from './getPractitionerDocumentInteractor';
 
 describe('getPractitionerDocumentInteractor', () => {

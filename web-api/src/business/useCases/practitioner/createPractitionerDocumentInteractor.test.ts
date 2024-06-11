@@ -1,6 +1,6 @@
 import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
-import { ROLES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createPractitionerDocumentInteractor } from './createPractitionerDocumentInteractor';
 jest.mock('../users/generateChangeOfAddress');
 

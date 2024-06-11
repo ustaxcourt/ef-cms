@@ -1,8 +1,8 @@
-import { Practitioner } from '../../entities/Practitioner';
+import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 /**
