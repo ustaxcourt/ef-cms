@@ -63,7 +63,7 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = () => {
     'Miscellaneous',
   );
   cy.get('#react-select-2-option-0').click({ force: true });
-  cy.get('#save-entry-button').click();
+  cy.get('[data-testid="save-docket-entry-button"]').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
 
   cy.visit('document-qc/my/inProgress');
