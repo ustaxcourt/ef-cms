@@ -21,8 +21,8 @@ export function UpdatedFilePetitionStep7() {
         You’ll need your docket number.
       </div>
       <div className="petitioner-flow-text margin-top-3">
-        Your case’s filing fee status may take 24-48 hours from payment date to
-        update in your case.
+        Your case’s filing fee status may take 2-3 business days from payment
+        date to update in your case.
       </div>
 
       <Button
