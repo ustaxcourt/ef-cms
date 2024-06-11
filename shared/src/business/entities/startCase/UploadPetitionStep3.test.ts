@@ -7,10 +7,13 @@ describe('UploadPetitionStep3', () => {
   describe('has IRS notice', () => {
     const VALID_ENTITY: RawUploadPetitionStep3 = {
       hasIrsNotice: true,
+      hasUploadedIrsNotice: true,
       irsNotices: [
         {
           caseType: 'Deficiency',
+          file: {} as File,
           key: 'SOME KEY',
+          size: 1,
           todayDate: "TODAYS' DATE",
         },
       ],
@@ -115,9 +118,10 @@ describe('UploadPetitionStep3', () => {
     const VALID_ENTITY: RawUploadPetitionStep3 = {
       caseType: 'Innocent Spouse',
       hasIrsNotice: false,
+      hasUploadedIrsNotice: false,
     };
 
-    it('should create a valid instance of "UploadPetitionStep3" entity', () => {
+    it('should create a valid instance of "UploadPetitionStep3" entity without IRS notice', () => {
       const entity = new UploadPetitionStep3(VALID_ENTITY);
 
       expect(entity).toBeDefined();

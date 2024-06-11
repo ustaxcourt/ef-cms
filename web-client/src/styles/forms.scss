@@ -18,8 +18,13 @@
       textarea {
         display: inline-block;
         width: 55rem;
+        max-width: 80vw;
         height: 4rem;
         vertical-align: top;
+
+        @media only screen and (max-width: ($medium-screen - 1px)) { 
+          max-width: 90vw;
+        }
       }
     }
 

@@ -167,24 +167,26 @@ export const UpdatedFilePetitionStep3 = connect(
                   />
                   Add another IRS Notice
                 </Button>
-                <div className="grid-row grid-gap margin-top-5">
-                  <span className="margin-bottom-1 font-sans-pro">
-                    <b>
-                      Please read and acknowledge before moving to the next
-                      step:
-                    </b>
-                  </span>
-                  <div className="tablet:grid-col-12">
-                    <RedactionAcknowledgement
-                      handleChange={updateFormValueSequence}
-                      id="redaction"
-                      name="irsNoticesRedactionAcknowledgement"
-                      redactionAcknowledgement={
-                        form.irsNoticesRedactionAcknowledgement
-                      }
-                    />
+                {startCaseHelper.irsNoticeRequiresRedactionAcknowledgement && (
+                  <div className="grid-row grid-gap margin-top-5">
+                    <span className="margin-bottom-1 font-sans-pro">
+                      <b>
+                        Please read and acknowledge before moving to the next
+                        step:
+                      </b>
+                    </span>
+                    <div className="tablet:grid-col-12">
+                      <RedactionAcknowledgement
+                        handleChange={updateFormValueSequence}
+                        id="redaction"
+                        name="irsNoticesRedactionAcknowledgement"
+                        redactionAcknowledgement={
+                          form.irsNoticesRedactionAcknowledgement
+                        }
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </>
             )}
 
@@ -215,7 +217,8 @@ export const UpdatedFilePetitionStep3 = connect(
 
         <UpdatedFilePetitionButtons
           isNextButtonDisabled={
-            form.hasIrsNotice && !form.irsNoticesRedactionAcknowledgement
+            startCaseHelper.irsNoticeRequiresRedactionAcknowledgement &&
+            !form.irsNoticesRedactionAcknowledgement
           }
           resetFocus={resetFocus}
         />

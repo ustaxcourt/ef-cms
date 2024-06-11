@@ -12,7 +12,11 @@ describe('getStep3DataAction', () => {
             'TEST_irsNoticesRedactionAcknowledgement',
           testProps: 'testProps',
         },
-        irsNoticeUploadFormInfo: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
+        irsNoticeUploadFormInfo: [
+          { caseType: 'IRS_NOTICE_CASE_TYPE', file: {} },
+          {},
+          {},
+        ],
       },
     });
 
@@ -20,7 +24,8 @@ describe('getStep3DataAction', () => {
     expect(step3Data).toEqual({
       caseType: 'IRS_NOTICE_CASE_TYPE',
       hasIrsNotice: 'TEST_hasIrsNotice',
-      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
+      hasUploadedIrsNotice: true,
+      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE', file: {} }, {}, {}],
       irsNoticesRedactionAcknowledgement:
         'TEST_irsNoticesRedactionAcknowledgement',
     });
@@ -36,7 +41,7 @@ describe('getStep3DataAction', () => {
             'TEST_irsNoticesRedactionAcknowledgement',
           testProps: 'testProps',
         },
-        irsNoticeUploadFormInfo: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
+        irsNoticeUploadFormInfo: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, {}, {}],
       },
     });
 
@@ -44,7 +49,8 @@ describe('getStep3DataAction', () => {
     expect(step3Data).toEqual({
       caseType: 'ROOT_LEVEL_CASE_TYPE',
       hasIrsNotice: false,
-      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, 2, 3],
+      hasUploadedIrsNotice: false,
+      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE' }, {}, {}],
       irsNoticesRedactionAcknowledgement:
         'TEST_irsNoticesRedactionAcknowledgement',
     });
