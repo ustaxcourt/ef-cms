@@ -3,10 +3,10 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
-import { caseServicesSupervisorUser } from '../../../test/mockUsers';
+import { caseServicesSupervisorUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('assignWorkItemsInteractor', () => {
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };

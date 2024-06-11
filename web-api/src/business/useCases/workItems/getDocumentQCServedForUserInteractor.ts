@@ -1,10 +1,10 @@
-import { ROLES } from '../../entities/EntityConstants';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 
 /**
  *

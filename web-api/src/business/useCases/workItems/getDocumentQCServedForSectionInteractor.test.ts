@@ -2,10 +2,10 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
-import { MOCK_USERS } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   calculateAfterDate,
   getDocumentQCServedForSectionInteractor,
@@ -13,7 +13,7 @@ import {
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
-} from '../../../business/utilities/DateHandler';
+} from '../../../../../shared/src/business/utilities/DateHandler';
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   describe('interactor', () => {

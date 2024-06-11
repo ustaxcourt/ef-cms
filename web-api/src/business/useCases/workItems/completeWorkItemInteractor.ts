@@ -1,11 +1,11 @@
-import { Case } from '../../entities/cases/Case';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { WorkItem } from '../../entities/WorkItem';
-import { createISODateString } from '../../utilities/DateHandler';
+import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**

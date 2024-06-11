@@ -1,5 +1,8 @@
-import { DOCKET_SECTION, ROLES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  DOCKET_SECTION,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCInboxForSectionInteractor';
 
 describe('getDocumentQCInboxForSectionInteractor', () => {

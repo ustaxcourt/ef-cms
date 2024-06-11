@@ -2,9 +2,9 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser } from '../../../test/mockUsers';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
