@@ -206,7 +206,7 @@ export const Petition = ({
             <div>{contactSecondary.name}</div>
             {contactSecondary.inCareOf && (
               <div>
-                <b>C/O: </b>
+                <span>c/o: </span>
                 {contactSecondary.inCareOf}
               </div>
             )}
