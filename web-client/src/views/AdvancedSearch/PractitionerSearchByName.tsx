@@ -79,7 +79,7 @@ export const PractitionerSearchByName = connect(
                 </Button>
                 <Button
                   link
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  className="margin-top-1"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({
