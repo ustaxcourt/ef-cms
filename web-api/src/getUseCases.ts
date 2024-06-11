@@ -140,8 +140,8 @@ import { getWorkItemInteractor } from '../../shared/src/business/useCases/workit
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logOldLoginAttemptInteractor } from '@web-api/business/useCases/logOldLoginAttemptInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
-import { onConnectInteractor } from '../../shared/src/business/useCases/notifications/onConnectInteractor';
-import { onDisconnectInteractor } from '../../shared/src/business/useCases/notifications/onDisconnectInteractor';
+import { onConnectInteractor } from './business/useCases/notifications/onConnectInteractor';
+import { onDisconnectInteractor } from './business/useCases/notifications/onDisconnectInteractor';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/opinionAdvancedSearchInteractor';
 import { opinionPublicSearchInteractor } from '../../shared/src/business/useCases/public/opinionPublicSearchInteractor';
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
