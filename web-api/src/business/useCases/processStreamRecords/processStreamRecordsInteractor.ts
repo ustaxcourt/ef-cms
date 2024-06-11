@@ -1,12 +1,12 @@
-import { partitionRecords } from '../../../../../shared/src/business/useCases/processStreamRecords/processStreamUtilities';
-import { processCaseEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processCaseEntries';
-import { processCompletionMarkers } from '../../../../../shared/src/business/useCases/processStreamRecords/processCompletionMarkers';
-import { processDocketEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processDocketEntries';
-import { processMessageEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processMessageEntries';
-import { processOtherEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processOtherEntries';
-import { processPractitionerMappingEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processPractitionerMappingEntries';
-import { processRemoveEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processRemoveEntries';
-import { processWorkItemEntries } from '../../../../../shared/src/business/useCases/processStreamRecords/processWorkItemEntries';
+import { partitionRecords } from './processStreamUtilities';
+import { processCaseEntries } from './processCaseEntries';
+import { processCompletionMarkers } from './processCompletionMarkers';
+import { processDocketEntries } from './processDocketEntries';
+import { processMessageEntries } from './processMessageEntries';
+import { processOtherEntries } from './processOtherEntries';
+import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
+import { processRemoveEntries } from './processRemoveEntries';
+import { processWorkItemEntries } from './processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
 
 export const processStreamRecordsInteractor = async (

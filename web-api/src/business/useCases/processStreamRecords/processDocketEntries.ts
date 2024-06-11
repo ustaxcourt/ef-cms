@@ -1,6 +1,6 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import type { IDynamoDBRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**

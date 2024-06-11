@@ -1,5 +1,5 @@
-import * as circleCiHelper from '../../../../admin-tools/circleci/circleci-helper';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import * as circleCiHelper from '../../../../../shared/admin-tools/circleci/circleci-helper';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { processCompletionMarkers } from './processCompletionMarkers';
 import type { DynamoDBRecord } from 'aws-lambda';
