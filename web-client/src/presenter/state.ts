@@ -772,6 +772,8 @@ export const baseState = {
     batches: [],
     currentPageIndex: 0, // batches from scanning
     isScanning: false,
+    scanMode: undefined,
+    scannerSourceName: undefined,
     selectedBatchIndex: 0,
   },
   screenMetadata: {} as any,

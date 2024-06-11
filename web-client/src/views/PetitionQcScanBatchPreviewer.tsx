@@ -145,6 +145,7 @@ export const PetitionQcScanBatchPreviewer = connect(
 
           <div className="preview-container--image-area">
             <img
+              alt="preview"
               src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
             />
           </div>

@@ -139,9 +139,8 @@ export const EditPetitionerCounsel = connect(
             <Button
               link
               className="red-warning no-wrap float-right"
-              data-testid="remove-petitioner-btn"
+              data-testid="remove-petitioner-counsel-button"
               icon="trash"
-              id="remove-petitioner-btn"
               onClick={() => {
                 openRemovePetitionerCounselModalSequence();
               }}

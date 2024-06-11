@@ -8,7 +8,7 @@ export const handler = async event => {
     const { body, receiptHandle } = Records[0];
     const params = JSON.parse(body);
 
-    await sendWithRetry({ applicationContext, params });
+    await sendWithRetry({ applicationContext, params, retryCount: 0 });
 
     const sqs = await applicationContext.getMessagingClient();
     await sqs
