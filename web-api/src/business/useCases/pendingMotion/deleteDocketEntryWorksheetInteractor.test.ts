@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { deleteDocketEntryWorksheetInteractor } from '@shared/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { deleteDocketEntryWorksheetInteractor } from '@web-api/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
 import { docketClerkUser } from '@shared/test/mockUsers';
 
 describe('deleteDocketEntryWorksheetInteractor', () => {

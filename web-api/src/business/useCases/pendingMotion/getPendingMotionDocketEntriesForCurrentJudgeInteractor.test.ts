@@ -1,10 +1,10 @@
 import {
   FormattedPendingMotionWithWorksheet,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
-} from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+} from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { judgeColvin, petitionsClerkUser } from '@shared/test/mockUsers';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
