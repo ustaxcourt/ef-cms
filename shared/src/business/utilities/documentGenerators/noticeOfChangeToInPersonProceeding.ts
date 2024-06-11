@@ -1,5 +1,5 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
-import { FormattedTrialInfo } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { FormattedTrialInfo } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { NoticeOfChangeToInPersonProceeding } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
