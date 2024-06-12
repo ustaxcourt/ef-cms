@@ -16,7 +16,6 @@ const props = cerebralProps as unknown as {
   onBlur: string;
   onChange: string;
   nameLabel: string;
-  showPlaceOfLegalResidence?: boolean;
   secondaryLabelNote?: string;
   secondaryLabel?: string;
   registerRef?: Function;
@@ -43,7 +42,6 @@ export const ContactPrimaryUpdated = connect(
     secondaryLabelNote: props.secondaryLabelNote,
     showInCareOf: props.showInCareOf,
     showInCareOfOptional: props.showInCareOfOptional,
-    showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     titleLabel: props.titleLabel,
     titleLabelNote: props.titleLabelNote,
     validationErrors: state.validationErrors,
@@ -63,7 +61,6 @@ export const ContactPrimaryUpdated = connect(
     secondaryLabelNote,
     showInCareOf,
     showInCareOfOptional,
-    showPlaceOfLegalResidence,
     titleLabel,
     titleLabelNote,
     validationErrors = {} as {
@@ -233,21 +230,19 @@ export const ContactPrimaryUpdated = connect(
               onChange={onChange}
             />
           )}
-          {showPlaceOfLegalResidence && (
-            <PlaceOfLegalResidenceDropdown
-              bind={bind}
-              placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
-              registerRef={registerRef}
-              type="contactPrimary"
-              // change - move to on change
-              onBlurSequence={() => {
-                onBlurSequence({
-                  validationKey: ['contactPrimary', 'placeOfLegalResidence'],
-                });
-              }}
-              onChange={onChange}
-            />
-          )}
+          <PlaceOfLegalResidenceDropdown
+            bind={bind}
+            placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
+            registerRef={registerRef}
+            type="contactPrimary"
+            // change - move to on change
+            onBlurSequence={() => {
+              onBlurSequence({
+                validationKey: ['contactPrimary', 'placeOfLegalResidence'],
+              });
+            }}
+            onChange={onChange}
+          />
 
           <FormGroup
             className="phone-input"

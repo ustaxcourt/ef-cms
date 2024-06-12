@@ -19,7 +19,6 @@ const props = cerebralProps as unknown as {
   registerRef?: Function;
   displayInCareOf?: boolean;
   showSameAsPrimaryCheckbox?: boolean;
-  showPlaceOfLegalResidence?: boolean;
 };
 
 export const ContactSecondaryUpdated = connect(
@@ -35,7 +34,6 @@ export const ContactSecondaryUpdated = connect(
     onChangeSequence: sequences[props.onChange],
     registerRef: props.registerRef,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
-    showPlaceOfLegalResidence: props.showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
     validationErrors: state.validationErrors,
   },
@@ -51,7 +49,6 @@ export const ContactSecondaryUpdated = connect(
     onChangeSequence,
     registerRef,
     resetSecondaryAddressSequence,
-    showPlaceOfLegalResidence,
     showSameAsPrimaryCheckbox,
     validationErrors = {} as {
       contactSecondary?: {
@@ -142,22 +139,20 @@ export const ContactSecondaryUpdated = connect(
                   onChange={onChange}
                 />
               )}
-              {showPlaceOfLegalResidence && (
-                <PlaceOfLegalResidenceDropdown
-                  bind={bind}
-                  registerRef={registerRef}
-                  type="contactSecondary"
-                  onBlurSequence={() => {
-                    onBlurSequence({
-                      validationKey: [
-                        'contactSecondary',
-                        'placeOfLegalResidence',
-                      ],
-                    });
-                  }}
-                  onChange={onChange}
-                />
-              )}
+              <PlaceOfLegalResidenceDropdown
+                bind={bind}
+                registerRef={registerRef}
+                type="contactSecondary"
+                onBlurSequence={() => {
+                  onBlurSequence({
+                    validationKey: [
+                      'contactSecondary',
+                      'placeOfLegalResidence',
+                    ],
+                  });
+                }}
+                onChange={onChange}
+              />
             </>
           )}
           <FormGroup
