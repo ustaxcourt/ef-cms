@@ -8,5 +8,4 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const setMessageAction = ({ props, store }: ActionProps) => {
   store.set(state.messageDetail, props.messageDetail);
-  console.log('message detail', props.messageDetail);
 };
