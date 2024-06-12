@@ -1,7 +1,9 @@
 import { pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getStep2DataAction = ({ get }: ActionProps) => {
+export const getFilePetitionPetitionerInformationAction = ({
+  get,
+}: ActionProps) => {
   const {
     businessType,
     contactPrimary,
@@ -20,7 +22,7 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
     useSameAsPrimary,
   } = get(state.form);
 
-  const step2Data = {
+  const petitionerInformationAction = {
     businessType,
     contactPrimary,
     contactSecondary: useSameAsPrimary
@@ -54,6 +56,6 @@ export const getStep2DataAction = ({ get }: ActionProps) => {
   };
 
   return {
-    step2Data,
+    petitionerInformationAction,
   };
 };

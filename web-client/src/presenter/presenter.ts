@@ -116,6 +116,7 @@ import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequenc
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
+import { filePetitionCompletePetitionerInformationSequence } from '@web-client/presenter/sequences/filePetitionCompletePetitionerInformationSequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { formatAndUpdateDateFromDatePickerSequence } from './sequences/formatAndUpdateDateFromDatePickerSequence';
@@ -532,7 +533,6 @@ import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequen
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { updatedFilePetitionCompleteStep1Sequence } from './sequences/updatedFilePetitionCompleteStep1Sequence';
-import { updatedFilePetitionCompleteStep2Sequence } from '@web-client/presenter/sequences/updatedFilePetitionCompleteStep2Sequence';
 import { updatedFilePetitionCompleteStep3Sequence } from './sequences/updatedFilePetitionCompleteStep3Sequence';
 import { updatedFilePetitionCompleteStep4Sequence } from './sequences/updatedFilePetitionCompleteStep4Sequence';
 import { updatedFilePetitionCompleteStep5Sequence } from './sequences/updatedFilePetitionCompleteStep5Sequence';
@@ -1485,7 +1485,7 @@ export const presenterSequences = {
   updatedFilePetitionCompleteStep1Sequence:
     updatedFilePetitionCompleteStep1Sequence as unknown as Function,
   updatedFilePetitionCompleteStep2Sequence:
-    updatedFilePetitionCompleteStep2Sequence as unknown as Function,
+    filePetitionCompletePetitionerInformationSequence as unknown as Function,
   updatedFilePetitionCompleteStep3Sequence:
     updatedFilePetitionCompleteStep3Sequence as unknown as Function,
   updatedFilePetitionCompleteStep4Sequence:
