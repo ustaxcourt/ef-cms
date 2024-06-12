@@ -69,12 +69,6 @@ export const completeDocumentTypeSectionHelper = (
 
       if (!Case.isFirstIrsFiling(caseDetail) && documentType.eventCode === 'EA')
         return false;
-
-      // TODO consider whether we should move this
-      // seems odd to be modifying data in a filter function.
-      if (documentType.eventCode === 'EA') {
-        documentType.documentTitle += ' for Respondent';
-      }
     } else if (documentType.eventCode === 'EA') return false;
 
     return (
