@@ -1,7 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { SuccessNotification } from '../SuccessNotification';
 import { TableFilters } from '../../ustc-ui/Table/TableFilters';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -47,6 +49,22 @@ export const MessagesIndividualInbox = connect(
     ]);
     return (
       <>
+        <SuccessNotification />
+        <ErrorNotification />
+        {messagesIndividualInboxHelper.completedMessages.length && (
+          <div
+            aria-live="polite"
+            className="usa-alert usa-alert--success"
+            data-testid="message-detail-success-alert"
+            role="alert"
+          >
+            <div className="usa-alert__body">
+              Message(s) completed on{' '}
+              {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
+              {messagesIndividualInboxHelper.messagesCompletedBy}
+            </div>
+          </div>
+        )}
         <div className="grid-row grid-gap margin-bottom-2">
           <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
             <TableFilters
@@ -99,9 +117,7 @@ export const MessagesIndividualInbox = connect(
               <th>
                 <input
                   aria-label="all-messages-checkbox"
-                  checked={
-                    messagesIndividualInboxHelper.allMessagesCheckboxChecked
-                  }
+                  checked={messagesIndividualInboxHelper.allMessagesSelected}
                   data-testid="all-messages-checkbox"
                   disabled={
                     !messagesIndividualInboxHelper.allMessagesCheckboxEnabled

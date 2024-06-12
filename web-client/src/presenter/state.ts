@@ -678,6 +678,9 @@ export const baseState = {
   maintenanceMode: false,
   messagesInboxCount: 0,
   messagesPage: {
+    completedMessagesList: [] as string[],
+    messagesCompletedAt: '',
+    messagesCompletedBy: '',
     selectedMessages: new Map() as Map<string, string>,
   },
   messagesSectionCount: 0,

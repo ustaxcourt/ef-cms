@@ -1,20 +1,29 @@
+import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const batchCompleteMessageAction = async ({
   applicationContext,
   get,
+  store,
 }: ActionProps): Promise<void> => {
   const messages = get(state.messagesPage.selectedMessages);
 
-  // we can do this in another action if we really want to
   const messagesToComplete = Array.from(messages, ([, parentMessageId]) => ({
     messageBody: '',
     parentMessageId,
   }));
 
-  await applicationContext
+  // what if some of these fail?
+  const { user } = await applicationContext
     .getUseCases()
     .completeMessageInteractor(applicationContext, {
       messages: messagesToComplete,
     });
+
+  store.set(state.messagesPage.messagesCompletedBy, user);
+  store.set(state.messagesPage.messagesCompletedAt, createISODateString());
+  store.set(
+    state.messagesPage.completedMessagesList,
+    Array.from(messages.keys()),
+  );
 };

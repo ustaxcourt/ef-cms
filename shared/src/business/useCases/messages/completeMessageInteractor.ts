@@ -4,23 +4,15 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UserRecord } from '../../../../../web-api/src/persistence/dynamo/dynamoTypes';
 import { orderBy } from 'lodash';
 
-/**
- * completes a message thread
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.message the message text
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @returns {object} the message
- */
 export const completeMessageInteractor = async (
   applicationContext: IApplicationContext,
   {
     messages,
   }: { messages: { messageBody: string; parentMessageId: string }[] },
-): Promise<void> => {
+): Promise<{ user: UserRecord }> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -61,4 +53,5 @@ export const completeMessageInteractor = async (
       message: validatedRawMessage,
     });
   }
+  return { user };
 };
