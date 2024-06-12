@@ -50,8 +50,8 @@ export const UpdatedFilePetitionButtons = connect(
   }) {
     const { currentStep } = stepIndicatorInfo;
     const NEXT_SEQUENCE = {
-      1: updatedFilePetitionCompleteStep1Sequence,
-      2: updatedFilePetitionCompleteStep2Sequence,
+      1: updatedFilePetitionCompleteStep2Sequence,
+      2: updatedFilePetitionCompleteStep1Sequence,
       3: updatedFilePetitionCompleteStep3Sequence,
       4: updatedFilePetitionCompleteStep4Sequence,
       5: updatedFilePetitionCompleteStep5Sequence,
