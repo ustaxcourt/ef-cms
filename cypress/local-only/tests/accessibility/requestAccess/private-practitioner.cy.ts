@@ -10,16 +10,16 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
   it('should be free of a11y issues', () => {
     loginAsPrivatePractitioner();
 
-    cy.visit('/case-detail/102-19/request-access');
-    cy.get('[data-testid="submit-represent-a-party-button"]').should('exist');
+    cy.visit('/case-detail/102-19/case-association-request');
+    cy.get('[data-testid="request-access-submit-document"]').should('exist');
     cy.runA11y();
   });
 
   it('should be free of a11y issues when requesting access with supporting document', () => {
     loginAsPrivatePractitioner();
 
-    cy.visit('/case-detail/102-19/request-access');
-    cy.get('[data-testid="submit-represent-a-party-button"]').should('exist');
+    cy.visit('/case-detail/102-19/case-association-request');
+    cy.get('[data-testid="request-access-submit-document"]').should('exist');
     cy.get('[data-testid="document-type"]').click();
     cy.get('[data-testid="document-type"]').type(
       'Motion to Substitute Parties and Change Caption{enter}',
