@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Case Detail Internal - Docket Clerk Accessibility', () => {
@@ -12,7 +13,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19');
       cy.get('[data-testid="docket-number-header"]');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     describe('Document view tab', () => {
@@ -24,7 +25,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
         );
         cy.get('[data-testid="document-view-container"]');
 
-        cy.runA11y();
+        checkA11y();
       });
 
       it('sealed case - should be free of a11y issues', () => {
@@ -35,7 +36,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
         );
         cy.get('[data-testid="document-view-container"]');
 
-        cy.runA11y();
+        checkA11y();
       });
     });
   });
@@ -50,7 +51,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
         cy.get('[data-testid="case-status-history-tab"]').click();
         cy.get('[data-testid="case-status-history-container"]');
 
-        cy.runA11y();
+        checkA11y();
       });
     });
   });
@@ -64,7 +65,7 @@ describe('Case Detail Internal - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="message-detail-container"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

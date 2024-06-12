@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a Petition Page - Private Practitioner Accessibility', () => {
@@ -9,6 +10,6 @@ describe('File a Petition Page - Private Practitioner Accessibility', () => {
     loginAsPrivatePractitioner();
     cy.visit('/file-a-petition/step-1');
     cy.get('[data-testid="complete-step-1"]').should('exist');
-    cy.runA11y();
+    checkA11y();
   });
 });

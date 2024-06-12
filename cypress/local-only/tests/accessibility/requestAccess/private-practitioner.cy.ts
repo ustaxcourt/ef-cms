@@ -1,5 +1,6 @@
 /* eslint-disable jest/no-disabled-tests */
 
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Request Case Access Page - Private Practitioner Accessibility', () => {
@@ -12,7 +13,7 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
 
     cy.visit('/case-detail/102-19/request-access');
     cy.get('[data-testid="request-access-submit-document"]').should('exist');
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when requesting access with supporting document', () => {
@@ -31,6 +32,6 @@ describe('Request Case Access Page - Private Practitioner Accessibility', () => 
     });
     cy.get('#supportingDocuments-0-service-date-picker').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

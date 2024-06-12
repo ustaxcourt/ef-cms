@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard - Petitioner Accessibility', () => {
@@ -8,7 +9,7 @@ describe('Dashboard - Petitioner Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsPetitioner();
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when viewing payment options', () => {
@@ -16,6 +17,6 @@ describe('Dashboard - Petitioner Accessibility', () => {
     cy.get('.payment-options').click();
     cy.get('a.usa-link--external').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Maintenance - Docket Clerk Accessibility', () => {
@@ -11,6 +12,6 @@ describe('Maintenance - Docket Clerk Accessibility', () => {
     cy.visit('/maintenance');
     cy.get('[data-testid="maintenance-container"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

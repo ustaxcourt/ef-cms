@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a Petition Page - Petitioner Accessibility', () => {
@@ -11,7 +12,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.visit('/file-a-petition/step-1');
       cy.get('[data-testid="complete-step-1"]').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -23,7 +24,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#hasIrsNotice-0').click();
       cy.get('label#atp-file-upload-label').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues without irs notice', () => {
@@ -33,7 +34,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#hasIrsNotice-1').click();
       cy.get('.case-type-select').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -45,7 +46,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#filing-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing with spouse', () => {
@@ -56,7 +57,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-spouse-deceased-1').click();
       cy.get('.modal-dialog').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing with deceased spouse', () => {
@@ -67,7 +68,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-spouse-deceased-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing with deceased spouse with international address', () => {
@@ -79,7 +80,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#contactSecondary-country-radio-label-international').click();
       cy.get('.contactSecondary-country').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing as corporation', () => {
@@ -90,7 +91,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for partnership as tax matters', () => {
@@ -101,7 +102,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-1').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for partnership as other than tax matters', () => {
@@ -112,7 +113,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for partnership as BBA', () => {
@@ -123,7 +124,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('label#is-business-type-3').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for estate with executor', () => {
@@ -135,7 +136,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-estate-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for estate without executor', () => {
@@ -147,7 +148,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-estate-type-1').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for estate as trust', () => {
@@ -159,7 +160,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-estate-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for conservator', () => {
@@ -171,7 +172,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-0').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for guardian', () => {
@@ -183,7 +184,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-1').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for custodian', () => {
@@ -195,7 +196,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for minor', () => {
@@ -207,7 +208,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-3').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for legally incompetent person', () => {
@@ -219,7 +220,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-minorIncompetent-type-4').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for donor', () => {
@@ -230,7 +231,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-other-type-2').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for transferee', () => {
@@ -241,7 +242,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-other-type-3').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when filing for surviving spouse', () => {
@@ -252,7 +253,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#is-other-type-4').click();
       cy.get('.contact-group').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -264,7 +265,7 @@ describe('File a Petition Page - Petitioner Accessibility', () => {
       cy.get('#procedure-type-0').click();
       cy.get('#preferred-trial-city').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Seal Docket Entry Modal - Docket Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Seal Docket Entry Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="seal-docket-entry-button-1"]').click();
     cy.get('[data-testid="seal-docket-entry-modal"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });
