@@ -11,6 +11,7 @@ import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   {
+    batchCompleteMessageSequence: sequences.batchCompleteMessageSequence,
     constants: state.constants,
     formattedMessages: state.formattedMessages,
     messagesIndividualInboxHelper: state.messagesIndividualInboxHelper,
@@ -21,6 +22,7 @@ export const MessagesIndividualInbox = connect(
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualInbox({
+    batchCompleteMessageSequence,
     constants,
     formattedMessages,
     messagesIndividualInboxHelper,
@@ -82,7 +84,9 @@ export const MessagesIndividualInbox = connect(
               }
               icon="check-circle"
               id="button-batch-complete"
-              // onClick={}
+              onClick={() => {
+                batchCompleteMessageSequence();
+              }}
             >
               Complete
             </Button>
