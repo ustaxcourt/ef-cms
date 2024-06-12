@@ -53,9 +53,7 @@ describe('canRequestAccessAction', () => {
     });
 
     expect(presenter.providers.path.no).toHaveBeenCalled();
-    expect(
-      presenter.providers.path.unauthorized.mock.calls[0][0],
-    ).toMatchObject({
+    expect(presenter.providers.path.no.mock.calls[0][0]).toMatchObject({
       docketNumber: '123-45',
     });
   });
