@@ -12,12 +12,7 @@ export const setSelectedMessagesAction = ({
     selectedMap = new Map<string, string>(); // why a map tho
   }
   props.messages.forEach(message => {
-    // if (message.selected) {
-    //   selectedMap.set(message.messageId, message.selected);
-    // } else {
-    //   selectedMap.delete(message.messageId);
-    // }
-    if (selectedMap.has(message.messageId)) {
+    if (!selectedMap.has(message.messageId)) {
       selectedMap.set(message.messageId, message.parentMessageId);
     } else {
       selectedMap.delete(message.messageId);
