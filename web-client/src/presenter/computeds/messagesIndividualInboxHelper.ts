@@ -16,6 +16,8 @@ export const messagesIndividualInboxHelper = (
   const isCompletionButtonEnabled = someMessagesSelected;
 
   return {
+    allMessagesCheckboxChecked: allMessagesSelected && !!messagesInboxCount,
+    allMessagesCheckboxEnabled: !!messagesInboxCount,
     allMessagesSelected,
     isCompletionButtonEnabled,
     someMessagesSelected,
