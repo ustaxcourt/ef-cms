@@ -4,8 +4,8 @@ export const setStepIndicatorInfoForPetitionGeneratorAction = ({
   store,
 }: ActionProps) => {
   const steps = {
-    1: 'Petition',
-    2: 'Petitioner Information',
+    1: 'Petitioner Information',
+    2: 'Petition',
     3: 'IRS Notice',
     4: 'Case Procedure & Trial Location',
     5: 'Statement of Taxpayer Identification',
