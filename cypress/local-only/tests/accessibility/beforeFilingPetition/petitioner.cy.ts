@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Before Starting Case - Petitioner Accessibility', () => {
@@ -11,6 +12,6 @@ describe('Before Starting Case - Petitioner Accessibility', () => {
     cy.visit('/before-filing-a-petition');
     cy.get('[data-testid="go-to-step-1"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
+
 describe('Todays Orders - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -7,6 +9,6 @@ describe('Todays Orders - Accessibility', () => {
     cy.visit('/todays-orders');
     cy.get('.todays-orders').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard - Judge Accessibility', () => {
@@ -8,7 +9,7 @@ describe('Dashboard - Judge Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsColvin();
 
-    cy.runA11y();
+    checkA11y();
   });
 
   describe('Submitted/CAV tab', () => {
@@ -19,7 +20,7 @@ describe('Dashboard - Judge Accessibility', () => {
       cy.get('.modal-screen').should('exist');
       cy.get('#confirm').click();
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -33,7 +34,7 @@ describe('Dashboard - Judge Accessibility', () => {
       cy.get('.modal-screen').should('exist');
       cy.get('#confirm').click();
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

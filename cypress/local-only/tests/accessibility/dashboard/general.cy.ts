@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsGeneral } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard - General Accessibility', () => {
@@ -8,6 +9,6 @@ describe('Dashboard - General Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsGeneral();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

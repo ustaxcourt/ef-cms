@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard - Docket Clerk Accessibility', () => {
@@ -8,6 +9,6 @@ describe('Dashboard - Docket Clerk Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsDocketClerk1();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

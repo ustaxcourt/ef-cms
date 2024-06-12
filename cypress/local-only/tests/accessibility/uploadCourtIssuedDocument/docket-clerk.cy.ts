@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Upload Court Issued Document - Docket Clerk Accessibility', () => {
@@ -11,6 +12,6 @@ describe('Upload Court Issued Document - Docket Clerk Accessibility', () => {
     cy.visit('/case-detail/104-20/upload-court-issued');
     cy.get('[data-testid="upload-court-issued-document-form"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

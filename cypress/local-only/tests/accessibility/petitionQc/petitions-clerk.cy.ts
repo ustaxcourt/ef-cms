@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Petition QC - Petitions Clerk Accessibility', () => {
@@ -12,7 +13,7 @@ describe('Petition QC - Petitions Clerk Accessibility', () => {
       cy.visit('/case-detail/104-19/petition-qc?tab=partyInfo');
       cy.contains('Petition').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -23,7 +24,7 @@ describe('Petition QC - Petitions Clerk Accessibility', () => {
       cy.visit('/case-detail/104-19/petition-qc?tab=caseInfo');
       cy.contains('Petition').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -36,7 +37,7 @@ describe('Petition QC - Petitions Clerk Accessibility', () => {
       cy.get('#has-irs-verified-notice-yes').click();
       cy.get('#date-of-notice-picker').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

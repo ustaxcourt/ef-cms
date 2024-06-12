@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
+
 describe('Privacy - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -7,6 +9,6 @@ describe('Privacy - Accessibility', () => {
     cy.visit('/privacy');
     cy.contains('Privacy').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

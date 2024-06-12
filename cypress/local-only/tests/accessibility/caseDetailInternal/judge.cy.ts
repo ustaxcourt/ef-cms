@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import {
   loginAsColvin,
   loginAsDocketClerk,
@@ -18,7 +19,7 @@ describe('Case Detail Internal - Judge Accessibility', () => {
       cy.get('#add-procedural-note-button').click();
       cy.get('.modal-header__title').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when deleting note', () => {
@@ -30,7 +31,7 @@ describe('Case Detail Internal - Judge Accessibility', () => {
       cy.get('#delete-procedural-note-button').click();
       cy.get('.modal-header__title').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -44,7 +45,7 @@ describe('Case Detail Internal - Judge Accessibility', () => {
         cy.get('[data-testid="case-status-history-tab"]').click();
         cy.get('[data-testid="case-status-history-container"]');
 
-        cy.runA11y();
+        checkA11y();
       });
     });
   });

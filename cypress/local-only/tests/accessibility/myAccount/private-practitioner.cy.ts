@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('My Account Page - Private Practitioner Accessibility', () => {
@@ -10,7 +11,7 @@ describe('My Account Page - Private Practitioner Accessibility', () => {
     cy.visit('/my-account');
     cy.contains('My Contact Information');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when changing email', () => {
@@ -18,6 +19,6 @@ describe('My Account Page - Private Practitioner Accessibility', () => {
     cy.visit('/change-login-and-service-email');
     cy.get('[data-testid="change-login-email-input"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

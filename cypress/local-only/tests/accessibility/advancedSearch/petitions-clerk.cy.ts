@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced Search - Petition Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Advanced Search - Petition Clerk Accessibility', () => {
     cy.get('#practitioner-search-by-name-button').click();
     cy.get('.search-results').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

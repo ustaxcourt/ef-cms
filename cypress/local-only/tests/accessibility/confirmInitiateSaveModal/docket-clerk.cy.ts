@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Confirm Initiate Save Modal - Docket Clerk Accessibility', () => {
@@ -17,6 +18,6 @@ describe('Confirm Initiate Save Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="save-docket-entry-button"]').click();
     cy.get('[data-testid="confirm-initiate-save-modal"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

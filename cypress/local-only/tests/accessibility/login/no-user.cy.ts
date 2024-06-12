@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
+
 describe('Login - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -8,6 +10,6 @@ describe('Login - Accessibility', () => {
 
     cy.get('[data-testid="email-input"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

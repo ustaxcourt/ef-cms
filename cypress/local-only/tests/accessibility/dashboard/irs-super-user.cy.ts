@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsIrsSuperUser } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard Page - IRS Super User Accessibility', () => {
@@ -8,6 +9,6 @@ describe('Dashboard Page - IRS Super User Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsIrsSuperUser();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

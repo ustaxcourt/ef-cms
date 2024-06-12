@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsFloater } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard - Floater Accessibility', () => {
@@ -8,6 +9,6 @@ describe('Dashboard - Floater Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsFloater();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

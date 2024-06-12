@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsIrsSuperUser } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced Search - IRS Super User Accessibility', () => {
@@ -12,6 +13,6 @@ describe('Advanced Search - IRS Super User Accessibility', () => {
     cy.get('#advanced-search-button').click();
     cy.get('.search-results').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

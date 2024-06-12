@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import {
   loginAsDocketClerk,
   loginAsDocketClerk1,
@@ -20,7 +21,7 @@ describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="serve-to-parties-btn"]').click();
     cy.get('[data-testid="confirm-initiate-service-modal"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   describe('Multi-docketable filings', () => {
@@ -33,7 +34,7 @@ describe('Confirm Initiate Service Modal - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="serve-paper-filed-document"]').click();
       cy.get('[data-testid="confirm-initiate-service-modal"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

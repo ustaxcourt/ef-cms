@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdc } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Messages - ADC Accessibility', () => {
@@ -10,7 +11,7 @@ describe('Messages - ADC Accessibility', () => {
       it('should be free of a11y issues', () => {
         loginAsAdc();
 
-        cy.runA11y();
+        checkA11y();
       });
     });
   });

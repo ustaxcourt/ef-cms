@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Case Deadlines - Docket Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Case Deadlines - Docket Clerk Accessibility', () => {
     cy.get('#deadlineEnd-date-end').type('12/01/2019');
     cy.get('[data-testid="submit-case-deadlines-report-button"]').click();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

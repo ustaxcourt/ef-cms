@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced Search - Docket Clerk Accessibility', () => {
@@ -17,7 +18,7 @@ describe('Advanced Search - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="submit-order-advanced-search-button"]').click();
       cy.get('[data-testid="advanced-document-search-results-table"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -33,7 +34,7 @@ describe('Advanced Search - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="advanced-search-button"]').click();
       cy.get('[data-testid="advanced-document-search-results-table"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Create Practitioner - Admissions Clerk Accessibility', () => {
@@ -11,6 +12,6 @@ describe('Create Practitioner - Admissions Clerk Accessibility', () => {
     cy.visit('/users/create-practitioner');
     cy.get('[data-testid="create-practitioner-button"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

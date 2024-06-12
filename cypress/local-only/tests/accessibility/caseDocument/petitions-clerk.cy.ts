@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Case Documents Page - Petitions Clerk Accessibility', () => {
@@ -12,6 +13,6 @@ describe('Case Documents Page - Petitions Clerk Accessibility', () => {
     );
     cy.get('#file-a-document-header').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -2,6 +2,7 @@ import {
   VALID_PASSWORD_CONFIG,
   generatePassword,
 } from '../../../../helpers/authentication/generate-password';
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
 
 describe('Create Petitioner Page Accessibility', () => {
@@ -14,7 +15,7 @@ describe('Create Petitioner Page Accessibility', () => {
 
     cy.get('[data-testid="create-petitioner-account-container"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when creating petitioner and showing success message', () => {
@@ -25,6 +26,6 @@ describe('Create Petitioner Page Accessibility', () => {
     });
     cy.get('[data-testid="verification-sent-message"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

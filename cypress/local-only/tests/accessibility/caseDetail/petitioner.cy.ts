@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Case Detail Page - Petitioner Accessibility', () => {
@@ -10,7 +11,7 @@ describe('Case Detail Page - Petitioner Accessibility', () => {
     cy.visit('/case-detail/101-19');
     cy.get('[data-testid="docket-record-table"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when editing contact details', () => {
@@ -20,6 +21,6 @@ describe('Case Detail Page - Petitioner Accessibility', () => {
     );
     cy.contains('Contact name').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

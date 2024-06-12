@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Petitions Clerk Accessibility', () => {
@@ -15,7 +16,7 @@ describe('File a petition - Petitions Clerk Accessibility', () => {
       cy.get('#case-type').select('Deficiency');
       cy.get('.statistic-form').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues on irs notice modal', () => {
@@ -28,7 +29,7 @@ describe('File a petition - Petitions Clerk Accessibility', () => {
       cy.get('.calculate-penalties').click();
       cy.get('.modal-screen').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

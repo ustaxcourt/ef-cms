@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Case Inventory Report - Docket Clerk Accessibility', () => {
@@ -19,6 +20,6 @@ describe('Case Inventory Report - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="modal-button-confirm"]').click();
     cy.get('[data-testid="case-inventory-report-table"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

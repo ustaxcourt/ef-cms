@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Practitioner Details - Admissions Clerk Accessibility', () => {
@@ -12,7 +13,7 @@ describe('Practitioner Details - Admissions Clerk Accessibility', () => {
       cy.visit('/practitioner-detail/PT1234?tab=practitioner-documentation');
       cy.get('[data-testid="add-practitioner-document-button"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

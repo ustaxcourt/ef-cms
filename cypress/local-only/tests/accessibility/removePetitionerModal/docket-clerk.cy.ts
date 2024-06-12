@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Remove Petitioner Modal - Docket Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Remove Petitioner Modal - Docket Clerk Accessibility', () => {
     );
     cy.get('[data-testid="remove-petitioner-button"]').click();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

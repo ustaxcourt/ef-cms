@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
@@ -13,7 +14,7 @@ describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
     );
     cy.get('[data-testid="edit-petitioner-contact-type-select"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   describe('Matching Email Found Modal', () => {
@@ -35,7 +36,7 @@ describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
       ).click();
       cy.get('[data-testid="matching-email-found-modal"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -58,7 +59,7 @@ describe('Edit Petitioner Information - Admissions Clerk Accessibility', () => {
       ).click();
       cy.get('[data-testid="no-matching-email-found-modal"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

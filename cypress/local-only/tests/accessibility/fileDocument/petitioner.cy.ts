@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File Document Page - Petitioner Accessibility', () => {
@@ -10,7 +11,7 @@ describe('File Document Page - Petitioner Accessibility', () => {
     cy.visit('/case-detail/101-19/file-a-document');
     cy.get('#document-type').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues on step 2', () => {
@@ -32,6 +33,6 @@ describe('File Document Page - Petitioner Accessibility', () => {
     cy.get('#primaryDocument-certificateOfService-label').click();
     cy.get('#primaryDocument-service-date-picker').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

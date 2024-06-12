@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsColvinChambers } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Dashboard - Chambers Accessibility', () => {
@@ -8,7 +9,7 @@ describe('Dashboard - Chambers Accessibility', () => {
   it('should be free of a11y issues', () => {
     loginAsColvinChambers();
 
-    cy.runA11y();
+    checkA11y();
   });
 
   describe('Submitted/CAV tab', () => {
@@ -18,7 +19,7 @@ describe('Dashboard - Chambers Accessibility', () => {
       cy.get('[data-testid="submitted-cav-cases-tab"]').click();
       cy.get('[data-testid="case-worksheets-total-count-text"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -29,7 +30,7 @@ describe('Dashboard - Chambers Accessibility', () => {
       cy.get('[data-testid="pending-motions-tab"]').click();
       cy.get('[data-testid="pending-motions-total-count-text"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

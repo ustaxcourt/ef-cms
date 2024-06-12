@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Add/Edit Practitioner Document - Admissions Clerk Accessibility', () => {
@@ -11,6 +12,6 @@ describe('Add/Edit Practitioner Document - Admissions Clerk Accessibility', () =
     cy.visit('/practitioner-detail/PT1234/add-document');
     cy.get('[data-testid="add-edit-practitioner-document-header"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });
