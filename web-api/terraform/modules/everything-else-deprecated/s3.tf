@@ -45,6 +45,13 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "documents_east_ownership_controls" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
 resource "aws_s3_bucket_replication_configuration" "documents_s3_replication_us_east_1" {
   depends_on = [aws_s3_bucket_versioning.documents_s3_versioning_us_east_1]
   role       = aws_iam_role.s3_replication_role.arn
