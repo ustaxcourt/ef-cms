@@ -143,7 +143,12 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.documentTypesForSelectSorted).toBeDefined();
     expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).toEqual(
-      expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
+      expect.arrayContaining([
+        expect.objectContaining({
+          documentTitle: 'Entry of Appearance for Respondent',
+          eventCode: 'EA',
+        }),
+      ]),
     );
   });
 
