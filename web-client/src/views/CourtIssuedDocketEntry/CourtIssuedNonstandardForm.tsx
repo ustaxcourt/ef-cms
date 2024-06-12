@@ -20,6 +20,7 @@ const NonstandardDateInput = ({
     errorText={validationErrors.date}
     id="date"
     label={addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
+    minDate={addCourtIssuedDocketEntryNonstandardHelper.minDate}
     onChange={e => {
       formatAndUpdateDateFromDatePickerSequence({
         key: 'date',
@@ -152,6 +153,7 @@ export const CourtIssuedNonstandardForm = connect(
             <input
               aria-describedby="free-text-label"
               className="usa-input usa-input--inline"
+              data-testid="document-description-input"
               id="free-text"
               name="freeText"
               value={form.freeText || ''}

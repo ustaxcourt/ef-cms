@@ -36,9 +36,10 @@ export const TrialSessionsSummary = connect(
             >
               <div className="content-wrapper gray height-full">
                 <h3>Upcoming Trial Sessions</h3>
-                <div role="list">
-                  {formattedUpcomingSessions.length ? (
-                    formattedUpcomingSessions.map(trialSession => (
+
+                {formattedUpcomingSessions.length ? (
+                  <div role="list">
+                    {formattedUpcomingSessions.map(trialSession => (
                       <div
                         className="grid-row margin-top-4 margin-bottom-4"
                         key={trialSession.trialSessionId}
@@ -55,13 +56,13 @@ export const TrialSessionsSummary = connect(
                           </a>
                         </div>
                       </div>
-                    ))
-                  ) : (
-                    <div className="padding-top-2 padding-bottom-2">
-                      You have no upcoming trial sessions.
-                    </div>
-                  )}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="padding-top-2 padding-bottom-2">
+                    You have no upcoming trial sessions.
+                  </div>
+                )}
               </div>
             </div>
           </div>

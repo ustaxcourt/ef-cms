@@ -48,6 +48,7 @@ import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
+import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -92,6 +93,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -151,6 +153,7 @@ const pages = {
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
+  ErrorView500,
   FileDocumentWizard,
   FilePetitionSuccess,
   ForgotPassword,
@@ -189,6 +192,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -219,9 +223,11 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
-    const focusMain = e => {
+    const focusMain = (e?: any) => {
       e && e.preventDefault();
-      const header = window.document.querySelector('#main-content h1');
+      const header = window.document.querySelector(
+        '#main-content h1',
+      ) as HTMLElement;
       if (header) header.focus();
       return;
     };
