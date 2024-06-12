@@ -37,12 +37,21 @@ export const completeDocumentTypeSectionHelper = (
     );
 
     const currentUser = applicationContext.getCurrentUser();
-    if (
-      currentUser.role === USER_ROLES.irsPractitioner &&
-      documentType.eventCode === 'EA'
-    ) {
-      if (!Case.isFirstIrsFiling(caseDetail)) return false;
-      documentType.documentTitle += ' for Respondent';
+    if (currentUser.role === USER_ROLES.irsPractitioner) {
+      if (
+        Case.isFirstIrsFiling(caseDetail) &&
+        !documentType.canBeFirstIrsDocument
+      )
+        return false;
+
+      if (!Case.isFirstIrsFiling(caseDetail) && documentType.eventCode === 'EA')
+        return false;
+
+      // TODO consider whether we should move this
+      // seems odd to be modifying data in a filter function.
+      if (documentType.eventCode === 'EA') {
+        documentType.documentTitle += ' for Respondent';
+      }
     } else if (documentType.eventCode === 'EA') return false;
 
     return (
