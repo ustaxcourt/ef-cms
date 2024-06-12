@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeletePractitionerDocumentConfirmModal } from './DeletePractitionerDocumentConfirmModal';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -9,7 +9,10 @@ import React from 'react';
 export const PractitionerDocumentation = connect(
   {
     barNumber: state.practitionerDetail.barNumber,
+    clearModalSequence: sequences.clearModalSequence,
     constants: state.constants,
+    deletePractitionerDocumentSequence:
+      sequences.deletePractitionerDocumentSequence,
     openDeletePractitionerDocumentConfirmModalSequence:
       sequences.openDeletePractitionerDocumentConfirmModalSequence,
     openPractitionerDocumentDownloadUrlSequence:
@@ -21,7 +24,9 @@ export const PractitionerDocumentation = connect(
   },
   function PractitionerDocumentation({
     barNumber,
+    clearModalSequence,
     constants,
+    deletePractitionerDocumentSequence,
     openDeletePractitionerDocumentConfirmModalSequence,
     openPractitionerDocumentDownloadUrlSequence,
     practitionerDocumentationHelper,
@@ -172,7 +177,16 @@ export const PractitionerDocumentation = connect(
           </tbody>
         </table>
         {showModal === 'DeletePractitionerDocumentConfirmModal' && (
-          <DeletePractitionerDocumentConfirmModal onConfirmSequence="deletePractitionerDocumentSequence" />
+          <ConfirmModal
+            cancelLabel="No, Cancel"
+            confirmLabel="Yes, Delete"
+            preventCancelOnBlur={true}
+            title="Are You Sure You Want to Delete This Document?"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={deletePractitionerDocumentSequence}
+          >
+            <p>This action cannot be undone.</p>
+          </ConfirmModal>
         )}
       </>
     );

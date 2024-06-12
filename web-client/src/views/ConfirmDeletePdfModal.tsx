@@ -1,16 +1,26 @@
 import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ConfirmDeletePDFModal = connect(
-  {
-    confirmSequence: props.confirmSequence,
-    confirmText: props.confirmText,
-    modalContent: props.modalContent,
-    title: props.title,
-  },
+type ConfirmDeletePDFModalProps = {
+  confirmText: string;
+  modalContent: string;
+  title: string;
+  confirmSequence: Function;
+};
+
+const confirmDeletePDFModal = {
+  clearModalSequence: sequences.clearModalSequence,
+};
+
+export const ConfirmDeletePDFModal = connect<
+  ConfirmDeletePDFModalProps,
+  typeof confirmDeletePDFModal
+>(
+  confirmDeletePDFModal,
   function ConfirmDeletePDFModal({
+    clearModalSequence,
     confirmSequence,
     confirmText,
     modalContent,
@@ -21,7 +31,7 @@ export const ConfirmDeletePDFModal = connect(
         cancelLabel="No, Cancel"
         confirmLabel={confirmText}
         title={title}
-        onCancelSequence="clearModalSequence"
+        onCancelSequence={clearModalSequence}
         onConfirmSequence={confirmSequence}
       >
         {modalContent}

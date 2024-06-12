@@ -22,6 +22,7 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
+import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
@@ -65,6 +66,7 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  documentUrlTranslator,
   formatDateString,
   formatJudgeName,
   formatNow,

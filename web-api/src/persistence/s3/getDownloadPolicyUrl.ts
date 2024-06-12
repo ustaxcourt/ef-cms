@@ -36,7 +36,7 @@ export const getDownloadPolicyUrl = async ({
   );
 
   return {
-    url: applicationContext.documentUrlTranslator({
+    url: applicationContext.getUtilities().documentUrlTranslator({
       applicationContext,
       documentUrl: url,
       useTempBucket,
