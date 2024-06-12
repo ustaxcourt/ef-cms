@@ -3,6 +3,9 @@ import { uploadFile } from '../file/upload-file';
 export function petitionerCreatesElectronicCaseUpdated(
   primaryFilerName = 'John',
 ) {
+  cy.get('[data-testid="file-a-petition"]').click();
+  cy.get('[data-testid="go-to-step-1"]').click();
+
   cy.get('[data-testid="filing-type-0"]').click();
   cy.get('[data-testid="contact-primary-name"]').type(primaryFilerName);
   cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
@@ -13,8 +16,6 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
   cy.get('[data-testid="step-1-next-button"]').click();
 
-  cy.get('[data-testid="file-a-petition"]').click();
-  cy.get('[data-testid="go-to-step-1"]').click();
   cy.get('[data-testid="petition-reason--1"]').type('First reason goes here');
   cy.get('[data-testid="petition-fact--1"]').type('First fact goes here');
   cy.get('[data-testid="step-2-next-button"]').click();
