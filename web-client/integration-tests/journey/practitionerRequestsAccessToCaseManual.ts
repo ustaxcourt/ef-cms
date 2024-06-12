@@ -27,7 +27,7 @@ export const practitionerRequestsAccessToCaseManual = (
 
     expect(headerHelper.showRepresentAPartyButton).toBeTruthy();
 
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 

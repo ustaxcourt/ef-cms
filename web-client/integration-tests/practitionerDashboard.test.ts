@@ -44,7 +44,7 @@ describe('Practitioner Dashboard', () => {
         docketNumber: docketNumberToAssociateWith,
       });
 
-      await cerebralTest.runSequence('gotoRequestAccessSequence', {
+      await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
         docketNumber: docketNumberToAssociateWith,
       });
 
