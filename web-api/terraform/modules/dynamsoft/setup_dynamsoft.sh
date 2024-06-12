@@ -27,3 +27,13 @@ sudo sed -i "s|DYNAMSOFT_PRODUCT_KEYS|${dynamsoft_product_keys}|" /tmp/dynamsoft
 
 # copy back from /tmp to main nginx html folder
 sudo cp /tmp/dynamsoft.webtwain.config.js.tpl Dynamic\ Web\ TWAIN\ SDK\ 18.5/Resources/dynamsoft.webtwain.config.js
+
+# Add Access-Control-Allow-Origin header to NGINX configuration
+echo 'add_header Access-Control-Allow-Origin "*";' | sudo tee /etc/nginx/conf.d/cors.conf
+
+# Start and enable nginx service
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Reload nginx to apply changes
+sudo systemctl reload nginx
