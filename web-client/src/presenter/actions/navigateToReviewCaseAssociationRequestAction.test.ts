@@ -27,7 +27,7 @@ describe('navigateToReviewCaseAssociationRequestAction', () => {
     });
 
     expect(routerStub.mock.calls[0][0]).toBe(
-      `/case-detail/${mockDocketNumber}/request-access/review`,
+      `/case-detail/${mockDocketNumber}/case-association-request/review`,
     );
   });
 
