@@ -119,7 +119,7 @@ describe('Practitioner requests access to case', () => {
 
     expect(headerHelper.showRepresentAPartyButton).toBeTruthy();
 
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 

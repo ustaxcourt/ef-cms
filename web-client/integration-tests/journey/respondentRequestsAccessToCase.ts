@@ -20,7 +20,7 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
 
     expect(helper.showFileFirstDocumentButton).toBeFalsy();
 
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 

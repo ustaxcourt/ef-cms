@@ -6,7 +6,7 @@ export const practitionerRequestsPendingAccessToCase = (
   fakeFile,
 ) => {
   return it('Practitioner requests access to pending case', async () => {
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
