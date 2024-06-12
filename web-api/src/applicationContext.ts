@@ -3,7 +3,6 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { Agent } from 'https';
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import {
   CASE_STATUS_TYPES,
@@ -24,10 +23,8 @@ import { Correspondence } from '../../shared/src/business/entities/Correspondenc
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
-import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
-import { S3 } from '@aws-sdk/client-s3';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -51,6 +48,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
 import { getUserGateway } from '@web-api/getUserGateway';
@@ -74,7 +72,6 @@ import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
-let s3Cache: S3;
 let sesCache;
 let sqsCache;
 let searchClientCache: Client;
@@ -361,23 +358,7 @@ export const createApplicationContext = (
       return searchClientCache;
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
-    getStorageClient: (): S3 => {
-      console.log('******* Region is: ', environment.region);
-      if (!s3Cache) {
-        s3Cache = new S3({
-          endpoint: environment.s3Endpoint,
-          forcePathStyle: true,
-          maxAttempts: 3,
-          region: 'us-east-1',
-          requestHandler: new NodeHttpHandler({
-            connectionTimeout: 3000,
-            httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
-            requestTimeout: 5000,
-          }),
-        });
-      }
-      return s3Cache;
-    },
+    getStorageClient,
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
