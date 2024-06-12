@@ -29,8 +29,8 @@ export const UpdatedFilePetition = connect(
         )}
         <section className="usa-section grid-container">
           <StepIndicator />
-          {currentStep === 1 && <UpdatedFilePetitionStep1 />}
-          {currentStep === 2 && <UpdatedFilePetitionStep2 />}
+          {currentStep === 1 && <UpdatedFilePetitionStep2 />}
+          {currentStep === 2 && <UpdatedFilePetitionStep1 />}
           {currentStep === 3 && <UpdatedFilePetitionStep3 />}
           {currentStep === 4 && <UpdatedFilePetitionStep4 />}
           {currentStep === 5 && <UpdatedFilePetitionStep5 />}
