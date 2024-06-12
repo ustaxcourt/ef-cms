@@ -1,6 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getStep1DataAction = ({ get }: ActionProps) => {
+export const getFilePetitionPetitionInformationAction = ({
+  get,
+}: ActionProps) => {
   const {
     petitionFacts,
     petitionFile,
@@ -10,7 +12,7 @@ export const getStep1DataAction = ({ get }: ActionProps) => {
     petitionType,
   } = get(state.form);
 
-  const step1Data = {
+  const petitionInformation = {
     petitionFacts,
     petitionFile,
     petitionFileSize,
@@ -20,6 +22,6 @@ export const getStep1DataAction = ({ get }: ActionProps) => {
   };
 
   return {
-    step1Data,
+    petitionInformation,
   };
 };
