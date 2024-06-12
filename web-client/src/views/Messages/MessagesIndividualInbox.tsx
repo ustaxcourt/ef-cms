@@ -99,8 +99,13 @@ export const MessagesIndividualInbox = connect(
               <th>
                 <input
                   aria-label="all-messages-checkbox"
-                  checked={messagesIndividualInboxHelper.allMessagesSelected}
+                  checked={
+                    messagesIndividualInboxHelper.allMessagesCheckboxChecked
+                  }
                   data-testid="all-messages-checkbox"
+                  disabled={
+                    !messagesIndividualInboxHelper.allMessagesCheckboxEnabled
+                  }
                   id="all-messages-checkbox"
                   ref={selectAllCheckboxRef}
                   type="checkbox"
