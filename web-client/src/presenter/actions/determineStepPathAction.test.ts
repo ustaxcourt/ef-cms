@@ -17,6 +17,38 @@ describe('determineStepPathAction', () => {
     });
   });
 
+  [
+    [1, 'PetitionerInformation'],
+    [2, 'PetitionInformation'],
+    [3, 'step3'],
+    [4, 'step4'],
+    [5, 'step5'],
+    [6, 'step6'],
+  ].forEach(([currentStep, pathName]) => {
+    it(`should call the correct path when passing in "${currentStep}" as the current step`, async () => {
+      const TEST_PATHS = {
+        [pathName]: jest.fn(),
+      };
+
+      presenter.providers.path = TEST_PATHS;
+
+      expect(TEST_PATHS[pathName].mock.calls.length).toEqual(0);
+
+      await runAction(determineStepPathAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          stepIndicatorInfo: {
+            currentStep,
+          },
+        },
+      });
+
+      expect(TEST_PATHS[pathName].mock.calls.length).toEqual(1);
+    });
+  });
+
   it('should call path using the step in state', async () => {
     expect(PATHS.step3.mock.calls.length).toEqual(0);
 
