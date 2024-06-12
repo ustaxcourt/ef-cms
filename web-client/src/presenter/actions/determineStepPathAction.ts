@@ -6,6 +6,7 @@ export const determineStepPathAction = ({ get, path }: ActionProps) => {
 
   const PATH_DICTIONARY = {
     1: 'PetitionerInformation',
+    2: 'PetitionInformation',
   };
 
   const pathFunctionName = PATH_DICTIONARY[currentStep] || pathName;

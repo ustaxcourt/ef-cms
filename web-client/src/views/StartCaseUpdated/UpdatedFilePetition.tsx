@@ -1,9 +1,9 @@
 import { BigHeader } from '@web-client/views/BigHeader';
+import { FilePetitionPetitionInformation } from '@web-client/views/StartCaseUpdated/FilePetitionPetitionInformation';
 import { FilePetitionPetitionerInformation } from '@web-client/views/StartCaseUpdated/FilePetitionPetitionerInformation';
 import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
 import { PetitionSuccessHeader } from '@web-client/views/PetitionSuccessHeader';
 import { StepIndicator } from '@web-client/views/StepIndicator';
-import { UpdatedFilePetitionStep1 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep1';
 import { UpdatedFilePetitionStep3 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep3';
 import { UpdatedFilePetitionStep4 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep4';
 import { UpdatedFilePetitionStep5 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep5';
@@ -30,7 +30,7 @@ export const UpdatedFilePetition = connect(
         <section className="usa-section grid-container">
           <StepIndicator />
           {currentStep === 1 && <FilePetitionPetitionerInformation />}
-          {currentStep === 2 && <UpdatedFilePetitionStep1 />}
+          {currentStep === 2 && <FilePetitionPetitionInformation />}
           {currentStep === 3 && <UpdatedFilePetitionStep3 />}
           {currentStep === 4 && <UpdatedFilePetitionStep4 />}
           {currentStep === 5 && <UpdatedFilePetitionStep5 />}
