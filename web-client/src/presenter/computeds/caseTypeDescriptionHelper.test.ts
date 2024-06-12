@@ -132,4 +132,75 @@ describe('caseTypeDescriptionHelper', () => {
       ],
     });
   });
+
+  describe('caseTypesIrsNoticeUpload', () => {
+    it('should reorder the case types correctly for Irs Notices', () => {
+      const result = runCompute(caseTypeDescriptionHelper, {
+        state: {
+          form: { hasIrsNotice: true },
+        },
+      });
+
+      expect(result.caseTypesIrsNoticeUpload).toBeDefined();
+      expect(result.caseTypesIrsNoticeUpload).toEqual([
+        {
+          description: 'Notice of Deficiency',
+          type: 'Deficiency',
+        },
+        {
+          description: 'Notice of Determination Concerning Collection Action',
+          type: 'CDP (Lien/Levy)',
+        },
+        {
+          description: 'Other',
+          type: 'Other',
+        },
+        {
+          description: 'Adjustment of Partnership Items Code Section 6228',
+          type: 'Partnership (Section 6228)',
+        },
+        {
+          description:
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          type: 'Disclosure2',
+        },
+        {
+          description:
+            'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State',
+          type: 'Passport',
+        },
+        {
+          description:
+            'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
+          type: 'Innocent Spouse',
+        },
+        {
+          description: 'Notice of Determination of Worker Classification',
+          type: 'Worker Classification',
+        },
+        {
+          description:
+            'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
+          type: 'Whistleblower',
+        },
+        {
+          description:
+            'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
+          type: 'Interest Abatement',
+        },
+        {
+          description: 'Notice of Intention to Disclose',
+          type: 'Disclosure1',
+        },
+        {
+          description: 'Partnership Action Under BBA Section 1101',
+          type: 'Partnership (BBA Section 1101)',
+        },
+        {
+          description: 'Readjustment of Partnership Items Code Section 6226',
+          type: 'Partnership (Section 6226)',
+        },
+      ]);
+    });
+  });
 });

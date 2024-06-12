@@ -49,5 +49,35 @@ export const caseTypeDescriptionHelper = (
     });
   }
 
-  return { caseTypes: caseTypesWithDescriptions };
+  return {
+    caseTypes: caseTypesWithDescriptions,
+    caseTypesIrsNoticeUpload: reorderCaseTypesForIrsNoticeCaseTypes(
+      caseTypesWithDescriptions,
+    ),
+  };
 };
+
+function reorderCaseTypesForIrsNoticeCaseTypes(
+  caseTypes: { description: string; type: string }[],
+) {
+  const specificOrder = [
+    'Notice of Deficiency',
+    'Notice of Determination Concerning Collection Action',
+    'Other',
+  ];
+
+  const orderedItems: { description: string; type: string }[] = [];
+  const otherItems: { description: string; type: string }[] = [];
+
+  caseTypes.forEach(item => {
+    if (specificOrder.includes(item.description)) {
+      orderedItems[specificOrder.indexOf(item.description)] = item;
+    } else {
+      otherItems.push(item);
+    }
+  });
+
+  otherItems.sort((a, b) => a.description.localeCompare(b.description));
+
+  return [...orderedItems, ...otherItems];
+}
