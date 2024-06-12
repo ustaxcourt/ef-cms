@@ -799,6 +799,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  todaysDate: '',
   token: '',
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
