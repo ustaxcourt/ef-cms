@@ -68,7 +68,6 @@ export const CaseDetailHeader = connect<
               aria-label="Request for Access Pending"
               className="usa-tag push-right margin-right-0 padding-x-3"
             >
-              {/*  TODO 10389: RENAME??? */}
               <span aria-hidden="true">Request for Access Pending</span>
             </span>
           )}
