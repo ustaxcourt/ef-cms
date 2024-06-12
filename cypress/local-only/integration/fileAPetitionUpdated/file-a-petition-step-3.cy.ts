@@ -13,8 +13,8 @@ describe('File a petition - Step 3 IRS Notices', () => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
 
-    fillPetitionFileInformation(VALID_FILE);
     fillPetitionerInformation();
+    fillPetitionFileInformation(VALID_FILE);
   });
 
   it('should display all the possible options', () => {
