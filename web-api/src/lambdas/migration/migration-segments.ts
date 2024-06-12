@@ -12,6 +12,7 @@ import {
   dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
 import { createLogger } from '@web-api/createLogger';
+import { getAwsClientConfig } from '@shared/sharedAppContext';
 import { migrationsToRun } from './migrationsToRun';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 import promiseRetry from 'promise-retry';
@@ -20,6 +21,7 @@ import type { Context, Handler, SQSEvent } from 'aws-lambda';
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
 const dynamodb = new DynamoDBClient({
+  ...getAwsClientConfig(),
   maxAttempts: 10,
   region: 'us-east-1',
 });
