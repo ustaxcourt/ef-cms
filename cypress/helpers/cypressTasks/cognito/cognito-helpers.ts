@@ -1,4 +1,9 @@
+import {
+  AuthFlowType,
+  ChallengeNameType,
+} from '@aws-sdk/client-cognito-identity-provider';
 import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { TOTP } from 'totp-generator';
 import { batchWrite, getDocumentClient } from '../dynamo/getDynamoCypress';
 import { getCognito } from './getCognitoCypress';
 import { getCypressEnv } from '../../env/cypressEnvironment';
@@ -42,23 +47,9 @@ const getClientId = async (userPoolId: string): Promise<string> => {
   });
   const clientId = results?.UserPoolClients?.[0].ClientId;
   if (!clientId) {
-    throw new Error(`Could not find clientIdd for userPool: ${userPoolId}`);
+    throw new Error(`Could not find clientId for userPool: ${userPoolId}`);
   }
   return clientId;
-};
-
-const getUserPoolId = async (): Promise<string> => {
-  const results = await getCognito().listUserPools({
-    MaxResults: 50,
-  });
-  const userPoolId = results?.UserPools?.find(
-    pool => pool.Name === `efcms-${getCypressEnv().env}`,
-  )?.Id;
-
-  if (!userPoolId) {
-    throw new Error('Could not get userPoolId');
-  }
-  return userPoolId;
 };
 
 export const getCognitoUserIdByEmail = async (
@@ -75,6 +66,64 @@ export const getCognitoUserIdByEmail = async (
   )?.Value!;
 
   return userId;
+};
+
+const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
+  const results = await getCognito().listUserPools({
+    MaxResults: 50,
+  });
+  const poolName = isIrsEnv
+    ? `efcms-irs-${getCypressEnv().env}`
+    : `efcms-${getCypressEnv().env}`;
+
+  const userPoolId = results?.UserPools?.find(
+    pool => pool.Name === poolName,
+  )?.Id;
+
+  if (!userPoolId) {
+    throw new Error('Could not get userPoolId');
+  }
+  return userPoolId;
+};
+
+export const createAccount = async ({
+  isIrsEnv,
+  password,
+  role,
+  userName,
+}: {
+  userName: string;
+  password: string;
+  role: string;
+  isIrsEnv: boolean;
+}): Promise<null> => {
+  const userPoolId = await getUserPoolId(isIrsEnv);
+  await getCognito().adminCreateUser({
+    TemporaryPassword: password,
+    UserAttributes: [
+      {
+        Name: 'custom:role',
+        Value: role,
+      },
+      {
+        Name: 'email',
+        Value: userName.toLowerCase(),
+      },
+      {
+        Name: 'email_verified',
+        Value: 'true',
+      },
+    ],
+    UserPoolId: userPoolId,
+    Username: userName.toLowerCase(),
+  });
+  await getCognito().adminSetUserPassword({
+    Password: password,
+    Permanent: true,
+    UserPoolId: userPoolId,
+    Username: userName.toLowerCase(),
+  });
+  return null;
 };
 
 const deleteAccount = async (
@@ -180,3 +229,57 @@ export const deleteAllCypressTestAccounts = async (): Promise<null> => {
   await Promise.all(accounts.map(user => deleteAccount(user, userPoolId)));
   return null;
 };
+
+export const deleteAllIrsCypressTestAccounts = async (): Promise<null> => {
+  const irsUserPoolId = await getUserPoolId(true);
+  if (!irsUserPoolId) return null;
+  const irsAccounts = await getAllCypressTestAccounts(irsUserPoolId);
+  await Promise.all(
+    irsAccounts.map(user => deleteAccount(user, irsUserPoolId)),
+  );
+  return null;
+};
+
+export async function getIrsBearerToken({
+  password,
+  userName,
+}: {
+  password: string;
+  userName: string;
+}): Promise<string> {
+  const userPoolId = await getUserPoolId(true);
+  const clientId = await getClientId(userPoolId);
+  const initiateAuthResult = await getCognito().adminInitiateAuth({
+    AuthFlow: AuthFlowType.ADMIN_USER_PASSWORD_AUTH,
+    AuthParameters: {
+      PASSWORD: password,
+      USERNAME: userName.toLowerCase(),
+    },
+    ClientId: clientId,
+    UserPoolId: userPoolId,
+  });
+  const associateResult = await getCognito().associateSoftwareToken({
+    Session: initiateAuthResult.Session,
+  });
+
+  if (!associateResult.SecretCode) {
+    throw new Error('Could not generate Secret Code');
+  }
+  const { otp } = TOTP.generate(associateResult.SecretCode);
+  const verifyTokenResult = await getCognito().verifySoftwareToken({
+    Session: associateResult.Session,
+    UserCode: otp,
+  });
+  const challengeResponse = await getCognito().respondToAuthChallenge({
+    ChallengeName: ChallengeNameType.MFA_SETUP,
+    ChallengeResponses: {
+      USERNAME: userName.toLowerCase(),
+    },
+    ClientId: clientId,
+    Session: verifyTokenResult.Session,
+  });
+  if (!challengeResponse.AuthenticationResult?.IdToken) {
+    throw new Error(`Failed to generate token for user: ${userName}`);
+  }
+  return challengeResponse.AuthenticationResult?.IdToken;
+}

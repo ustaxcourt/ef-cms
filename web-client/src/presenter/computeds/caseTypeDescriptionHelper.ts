@@ -22,10 +22,10 @@ export const caseTypeDescriptionHelper = (
     CASE_TYPES,
   } = applicationContext.getConstants();
 
-  let caseTypesWithDisclosure = cloneDeep(CASE_TYPES);
+  let caseTypesWithDisclosure: string[] = cloneDeep(CASE_TYPES);
   caseTypesWithDisclosure.push('Disclosure1', 'Disclosure2');
 
-  let caseTypesWithDescriptions = [];
+  let caseTypesWithDescriptions: { description: string; type: string }[] = [];
   if (form.hasIrsNotice) {
     caseTypesWithDisclosure.forEach(caseType => {
       const caseDescription = CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];

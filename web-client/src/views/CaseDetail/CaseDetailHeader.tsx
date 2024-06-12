@@ -5,18 +5,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const CaseDetailHeader = connect(
-  {
-    CASE_CAPTION_POSTFIX: state.constants.CASE_CAPTION_POSTFIX,
-    caseDetailHeaderHelper: state.caseDetailHeaderHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
-    hideActionButtons: props.hideActionButtons,
-  },
+type CaseDetailHeaderProps = {
+  hideActionButtons?: boolean;
+  className?: string;
+};
+
+const caseDetailHeaderDeps = {
+  CASE_CAPTION_POSTFIX: state.constants.CASE_CAPTION_POSTFIX,
+  caseDetailHeaderHelper: state.caseDetailHeaderHelper,
+  formattedCaseDetail: state.formattedCaseDetail,
+};
+
+export const CaseDetailHeader = connect<
+  CaseDetailHeaderProps,
+  typeof caseDetailHeaderDeps
+>(
+  caseDetailHeaderDeps,
   function CaseDetailHeader({
     CASE_CAPTION_POSTFIX,
     caseDetailHeaderHelper,
@@ -69,6 +77,7 @@ export const CaseDetailHeader = connect(
             <Button
               secondary
               className="tablet-full-width push-right margin-right-0"
+              data-testid="button-first-irs-document"
               href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
               icon="file"
               id="button-first-irs-document"
@@ -130,7 +139,7 @@ export const CaseDetailHeader = connect(
     return (
       <>
         {caseDetailHeaderHelper.showSealedCaseBanner && (
-          <div className="red-warning-header sealed-banner">
+          <div className="red-warning-header" data-testid="sealed-case-banner">
             <div className="grid-container text-bold">
               <Icon
                 aria-label="sealed case"
@@ -149,6 +158,7 @@ export const CaseDetailHeader = connect(
                 <div className="margin-bottom-1">
                   <h1
                     className="heading-2 captioned docket-number-header"
+                    data-testid="docket-number-header"
                     tabIndex={-1}
                   >
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
@@ -176,18 +186,19 @@ export const CaseDetailHeader = connect(
                           <span aria-hidden="true">Lead case</span>
                         </span>
                       )}
-                      <span
+                      <label
                         aria-label={`status: ${formattedCaseDetail.status}`}
                         className={classNames(
                           'usa-tag',
                           formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
                         )}
                         data-testid="case-status"
+                        htmlFor="case-status"
                       >
-                        <span aria-hidden="true">
+                        <span aria-hidden="true" id="case-status">
                           {formattedCaseDetail.status}
                         </span>
-                      </span>
+                      </label>
                       {formattedCaseDetail.associatedJudge && (
                         <span
                           aria-label="associated judge"

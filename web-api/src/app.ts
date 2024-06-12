@@ -60,6 +60,7 @@ import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
+import { generatePetitionPdfLambda } from '@web-api/lambdas/cases/generatePetitionPdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
@@ -254,6 +255,25 @@ app.use((req, res, next) => {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
   }
+  next();
+});
+app.use((req, res, next) => {
+  /**
+   * This environment variable is set to true by default on deployment of the API lambdas
+   * to prevent traffic from hitting the deploying color during deployment.
+   * It is also set to true on the newly-passive color at the end of a deployment as we switch colors
+   * to prevent traffic to the inactive color.
+   */
+  const shouldForceRefresh =
+    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
+
+  if (shouldForceRefresh) {
+    res.set('X-Force-Refresh', 'true');
+    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    res.status(500).send('this api is disabled due to a deployment');
+    return;
+  }
+
   next();
 });
 app.use(logger());
@@ -643,6 +663,10 @@ app.use(logger());
   app.post(
     '/cases/:docketNumber/generate-entry-of-appearance',
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
+  );
+  app.post(
+    '/cases/generate-petition',
+    lambdaWrapper(generatePetitionPdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));

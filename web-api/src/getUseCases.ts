@@ -63,6 +63,7 @@ import { generateNoticeOfTrialIssuedInteractor } from '../../shared/src/business
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../../shared/src/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
+import { generatePetitionPdfInteractor } from '../../shared/src/business/useCases/generatePetitionPdfInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor';
@@ -116,10 +117,10 @@ import { getPractitionerByBarNumberInteractor } from '../../shared/src/business/
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerDocumentDownloadUrlInteractor';
 import { getPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerDocumentInteractor';
 import { getPractitionerDocumentsInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerDocumentsInteractor';
-import { getPractitionersByNameInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor';
+import { getPractitionersByNameInteractor } from './business/useCases/practitioner/getPractitionersByNameInteractor';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/business/useCases/users/getPrivatePractitionersBySearchKeyInteractor';
 import { getPublicCaseInteractor } from '../../shared/src/business/useCases/public/getPublicCaseInteractor';
-import { getPublicDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor';
+import { getPublicDownloadPolicyUrlInteractor } from './business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
 import { getTodaysOpinionsInteractor } from '../../shared/src/business/useCases/public/getTodaysOpinionsInteractor';
 import { getTodaysOrdersInteractor } from '../../shared/src/business/useCases/public/getTodaysOrdersInteractor';
@@ -276,6 +277,7 @@ const useCases = {
   generateNoticesForCaseTrialSessionCalendarInteractor,
   generatePDFFromJPGDataInteractor,
   generatePdfFromHtmlInteractor,
+  generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,

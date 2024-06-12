@@ -78,11 +78,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
   },
-  CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS: {
-    disabledMessage:
-      'The ability to add multiple docket entries to an order is disabled.',
-    key: 'consolidated-cases-add-docket-numbers',
-  },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
   },
@@ -91,6 +86,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
+  },
+  UPDATED_PETITION_FLOW: {
+    key: 'updated-petition-flow',
   },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
@@ -1007,6 +1005,7 @@ export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
 
 export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
   [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
+  [CASE_TYPES_MAP.passport]: 'Passport',
   [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',
   [CASE_TYPES_MAP.whistleblower]: 'Whistleblower',
   [CASE_TYPES_MAP.workerClassification]: 'Worker Classification',
@@ -1133,6 +1132,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const ALL_STATE_OPTIONS = {
+  ...US_STATES,
+  ...US_STATES_OTHER,
+  Other: 'Other',
+};
 
 const statesArray = [
   ...Object.values(US_STATES),
@@ -1495,6 +1500,7 @@ export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for ea
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
 export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
+export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
@@ -1612,12 +1618,14 @@ export const JUDGE_TITLES = [
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
 
-export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
-
 export type FileUploadProgressType = {
   file: any;
   uploadProgress: (progressEvent: any) => void;
 };
+
+export type FileUploadProgressValueType =
+  | FileUploadProgressType
+  | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -1648,6 +1656,8 @@ export type CreatedCaseType = {
   partyType: string;
   petitionFile: Blob;
   petitionFileSize: number;
+  petitionFileId?: string;
+  petitionType?: string;
   petitionPaymentStatus: string;
   procedureType: string;
   receivedAt: string;
