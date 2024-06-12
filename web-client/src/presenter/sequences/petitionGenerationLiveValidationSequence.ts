@@ -19,15 +19,15 @@ export const petitionGenerationLiveValidationSequence = [
   startShowValidationAction,
   determineStepPathAction,
   {
-    //can remove step 1?
     step1: [
-      getStep1DataAction,
-      validateUploadPetitionStep1Action,
-      handleValidationErrorsRoute,
-    ],
-    step2: [
       getStep2DataAction,
       validateUploadPetitionStep2Action,
+      handleValidationErrorsRoute,
+    ],
+    //can remove step 1?
+    step2: [
+      getStep1DataAction,
+      validateUploadPetitionStep1Action,
       handleValidationErrorsRoute,
     ],
     step3: [

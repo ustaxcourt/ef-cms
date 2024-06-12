@@ -1,20 +1,22 @@
+import { fillPetitionerInformation } from './petition-helper';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition', () => {
   beforeEach(() => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
+    fillPetitionerInformation();
   });
 
-  describe('Step 1 - Petition', () => {
+  describe('Step 2 - Petition', () => {
     beforeEach(() => {
-      cy.get('[data-testid="step-indicator-current-step-1-icon"]');
+      cy.get('[data-testid="step-indicator-current-step-2-icon"]');
     });
 
     describe('Auto generate Petition', () => {
       describe('VALIDATION MESSAGES', () => {
         it('should display error messages when user presses "Next" button without filling reason and fact', () => {
-          cy.get('[data-testid="step-1-next-button"]').click();
+          cy.get('[data-testid="step-2-next-button"]').click();
 
           cy.get('[data-testid="error_message_petitionReasons[0]"]').should(
             'exist',
@@ -26,7 +28,7 @@ describe('File a petition', () => {
         });
 
         it('should remove any error message when the user starts typing/changing the input', () => {
-          cy.get('[data-testid="step-1-next-button"]').click();
+          cy.get('[data-testid="step-2-next-button"]').click();
 
           cy.get('[data-testid="error_message_petitionReasons[0]"]').should(
             'exist',
@@ -74,8 +76,8 @@ describe('File a petition', () => {
           cy.get('[data-testid="petition-fact-0"').should('exist');
           cy.get('[data-testid="petition-fact-1"').should('exist');
 
-          cy.get('[data-testid="step-1-next-button"]').click();
-          cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
 
         it('should be able to navigate to step 2 when the user fills in reason and fact correctly', () => {
@@ -85,8 +87,8 @@ describe('File a petition', () => {
           cy.get('[data-testid="petition-fact--1"]').focus();
           cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
 
-          cy.get('[data-testid="step-1-next-button"]').click();
-          cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
       });
     });
@@ -96,8 +98,8 @@ describe('File a petition', () => {
         cy.get('[data-testid="upload-a-petition-label"').should('exist');
         cy.get('[data-testid="upload-a-petition-label"').click();
 
-        cy.get('[data-testid="step-1-next-button"]').should('exist');
-        cy.get('[data-testid="step-1-next-button"]').should('be.disabled');
+        cy.get('[data-testid="step-2-next-button"]').should('exist');
+        cy.get('[data-testid="step-2-next-button"]').should('be.disabled');
 
         cy.get(
           '[data-testid="petition-redaction-acknowledgement-label"]',
@@ -106,18 +108,18 @@ describe('File a petition', () => {
           '[data-testid="petition-redaction-acknowledgement-label"]',
         ).click();
 
-        cy.get('[data-testid="step-1-next-button"]').should('not.be.disabled');
+        cy.get('[data-testid="step-2-next-button"]').should('not.be.disabled');
       });
 
       describe('VALIDATION MESSAGES', () => {
         it('should throw an error if user presses "Next" button without uploading a file', () => {
-          cy.get('[data-testid="step-1-next-button"]').click();
+          cy.get('[data-testid="step-2-next-button"]').click();
 
           cy.get('[data-testid="petition-error-message-0"]').should('exist');
         });
 
         it('should remove error message when user uploads a file', () => {
-          cy.get('[data-testid="step-1-next-button"]').click();
+          cy.get('[data-testid="step-2-next-button"]').click();
 
           cy.get('[data-testid="petition-error-message-0"]').should('exist');
 
@@ -135,8 +137,8 @@ describe('File a petition', () => {
             'not.exist',
           );
 
-          cy.get('[data-testid="step-1-next-button"]').click();
-          cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+          cy.get('[data-testid="step-2-next-button"]').click();
+          cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
       });
     });

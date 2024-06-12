@@ -55,7 +55,7 @@ export function fillPetitionFileInformation(filePath: string) {
   cy.get('[data-testid="upload-a-petition-label"').click();
   cy.get('#petition-file').attachFile(filePath);
   cy.get('[data-testid="petition-redaction-acknowledgement-label"]').click();
-  cy.get('[data-testid="step-1-next-button"]').click();
+  cy.get('[data-testid="step-2-next-button"]').click();
 }
 
 export function fillGeneratePetitionFileInformation() {
@@ -63,7 +63,7 @@ export function fillGeneratePetitionFileInformation() {
   cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
   cy.get('[data-testid="petition-fact--1"]').focus();
   cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
-  cy.get('[data-testid="step-1-next-button"]').click();
+  cy.get('[data-testid="step-2-next-button"]').click();
 }
 
 export function fillPetitionerInformation() {
@@ -113,7 +113,7 @@ export function fillPetitionerInformation() {
     }
   });
 
-  cy.get('[data-testid="step-2-next-button"]').click();
+  cy.get('[data-testid="step-1-next-button"]').click();
 }
 
 export function fillIrsNoticeInformation(filePath: string) {
