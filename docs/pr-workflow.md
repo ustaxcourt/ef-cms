@@ -21,7 +21,6 @@ You will occasionally push your changes to an experimental branch to verify if m
 
 We need to interact with the US Tax Court fork often.  Take note of the following branches.
 
-- `court/migration` (a staging environment for when we need to fix something in production without also releasing other story/bug work)
 - `court/test` (kept up to date with `court/staging`, but a staging environment for tests to run and the PO to verify work; where we merge our PRs to)
 - `court/staging` (kept up to date with `court/prod`, but also a staging environment for the upcoming deploy; our second PR merges into this after testing is complete; any new work branches off this branch)
 - `court/prod` (the current version which is running on production)

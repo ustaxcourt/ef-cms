@@ -18,9 +18,10 @@ export const MatchingEmailFoundModal = connect(
         cancelSequence={cancelSequence}
         confirmLabel="Yes, Continue"
         confirmSequence={confirmSequence}
+        dataTestId="matching-email-found-modal"
         title="Matching Email Found"
       >
-        <div id="matching-email-modal">
+        <div>
           <p>
             {form.contact.name}
             <br />
