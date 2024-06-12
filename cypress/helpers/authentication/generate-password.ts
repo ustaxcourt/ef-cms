@@ -6,6 +6,14 @@ export type PasswordConfig = {
   special: number;
 };
 
+export const VALID_PASSWORD_CONFIG: PasswordConfig = {
+  digits: 1,
+  length: 8,
+  lower: 1,
+  special: 1,
+  upper: 1,
+};
+
 export function generatePassword(config: PasswordConfig): string {
   const charSets: { [key: string]: string } = {
     digits: '0123456789',

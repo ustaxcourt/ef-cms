@@ -40,8 +40,8 @@ export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
       })
       .messages({
         '*': 'Enter a date',
-        'date.max': 'Enter a valid date',
-        'date.min': 'Enter a valid date',
+        'date.min':
+          'Date must be no earlier than yesterday. Enter a valid date.',
       }),
   };
 

@@ -134,7 +134,10 @@ export const Footer = connect(
                         </div>
                       </div>
                     </div>
-                    <div className="grid-col-8 footer-right">
+                    <div
+                      className="grid-col-8 footer-right"
+                      data-testid="footer-misuse-warning-text"
+                    >
                       This is a U.S. government system. Your use indicates your
                       consent to monitoring and recording. Therefore, no
                       expectation of privacy is to be assumed. Misuse is subject
