@@ -61,7 +61,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
         cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
           'exist',
         );
-        cy.get('[data-testid="submit-entry-of-appearance-button"]').click();
+        cy.get('[data-testid="submit-represent-a-party-button"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(
           'contain.text',
@@ -87,7 +87,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
         selectTypeaheadInput('document-type', 'Entry of Appearance');
         cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
         cy.get('[data-testid="auto-generation"]').should('exist');
-        cy.get('[data-testid="submit-represent-a-party-button"]').click();
+        cy.get('[data-testid="request-access-submit-document"]').click();
 
         cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
           'exist',

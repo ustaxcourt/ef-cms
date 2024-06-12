@@ -156,7 +156,7 @@ describe('External User files a document across a consolidated case group', () =
     });
 
     it('practitioner requests access to case', async () => {
-      await cerebralTest.runSequence('gotoRequestAccessSequence', {
+      await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
         docketNumber: consolidatedCaseDocketNumber3,
       });
 
