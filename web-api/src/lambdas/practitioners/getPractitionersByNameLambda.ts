@@ -8,11 +8,12 @@ import { genericHandler } from '../../genericHandler';
  */
 export const getPractitionersByNameLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { name } = event.queryStringParameters;
+    const { name, searchAfter } = event.queryStringParameters;
 
     return await applicationContext
       .getUseCases()
       .getPractitionersByNameInteractor(applicationContext, {
         name,
+        searchAfter,
       });
   });

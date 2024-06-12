@@ -1,18 +1,20 @@
 const stage = process.env.STAGE || process.env.ENV || 'local';
 const region = process.env.AWS_REGION || 'us-east-1';
 const isLocal = stage === 'local';
+const currentColor = process.env.CURRENT_COLOR || 'green';
 
 export const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
-    ? `app.${process.env.EFCMS_DOMAIN}`
+    ? `app-${currentColor}.${process.env.EFCMS_DOMAIN}`
     : 'localhost:1234',
   cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
-  currentColor: process.env.CURRENT_COLOR || 'green',
+  currentColor,
   defaultAccountPass: process.env.DEFAULT_ACCOUNT_PASS || 'Testing1234$',
   documentsBucketName: isLocal
     ? 'noop-documents-local-us-east-1'
     : `${process.env.EFCMS_DOMAIN}-documents-${stage}-us-east-1`,
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
+  efcmsDomain: process.env.EFCMS_DOMAIN || 'localhost',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress:

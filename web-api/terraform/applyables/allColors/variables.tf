@@ -56,3 +56,25 @@ variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
 }
+
+variable "is_dynamsoft_enabled" {
+  type = string
+}
+
+variable "dynamsoft_s3_zip_path" {
+  type = string
+}
+
+variable "dynamsoft_url" {
+  type = string
+}
+
+variable "dynamsoft_product_keys" {
+  type = string
+}
+
+variable "viewer_protocol_policy" {
+  type    = string
+  default = "redirect-to-https"
+}
+

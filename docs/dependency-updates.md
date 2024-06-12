@@ -10,7 +10,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 ### Do the following for all package.json files
 
-note: we have 2 package.json files, be sure to update them all
+note: we have 2 package.json files, be sure to update both
   - ./package.json
   - ./web-api/runtimes/puppeteer/package.json
 
@@ -41,11 +41,9 @@ note: we have 2 package.json files, be sure to update them all
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
 4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
-	- ./iam/terraform/account-specific/main/main.tf
-	- ./iam/terraform/environment-specific/main/main.tf
-	- ./shared/admin-tools/glue/glue_migrations/main.tf
-	- ./shared/admin-tools/glue/remote_role/main.tf
-	- ./web-api/terraform/main/main.tf
+
+regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+
 	- ./web-api/workflow-terraform/glue-cron/main/main.tf
 	- ./web-api/workflow-terraform/migration/main/main.tf
 	- ./web-api/workflow-terraform/migration-cron/main/main.tf
@@ -56,11 +54,9 @@ note: we have 2 package.json files, be sure to update them all
 
 	> aws = "<LATEST_VERSION>"
 
-5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
-6. Check through the list of caveats to see if any of the documented issues have been resolved.
-
-7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
 
@@ -76,7 +72,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on.
-- As of 05/08/2024, we cannot update puppeteer beyond 22.6.5 because @sparticuz/chromium only supports version 123 of chromium.
+- As of 06/07/2024, we cannot update puppeteer beyond 22.6.5 because @sparticuz/chromium only supports version 123 of chromium.
 
 ### pdfjs-dist
 
@@ -90,10 +86,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### eslint
 - Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
+See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
 - Keep eslint-plugin-security at 2.1.1 since upgrading makes it only compatible with v9.0.0
-
-### esbuild
-- Keep esbuild pinned to 0.20.2 because esbuild-sass-plugin is not yet compatible with esbuild 0.21.0: https://github.com/glromeo/esbuild-sass-plugin/issues/176
 
 ## Incrementing the Node Cache Key Version
 

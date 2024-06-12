@@ -49,7 +49,7 @@ import { createDocketNumber } from '../../../../web-api/src/persistence/dynamo/c
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../../../web-api/src/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/deleteWorkItem';
-import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
+import { documentUrlTranslator } from '../../../../web-api/src/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
 import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
@@ -233,6 +233,7 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
+    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
@@ -591,7 +592,6 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(() => new Uint8Array([])),
     docketNumberGenerator: mockCreateDocketNumberGenerator,
-    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
       appEndpoint: 'localhost:1234',
       cognitoClientId: 'bvjrggnd3co403c0aahscinne',
@@ -602,7 +602,6 @@ export const createTestApplicationContext = ({
       workerQueueUrl: 'sqs.aws',
     },
     filterCaseMetadata: jest.fn(),
-    getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),

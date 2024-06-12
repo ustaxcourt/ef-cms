@@ -33,7 +33,6 @@ import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseN
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
-import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
@@ -124,11 +123,7 @@ export const createApplicationContext = (
   return {
     barNumberGenerator,
     docketNumberGenerator,
-    documentUrlTranslator,
     environment,
-    getAppEndpoint: () => {
-      return environment.appEndpoint;
-    },
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
