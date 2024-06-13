@@ -1,4 +1,3 @@
-import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getEnvironment = () => ({
@@ -27,19 +26,4 @@ export const ERROR_MAP_429 = {
     message: 'Please wait 1 minute before trying your search again',
     title: 'Search is experiencing high traffic',
   },
-};
-
-/**
- * Returns common configuration settings used across AWS v3 clients e.g. SQS, SES
- * @returns
- */
-export const getAwsClientConfig = () => {
-  return {
-    maxAttempts: 3,
-    region: 'us-east-1',
-    requestHandler: new NodeHttpHandler({
-      connectionTimeout: 3_000,
-      requestTimeout: 5_000,
-    }),
-  };
 };
