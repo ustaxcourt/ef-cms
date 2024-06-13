@@ -94,7 +94,7 @@ export const PublicSearch = connect(
           <div>
             <p className="margin-top-0">
               The information in the search results below is maintained by the
-              Admissions Clerk of the U.S.T.C. Practitioners may:
+              Admissions Clerk of the U.S. Tax Court. Practitioners may:
             </p>
             <ul>
               <li>
