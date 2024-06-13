@@ -1,0 +1,59 @@
+{
+  "pk": "case|8994-23",
+  "sk": "docket-entry|599c7793-20e9-438f-bec1-109703fb9136",
+  "addToCoversheet": false,
+  "attachments": false,
+  "certificateOfService": false,
+  "createdAt": "2024-06-13T18:09:26.116Z",
+  "docketEntryId": "599c7793-20e9-438f-bec1-109703fb9136",
+  "docketNumber": "8994-23",
+  "documentTitle": "Entry of Appearance",
+  "documentType": "Entry of Appearance",
+  "editState": "{}",
+  "entityName": "DocketEntry",
+  "eventCode": "EA",
+  "filedBy": "privatePractitioner 3 Test",
+  "filedByRole": "privatePractitioner",
+  "filers": ["25e05e46-8530-493c-8d67-46d88b2a7299"],
+  "filingDate": "2024-06-12T00:00:00.000-04:00",
+  "hasSupportingDocuments": false,
+  "index": 23,
+  "isDraft": false,
+  "isFileAttached": true,
+  "isOnDocketRecord": true,
+  "isStricken": false,
+  "lodged": false,
+  "numberOfPages": 3,
+  "pending": false,
+  "privatePractitioners": [
+    {
+      "name": "privatePractitioner 3 Test",
+      "partyPrivatePractitioner": true
+    }
+  ],
+  "processingStatus": "complete",
+  "qcAt": "2024-06-13T18:15:01.555Z",
+  "qcByUserId": "382adff0-df39-4cc5-af91-0c01219c66f7",
+  "receivedAt": "2024-06-13T04:00:00.000Z",
+  "redactionAcknowledgement": true,
+  "relationship": "primaryDocument",
+  "scenario": "Standard",
+  "servedAt": "2024-06-13T18:09:26.124Z",
+  "servedParties": [
+    {
+      "email": "abf8e0a686a0613eb2760af51da6dbae@ef-cms.ustaxcourt.gov",
+      "name": "Paul Counts"
+    },
+    {
+      "email": "d4c2d6820a24364f10d0ed03dafe0b98@ef-cms.ustaxcourt.gov",
+      "name": "Shane R. Colegrove"
+    },
+    {
+      "email": "c1f8a815bec2a467b7d092e090890483@ef-cms.ustaxcourt.gov",
+      "name": "Patsy A. Clarke"
+    }
+  ],
+  "servedPartiesCode": "B",
+  "stampData": {},
+  "userId": "ff274738-9892-4fc4-bc35-f1119e59f694"
+}

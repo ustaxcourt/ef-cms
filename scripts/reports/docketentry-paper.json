@@ -1,0 +1,55 @@
+{
+  "pk": "case|8994-23",
+  "sk": "docket-entry|a06737f1-6e26-4930-9e71-292c35e3ac8e",
+  "addToCoversheet": false,
+  "createdAt": "2024-06-13T00:00:00.000-04:00",
+  "docketEntryId": "a06737f1-6e26-4930-9e71-292c35e3ac8e",
+  "docketNumber": "8994-23",
+  "documentTitle": "Amended Certificate of Service of Declaration of Kevin Dyal in Support of Motion for Summary Judgment 06-13-2024",
+  "documentType": "Amended Certificate of Service",
+  "editState": "{}",
+  "entityName": "DocketEntry",
+  "eventCode": "AMDC",
+  "filedBy": "Petr. Paul Counts",
+  "filedByRole": "docketclerk",
+  "filers": ["25e05e46-8530-493c-8d67-46d88b2a7299"],
+  "filingDate": "2024-06-13T00:00:00.000-04:00",
+  "index": 24,
+  "isDraft": false,
+  "isFileAttached": true,
+  "isOnDocketRecord": true,
+  "isPaper": true,
+  "isStricken": false,
+  "lodged": false,
+  "mailingDate": "FedEx",
+  "numberOfPages": 2,
+  "pending": false,
+  "previousDocument": {
+    "docketEntryId": "b6850643-01cd-4463-b75a-a7c63750a784",
+    "documentTitle": "Declaration of Kevin Dyal in Support of Motion for Summary Judgment",
+    "documentType": "Declaration in Support"
+  },
+  "processingStatus": "complete",
+  "receivedAt": "2024-06-13T04:00:00.000Z",
+  "relationship": "primaryDocument",
+  "scenario": "Nonstandard D",
+  "servedAt": "2024-06-13T18:20:26.262Z",
+  "servedParties": [
+    {
+      "email": "privatePractitioner3@example.com",
+      "name": "privatePractitioner 3 Test"
+    },
+    {
+      "email": "d4c2d6820a24364f10d0ed03dafe0b98@ef-cms.ustaxcourt.gov",
+      "name": "Shane R. Colegrove"
+    },
+    {
+      "email": "c1f8a815bec2a467b7d092e090890483@ef-cms.ustaxcourt.gov",
+      "name": "Patsy A. Clarke"
+    }
+  ],
+  "servedPartiesCode": "B",
+  "serviceDate": "2024-06-13T00:00:00.000-04:00",
+  "stampData": {},
+  "userId": "382adff0-df39-4cc5-af91-0c01219c66f7"
+}

@@ -32,25 +32,18 @@ const documentQuery = {
         filter: [
           { term: { 'entityName.S': 'DocketEntry' } },
           {
-            exists: {
-              field: 'servedAt',
-            },
-          },
-          {
             term: {
               'isStricken.BOOL': false,
             },
           },
-          //add filter by date here
           {
             range: {
-              'filingDate.S': {
+              'receivedAt.S': {
                 gte: dateStart,
-                lte: dateEnd, //todo: what's up with '/h'?
+                lt: dateEnd,
               },
             },
           },
-          //add filter for cases within servedAt range
         ],
         // minimum_should_match: 1,
         // should: shouldFilters,
