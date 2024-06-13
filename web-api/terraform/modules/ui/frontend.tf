@@ -201,21 +201,25 @@ resource "aws_cloudfront_distribution" "distribution" {
   origin {
     domain_name = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
     origin_id   = "primary-documents.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   origin {
     domain_name = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
     origin_id   = "failover-documents.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   origin {
     domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
     origin_id   = "primary-temp-documents.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   origin {
     domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
     origin_id   = "failover-temp-documents.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   custom_error_response {
@@ -304,6 +308,8 @@ resource "aws_cloudfront_distribution" "distribution" {
         forward = "none"
       }
     }
+
+    trusted_key_groups = [aws_cloudfront_key_group.key_group.id]
   }
 
   ordered_cache_behavior {
@@ -330,6 +336,8 @@ resource "aws_cloudfront_distribution" "distribution" {
         forward = "none"
       }
     }
+
+    trusted_key_groups = [aws_cloudfront_key_group.key_group.id]
   }
 
   lifecycle {
@@ -348,6 +356,37 @@ resource "aws_cloudfront_distribution" "distribution" {
     acm_certificate_arn = data.aws_acm_certificate.private_certificate.arn
     ssl_support_method  = "sni-only"
   }
+
+}
+
+resource "aws_cloudfront_origin_access_control" "cloudfront_documents_oac" {
+  name                              = "cloudfront_documents_oac_${var.environment}_${var.current_color}"
+  description                       = "Origin access control used for fetching private documents from documents bucket"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_kms_key" "origin_access_control_signing_key" {
+  description              = "RSA-2048 asymmetric KMS key Key pair used to sign document urls"
+  customer_master_key_spec = "RSA_2048"
+  key_usage                = "SIGN_VERIFY"
+  enable_key_rotation      = false
+}
+
+data "aws_kms_public_key" "origin_access_control_public_signing_key" {
+  key_id = aws_kms_key.origin_access_control_signing_key.id
+}
+
+resource "aws_cloudfront_public_key" "public_key_for_documents" {
+  encoded_key = data.aws_kms_public_key.origin_access_control_public_signing_key.public_key_pem
+  name        = "public_key_for_documents"
+}
+
+resource "aws_cloudfront_key_group" "key_group" {
+  comment = "oac_key_group_${var.environment}_${var.current_color}"
+  items   = [aws_cloudfront_public_key.public_key_for_documents.id]
+  name    = "oac_key_group_${var.environment}_${var.current_color}"
 }
 
 data "aws_route53_zone" "zone" {
