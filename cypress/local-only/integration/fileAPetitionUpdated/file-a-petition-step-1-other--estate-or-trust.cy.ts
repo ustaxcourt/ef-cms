@@ -1,19 +1,11 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 
-describe('File a petition: Step 2 - Petitioner Information', () => {
+describe('File a petition: Step 1 - Petitioner Information', () => {
   beforeEach(() => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
-
-    cy.get('[data-testid="petition-reason--1"]').focus();
-    cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
-
-    cy.get('[data-testid="petition-fact--1"]').focus();
-    cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
-
-    cy.get('[data-testid="step-1-next-button"]').click();
-    cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+    cy.get('[data-testid="step-indicator-current-step-1-icon"]');
   });
 
   describe('Other', () => {
@@ -38,7 +30,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
     it('should display a validation error message when no other type is selected', () => {
       cy.get('[data-testid="other-type-error-message"]').should('not.exist');
 
-      cy.get('[data-testid="step-2-next-button"]').click();
+      cy.get('[data-testid="step-1-next-button"]').click();
 
       cy.get('[data-testid="other-type-error-message"]').should('exist');
     });
@@ -68,7 +60,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
       it('should display a validation error message when no estate type is selected', () => {
         cy.get('[data-testid="estate-type-error-message"]').should('not.exist');
 
-        cy.get('[data-testid="step-2-next-button"]').click();
+        cy.get('[data-testid="step-1-next-button"]').click();
 
         cy.get('[data-testid="estate-type-error-message"]').should('exist');
       });
@@ -141,7 +133,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               cy.get(`[data-testid="${selector}"]`).should('not.exist');
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-1-next-button"]').click();
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
               cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -158,8 +150,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               }
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
             FORM_INPUT_DATA.forEach(inputInfo => {
@@ -173,8 +165,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 cy.get(`[data-testid="${input}"]`).type(inputValue);
               }
             });
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
         });
 
@@ -240,7 +232,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               cy.get(`[data-testid="${selector}"]`).should('not.exist');
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-1-next-button"]').click();
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
               cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -257,8 +249,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               }
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
             FORM_INPUT_DATA.forEach(inputInfo => {
@@ -272,8 +264,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 cy.get(`[data-testid="${input}"]`).type(inputValue);
               }
             });
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
         });
       });
@@ -335,7 +327,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               cy.get(`[data-testid="${selector}"]`).should('not.exist');
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-1-next-button"]').click();
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
               cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -352,8 +344,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               }
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
             FORM_INPUT_DATA.forEach(inputInfo => {
@@ -367,8 +359,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 cy.get(`[data-testid="${input}"]`).type(inputValue);
               }
             });
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
         });
 
@@ -425,7 +417,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               cy.get(`[data-testid="${selector}"]`).should('not.exist');
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-1-next-button"]').click();
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
               cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -442,8 +434,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               }
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
             FORM_INPUT_DATA.forEach(inputInfo => {
@@ -457,8 +449,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 cy.get(`[data-testid="${input}"]`).type(inputValue);
               }
             });
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
         });
       });
@@ -525,7 +517,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               cy.get(`[data-testid="${selector}"]`).should('not.exist');
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-1-next-button"]').click();
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
               cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -542,8 +534,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               }
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
             FORM_INPUT_DATA.forEach(inputInfo => {
@@ -557,8 +549,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 cy.get(`[data-testid="${input}"]`).type(inputValue);
               }
             });
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
         });
 
@@ -618,7 +610,7 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               cy.get(`[data-testid="${selector}"]`).should('not.exist');
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
+            cy.get('[data-testid="step-1-next-button"]').click();
 
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
               cy.get(`[data-testid="${selector}"]`).should('exist');
@@ -635,8 +627,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
               }
             });
 
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
           it('should allow user to go to step 3 if everything is filled out correctly', () => {
             FORM_INPUT_DATA.forEach(inputInfo => {
@@ -650,8 +642,8 @@ describe('File a petition: Step 2 - Petitioner Information', () => {
                 cy.get(`[data-testid="${input}"]`).type(inputValue);
               }
             });
-            cy.get('[data-testid="step-2-next-button"]').click();
-            cy.get('[data-testid="step-indicator-current-step-3-icon"]');
+            cy.get('[data-testid="step-1-next-button"]').click();
+            cy.get('[data-testid="step-indicator-current-step-2-icon"]');
           });
         });
       });

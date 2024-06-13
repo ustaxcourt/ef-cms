@@ -1,9 +1,9 @@
-import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
+import { getFilePetitionPetitionInformationAction } from '@web-client/presenter/actions/getFilePetitionPetitionInformationAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getStep1DataAction', () => {
-  it('should fetch step 1 related data from state.form', async () => {
-    const results = await runAction(getStep1DataAction, {
+describe('getFilePetitionPetitionInformationAction', () => {
+  it('should fetch Petition Information related data from state.form', async () => {
+    const results = await runAction(getFilePetitionPetitionInformationAction, {
       state: {
         form: {
           petitionFacts: 'TEST_petitionFacts',
@@ -20,8 +20,8 @@ describe('getStep1DataAction', () => {
       },
     });
 
-    const { step1Data } = results.output;
-    expect(step1Data).toEqual({
+    const { petitionInformation } = results.output;
+    expect(petitionInformation).toEqual({
       petitionFacts: 'TEST_petitionFacts',
       petitionFile: 'TEST_petitionFile',
       petitionFileSize: 'TEST_petitionFileSize',

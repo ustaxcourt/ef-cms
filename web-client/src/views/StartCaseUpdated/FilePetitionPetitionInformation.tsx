@@ -12,7 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const UpdatedFilePetitionStep1 = connect(
+export const FilePetitionPetitionInformation = connect(
   {
     constants: state.constants,
     form: state.form,
@@ -20,7 +20,7 @@ export const UpdatedFilePetitionStep1 = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep1({
+  function FilePetitionPetitionInformation({
     constants,
     form,
     setPetitionTypeSequence,

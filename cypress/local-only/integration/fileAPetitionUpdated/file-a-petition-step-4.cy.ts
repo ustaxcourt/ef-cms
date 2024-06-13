@@ -14,8 +14,8 @@ describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
 
-    fillPetitionFileInformation(VALID_FILE);
     fillPetitionerInformation();
+    fillPetitionFileInformation(VALID_FILE);
     fillIrsNoticeInformation(VALID_FILE);
   });
 

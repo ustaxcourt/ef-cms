@@ -13,15 +13,15 @@ const props = cerebralProps as unknown as {
 
 export const UpdatedFilePetitionButtons = connect(
   {
+    filePetitionCompletePetitionInformationSequence:
+      sequences.filePetitionCompletePetitionInformationSequence,
+    filePetitionCompletePetitionerInformationSequence:
+      sequences.filePetitionCompletePetitionerInformationSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isNextButtonDisabled: props.isNextButtonDisabled,
     primaryLabel: props.primaryLabel,
     resetFocus: props.resetFocus,
     stepIndicatorInfo: state.stepIndicatorInfo,
-    updatedFilePetitionCompleteStep1Sequence:
-      sequences.updatedFilePetitionCompleteStep1Sequence,
-    updatedFilePetitionCompleteStep2Sequence:
-      sequences.updatedFilePetitionCompleteStep2Sequence,
     updatedFilePetitionCompleteStep3Sequence:
       sequences.updatedFilePetitionCompleteStep3Sequence,
     updatedFilePetitionCompleteStep4Sequence:
@@ -35,13 +35,13 @@ export const UpdatedFilePetitionButtons = connect(
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetition({
+    filePetitionCompletePetitionerInformationSequence,
+    filePetitionCompletePetitionInformationSequence,
     formCancelToggleCancelSequence,
     isNextButtonDisabled,
     primaryLabel,
     resetFocus,
     stepIndicatorInfo,
-    updatedFilePetitionCompleteStep1Sequence,
-    updatedFilePetitionCompleteStep2Sequence,
     updatedFilePetitionCompleteStep3Sequence,
     updatedFilePetitionCompleteStep4Sequence,
     updatedFilePetitionCompleteStep5Sequence,
@@ -50,8 +50,8 @@ export const UpdatedFilePetitionButtons = connect(
   }) {
     const { currentStep } = stepIndicatorInfo;
     const NEXT_SEQUENCE = {
-      1: updatedFilePetitionCompleteStep1Sequence,
-      2: updatedFilePetitionCompleteStep2Sequence,
+      1: filePetitionCompletePetitionerInformationSequence,
+      2: filePetitionCompletePetitionInformationSequence,
       3: updatedFilePetitionCompleteStep3Sequence,
       4: updatedFilePetitionCompleteStep4Sequence,
       5: updatedFilePetitionCompleteStep5Sequence,

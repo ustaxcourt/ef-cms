@@ -1,15 +1,15 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
+import { getFilePetitionPetitionerInformationAction } from '@web-client/presenter/actions/getFilePetitionPetitionerInformationAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { validateUploadPetitionStep1Action } from '@web-client/presenter/actions/validateUploadPetitionStep1Action';
+import { validateFilePetitionPetitionerInformationAction } from '@web-client/presenter/actions/validateFilePetitionPetitionerInformationAction';
 
-export const updatedFilePetitionCompleteStep1Sequence = [
+export const filePetitionCompletePetitionerInformationSequence = [
   startShowValidationAction,
-  getStep1DataAction,
-  validateUploadPetitionStep1Action,
+  getFilePetitionPetitionerInformationAction,
+  validateFilePetitionPetitionerInformationAction,
   {
     error: [setValidationErrorsAction],
     success: [
