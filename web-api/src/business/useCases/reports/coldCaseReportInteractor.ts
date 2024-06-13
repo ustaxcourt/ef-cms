@@ -12,26 +12,52 @@ export const coldCaseReportInteractor = async (
         _source: ['docketNumber', 'pending', 'filingDate'],
         query: {
           bool: {
-            must: [
+            filter: [
               {
-                has_parent: {
+                term: {
+                  'status.S': 'General Docket - Not at Issue',
+                },
+              },
+              {
+                term: {
+                  'entityName.S': 'CaseDocketEntryMapping',
+                },
+              },
+            ],
+            must_not: [
+              {
+                has_child: {
                   inner_hits: {
-                    _source: {
-                      includes: ['docketNumber'],
-                    },
-                    name: 'case-mappings',
+                    _source: ['filingDate.S', 'pending.BOOL'],
+                    name: 'most_recent_child',
+                    size: 1,
+                    sort: [{ 'filingDate.S': { order: 'desc' } }],
                   },
-                  parent_type: 'case',
                   query: {
-                    term: {
-                      'status.S': 'General Docket - Not at Issue',
+                    bool: {
+                      should: [
+                        {
+                          term: {
+                            'pending.BOOL': true,
+                          },
+                        },
+                        {
+                          range: {
+                            'filingDate.S': {
+                              gt: 'now-120d/d',
+                            },
+                          },
+                        },
+                      ],
                     },
                   },
+                  type: 'document',
                 },
               },
             ],
           },
         },
+        sort: [{ 'filingDate.S': { order: 'asc' } }],
       },
       index: 'efcms-docket-entry',
       size: 10000,
@@ -39,30 +65,5 @@ export const coldCaseReportInteractor = async (
 
   const { results } = formatResults(entriesOfNotAtIssueCases.body);
 
-  const cases = {};
-  for (let entry of results) {
-    if (!cases[entry.docketNumber]) {
-      cases[entry.docketNumber] = [];
-    }
-    cases[entry.docketNumber].push(entry);
-  }
-
-  const DAYS_THRESHOLD = calculateISODate({
-    howMuch: -120,
-    units: 'days',
-  });
-
-  const coldCases: { docketNumber: string }[] = [];
-  for (let docketNumber of Object.keys(cases)) {
-    const isCold = cases[docketNumber].every(entry => {
-      return entry.filingDate < DAYS_THRESHOLD && !entry.pending;
-    });
-    if (isCold) {
-      coldCases.push({
-        docketNumber,
-      });
-    }
-  }
-
-  return coldCases;
+  return results;
 };
