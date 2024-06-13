@@ -42,6 +42,7 @@ export const ConfirmInitiateServiceModal = connect(
           debounceSubmit(200);
           confirmSequence();
         }}
+        dataTestId="confirm-initiate-service-modal"
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >

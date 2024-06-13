@@ -41,7 +41,6 @@ export const ForwardMessageModalDialog = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Send"
-        preventCancelOnBlur={true}
         title="Forward Message"
         onCancelSequence={clearModalFormSequence}
         onConfirmSequence={forwardMessageSequence}

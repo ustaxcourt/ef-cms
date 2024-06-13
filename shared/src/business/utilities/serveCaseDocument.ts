@@ -11,46 +11,61 @@ export const serveCaseDocument = async ({
   caseEntity: Case;
   initialDocumentTypeKey: string;
 }) => {
-  const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
-
-  const initialDocketEntry = caseEntity.docketEntries.find(
-    doc => doc.documentType === initialDocumentType.documentType,
-  );
+  const documentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
   if (
-    initialDocketEntry &&
-    !DocketEntry.isUnservable(initialDocketEntry) &&
-    initialDocketEntry.isFileAttached
+    documentType.eventCode ===
+    INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
   ) {
-    initialDocketEntry.setAsServed([
+    const docketEntriesByDocumentType = caseEntity.docketEntries.filter(
+      doc => doc.documentType === documentType.documentType,
+    );
+
+    for (const docketEntry of docketEntriesByDocumentType) {
+      await serveDocument(docketEntry, caseEntity, applicationContext);
+    }
+  } else {
+    const docketEntry = caseEntity.docketEntries.find(
+      doc => doc.documentType === documentType.documentType,
+    );
+    await serveDocument(docketEntry, caseEntity, applicationContext);
+  }
+};
+
+async function serveDocument(docketEntry, caseEntity, applicationContext) {
+  if (
+    docketEntry &&
+    !DocketEntry.isUnservable(docketEntry) &&
+    docketEntry.isFileAttached
+  ) {
+    docketEntry.setAsServed([
       {
         name: 'IRS',
         role: ROLES.irsSuperuser,
       },
     ]);
-    caseEntity.updateDocketEntry(initialDocketEntry);
+    caseEntity.updateDocketEntry(docketEntry);
 
     if (
-      initialDocketEntry.documentType ===
-      INITIAL_DOCUMENT_TYPES.petition.documentType
+      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType
     ) {
       await applicationContext
         .getUseCaseHelpers()
         .sendIrsSuperuserPetitionEmail({
           applicationContext,
           caseEntity,
-          docketEntryId: initialDocketEntry.docketEntryId,
+          docketEntryId: docketEntry.docketEntryId,
         });
     } else {
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
-        docketEntryId: initialDocketEntry.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
         servedParties: {
-          //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
+          // IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
           electronic: [],
         },
       });
     }
   }
-};
+}

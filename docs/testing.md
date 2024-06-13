@@ -247,54 +247,11 @@ All files |        0 |        0 |        0 |        0 |                   |
 - Funcs: % of functions executed in the code
 - Uncovered Line #s: lines not covered by tests
 
-## Pa11y Tests
+### Accessibility Extension
 
-We care about accessability on Dawson; therefore, we use [Pa11y](https://pa11y.org/) to run a variety of accessability checks against our site.  More specifically, we use [pa11y-ci](https://www.npmjs.com/package/pa11y-ci) which handles spinning up a local instance of Pa11y and running the checks against the site. 
+In addition to automated cypress tests, the following extension is useful for manually running accessibility scans on individual pages.
 
-If you have your UI and API running locally, you can use the following command to run the Pa11y tests:
-
-- `npm run test:pa11y`
-- `npm run test:pa11y:public`
-
-
-### How Pa11y Works
-
-Pa11y is set up using .json files that define which URL it should hit and what actions it should invoke.  For example, we have a file called `web-client/pa11y/pa11y-judge.js` which contains the following:
-
-```javascript
-[
-  'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
-  {
-    actions: [
-      'wait for #advanced-search-button to be visible',
-      'click element #advanced-search-button',
-      'wait for .search-results to be visible',
-    ],
-    notes: 'checks a11y of advanced search results table',
-    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/search?petitionerName=cairo',
-  }
-  //.... more pa11y tests
-]
-```
-
-The Pa11y test is made up of an array of either URLs or objects.  The url will have `?code=EMAIL` which will log in as that user and navigate to `&path=URL`.  We can also provide a list of `actions` which Pa11y will follow when the page loads.  We often use the `actions` list for clicking on buttons to have modals show and verify them again Pa11y.
-
-### An issue with Pa11y in CI/CD
-
-One thing you'll notice is that our application have many pa11y tests split up into smaller scripts
-
-- `npm run test:pa11y:1`
-- `npm run test:pa11y:2`
-- `npm run test:pa11y:3`
-- `npm run test:pa11y:4`
-
-The main reason for this is that we've noticed that Pa11y seems to eat up memory in our CI/CD pipeline and cause the Docker containers to throw `out of memory` exceptions.  Currently, our best fix involves splitting up these test suites into smaller suites.
-
-### Accessibility HTML_CodeSniffer Bookmarklet
-
-The following bookmarklet is useful for running Pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
-
-https://squizlabs.github.io/HTML_CodeSniffer/
+https://www.deque.com/axe/devtools/chrome-browser-extension/
 
 ## Testing Everything via Docker
 
@@ -306,7 +263,7 @@ If needed, you can run all the tests locally by running the following:
 ./docker-test-all.sh
 ```
 
-This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
+This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, etc. over all the components.
 
 
 ## PDF Testing

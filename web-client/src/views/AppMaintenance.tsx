@@ -17,7 +17,10 @@ const updateTime = `${new Date().toLocaleString('en-US', {
 export const AppMaintenance = connect(function AppMaintenance() {
   return (
     <>
-      <section className="text-center maintenance-content">
+      <section
+        className="text-center maintenance-content"
+        data-testid="maintenance-container"
+      >
         <div>
           <div className="usa-logo margin-5">
             <a href="/">

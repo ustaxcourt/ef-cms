@@ -10,7 +10,7 @@ Here are the Deliverables and Performance Standards for the U.S. Tax Court’s E
 | --- | --- | --- | --- |
 | Tested Code | Code delivered under the order must have substantial test code coverage and a clean code base<br><br>Version-controlled Court GitHub repository of code that comprises product that will remain in the government domain | Minimum of 90% test coverage of all code | Combination of manual review and automated testing |
 | Properly Styled Code | [GSA 18F Front End Guide](https://frontend.18f.gov/#js-style) | 0 linting errors and 0 warnings | Combination of manual review and automated testing |
-| Accessible | Web Content Accessibility Guidelines 2.1 AA (WCAG 2.1 AA) standards | 0 errors reported for WCAG 2.1 AA standards using an automated scanner and 0 errors reported in manual testing | [http://squizlabs.github.io/HTML\_CodeSniffer/](http://squizlabs.github.io/HTML_CodeSniffer/) or [https://github.com/pa11y/pa11y](https://github.com/pa11y/pa11y) |
+| Accessible | Web Content Accessibility Guidelines 2.1 AA (WCAG 2.1 AA) standards | 0 errors reported for WCAG 2.1 AA standards using an automated scanner and 0 errors reported in manual testing | [http://squizlabs.github.io/HTML\_CodeSniffer/](http://squizlabs.github.io/HTML_CodeSniffer/) or [https://github.com/dequelabs/axe-core](https://github.com/dequelabs/axe-core) |
 | Deployed | Code must successfully build and deploy into staging environment. | Successful build with a single command | Combination of manual review and automated testing |
 | Documentation | All dependencies are listed and the licenses are documented. Major functionality in the software/source code is documented. Individual methods are documented inline using Typescript. System diagram is provided. | Combination of manual review and automated testing, if available | Manual review |
 | Secure | OWASP Application Security Verification Standard 3.0 | Code submitted must be free of medium- and high-level static and dynamic security vulnerabilities | Clean tests from a static testing SaaS (such as Gemnasium) and from OWASP ZAP, along with documentation explaining any false positives |
@@ -105,7 +105,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] use an automated audit tool, such as Chrome Audit or aXe
 		- [ ] navigate site only with the keyboard
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
-		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
+		- [ ] manually test anything that cypress cannot test automatically
 - [ ] review static code analysis results in [the vendor’s DeepScan account](https://deepscan.io/dashboard/#view=project&tid=8976&pid=17137&bid=383813&prid=874192&subview=overview)
 - [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
 - [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
