@@ -10,7 +10,7 @@ import {
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { flatten, partition, uniq } from 'lodash';
 
 export const setTrialSessionCalendarInteractor = async (
