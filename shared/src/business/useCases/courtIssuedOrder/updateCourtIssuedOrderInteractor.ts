@@ -10,7 +10,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { get } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  *

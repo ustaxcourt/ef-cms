@@ -10,7 +10,7 @@ import {
 } from '@web-api/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * saveCaseDetailInternalEdit
