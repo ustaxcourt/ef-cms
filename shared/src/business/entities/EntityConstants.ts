@@ -1004,6 +1004,7 @@ export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
 };
 
 export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
+  [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
   [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
   [CASE_TYPES_MAP.passport]: 'Passport',
   [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',
