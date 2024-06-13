@@ -81,7 +81,9 @@ export const practitionerRequestsPendingAccessToCase = (
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(cerebralTest.getState('wizardStep')).toBe('RequestAccessReview');
+    expect(cerebralTest.getState('wizardStep')).toBe(
+      'CaseAssociationRequestReview',
+    );
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
 
