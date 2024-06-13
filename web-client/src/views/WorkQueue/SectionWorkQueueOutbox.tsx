@@ -18,7 +18,7 @@ export const SectionWorkQueueOutbox = connect(
   }) {
     return (
       <React.Fragment>
-        <WorkQueueAssignments showSendToBar={false} users={users} />
+        <WorkQueueAssignments users={users} />
         <table
           aria-describedby="tab-work-queue"
           className="usa-table ustc-table subsection"
