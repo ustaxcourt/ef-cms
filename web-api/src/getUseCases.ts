@@ -21,6 +21,7 @@ import { changePasswordInteractor } from '@web-api/business/useCases/auth/change
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from '../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor';
+import { coldCaseReportInteractor } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { completeDocketEntryQCInteractor } from '../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from '../../shared/src/business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/business/useCases/workitems/completeWorkItemInteractor';
@@ -234,6 +235,7 @@ const useCases = {
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
+  coldCaseReportInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
