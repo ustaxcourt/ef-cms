@@ -119,24 +119,27 @@ resource "aws_s3_bucket_policy" "documents_east_policy" {
 }
 
 data "aws_iam_policy_document" "documents_east_policy_document" {
-  statement {
-    sid = "DelegateS3AccessForGlueJobs"
+  dynamic "statement" {
+    for_each = var.environment == "prod" ? ["apply"] : []
+    content {
+      sid = "DelegateS3AccessForGlueJobs"
 
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"]
+      principals {
+        type        = "AWS"
+        identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"]
+      }
+
+      actions = [
+        "s3:GetObject",
+        "s3:GetObjectTagging",
+        "s3:ListBucket",
+      ]
+
+      resources = [
+        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
+        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
+      ]
     }
-
-    actions = [
-      "s3:GetObject",
-      "s3:GetObjectTagging",
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
-      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
-    ]
   }
 
   statement {
@@ -174,6 +177,41 @@ resource "aws_s3_bucket" "documents_us_west_1" {
 
   tags = {
     environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "documents_west_ownership_controls" {
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_policy" "documents_west_policy" {
+  provider = aws.us-west-1
+  bucket   = aws_s3_bucket.documents_us_west_1.bucket
+  policy   = data.aws_iam_policy_document.documents_west_policy_document.json
+}
+
+data "aws_iam_policy_document" "documents_west_policy_document" {
+  statement {
+    sid = "AllowCloudFrontServicePrincipalReadOnly"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions = [
+      "s3:GetObject",
+    ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.documents_us_west_1.bucket}/*"
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
+    }
   }
 }
 
