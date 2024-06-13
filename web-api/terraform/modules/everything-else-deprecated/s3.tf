@@ -113,15 +113,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_
   }
 }
 
-resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
-  count  = var.environment == "prod" ? 1 : 0
+resource "aws_s3_bucket_policy" "documents_east_policy" {
   bucket = aws_s3_bucket.documents_us_east_1.bucket
-  policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
+  policy = data.aws_iam_policy_document.documents_east_policy_document.json
 }
 
-data "aws_iam_policy_document" "allow_access_for_glue_job" {
+data "aws_iam_policy_document" "documents_east_policy_document" {
   statement {
-    sid = "DelegateS3Access"
+    sid = "DelegateS3AccessForGlueJobs"
 
     principals {
       type        = "AWS"
@@ -138,6 +137,25 @@ data "aws_iam_policy_document" "allow_access_for_glue_job" {
       "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
       "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
     ]
+  }
+
+  statement {
+    sid = "AllowCloudFrontServicePrincipalReadOnly"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions = [
+      "s3:GetObject",
+    ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.documents_us_east_1.bucket}/*"
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
+    }
   }
 }
 
