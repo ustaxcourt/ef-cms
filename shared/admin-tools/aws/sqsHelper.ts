@@ -6,10 +6,8 @@ import {
   SendMessageBatchCommandOutput,
 } from '@aws-sdk/client-sqs';
 import { chunk } from 'lodash';
-import { getAwsClientConfig } from '@shared/sharedAppContext';
 
 const sqsClient = new SQSClient({
-  ...getAwsClientConfig(),
   region: 'us-east-1',
 });
 

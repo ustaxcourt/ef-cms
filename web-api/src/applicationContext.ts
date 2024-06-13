@@ -27,6 +27,7 @@ import {
 } from '@web-api/persistence/messages/sendEmailToUser';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { SESClient } from '@aws-sdk/client-ses';
@@ -41,11 +42,6 @@ import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
 import { environment } from '@web-api/environment';
 import {
-  getAwsClientConfig,
-  getEnvironment,
-  getUniqueId,
-} from '../../shared/src/sharedAppContext';
-import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
@@ -56,6 +52,7 @@ import {
 import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
+import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -75,6 +72,7 @@ import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import AWS, { S3 } from 'aws-sdk';
+
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
@@ -197,7 +195,14 @@ export const createApplicationContext = (
         } as unknown as SESClient;
       } else {
         if (!sesCache) {
-          sesCache = new SESClient(getAwsClientConfig());
+          sesCache = new SESClient({
+            maxAttempts: 3,
+            region: 'us-east-1',
+            requestHandler: new NodeHttpHandler({
+              connectionTimeout: 3_000,
+              requestTimeout: 5_000,
+            }),
+          });
         }
         return sesCache;
       }
@@ -236,7 +241,14 @@ export const createApplicationContext = (
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
-        sqsCache = new SQSClient(getAwsClientConfig());
+        sqsCache = new SQSClient({
+          maxAttempts: 3,
+          region: 'us-east-1',
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3_000,
+            requestTimeout: 5_000,
+          }),
+        });
       }
       return sqsCache;
     },
