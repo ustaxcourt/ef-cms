@@ -367,19 +367,18 @@ resource "aws_cloudfront_origin_access_control" "cloudfront_documents_oac" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_kms_key" "origin_access_control_signing_key" {
-  description              = "RSA-2048 asymmetric KMS key Key pair used to sign document urls"
-  customer_master_key_spec = "RSA_2048"
-  key_usage                = "SIGN_VERIFY"
-  enable_key_rotation      = false
-}
-
-data "aws_kms_public_key" "origin_access_control_public_signing_key" {
-  key_id = aws_kms_key.origin_access_control_signing_key.id
-}
-
 resource "aws_cloudfront_public_key" "public_key_for_documents" {
-  encoded_key = data.aws_kms_public_key.origin_access_control_public_signing_key.public_key_pem
+  encoded_key = <<EOF
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs9eGPE3QS1MGM7iuVc74
+83NgFlah8s3+4YbtAxMumToPB28F1UKGEUDDbtl6jDfFJNRaEySvXh+icOZukWxn
+PahcaWNZN/eqochAYroGbgsOfhgbDbKf8hmlGwvIwszNpp3TRxF+EN5LSO9xCZWe
+rY5KyBl6xWxmbEQ7O6o/t1TckS84f/vCEa3qYJ/uHzN62inI0opbNC1dcJimKPdf
+HBeGzaj4HU6l0mwuYdozROLUaDCYakuKilRIQrMSN/tmrCsb149raXSHaGofnoVv
+J2OYiOll4Ee8L4qCSy06eAXC4DWgt+Q23Qv+YdeSzqrx4m0jS1J4cbO0Ol9rw08Z
+UwIDAQAB
+-----END PUBLIC KEY-----
+EOF
   name        = "public_key_for_documents"
 }
 
