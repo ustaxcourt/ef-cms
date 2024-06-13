@@ -1,10 +1,44 @@
-
+// ADD CLOUDFRONT ACCESS AND DISABLE ACLS
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
 
   tags = {
     environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "temp_documents_east_ownership_controls" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_policy" "temp_documents_east_policy" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.bucket
+  policy = data.aws_iam_policy_document.temp_documents_east_policy_document.json
+}
+
+data "aws_iam_policy_document" "temp_documents_east_policy_document" {
+
+  statement {
+    sid = "AllowCloudFrontServicePrincipalReadOnly"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions = [
+      "s3:GetObject",
+    ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.temp_documents_us_east_1.bucket}/*"
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
+    }
   }
 }
 
@@ -65,6 +99,42 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
 
   tags = {
     environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "temp_documents_west_ownership_controls" {
+  provider = aws.us-west-1
+  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_policy" "temp_documents_west_policy" {
+  provider = aws.us-west-1
+  bucket = aws_s3_bucket.temp_documents_us_west_1.bucket
+  policy = data.aws_iam_policy_document.temp_documents_west_policy_document.json
+}
+
+data "aws_iam_policy_document" "temp_documents_west_policy_document" {
+
+  statement {
+    sid = "AllowCloudFrontServicePrincipalReadOnly"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions = [
+      "s3:GetObject",
+    ]
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.temp_documents_us_west_1.bucket}/*"
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
+    }
   }
 }
 
