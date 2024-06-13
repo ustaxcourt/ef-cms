@@ -1,3 +1,5 @@
+import { Client } from '@opensearch-project/opensearch/.';
+
 /* eslint-disable no-unused-vars */
 interface IApplicationContext {
   [key: string]: any;
@@ -8,4 +10,5 @@ interface IApplicationContext {
   getUtilities: IGetUtilities;
   getDocumentGenerators: IGetDocumentGenerators;
   getStorageClient: () => AWS.S3;
+  getSearchClient: () => Client;
 }
