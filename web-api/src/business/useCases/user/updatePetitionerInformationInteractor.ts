@@ -15,7 +15,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
   oldCase,
