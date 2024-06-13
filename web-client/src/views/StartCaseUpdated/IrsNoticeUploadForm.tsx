@@ -124,7 +124,7 @@ export const IrsNoticeUploadForm = connect(
           <Mobile>
             <CaseTypeSelect
               allowDefaultOption={true}
-              caseTypes={caseTypeDescriptionHelper.caseTypesIrsNoticeUpload}
+              caseTypes={caseTypeDescriptionHelper.caseTypes}
               errorMessageId={`case-type-${index}-error-message`}
               hint="(required)"
               legend="Type of notice/case"
@@ -267,7 +267,7 @@ export const IrsNoticeUploadForm = connect(
               <div className="grid-col-8">
                 <CaseTypeSelect
                   allowDefaultOption={true}
-                  caseTypes={caseTypeDescriptionHelper.caseTypesIrsNoticeUpload}
+                  caseTypes={caseTypeDescriptionHelper.caseTypes}
                   errorMessageId={`case-type-${index}-error-message`}
                   hint="(required)"
                   legend="Type of notice/case"

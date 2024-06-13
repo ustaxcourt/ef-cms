@@ -22,38 +22,28 @@ export const caseTypeDescriptionHelper = (
     CASE_TYPES,
   } = applicationContext.getConstants();
 
-  let caseTypesWithDisclosure: string[] = cloneDeep(CASE_TYPES);
+  const caseTypesWithDisclosure: string[] = cloneDeep(CASE_TYPES);
   caseTypesWithDisclosure.push('Disclosure1', 'Disclosure2');
 
-  let caseTypesWithDescriptions: { description: string; type: string }[] = [];
-  if (form.hasIrsNotice) {
-    caseTypesWithDisclosure.forEach(caseType => {
-      const caseDescription = CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];
-      if (caseDescription) {
-        caseTypesWithDescriptions.push({
-          description: caseDescription,
-          type: caseType,
-        });
-      }
-    });
-  } else {
-    caseTypesWithDisclosure.forEach(caseType => {
-      const caseDescription =
-        CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
-      if (caseDescription) {
-        caseTypesWithDescriptions.push({
-          description: caseDescription,
-          type: caseType,
-        });
-      }
-    });
-  }
+  const caseTypesWithDescriptions: { description: string; type: string }[] = [];
+  const caseTypeDescriptions = form.hasIrsNotice
+    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE
+    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE;
+
+  caseTypesWithDisclosure.forEach(caseType => {
+    const caseDescription = caseTypeDescriptions[caseType];
+    if (caseDescription) {
+      caseTypesWithDescriptions.push({
+        description: caseDescription,
+        type: caseType,
+      });
+    }
+  });
 
   return {
-    caseTypes: caseTypesWithDescriptions,
-    caseTypesIrsNoticeUpload: reorderCaseTypesForIrsNoticeCaseTypes(
-      caseTypesWithDescriptions,
-    ),
+    caseTypes: form.hasIrsNotice
+      ? reorderCaseTypesForIrsNoticeCaseTypes(caseTypesWithDescriptions)
+      : caseTypesWithDescriptions,
   };
 };
 
