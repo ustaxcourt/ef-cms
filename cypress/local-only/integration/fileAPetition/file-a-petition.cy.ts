@@ -183,9 +183,24 @@ describe('creation form', () => {
 
   it('reviews information before filing', () => {
     cy.get('button#submit-case').click();
+
+    // check pdf preview for desktop
     cy.get('button#petition-preview-button').click();
     cy.get('dialog.modal-screen').should('exist');
     cy.get('button#close-modal-button').click();
+
+    // check pdf preview for mobile
+    cy.viewport('iphone-6+');
+    cy.window().then(win => {
+      // Stub the window.open in the context of the window
+      cy.stub(win, 'open').as('windowOpen');
+    });
+    cy.get('button#petition-preview-button').click();
+    cy.get('@windowOpen').should(
+      'be.calledWithMatch',
+      new RegExp('^blob:', 'm'),
+      '_blank',
+    );
   });
 
   it('submits forms and redirects to the file petition success page', () => {
