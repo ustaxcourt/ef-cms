@@ -2,7 +2,7 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { compact } from 'lodash';
 import { compareCasesByDocketNumberFactory } from '../../utilities/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
-import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
+import { saveFileAndGenerateUrl } from '../../../../../web-api/src/business/useCaseHelper/saveFileAndGenerateUrl';
 
 export const generateTrialCalendarPdfInteractor = async (
   applicationContext: IApplicationContext,

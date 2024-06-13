@@ -13,7 +13,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateTrialSession = async (
   applicationContext: IApplicationContext,
