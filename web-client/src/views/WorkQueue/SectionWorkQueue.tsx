@@ -38,7 +38,7 @@ export const SectionWorkQueue = connect(
         <WorkQueueActionButtons />
 
         <Tab
-          id="section-inbox-tab"
+          data-testid="section-inbox-tab"
           tabName="inbox"
           title={`Inbox (${workQueueHelper.sectionInboxCount})`}
         >
