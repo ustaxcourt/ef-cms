@@ -91,7 +91,7 @@
     "supports-color": "9.4.0",
     "tmp": "0.2.3",
     "util": "0.12.5",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "websocket": "1.0.35",
     "wicg-inert": "3.1.2",
     "winston": "3.13.0"
