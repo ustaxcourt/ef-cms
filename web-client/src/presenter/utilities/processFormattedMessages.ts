@@ -9,10 +9,13 @@ type TableSort = { sortField: string; sortOrder?: string };
 export const SUPPORTED_SORT_FIELDS = [
   'createdAt',
   'completedAt',
+  'completedMessage',
   'subject',
   'caseTitle',
   'caseStatus',
   'from',
+  'to',
+  'toSection',
   'fromSectionFormatted',
 ];
 
