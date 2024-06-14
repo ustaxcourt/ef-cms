@@ -1,25 +1,32 @@
-# 10345: Is this infrastructure needed? Explore.
 resource "aws_s3_bucket" "public_redirect" {
   bucket = "www.${var.dns_domain}"
-
-  policy = data.aws_iam_policy_document.www_redirect_policy_bucket.json
-
-  website {
-    redirect_all_requests_to = "https://${var.dns_domain}"
-  }
-
   tags = {
     environment = var.environment
   }
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "public_redirect_sse" {
+  bucket = aws_s3_bucket.public_redirect.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
+}
 
+resource "aws_s3_bucket_website_configuration" "public_redirect_s3_website" {
+  bucket = aws_s3_bucket.public_redirect.id
+  redirect_all_requests_to {
+    host_name = var.dns_domain
+    protocol  = "https"
+  }
+}
+
+resource "aws_s3_bucket_policy" "redirect_policy" {
+  bucket = aws_s3_bucket.public_redirect.id
+  policy = data.aws_iam_policy_document.www_redirect_policy_bucket.json
 }
 
 data "aws_iam_policy_document" "www_redirect_policy_bucket" {
@@ -42,7 +49,7 @@ data "aws_iam_policy_document" "www_redirect_policy_bucket" {
 
 resource "aws_cloudfront_distribution" "public_distribution_www" {
   origin {
-    domain_name = aws_s3_bucket.public_redirect.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.public_redirect_s3_website.website_endpoint
     origin_id   = "www.${var.dns_domain}"
 
     custom_origin_config {

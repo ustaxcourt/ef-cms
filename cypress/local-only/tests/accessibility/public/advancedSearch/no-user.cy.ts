@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
+
 describe('Advanced Search - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -10,7 +12,7 @@ describe('Advanced Search - Accessibility', () => {
       cy.get('#docket-search-button').click();
       cy.get('.ustc-table').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -23,7 +25,7 @@ describe('Advanced Search - Accessibility', () => {
       cy.get('#advanced-search-button').click();
       cy.get('.search-results').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
 
     it('should be free of a11y issues when searching with no results', () => {
@@ -33,7 +35,7 @@ describe('Advanced Search - Accessibility', () => {
       cy.get('#advanced-search-button').click();
       cy.get('#no-search-results').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -47,7 +49,7 @@ describe('Advanced Search - Accessibility', () => {
       cy.get('#advanced-search-button').click();
       cy.get('.search-results').should('exist');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

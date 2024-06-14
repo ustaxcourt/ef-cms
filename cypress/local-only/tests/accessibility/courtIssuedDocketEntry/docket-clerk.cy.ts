@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Court Issued Docket Entry - Docket Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Court Issued Docket Entry - Docket Clerk Accessibility', () => {
     );
     cy.get('[data-testid="court-issued-docket-entry-title"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

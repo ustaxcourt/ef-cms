@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Docket Entry QC - Docket Clerk Accessibility', () => {
@@ -13,7 +14,7 @@ describe('Docket Entry QC - Docket Clerk Accessibility', () => {
     );
     cy.get('[data-testid="docket-entry-qc-container"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   describe('Work item already completed modal', () => {
@@ -25,7 +26,7 @@ describe('Docket Entry QC - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="work-item-already-completed-modal"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

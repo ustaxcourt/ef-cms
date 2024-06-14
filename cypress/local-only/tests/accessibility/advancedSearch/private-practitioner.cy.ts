@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced Search - Private Practitioner Accessibility', () => {
@@ -10,6 +11,6 @@ describe('Advanced Search - Private Practitioner Accessibility', () => {
     cy.visit('/search/no-matches');
     cy.get('[data-testid="search-by-name-link"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

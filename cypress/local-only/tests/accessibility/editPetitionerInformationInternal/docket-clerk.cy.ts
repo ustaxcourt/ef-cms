@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
@@ -14,7 +15,7 @@ describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="edit-petitioner-contact-type-select"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -27,7 +28,7 @@ describe('Edit Petitioner Information - Docket Clerk Accessibility', () => {
       );
       cy.get('[data-testid="edit-petitioner-contact-type-select"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

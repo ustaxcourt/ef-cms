@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Edit Case Details - Docket Clerk Accessibility', () => {
@@ -12,7 +13,7 @@ describe('Edit Case Details - Docket Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19/edit-details');
       cy.get('[data-testid="payment-status-paid-radio"]').click();
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -23,7 +24,7 @@ describe('Edit Case Details - Docket Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19/edit-details');
       cy.get('[data-testid="payment-status-unpaid-radio"]').click();
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 
@@ -34,7 +35,7 @@ describe('Edit Case Details - Docket Clerk Accessibility', () => {
       cy.visit('/case-detail/101-19/edit-details');
       cy.get('[data-testid="payment-status-waived-radio"]').click();
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

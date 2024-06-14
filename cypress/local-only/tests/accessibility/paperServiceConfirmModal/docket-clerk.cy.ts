@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Paper Service Confirm Modal - Docket Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Paper Service Confirm Modal - Docket Clerk Accessibility', () => {
     cy.get('#save-and-finish').click();
     cy.get('[data-testid="modal-confirm"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

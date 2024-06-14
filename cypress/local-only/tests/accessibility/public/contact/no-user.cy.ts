@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
+
 describe('Contact Us - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -7,6 +9,6 @@ describe('Contact Us - Accessibility', () => {
     cy.visit('/contact');
     cy.contains('Contact Us').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

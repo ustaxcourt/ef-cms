@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
+
 describe('Health Check - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -7,6 +9,6 @@ describe('Health Check - Accessibility', () => {
     cy.visit('/health');
     cy.contains('Health Check');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

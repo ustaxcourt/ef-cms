@@ -2,6 +2,7 @@ import {
   VALID_PASSWORD_CONFIG,
   generatePassword,
 } from '../../../../helpers/authentication/generate-password';
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
 
 describe('Forgot Password - Accessibility', () => {
@@ -14,7 +15,7 @@ describe('Forgot Password - Accessibility', () => {
 
     cy.get('[data-testid="email-input"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when resetting password', () => {
@@ -30,6 +31,6 @@ describe('Forgot Password - Accessibility', () => {
     cy.get('[data-testid="send-password-reset-button"]').click();
     cy.contains('We’ve sent you an email');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

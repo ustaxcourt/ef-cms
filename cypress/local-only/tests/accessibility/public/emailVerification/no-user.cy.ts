@@ -1,3 +1,5 @@
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
+
 describe('Email Verification - Accessibility', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -7,6 +9,6 @@ describe('Email Verification - Accessibility', () => {
     cy.visit('/email-verification-instructions');
     cy.contains('Log In').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

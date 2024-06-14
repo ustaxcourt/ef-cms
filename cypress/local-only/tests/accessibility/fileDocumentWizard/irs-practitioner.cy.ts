@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsIrsPractitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File Document Wizard - Irs Practitioner Accessibility', () => {
@@ -9,6 +10,6 @@ describe('File Document Wizard - Irs Practitioner Accessibility', () => {
     cy.get('[data-testid="button-first-irs-document"]').click();
     cy.get('[data-testid="select-document-to-file-header"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });
