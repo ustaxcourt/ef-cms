@@ -68,11 +68,29 @@ export const Petition = ({
           </li>
           {irsNotices.length > 1 ? (
             <ol className="list-disc">
-              {irsNotices.map(irsNotice => (
-                <li key={irsNotice.noticeIssuedDateFormatted}>
-                  <span>{irsNotice.noticeIssuedDateFormatted || 'N/A'}</span>
-                </li>
-              ))}
+              {irsNotices.map(irsNotice => {
+                if (
+                  !irsNotice.noticeIssuedDateFormatted &&
+                  !irsNotice.cityAndStateIssuingOffice
+                ) {
+                  return (
+                    <li key={irsNotice.key}>
+                      <span>N/A</span>
+                    </li>
+                  );
+                } else {
+                  return (
+                    <li key={irsNotice.key}>
+                      <span>
+                        {irsNotice.noticeIssuedDateFormatted || 'N/A'}
+                      </span>
+                      <span>
+                        {irsNotice.cityAndStateIssuingOffice || 'N/A'}
+                      </span>
+                    </li>
+                  );
+                }
+              })}
             </ol>
           ) : (
             <p>{noticeIssuedDate ? `${noticeIssuedDate}` : 'N/A'}</p>

@@ -16,6 +16,7 @@ export class IrsNoticeForm extends JoiValidationEntity {
   public caseType: string;
   public noticeIssuedDate?: string;
   public taxYear?: number;
+  public cityAndStateIssuingOffice?: string;
 
   constructor(rawProps) {
     super('IrsNoticeForm');
@@ -23,6 +24,7 @@ export class IrsNoticeForm extends JoiValidationEntity {
     this.file = rawProps.file;
     this.size = rawProps.size;
     this.caseType = rawProps.caseType;
+    this.cityAndStateIssuingOffice = rawProps.cityAndStateIssuingOffice;
     this.noticeIssuedDate = rawProps.noticeIssuedDate;
     this.taxYear = rawProps.taxYear;
   }
@@ -48,6 +50,8 @@ export class IrsNoticeForm extends JoiValidationEntity {
       .messages({
         '*': 'Select a case type',
       }),
+    cityAndStateIssuingOffice:
+      JoiValidationConstants.STRING.max(200).optional(),
     file: joi.optional(),
     key: joi.string().required(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.max('now').messages({
