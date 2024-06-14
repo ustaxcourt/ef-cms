@@ -12,8 +12,8 @@ export const canRequestAccessAction = ({ get, path, props }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
   if (!isDirectlyAssociated) {
-    return path['proceed']({ isRequestingAccess: true });
+    return path['yes']({ isRequestingAccess: true });
   } else {
-    return path['unauthorized']({ docketNumber });
+    return path['no']({ docketNumber });
   }
 };

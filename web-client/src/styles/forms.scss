@@ -6,6 +6,44 @@
   max-width: 40rem;
   margin-top: 0;
   margin-bottom: 35px;
+
+  &.autogenerate-petition-form {
+    max-width: 65rem;
+
+    ol {
+      padding-inline-start: 15px;
+    }
+
+    .fact-or-reason {
+      textarea {
+        display: inline-block;
+        width: 55rem;
+        max-width: 80vw;
+        height: 4rem;
+        vertical-align: top;
+
+        @media only screen and (max-width: ($medium-screen - 1px)) { 
+          max-width: 90vw;
+        }
+      }
+    }
+
+    .reason-button {
+      margin-left: 1rem;
+    }
+
+    .usa-form-group {
+      margin-bottom: 15px;
+    }
+
+    .usa-button {
+      padding: 0;
+    }
+  }
+}
+
+.usa-form-group-horizontal {
+  max-width: 30rem;
 }
 
 .usa-form-group--error {
@@ -132,6 +170,10 @@ select {
   margin-bottom: 15px;
   background: transparent;
 
+  &.petition-selection {
+    margin-bottom: 2rem;
+  }
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -191,16 +233,28 @@ select.case-status {
 }
 
 div.usa-radio.usa-radio__inline {
-  display: inline;
+  display: inline; 
 
   .usa-radio__label {
-    padding-right: 2rem;
+    padding-right: 2rem; 
 
     &.smaller-padding-right {
-      padding-right: 1rem;
+      padding-right: 1rem; 
     }
   }
 }
+
+@media (max-width: ($medium-screen - 280px)) { 
+  div.usa-radio.usa-radio__inline {
+    display: block;
+  }
+  
+    .usa-radio__label {
+      padding-right: 0; 
+    }
+
+}
+
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
@@ -629,4 +683,30 @@ label.ustc-upload {
 
 .ustc-message-modal-text-area {
   resize: vertical;
+}
+
+.add-another-reason-button, .add-another-fact-button {
+	@media only screen and (max-width: $medium-screen - 1px) {
+		text-align: left !important;
+	}
+}
+
+.remove-fact-reason-button {
+	@media only screen and (max-width: $medium-screen - 1px) {
+		padding-right: 1rem !important;
+		text-align: right !important;
+	}
+}
+
+.irs-notice-remove-button{
+	@media only screen and (max-width: $medium-screen - 1px) {
+		width: auto !important;
+		margin-left: auto !important;
+	}
+}
+
+.tax-case-info {
+  padding-bottom: 10px;
+  font-size: 18px;
+  line-height: 1.5;
 }
