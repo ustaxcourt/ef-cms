@@ -2072,6 +2072,12 @@ export const caseHasServedDocketEntries = rawCase => {
   );
 };
 
+export const isInConsolidatedGroup = (caseInfo: {
+  leadDocketNumber: string;
+}) => {
+  return !!caseInfo.leadDocketNumber;
+};
+
 /**
  * determines if the case is in a state where documents can be served
  * @param {Object} rawCase The Case we are using to determine whether we can allow document service

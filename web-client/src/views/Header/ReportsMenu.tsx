@@ -132,6 +132,20 @@ export const ReportsMenu = connect(
                 Trial Session Planning
               </Button>
             </li>
+
+            <li className="usa-nav__submenu-item">
+              <a
+                data-testid="select-cold-case-report"
+                href="/reports/cold-case-report"
+                id="cold-case-report"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Cold Case Report
+              </a>
+            </li>
           </ul>
         )}
       </>
