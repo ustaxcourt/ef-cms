@@ -176,7 +176,6 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
-import { gotoOldLoginSequence } from '@web-client/presenter/sequences/Login/gotoOldLoginSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -289,6 +288,7 @@ import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleM
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
+import { openPdfInNewTabSequence } from './sequences/openPdfInNewTabSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintGeneratedPaperServiceSequence } from '@web-client/presenter/sequences/openPrintGeneratedPaperServiceSequence';
@@ -851,7 +851,6 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
-  gotoOldLoginSequence: gotoOldLoginSequence as unknown as Function,
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
@@ -902,7 +901,7 @@ export const presenterSequences = {
     gotoUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
-  gotoVerifyEmailSequence: gotoVerifyEmailSequence as unknown as Function,
+  gotoVerifyEmailSequence,
   gotoViewAllDocumentsSequence:
     gotoViewAllDocumentsSequence as unknown as Function,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
@@ -1052,6 +1051,7 @@ export const presenterSequences = {
     openGainElectronicAccessToCaseModalSequence as unknown as Function,
   openItemizedPenaltiesModalSequence:
     openItemizedPenaltiesModalSequence as unknown as Function,
+  openPdfInNewTabSequence,
   openPdfPreviewModalSequence:
     openPdfPreviewModalSequence as unknown as Function,
   openPractitionerDocumentDownloadUrlSequence:

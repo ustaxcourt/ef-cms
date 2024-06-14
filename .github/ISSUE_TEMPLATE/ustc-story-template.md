@@ -31,7 +31,7 @@ As a _______, so that ________, I need ________.
 **Engineering**
  - [ ] Automated test scripts have been written, including visual tests for newly added PDFs.
  - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning.
- - [ ] New screens have been added to pa11y scripts.
+ - [ ] New screens have been added to cypress accessibility axe
  - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html.
  - [ ] Swagger docs have been updated if API endpoints have been added or updated.
  - [ ] UI should be touch optimized and responsive for external users.

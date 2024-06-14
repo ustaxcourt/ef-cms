@@ -75,7 +75,7 @@ export const EditPetitionerInformationInternal = connect(
               <select
                 aria-describedby="contact-type-label"
                 className="usa-select max-width-400"
-                data-testid="edit-petitioner-contact-type"
+                data-testid="edit-petitioner-contact-type-select"
                 id="contactType"
                 name="contact.contactType"
                 value={form.contact.contactType || ''}
@@ -321,7 +321,6 @@ export const EditPetitionerInformationInternal = connect(
           <div>
             <Button
               data-testid="submit-edit-petitioner-information-button"
-              id="submit-edit-petitioner-information"
               onClick={() => {
                 submitEditPetitionerSequence({ contactToSeal: form.contact });
               }}
@@ -342,8 +341,8 @@ export const EditPetitionerInformationInternal = connect(
               <Button
                 link
                 className="red-warning no-wrap float-right"
+                data-testid="remove-petitioner-button"
                 icon="trash"
-                id="remove-petitioner-btn"
                 onClick={() => {
                   openRemovePetitionerModalSequence();
                 }}

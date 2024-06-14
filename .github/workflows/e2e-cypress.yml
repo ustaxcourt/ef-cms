@@ -10,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [4]
-        ci_node_index: [0, 1, 2, 3]
+        ci_node_total: [6]
+        ci_node_index: [0, 1, 2, 3, 4, 5]
     env:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
@@ -42,7 +42,7 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts)
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
           npm run cypress:integration:file $TESTFILES
       - name: Store Cypress Videos
         if: always()
