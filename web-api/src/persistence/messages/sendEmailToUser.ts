@@ -17,7 +17,6 @@ export const sendEmailToUser = (
     subject: string;
     to: string;
   },
-  //todo: return promise<void> instead?
 ): Promise<EmailResponse> => {
   const charset = 'UTF-8';
   const cmd = new SendEmailCommand({
