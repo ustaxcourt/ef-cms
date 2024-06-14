@@ -12,7 +12,7 @@ export const PdfViewer = connect({}, ({ className, id, src, title }) => {
   classNames.push('default-iframe');
   pdfProps.className = classNames.join(' ');
 
-  return <iframe {...pdfProps} />;
+  return <iframe {...pdfProps} title="pdf" />;
 });
 
 PdfViewer.displayName = 'PdfViewer';
