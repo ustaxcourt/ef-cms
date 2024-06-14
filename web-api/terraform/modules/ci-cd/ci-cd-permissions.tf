@@ -357,7 +357,8 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/switch_colors_cron_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*"
       ]
     }
   ]
