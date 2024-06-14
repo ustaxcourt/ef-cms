@@ -24,7 +24,10 @@ export const CaseWorksheets = connect(
         <div className="grid-container padding-0 margin-bottom-3">
           <div className="grid-row">
             <div className="display-flex flex-align-end flex-justify-end grid-col-12">
-              <span className="text-semibold">
+              <span
+                className="text-semibold"
+                data-testid="case-worksheets-total-count-text"
+              >
                 Count: {caseWorksheetsHelper.caseWorksheetsFormatted.length}
               </span>
             </div>
