@@ -199,26 +199,26 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
-    origin_id   = "primary-documents.${var.dns_domain}"
+    domain_name              = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
+    origin_id                = "primary-documents.${var.dns_domain}"
     origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   origin {
-    domain_name = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
-    origin_id   = "failover-documents.${var.dns_domain}"
+    domain_name              = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
+    origin_id                = "failover-documents.${var.dns_domain}"
     origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   origin {
-    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
-    origin_id   = "primary-temp-documents.${var.dns_domain}"
+    domain_name              = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
+    origin_id                = "primary-temp-documents.${var.dns_domain}"
     origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
   origin {
-    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
-    origin_id   = "failover-temp-documents.${var.dns_domain}"
+    domain_name              = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
+    origin_id                = "failover-temp-documents.${var.dns_domain}"
     origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
   }
 
