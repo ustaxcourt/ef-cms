@@ -443,7 +443,7 @@ describe('caseDetailHeaderHelper', () => {
     });
   });
 
-  describe('showRequestAccessToCaseButton', () => {
+  describe('showRepresentAPartyButton', () => {
     describe('when the user is an irs practitioner', () => {
       it('should be false when they are directly associated with the case', () => {
         const result = runCompute(caseDetailHeaderHelper, {
@@ -459,7 +459,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
 
       it('should be true when they are not directly associated with the case', () => {
@@ -476,7 +476,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(true);
+        expect(result.showRepresentAPartyButton).toEqual(true);
       });
 
       it('should be false when they are not directly associated with the case and the case is sealed', () => {
@@ -494,7 +494,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
     });
 
@@ -509,7 +509,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(true);
+        expect(result.showRepresentAPartyButton).toEqual(true);
       });
 
       it('should be false they are directly associated with the case', () => {
@@ -526,7 +526,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
 
       it('should be false when they are not directly associated with the case and the case is sealed', () => {
@@ -543,18 +543,18 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
 
-      it('should be false when they are on the Request Access Form page', () => {
+      it('should be false when they are on the Represent a Party Form page', () => {
         const result = runCompute(caseDetailHeaderHelper, {
           state: {
             ...getBaseState(privatePractitionerUser),
-            currentPage: 'RequestAccessWizard',
+            currentPage: 'RepresentAPartyWizard',
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
 
       it('should be false when the current page is FilePetitionSuccess', () => {
@@ -565,7 +565,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
     });
 
@@ -580,7 +580,7 @@ describe('caseDetailHeaderHelper', () => {
           },
         });
 
-        expect(result.showRequestAccessToCaseButton).toEqual(false);
+        expect(result.showRepresentAPartyButton).toEqual(false);
       });
     });
   });

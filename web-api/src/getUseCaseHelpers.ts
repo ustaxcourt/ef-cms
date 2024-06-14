@@ -1,6 +1,7 @@
 import { acquireLock } from './business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from './business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
+import { addDraftWatermarkToDocument } from '@shared/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
 import { addExistingUserToCase } from './business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { addServedStampToDocument } from './business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { appendPaperServiceAddressPageToPdf } from './business/useCaseHelper/service/appendPaperServiceAddressPageToPdf';
@@ -49,6 +50,7 @@ const useCaseHelpers = {
   acquireLock,
   addDocketEntryForSystemGeneratedOrder,
   addDraftStampOrderDocketEntryInteractor,
+  addDraftWatermarkToDocument,
   addExistingUserToCase,
   addServedStampToDocument,
   appendPaperServiceAddressPageToPdf,

@@ -12,6 +12,7 @@ import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadPr
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
+import { CaseAssociationRequestWizard } from '@web-client/views/CaseAssociationRequest/CaseAssociationRequestWizard';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
@@ -48,6 +49,7 @@ import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
+import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -77,7 +79,6 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
-import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -91,6 +92,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -116,6 +118,7 @@ const pages = {
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
+  CaseAssociationRequestWizard,
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
@@ -150,6 +153,7 @@ const pages = {
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
+  ErrorView500,
   FileDocumentWizard,
   FilePetitionSuccess,
   ForgotPassword,
@@ -174,7 +178,6 @@ const pages = {
   PrintableTrialCalendar,
   PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
-  RequestAccessWizard,
   ReviewSavedPetition,
   SealedCaseDetail,
   SelectDocumentType,
@@ -187,6 +190,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -217,9 +221,11 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
-    const focusMain = e => {
+    const focusMain = (e?: any) => {
       e && e.preventDefault();
-      const header = window.document.querySelector('#main-content h1');
+      const header = window.document.querySelector(
+        '#main-content h1',
+      ) as HTMLElement;
       if (header) header.focus();
       return;
     };
