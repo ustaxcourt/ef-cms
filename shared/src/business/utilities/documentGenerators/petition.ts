@@ -1,4 +1,3 @@
-import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Petition } from '@shared/business/utilities/pdfGenerator/documentTemplates/Petition';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
@@ -21,8 +20,6 @@ export const petition = async ({ applicationContext, data }) => {
     taxYear,
   } = data;
 
-  const date = applicationContext.getUtilities().formatNow(FORMATS.MMDDYY);
-
   const PetitionTemplate = ReactDOM.renderToString(
     React.createElement(Petition, {
       caseCaptionExtension,
@@ -30,7 +27,6 @@ export const petition = async ({ applicationContext, data }) => {
       caseTitle,
       contactPrimary,
       contactSecondary,
-      date,
       irsNotices,
       noticeIssuedDate,
       partyType,
