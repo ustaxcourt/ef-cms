@@ -28,7 +28,7 @@ describe('validateFilePetitionPetitionerInformationAction', () => {
         presenter,
       },
       props: {
-        petitionerInformationAction: {
+        petitionerInformation: {
           countryType: COUNTRY_TYPES.DOMESTIC,
           filingType: FILING_TYPES[ROLES.petitioner][0],
           partyType: PARTY_TYPES.petitioner,
@@ -46,7 +46,7 @@ describe('validateFilePetitionPetitionerInformationAction', () => {
         presenter,
       },
       props: {
-        petitionerInformationAction: {},
+        petitionerInformation: {},
       },
     });
 

@@ -3,11 +3,11 @@ import { UploadPetitionStep2 } from '@shared/business/entities/startCase/UploadP
 export const validateFilePetitionPetitionerInformationAction = ({
   path,
   props,
-}: ActionProps<{ petitionerInformationAction: any }>) => {
-  const { petitionerInformationAction } = props;
+}: ActionProps<{ petitionerInformation: any }>) => {
+  const { petitionerInformation } = props;
 
   const errors = new UploadPetitionStep2(
-    petitionerInformationAction,
+    petitionerInformation,
   ).getFormattedValidationErrors();
 
   if (!errors) {

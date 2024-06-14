@@ -45,8 +45,8 @@ describe('getFilePetitionPetitionerInformationAction', () => {
       },
     );
 
-    const { petitionerInformationAction } = results.output;
-    expect(petitionerInformationAction).toEqual({
+    const { petitionerInformation } = results.output;
+    expect(petitionerInformation).toEqual({
       businessType: 'TEST_businessType',
       contactPrimary: {
         address1: 'TEST_PRIMARY_address1',
@@ -115,8 +115,8 @@ describe('getFilePetitionPetitionerInformationAction', () => {
       },
     );
 
-    const { petitionerInformationAction } = results.output;
-    expect(petitionerInformationAction).toEqual({
+    const { petitionerInformation } = results.output;
+    expect(petitionerInformation).toEqual({
       businessType: 'TEST_businessType',
       contactPrimary: {
         address2: 'TEST_PRIMARY_address2',
