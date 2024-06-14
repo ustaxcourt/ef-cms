@@ -18,11 +18,14 @@ export const getPractitionerByBarNumberInteractor = async (
   { barNumber }: { barNumber: string },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
+  const isLoggedInUser = !!requestUser;
 
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
+  if (
+    isLoggedInUser &&
+    !isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
+  ) {
     throw new UnauthorizedError('Unauthorized for getting attorney user');
   }
-
   const foundPractitioner = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
@@ -33,5 +36,21 @@ export const getPractitionerByBarNumberInteractor = async (
     practitioner = new Practitioner(foundPractitioner).validate().toRawObject();
   }
 
-  return practitioner;
+  return isLoggedInUser
+    ? practitioner
+    : practitioner
+      ? [
+          {
+            admissionsDate: practitioner.admissionsDate,
+            admissionsStatus: practitioner.admissionsStatus,
+            barNumber: practitioner.barNumber,
+            contact: {
+              state: practitioner.originalBarState,
+            },
+            name: practitioner.name,
+            practiceType: practitioner.practiceType,
+            practitionerType: practitioner.practitionerType,
+          },
+        ]
+      : [];
 };

@@ -117,13 +117,13 @@ describe('Practitioner requests access to case', () => {
       state: cerebralTest.getState(),
     });
 
-    expect(headerHelper.showRequestAccessToCaseButton).toBeTruthy();
+    expect(headerHelper.showRepresentAPartyButton).toBeTruthy();
 
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
@@ -169,7 +169,7 @@ describe('Practitioner requests access to case', () => {
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Notice of Election to Intervene',
