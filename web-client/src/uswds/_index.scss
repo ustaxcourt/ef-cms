@@ -2,7 +2,18 @@
   $theme-show-notifications: false,
   $theme-font-path: '../../node_modules/@uswds/uswds/dist/fonts',
   $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
-  $theme-font-weight-semibold: 600
+  $theme-font-weight-semibold: 600,
+  $theme-utility-breakpoints: (
+    "card": false,
+    "card-lg": false,
+    "mobile": true,
+    "mobile-lg": false,
+    "tablet": true,
+    "tablet-lg": true,
+    "desktop": true,
+    "desktop-lg": false,
+    "widescreen": false
+  ),
 );
 @forward 'uswds-global';
 @forward 'usa-date-picker';
