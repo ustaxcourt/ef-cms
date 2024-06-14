@@ -48,7 +48,10 @@ export const DocumentSearchResults = connect(
               </div>
             </div>
 
-            <table className="usa-table search-results ustc-table responsive-table">
+            <table
+              className="usa-table search-results ustc-table responsive-table"
+              data-testid="advanced-document-search-results-table"
+            >
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>

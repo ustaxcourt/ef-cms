@@ -40,6 +40,7 @@ export const PractitionerDocumentation = connect(
           <Button
             link
             className="push-right margin-bottom-1"
+            data-testid="add-practitioner-document-button"
             href={`/practitioner-detail/${barNumber}/add-document`}
             icon="plus-circle"
             overrideMargin={true}
@@ -180,7 +181,6 @@ export const PractitionerDocumentation = connect(
           <ConfirmModal
             cancelLabel="No, Cancel"
             confirmLabel="Yes, Delete"
-            preventCancelOnBlur={true}
             title="Are You Sure You Want to Delete This Document?"
             onCancelSequence={clearModalSequence}
             onConfirmSequence={deletePractitionerDocumentSequence}

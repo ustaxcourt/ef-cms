@@ -35,7 +35,7 @@ export const EditCaseDetails = connect(
 
         <section
           className="usa-section grid-container"
-          id="case-detail-internal"
+          data-testid="edit-case-details-container"
         >
           <ErrorNotification />
 

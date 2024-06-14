@@ -196,9 +196,11 @@ export const AccessibilityStatement = () => (
       <ul className="usa-list technical-information assessment-approaches">
         <li>Self-evaluation</li>
         <li>
-          Integrated testing environment analyzing interface using the “Pa11y”
-          software libraries:{' '}
-          <a href="https://pa11y.org/">https://pa11y.org/</a>
+          Integrated testing environment analyzing interface using the
+          &quot;axe-core&quot; software libraries:{' '}
+          <a href="https://github.com/dequelabs/axe-core">
+            https://github.com/dequelabs/axe-core
+          </a>
         </li>
       </ul>
       <h3>Other evidence</h3>
