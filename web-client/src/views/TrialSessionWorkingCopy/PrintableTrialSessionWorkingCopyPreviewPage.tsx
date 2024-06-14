@@ -26,6 +26,7 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
           <Button
             link
             className="margin-bottom-3"
+            data-testid="back-to-working-copy-button"
             onClick={() => {
               gotoTrialSessionWorkingCopySequence({
                 trialSessionId,
