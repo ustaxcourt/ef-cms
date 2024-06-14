@@ -22,7 +22,7 @@ export const getFilePetitionPetitionerInformationAction = ({
     useSameAsPrimary,
   } = get(state.form);
 
-  const petitionerInformationAction = {
+  const petitionerInformation = {
     businessType,
     contactPrimary,
     contactSecondary: useSameAsPrimary
@@ -56,6 +56,6 @@ export const getFilePetitionPetitionerInformationAction = ({
   };
 
   return {
-    petitionerInformationAction,
+    petitionerInformation,
   };
 };
