@@ -2,20 +2,55 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import {
   isInConsolidatedGroup,
   isLeadCase,
 } from '@shared/business/entities/cases/Case';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
-export const ColdCaseReportList = ({
-  entries,
-}: {
-  entries: ColdCaseEntry[];
-}) => {
+const ITEMS_PER_PAGE = 100;
+
+export function useClientSidePaginator<T>(fullDataSet: T[], pageSize) {
+  const [activePage, setActivePage] = useState(0);
+  const totalPages = Math.ceil(fullDataSet.length / pageSize);
+  const entriesInPage = fullDataSet.slice(
+    activePage * pageSize,
+    activePage * pageSize + pageSize,
+  );
+
+  return {
+    activePage,
+    pageRecords: entriesInPage,
+    setActivePage,
+    totalPages,
+  };
+}
+
+export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
+  const paginatorTop = useRef(null);
+
+  const { activePage, pageRecords, setActivePage, totalPages } =
+    useClientSidePaginator(entries, ITEMS_PER_PAGE);
+
   return (
     <>
+      <div ref={paginatorTop}>
+        <Paginator
+          breakClassName="hide"
+          forcePage={activePage}
+          marginPagesDisplayed={0}
+          pageCount={totalPages}
+          pageRangeDisplayed={0}
+          onPageChange={async pageChange => {
+            setActivePage(pageChange.selected);
+            focusPaginatorTop(paginatorTop);
+          }}
+        />
+      </div>
+
       <div className="grid-row margin-bottom-2">
         <div className="grid-col text-right margin-top-1">
           <Button
@@ -57,7 +92,7 @@ export const ColdCaseReportList = ({
             <th>Last Event</th>
           </tr>
         </thead>
-        {entries.map(item => (
+        {pageRecords.map(item => (
           <tbody key={`cold-case-entry-${item.docketNumber}`}>
             <tr className="pending-item-row">
               <td>
@@ -83,8 +118,20 @@ export const ColdCaseReportList = ({
       </table>
 
       {entries.length === 0 && <p>There is no cold cases.</p>}
+
+      <Paginator
+        breakClassName="hide"
+        forcePage={activePage}
+        marginPagesDisplayed={0}
+        pageCount={totalPages}
+        pageRangeDisplayed={0}
+        onPageChange={async pageChange => {
+          setActivePage(pageChange.selected);
+          focusPaginatorTop(paginatorTop);
+        }}
+      />
     </>
   );
-};
+}
 
 ColdCaseReportList.displayName = 'ColdCaseReportList';

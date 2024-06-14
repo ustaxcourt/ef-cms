@@ -20,10 +20,11 @@ export const ColdCaseReport = connect(
           <div className="title">
             <h1>Cold Case Report</h1>
           </div>
-          <p>
+
+          <div className="margin-bottom-3">
             Showing cases not at issue with no activity in the last 120 days,
             sorted by date of the last docket entry.
-          </p>
+          </div>
 
           <ColdCaseReportList entries={coldCaseReport.entries} />
         </section>
