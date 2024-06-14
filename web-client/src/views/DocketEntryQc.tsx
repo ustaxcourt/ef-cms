@@ -40,7 +40,10 @@ export const DocketEntryQc = connect(
     return (
       <>
         <CaseDetailHeader />
-        <section className="usa-section grid-container">
+        <section
+          className="usa-section grid-container"
+          data-testid="docket-entry-qc-container"
+        >
           {docketEntryQcHelper.showPaperServiceWarning && (
             <Hint fullWidth>
               This document was automatically generated and requires paper
