@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
+import { pinkLog } from '@shared/tools/pinkLog';
 
 export const getDownloadPolicyUrl = async ({
   // applicationContext,
@@ -32,11 +33,21 @@ export const getDownloadPolicyUrl = async ({
 
   const privateKey = response.SecretString!;
   const bucketName = useTempBucket ? 'temp-documents' : 'documents';
+  pinkLog(privateKey);
 
-  const url = `https://app-${environment.currentColor}.${environment.efcmsDomain}/${bucketName}/${key}`;
+  // const url = `https://app-${environment.currentColor}.${environment.efcmsDomain}/${bucketName}/${key}`;
+  const url = `https://d1w39o8lp3jgfs.cloudfront.net/${bucketName}/${key}`;
+  // const url = new URL(
+  //   `${bucketName}/${key}`,
+  //   'https://d1w39o8lp3jgfs.cloudfront.net',
+  // ).toString();
+  pinkLog('SIGN URL', url);
+
+  const expireIn5Min = new Date();
+  expireIn5Min.setUTCMinutes(new Date().getUTCMinutes() + 5);
 
   const signedUrl = getSignedUrl({
-    dateLessThan: '2024-06-19',
+    dateLessThan: expireIn5Min.toISOString(),
     keyPairId: 'K2EHQGE49YSTCV',
     privateKey,
     url,
