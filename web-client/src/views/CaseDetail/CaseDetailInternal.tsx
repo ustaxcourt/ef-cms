@@ -152,7 +152,11 @@ export const CaseDetailInternal = connect(
               <Tab id="tab-statistics" tabName="statistics" title="Statistics">
                 <Statistics />
               </Tab>
-              <Tab id="tab-history" tabName="history" title="History">
+              <Tab
+                data-testid="case-status-history-tab"
+                tabName="history"
+                title="History"
+              >
                 <CaseStatusHistory />
               </Tab>
             </Tabs>

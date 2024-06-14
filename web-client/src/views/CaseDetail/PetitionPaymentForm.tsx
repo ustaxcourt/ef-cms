@@ -49,7 +49,11 @@ export const PetitionPaymentForm = connect(
                   validateSequence();
                 }}
               />
-              <label className="usa-radio__label" htmlFor="payment-status-paid">
+              <label
+                className="usa-radio__label"
+                data-testid="payment-status-paid-radio"
+                htmlFor="payment-status-paid"
+              >
                 {paymentStatus.PAID}
               </label>
             </div>
@@ -73,7 +77,7 @@ export const PetitionPaymentForm = connect(
               />
               <label
                 className="usa-radio__label"
-                data-testid="payment-status-unpaid-label"
+                data-testid="payment-status-unpaid-radio"
                 htmlFor="payment-status-unpaid"
               >
                 {paymentStatus.UNPAID}
@@ -99,6 +103,7 @@ export const PetitionPaymentForm = connect(
               />
               <label
                 className="usa-radio__label"
+                data-testid="payment-status-waived-radio"
                 htmlFor="payment-status-waived"
               >
                 {paymentStatus.WAIVED}

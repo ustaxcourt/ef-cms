@@ -41,7 +41,6 @@ export const AddEditDocketEntryWorksheetModal = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Save"
-        preventCancelOnBlur={true}
         title="Edit Details"
         onCancelSequence={dismissAddEditCaseWorksheetModalSequence}
         onConfirmSequence={updateDocketEntryWorksheetSequence}

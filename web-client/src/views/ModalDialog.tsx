@@ -21,7 +21,6 @@ export const ModalDialog = ({
   disableSubmit = false,
   message,
   messageClass = 'margin-bottom-5',
-  preventCancelOnBlur,
   preventScrolling,
   showButtons = true,
   title,
@@ -41,13 +40,11 @@ export const ModalDialog = ({
   dataTestId?: string;
   disableSubmit?: boolean;
   message?: string;
-  preventCancelOnBlur?: boolean;
   preventScrolling?: boolean;
   showButtons?: boolean;
   title: string;
   useRunConfirmSequence?: boolean;
 }) => {
-  preventCancelOnBlur = !!preventCancelOnBlur;
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
   const elRef = useRef(null);
@@ -83,31 +80,16 @@ export const ModalDialog = ({
     confirmSequence.call();
   };
 
-  const keydownTriggered = evt => {
-    if (evt.keyCode === 27) {
-      return blurDialog(evt);
-    }
-  };
-
   const touchmoveTriggered = evt => {
     return evt.preventDefault();
   };
 
-  const blurDialog = evt => {
-    if (preventCancelOnBlur) {
-      return;
-    }
-    return runCancelSequence(evt);
-  };
-
   useEffect(() => {
     modalRoot.appendChild(getEl());
-    window.document.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      window.document.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
@@ -117,16 +99,13 @@ export const ModalDialog = ({
       <FocusLock>
         <dialog
           open
+          aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
           role="dialog"
-          onClick={blurDialog}
+          title={title}
         >
-          <div
-            aria-modal="true"
-            className={classNames('modal-dialog padding-205', className)}
-            onClick={evt => evt.stopPropagation()}
-          >
+          <div className={classNames('modal-dialog padding-205', className)}>
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
                 <div
