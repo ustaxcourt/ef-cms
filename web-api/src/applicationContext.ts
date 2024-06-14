@@ -21,15 +21,10 @@ import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
-import {
-  EmailResponse,
-  sendEmailToUser,
-} from '@web-api/persistence/messages/sendEmailToUser';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
-import { SESClient } from '@aws-sdk/client-ses';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -50,6 +45,7 @@ import {
 import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
+import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -62,6 +58,7 @@ import { retrySendNotificationToConnections } from './notifications/retrySendNot
 import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
+import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from './notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from './notifications/sendNotificationToUser';
@@ -75,7 +72,6 @@ import pug from 'pug';
 import sass from 'sass';
 
 let s3Cache: AWS.S3 | undefined;
-let sesCache: SESClient;
 let sqsCache;
 let searchClientCache: Client;
 let notificationServiceCache;
@@ -181,25 +177,7 @@ export const createApplicationContext = (
     getDocumentClient,
     getDocumentGenerators,
     getDynamoClient,
-    getEmailClient: () => {
-      if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
-        return {
-          send: () => {
-            return new Promise<EmailResponse>(resolve => {
-              resolve({ MessageId: '' });
-            });
-          },
-        } as unknown as SESClient;
-      } else {
-        if (!sesCache) {
-          sesCache = new SESClient({
-            maxAttempts: 3,
-            region: 'us-east-1',
-          });
-        }
-        return sesCache;
-      }
-    },
+    getEmailClient,
     getEntityByName: name => {
       return entitiesByName[name];
     },
