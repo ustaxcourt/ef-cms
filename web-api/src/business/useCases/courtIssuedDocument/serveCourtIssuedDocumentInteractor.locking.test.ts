@@ -1,8 +1,8 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { addCoverToPdf } from '@shared/business/useCases/addCoverToPdf';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   handleLockError,
@@ -14,6 +14,7 @@ jest.mock('../../../../../shared/src/business/useCases/addCoverToPdf');
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
+
   beforeEach(() => {
     mockParams = {
       applicationContext,

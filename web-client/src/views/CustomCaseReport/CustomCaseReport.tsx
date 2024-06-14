@@ -466,8 +466,7 @@ export const CustomCaseReport = connect(
             </label>
           </div>
           <Button
-            data-testid="run-custom-case-report"
-            id="run-custom-case-report"
+            data-testid="submit-custom-case-report-button"
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
@@ -509,7 +508,7 @@ export const CustomCaseReport = connect(
               link
               aria-label="export pending report"
               className="margin-top-2"
-              data-testid="export-pending-report"
+              data-testid="export-custom-case-report"
               disabled={
                 isSubmitDebounced || +formatPositiveNumber(totalCases) === 0
               }
@@ -521,7 +520,7 @@ export const CustomCaseReport = connect(
             >
               Export
             </Button>
-            <span className="text-bold" id="custom-case-result-count">
+            <span className="text-bold" data-testid="custom-case-result-count">
               Count: &nbsp;
             </span>
             <span data-testid="custom-case-report-count">
@@ -574,7 +573,7 @@ const ReportTable = ({
       <table
         aria-label="custom case record"
         className="usa-table case-detail ustc-table responsive-table"
-        id="custom-case-report-table"
+        data-testid="custom-case-report-table"
       >
         <thead>
           <tr>
@@ -595,7 +594,7 @@ const ReportTable = ({
           </tr>
         </thead>
         {cases.length !== 0 && (
-          <tbody id="custom-case-report-table-body">
+          <tbody>
             {cases.map(entry => (
               <tr
                 data-testid={`custom-case-report-row-${entry.docketNumber}`}

@@ -27,7 +27,7 @@ import { generateDraftDocument } from '../../../../../shared/src/business/useCas
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,

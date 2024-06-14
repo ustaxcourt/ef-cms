@@ -1,7 +1,7 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { saveFileAndGenerateUrl } from '../../../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl';
+import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
 export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,

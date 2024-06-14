@@ -1,15 +1,5 @@
 # Environment-Related Troubleshooting
 
-## Failing Pa11y Tests
-
-Problem:
-
-- Pa11y tests succeed locally but fail on Circle.
-
-Solution:
-
-- We utilize a package called `pa11y-ci` which runs tests found in the `pa11y/` directory.  These run within docker containers, but they also seem to leak memory [see this issue](https://github.com/nodejs/docker-node/issues/1096) from within Node itself.  This has resulted in the need to split our many `pa11y` tests into several more runs, each smaller in size (see `.circleci/config.yml` and the multiple steps within 'e2e-pa11y' job).  If a `pa11y` test repeatedly succeed when running locally but frequently fail within the CI docker container, you may be hitting a memory constraint and should consider further splitting up your `pa11y` test tasks.
-
 ## Repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1 Not Found
 
 Problem:  

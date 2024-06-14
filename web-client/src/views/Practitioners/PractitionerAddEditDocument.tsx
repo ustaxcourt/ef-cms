@@ -55,7 +55,10 @@ export const PractitionerAddEditDocument = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <h1 className="margin-bottom-1">
+          <h1
+            className="margin-bottom-1"
+            data-testid="add-edit-practitioner-document-header"
+          >
             {form.isEditingDocument ? 'Edit' : 'Add'} File
           </h1>
           <div className="grid-row margin-bottom-4">
@@ -210,7 +213,7 @@ export const PractitionerAddEditDocument = connect(
                   )}
                   <Button
                     link
-                    id="cancel-button"
+                    data-testid="cancel-add-edit-practitioner-document-button"
                     onClick={() => {
                       formCancelToggleCancelSequence();
                     }}

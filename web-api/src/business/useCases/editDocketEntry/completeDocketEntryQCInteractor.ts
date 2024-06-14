@@ -17,14 +17,14 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { addServedStampToDocument } from '../../../../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '../../../../../shared/src/business/utilities/getDocumentTitleForNoticeOfChange';
-import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { User } from '@shared/business/entities/User';
+import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,

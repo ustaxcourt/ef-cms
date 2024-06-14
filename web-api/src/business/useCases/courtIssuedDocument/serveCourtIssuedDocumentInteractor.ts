@@ -8,7 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
