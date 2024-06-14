@@ -28,7 +28,6 @@ export const FileCompressionErrorModal = connect(
         headerIconClassName="text-secondary-dark"
         noCancel={!allowRetry}
         noConfirm={!allowRetry}
-        preventCancelOnBlur={true}
         title="Unable to Compress Files"
         onCancelSequence={clearModalSequence}
         onConfirmSequence={batchDownloadTrialSessionSequence}

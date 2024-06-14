@@ -1137,11 +1137,6 @@ const router = {
       }
     });
 
-    registerRoute('/log-in...', () => {
-      setPageTitle('Login');
-      return app.getSequence('gotoOldLoginSequence')();
-    });
-
     registerRoute('/forgot-password', () => {
       setPageTitle('Forgot Password');
       app.getSequence('goToForgotPasswordSequence')();

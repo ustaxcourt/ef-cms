@@ -18,7 +18,7 @@ const component = ({
   serveThirtyDayNoticeModalHelper,
 }: typeof props) => {
   return (
-    <BaseModal preventCancelOnBlur={false} onBlurSequence={closeModalSequence}>
+    <BaseModal title={'Serve thirty day notice'}>
       <div className="modal-header grid-container padding-x-0">
         <div className="grid-row">
           <div className="mobile-lg:grid-col-9">
