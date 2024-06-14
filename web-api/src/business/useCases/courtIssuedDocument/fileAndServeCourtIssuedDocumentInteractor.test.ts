@@ -11,14 +11,14 @@ import {
   docketClerkUser,
   judgeUser,
 } from '../../../../../shared/src/test/mockUsers';
-import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
+import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 let MOCK_DATE;
 
-jest.mock('../../../../../shared/src/business/utilities/DateHandler', () => {
+jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
-    '../../../../../shared/src/business/utilities/DateHandler',
+    '@shared/business/utilities/DateHandler',
   );
   return {
     __esModule: true,

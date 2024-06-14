@@ -1,4 +1,4 @@
-import { EntryOfAppearanceProps } from '@shared/business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
+import { EntryOfAppearanceProps } from '@web-api/business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { post } from '../requests';
 
 export const generateEntryOfAppearancePdfInteractor = (

@@ -61,7 +61,9 @@ const SectionWorkQueueInProgressRow = React.memo(
                   className="padding-top-05 usa-checkbox__label"
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
-                />
+                >
+                  {''}
+                </label>
               </div>
             </td>
           )}
@@ -156,7 +158,9 @@ export const SectionWorkQueueInProgress = connect(
                           className="padding-top-05 usa-checkbox__label"
                           htmlFor="workitem-select-all-checkbox"
                           id="label-workitem-select-all-checkbox"
-                        />
+                        >
+                          {''}
+                        </label>
                       </>
                     )}
                   </th>

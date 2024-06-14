@@ -20,9 +20,17 @@ export default defineConfig({
         setAllowedTerminalIpAddresses(ipAddresses) {
           return setAllowedTerminalIpAddresses(ipAddresses);
         },
+        table(message) {
+          console.table(message);
+
+          return null;
+        },
       });
     },
-    specPattern: 'cypress/local-only/integration/public/**/*.cy.ts',
+    specPattern: [
+      'cypress/local-only/tests/integration/public/**/*.cy.ts',
+      'cypress/local-only/tests/accessibility/public/**/*.cy.ts',
+    ],
     supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },

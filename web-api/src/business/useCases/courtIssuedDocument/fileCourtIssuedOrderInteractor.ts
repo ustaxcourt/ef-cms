@@ -9,7 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
