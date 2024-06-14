@@ -6,6 +6,16 @@ const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
 type TableSort = { sortField: string; sortOrder?: string };
 
+export const SUPPORTED_SORT_FIELDS = [
+  'createdAt',
+  'completedAt',
+  'subject',
+  'caseTitle',
+  'caseStatus',
+  'from',
+  'fromSectionFormatted',
+];
+
 export const sortFormattedMessages = (
   formattedCaseMessages,
   tableSort: null | TableSort = null,
@@ -15,9 +25,7 @@ export const sortFormattedMessages = (
 
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
-    } else if (
-      ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
-    ) {
+    } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
       sortNumber = a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
     } else if (tableSort.sortField === 'docketNumber') {
       const aSplit = a.docketNumber.split('-');
