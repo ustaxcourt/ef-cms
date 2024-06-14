@@ -74,7 +74,6 @@ export const CaseInformationInternal = connect(
                   className="margin-0"
                   data-testid="menu-edit-case-context-button"
                   icon="edit"
-                  id="menu-edit-case-context-button"
                   onClick={() => {
                     resetCaseMenuSequence();
                     openUpdateCaseModalSequence();
@@ -169,6 +168,7 @@ export const CaseInformationInternal = connect(
                         link
                         aria-label="unconsolidate cases"
                         className="red-warning margin-right-0 margin-left-205 margin-top-1 padding-0 float-right"
+                        data-testid="unconsolidate-cases-button"
                         icon="minus-circle"
                         onClick={() => {
                           openCleanModalSequence({
