@@ -145,6 +145,7 @@ import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequen
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
+import { gotoCaseAssociationRequestSequence } from './sequences/gotoCaseAssociationRequestSequence';
 import { gotoCaseDeadlineReportSequence } from './sequences/gotoCaseDeadlineReportSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
@@ -199,7 +200,6 @@ import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrint
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoPrintableTrialSessionWorkingCopySequence } from './sequences/gotoPrintableTrialSessionWorkingCopySequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
-import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
@@ -346,8 +346,8 @@ import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { resetSecondaryAddressSequence } from './sequences/resetSecondaryAddressSequence';
 import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
+import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
-import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveCourtIssuedDocketEntrySequence } from './sequences/saveCourtIssuedDocketEntrySequence';
 import { saveDocketEntryForLaterCompleteSequence } from './sequences/saveDocketEntryForLaterCompleteSequence';
@@ -826,6 +826,8 @@ export const presenterSequences = {
     gotoBeforeYouFileDocumentSequence as unknown as Function,
   gotoBlockedCasesReportSequence:
     gotoBlockedCasesReportSequence as unknown as Function,
+  gotoCaseAssociationRequestSequence:
+    gotoCaseAssociationRequestSequence as unknown as Function,
   gotoCaseDeadlineReportSequence:
     gotoCaseDeadlineReportSequence as unknown as Function,
   gotoCaseDetailSequence: gotoCaseDetailSequence as unknown as Function,
@@ -915,7 +917,6 @@ export const presenterSequences = {
   gotoPrintableTrialSessionWorkingCopySequence:
     gotoPrintableTrialSessionWorkingCopySequence as unknown as Function,
   gotoPrivacySequence: gotoPrivacySequence as unknown as Function,
-  gotoRequestAccessSequence: gotoRequestAccessSequence as unknown as Function,
   gotoReviewSavedPetitionSequence:
     gotoReviewSavedPetitionSequence as unknown as Function,
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,
@@ -1175,10 +1176,10 @@ export const presenterSequences = {
   resetSecondaryAddressSequence:
     resetSecondaryAddressSequence as unknown as Function,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
+  reviewCaseAssociationRequestSequence:
+    reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  reviewRequestAccessInformationSequence:
-    reviewRequestAccessInformationSequence as unknown as Function,
   runTrialSessionPlanningReportSequence:
     runTrialSessionPlanningReportSequence as unknown as Function,
   saveCourtIssuedDocketEntrySequence:

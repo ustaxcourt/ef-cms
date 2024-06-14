@@ -14,7 +14,7 @@ import { petitionsClerkServesPetition } from '../../../../../../helpers/document
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { uploadFile } from '../../../../../../helpers/file/upload-file';
 
-describe('Private Practitioner requests access to case', () => {
+describe('Private Practitioner requests to represent a party to a case', () => {
   before(() => {
     cy.task('toggleFeatureFlag', {
       flag: 'updated-petition-flow',
@@ -46,7 +46,7 @@ describe('Private Practitioner requests access to case', () => {
 
         externalUserSearchesDocketNumber(docketNumber);
 
-        cy.get('[data-testid="button-request-access"]').click();
+        cy.get('[data-testid="request-represent-a-party-button"]').click();
 
         selectTypeaheadInput('document-type', 'Entry of Appearance');
 
@@ -61,7 +61,7 @@ describe('Private Practitioner requests access to case', () => {
         cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
           'exist',
         );
-        cy.get('[data-testid="request-access-review-submit-document"]').click();
+        cy.get('[data-testid="submit-represent-a-party-button"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(
           'contain.text',
@@ -83,7 +83,7 @@ describe('Private Practitioner requests access to case', () => {
 
         loginAsPrivatePractitioner();
         externalUserSearchesDocketNumber(docketNumber);
-        cy.get('[data-testid="button-request-access"]').click();
+        cy.get('[data-testid="request-represent-a-party-button"]').click();
         selectTypeaheadInput('document-type', 'Entry of Appearance');
         cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
         cy.get('[data-testid="auto-generation"]').should('exist');
@@ -92,7 +92,7 @@ describe('Private Practitioner requests access to case', () => {
         cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
           'exist',
         );
-        cy.get('[data-testid="request-access-review-submit-document"]').click();
+        cy.get('[data-testid="submit-represent-a-party-button"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(
           'have.text',
@@ -117,7 +117,7 @@ describe('Private Practitioner requests access to case', () => {
 
         externalUserSearchesDocketNumber(docketNumber);
 
-        cy.get('[data-testid="button-request-access"]').click();
+        cy.get('[data-testid="request-represent-a-party-button"]').click();
 
         selectTypeaheadInput('document-type', 'Entry of Appearance');
 
@@ -131,7 +131,7 @@ describe('Private Practitioner requests access to case', () => {
         cy.get('[data-testid="request-access-submit-document"]').click();
 
         cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-        cy.get('[data-testid="request-access-review-submit-document"]').click();
+        cy.get('[data-testid="submit-represent-a-party-button"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(
           'have.text',
