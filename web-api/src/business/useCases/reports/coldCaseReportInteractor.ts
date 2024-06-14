@@ -1,8 +1,8 @@
-import { IApplicationContext } from 'types/IApplicationContext';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type ColdCaseEntry = {
@@ -16,7 +16,7 @@ export type ColdCaseEntry = {
 };
 
 export const coldCaseReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ): Promise<ColdCaseEntry[]> => {
   const requestUser = applicationContext.getCurrentUser();
 
