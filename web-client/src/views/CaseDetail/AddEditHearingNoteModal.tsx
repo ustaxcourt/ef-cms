@@ -25,7 +25,6 @@ export const AddEditHearingNoteModal = connect(
         cancelLabel="Cancel"
         className="add-edit-calendar-note-modal"
         confirmLabel="Save"
-        preventCancelOnBlur={true}
         title="Add/Edit Hearing Note"
         onCancelSequence={clearModalFormSequence}
         onConfirmSequence={updateHearingNoteSequence}
