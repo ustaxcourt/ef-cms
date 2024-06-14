@@ -3,7 +3,7 @@ import {
   createISODateString,
   formatDateString,
 } from '../../utilities/DateHandler';
-import { TrialSessionInformationType } from '@shared/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
+import { TrialSessionInformationType } from '@web-api/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';

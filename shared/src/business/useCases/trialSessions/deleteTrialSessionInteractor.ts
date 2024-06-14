@@ -5,7 +5,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * deleteTrialSession
