@@ -247,14 +247,16 @@ export const BeforeStartingCase = connect(
                   </p>
                 </AccordionItem>
               </Accordion>
-              <div className="grid-col-12">
-                <hr />
-                <p>
-                  Next you’ll continue to follow the steps to upload your
-                  documents and fill in the information that will create your
-                  case.
-                </p>
-              </div>
+            </div>
+          </div>
+          <div className="grid-container padding-x-0 margin-bottom-5 create-case-steps">
+            <div className="grid-col-12">
+              <hr />
+              <p>
+                Next you’ll continue to follow the steps to upload your
+                documents and fill in the information that will create your
+                case.
+              </p>
             </div>
           </div>
           <Button data-testid="go-to-step-1" href="/file-a-petition/step-1">

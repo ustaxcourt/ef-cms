@@ -91,7 +91,7 @@ If the Court is not able to reproduce the bug, add the “Unable to reproduce”
  - [ ] Automated test scripts have been written
  - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
  - [ ] Verify that language for docket record for internal users and external users is identical
- - [ ] New screens have been added to pa11y scripts
+ - [ ] New screens have been added to cypress accessibility axe
  - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html 
  - [ ] READMEs, other appropriate docs and swagger/APIs fully updated
  - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required)
