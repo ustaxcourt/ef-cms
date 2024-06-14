@@ -443,6 +443,7 @@ export const createTestApplicationContext = ({
     noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    petition: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     printableWorkingCopySessionList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
@@ -566,7 +567,7 @@ export const createTestApplicationContext = ({
   });
 
   const mockGetEmailClient = {
-    sendBulkTemplatedEmail: jest.fn(),
+    send: jest.fn(),
   };
 
   const mockGetMessagingClient = {

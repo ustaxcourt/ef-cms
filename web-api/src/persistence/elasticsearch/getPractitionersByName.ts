@@ -6,6 +6,7 @@ export type PractitionerSearchResultType = {
   admissionsStatus: string;
   barNumber: string;
   admissionsDate: string;
+  originalBarState: string;
   contact: {
     address3: string;
     address2: string;
@@ -39,6 +40,7 @@ export const getPractitionersByName = async (
         'barNumber',
         'contact',
         'name',
+        'originalBarState',
         'practitionerType',
         'practiceType',
       ],

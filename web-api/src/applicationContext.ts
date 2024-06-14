@@ -21,10 +21,15 @@ import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import {
+  EmailResponse,
+  sendEmailToUser,
+} from '@web-api/persistence/messages/sendEmailToUser';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { SESClient } from '@aws-sdk/client-ses';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -57,7 +62,6 @@ import { retrySendNotificationToConnections } from './notifications/retrySendNot
 import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
-import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from './notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from './notifications/sendNotificationToUser';
@@ -65,13 +69,13 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SES, SQS } from 'aws-sdk';
+import AWS, { S3, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
 let s3Cache: AWS.S3 | undefined;
-let sesCache;
+let sesCache: SESClient;
 let sqsCache;
 let searchClientCache: Client;
 let notificationServiceCache;
@@ -180,41 +184,16 @@ export const createApplicationContext = (
     getEmailClient: () => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
-          getSendStatistics: () => {
-            // mock this out so the health checks pass on smoke tests
-            return {
-              promise: () => ({
-                SendDataPoints: [
-                  {
-                    Rejects: 0,
-                  },
-                ],
-              }),
-            };
+          send: () => {
+            return new Promise<EmailResponse>(resolve => {
+              resolve({ MessageId: '' });
+            });
           },
-          sendBulkTemplatedEmail: () => {
-            return {
-              promise: () => {
-                return { Status: [] };
-              },
-            };
-          },
-          sendEmail: () => {
-            return {
-              promise: (): SES.SendEmailResponse => {
-                return { MessageId: '' };
-              },
-            };
-          },
-        };
+        } as unknown as SESClient;
       } else {
         if (!sesCache) {
-          sesCache = new SES({
-            httpOptions: {
-              connectTimeout: 3000,
-              timeout: 5000,
-            },
-            maxRetries: 3,
+          sesCache = new SESClient({
+            maxAttempts: 3,
             region: 'us-east-1',
           });
         }

@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -9,6 +10,7 @@ export const PractitionerSearchByBarNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    isPublicUser: props.isPublicUser,
     submitPractitionerBarNumberSearchSequence:
       sequences.submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence:
@@ -20,6 +22,7 @@ export const PractitionerSearchByBarNumber = connect(
   function PractitionerSearchByBarNumber({
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
+    isPublicUser,
     submitPractitionerBarNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validatePractitionerSearchByBarNumberFormSequence,
@@ -71,14 +74,16 @@ export const PractitionerSearchByBarNumber = connect(
                   id="practitioner-search-by-bar-number-button"
                   onClick={e => {
                     e.preventDefault();
-                    submitPractitionerBarNumberSearchSequence();
+                    submitPractitionerBarNumberSearchSequence({
+                      isPublicUser,
+                    });
                   }}
                 >
                   Search
                 </Button>
                 <Button
                   link
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  className="margin-top-1"
                   data-testid="clear-practitioner-search"
                   onClick={e => {
                     e.preventDefault();

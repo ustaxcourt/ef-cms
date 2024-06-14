@@ -13,7 +13,23 @@ import { selectTypeaheadInput } from '../../../../../../helpers/components/typeA
  * When a docket clerk adds a paper filing,
  * Then they can choose MLSP option
  */
-describe('Private Practitioner requests access to case', () => {
+describe('Private Practitioner requests to represent a party to a case', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should have access to auto generate entry of appearance if there are no parties with paper service preference', () => {
     const primaryFilerName = 'John';
 
@@ -84,6 +100,22 @@ describe('Private Practitioner requests access to case', () => {
  * Then they can choose MLSP option
  */
 describe('Petitioner files motion to lift stay of proceedings', () => {
+  before(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: false,
+    });
+
+    cy.reload(true);
+  });
+
+  after(() => {
+    cy.task('toggleFeatureFlag', {
+      flag: 'updated-petition-flow',
+      flagValue: true,
+    });
+  });
+
   it('should show MLSP document type option and let us select it', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
