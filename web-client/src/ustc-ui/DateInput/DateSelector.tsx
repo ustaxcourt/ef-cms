@@ -11,7 +11,9 @@ export const DateSelector = ({
   hintText = undefined,
   id,
   label,
+  maxDate,
   minDate,
+  onBlur,
   onChange,
   placeHolderText,
   showDateHint = false,
@@ -20,6 +22,7 @@ export const DateSelector = ({
   displayOptionalHintText?: boolean;
   placeHolderText?: string;
   errorText?: string;
+  maxDate?: string;
   disabled?: boolean;
   formGroupClassNames?: string;
   minDate?: string;
@@ -27,10 +30,12 @@ export const DateSelector = ({
   id: string;
   label?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
 }) => {
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
   const formGroupInputRef = useRef<HTMLInputElement>(null);
+  const defaultMinDate = '0000-01-01';
 
   useEffect(() => {
     if (formGroupInputRef.current) {
@@ -50,6 +55,8 @@ export const DateSelector = ({
 
       (myDatePicker as HTMLInputElement).addEventListener('change', onChange);
       (myDatePicker as HTMLInputElement).addEventListener('input', onChange);
+      if (onBlur)
+        (myDatePicker as HTMLInputElement).addEventListener('blur', onBlur);
     }
   }, [formGroupInputRef]);
 
@@ -97,7 +104,8 @@ export const DateSelector = ({
       <div
         className="usa-date-picker"
         data-default-value={defaultValue}
-        data-min-date={minDate}
+        data-max-date={maxDate}
+        data-min-date={minDate ?? defaultMinDate}
       >
         <input
           aria-describedby={`date-picker-label ${id}-date-hint`}
