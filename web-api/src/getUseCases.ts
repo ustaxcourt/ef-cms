@@ -138,7 +138,6 @@ import { getUsersInSectionInteractor } from './business/useCases/user/getUsersIn
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
 import { getWorkItemInteractor } from './business/useCases/workItems/getWorkItemInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
-import { logOldLoginAttemptInteractor } from '@web-api/business/useCases/logOldLoginAttemptInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
 import { onConnectInteractor } from './business/useCases/notifications/onConnectInteractor';
 import { onDisconnectInteractor } from './business/useCases/notifications/onDisconnectInteractor';
@@ -351,7 +350,6 @@ const useCases = {
   getUsersPendingEmailInteractor,
   getWorkItemInteractor,
   handleBounceNotificationInteractor,
-  logOldLoginAttemptInteractor,
   loginInteractor,
   onConnectInteractor,
   onDisconnectInteractor,

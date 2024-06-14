@@ -42,7 +42,7 @@ export const DashboardJudge = connect(
             </Tab>
 
             <Tab
-              data-testid="tab-pending-motions"
+              data-testid="pending-motions-tab"
               tabName="pendingMotions"
               title={`Pending Motions (${pendingMotionsHelper.formattedPendingMotions.length})`}
             >
