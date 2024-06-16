@@ -30,7 +30,6 @@ export const AddEditCalendarNoteModal = connect(
         className="add-edit-calendar-note-modal"
         confirmLabel="Save"
         deleteLabel="Delete Note"
-        preventCancelOnBlur={true}
         showDelete={isEditing}
         title="Add/Edit Calendar Note"
         onCancelSequence={clearModalFormSequence}

@@ -46,6 +46,11 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
+        table(message) {
+          console.table(message);
+
+          return null;
+        },
         unzipFile({ destinationPath, filePath }) {
           return unzipFile({ destinationPath, filePath });
         },
@@ -66,7 +71,7 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/local-only/integration/**/*.cy.ts',
+    specPattern: 'cypress/local-only/tests/**/*.cy.ts',
     supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },

@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "switch_colors_lambda_role" {
-  name = "lambda_role_${var.environment}"
+  name = "switch_colors_cron_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -23,7 +23,7 @@ EOF
 
 resource "aws_iam_role_policy" "switch_colors_lambda_policy" {
   name = "lambda_policy_${var.environment}"
-  role = aws_iam_role.lambda_role.id
+  role = aws_iam_role.switch_colors_lambda_role.id
 
   policy = <<EOF
 {

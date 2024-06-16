@@ -43,7 +43,6 @@ export const AddConsolidatedCaseModal = connect(
         cancelLabel="Cancel"
         className="add-consolidated-case-search-modal"
         confirmLabel="Consolidate Cases"
-        preventCancelOnBlur={true}
         showModalWhen="AddConsolidatedCaseModal"
         title="Consolidate Cases"
         onCancelSequence={clearModalSequence}
