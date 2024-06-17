@@ -8,8 +8,6 @@ export const getPractitionerByBarNumberInteractor = (
     ? `/public-api/practitioners/${barNumber}`
     : `/practitioners/${barNumber}`;
 
-  console.log('by bar endpoint', endpoint);
-
   return get({
     applicationContext,
     endpoint,
