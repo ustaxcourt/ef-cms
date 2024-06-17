@@ -3,13 +3,13 @@ import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { IApplicationContext } from 'types/IApplicationContext';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatResults } from '../searchClient';
 
 export async function getColdCases({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }) {
   const entriesOfNotAtIssueCases = await applicationContext
     .getSearchClient()
@@ -17,6 +17,7 @@ export async function getColdCases({
       body: {
         _source: [
           'docketNumber',
+          'docketNumberWithSuffix',
           'filingDate',
           'createdAt',
           'caseType',

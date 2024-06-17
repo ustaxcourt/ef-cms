@@ -6,6 +6,7 @@ import {
 } from '@aws-sdk/client-ses';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { backOff } from '@shared/tools/helpers';
+import { environment } from '@web-api/environment';
 
 /**
  * calls SES.sendBulkTemplatedEmail
@@ -43,9 +44,7 @@ export const sendBulkTemplatedEmail = async ({
         },
         ReplacementTemplateData: JSON.stringify(destination.templateData),
       })),
-      ReturnPath:
-        process.env.BOUNCED_EMAIL_RECIPIENT ||
-        applicationContext.environment.emailFromAddress,
+      ReturnPath: environment.bouncedEmailRecipient,
       Source: applicationContext.environment.emailFromAddress,
       Template: templateName,
     };

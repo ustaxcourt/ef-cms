@@ -12,7 +12,6 @@ export const getSesStatus = async ({
   const sesHealth = SendDataPoints?.slice(0, numberOfDataPoints).every(
     ({ Rejects }) => Rejects === 0,
   );
-  //todo: what is the meaning of SendDataPoints being undefined.  Can we assume success? Failure?
   if (sesHealth === undefined) {
     console.warn('SES::GetSendStatisticsCommand returned no data');
     return true;
