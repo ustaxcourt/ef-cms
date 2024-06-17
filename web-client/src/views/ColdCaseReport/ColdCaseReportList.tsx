@@ -2,6 +2,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
@@ -35,6 +36,17 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
   const { activePage, pageRecords, setActivePage, totalPages } =
     useClientSidePaginator(entries, ITEMS_PER_PAGE);
 
+  function exportColdCaseCsv() {
+    const today = formatNow(FORMATS.MMDDYYYY);
+    const fileName = `Cold Case Report - ${today}.csv`;
+    const csvConfig = mkConfig({
+      filename: fileName,
+      useKeysAsHeaders: true,
+    });
+    const csv = generateCsv(csvConfig)(entries);
+    download(csvConfig)(csv);
+  }
+
   return (
     <>
       <div ref={paginatorTop}>
@@ -60,11 +72,7 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
             data-testid="export-pending-report"
             disabled={entries.length === 0}
             icon="file-export"
-            onClick={() => {
-              const csvConfig = mkConfig({ useKeysAsHeaders: true });
-              const csv = generateCsv(csvConfig)(entries);
-              download(csvConfig)(csv);
-            }}
+            onClick={exportColdCaseCsv}
           >
             Export
           </Button>
@@ -105,7 +113,11 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
                 />
               </td>
               <td>
-                <CaseLink formattedCase={item} />
+                <CaseLink
+                  formattedCase={item}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                />
               </td>
               <td>{item.createdAt}</td>
               <td>{item.caseType}</td>
