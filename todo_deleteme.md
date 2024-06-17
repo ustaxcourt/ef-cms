@@ -1,0 +1,16 @@
+# To do
+- Understand if there was any reason to default user to empty object on these interactors
+  - web-api/src/lambdas/cases/checkForReadyForTrialCasesLambda.ts
+  - web-api/src/lambdas/cases/sendMaintenanceNotificationsLambda.ts
+  - web-api/src/lambdas/notifications/disconnectLambda.ts
+  - web-api/src/lambdas/public-api/casePublicSearchLambda.ts
+  - web-api/src/lambdas/public-api/generatePublicDocketRecordPdfLambda.ts
+  - web-api/src/lambdas/public-api/getCaseForPublicDocketSearchLambda.ts
+  - web-api/src/lambdas/public-api/getPublicCaseExistsLambda.ts
+  - web-api/src/lambdas/public-api/getPublicCaseLambda.ts
+  - web-api/src/lambdas/public-api/getPublicDocumentDownloadUrlLambda.ts
+  - web-api/src/lambdas/public-api/getPublicJudgesLambda.ts
+  - web-api/src/lambdas/public-api/opinionPublicSearchLambda.ts
+  - web-api/src/lambdas/public-api/orderPublicSearchLambda.ts
+  - web-api/src/lambdas/public-api/todaysOpinionsLambda.ts
+  - web-api/src/lambdas/public-api/todaysOrdersLambda.ts

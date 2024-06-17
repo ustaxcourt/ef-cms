@@ -24,5 +24,5 @@ export const disconnectLambda = event =>
 
       return results;
     },
-    { bypassMaintenanceCheck: true, user: {} },
+    { bypassMaintenanceCheck: true },
   );

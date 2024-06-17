@@ -57,9 +57,16 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 
-export const genericHandler = (awsEvent, cb, options = {}) => {
+export const genericHandler = (
+  awsEvent,
+  cb,
+  options: {
+    bypassMaintenanceCheck?: boolean;
+    logResults?: boolean;
+  } = {},
+) => {
   return handle(awsEvent, async () => {
-    const user = options.user || getUserFromAuthHeader(awsEvent);
+    const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext =
       options.applicationContext ||
