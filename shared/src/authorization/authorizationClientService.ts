@@ -85,7 +85,10 @@ export const ROLE_PERMISSIONS = {
   VIEW_SEALED_ADDRESS: 'VIEW_SEALED_ADDRESS',
   VIEW_SEALED_CASE: 'VIEW_SEALED_CASE',
   WORKITEM: 'WORKITEM',
-};
+} as const;
+
+export type RolePermission =
+  (typeof ROLE_PERMISSIONS)[keyof typeof ROLE_PERMISSIONS];
 
 const allInternalUserPermissions = [
   ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION,
@@ -339,17 +342,10 @@ export const AUTHORIZATION_MAP = {
   trialclerk: trialClerkPermissions,
 } as const;
 
-/**
- * Checks user permissions for an action
- * @param {object} user the user to check for authorization
- * @param {string} action the action to verify if the user is authorized for
- * @param {string} owner the user id of the owner of the item to verify
- * @returns {boolean} true if user is authorized, false otherwise
- */
 export const isAuthorized = (
   user: UnknownAuthUser,
-  action,
-  owner?,
+  action: RolePermission,
+  owner?: string,
 ): user is AuthUser => {
   if (!isAuthUser(user)) {
     return false;
