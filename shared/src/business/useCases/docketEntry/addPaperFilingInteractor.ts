@@ -12,7 +12,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  *
