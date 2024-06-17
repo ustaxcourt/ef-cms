@@ -23,6 +23,7 @@
     "@aws-sdk/client-opensearch": "3.590.0",
     "@aws-sdk/client-route-53": "3.590.0",
     "@aws-sdk/client-s3": "3.591.0",
+    "@aws-sdk/client-ses": "3.596.0",
     "@aws-sdk/client-sns": "3.590.0",
     "@aws-sdk/client-sqs": "3.590.0",
     "@aws-sdk/client-ssm": "3.590.0",
