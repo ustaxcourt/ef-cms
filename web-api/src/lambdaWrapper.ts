@@ -1,6 +1,9 @@
+import {
+  UnknownAuthUser,
+  getUserFromAuthHeader,
+} from '@web-api/middleware/apiGatewayHelper';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -19,7 +22,7 @@ const defaultOptions: {
 } = {};
 
 export const lambdaWrapper = (
-  lambda,
+  lambda: (awsEvent: Record<string, any>, user: UnknownAuthUser) => any,
   options = defaultOptions,
   applicationContext?: IApplicationContext,
 ) => {
@@ -45,23 +48,27 @@ export const lambdaWrapper = (
       queryStringParameters: req.query,
     };
 
+    const user = getUserFromAuthHeader(event);
+
     if (shouldMimicApiGatewayAsyncEndpoint) {
       // we return immediately before we try running the lambda because that is how
       // the api gateway works with async endpoints.
       res.status(204).send('');
     }
 
-    const response = await lambda({
-      ...event,
-      body: JSON.stringify(req.body),
-      logger: req.locals.logger,
-    });
+    const response = await lambda(
+      {
+        ...event,
+        body: JSON.stringify(req.body),
+        logger: req.locals.logger,
+      },
+      user,
+    );
 
     const { asyncsyncid } = req.headers;
 
     if (options.isAsyncSync && asyncsyncid && applicationContext) {
       try {
-        const user = getUserFromAuthHeader(event);
         const fullResponse = {
           ...response,
           body: response.body ? JSON.parse(response.body) : response.body,
