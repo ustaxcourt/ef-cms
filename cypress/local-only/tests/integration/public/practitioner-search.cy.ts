@@ -1,4 +1,4 @@
-import { isValidRequest } from '../../../readonly/support/helpers';
+import { isValidRequest } from '../../../../readonly/support/helpers';
 
 describe('Public User - Search', () => {
   beforeEach(() => {
