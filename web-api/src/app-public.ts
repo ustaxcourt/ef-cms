@@ -153,9 +153,12 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
     '/public-api/docket-number-search/:docketNumber',
     lambdaWrapper(getCaseForPublicDocketSearchLambda),
   );
-  app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
   app.get(
-    '/practitioners/:barNumber',
+    '/public-api/practitioners',
+    lambdaWrapper(getPractitionersByNameLambda),
+  );
+  app.get(
+    '/public-api/practitioners/:barNumber',
     lambdaWrapper(getPractitionerByBarNumberLambda),
   );
 }

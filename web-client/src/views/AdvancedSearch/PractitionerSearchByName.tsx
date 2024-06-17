@@ -72,7 +72,9 @@ export const PractitionerSearchByName = connect(
                   id="practitioner-search-by-name-button"
                   onClick={e => {
                     e.preventDefault();
-                    submitPractitionerNameSearchSequence({ selectedPage: 0 });
+                    submitPractitionerNameSearchSequence({
+                      selectedPage: 0,
+                    });
                   }}
                 >
                   Search
