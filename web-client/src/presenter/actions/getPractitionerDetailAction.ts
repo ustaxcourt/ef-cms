@@ -9,13 +9,14 @@
 export const getPractitionerDetailAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
-  const { barNumber } = props;
+}: ActionProps<{ barNumber: string; isPublicUser: boolean }>) => {
+  const { barNumber, isPublicUser } = props;
 
   const practitionerDetail = await applicationContext
     .getUseCases()
     .getPractitionerByBarNumberInteractor(applicationContext, {
       barNumber,
+      isPublicUser,
     });
 
   return { practitionerDetail };

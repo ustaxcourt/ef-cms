@@ -3,11 +3,25 @@ import { get } from '../requests';
 
 export const getPractitionersByNameInteractor = (
   applicationContext: IApplicationContext,
-  { name, searchAfter }: { name: string; searchAfter: (string | number)[] },
+  {
+    isPublicUser,
+    name,
+    searchAfter,
+  }: {
+    name: string;
+    searchAfter: (string | number)[];
+    isPublicUser: boolean;
+  },
 ): Promise<PractitionersByName> => {
+  const endpoint = isPublicUser
+    ? '/public-api/practitioners'
+    : '/practitioners';
+
+  console.log('by name endpoint', endpoint);
+
   return get({
     applicationContext,
-    endpoint: '/practitioners',
+    endpoint,
     params: {
       name,
       searchAfter,
