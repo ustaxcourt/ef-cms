@@ -8,6 +8,13 @@ import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 
+export type AuthUser = {
+  role: string;
+  userId: string;
+  email: string;
+  name: string;
+};
+
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
  *
@@ -168,13 +175,7 @@ export const getAuthHeader = event => {
   }
 };
 
-/**
- * extracts and decodes the JWT token from the gateway response event's header / query string and returns the decoded user object
- *
- * @param {object} event the api gateway request event
- * @returns {object} the user decoded from the JWT token
- */
-export const getUserFromAuthHeader = event => {
+export const getUserFromAuthHeader = (event): AuthUser | null => {
   const token = getAuthHeader(event);
   if (!token) return null;
   const decoded = jwt.decode(token);
