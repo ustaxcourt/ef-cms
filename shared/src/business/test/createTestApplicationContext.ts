@@ -566,7 +566,7 @@ export const createTestApplicationContext = ({
   });
 
   const mockGetEmailClient = {
-    sendBulkTemplatedEmail: jest.fn(),
+    send: jest.fn(),
   };
 
   const mockGetMessagingClient = {
