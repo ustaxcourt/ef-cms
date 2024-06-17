@@ -1,19 +1,29 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { RawUser } from '@shared/business/entities/User';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const WorkQueueAssignments = connect(
-  {
-    assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    clearSelectedWorkItemsSequence: sequences.clearSelectedWorkItemsSequence,
-    formattedWorkQueue: state.formattedWorkQueue,
-    selectAssigneeSequence: sequences.selectAssigneeSequence,
-    selectedWorkItemsLength: state.selectedWorkItems.length,
-    workQueueHelper: state.workQueueHelper,
-  },
+type WorkQueueAssignmentsProps = {
+  users: RawUser[];
+};
+
+const workQueueAssignmentsDeps = {
+  assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
+  clearSelectedWorkItemsSequence: sequences.clearSelectedWorkItemsSequence,
+  formattedWorkQueue: state.formattedWorkQueue,
+  selectAssigneeSequence: sequences.selectAssigneeSequence,
+  selectedWorkItemsLength: state.selectedWorkItems.length,
+  workQueueHelper: state.workQueueHelper,
+};
+
+export const WorkQueueAssignments = connect<
+  WorkQueueAssignmentsProps,
+  typeof workQueueAssignmentsDeps
+>(
+  workQueueAssignmentsDeps,
   function WorkQueueAssignments({
     assignSelectedWorkItemsSequence,
     clearSelectedWorkItemsSequence,
@@ -120,7 +130,7 @@ export const WorkQueueAssignments = connect(
                     assignSelectedWorkItemsSequence();
                   }}
                 >
-                  <option value>Assign to...</option>
+                  <option value="">Assign to...</option>
                   {users.map(user => (
                     <option key={user.userId} value={user.userId}>
                       {user.name}

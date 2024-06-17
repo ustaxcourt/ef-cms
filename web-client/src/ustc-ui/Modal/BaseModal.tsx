@@ -8,13 +8,11 @@ const modalRoot = window.document.getElementById('modal-root');
 export const BaseModal = ({
   children,
   className,
-  onBlurSequence,
-  preventCancelOnBlur,
+  title,
 }: {
+  title: string;
   children?: React.ReactNode;
   className?: string;
-  onBlurSequence: Function;
-  preventCancelOnBlur?: boolean;
 }) => {
   const elRef = React.useRef(null);
 
@@ -23,20 +21,6 @@ export const BaseModal = ({
       elRef.current = window.document.createElement('div');
     }
     return elRef.current;
-  };
-
-  const runBlurSequence = event => {
-    event.stopPropagation();
-    if (onBlurSequence) {
-      onBlurSequence();
-    }
-  };
-
-  const blurDialog = event => {
-    if (preventCancelOnBlur) {
-      return;
-    }
-    return runBlurSequence(event);
   };
 
   useEffect(() => {
@@ -48,19 +32,11 @@ export const BaseModal = ({
       }
     };
 
-    const keydownTriggered = event => {
-      if (event.keyCode === 27) {
-        return blurDialog(event);
-      }
-    };
-
     modalRoot.appendChild(getEl());
-    window.document.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      window.document.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
@@ -70,18 +46,12 @@ export const BaseModal = ({
       <FocusLock>
         <dialog
           open
+          aria-modal="true"
           className={classNames('modal-screen', className)}
           role="dialog"
-          onClick={blurDialog}
+          title={title}
         >
-          <div
-            aria-modal="true"
-            className="modal-dialog padding-205"
-            role="status"
-            onClick={event => event.stopPropagation()}
-          >
-            {children}
-          </div>
+          <div className="modal-dialog padding-205">{children}</div>
         </dialog>
       </FocusLock>
     );

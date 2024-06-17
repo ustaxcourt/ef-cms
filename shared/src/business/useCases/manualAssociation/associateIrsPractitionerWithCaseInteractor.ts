@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
+import { associateIrsPractitionerToCase } from '../../../../../web-api/src/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 
 /**
  * associateIrsPractitionerWithCaseInteractor

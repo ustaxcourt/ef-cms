@@ -45,7 +45,10 @@ export const PendingMotion = connect<
           </Button>
           .
         </div>
-        <div className="float-right margin-bottom-2 text-semibold">
+        <div
+          className="float-right margin-bottom-2 text-semibold"
+          data-testid="pending-motions-total-count-text"
+        >
           Count: {pendingMotionsHelper.formattedPendingMotions.length}
         </div>
 
