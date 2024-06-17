@@ -26,7 +26,7 @@ RUN apt-get install -y \
   python-dev-is-python3 \
   python3-pip=23.0.1+dfsg-1 \
   jq \
-  graphicsmagick=1.4+really1.3.38+hg16870-1 \
+  graphicsmagick \
   ghostscript \
   chromium \
   openssh-client \

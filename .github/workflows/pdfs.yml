@@ -18,9 +18,6 @@ jobs:
           comment_on_pr: false
       - name: Setup
         run: |
-          sudo apt-get update
-          sudo apt-get install -o Acquire::Retries=3 -y graphicsmagick=1.4+really1.3.38-1ubuntu0.1 ghostscript
-      - name: Install Node Dependencies
-        run: npm ci && npm rebuild
-      - name: Generate and Test PDFs
-        run: npm run test:document-generation
+          docker build --platform=linux/amd64 -t efcms -f Dockerfile . 
+          docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . 
+          docker run --platform=linux/amd64 -it --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation"
