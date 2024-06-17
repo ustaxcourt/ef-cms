@@ -1,4 +1,12 @@
-import { backOff } from '../../../../shared/src/tools/helpers';
+import {
+  type BulkEmailDestination,
+  type SESClient,
+  SendBulkTemplatedEmailCommand,
+  type SendBulkTemplatedEmailCommandInput,
+} from '@aws-sdk/client-ses';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { backOff } from '@shared/tools/helpers';
+import { environment } from '@web-api/environment';
 
 /**
  * calls SES.sendBulkTemplatedEmail
@@ -15,37 +23,35 @@ import { backOff } from '../../../../shared/src/tools/helpers';
  *   myCustomVar1: 'undefined',
  *   myCustomVar2: 'undefined'
  * }
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext application context
- * @param {object} providers.defaultTemplateData default values correlated with templateData matching the format described above
- * @param {Array} providers.destinations array of destinations matching the format described above
- * @param {string} providers.templateName name of the SES template
- * @returns {void}
  */
 export const sendBulkTemplatedEmail = async ({
   applicationContext,
   defaultTemplateData,
   destinations,
   templateName,
-}) => {
+}: {
+  applicationContext: ServerApplicationContext;
+  defaultTemplateData: { [key: string]: any };
+  destinations: { email: string; templateData: { [key: string]: any } }[];
+  templateName: string;
+}): Promise<void> => {
   try {
+    const params: SendBulkTemplatedEmailCommandInput = {
+      DefaultTemplateData: JSON.stringify(defaultTemplateData),
+      Destinations: destinations.map(destination => ({
+        Destination: {
+          ToAddresses: [destination.email],
+        },
+        ReplacementTemplateData: JSON.stringify(destination.templateData),
+      })),
+      ReturnPath: environment.bouncedEmailRecipient,
+      Source: applicationContext.environment.emailFromAddress,
+      Template: templateName,
+    };
+
     await applicationContext.getMessageGateway().sendEmailEventToQueue({
       applicationContext,
-      emailParams: {
-        DefaultTemplateData: JSON.stringify(defaultTemplateData),
-        Destinations: destinations.map(destination => ({
-          Destination: {
-            ToAddresses: [destination.email],
-          },
-          ReplacementTemplateData: JSON.stringify(destination.templateData),
-        })),
-        ReturnPath:
-          process.env.BOUNCED_EMAIL_RECIPIENT ||
-          applicationContext.environment.emailFromAddress,
-        Source: applicationContext.environment.emailFromAddress,
-        Template: templateName,
-      },
+      emailParams: params,
     });
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err}`, err);
@@ -53,39 +59,47 @@ export const sendBulkTemplatedEmail = async ({
   }
 };
 
-/**
- * Sends the email via SES, and retry `MAX_SES_RETRIES` number of times
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext application context
- * @param {object} providers.params the parameters to send to SES
- * @param {number} providers.retryCount the number of retries attempted
- */
 export const sendWithRetry = async ({
   applicationContext,
   params,
   retryCount = 0,
+}: {
+  applicationContext: ServerApplicationContext;
+  params: SendBulkTemplatedEmailCommandInput;
+  retryCount: number;
 }) => {
-  const SES = applicationContext.getEmailClient();
+  const sesClient: SESClient = applicationContext.getEmailClient();
   const { MAX_SES_RETRIES } = applicationContext.getConstants();
 
   applicationContext.logger.info('Bulk Email Params', params);
-  const response = await SES.sendBulkTemplatedEmail(params).promise();
+
+  const cmd = new SendBulkTemplatedEmailCommand(params);
+  const response = await sesClient.send(cmd);
   applicationContext.logger.info('Bulk Email Response', response);
 
   // parse response from AWS
-  const needToRetry = response.Status.map((attempt, index) => {
+  const needToRetry: BulkEmailDestination[] = [];
+  response.Status?.map((attempt, index) => {
     // AWS returns 'Success' and helpful identifier upon successful delivery
-    return attempt.Status !== 'Success' ? params.Destinations[index] : false;
-  }).filter(Boolean);
+    if (
+      attempt.Status !== 'Success' &&
+      !!(params.Destinations && params.Destinations[index])
+    ) {
+      needToRetry.push(params.Destinations[index]);
+    }
+  });
 
-  if (needToRetry.length === 0) {
+  if (!needToRetry || needToRetry.length === 0) {
     return;
   }
 
   if (retryCount >= MAX_SES_RETRIES) {
     const failures = needToRetry
-      .map(dest => dest.Destination.ToAddresses[0])
+      .map(dest =>
+        dest.Destination?.ToAddresses && dest.Destination.ToAddresses[0]
+          ? dest.Destination.ToAddresses[0]
+          : 'undefined',
+      )
       .join(',');
     throw `Could not complete service to ${failures}`;
   }
