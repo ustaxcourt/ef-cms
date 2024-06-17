@@ -9,7 +9,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const pdfPreviewButtonDeps = {
-  openPdfInNewTabSequence: sequences.openPdfInNewTabSequence,
   openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
   pdfPreviewModalHelper: state.pdfPreviewModalHelper,
   showModal: state.modal.showModal,
@@ -31,7 +30,6 @@ export const PDFPreviewButton = connect<
   function PDFPreviewButton({
     file,
     id,
-    openPdfInNewTabSequence,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
     shouldAbbreviateTitle = true,
@@ -63,7 +61,8 @@ export const PDFPreviewButton = connect<
           <Button
             {...buttonProps}
             onClick={() => {
-              return openPdfInNewTabSequence({ file });
+              const url = window.URL.createObjectURL(file);
+              window.open(url, '_blank');
             }}
           >
             {displayTitle}
