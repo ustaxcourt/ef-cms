@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -9,6 +10,7 @@ export const PractitionerSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    isPublicUser: props.isPublicUser,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence:
@@ -20,6 +22,7 @@ export const PractitionerSearchByName = connect(
   function PractitionerSearchByName({
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
+    isPublicUser,
     submitPractitionerNameSearchSequence,
     updateAdvancedSearchFormValueSequence,
     validatePractitionerSearchByNameFormSequence,
@@ -72,7 +75,10 @@ export const PractitionerSearchByName = connect(
                   id="practitioner-search-by-name-button"
                   onClick={e => {
                     e.preventDefault();
-                    submitPractitionerNameSearchSequence({ selectedPage: 0 });
+                    submitPractitionerNameSearchSequence({
+                      isPublicUser,
+                      selectedPage: 0,
+                    });
                   }}
                 >
                   Search

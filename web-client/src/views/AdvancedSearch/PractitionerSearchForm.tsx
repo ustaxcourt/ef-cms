@@ -75,7 +75,7 @@ export const PractitionerSearchForm = connect(
             {selectedPractitionerSearchOption === MOBILE_SEARCH_OPTIONS[0] ||
             !selectedPractitionerSearchOption ? (
               <div className="grid-col-12">
-                <PractitionerSearchByName />
+                <PractitionerSearchByName isPublicUser={isPublicUser} />
               </div>
             ) : (
               <div className="grid-col-12">
@@ -93,7 +93,7 @@ export const PractitionerSearchForm = connect(
             data-testid="practitioner-search-container"
           >
             <div className="grid-col-6 right-gray-border">
-              <PractitionerSearchByName />
+              <PractitionerSearchByName isPublicUser={isPublicUser} />
             </div>
 
             <div className="grid-col-6">
