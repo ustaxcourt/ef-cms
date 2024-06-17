@@ -62,7 +62,9 @@ const SectionWorkQueueTable = connect(
                       data-testid="checkbox-select-all-workitems"
                       htmlFor="workitem-select-all-checkbox"
                       id="label-workitem-select-all-checkbox"
-                    />
+                    >
+                      {''}
+                    </label>
                   </>
                 )}
               </th>
@@ -134,7 +136,9 @@ SectionWorkQueueTable.Row = React.memo(
                   data-testid="checkbox-assign-work-item"
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
-                />
+                >
+                  {''}
+                </label>
               </div>
             </td>
           )}

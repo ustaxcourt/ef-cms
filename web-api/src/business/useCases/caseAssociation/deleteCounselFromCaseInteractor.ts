@@ -7,7 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const deleteCounselFromCase = async (
   applicationContext: ServerApplicationContext,

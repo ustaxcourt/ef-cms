@@ -18,7 +18,11 @@ export const CaseSearchNoMatches = connect(
             Check your docket number and try again.{' '}
             {caseSearchNoMatchesHelper.showSearchByNameOption ? (
               <>
-                Or you can try <a href="/search">searching by name</a>.
+                Or you can try{' '}
+                <a data-testid="search-by-name-link" href="/search">
+                  searching by name
+                </a>
+                .
               </>
             ) : (
               <>

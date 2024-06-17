@@ -11,6 +11,7 @@ In order to write a realiable cypress test suites, there are some best practices
   - Avoid cy.get('#my-id').
 - Wait for actions to finish explicitly.
   - Always verify something on the page after running an action or loading a new page.  For example, if you click on a button which updates a practitioner name, be sure to wait for a success alert to appear before trying to move onto the next steps in your test.  Failing to do this will result in race conditions and flaky tests.  
+  - This is especially important for accessibilty tests, wait explicitly for the page to full load before running an accessibility scan. If you are seeing 'color-contrast' violations that are intermittent you are most likely not waiting for the right element to be loaded before running a scan.
 - Extract reusable steps.
   - Try to find ways to create helper functions which we can re-use in other tests.  For example, creating a case as a petitioner is a good re-usable flow.  When writing these helpers, be sure they do not contain asserts related to the high level test you are writing.  They should just login as a user, create or modify the data, then return any new created values we may need.
 - Test should be re-runnable.
@@ -29,11 +30,17 @@ In order to write a realiable cypress test suites, there are some best practices
 - Rely on `after` hooks.
   - Instead any setup should be performed in a `before` hook. Running code in an `after` can potentially not get run because cypress will stop a test early on a failure which means your after will not run.
 - Use aliases
-  - Instead use nesting of chainables in cypress tests.  Please review the `cypress/local-only/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
+  - Instead use nesting of chainables in cypress tests.  Please review the `cypress/local-only/tests/integration/respondent-modifies-contact-info.cy.ts` test.  Aliases are basically global variables that are very hard to understand.  If you have a helper function that creates a case and need to return a docket number, just have the function return a cy.wrap(docketNumber).  Aliases are also harder to hook up with typescript and makes it harder to follow the code.
 
 
 # Test Organization
+- Local tests vs deployed tests vs production tests vs public tests.
+  - `local-only`folder is for tests that are meant to only run locally and in gitHub Actions
+  - `deployed-and-local`folder is for tests that are meant to run locally, in gitHub Actions, and against deployed environments.
+  - `readonly` folder is for tests that are meant to be run against deployed environments, and against production as they do not create any test data.
+  - All of these folders may also have a subfolder for tests that are meant to run against the public site. So a test that you would want to be run against public and only locally belongs in `local-only > integration > public`.
 
+## Integration and Smoketests
 - Organize Cypress test by feature. 
   - For example, a test that verifies a paper filed docket entry displays a served date after it has been served would belong under `caseDetail > docketRecord > paperFiling` because the feature under test is the behavior of a paper filed docket entry. 
 - If multiple users use the same feature, create a new test for each user if they interact with it differently.
@@ -44,11 +51,11 @@ In order to write a realiable cypress test suites, there are some best practices
   - Helper functions that connect to or interact with lower level services (Dynamo, Cognito, etc.) or run Node functions from within a Cypress task are organized under `helpers > cypressTasks`.
 - Tests for individual React components should be placed under `components > <COMPONENT_NAME>`.
   - For example, we have custom validation logic for the date picker component, the test for that validation is placed at `components > datePicker > date-picker-validation-invalid-year.cy.ts`.
-- Local tests vs deployed tests vs production tests vs public tests.
-  - `local-only`folder is for tests that are meant to only run locally and in gitHub Actions
-  - `deployed-and-local`folder is for tests that are meant to run locally, in gitHub Actions, and against deployed environments.
-  - `readonly` folder is for tests that are meant to be run against deployed environments, and against production as they do not create any test data.
-  - All of these folders may also have a subfolder for tests that are meant to run against the public site. So a test that you would want to be run against public and only locally belongs in `local-only > integration > public`.
+
+## Accessibility
+- Accessibility tests are organized by route. 
+  - For example, a test that verifies the accessibility of the page `Advanced Search` - including the Case/Opinion/Order/Practitioner tabs would belong under `advancedSearch > <USER>.cy.ts` because the individual search tabs are not associated with their own route.  
+
 
 # Learn More
 
