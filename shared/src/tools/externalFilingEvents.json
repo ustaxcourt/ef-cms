@@ -8,6 +8,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -16,6 +17,7 @@
       "category": "Answer (filed by respondent only)",
       "eventCode": "AAPN",
       "scenario": "Standard",
+      "canBeFirstIrsDocument": true,
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
@@ -28,6 +30,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -38,6 +41,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -48,6 +52,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -58,6 +63,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -68,6 +74,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -78,6 +85,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -88,6 +96,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -98,6 +107,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -108,6 +118,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     }
   ],
@@ -121,6 +132,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     },
     {
@@ -186,6 +198,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "canBeFirstIrsDocument": true,
       "ordinalField": ""
     }
   ],
@@ -214,6 +227,7 @@
       "documentTitle": "Proposed Stipulated Decision",
       "documentType": "Proposed Stipulated Decision",
       "category": "Decision",
+      "canBeFirstIrsDocument": true,
       "eventCode": "PSDE",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -376,6 +390,7 @@
       "documentTitle": "Status Report",
       "documentType": "Status Report",
       "category": "Miscellaneous",
+      "canBeFirstIrsDocument": true,
       "eventCode": "RPT",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -404,6 +419,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -421,6 +437,7 @@
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction",
       "documentType": "Motion to Dismiss for Lack of Jurisdiction",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M073",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -470,6 +487,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -646,6 +664,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -657,6 +676,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -690,6 +710,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -800,6 +821,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -833,6 +855,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -844,6 +867,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -921,6 +945,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -932,6 +957,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -943,6 +969,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -1075,6 +1102,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
+      "canBeFirstIrsDocument": true,
       "allowStamp": true
     },
     {
@@ -1115,6 +1143,7 @@
       "documentType": "Motion to Clarify Order",
       "category": "Motion",
       "eventCode": "M061",
+      "canBeFirstIrsDocument": true,
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1125,6 +1154,7 @@
       "documentTitle": "Motion to Close on Ground of Duplication",
       "documentType": "Motion to Close on Ground of Duplication",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M062",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1190,6 +1220,7 @@
     {
       "documentTitle": "Motion to Consolidate Docket Numbers [docket numbers]",
       "documentType": "Motion to Consolidate",
+      "canBeFirstIrsDocument": true,
       "category": "Motion",
       "eventCode": "M067",
       "scenario": "Nonstandard B",
@@ -1212,6 +1243,7 @@
     {
       "documentTitle": "Motion to Correct Clerical Order",
       "documentType": "Motion to Correct Clerical Order",
+      "canBeFirstIrsDocument": true,
       "category": "Motion",
       "eventCode": "M124",
       "scenario": "Standard",
@@ -1257,6 +1289,7 @@
       "documentTitle": "Motion to Dismiss",
       "documentType": "Motion to Dismiss",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M070",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1279,6 +1312,7 @@
       "documentTitle": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
       "documentType": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M072",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1290,6 +1324,7 @@
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "documentType": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M126",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
@@ -1301,6 +1336,7 @@
       "documentTitle": "Motion to Dismiss on Ground of Mootness",
       "documentType": "Motion to Dismiss on Ground of Mootness",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M075",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1312,6 +1348,7 @@
       "documentTitle": "Motion to Disqualify Counsel",
       "documentType": "Motion to Disqualify Counsel",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M130",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1345,6 +1382,7 @@
       "documentTitle": "Motion to Extend Time to Move or File Answer",
       "documentType": "Motion to Extend Time to Move or File Answer",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M078",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1401,6 +1439,7 @@
       "documentTitle": "Motion to Modify Order",
       "documentType": "Motion to Modify Order",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M125",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1423,6 +1462,7 @@
       "documentTitle": "Motion to Permit Levy",
       "documentType": "Motion to Permit Levy",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M088",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1478,6 +1518,7 @@
       "documentTitle": "Motion to Remove Lien/Levy Designation",
       "documentType": "Motion to Remove Lien/Levy Designation",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M132",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1489,6 +1530,7 @@
       "documentTitle": "Motion to Remove Small Tax Case Designation",
       "documentType": "Motion to Remove Small Tax Case Designation",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M091",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1577,6 +1619,7 @@
       "documentTitle": "Motion to Seal",
       "documentType": "Motion to Seal",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M114",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1610,6 +1653,7 @@
       "documentTitle": "Motion to Sever",
       "documentType": "Motion to Sever",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M100",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1643,6 +1687,7 @@
       "documentTitle": "Motion to Stay Proceedings",
       "documentType": "Motion to Stay Proceedings",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M103",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1665,6 +1710,7 @@
       "documentTitle": "Motion to Strike",
       "documentType": "Motion to Strike",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M105",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1687,6 +1733,7 @@
       "documentTitle": "Motion to Substitute Parties and Change Caption",
       "documentType": "Motion to Substitute Parties and Change Caption",
       "category": "Motion",
+      "canBeFirstIrsDocument": true,
       "eventCode": "M107",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1876,6 +1923,7 @@
       "documentTitle": "Notice of Concession",
       "documentType": "Notice of Concession",
       "category": "Notice",
+      "canBeFirstIrsDocument": true,
       "eventCode": "NCON",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -1936,6 +1984,7 @@
       "documentTitle": "Notice of Intent Not to File [anything]",
       "documentType": "Notice of Intent Not to File",
       "category": "Notice",
+      "canBeFirstIrsDocument": true,
       "eventCode": "NINF",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
@@ -1976,6 +2025,7 @@
       "documentTitle": "Notice of No Objection to [Document Name]",
       "documentType": "Notice of No Objection",
       "category": "Notice",
+      "canBeFirstIrsDocument": true,
       "eventCode": "NNOB",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you not objecting to?",
@@ -1986,6 +2036,7 @@
       "documentTitle": "Notice of Objection to [Document Name]",
       "documentType": "Notice of Objection",
       "category": "Notice",
+      "canBeFirstIrsDocument": true,
       "eventCode": "OBJN",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you objecting to?",
@@ -2006,6 +2057,7 @@
       "documentTitle": "Notice of Proceeding in Bankruptcy",
       "documentType": "Notice of Proceeding in Bankruptcy",
       "category": "Notice",
+      "canBeFirstIrsDocument": true,
       "eventCode": "NPB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2174,6 +2226,7 @@
       "documentTitle": "Request for Place of Trial at [Place]",
       "documentType": "Request for Place of Trial",
       "category": "Request",
+      "canBeFirstIrsDocument": true,
       "eventCode": "RQT",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
@@ -2198,6 +2251,7 @@
       "documentType": "No Objection",
       "category": "Response, Opposition or Objection",
       "eventCode": "NOB",
+      "canBeFirstIrsDocument": true,
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which document are you not objecting to?",
       "labelFreeText": "",
@@ -2206,6 +2260,7 @@
     {
       "documentTitle": "Objection to [Document Name]",
       "documentType": "Objection",
+      "canBeFirstIrsDocument": true,
       "category": "Response, Opposition or Objection",
       "eventCode": "OBJE",
       "scenario": "Nonstandard A",
@@ -2216,6 +2271,7 @@
     {
       "documentTitle": "Opposition to [Document Name]",
       "documentType": "Opposition",
+      "canBeFirstIrsDocument": true,
       "category": "Response, Opposition or Objection",
       "eventCode": "OPPO",
       "scenario": "Nonstandard A",
@@ -2465,6 +2521,7 @@
       "documentTitle": "Settlement Stipulation",
       "documentType": "Settlement Stipulation",
       "category": "Stipulation",
+      "canBeFirstIrsDocument": true,
       "eventCode": "SSTP",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2474,6 +2531,7 @@
     {
       "documentTitle": "Stipulation [anything]",
       "documentType": "Stipulation",
+      "canBeFirstIrsDocument": true,
       "category": "Stipulation",
       "eventCode": "STP",
       "scenario": "Nonstandard B",
@@ -2525,6 +2583,7 @@
       "documentTitle": "Stipulation of Settled Issues",
       "documentType": "Stipulation of Settled Issues",
       "category": "Stipulation",
+      "canBeFirstIrsDocument": true,
       "eventCode": "STST",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2535,6 +2594,7 @@
       "documentTitle": "Stipulation of Settlement",
       "documentType": "Stipulation of Settlement",
       "category": "Stipulation",
+      "canBeFirstIrsDocument": true,
       "eventCode": "STS",
       "scenario": "Standard",
       "labelPreviousDocument": "",
