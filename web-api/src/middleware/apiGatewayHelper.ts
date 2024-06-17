@@ -15,6 +15,8 @@ export type AuthUser = {
   name: string;
 };
 
+export type UnknownAuthUser = AuthUser | undefined;
+
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
  *
@@ -175,9 +177,9 @@ export const getAuthHeader = event => {
   }
 };
 
-export const getUserFromAuthHeader = (event): AuthUser | null => {
+export const getUserFromAuthHeader = (event): UnknownAuthUser => {
   const token = getAuthHeader(event);
-  if (!token) return null;
+  if (!token) return undefined;
   const decoded = jwt.decode(token);
   if (decoded) {
     decoded.token = token;
@@ -186,7 +188,7 @@ export const getUserFromAuthHeader = (event): AuthUser | null => {
     decoded.name = decoded.name || decoded['custom:name']; // custom:name only exists locally. This is a workaround for cognito-local.
     return decoded;
   } else {
-    return null;
+    return undefined;
   }
 };
 
@@ -196,11 +198,8 @@ export const getUserFromAuthHeader = (event): AuthUser | null => {
  * @param {object} event the api gateway request event
  * @returns {string|void} the connectionId
  */
-export const getConnectionIdFromEvent = event => {
-  if (
-    event.queryStringParameters &&
-    event.queryStringParameters.clientConnectionId
-  ) {
+export const getConnectionIdFromEvent = (event): string | undefined => {
+  if (event?.queryStringParameters?.clientConnectionId) {
     return event.queryStringParameters.clientConnectionId;
   }
 };

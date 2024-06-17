@@ -1,7 +1,10 @@
-import { createApplicationContext } from './applicationContext';
 import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from './applicationContext';
+import {
+  UnknownAuthUser,
   getConnectionIdFromEvent,
-  getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
 
@@ -59,18 +62,16 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
 
 export const genericHandler = (
   awsEvent,
-  cb,
+  cb: (appContext: { applicationContext: ServerApplicationContext }) => any,
+  user: UnknownAuthUser,
   options: {
     bypassMaintenanceCheck?: boolean;
     logResults?: boolean;
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext =
-      options.applicationContext ||
-      createApplicationContext(user, awsEvent.logger);
+    const applicationContext = createApplicationContext(user, awsEvent.logger);
 
     delete awsEvent.logger;
 
@@ -89,7 +90,6 @@ export const genericHandler = (
       const results = await cb({
         applicationContext,
         clientConnectionId,
-        user,
       });
 
       const returnResults = dataSecurityFilter(results, {
