@@ -66,11 +66,11 @@ import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
-import { getPractitionerByBarNumberInteractor } from '@shared/proxies/users/getPractitionerByBarNumberProxy';
-import { getPractitionersByNameInteractor } from '@shared/proxies/practitioners/getPractitionersByNameProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
+import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
+import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
@@ -109,8 +109,9 @@ const allUseCases = {
   getHealthCheckInteractor,
   getItemInteractor,
   getMaintenanceModePublicInteractor,
-  getPractitionerByBarNumberInteractor,
-  getPractitionersByNameInteractor,
+  getPractitionerByBarNumberInteractor:
+    getPublicPractitionerByBarNumberInteractor,
+  getPractitionersByNameInteractor: getPublicPractitionersByNameInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,

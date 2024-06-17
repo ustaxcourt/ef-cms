@@ -37,7 +37,6 @@ export const PractitionerSearchResults = connect(
                   pageRangeDisplayed={0}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
-                      isPublicUser,
                       selectedPage: pageChange.selected,
                     });
                     focusPaginatorTop(paginatorTop);
@@ -175,7 +174,6 @@ export const PractitionerSearchResults = connect(
                   pageRangeDisplayed={0}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
-                      isPublicUser,
                       selectedPage: pageChange.selected,
                     });
                     focusPaginatorTop(paginatorTop);
