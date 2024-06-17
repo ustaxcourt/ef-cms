@@ -1,7 +1,7 @@
 import { PNG } from 'pngjs';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fromPath } from 'pdf2pic';
-import { generatePdfFromHtmlHelper } from '../../useCaseHelper/generatePdfFromHtmlHelper';
+import { generatePdfFromHtmlHelper } from '../../../../../web-api/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../useCases/generatePdfFromHtmlInteractor';
 import { getChromiumBrowser } from '../getChromiumBrowser';
 import fs from 'fs';

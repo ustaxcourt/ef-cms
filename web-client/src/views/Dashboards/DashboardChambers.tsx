@@ -34,6 +34,7 @@ export const DashboardChambers = connect(
             </Tab>
 
             <Tab
+              data-testid="submitted-cav-cases-tab"
               tabName="caseWorksheets"
               title={`Submitted/CAV (${caseWorksheetsHelper.caseWorksheetsFormatted.length})`}
             >
@@ -41,7 +42,7 @@ export const DashboardChambers = connect(
             </Tab>
 
             <Tab
-              data-testid="tab-pending-motions"
+              data-testid="pending-motions-tab"
               tabName="pendingMotions"
               title={`Pending Motions (${pendingMotionsHelper.formattedPendingMotions.length})`}
             >
