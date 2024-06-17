@@ -17,8 +17,6 @@ export const getPractitionersByNameInteractor = (
     ? '/public-api/practitioners'
     : '/practitioners';
 
-  console.log('by name endpoint', endpoint);
-
   return get({
     applicationContext,
     endpoint,
