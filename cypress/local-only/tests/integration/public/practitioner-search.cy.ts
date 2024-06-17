@@ -25,12 +25,12 @@ describe('Public User - Search', () => {
 
       cy.intercept({
         method: 'GET',
-        url: '/practitioners?name=test',
+        url: '/public-api/practitioners?name=test',
       }).as('getPractitionerByName');
 
       cy.intercept({
         method: 'GET',
-        url: '/practitioners/test',
+        url: '/public-api/practitioners/test',
       }).as('getPractitionerByBarNumber');
     });
 
