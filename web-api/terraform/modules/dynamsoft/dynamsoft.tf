@@ -10,9 +10,6 @@ resource "aws_instance" "dynamsoft" {
     Name        = "dynamsoft-${var.environment}"
     environment = var.environment
   }
-
-  count = var.is_dynamsoft_enabled
-
   user_data = data.template_file.setup_dynamsoft.rendered
 
   iam_instance_profile = "dynamsoft_s3_download_role"
@@ -105,9 +102,7 @@ resource "aws_elb" "dynamsoft_elb" {
     interval            = 30
   }
 
-  count = var.is_dynamsoft_enabled
-
-  instances                   = [aws_instance.dynamsoft.0.id]
+  instances                   = [aws_instance.dynamsoft.id]
   cross_zone_load_balancing   = false
   idle_timeout                = 400
   connection_draining         = true
@@ -157,9 +152,8 @@ resource "aws_route53_record" "record_www" {
   type           = "CNAME"
   zone_id        = data.aws_route53_zone.zone.zone_id
   set_identifier = var.region
-  count          = var.is_dynamsoft_enabled
   records = [
-    element(concat(aws_elb.dynamsoft_elb.*.dns_name, tolist([""])), 0),
+    aws_elb.dynamsoft_elb.dns_name
   ]
   latency_routing_policy {
     region = var.region
