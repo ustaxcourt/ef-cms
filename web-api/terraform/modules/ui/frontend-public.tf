@@ -1,11 +1,3 @@
-provider "aws" {
-  alias = "us-east-1"
-}
-
-provider "aws" {
-  alias = "us-west-1"
-}
-
 data "aws_acm_certificate" "public_certificate" {
   domain = var.dns_domain
 }
@@ -13,51 +5,74 @@ data "aws_acm_certificate" "public_certificate" {
 resource "aws_s3_bucket" "frontend_public" {
   bucket = "${var.current_color}.${var.dns_domain}"
 
-  policy = data.aws_iam_policy_document.public_policy_bucket.json
-
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
-  }
-
   tags = {
     environment = var.environment
   }
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_policy" "frontend_public_s3_policy" {
+  bucket = aws_s3_bucket.frontend_public.id
+  policy = data.aws_iam_policy_document.public_policy_bucket.json
+}
+
+resource "aws_s3_bucket_website_configuration" "frontend_public_s3_website" {
+  bucket = aws_s3_bucket.frontend_public.id
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_public_sse" {
+  bucket = aws_s3_bucket.frontend_public.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
-
 }
 
 resource "aws_s3_bucket" "failover_public" {
   bucket = "failover-${var.current_color}.${var.dns_domain}"
 
-  policy = data.aws_iam_policy_document.public_policy_bucket_failover.json
-
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
-  }
-
   tags = {
     environment = var.environment
   }
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+  provider = aws.us-west-1
+}
+
+resource "aws_s3_bucket_policy" "failover_public_s3_policy" {
+  bucket   = aws_s3_bucket.failover_public.id
+  policy   = data.aws_iam_policy_document.public_policy_bucket_failover.json
+  provider = aws.us-west-1
+}
+
+resource "aws_s3_bucket_website_configuration" "failover_public_s3_website" {
+  bucket   = aws_s3_bucket.failover_public.id
+  provider = aws.us-west-1
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "failover_public_sse" {
+  bucket   = aws_s3_bucket.failover_public.id
+  provider = aws.us-west-1
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
-
-  provider = aws.us-west-1
 }
 
 data "aws_iam_policy_document" "public_policy_bucket" {
@@ -114,7 +129,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   }
 
   origin {
-    domain_name = aws_s3_bucket.frontend_public.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.frontend_public_s3_website.website_endpoint
     origin_id   = "primary-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
@@ -132,7 +147,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
 
   origin {
-    domain_name = aws_s3_bucket.failover_public.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.failover_public_s3_website.website_endpoint
     origin_id   = "failover-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
