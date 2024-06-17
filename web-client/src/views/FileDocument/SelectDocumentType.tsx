@@ -23,7 +23,7 @@ export const SelectDocumentType = connect(
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-6">
-              <h1 id="file-a-document-header" tabIndex={-1}>
+              <h1 data-testid="select-document-to-file-header" tabIndex={-1}>
                 What Document are You Filing?
               </h1>
 

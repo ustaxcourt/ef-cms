@@ -25,7 +25,8 @@
 
       button,
       &.row-button {
-        padding: 0.2rem;
+        width: 100%;
+        padding: 1.2rem 0 1.2rem 0;
         color: color($theme-color-primary);
         font-weight: $font-semibold;
 
@@ -36,6 +37,10 @@
 
         &:hover {
           text-decoration: underline;
+        }
+
+        .fa-icon-blue {
+          color: color($theme-color-primary);
         }
       }
 
