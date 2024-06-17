@@ -51,6 +51,7 @@
     "canvas": "2.11.2",
     "cerebral": "5.2.1",
     "classnames": "2.5.1",
+    "export-to-csv": "^1.3.0",
     "cookie": "0.6.0",
     "core-js": "3.37.1",
     "cors": "2.8.5",

@@ -65,7 +65,7 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `AWS_ACCESS_KEY_ID` | AWS access key for the AWS CircleCI user |
   | `AWS_SECRET_ACCESS_KEY` | AWS secret access key for the AWS CircleCI user |
   | `DYNAMSOFT_PRODUCT_KEYS`* | Dynamsoft Web TWAIN product key used |
-  | `DYNAMSOFT_S3_ZIP_PATH`* | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-17.2.5.tar.gz` |
+  | `DYNAMSOFT_S3_ZIP_PATH`* | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-18.5.tar.gz` |
   | `EFCMS_DOMAIN`* | Domain name chosen above |
   | `COGNITO_SUFFIX`* | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_USER` | Username of your choice used by the Cognito admin user |
