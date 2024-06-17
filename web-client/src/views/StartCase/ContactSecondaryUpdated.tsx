@@ -19,6 +19,7 @@ const props = cerebralProps as unknown as {
   registerRef?: Function;
   displayInCareOf?: boolean;
   showSameAsPrimaryCheckbox?: boolean;
+  onChangeCountryType: string;
 };
 
 export const ContactSecondaryUpdated = connect(
@@ -31,6 +32,7 @@ export const ContactSecondaryUpdated = connect(
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
+    onChangeCountryType: props.onChangeCountryType,
     onChangeSequence: sequences[props.onChange],
     registerRef: props.registerRef,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
@@ -46,6 +48,7 @@ export const ContactSecondaryUpdated = connect(
     onBlur,
     onBlurSequence,
     onChange,
+    onChangeCountryType,
     onChangeSequence,
     registerRef,
     resetSecondaryAddressSequence,
@@ -117,7 +120,8 @@ export const ContactSecondaryUpdated = connect(
                 registerRef={registerRef}
                 type="contactSecondary"
                 onBlur={onBlurSequence}
-                onChange={onChangeSequence}
+                onChange={onChange}
+                onChangeCountryType={onChangeCountryType}
               />
               {data.contactSecondary.countryType ===
                 constants.COUNTRY_TYPES.DOMESTIC && (

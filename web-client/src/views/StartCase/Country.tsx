@@ -47,6 +47,7 @@ export const Country = connect(
                 const method = onChangeCountryType || updateFormValueSequence;
                 method({
                   key: e.target.name,
+                  type,
                   value: e.target.value,
                 });
                 if (onBlurSequence) {
@@ -75,6 +76,7 @@ export const Country = connect(
                 const method = onChangeCountryType || updateFormValueSequence;
                 method({
                   key: e.target.name,
+                  type,
                   value: e.target.value,
                 });
                 if (onBlurSequence) {
