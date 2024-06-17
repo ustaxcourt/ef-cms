@@ -32,7 +32,7 @@ export const caseDetailHeaderHelper = (
     Case.isPetitionerRepresented(caseDetail, petitioner.contactId),
   );
 
-  let showRequestAccessToCaseButton = false;
+  let showRepresentAPartyButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
 
@@ -41,12 +41,12 @@ export const caseDetailHeaderHelper = (
 
     const isCurrentPageFilePetitionSuccess =
       currentPage === 'FilePetitionSuccess';
-    const isRequestAccessForm = currentPage === 'RequestAccessWizard';
+    const isRepresentAPartyForm = currentPage === 'RepresentAPartyWizard';
 
     if (user.role === USER_ROLES.privatePractitioner) {
-      showRequestAccessToCaseButton =
+      showRepresentAPartyButton =
         !pendingAssociation &&
-        !isRequestAccessForm &&
+        !isRepresentAPartyForm &&
         !isCaseSealed &&
         !isCurrentPageFilePetitionSuccess;
 
@@ -58,9 +58,9 @@ export const caseDetailHeaderHelper = (
 
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
 
-      showRequestAccessToCaseButton =
+      showRepresentAPartyButton =
         caseHasRespondent &&
-        !isRequestAccessForm &&
+        !isRepresentAPartyForm &&
         !isCaseSealed &&
         !isCurrentPageFilePetitionSuccess;
     }
@@ -89,8 +89,8 @@ export const caseDetailHeaderHelper = (
     showFileFirstDocumentButton,
     showNewTabLink: isInternalUser,
     showPendingAccessToCaseButton,
+    showRepresentAPartyButton,
     showRepresented: isInternalUser && caseHasRepresentedParty,
-    showRequestAccessToCaseButton,
     showSealedCaseBanner: isCaseSealed,
     showUploadCourtIssuedDocumentButton: isInternalUser,
   };
