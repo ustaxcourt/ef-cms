@@ -103,7 +103,6 @@ export const Login = connect(
                       <Button
                         className="usa-button margin-top-3"
                         data-testid="login-button"
-                        // disabled={loginHelper.disableLoginButton}
                       >
                         Log in
                       </Button>
