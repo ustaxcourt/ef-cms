@@ -506,6 +506,7 @@ import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFil
 import { updateFilingTypeSequence } from './sequences/updateFilingTypeSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
+import { updateFormValueCountryTypeSequence } from '@web-client/presenter/sequences/updateFormValueCountryTypeSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateFormValueUpdatedSequence } from '@web-client/presenter/sequences/updateFormValueUpdatedSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
@@ -1439,6 +1440,8 @@ export const presenterSequences = {
     updateFormValueAndCaseCaptionSequence as unknown as Function,
   updateFormValueAndSecondaryContactInfoSequence:
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
+  updateFormValueCountryTypeSequence:
+    updateFormValueCountryTypeSequence as unknown as Function,
   updateFormValueSequence: updateFormValueSequence as unknown as Function,
   updateFormValueUpdatedSequence:
     updateFormValueUpdatedSequence as unknown as Function,

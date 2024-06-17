@@ -89,6 +89,7 @@ export const FilePetitionPetitionerInformation = connect(
             registerRef={registerRef}
             onBlur="petitionGenerationLiveValidationSequence"
             onChange="updateFormValueUpdatedSequence"
+            onChangeCountryType="updateFormValueCountryTypeSequence"
           />
         )}
         {form.filingType === 'Myself and my spouse' && (
@@ -99,6 +100,7 @@ export const FilePetitionPetitionerInformation = connect(
               registerRef={registerRef}
               onBlur="petitionGenerationLiveValidationSequence"
               onChange="updateFormValueUpdatedSequence"
+              onChangeCountryType="updateFormValueCountryTypeSequence"
             />
             <PetitionerAndSpouseInfo
               hasSpouseConsent={form.hasSpouseConsent}
@@ -213,6 +215,7 @@ function PetitionerAndSpouseInfo({
           showSameAsPrimaryCheckbox={true}
           onBlur="petitionGenerationLiveValidationSequence"
           onChange="updateFormValueUpdatedSequence"
+          onChangeCountryType="updateFormValueCountryTypeSequence"
         />
       )}
       {isSpouseDeceasedSelected === 'No' && (
@@ -286,6 +289,7 @@ function Spouse({
           showSameAsPrimaryCheckbox={true}
           onBlur="petitionGenerationLiveValidationSequence"
           onChange="updateFormValueUpdatedSequence"
+          onChangeCountryType="updateFormValueCountryTypeSequence"
         />
       )}
     </>
