@@ -38,10 +38,36 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
 
   function exportColdCaseCsv() {
     const today = formatNow(FORMATS.MMDDYYYY);
-    const fileName = `Cold Case Report - ${today}.csv`;
+    const fileName = `Cold Case Report - ${today}`;
     const csvConfig = mkConfig({
+      columnHeaders: [
+        {
+          displayLabel: 'Docket No.',
+          key: 'docketNumberWithSuffix',
+        },
+        {
+          displayLabel: 'Date Created',
+          key: 'createdAt',
+        },
+        {
+          displayLabel: 'Case Type',
+          key: 'caseType',
+        },
+        {
+          displayLabel: 'Requested Place of Trial',
+          key: 'preferredTrialCity',
+        },
+        {
+          displayLabel: 'Last Entry',
+          key: 'filingDate',
+        },
+        {
+          displayLabel: 'Last Event',
+          key: 'eventCode',
+        },
+      ],
       filename: fileName,
-      useKeysAsHeaders: true,
+      useKeysAsHeaders: false,
     });
     const csv = generateCsv(csvConfig)(entries);
     download(csvConfig)(csv);
@@ -49,19 +75,21 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
 
   return (
     <>
-      <div ref={paginatorTop}>
-        <Paginator
-          breakClassName="hide"
-          forcePage={activePage}
-          marginPagesDisplayed={0}
-          pageCount={totalPages}
-          pageRangeDisplayed={0}
-          onPageChange={async pageChange => {
-            setActivePage(pageChange.selected);
-            focusPaginatorTop(paginatorTop);
-          }}
-        />
-      </div>
+      {totalPages > 1 && (
+        <div ref={paginatorTop}>
+          <Paginator
+            breakClassName="hide"
+            forcePage={activePage}
+            marginPagesDisplayed={0}
+            pageCount={totalPages}
+            pageRangeDisplayed={0}
+            onPageChange={async pageChange => {
+              setActivePage(pageChange.selected);
+              focusPaginatorTop(paginatorTop);
+            }}
+          />
+        </div>
+      )}
 
       <div className="grid-row margin-bottom-2">
         <div className="grid-col text-right margin-top-1">
@@ -131,17 +159,19 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
 
       {entries.length === 0 && <p>There is no cold cases.</p>}
 
-      <Paginator
-        breakClassName="hide"
-        forcePage={activePage}
-        marginPagesDisplayed={0}
-        pageCount={totalPages}
-        pageRangeDisplayed={0}
-        onPageChange={async pageChange => {
-          setActivePage(pageChange.selected);
-          focusPaginatorTop(paginatorTop);
-        }}
-      />
+      {totalPages > 1 && (
+        <Paginator
+          breakClassName="hide"
+          forcePage={activePage}
+          marginPagesDisplayed={0}
+          pageCount={totalPages}
+          pageRangeDisplayed={0}
+          onPageChange={async pageChange => {
+            setActivePage(pageChange.selected);
+            focusPaginatorTop(paginatorTop);
+          }}
+        />
+      )}
     </>
   );
 }
