@@ -26,10 +26,6 @@ variable "dynamsoft_product_keys" {
   type = string
 }
 
-variable "is_dynamsoft_enabled" {
-  type = string
- }
-
 variable "zone_name" {
   type = string
 }
