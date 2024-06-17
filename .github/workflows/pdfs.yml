@@ -19,7 +19,7 @@ jobs:
       - name: Setup
         run: |
           sudo apt-get update
-          sudo apt-get install -o Acquire::Retries=3 -y graphicsmagick ghostscript
+          sudo apt-get install -o Acquire::Retries=3 -y graphicsmagick=1.4+really1.3.38-1ubuntu0.1 ghostscript
       - name: Install Node Dependencies
         run: npm ci && npm rebuild
       - name: Generate and Test PDFs
