@@ -27,7 +27,7 @@ RUN apt-get install -y \
   python3-pip=23.0.1+dfsg-1 \
   jq \
   graphicsmagick=1.4+really1.3.40-4 \
-  ghostscript \
+  ghostscript=10.0.0~dfsg-11+deb12u4 \
   chromium \
   openssh-client \
   sudo
