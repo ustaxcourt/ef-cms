@@ -6,7 +6,7 @@ export const getPractitionersByNameAction = async ({
   props,
   store,
 }: ActionProps<{ isPublicUser: boolean; selectedPage: number }>) => {
-  const { isPublicUser, selectedPage } = props;
+  const { selectedPage } = props;
 
   const {
     lastKeysOfPages,
@@ -25,7 +25,6 @@ export const getPractitionersByNameAction = async ({
   const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
-      isPublicUser,
       name: practitionerName,
       searchAfter: lastKeysOfPages[selectedPage],
     });
