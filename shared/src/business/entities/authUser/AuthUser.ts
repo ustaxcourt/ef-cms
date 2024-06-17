@@ -24,7 +24,7 @@ export function isAuthUser(user): user is AuthUser {
 
   const { error } = authUserSchema.validate(user);
   if (error) {
-    throw error;
+    return false;
   }
 
   return true;

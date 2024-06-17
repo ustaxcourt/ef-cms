@@ -1,4 +1,8 @@
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 
 export const ROLE_PERMISSIONS = {
   ADD_CASE_TO_TRIAL_SESSION: 'ADD_CASE_TO_TRIAL_SESSION',
@@ -333,7 +337,7 @@ export const AUTHORIZATION_MAP = {
   privatePractitioner: privatePractitionerPermissions,
   reportersOffice: allInternalUserPermissions,
   trialclerk: trialClerkPermissions,
-};
+} as const;
 
 /**
  * Checks user permissions for an action
@@ -346,24 +350,24 @@ export const isAuthorized = (
   user: UnknownAuthUser,
   action,
   owner?,
-): boolean => {
-  if (!user) {
+): user is AuthUser => {
+  if (!isAuthUser(user)) {
     return false;
   }
 
-  if (user.userId && user.userId === owner) {
+  if (user.userId === owner) {
     return true;
   }
 
   const userRole = user.role;
-  if (!AUTHORIZATION_MAP[userRole]) {
+  const permissions = AUTHORIZATION_MAP[userRole];
+  if (!permissions) {
     return false;
   }
 
-  const roleActionIndex = AUTHORIZATION_MAP[userRole].indexOf(action);
+  const roleActionIndex = permissions.indexOf(action);
 
-  const actionInRoleAuthorization =
-    !!AUTHORIZATION_MAP[userRole][roleActionIndex];
+  const actionInRoleAuthorization = !!permissions[roleActionIndex];
 
   return actionInRoleAuthorization;
 };
