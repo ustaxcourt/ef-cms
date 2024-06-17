@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "dynamsoft" {
   bucket = "${var.zone_name}-software"
-  acl = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "dynamsoft" {

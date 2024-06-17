@@ -34,7 +34,6 @@ export const AddEditCaseNoteModal = connect<
         cancelLabel="Cancel"
         className="add-edit-procedural-note-modal"
         confirmLabel="Save"
-        preventCancelOnBlur={true}
         title="Add/Edit Case Notes"
         onCancelSequence={clearModalFormSequence}
         onConfirmSequence={onConfirmSequence}
