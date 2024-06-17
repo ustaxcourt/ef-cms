@@ -1,3 +1,5 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+
 export const ROLE_PERMISSIONS = {
   ADD_CASE_TO_TRIAL_SESSION: 'ADD_CASE_TO_TRIAL_SESSION',
   ADD_EDIT_JUDGE_USER: 'ADD_EDIT_JUDGE_USER',
@@ -340,7 +342,11 @@ export const AUTHORIZATION_MAP = {
  * @param {string} owner the user id of the owner of the item to verify
  * @returns {boolean} true if user is authorized, false otherwise
  */
-export const isAuthorized = (user, action, owner?): boolean => {
+export const isAuthorized = (
+  user: UnknownAuthUser,
+  action,
+  owner?,
+): boolean => {
   if (!user) {
     return false;
   }

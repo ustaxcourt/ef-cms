@@ -3,19 +3,11 @@ import {
   UnauthorizedError,
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
-
-export type AuthUser = {
-  role: string;
-  userId: string;
-  email: string;
-  name: string;
-};
-
-export type UnknownAuthUser = AuthUser | undefined;
 
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)

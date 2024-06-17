@@ -12,6 +12,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
@@ -59,9 +60,9 @@ export type CustomCaseReportSearchAfter = {
 export const getCustomCaseReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCustomCaseReportRequest,
+  user: UnknownAuthUser,
 ): Promise<GetCustomCaseReportResponse> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
