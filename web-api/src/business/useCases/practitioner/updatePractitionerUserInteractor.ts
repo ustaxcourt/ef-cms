@@ -10,7 +10,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateChangeOfAddress } from '../../../../../shared/src/business/useCases/users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
-import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,

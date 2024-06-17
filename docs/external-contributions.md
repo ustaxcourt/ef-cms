@@ -66,9 +66,7 @@ Please follow these steps to validate your changes before submitting a pull requ
        1. `npm run start:public:ci`
     1. `npm run test:api`
     1. `npm run test:client:unit`
-    1. `npm run test:pa11y`
-    1. `npm run test:pa11y:public`
-    1. `npm run test:pa11y:public-search`
+    1. `npm run cypress:integration`
     1. `npm run test:scripts`
     1. `npm run test:shared`
        
