@@ -10,6 +10,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { stringify } from 'csv-stringify/sync';
 
@@ -19,7 +20,7 @@ export type CustomCaseReportCsvRequest = CustomCaseReportFilters & {
 };
 
 export const createCsvCustomCaseReportFileInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseStatuses,
     caseTypes,
