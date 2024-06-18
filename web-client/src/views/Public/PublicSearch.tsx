@@ -154,7 +154,6 @@ export const PublicSearch = connect(
                 title={'Opinion'}
               >
                 {OpinionRender()}
-                <DocumentSearchResults />
               </Tab>
               <Tab
                 data-testid="practitioner-search-tab"
