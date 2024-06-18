@@ -49,6 +49,7 @@ export const baseState = {
   },
   isPublic: true,
   isTerminalUser: false,
+  modal: {},
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
