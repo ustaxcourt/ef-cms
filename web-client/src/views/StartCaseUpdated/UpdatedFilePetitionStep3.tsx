@@ -174,7 +174,7 @@ export const UpdatedFilePetitionStep3 = connect(
                   Add another IRS Notice
                 </Button>
                 {startCaseHelper.irsNoticeRequiresRedactionAcknowledgement && (
-                  <div className="grid-row grid-gap margin-top-5">
+                  <div className="grid-row grid-gap margin-top-05">
                     <span className="margin-bottom-1 font-sans-pro">
                       <b>
                         Please read and acknowledge before moving to the next
