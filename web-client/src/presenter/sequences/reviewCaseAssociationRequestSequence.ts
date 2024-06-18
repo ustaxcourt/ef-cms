@@ -2,7 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
 import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
-import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
+import { navigateToReviewCaseAssociationRequestAction } from '../actions/navigateToReviewCaseAssociationRequestAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -14,7 +14,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCaseAssociationRequestAction } from '../actions/validateCaseAssociationRequestAction';
 
-export const reviewRequestAccessInformationSequence =
+export const reviewCaseAssociationRequestSequence =
   showProgressSequenceDecorator([
     clearAlertsAction,
     startShowValidationAction,
@@ -34,7 +34,7 @@ export const reviewRequestAccessInformationSequence =
         generateTitleForSupportingDocumentsAction,
         stopShowValidationAction,
         clearAlertsAction,
-        navigateToRequestAccessReviewAction,
+        navigateToReviewCaseAssociationRequestAction,
       ],
     },
   ]);
