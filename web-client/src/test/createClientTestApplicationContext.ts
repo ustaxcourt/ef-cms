@@ -62,7 +62,7 @@ import {
   getJudgeLastName,
 } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
-import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@shared/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
+import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,

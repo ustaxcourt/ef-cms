@@ -1,4 +1,4 @@
-import { addDocumentTypeToEventCodeAggregation } from '@shared/business/useCases/judgeActivityReport/addDocumentTypeToEventCodeAggregation';
+import { addDocumentTypeToEventCodeAggregation } from '@web-api/business/useCases/judgeActivityReport/addDocumentTypeToEventCodeAggregation';
 
 export const mockCountOfFormattedOpinionsIssuedByJudge = [
   { count: 177, eventCode: 'MOP' },

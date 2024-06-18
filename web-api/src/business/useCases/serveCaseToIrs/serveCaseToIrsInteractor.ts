@@ -23,7 +23,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { generateDraftDocument } from '../../../../../shared/src/business/useCases/serveCaseToIrs/generateDraftDocument';
+import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
@@ -665,7 +665,7 @@ export const serveCaseToIrs = async (
 
 export const serveCaseToIrsInteractor = withLocking(
   serveCaseToIrs,
-  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
     identifiers: [`case|${docketNumber}`],
   }),
 );
