@@ -1,4 +1,4 @@
-import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
+import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCaseInteractor';
 import { post } from './requests';
 
 export const createCaseInteractor = (
