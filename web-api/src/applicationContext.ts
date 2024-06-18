@@ -48,6 +48,7 @@ import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
+import { getSecretsGateway } from '@web-api/persistence/secrets/getSecretsGateway';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -309,6 +310,7 @@ export const createApplicationContext = (
       }
       return searchClientCache;
     },
+    getSecretsGateway,
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient,
     getUniqueId,
