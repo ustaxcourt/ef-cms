@@ -183,7 +183,7 @@ export const BeforeStartingCase = connect(
           />
           <div>
             <h3>Deadline to File</h3>
-            <div className="petitioner-flow-text margin-bottom-20">
+            <div className="petitioner-flow-text margin-bottom-2">
               If you received a notice in the mail from the IRS, it may show the
               last date to file or the number of days you have to file a
               Petition.{' '}
@@ -196,7 +196,7 @@ export const BeforeStartingCase = connect(
               may be dismissed for lack of jurisdiction.
             </div>
           </div>
-          <div className="grid-row grid-gap margin-top-20">
+          <div className="grid-row grid-gap">
             <Accordion className="petitioner-accordion-title" headingLevel="3">
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"

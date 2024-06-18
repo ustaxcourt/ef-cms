@@ -53,21 +53,24 @@ export const StepIndicator = connect(
             <h4
               className={classNames(
                 'usa-step-indicator__heading',
-                'display-flex-center',
+                'display-flex',
+                'flex-align-center',
               )}
             >
               <span
                 className={classNames(
                   'usa-step-indicator__heading-counter',
-                  'display-flex-center',
+                  'display-flex',
+                  'flex-align-center',
                 )}
               >
                 <span className="usa-sr-only">Step</span>
                 <span
                   className={classNames(
                     'usa-step-indicator__current-step',
-                    'display-flex-center',
-                    'justify-content-center',
+                    'display-flex',
+                    'flex-align-center',
+                    'flex-justify-center',
                   )}
                   data-testid={`step-indicator-current-step-${currentStep}-icon`}
                 >
@@ -76,7 +79,7 @@ export const StepIndicator = connect(
                 <span
                   className={classNames(
                     'usa-step-indicator__total-steps',
-                    'margin-left-5',
+                    'margin-left-05',
                   )}
                 >
                   of {Object.keys(steps).length}

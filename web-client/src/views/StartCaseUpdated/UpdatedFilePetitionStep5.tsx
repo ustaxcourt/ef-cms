@@ -39,7 +39,7 @@ export const UpdatedFilePetitionStep5 = connect(
           </div>
           <Button
             link
-            className="usa-link--external text-left mobile-text-wrap font-weight-600"
+            className="usa-link--external text-left mobile-text-wrap text-semibold"
             href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
             marginDirection="bottom"
             rel="noopener noreferrer"

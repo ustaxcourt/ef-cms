@@ -405,7 +405,7 @@ function CorporateDisclosureUpload({
       >
         Corporate Disclosure Statement (T.C. Form 6)
       </Button>
-      <div className="margin-top-20">
+      <div className="margin-top-205">
         <FormGroup
           errorMessageId="corporate-disclosure-file-error-message"
           errorText={
