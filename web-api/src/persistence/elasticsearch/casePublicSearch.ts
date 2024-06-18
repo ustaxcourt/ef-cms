@@ -1,4 +1,4 @@
-import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';

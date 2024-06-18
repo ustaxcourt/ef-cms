@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { MessageWithMetaData } from '@shared/business/useCases/messages/createMessageInteractor';
+import { MessageWithMetaData } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { post } from '../requests';
 
 export const createMessageInteractor = (
