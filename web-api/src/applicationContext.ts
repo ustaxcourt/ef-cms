@@ -33,6 +33,7 @@ import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseN
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
@@ -291,16 +292,10 @@ export const createApplicationContext = (
         } else {
           searchClientCache = new Client({
             ...AwsSigv4Signer({
-              getCredentials: () =>
-                new Promise((resolve, reject) => {
-                  AWS.config.getCredentials((err, credentials) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(credentials as any);
-                    }
-                  });
-                }),
+              getCredentials: () => {
+                const credentialsProvider = defaultProvider();
+                return credentialsProvider();
+              },
               region: 'us-east-1',
             }),
             node: `https://${environment.elasticsearchEndpoint}:443`,
