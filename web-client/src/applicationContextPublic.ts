@@ -61,6 +61,7 @@ import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrent
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getHttpClient } from '@web-client/providers/httpClient';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
@@ -84,7 +85,6 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
-import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
 const ADVANCED_SEARCH_TABS = {
@@ -155,6 +155,8 @@ const frozenConstants = deepFreeze({
   USER_ROLES: ROLES,
 });
 
+let forceRefreshCallback: () => {};
+
 const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:5000';
@@ -164,7 +166,12 @@ const applicationContextPublic = {
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
   getEnvironment,
-  getHttpClient: () => axios,
+  getForceRefreshCallback() {
+    return forceRefreshCallback;
+  },
+  getHttpClient: () => {
+    return getHttpClient(forceRefreshCallback);
+  },
   getLogger: () => ({
     error: () => {
       // eslint-disable-next-line no-console
@@ -218,6 +225,9 @@ const applicationContextPublic = {
   },
   isFeatureEnabled: featureName => {
     return getIsFeatureEnabled(featureName, {}, getEnvironment().stage);
+  },
+  setForceRefreshCallback(callback) {
+    forceRefreshCallback = callback;
   },
 };
 
