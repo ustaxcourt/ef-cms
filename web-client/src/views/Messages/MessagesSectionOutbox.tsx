@@ -102,11 +102,76 @@ export const MessagesSectionOutbox = connect(
                   onClickSequence={sortTableSequence}
                 />
               </th>
-              <th>Case Title</th>
-              <th>Case Status</th>
-              <th>To</th>
-              <th>From</th>
-              <th>Section</th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-case-title-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="caseTitle"
+                  title="Case Title"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-case-status-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="caseStatus"
+                  title="Case Status"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-to-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="to"
+                  title="To"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-from-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="from"
+                  title="From"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-to-section-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="toSection"
+                  title="Section"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
             </tr>
           </thead>
           {formattedMessages.messages.map(message => (

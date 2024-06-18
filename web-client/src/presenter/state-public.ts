@@ -5,6 +5,7 @@ import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByN
 import { headerPublicHelper } from '@web-client/presenter/computeds/headerPublicHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { practitionerSearchHelper } from '@web-client/presenter/computeds/AdvancedSearch/practitionerSearchHelper';
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
@@ -20,6 +21,9 @@ const computeds = {
   headerPublicHelper,
   loadingHelper,
   menuHelper,
+  practitionerSearchHelper: practitionerSearchHelper as unknown as ReturnType<
+    typeof practitionerSearchHelper
+  >,
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
   templateHelper,

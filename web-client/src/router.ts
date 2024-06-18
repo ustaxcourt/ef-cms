@@ -1100,6 +1100,14 @@ const router = {
     );
 
     registerRoute(
+      '/reports/cold-case-report',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Cold case report');
+        return app.getSequence('gotoColdCaseReportSequence')();
+      }),
+    );
+
+    registerRoute(
       '/trial-sessions..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
@@ -1188,6 +1196,14 @@ const router = {
             }
           }
         }
+      }),
+    );
+
+    registerRoute(
+      '/file-a-petition/new',
+      ifHasAccess({ app }, () => {
+        setPageTitle('File a petition');
+        return app.getSequence('gotoUpdatedPetitionFlowSequence')();
       }),
     );
 

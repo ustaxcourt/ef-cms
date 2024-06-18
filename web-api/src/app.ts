@@ -20,6 +20,7 @@ import { changePasswordLambda } from '@web-api/lambdas/auth/changePasswordLambda
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
+import { coldCaseReportLambda } from './lambdas/reports/coldCaseReportLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -60,6 +61,7 @@ import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
+import { generatePetitionPdfLambda } from '@web-api/lambdas/cases/generatePetitionPdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
@@ -662,6 +664,10 @@ app.use(logger());
     '/cases/:docketNumber/generate-entry-of-appearance',
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
+  app.post(
+    '/cases/generate-petition',
+    lambdaWrapper(generatePetitionPdfLambda),
+  );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.post('/cases', lambdaWrapper(createCaseLambda));
@@ -830,6 +836,7 @@ app.delete(
     '/reports/pending-report/export',
     lambdaWrapper(exportPendingReportLambda),
   );
+  app.get('/reports/cold-case-report', lambdaWrapper(coldCaseReportLambda));
   app.post(
     '/reports/trial-calendar-pdf',
     lambdaWrapper(generateTrialCalendarPdfLambda),
