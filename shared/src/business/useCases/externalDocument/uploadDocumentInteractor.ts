@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -5,7 +6,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const uploadDocumentInteractor = async (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   { documentFile, key, onUploadProgress },
 ) => {
   const user = applicationContext.getCurrentUser();

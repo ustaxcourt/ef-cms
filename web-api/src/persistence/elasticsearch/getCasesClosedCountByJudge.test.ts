@@ -2,7 +2,7 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { getCasesClosedCountByJudge } from './getCasesClosedCountByJudge';
 jest.mock('./searchClient');
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { casesClosedResults } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor.test';
+import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor.test';
 import { judgeUser } from '@shared/test/mockUsers';
 import { search } from './searchClient';
 
