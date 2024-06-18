@@ -6,10 +6,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 
 export const getDownloadPolicyUrlInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, key }: { docketNumber: string; key: string },
 ): Promise<{ url: string }> => {
   const user = applicationContext.getCurrentUser();
