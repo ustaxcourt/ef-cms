@@ -107,7 +107,7 @@ export const IrsNoticeUploadForm = connect(
               {index !== 0 && (
                 <Button
                   link
-                  className="margin-left-10 irs-notice-remove-button"
+                  className="margin-left-1 irs-notice-remove-button"
                   onClick={() => removeIrsNoticeFromFormSequence({ index })}
                 >
                   <Icon
@@ -115,7 +115,7 @@ export const IrsNoticeUploadForm = connect(
                     icon={['fas', 'times']}
                     size="1x"
                   />
-                  <span style={{ marginLeft: '-5px' }}>Remove</span>
+                  <span className="margin-left-neg-05">Remove</span>
                 </Button>
               )}
             </h2>

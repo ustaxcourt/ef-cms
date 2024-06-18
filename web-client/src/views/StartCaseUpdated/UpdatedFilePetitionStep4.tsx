@@ -30,7 +30,7 @@ export const UpdatedFilePetitionStep4 = connect(
           <p className="margin-top-0 required-statement">
             *All fields required
           </p>
-          <h2 className="margin-bottom-8">Case procedure</h2>
+          <h2>Case procedure</h2>
           <div className="maxw-none tax-case-info">
             If your case qualifies, you may choose to have it handled as a small
             tax case. The Court handles small tax cases differently.
@@ -71,9 +71,7 @@ export const UpdatedFilePetitionStep4 = connect(
           </div>
           {form.procedureType && (
             <div>
-              <h2 className="margin-bottom-8">
-                U.S. Tax Court trial locations
-              </h2>
+              <h2>U.S. Tax Court trial locations</h2>
               <div className="max-width-900 tax-case-info">
                 {form.procedureType === PROCEDURE_TYPES_MAP.regular
                   ? `This is your preferred location where your case may be heard if
