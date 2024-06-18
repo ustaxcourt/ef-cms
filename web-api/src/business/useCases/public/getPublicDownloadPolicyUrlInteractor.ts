@@ -83,10 +83,8 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .getPublicDownloadPolicyUrl({
-      applicationContext,
-      key,
-    });
+  return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    key,
+  });
 };
