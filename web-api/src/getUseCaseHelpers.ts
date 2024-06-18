@@ -28,7 +28,7 @@ import { getJudgeInSectionHelper } from './business/useCaseHelper/getJudgeInSect
 import { getUserIdForNote } from './business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from './business/useCaseHelper/pdf/parseAndScrapePdfContents';
 import { removeCounselFromRemovedPetitioner } from './business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
-import { removeCoversheet } from '@web-api/business/useCaseHelper/coverSheets/removeCoversheet';
+import { removeCoversheet } from '@web-api/business/useCaseHelper/coverSheet/removeCoversheet';
 import { saveFileAndGenerateUrl } from './business/useCaseHelper/saveFileAndGenerateUrl';
 import { sealInLowerEnvironment } from './business/useCaseHelper/sealInLowerEnvironment';
 import { sendEmailVerificationLink } from './business/useCaseHelper/email/sendEmailVerificationLink';
@@ -40,7 +40,7 @@ import { setNoticeOfChangeOfTrialJudge } from './business/useCaseHelper/trialSes
 import { setNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding';
 import { setNoticeOfChangeToRemoteProceeding } from './business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding';
 import { setPdfFormFields } from './business/useCaseHelper/pdf/setPdfFormFields';
-import { stampDocumentForService } from '@web-api/business/useCaseHelper/stampDocumentForService';
+import { stampDocumentForService } from '@web-api/business/useCaseHelper/pdf/stampDocumentForService';
 import { updateCaseAndAssociations } from './business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from './business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateInitialFilingDocuments } from './business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';

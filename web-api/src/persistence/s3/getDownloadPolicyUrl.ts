@@ -2,19 +2,15 @@ import {
   GetSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { environment } from '@web-api/environment';
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
-import { pinkLog } from '@shared/tools/pinkLog';
 
 export const getDownloadPolicyUrl = async ({
-  // applicationContext,
-  // filename,
   key,
-  // urlTtl = 120,
+  urlTtl = 120,
   useTempBucket = false,
 }: {
-  applicationContext: ServerApplicationContext;
   filename?: string;
   key: string;
   urlTtl?: number;
@@ -33,21 +29,16 @@ export const getDownloadPolicyUrl = async ({
 
   const privateKey = response.SecretString!;
   const bucketName = useTempBucket ? 'temp-documents' : 'documents';
-  pinkLog(privateKey);
 
-  // const url = `https://app-${environment.currentColor}.${environment.efcmsDomain}/${bucketName}/${key}`;
-  const url = `https://d1w39o8lp3jgfs.cloudfront.net/${bucketName}/${key}`;
-  // const url = new URL(
-  //   `${bucketName}/${key}`,
-  //   'https://d1w39o8lp3jgfs.cloudfront.net',
-  // ).toString();
-  pinkLog('SIGN URL', url);
+  const url = `https://app-${environment.currentColor}.${environment.efcmsDomain}/${bucketName}/${key}`;
 
-  const expireIn5Min = new Date();
-  expireIn5Min.setUTCMinutes(new Date().getUTCMinutes() + 5);
+  const expirationDate = calculateISODate({
+    howMuch: urlTtl,
+    units: 'seconds',
+  });
 
   const signedUrl = getSignedUrl({
-    dateLessThan: expireIn5Min.toISOString(),
+    dateLessThan: expirationDate,
     keyPairId: 'K2EHQGE49YSTCV',
     privateKey,
     url,
