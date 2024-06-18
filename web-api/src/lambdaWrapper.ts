@@ -1,9 +1,7 @@
-import {
-  UnknownAuthUser,
-  getUserFromAuthHeader,
-} from '@web-api/middleware/apiGatewayHelper';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
