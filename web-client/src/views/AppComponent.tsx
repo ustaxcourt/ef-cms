@@ -12,6 +12,7 @@ import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadPr
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
+import { CaseAssociationRequestWizard } from '@web-client/views/CaseAssociationRequest/CaseAssociationRequestWizard';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
@@ -49,6 +50,7 @@ import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
+import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -78,7 +80,6 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
-import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -117,6 +118,7 @@ const pages = {
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
+  CaseAssociationRequestWizard,
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
@@ -152,6 +154,7 @@ const pages = {
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
+  ErrorView500,
   FileDocumentWizard,
   FilePetitionSuccess,
   ForgotPassword,
@@ -176,7 +179,6 @@ const pages = {
   PrintableTrialCalendar,
   PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
-  RequestAccessWizard,
   ReviewSavedPetition,
   SealedCaseDetail,
   SelectDocumentType,
