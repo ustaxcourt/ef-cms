@@ -8,11 +8,11 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { capitalize } from 'lodash';
-import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
+import { caseAssociationRequestHelper as caseAssociationRequestHelperComputed } from './caseAssociationRequestHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('requestAccessHelper', () => {
+describe('caseAssociationRequestHelper', () => {
   const mockContactId1 = '4e53fade-4966-4efe-8b01-0cb5f587eb47';
   const mockContactId2 = '68a1e378-6e96-4e61-b06e-2cb4e6c22f48';
   const mockContactId3 = '00a770ee-eb7a-45df-a1ff-df1c01b9d756';
@@ -23,8 +23,8 @@ describe('requestAccessHelper', () => {
     validationErrors: {},
   };
 
-  const requestAccessHelper = withAppContextDecorator(
-    requestAccessHelperComputed,
+  const caseAssociationRequestHelper = withAppContextDecorator(
+    caseAssociationRequestHelperComputed,
     applicationContext,
   );
 
@@ -74,7 +74,7 @@ describe('requestAccessHelper', () => {
       showPrimaryDocumentValid: false,
     };
 
-    const result = runCompute(requestAccessHelper, {
+    const result = runCompute(caseAssociationRequestHelper, {
       state: testState,
     });
     expect(result).toMatchObject(expected);
@@ -87,23 +87,23 @@ describe('requestAccessHelper', () => {
       primaryDocumentFile: { some: 'file' },
     };
 
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showPrimaryDocumentValid).toBeTruthy();
   });
 
   it('generates correctly formatted service date', () => {
     state.form.certificateOfServiceDate = '2012-05-31';
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
   it('does not generate a formatted service date if a service date is not entered on the form', () => {
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.certificateOfServiceDateFormatted).toEqual('');
   });
 
   it('returns correct number of document options for user role privatePractitioner', () => {
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.documents.length).toEqual(7);
   });
 
@@ -112,13 +112,13 @@ describe('requestAccessHelper', () => {
       ({
         role: ROLES.irsPractitioner,
       }) as RawUser;
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.documents.length).toEqual(2);
   });
 
   it('shows filing includes if certificate of service or attachments is true', () => {
     state.form = { certificateOfService: true, filersMap };
-    let result = runCompute(requestAccessHelper, { state });
+    let result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
 
     state.form = {
@@ -127,7 +127,7 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       filersMap,
     };
-    result = runCompute(requestAccessHelper, { state });
+    result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
   });
 
@@ -138,13 +138,13 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       filersMap,
     };
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingIncludes).toEqual(false);
   });
 
   it('shows filing not includes if certificate of service, attachments, or supporting documents is false', () => {
     state.form = { certificateOfService: false, filersMap };
-    let result = runCompute(requestAccessHelper, { state });
+    let result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
@@ -152,7 +152,7 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       filersMap,
     };
-    result = runCompute(requestAccessHelper, { state });
+    result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
@@ -161,7 +161,7 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       filersMap,
     };
-    result = runCompute(requestAccessHelper, { state });
+    result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
@@ -171,7 +171,7 @@ describe('requestAccessHelper', () => {
       filersMap,
       hasSupportingDocuments: false,
     };
-    result = runCompute(requestAccessHelper, { state });
+    result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
   });
 
@@ -183,7 +183,7 @@ describe('requestAccessHelper', () => {
       filersMap,
       hasSupportingDocuments: true,
     };
-    const result = runCompute(requestAccessHelper, { state });
+    const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(false);
   });
 
@@ -194,7 +194,7 @@ describe('requestAccessHelper', () => {
         generationType: GENERATION_TYPES.AUTO,
       };
       const { isAutoGeneratedEntryOfAppearance } = runCompute(
-        requestAccessHelper,
+        caseAssociationRequestHelper,
         {
           state,
         },
@@ -209,7 +209,7 @@ describe('requestAccessHelper', () => {
         generationType: GENERATION_TYPES.AUTO,
       };
       const { isAutoGeneratedEntryOfAppearance } = runCompute(
-        requestAccessHelper,
+        caseAssociationRequestHelper,
         {
           state,
         },
@@ -224,7 +224,7 @@ describe('requestAccessHelper', () => {
         generationType: GENERATION_TYPES.MANUAL,
       };
       const { isAutoGeneratedEntryOfAppearance } = runCompute(
-        requestAccessHelper,
+        caseAssociationRequestHelper,
         {
           state,
         },
@@ -283,9 +283,12 @@ describe('requestAccessHelper', () => {
         ({
           role: ROLES.irsPractitioner,
         }) as RawUser;
-      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
-        state,
-      });
+      const { showGenerationTypeForm } = runCompute(
+        caseAssociationRequestHelper,
+        {
+          state,
+        },
+      );
       expect(showGenerationTypeForm).toBeTruthy();
     });
 
@@ -297,9 +300,12 @@ describe('requestAccessHelper', () => {
         ({
           role: ROLES.privatePractitioner,
         }) as RawUser;
-      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
-        state,
-      });
+      const { showGenerationTypeForm } = runCompute(
+        caseAssociationRequestHelper,
+        {
+          state,
+        },
+      );
       expect(showGenerationTypeForm).toBeFalsy();
     });
 
@@ -308,16 +314,22 @@ describe('requestAccessHelper', () => {
         ({
           role: ROLES.irsPractitioner,
         }) as RawUser;
-      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
-        state,
-      });
+      const { showGenerationTypeForm } = runCompute(
+        caseAssociationRequestHelper,
+        {
+          state,
+        },
+      );
       expect(showGenerationTypeForm).toBeFalsy();
     });
 
     it('should set showGenerationTypeForm to true when code is EA and user is a private practitioner with parties that have paper service', () => {
-      const { showGenerationTypeForm } = runCompute(requestAccessHelper, {
-        state,
-      });
+      const { showGenerationTypeForm } = runCompute(
+        caseAssociationRequestHelper,
+        {
+          state,
+        },
+      );
 
       expect(showGenerationTypeForm).toBeTruthy();
     });
@@ -355,9 +367,12 @@ describe('requestAccessHelper', () => {
     });
 
     it('should be set to the names of all petitioners being represented', () => {
-      const { representingPartiesNames } = runCompute(requestAccessHelper, {
-        state,
-      });
+      const { representingPartiesNames } = runCompute(
+        caseAssociationRequestHelper,
+        {
+          state,
+        },
+      );
 
       expect(representingPartiesNames).toEqual([
         'bob, Petitioner',

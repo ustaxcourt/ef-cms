@@ -1,11 +1,12 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setRequestAccessWizardStepActionGenerator } from './setRequestAccessWizardStepActionGenerator';
+import { setCaseAssociationRequestStepActionGenerator } from './setCaseAssociationRequestStepActionGenerator';
 
-describe('setRequestAccessWizardStepActionGenerator', () => {
+describe('setCaseAssociationRequestStepActionGenerator', () => {
   it('should set state.wizardStep to the value passed in', async () => {
     const mockWizardStep = 'TestWizardStep';
+
     const { state } = await runAction(
-      setRequestAccessWizardStepActionGenerator(mockWizardStep),
+      setCaseAssociationRequestStepActionGenerator(mockWizardStep),
     );
 
     expect(state.wizardStep).toBe(mockWizardStep);

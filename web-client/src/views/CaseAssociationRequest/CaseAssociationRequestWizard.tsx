@@ -1,19 +1,19 @@
+import { CaseAssociationRequest } from './CaseAssociationRequest';
+import { CaseAssociationRequestReview } from './CaseAssociationRequestReview';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { RequestAccess } from './RequestAccess';
-import { RequestAccessReview } from './RequestAccessReview';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const RequestAccessWizard = connect(
+export const CaseAssociationRequestWizard = connect(
   {
     showModal: state.modal.showModal,
   },
-  function RequestAccessWizard({ showModal }) {
+  function CaseAssociationRequestWizard({ showModal }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -23,12 +23,16 @@ export const RequestAccessWizard = connect(
           )}
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs asSwitch bind="wizardStep" defaultActiveTab="RequestAccess">
-            <Tab tabName="RequestAccess">
-              <RequestAccess />
+          <Tabs
+            asSwitch
+            bind="wizardStep"
+            defaultActiveTab="CaseAssociationRequest"
+          >
+            <Tab tabName="CaseAssociationRequest">
+              <CaseAssociationRequest />
             </Tab>
-            <Tab tabName="RequestAccessReview">
-              <RequestAccessReview />
+            <Tab tabName="CaseAssociationRequestReview">
+              <CaseAssociationRequestReview />
             </Tab>
           </Tabs>
         </section>
@@ -37,4 +41,4 @@ export const RequestAccessWizard = connect(
   },
 );
 
-RequestAccessWizard.displayName = 'RequestAccessWizard';
+CaseAssociationRequestWizard.displayName = 'CaseAssociationRequestWizard';
