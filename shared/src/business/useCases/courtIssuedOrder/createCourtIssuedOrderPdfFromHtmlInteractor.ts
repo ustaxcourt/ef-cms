@@ -8,7 +8,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
-import { pinkLog } from '@shared/tools/pinkLog';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
@@ -31,9 +30,9 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
 }> => {
   const user = applicationContext.getCurrentUser();
 
-  // if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const caseDetail = await applicationContext
     .getPersistenceGateway()
@@ -74,8 +73,6 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       titleOfClerk,
     },
   });
-
-  pinkLog('createCourtIssuedOrderPdfFromHtmlInteractor 1');
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
