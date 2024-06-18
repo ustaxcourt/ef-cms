@@ -1,7 +1,7 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
-import { TrialInfoType } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
+import { TrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import React from 'react';
 
 export const NoticeOfTrialIssued = ({
