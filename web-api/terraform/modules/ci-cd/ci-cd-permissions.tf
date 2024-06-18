@@ -128,7 +128,8 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cloudfront:GetDistributionConfig",
         "cloudfront:DeleteDistribution",
         "cloudfront:GetPublicKey",
-        "cloudfront:GetOriginAccessControl"
+        "cloudfront:GetOriginAccessControl",
+        "cloudfront:GetKeyGroup"
       ],
       "Resource": "*"
     },
