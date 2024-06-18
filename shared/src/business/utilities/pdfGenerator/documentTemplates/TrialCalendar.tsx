@@ -123,7 +123,9 @@ export const TrialCalendar = ({
 
       <div className="card margin-top-0" id="notes">
         <div className="card-header">Session Notes</div>
-        <div className="card-content">{sessionDetail.notes || 'n/a'} </div>
+        <div className="card-content">
+          <PreformattedText text={sessionDetail.notes || 'n/a'} />
+        </div>
       </div>
 
       <h4 className="text-center" id="cases-count">
