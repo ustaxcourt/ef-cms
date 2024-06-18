@@ -7,14 +7,14 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
+import { setCaseAssociationRequestStepActionGenerator } from '../actions/setCaseAssociationRequestStepActionGenerator';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
-import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoRequestAccessSequence =
+export const gotoCaseAssociationRequestSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
@@ -26,22 +26,26 @@ export const gotoRequestAccessSequence =
     setCaseAssociationAction,
     canRequestAccessAction,
     {
-      proceed: [
+      no: [navigateToCaseDetailAction],
+      yes: [
         setDefaultFileDocumentFormValuesAction,
         runPathForUserRoleAction,
         {
           irsPractitioner: [
             setFormPartyTrueAction('partyIrsPractitioner'),
-            setRequestAccessWizardStepActionGenerator('RequestAccess'),
-            setupCurrentPageAction('RequestAccessWizard'),
+            setCaseAssociationRequestStepActionGenerator(
+              'CaseAssociationRequest',
+            ),
+            setupCurrentPageAction('CaseAssociationRequestWizard'),
           ],
           privatePractitioner: [
             setFormPartyTrueAction('partyPrivatePractitioner'),
-            setRequestAccessWizardStepActionGenerator('RequestAccess'),
-            setupCurrentPageAction('RequestAccessWizard'),
+            setCaseAssociationRequestStepActionGenerator(
+              'CaseAssociationRequest',
+            ),
+            setupCurrentPageAction('CaseAssociationRequestWizard'),
           ],
         },
       ],
-      unauthorized: [navigateToCaseDetailAction],
     },
   ]);

@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
+import { PIIRedactedWarning } from '@web-client/views/CaseAssociationRequest/PIIRedactedWarning';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
 import { TextView } from '@web-client/ustc-ui/Text/TextView';
@@ -13,14 +13,14 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const RequestAccessDocumentForm = connect(
+export const CaseAssociationRequestDocumentForm = connect(
   {
+    caseAssociationRequestHelper: state.caseAssociationRequestHelper,
     constants: state.constants,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
-    requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
@@ -28,12 +28,12 @@ export const RequestAccessDocumentForm = connect(
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  function RequestAccessDocumentForm({
+  function CaseAssociationRequestDocumentForm({
+    caseAssociationRequestHelper,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
-    requestAccessHelper,
     showModal,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
@@ -43,7 +43,7 @@ export const RequestAccessDocumentForm = connect(
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
         <PIIRedactedWarning />
-        {requestAccessHelper.showGenerationTypeForm && (
+        {caseAssociationRequestHelper.showGenerationTypeForm && (
           <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
               <div className="usa-radio usa-radio__inline">
@@ -104,7 +104,8 @@ export const RequestAccessDocumentForm = connect(
                 <label
                   className={classNames(
                     'usa-label ustc-upload with-hint',
-                    requestAccessHelper.showPrimaryDocumentValid && 'validated',
+                    caseAssociationRequestHelper.showPrimaryDocumentValid &&
+                      'validated',
                   )}
                   data-testid="primary-document-label"
                   htmlFor="primary-document"
@@ -211,7 +212,7 @@ export const RequestAccessDocumentForm = connect(
                 )}
               </div>
 
-              {requestAccessHelper.documentWithObjections && (
+              {caseAssociationRequestHelper.documentWithObjections && (
                 <FormGroup errorText={validationErrors?.objections}>
                   <fieldset className="usa-fieldset margin-top-2">
                     <legend id="objections-legend">
@@ -248,7 +249,7 @@ export const RequestAccessDocumentForm = connect(
               )}
             </div>
 
-            {requestAccessHelper.documentWithSupportingDocuments && (
+            {caseAssociationRequestHelper.documentWithSupportingDocuments && (
               <div>
                 <SupportingDocuments />
                 <TextView
@@ -268,4 +269,5 @@ export const RequestAccessDocumentForm = connect(
   },
 );
 
-RequestAccessDocumentForm.displayName = 'RequestAccessDocumentForm';
+CaseAssociationRequestDocumentForm.displayName =
+  'CaseAssociationRequestDocumentForm';

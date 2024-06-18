@@ -27,9 +27,11 @@ import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/n
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { openAppUpdatedModalSequence } from '@web-client/presenter/sequences/openAppUpdatedModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
 import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/redirectToCreatePetitionerAccountSequence';
+import { redirectToDashboardSequence } from '@web-client/presenter/sequences/redirectToDashboardSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
@@ -97,9 +99,11 @@ export const presenterSequences = {
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,
+  openAppUpdatedModalSequence,
   openCaseDocumentDownloadUrlSequence,
   persistFormsOnReloadSequence,
   redirectToCreatePetitionerAccountSequence,
+  redirectToDashboardSequence,
   redirectToLoginSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
