@@ -89,7 +89,8 @@ export const IrsNoticeUploadForm = connect(
             </label>
             <span className="usa-hint" id="atp-files-upload-hint">
               Make sure file is not encrypted or password protected. Max file
-              size {constants.MAX_FILE_SIZE_MB}MB.
+              size {constants.MAX_FILE_SIZE_MB}MB. You may upload up to five PDF
+              files.
             </span>
             <StateDrivenFileInput
               aria-describedby={`irs-notice-upload-${index}-label`}

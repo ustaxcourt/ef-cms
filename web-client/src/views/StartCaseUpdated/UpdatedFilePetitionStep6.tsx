@@ -39,14 +39,14 @@ export const UpdatedFilePetitionStep6 = connect(
         <div className="grid-row grid-gap">
           <div className="grid-col">
             <p className="margin-top-0">
-              Review the Petition preview and uploaded documents to make sure
-              all of the information is accurate. You will not be able to make
-              changes to your case once you submit it without filing a motion.
+              Review the information to make sure it is accurate. You will not
+              be able to make changes to your case once you submit it without
+              filing a motion.
             </p>
             <WarningNotificationComponent
               alertWarning={{
                 message:
-                  'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) for every form except the Statement of Taxpayer Identification.',
+                  'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) from every form except the Statement of Taxpayer Identification Number.',
               }}
               dismissible={false}
               scrollToTop={false}
@@ -95,8 +95,6 @@ export const UpdatedFilePetitionStep6 = connect(
                   <div className="content-wrapper line-height-2">
                     <ol className="numbered-list">
                       <li>
-                        Double check your IRS Notice to ensure your Petition is
-                        timely.{' '}
                         <b>
                           In most cases, the Court must receive your
                           electronically filed Petition no later than 11:59 pm
@@ -107,16 +105,16 @@ export const UpdatedFilePetitionStep6 = connect(
                         Do not combine any additional documents with your
                         Petition.{' '}
                         <b>
-                          Documents that might be evidence can be submitted at a
-                          later time.
+                          Additional documents may be submitted after your
+                          Petition has been processed.
                         </b>
                       </li>
                       <li>
                         Confirm that all information being submitted appears as
                         you want it to appear.{' '}
                         <b>
-                          After submitting your case to the Court, you will only
-                          be able to make changes by filing a motion.
+                          After submitting your petition to the Court, you will
+                          only be able to make changes by filing a motion.
                         </b>
                       </li>
                     </ol>

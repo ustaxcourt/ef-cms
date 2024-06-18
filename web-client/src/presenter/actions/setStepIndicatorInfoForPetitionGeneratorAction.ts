@@ -8,7 +8,7 @@ export const setStepIndicatorInfoForPetitionGeneratorAction = ({
     2: 'Petition',
     3: 'IRS Notice',
     4: 'Case Procedure & Trial Location',
-    5: 'Statement of Taxpayer Identification',
+    5: 'Statement of Taxpayer Identification Number',
     6: 'Review & Submit Case',
     7: 'Pay Filing Fee',
   };

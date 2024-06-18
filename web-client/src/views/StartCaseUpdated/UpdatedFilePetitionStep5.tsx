@@ -22,11 +22,10 @@ export const UpdatedFilePetitionStep5 = connect(
             alertInfo={{
               message: (
                 <>
-                  The Statement of Taxpayer Identification is the only document
-                  that should include personal information (such as Social
-                  Security Numbers, Taxpayer Identification Numbers, or Employer
-                  Identification Numbers). It&apos;s sent to the IRS to help
-                  identify you but is{' '}
+                  The Statement of Taxpayer Identification Number is the only
+                  document that should include Social Security Numbers, Taxpayer
+                  Identification Numbers, or Employer Identification Numbers.
+                  It&apos;s sent to the IRS to help identify you but is{' '}
                   <b>never visible as part of the case record.</b>
                 </>
               ),

@@ -59,7 +59,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
               alertInfo.dismissText && 'padding-right-6',
             )}
           >
-            <div className="grid-container padding-x-0">
+            <div className="grid-container padding-left-0">
               <div className="grid-row">
                 <div className={dismissible ? 'tablet:grid-col-10' : ''}>
                   {alertInfo.title && (

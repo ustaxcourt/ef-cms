@@ -11,18 +11,17 @@ export function UpdatedFilePetitionStep7() {
     <>
       <SuccessNotification isDismissible={false} />
       <div className="petitioner-flow-text">
-        Once the Petition is processed by the Court, you will be able to check
-        the status of your case, submit new documents and view activity on the
-        case on the docket record.
+        Once the Petition is processed by the Court, you will be able to view
+        and submit documents.
       </div>
       <h3 className="margin-top-205">Pay $60 filing fee</h3>
       <div className="petitioner-flow-text">
-        Pay by credit/debit card, Amazon, PayPal or ACH (bank account) online.
-        You’ll need your docket number.
+        Pay by credit/debit card, Amazon Pay, PayPal or ACH (bank account)
+        online. You’ll need your docket number.
       </div>
       <div className="petitioner-flow-text margin-top-1">
         Your case’s filing fee status may take 2-3 business days from payment
-        date to update in your case.
+        date to update.
       </div>
 
       <Button
@@ -83,8 +82,8 @@ export function UpdatedFilePetitionStep7() {
                 Application for Waiver of Filing Fee.
               </Button>
               <span>
-                This form requires detailed information and must be signed under
-                penalty of perjury.
+                This form requires detailed financial information and must be
+                signed under penalty of perjury.
               </span>
               <ol className="margin-top-1 padding-left-4">
                 <li>Download and fill in the form.</li>
@@ -93,7 +92,7 @@ export function UpdatedFilePetitionStep7() {
                   computer/device.
                 </li>
                 <li>
-                  File the form to your case:
+                  File the form:
                   <ul className="list-style-disc padding-left-4">
                     <li>
                       You may electronically file the form after your Petition

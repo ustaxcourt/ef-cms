@@ -50,7 +50,7 @@ export const BeforeStartingCase = connect(
           <WarningNotificationComponent
             alertWarning={{
               message:
-                'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification.',
+                'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.',
             }}
             dismissible={false}
             scrollToTop={false}
@@ -59,11 +59,11 @@ export const BeforeStartingCase = connect(
             Before starting a case, you can prepare forms and documents in
             advance.{' '}
             <b>
-              {`Once you start a case, you won't be able to save your work and
+              {`Once you start this process, you won't be able to save your work and
               come back to it.`}
             </b>{' '}
-            {`After the case has been processed, you'll be able to log in at any
-            time to view the status and take action on the case.`}
+            {`After the petition has been processed, you'll be able to log in at any
+            time to view the status and take action in the case.`}
           </div>
           <div className="petitioner-flow-text">
             <span>
@@ -74,17 +74,20 @@ export const BeforeStartingCase = connect(
               >
                 This is the document that explains why you disagree with the
                 Internal Revenue Service (IRS). There are{' '}
-                {petitionFlowUpdated ? 'three' : 'two'} methods to add the
+                {petitionFlowUpdated ? 'three' : 'two'} methods to file the
                 Petition:
               </div>
               <ul className="margin-top-0">
                 {petitionFlowUpdated && (
                   <li>
-                    Answer some questions and have DAWSON create the Petition.
+                    Answer some questions and have DAWSON create and file the
+                    Petition.
                   </li>
                 )}
                 <li>
-                  {"Complete and upload the Court's standard Petition form. "}
+                  {
+                    "Complete and upload for filing the Court's standard Petition form. "
+                  }
                   <Button
                     link
                     className="usa-link--external text-left mobile-text-wrap margin-left-1"
@@ -98,8 +101,8 @@ export const BeforeStartingCase = connect(
                   </Button>
                 </li>
                 <li>
-                  Upload your own Petition that complies with the requirements
-                  of the{' '}
+                  Upload for filing your own Petition that complies with the
+                  requirements of the{' '}
                   <Button
                     link
                     className="usa-link--external text-left mobile-text-wrap"
@@ -119,7 +122,7 @@ export const BeforeStartingCase = connect(
                 className="petitioner-flow-text"
                 style={{ marginBottom: '5px' }}
               >
-                If you received a Notice(s) from the IRS:
+                If you received one or more Notices from the IRS:
               </div>
               <ul className="margin-top-0">
                 <li>Submit a PDF of the Notice(s) you received.</li>
@@ -193,7 +196,7 @@ export const BeforeStartingCase = connect(
                 file.
               </b>{' '}
               Petitions received after this date may be untimely and your case
-              may be dismissed for lack of jurisdiction.
+              may be dismissed.
             </div>
           </div>
           <div className="grid-row grid-gap">
@@ -204,20 +207,9 @@ export const BeforeStartingCase = connect(
                 title="Are you filing jointly with a spouse?"
               >
                 <div>
-                  To file a joint Petition with your spouse, you must have their
-                  consent. Both you and your spouse should{' '}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://ustaxcourt.gov/dawson_faqs_case_management.html#CASE7"
-                    overrideMargin="margin-right-0"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    sign the Petition
-                  </Button>
-                  {`. If you do not have your spouse's consent, select “Myself” as
-                  the person who is filing.`}
+                  {`To file a joint Petition with your spouse, you must have the
+                  spouse's consent. If you do not have your spouse's consent,
+                  select “Myself” as the person who is filing.`}
                 </div>
               </AccordionItem>
             </Accordion>
@@ -228,7 +220,7 @@ export const BeforeStartingCase = connect(
                 title="Are you filing on behalf of someone else?"
               >
                 <div>
-                  To file a case on behalf of another taxpayer, you must be
+                  To file a case on behalf of someone else, you must be
                   authorized to practice before this Court as provided by the{' '}
                   <Button
                     link
@@ -241,7 +233,7 @@ export const BeforeStartingCase = connect(
                     Tax Court Rules of Practice and Procedure (Rule 60)
                   </Button>
                   {
-                    '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent taxpayers.'
+                    '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
                   }
                 </div>
               </AccordionItem>
