@@ -1,3 +1,4 @@
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
@@ -188,12 +189,12 @@ export const TrialCalendar = ({
                   <td colSpan={1}></td>
                   <td colSpan={3}>
                     {caseDetail.calendarNotes && (
-                      <span>
+                      <div>
                         <span className="text-bold margin-right-1">
                           Calendar Notes:{' '}
                         </span>
-                        {caseDetail.calendarNotes}
-                      </span>
+                        <PreformattedText text={caseDetail.calendarNotes} />
+                      </div>
                     )}
                   </td>
                 </tr>

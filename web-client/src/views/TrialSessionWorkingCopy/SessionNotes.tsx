@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { TextView } from '../../ustc-ui/Text/TextView';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -38,7 +38,7 @@ export const SessionNotes = connect(
               {sessionNotes && (
                 <>
                   <div className="margin-top-1  margin-bottom-4">
-                    <TextView bind="trialSessionWorkingCopy.sessionNotes" />
+                    <PreformattedText text={sessionNotes} />
                   </div>
                   <div className="grid-row">
                     <div className="tablet:grid-col-6">
