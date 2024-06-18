@@ -4,88 +4,91 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { formatResults } from '../searchClient';
+import { formatResults, searchRaw } from '../searchClient';
 
 export async function getColdCases({
   applicationContext,
 }: {
   applicationContext: ServerApplicationContext;
 }) {
-  const entriesOfNotAtIssueCases = await applicationContext
-    .getSearchClient()
-    .search({
-      body: {
-        _source: [
-          'docketNumber',
-          'docketNumberWithSuffix',
-          'filingDate',
-          'createdAt',
-          'caseType',
-          'preferredTrialCity',
-          'leadDocketNumber',
-        ],
-        query: {
-          bool: {
-            filter: [
-              {
-                term: {
-                  'status.S': 'General Docket - Not at Issue',
-                },
+  const searchParameters = {
+    body: {
+      _source: [
+        'docketNumber',
+        'docketNumberWithSuffix',
+        'filingDate',
+        'createdAt',
+        'caseType',
+        'preferredTrialCity',
+        'leadDocketNumber',
+      ],
+      query: {
+        bool: {
+          filter: [
+            {
+              term: {
+                'status.S': 'General Docket - Not at Issue',
               },
-              {
-                term: {
-                  'entityName.S': 'CaseDocketEntryMapping',
-                },
+            },
+            {
+              term: {
+                'entityName.S': 'CaseDocketEntryMapping',
               },
-            ],
-            must: [
-              {
-                has_child: {
-                  inner_hits: {
-                    _source: ['filingDate.S', 'eventCode.S'],
-                    name: 'most_recent_child',
-                    size: 1,
-                    sort: [{ 'filingDate.S': { order: 'desc' } }],
-                  },
-                  min_children: 1,
-                  query: {
-                    match_all: {},
-                  },
-                  type: 'document',
+            },
+          ],
+          must: [
+            {
+              has_child: {
+                inner_hits: {
+                  _source: ['filingDate.S', 'eventCode.S'],
+                  name: 'most_recent_child',
+                  size: 1,
+                  sort: [{ 'filingDate.S': { order: 'desc' } }],
                 },
+                min_children: 1,
+                query: {
+                  match_all: {},
+                },
+                type: 'document',
               },
-            ],
-            must_not: [
-              {
-                has_child: {
-                  query: {
-                    bool: {
-                      should: [
-                        {
-                          term: {
-                            'pending.BOOL': true,
+            },
+          ],
+          must_not: [
+            {
+              has_child: {
+                query: {
+                  bool: {
+                    should: [
+                      {
+                        term: {
+                          'pending.BOOL': true,
+                        },
+                      },
+                      {
+                        range: {
+                          'filingDate.S': {
+                            gt: 'now-120d/d',
                           },
                         },
-                        {
-                          range: {
-                            'filingDate.S': {
-                              gt: 'now-120d/d',
-                            },
-                          },
-                        },
-                      ],
-                    },
+                      },
+                    ],
                   },
-                  type: 'document',
                 },
+                type: 'document',
               },
-            ],
-          },
+            },
+          ],
         },
       },
-      index: 'efcms-docket-entry',
-      size: 10000,
-    });
+    },
+    index: 'efcms-docket-entry',
+    size: 10000,
+  };
+
+  const entriesOfNotAtIssueCases = await searchRaw({
+    applicationContext,
+    searchParameters,
+  });
 
   entriesOfNotAtIssueCases.body.hits.hits.forEach(hit => {
     hit._source.filingDate =
