@@ -1,4 +1,4 @@
-import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getPendingMotionDocketEntriesForCurrentJudgeAction = async ({
