@@ -22,6 +22,7 @@ import axios from 'axios';
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'x-test-user': 'true',
           },
         },
       );

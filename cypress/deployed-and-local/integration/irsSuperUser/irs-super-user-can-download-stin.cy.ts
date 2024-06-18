@@ -53,10 +53,14 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
  */
 const verifyReconciliationReportAndStinUrl = (bearerToken: string) => {
   const url = `https://api-${getCypressEnv().deployingColor}.${getCypressEnv().efcmsDomain}/v2/reconciliation-report/today`;
+  const headers = {
+    'x-test-user': 'true',
+  };
   cy.request({
     auth: {
       bearer: bearerToken,
     },
+    headers,
     url,
   }).then(response => {
     expect(response.status).to.equal(200);
@@ -74,6 +78,7 @@ const verifyReconciliationReportAndStinUrl = (bearerToken: string) => {
       auth: {
         bearer: bearerToken,
       },
+      headers,
       url: docDownloadUrl,
     }).then(docDownloadUrlResponse => {
       expect(docDownloadUrlResponse.status).to.equal(200);
