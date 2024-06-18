@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
-import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
-import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
