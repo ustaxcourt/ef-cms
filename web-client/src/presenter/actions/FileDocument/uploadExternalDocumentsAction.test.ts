@@ -248,7 +248,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should set documentMetadata.privatePractitioners to form.practitioner when the document to upload is a practitioner association request', async () => {
+  it('should set documentMetadata.privatePractitioners to form.practitioner when the document to upload is a practitioner case association request', async () => {
     const mockPrivatePractitioner = {
       name: 'Simone Baulk',
     };

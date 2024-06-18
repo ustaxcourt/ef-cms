@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseAssociationRequestDocumentForm } from './CaseAssociationRequestDocumentForm';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
-import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
@@ -11,24 +11,24 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const RequestAccess = connect(
+export const CaseAssociationRequest = connect(
   {
+    caseAssociationRequestHelper: state.caseAssociationRequestHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    requestAccessHelper: state.requestAccessHelper,
-    reviewRequestAccessInformationSequence:
-      sequences.reviewRequestAccessInformationSequence,
+    reviewCaseAssociationRequestSequence:
+      sequences.reviewCaseAssociationRequestSequence,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
-  function RequestAccess({
+  function CaseAssociationRequest({
+    caseAssociationRequestHelper,
     form,
     formCancelToggleCancelSequence,
-    requestAccessHelper,
-    reviewRequestAccessInformationSequence,
+    reviewCaseAssociationRequestSequence,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
@@ -41,7 +41,7 @@ export const RequestAccess = connect(
             id="file-a-document-header"
             tabIndex={-1}
           >
-            Request Access to This Case
+            Represent a Party to this Case
           </h1>
         </Focus>
         <p className="margin-bottom-3 margin-top-0 required-statement">
@@ -76,9 +76,9 @@ export const RequestAccess = connect(
               data-testid="document-type"
               id="document-type"
               name="documentType"
-              options={requestAccessHelper.documentsForSelect}
+              options={caseAssociationRequestHelper.documentsForSelect}
               value={reactSelectValue({
-                documentTypes: requestAccessHelper.documentsForSelect,
+                documentTypes: caseAssociationRequestHelper.documentsForSelect,
                 selectedEventCode: form.eventCode,
               })}
               onChange={e => {
@@ -102,10 +102,10 @@ export const RequestAccess = connect(
               }}
             />
           </FormGroup>
-          {requestAccessHelper.showPartiesRepresenting && (
+          {caseAssociationRequestHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
-          <RequestAccessDocumentForm />
+          <CaseAssociationRequestDocumentForm />
 
           <div className="margin-top-5">
             <Button
@@ -113,7 +113,7 @@ export const RequestAccess = connect(
               id="submit-document"
               type="submit"
               onClick={() => {
-                reviewRequestAccessInformationSequence();
+                reviewCaseAssociationRequestSequence();
               }}
             >
               Review Filing
@@ -133,4 +133,4 @@ export const RequestAccess = connect(
   },
 );
 
-RequestAccess.displayName = 'RequestAccess';
+CaseAssociationRequest.displayName = 'CaseAssociationRequest';
