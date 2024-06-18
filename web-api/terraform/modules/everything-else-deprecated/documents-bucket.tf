@@ -111,33 +111,31 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_
   }
 }
 
-resource "aws_s3_bucket_policy" "documents_east_policy" {
+resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
+  count  = var.environment == "prod" ? 1 : 0
   bucket = aws_s3_bucket.documents_us_east_1.bucket
-  policy = data.aws_iam_policy_document.documents_east_policy_document.json
+  policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
 }
 
-data "aws_iam_policy_document" "documents_east_policy_document" {
-  dynamic "statement" {
-    for_each = var.environment == "prod" ? ["apply"] : []
-    content {
-      sid = "DelegateS3AccessForGlueJobs"
+data "aws_iam_policy_document" "allow_access_for_glue_job" {
+  statement {
+    sid = "DelegateS3Access"
 
-      principals {
-        type        = "AWS"
-        identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"]
-      }
-
-      actions = [
-        "s3:GetObject",
-        "s3:GetObjectTagging",
-        "s3:ListBucket",
-      ]
-
-      resources = [
-        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
-        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
-      ]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"]
     }
+
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectTagging",
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
+      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
+    ]
   }
 }
 
