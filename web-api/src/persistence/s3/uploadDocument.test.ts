@@ -2,9 +2,9 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
-import { uploadToS3 } from './uploadToS3';
+import { uploadDocument } from './uploadDocument';
 
-describe('uploadToS3', () => {
+describe('uploadDocument', () => {
   let getObjectMock = () => {
     return {
       promise: () =>
@@ -31,7 +31,7 @@ describe('uploadToS3', () => {
     });
 
     await expect(
-      uploadToS3({
+      uploadDocument({
         applicationContext,
         pdfName: mockPdfName,
         testPdfDoc,
@@ -62,7 +62,7 @@ describe('uploadToS3', () => {
       upload: (params, callback) => callback(),
     });
 
-    await uploadToS3({
+    await uploadDocument({
       applicationContext,
       pdfName: mockPdfName,
       testPdfDoc,

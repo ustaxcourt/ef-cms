@@ -288,7 +288,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       {} as any,
     );
 
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should return the document url', async () => {

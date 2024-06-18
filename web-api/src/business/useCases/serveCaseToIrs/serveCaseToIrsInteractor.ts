@@ -309,14 +309,14 @@ const generateNoticeOfReceipt = async ({
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
     pdfName: caseConfirmationPdfName,
   });
 
   const notrDocketEntryId = applicationContext.getUniqueId();
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
     pdfName: notrDocketEntryId,

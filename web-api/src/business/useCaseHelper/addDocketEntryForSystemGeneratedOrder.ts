@@ -94,7 +94,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
     combinedPdf = Buffer.from(returnVal);
   }
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: combinedPdf,
     pdfName: newDocketEntry.docketEntryId,

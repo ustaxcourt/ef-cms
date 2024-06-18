@@ -47,7 +47,7 @@ export const appendAmendedPetitionFormInteractor = async (
     secondPdf: amendedPetitionFormData,
   });
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedPdf),
     pdfName: docketEntryId,

@@ -138,7 +138,9 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       },
     );
 
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should return the url to the generated trial session working copy PDF', async () => {
