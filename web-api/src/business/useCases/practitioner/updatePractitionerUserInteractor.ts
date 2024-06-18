@@ -8,7 +8,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { generateChangeOfAddress } from '../../../../../shared/src/business/useCases/users/generateChangeOfAddress';
+import { generateChangeOfAddress } from '../user/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
