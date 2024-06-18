@@ -8,7 +8,6 @@ import React from 'react';
 
 export const Login = connect(
   {
-    loginHelper: state.loginHelper,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence:
@@ -20,7 +19,6 @@ export const Login = connect(
       sequences.updateAuthenticationFormValueSequence,
   },
   ({
-    loginHelper,
     navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence,
     showPassword,
@@ -45,7 +43,13 @@ export const Login = connect(
                     >
                       Log in to DAWSON
                     </h1>
-                    <form className="usa-form margin-top-4 max-width-unset login-form">
+                    <form
+                      className="usa-form margin-top-4 max-width-unset login-form"
+                      onSubmit={e => {
+                        e.preventDefault();
+                        submitLoginSequence();
+                      }}
+                    >
                       <label className="usa-label" htmlFor="email">
                         Email address
                       </label>
@@ -99,11 +103,6 @@ export const Login = connect(
                       <Button
                         className="usa-button margin-top-3"
                         data-testid="login-button"
-                        disabled={loginHelper.disableLoginButton}
-                        onClick={e => {
-                          e.preventDefault();
-                          submitLoginSequence();
-                        }}
                       >
                         Log in
                       </Button>
