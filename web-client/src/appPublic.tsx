@@ -31,6 +31,7 @@ import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 
 // Icons - Regular
+import { GlobalModalWrapper } from '@web-client/views/GlobalModalWrapper';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
@@ -125,19 +126,9 @@ const appPublic = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    applicationContext
-      .getUseCases()
-      .getCurrentVersionInteractor(applicationContext)
-      .then(version => {
-        setInterval(async () => {
-          const currentVersion = await applicationContext
-            .getUseCases()
-            .getCurrentVersionInteractor(applicationContext);
-          if (currentVersion !== version) {
-            await cerebralApp.getSequence('persistFormsOnReloadSequence')();
-          }
-        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
-      });
+    applicationContext.setForceRefreshCallback(async () => {
+      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+    });
 
     router.initialize(cerebralApp);
 
@@ -147,6 +138,7 @@ const appPublic = {
     root.render(
       <Container app={cerebralApp}>
         <AppComponentPublic />
+        <GlobalModalWrapper />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
     );
