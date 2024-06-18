@@ -351,7 +351,6 @@ export const createTestApplicationContext = ({
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sleep: jest.fn(),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
-    uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
       .fn()
       .mockImplementation(DateHandler.validateDateAndCreateISO),
@@ -561,6 +560,7 @@ export const createTestApplicationContext = ({
       .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
+    uploadDocument: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });

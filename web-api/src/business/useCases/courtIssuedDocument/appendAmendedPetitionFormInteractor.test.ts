@@ -93,7 +93,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
     });
 
     expect(
-      applicationContext.getUtilities().uploadToS3.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().uploadDocument.mock
+        .calls[0][0],
     ).toMatchObject({
       pdfData: Buffer.from(returnedCombinedPdf),
       pdfName: mockDocketEntryId,

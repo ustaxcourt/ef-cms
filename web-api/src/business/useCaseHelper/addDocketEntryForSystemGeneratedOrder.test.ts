@@ -103,7 +103,9 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
     });
 
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should save documentContents and richText for editing the order', async () => {

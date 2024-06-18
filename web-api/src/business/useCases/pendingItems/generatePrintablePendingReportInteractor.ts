@@ -53,7 +53,7 @@ export const generatePrintablePendingReportInteractor = async (
 
   const key = `pending-report-${applicationContext.getUniqueId()}.pdf`;
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: pdf,
     pdfName: key,

@@ -51,7 +51,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
 
   const key = `trial-session-printable-copy-${applicationContext.getUniqueId()}.pdf`;
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: pdf,
     pdfName: key,

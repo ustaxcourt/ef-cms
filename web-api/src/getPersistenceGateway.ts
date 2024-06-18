@@ -178,6 +178,7 @@ import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
@@ -389,6 +390,7 @@ const gatewayMethods = {
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
+  uploadDocument,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,

@@ -43,7 +43,7 @@ export const zipDocuments = async ({
 
   const passThrough = new stream.PassThrough();
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: passThrough,
     pdfName: zipName,

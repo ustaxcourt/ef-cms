@@ -56,7 +56,7 @@ export const generateNoticeOfDocketChangePdf = async ({
 
   const docketEntryId = applicationContext.getUniqueId();
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: noticePdf,
     pdfName: docketEntryId,

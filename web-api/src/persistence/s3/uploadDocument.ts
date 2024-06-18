@@ -3,7 +3,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 
 // TODO 10336: Put behind getStorageGateway().uploadDocument?
 // applicationContext.getPersistenceGateway().getDocument => applicationContext.getStorageGateway().getDocument?
-export const uploadToS3 = async ({
+export const uploadDocument = async ({
   applicationContext,
   pdfData,
   pdfName,
@@ -19,7 +19,7 @@ export const uploadToS3 = async ({
     : applicationContext.environment.documentsBucketName;
 
   try {
-    const parallelUploads3 = new Upload({
+    const parallelUploadS3 = new Upload({
       client: applicationContext.getStorageClient(),
       params: {
         Body: pdfData,
@@ -29,11 +29,11 @@ export const uploadToS3 = async ({
       },
     });
 
-    parallelUploads3.on('httpUploadProgress', progress => {
+    parallelUploadS3.on('httpUploadProgress', progress => {
       console.log(progress);
     });
 
-    await parallelUploads3.done();
+    await parallelUploadS3.done();
   } catch (e) {
     console.log(`Failed to upload document (${pdfName}) to S3.`, e);
   }
