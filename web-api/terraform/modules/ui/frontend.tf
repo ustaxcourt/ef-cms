@@ -166,62 +166,6 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  origin_group {
-    origin_id = "group-documents.${var.dns_domain}"
-
-    failover_criteria {
-      status_codes = [403, 404, 500, 502, 503, 504]
-    }
-
-    member {
-      origin_id = "primary-documents.${var.dns_domain}"
-    }
-
-    member {
-      origin_id = "failover-documents.${var.dns_domain}"
-    }
-  }
-
-  origin_group {
-    origin_id = "group-temp-documents.${var.dns_domain}"
-
-    failover_criteria {
-      status_codes = [403, 404, 500, 502, 503, 504]
-    }
-
-    member {
-      origin_id = "primary-temp-documents.${var.dns_domain}"
-    }
-
-    member {
-      origin_id = "failover-temp-documents.${var.dns_domain}"
-    }
-  }
-
-  origin {
-    domain_name              = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
-    origin_id                = "primary-documents.${var.dns_domain}"
-    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
-  }
-
-  origin {
-    domain_name              = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
-    origin_id                = "failover-documents.${var.dns_domain}"
-    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
-  }
-
-  origin {
-    domain_name              = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
-    origin_id                = "primary-temp-documents.${var.dns_domain}"
-    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
-  }
-
-  origin {
-    domain_name              = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
-    origin_id                = "failover-temp-documents.${var.dns_domain}"
-    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_documents_oac.id
-  }
-
   custom_error_response {
     error_caching_min_ttl = 0
     error_code            = 404
@@ -284,62 +228,6 @@ resource "aws_cloudfront_distribution" "distribution" {
     viewer_protocol_policy = var.viewer_protocol_policy
   }
 
-  ordered_cache_behavior {
-    path_pattern           = "/documents/*"
-    viewer_protocol_policy = var.viewer_protocol_policy
-    compress               = true
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "group-documents.${var.dns_domain}"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-
-    lambda_function_association {
-      event_type   = "origin-request"
-      lambda_arn   = module.strip_basepath_lambda.qualified_arn
-      include_body = false
-    }
-
-    forwarded_values {
-      query_string = true
-
-      cookies {
-        forward = "none"
-      }
-    }
-
-    trusted_key_groups = [aws_cloudfront_key_group.key_group.id]
-  }
-
-  ordered_cache_behavior {
-    path_pattern           = "/temp-documents/*"
-    viewer_protocol_policy = var.viewer_protocol_policy
-    compress               = true
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "group-temp-documents.${var.dns_domain}"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-
-    lambda_function_association {
-      event_type   = "origin-request"
-      lambda_arn   = module.strip_basepath_lambda.qualified_arn
-      include_body = false
-    }
-
-    forwarded_values {
-      query_string = true
-
-      cookies {
-        forward = "none"
-      }
-    }
-
-    trusted_key_groups = [aws_cloudfront_key_group.key_group.id]
-  }
-
   lifecycle {
     ignore_changes = [aliases]
   }
@@ -356,36 +244,6 @@ resource "aws_cloudfront_distribution" "distribution" {
     acm_certificate_arn = data.aws_acm_certificate.private_certificate.arn
     ssl_support_method  = "sni-only"
   }
-
-}
-
-resource "aws_cloudfront_origin_access_control" "cloudfront_documents_oac" {
-  name                              = "cloudfront_documents_oac_${var.environment}_${var.current_color}"
-  description                       = "Origin access control used for fetching private documents from documents bucket"
-  origin_access_control_origin_type = "s3"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
-}
-
-resource "aws_cloudfront_public_key" "public_key_for_documents" {
-  encoded_key = <<EOF
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs9eGPE3QS1MGM7iuVc74
-83NgFlah8s3+4YbtAxMumToPB28F1UKGEUDDbtl6jDfFJNRaEySvXh+icOZukWxn
-PahcaWNZN/eqochAYroGbgsOfhgbDbKf8hmlGwvIwszNpp3TRxF+EN5LSO9xCZWe
-rY5KyBl6xWxmbEQ7O6o/t1TckS84f/vCEa3qYJ/uHzN62inI0opbNC1dcJimKPdf
-HBeGzaj4HU6l0mwuYdozROLUaDCYakuKilRIQrMSN/tmrCsb149raXSHaGofnoVv
-J2OYiOll4Ee8L4qCSy06eAXC4DWgt+Q23Qv+YdeSzqrx4m0jS1J4cbO0Ol9rw08Z
-UwIDAQAB
------END PUBLIC KEY-----
-EOF
-  name        = "public_key_for_documents"
-}
-
-resource "aws_cloudfront_key_group" "key_group" {
-  comment = "oac_key_group_${var.environment}_${var.current_color}"
-  items   = [aws_cloudfront_public_key.public_key_for_documents.id]
-  name    = "oac_key_group_${var.environment}_${var.current_color}"
 }
 
 data "aws_route53_zone" "zone" {

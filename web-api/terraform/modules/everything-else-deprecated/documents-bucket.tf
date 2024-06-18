@@ -139,25 +139,6 @@ data "aws_iam_policy_document" "documents_east_policy_document" {
       ]
     }
   }
-
-  statement {
-    sid = "AllowCloudFrontServicePrincipalReadOnly"
-    principals {
-      type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
-    }
-    actions = [
-      "s3:GetObject",
-    ]
-    resources = [
-      "arn:aws:s3:::${aws_s3_bucket.documents_us_east_1.bucket}/*"
-    ]
-    condition {
-      test     = "StringLike"
-      variable = "AWS:SourceArn"
-      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
-    }
-  }
 }
 
 resource "aws_s3_bucket_public_access_block" "block_documents_east" {
@@ -183,33 +164,6 @@ resource "aws_s3_bucket_ownership_controls" "documents_west_ownership_controls" 
   provider = aws.us-west-1
   rule {
     object_ownership = "BucketOwnerEnforced"
-  }
-}
-
-resource "aws_s3_bucket_policy" "documents_west_policy" {
-  provider = aws.us-west-1
-  bucket   = aws_s3_bucket.documents_us_west_1.bucket
-  policy   = data.aws_iam_policy_document.documents_west_policy_document.json
-}
-
-data "aws_iam_policy_document" "documents_west_policy_document" {
-  statement {
-    sid = "AllowCloudFrontServicePrincipalReadOnly"
-    principals {
-      type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
-    }
-    actions = [
-      "s3:GetObject",
-    ]
-    resources = [
-      "arn:aws:s3:::${aws_s3_bucket.documents_us_west_1.bucket}/*"
-    ]
-    condition {
-      test     = "StringLike"
-      variable = "AWS:SourceArn"
-      values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
-    }
   }
 }
 
