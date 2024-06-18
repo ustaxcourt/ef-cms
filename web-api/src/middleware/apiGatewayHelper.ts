@@ -174,11 +174,13 @@ export const getUserFromAuthHeader = (event): UnknownAuthUser => {
   if (!token) return undefined;
   const decoded = jwt.decode(token);
   if (decoded) {
-    decoded.token = token;
-    decoded.role = decoded['custom:role'];
-    decoded.userId = decoded['custom:userId'];
-    decoded.name = decoded.name || decoded['custom:name']; // custom:name only exists locally. This is a workaround for cognito-local.
-    return decoded;
+    decoded.token = token; // TODO zach: Understand if the token is needed for the auth user. Ideally not.
+    return {
+      email: decoded.email,
+      name: decoded.name || decoded['custom:name'], // custom:name only exists locally. This is a workaround for cognito-local.
+      role: decoded['custom:role'],
+      userId: decoded['custom:userId'],
+    };
   } else {
     return undefined;
   }

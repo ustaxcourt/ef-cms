@@ -1,4 +1,5 @@
 import { ROLES, Role } from '@shared/business/entities/EntityConstants';
+import { pinkLog } from '@shared/tools/pinkLog';
 import joi from 'joi';
 
 export type AuthUser = {
@@ -22,8 +23,13 @@ export function isAuthUser(user): user is AuthUser {
     userId: joi.string().min(1).uuid().required(),
   });
 
-  const { error } = authUserSchema.validate(user);
+  const { error } = authUserSchema.validate(user, {
+    abortEarly: false,
+    allowUnknown: true,
+  });
+
   if (error) {
+    pinkLog('isAuthUser error', error);
     return false;
   }
 

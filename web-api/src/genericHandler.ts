@@ -2,9 +2,10 @@ import {
   ServerApplicationContext,
   createApplicationContext,
 } from './applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
-  UnknownAuthUser,
   getConnectionIdFromEvent,
+  getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
 
@@ -70,8 +71,12 @@ export const genericHandler = (
   } = {},
 ) => {
   return handle(awsEvent, async () => {
+    const deprecatedUser = getUserFromAuthHeader(awsEvent); // TODO: zach remove getting user here. Should be passed in.
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext = createApplicationContext(user, awsEvent.logger);
+    const applicationContext = createApplicationContext(
+      deprecatedUser,
+      awsEvent.logger,
+    );
 
     delete awsEvent.logger;
 
