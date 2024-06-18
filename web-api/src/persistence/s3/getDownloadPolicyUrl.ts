@@ -1,10 +1,11 @@
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { environment } from '@web-api/environment';
-import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 export const getDownloadPolicyUrl = async ({
   applicationContext,
+  filename,
   key,
   urlTtl = 120,
   useTempBucket = false,
@@ -15,29 +16,21 @@ export const getDownloadPolicyUrl = async ({
   urlTtl?: number;
   useTempBucket?: boolean;
 }): Promise<{ url: string }> => {
-  const privateKey = await applicationContext
-    .getSecretsGateway()
-    .getSecret({ secretName: 'exp4_cloudfront_signing_private_key_delete_me' });
+  const bucketName = useTempBucket
+    ? environment.tempDocumentsBucketName
+    : environment.documentsBucketName;
 
-  if (!privateKey) {
-    throw new Error('Could not get cloudfront private key for signing');
-  }
+  const ResponseContentDisposition = filename
+    ? `inline;filename="${filename}"`
+    : undefined;
 
-  const bucketName = useTempBucket ? 'temp-documents' : 'documents';
-
-  const url = `https://app-${environment.currentColor}.${environment.efcmsDomain}/${bucketName}/${key}`;
-
-  const expirationDate = calculateISODate({
-    howMuch: urlTtl,
-    units: 'seconds',
+  const client = applicationContext.getStorageClient();
+  const command = new GetObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+    ResponseContentDisposition,
   });
+  const url = await getSignedUrl(client, command, { expiresIn: urlTtl });
 
-  const signedUrl = getSignedUrl({
-    dateLessThan: expirationDate,
-    keyPairId: 'K2EHQGE49YSTCV',
-    privateKey,
-    url,
-  });
-
-  return { url: signedUrl };
+  return { url };
 };
