@@ -1,7 +1,12 @@
 import { isEmpty } from 'lodash';
 
-export const hasPractitionerDetailAction = ({ path, props }: ActionProps) => {
-  const { isPublicUser, practitionerDetail } = props;
+export const hasPractitionerDetailAction = ({
+  applicationContext,
+  path,
+  props,
+}: ActionProps) => {
+  const { practitionerDetail } = props;
+  const isPublicUser = applicationContext.isPublicUser();
 
   if (isEmpty(practitionerDetail))
     return path.setResultsInState({ searchResults: [] });

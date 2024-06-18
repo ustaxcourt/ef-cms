@@ -111,11 +111,8 @@ export const PublicSearch = connect(
               </li>
             </ul>
           </div>
-          <PractitionerSearchForm isPublicUser={true}></PractitionerSearchForm>
-
-          <PractitionerSearchResults
-            isPublicUser={true}
-          ></PractitionerSearchResults>
+          <PractitionerSearchForm />
+          <PractitionerSearchResults />
         </>
       );
     }

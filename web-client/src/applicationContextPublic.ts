@@ -232,6 +232,7 @@ const applicationContextPublic = {
   isFeatureEnabled: featureName => {
     return getIsFeatureEnabled(featureName, {}, getEnvironment().stage);
   },
+  isPublicUser: () => true,
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },

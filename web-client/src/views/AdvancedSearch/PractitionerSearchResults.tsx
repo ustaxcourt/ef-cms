@@ -2,7 +2,6 @@ import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 
@@ -10,13 +9,11 @@ export const PractitionerSearchResults = connect(
   {
     PRACTITIONER_SEARCH_PAGE_SIZE:
       state.constants.PRACTITIONER_SEARCH_PAGE_SIZE,
-    isPublicUser: props.isPublicUser,
     practitionerSearchHelper: state.practitionerSearchHelper,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
   },
   function PractitionerSearchResults({
-    isPublicUser,
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
@@ -62,7 +59,7 @@ export const PractitionerSearchResults = connect(
                     <th aria-label="bar number">Bar No.</th>
                     <th data-testid="results-table-header-name">Name</th>
                     <th data-testid="results-table-header-state">
-                      {isPublicUser ? 'Original Bar State' : 'State'}
+                      {practitionerSearchHelper.stateHeaderText}
                     </th>
                     <th data-testid="results-table-header-admission-status">
                       Admission Status
@@ -87,7 +84,7 @@ export const PractitionerSearchResults = connect(
                         key={result.barNumber}
                       >
                         <td>
-                          {isPublicUser ? (
+                          {practitionerSearchHelper.isPublicUser ? (
                             <span>{result.barNumber}</span>
                           ) : (
                             <a
