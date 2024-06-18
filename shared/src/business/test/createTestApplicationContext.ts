@@ -99,7 +99,7 @@ import {
   getWorkQueueFilters,
 } from '@shared/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '@web-api/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCForSection } from '@web-api/persistence/dynamo/workitems/getDocumentQCForSection';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
@@ -112,7 +112,6 @@ import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dyna
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
-import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -507,11 +506,10 @@ export const createTestApplicationContext = ({
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
-    getDocumentQCInboxForSection: jest.fn(),
-    getDocumentQCInboxForUser: jest.fn(),
-    getDocumentQCServedForSection: jest
+    getDocumentQCForSection: jest
       .fn()
-      .mockImplementation(getDocumentQCInboxForSectionPersistence),
+      .mockImplementation(getDocumentQCForSection),
+    getDocumentQCForUser: jest.fn(),
     getDownloadPolicyUrl: jest
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
@@ -545,7 +543,7 @@ export const createTestApplicationContext = ({
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
-    putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
+    putWorkItemInUsersOutbox: jest.fn(),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),

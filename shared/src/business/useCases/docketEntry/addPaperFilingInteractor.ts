@@ -153,10 +153,9 @@ export const addPaperFiling = async (
       docketEntryEntity.setAsServed(servedParties.all);
     }
 
-    await saveWorkItem({
+    await applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
-      isReadyForService,
-      workItem,
+      workItem: workItem.validate().toRawObject(),
     });
 
     docketEntryEntity.setWorkItem(workItem);
@@ -229,35 +228,6 @@ export const addPaperFiling = async (
       pdfUrl: paperServicePdfUrl,
     },
     userId: user.userId,
-  });
-};
-
-/**
- * Helper function to save any work items required when filing this docket entry
- * @param {object} providers  The providers Object
- * @param {object} providers.applicationContext The application Context
- * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
- * @param {object} providers.workItem The work item we are saving
- */
-const saveWorkItem = async ({
-  applicationContext,
-  isReadyForService,
-  workItem,
-}) => {
-  const workItemRaw = workItem.validate().toRawObject();
-
-  if (isReadyForService) {
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: workItem.section,
-      userId: workItem.assigneeId,
-      workItem: workItemRaw,
-    });
-  }
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemRaw,
   });
 };
 

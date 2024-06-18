@@ -1,6 +1,4 @@
 /* eslint-disable max-lines */
-jest.mock('@shared/business/entities/Message.ts');
-jest.mock('@shared/business/entities/CaseDeadline');
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -18,6 +16,9 @@ import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { v4 as uuidv4 } from 'uuid';
+
+jest.spyOn(Message, 'validateRawCollection');
+jest.spyOn(CaseDeadline, 'validateRawCollection');
 
 describe('updateCaseAndAssociations', () => {
   let updateCaseMock = jest.fn();
@@ -132,7 +133,7 @@ describe('updateCaseAndAssociations', () => {
 
     // updateCaseMessages
     expect(
-      applicationContext.getPersistenceGateway().updateMessage,
+      applicationContext.getPersistenceGateway().upsertMessage,
     ).not.toHaveBeenCalled();
 
     // updateCorrespondence
@@ -846,7 +847,7 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
       ).not.toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateMessage,
+        applicationContext.getPersistenceGateway().upsertMessage,
       ).not.toHaveBeenCalled();
     });
 
@@ -872,7 +873,7 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
       ).toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateMessage,
+        applicationContext.getPersistenceGateway().upsertMessage,
       ).not.toHaveBeenCalled();
     });
 
@@ -892,7 +893,7 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
       ).toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateMessage,
+        applicationContext.getPersistenceGateway().upsertMessage,
       ).toHaveBeenCalled();
     });
   });

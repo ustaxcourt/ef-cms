@@ -50,13 +50,15 @@ describe('getCompletedMessagesForUserInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
+
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     });
+
     applicationContext
       .getPersistenceGateway()
-      .getCompletedUserInboxMessages.mockReturnValue([messageData]);
+      .getUserCompletedMessages.mockReturnValue([messageData]);
 
     const returnedMessages = await getCompletedMessagesForUserInteractor(
       applicationContext,
@@ -66,8 +68,12 @@ describe('getCompletedMessagesForUserInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().getUserCompletedMessages,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      userId: messageData.completedByUserId,
+    });
+
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

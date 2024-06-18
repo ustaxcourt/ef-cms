@@ -51,7 +51,7 @@ export const completeMessageInteractor = async (
 
   const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-  await applicationContext.getPersistenceGateway().updateMessage({
+  await applicationContext.getPersistenceGateway().upsertMessage({
     applicationContext,
     message: validatedRawMessage,
   });

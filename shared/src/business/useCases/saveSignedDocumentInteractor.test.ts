@@ -169,10 +169,10 @@ describe('saveSignedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateMessage,
+      applicationContext.getPersistenceGateway().upsertMessage,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().upsertMessage.mock.calls[0][0]
         .message,
     ).toMatchObject({
       attachments: [

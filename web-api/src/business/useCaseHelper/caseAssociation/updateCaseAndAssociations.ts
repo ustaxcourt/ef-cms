@@ -73,16 +73,15 @@ const updateCaseMessages = async ({
   caseToUpdate,
   oldCase,
 }) => {
-  const messageUpdatesNecessary =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
+  const messageUpdatesNecessary = Message.CASE_PROPERTIES.filter(
+    caseProperty => oldCase[caseProperty] !== caseToUpdate[caseProperty],
+  ).length;
 
   if (!messageUpdatesNecessary) {
     return [];
   }
 
-  const caseMessages = await applicationContext
+  let caseMessages = await applicationContext
     .getPersistenceGateway()
     .getMessagesByDocketNumber({
       applicationContext,
@@ -93,11 +92,10 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  caseMessages.forEach(message => {
-    message.caseStatus = caseToUpdate.status;
-    message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
-    message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
-  });
+  caseMessages = caseMessages.map(
+    message =>
+      new Message(message, { applicationContext, caseEntity: caseToUpdate }),
+  );
 
   const validMessages = Message.validateRawCollection(caseMessages, {
     applicationContext,
@@ -106,7 +104,7 @@ const updateCaseMessages = async ({
   return validMessages.map(
     message =>
       function updateCaseMessages_cb() {
-        return applicationContext.getPersistenceGateway().updateMessage({
+        return applicationContext.getPersistenceGateway().upsertMessage({
           applicationContext,
           message,
         });

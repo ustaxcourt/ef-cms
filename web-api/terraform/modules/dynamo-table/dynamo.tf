@@ -35,7 +35,8 @@ resource "aws_dynamodb_table" "efcms-table-east" {
     type = "S"
   }
 
-   attribute {
+  // refactor this to use new gsis
+  attribute {
     name = "gsi2pk"
     type = "S"
   }

@@ -13,10 +13,10 @@ export class WorkItem extends JoiValidationEntity {
   public caseIsInProgress: boolean;
   public caseStatus: string;
   public caseTitle: string;
-  public completedAt: string;
-  public completedBy: string;
-  public completedByUserId: string;
-  public completedMessage: string;
+  public completedAt?: string;
+  public completedBy?: string;
+  public completedByUserId?: string;
+  public completedMessage?: string;
   public createdAt: string;
   public docketEntry: any;
   public docketNumber: string;

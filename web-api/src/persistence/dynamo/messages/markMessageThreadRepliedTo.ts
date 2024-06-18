@@ -15,7 +15,7 @@ export const markMessageThreadRepliedTo = async ({
 }: {
   applicationContext: IApplicationContext;
   parentMessageId: string;
-}) => {
+}): Promise<void> => {
   const messages = await getMessageThreadByParentId({
     applicationContext,
     parentMessageId,
@@ -25,6 +25,8 @@ export const markMessageThreadRepliedTo = async ({
     const updateMessage = async message => {
       return await update({
         ExpressionAttributeNames: {
+          '#gsiSectionBox': 'gsiSectionBox',
+          '#gsiUserBox': 'gsiUserBox',
           '#isRepliedTo': 'isRepliedTo',
         },
         ExpressionAttributeValues: {
@@ -34,7 +36,8 @@ export const markMessageThreadRepliedTo = async ({
           pk: `case|${message.docketNumber}`,
           sk: `message|${message.messageId}`,
         },
-        UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
+        UpdateExpression:
+          'SET #isRepliedTo = :isRepliedTo REMOVE #gsiUserBox, #gsiSectionBox',
         applicationContext,
       });
     };
