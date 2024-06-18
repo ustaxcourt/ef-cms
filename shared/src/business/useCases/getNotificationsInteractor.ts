@@ -1,33 +1,24 @@
-import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import {
+  CHIEF_JUDGE,
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { isEmpty } from 'lodash';
-
-const getJudgeUser = async (
-  judgeUserId: string,
-  applicationContext: IApplicationContext,
-  role: string,
-) => {
-  let judgeUser;
-
-  if (judgeUserId) {
-    judgeUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: judgeUserId });
-  } else if (role === ROLES.adc) {
-    judgeUser = {
-      name: CHIEF_JUDGE,
-    };
-  }
-
-  return judgeUser;
-};
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const getNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     caseServicesSupervisorData,
     judgeUserId,
-  }: { judgeUserId: string; caseServicesSupervisorData: any },
+  }: {
+    judgeUserId?: string;
+    caseServicesSupervisorData?: { section: string; userId: string };
+  },
 ): Promise<{
   qcIndividualInProgressCount: number;
   qcIndividualInboxCount: number;
@@ -40,47 +31,32 @@ export const getNotificationsInteractor = async (
 }> => {
   const appContextUser = applicationContext.getCurrentUser();
 
-  applicationContext.logger.info('getNotificationsInteractor start', {
-    appContextUser,
-  });
-
-  const [currentUser, judgeUser] = await Promise.all([
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: appContextUser.userId }),
-    getJudgeUser(judgeUserId, applicationContext, appContextUser.role),
-  ]);
-
-  applicationContext.logger.info('getNotificationsInteractor getUser', {
-    currentUser,
-    judgeUser,
-  });
-
-  const { section, userId } = caseServicesSupervisorData || currentUser;
-
-  let sectionToDisplay = applicationContext
-    .getUtilities()
-    .getDocQcSectionForUser(currentUser);
-
-  if (!isEmpty(caseServicesSupervisorData)) {
-    sectionToDisplay = caseServicesSupervisorData.section;
+  if (!isAuthorized(appContextUser, ROLE_PERMISSIONS.WORKITEM)) {
+    throw new UnauthorizedError('Unauthorized for getting work items');
   }
 
-  const filters = applicationContext
-    .getUtilities()
-    .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
+  const currentUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: appContextUser.userId });
 
-  applicationContext.logger.info(
-    'getNotificationsInteractor about to start queries',
-    {
-      sectionToDisplay,
-    },
-  );
+  const { role } = currentUser;
+  const { section, userId } = caseServicesSupervisorData || currentUser;
+
+  let judgeUserName;
+  if (role === 'adc' || judgeUserId === CHIEF_JUDGE) {
+    judgeUserName = CHIEF_JUDGE;
+    judgeUserId = undefined;
+  }
+
+  let documentQcSection =
+    section === PETITIONS_SECTION ? PETITIONS_SECTION : DOCKET_SECTION;
 
   const [
     userInbox,
     sectionInbox,
+    documentQcIndividualInProgress,
     documentQCIndividualInbox,
+    documentQcSectionInProgress,
     documentQCSectionInbox,
   ] = await Promise.all([
     applicationContext.getPersistenceGateway().getUserInboxMessages({
@@ -91,60 +67,52 @@ export const getNotificationsInteractor = async (
       applicationContext,
       section,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForUser({
+    applicationContext.getPersistenceGateway().getDocumentQCForUser({
       applicationContext,
+      box: 'inProgress',
       userId,
     }),
-    applicationContext.getPersistenceGateway().getDocumentQCInboxForSection({
+    applicationContext.getPersistenceGateway().getDocumentQCForUser({
       applicationContext,
-      judgeUserName: judgeUser ? judgeUser.name : null,
-      section: sectionToDisplay,
+      box: 'inbox',
+      userId,
+    }),
+    applicationContext.getPersistenceGateway().getDocumentQCForSection({
+      applicationContext,
+      box: 'inProgress',
+      judgeUserId,
+      judgeUserName,
+      section: documentQcSection,
+    }),
+    applicationContext.getPersistenceGateway().getDocumentQCForSection({
+      applicationContext,
+      box: 'inbox',
+      judgeUserId,
+      judgeUserName,
+      section: documentQcSection,
     }),
   ]);
 
-  applicationContext.logger.info(
-    'getNotificationsInteractor queries complete',
-    {
-      documentQCIndividualInbox: documentQCIndividualInbox.length,
-      documentQCSectionInbox: documentQCSectionInbox.length,
-      sectionInbox: sectionInbox.length,
-      userInbox: userInbox.length,
-    },
-  );
+  const qcIndividualInProgressCount = documentQcIndividualInProgress.length;
+  const qcIndividualInboxCount = documentQCIndividualInbox.length;
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
-
-  const qcSectionInProgressCount = documentQCSectionInbox.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox.filter(
-    filters['section']['inbox'],
-  ).length;
+  const qcSectionInProgressCount = documentQcSectionInProgress.length;
+  const qcSectionInboxCount = documentQCSectionInbox.length;
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
   ).length;
 
-  applicationContext.logger.info('getNotificationsInteractor done filtering', {
-    qcIndividualInProgressCount,
-    qcIndividualInboxCount,
-    qcSectionInProgressCount,
-    qcSectionInboxCount,
-    unreadMessageCount,
-  });
+  const qcUnreadCount = documentQCIndividualInbox.filter(
+    item => !item.isRead,
+  ).length;
 
   return {
     qcIndividualInProgressCount,
     qcIndividualInboxCount,
     qcSectionInProgressCount,
     qcSectionInboxCount,
-    qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
-      .length,
+    qcUnreadCount,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
