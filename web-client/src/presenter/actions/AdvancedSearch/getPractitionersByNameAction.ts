@@ -5,7 +5,7 @@ export const getPractitionersByNameAction = async ({
   get,
   props,
   store,
-}: ActionProps<{ isPublicUser: boolean; selectedPage: number }>) => {
+}: ActionProps<{ selectedPage: number }>) => {
   const { selectedPage } = props;
 
   const {

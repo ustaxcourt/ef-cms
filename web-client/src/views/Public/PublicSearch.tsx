@@ -111,11 +111,8 @@ export const PublicSearch = connect(
               </li>
             </ul>
           </div>
-          <PractitionerSearchForm isPublicUser={true}></PractitionerSearchForm>
-
-          <PractitionerSearchResults
-            isPublicUser={true}
-          ></PractitionerSearchResults>
+          <PractitionerSearchForm />
+          <PractitionerSearchResults />
         </>
       );
     }
@@ -154,7 +151,6 @@ export const PublicSearch = connect(
                 title={'Opinion'}
               >
                 {OpinionRender()}
-                <DocumentSearchResults />
               </Tab>
               <Tab
                 data-testid="practitioner-search-tab"

@@ -4,19 +4,14 @@ import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PractitionerSearchByBarNumber } from './PractitionerSearchByBarNumber';
 import { PractitionerSearchByName } from './PractitionerSearchByName';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 export const PractitionerSearchForm = connect(
   {
-    isPublicUser: props.isPublicUser,
     practitionerSearchFormHelper: state.practitionerSearchFormHelper,
   },
-  function PractitionerSearchForm({
-    isPublicUser,
-    practitionerSearchFormHelper,
-  }) {
+  function PractitionerSearchForm({ practitionerSearchFormHelper }) {
     const MOBILE_SEARCH_OPTIONS = ['Name', 'Bar Number'];
 
     const [
@@ -26,7 +21,7 @@ export const PractitionerSearchForm = connect(
 
     return (
       <>
-        {!isPublicUser && practitionerSearchFormHelper.showAddPractitioner && (
+        {practitionerSearchFormHelper.showAddPractitioner && (
           <div className="grid-row margin-bottom-2">
             <div className="grid-col-12 text-right">
               <Button
@@ -79,9 +74,7 @@ export const PractitionerSearchForm = connect(
               </div>
             ) : (
               <div className="grid-col-12">
-                <PractitionerSearchByBarNumber
-                  isPublicUser={isPublicUser}
-                ></PractitionerSearchByBarNumber>
+                <PractitionerSearchByBarNumber />
               </div>
             )}
           </div>
@@ -97,9 +90,7 @@ export const PractitionerSearchForm = connect(
             </div>
 
             <div className="grid-col-6">
-              <PractitionerSearchByBarNumber
-                isPublicUser={isPublicUser}
-              ></PractitionerSearchByBarNumber>
+              <PractitionerSearchByBarNumber />
             </div>
           </div>
         </NonMobile>
