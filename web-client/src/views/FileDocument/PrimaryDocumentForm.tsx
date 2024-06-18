@@ -1,7 +1,7 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
-import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
+import { PIIRedactedWarning } from '@web-client/views/CaseAssociationRequest/PIIRedactedWarning';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
