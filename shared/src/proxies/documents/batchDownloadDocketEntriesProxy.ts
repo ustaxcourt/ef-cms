@@ -1,4 +1,4 @@
-import { DownloadDocketEntryRequestType } from '@shared/business/useCases/document/batchDownloadDocketEntriesInteractor';
+import { DownloadDocketEntryRequestType } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import { post } from '../requests';
 
 export const batchDownloadDocketEntriesInteractor = (

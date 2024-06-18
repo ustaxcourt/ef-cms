@@ -7,7 +7,7 @@ import {
 import { DocketEntry } from '../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
-import { addCoverToPdf } from './addCoverToPdf';
+import { addCoverToPdf } from '../../../../web-api/src/business/useCases/addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';

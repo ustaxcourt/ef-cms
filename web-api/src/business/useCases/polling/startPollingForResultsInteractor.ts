@@ -1,5 +1,7 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const startPollingForResultsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { requestId }: { requestId: string },
 ): Promise<{ response: any } | undefined> => {
   const user = applicationContext.getCurrentUser();
