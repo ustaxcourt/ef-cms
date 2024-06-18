@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "temp_documents_east_policy_document" {
       "arn:aws:s3:::${aws_s3_bucket.temp_documents_us_east_1.bucket}/*"
     ]
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "AWS:SourceArn"
       values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
     }
@@ -131,7 +131,7 @@ data "aws_iam_policy_document" "temp_documents_west_policy_document" {
       "arn:aws:s3:::${aws_s3_bucket.temp_documents_us_west_1.bucket}/*"
     ]
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "AWS:SourceArn"
       values   = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
     }
