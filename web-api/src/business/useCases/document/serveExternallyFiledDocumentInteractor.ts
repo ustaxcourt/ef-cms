@@ -201,7 +201,7 @@ export const serveExternallyFiledDocument = async (
 };
 
 export const determineEntitiesToLock = (
-  _applicationContext: IApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
@@ -217,7 +217,7 @@ export const determineEntitiesToLock = (
 });
 
 export const handleLockError = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   originalRequest: any,
 ) => {
   const user = applicationContext.getCurrentUser();

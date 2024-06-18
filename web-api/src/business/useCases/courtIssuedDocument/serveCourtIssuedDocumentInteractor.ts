@@ -198,7 +198,7 @@ export const serveCourtIssuedDocument = async (
 };
 
 export const determineEntitiesToLock = (
-  _applicationContext: IApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
