@@ -1,3 +1,4 @@
+import { setDefaultCaseProcedureAction } from '@web-client/presenter/actions/setDefaultCaseProcedureAction';
 import { setIrsNoticeUploadFormInfoAction } from '@web-client/presenter/actions/setIrsNoticeUploadFormInfoAction';
 import { setStepIndicatorInfoForPetitionGeneratorAction } from '@web-client/presenter/actions/setStepIndicatorInfoForPetitionGeneratorAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -9,5 +10,6 @@ export const gotoUpdatedPetitionFlowSequence =
     setIrsNoticeUploadFormInfoAction,
     setStepIndicatorInfoForPetitionGeneratorAction,
     setupPetitionStateAction,
+    setDefaultCaseProcedureAction,
     setupCurrentPageAction('UpdatedFilePetition'),
   ]);

@@ -12,21 +12,18 @@ export const PetitionWelcomePage = () => (
       </a> with your case's docket number (e.g. 12345-67) to get access to
     your existing case.`,
       ]}
-      title="Have you already filed a petition by mail or want electronic access to
-    your existing case?"
+      title="Have you already filed a petition by mail or do you want electronic access to your existing case?"
     />
     <h2>Welcome to DAWSON!</h2>
     <div className="petitioner-flow-text">
       {`DAWSON (Docket Access Within a Secure Online Network) is the U.S. Tax
-      Court's electronic filing and case management system. The Court encourages
-      all petitioners to file their Petition (case) and all documents
-      electronically.`}
+      Court's electronic filing and case management system. The Court encourages all petitioners to file documents electronically.`}
     </div>
     <div className="petitioner-flow-text">DAWSON allows you to:</div>
     <div className="petitioner-flow-text">
       <ul style={{ marginBottom: '0px', marginTop: '0px' }}>
-        <li>Immediately receive a Case Docket number upon filing</li>
-        <li>File documents electronically</li>
+        <li>Immediately receive a docket number upon filing a Petition</li>
+        <li>File and view documents electronically</li>
         <li>Access your case documents over the internet</li>
         <li>
           Receive email notifications anytime there is activity in your case
@@ -36,7 +33,7 @@ export const PetitionWelcomePage = () => (
     <div className="petitioner-flow-text">
       {`To create a case, you'll need to submit a Petition to the Court. After the
       Petition is processed by the Court, you'll be able to view the status of
-      your case, submit new documents (such as evidence) and perform other
+      your case, submit new documents and perform other
       actions.`}
     </div>
     <Button

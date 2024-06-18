@@ -1,6 +1,5 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { ProcedureType } from '@web-client/views/StartCase/ProcedureType';
 import { TrialCity } from '@web-client/views/StartCase/TrialCity';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
@@ -73,13 +72,9 @@ export const UpdatedFilePetitionStep4 = connect(
             <div>
               <h2>U.S. Tax Court trial locations</h2>
               <div className="max-width-900 tax-case-info">
-                {form.procedureType === PROCEDURE_TYPES_MAP.regular
-                  ? `This is your preferred location where your case may be heard if
-                it goes to trial. Trial locations are unavailable in the
-                following states: DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY.`
-                  : `This is your preferred location where your case may be heard if
-                it goes to trial. Trial locations are unavailable in the
-                following states:  DE, NH, NJ, RI.`}
+                This is your preferred location where your case may be heard if
+                it goes to trial. Trial locations may vary based on case
+                procedure selected.
                 <span>
                   {' '}
                   <Button
