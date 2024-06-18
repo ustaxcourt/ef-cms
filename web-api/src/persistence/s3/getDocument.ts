@@ -8,7 +8,7 @@ export const getDocument = async ({
   applicationContext: ServerApplicationContext;
   key: string;
   useTempBucket?: boolean;
-}): Promise<Uint8Array> => {
+}): Promise<Buffer> => {
   const response = await applicationContext.getStorageClient().getObject({
     Bucket: useTempBucket
       ? applicationContext.environment.tempDocumentsBucketName
@@ -19,6 +19,7 @@ export const getDocument = async ({
   if (!response.Body) {
     throw new Error(`Unable to get document (${key}) from persistence.`);
   }
+  const string = await response.Body.transformToString();
 
-  return await response.Body.transformToByteArray();
+  return Buffer.from(string);
 };
