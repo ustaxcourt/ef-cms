@@ -1,5 +1,4 @@
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
-import { pinkLog } from '@shared/tools/pinkLog';
 
 export const generatePdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
@@ -65,7 +64,6 @@ export const generatePdfFromHtmlInteractor = async (
   const textDecoder = new TextDecoder('utf-8');
   const responseStr = textDecoder.decode(response.Payload);
   const key = JSON.parse(responseStr);
-  pinkLog('generatePdfFromHtmlInteractor key', key);
 
   return await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,

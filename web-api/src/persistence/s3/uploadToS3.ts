@@ -1,6 +1,8 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Upload } from '@aws-sdk/lib-storage';
 
+// TODO 10336: Put behind getStorageGateway().uploadDocument?
+// applicationContext.getPersistenceGateway().getDocument => applicationContext.getStorageGateway().getDocument?
 export const uploadToS3 = async ({
   applicationContext,
   pdfData,

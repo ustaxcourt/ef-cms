@@ -1,5 +1,4 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { pinkLog } from '@shared/tools/pinkLog';
 
 export const saveFileAndGenerateUrl = async ({
   applicationContext,
@@ -31,8 +30,6 @@ export const saveFileAndGenerateUrl = async ({
     useTempBucket,
   });
 
-  pinkLog('saveFileAndGenerateUrl 1');
-
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
@@ -41,7 +38,6 @@ export const saveFileAndGenerateUrl = async ({
       urlTtl,
       useTempBucket,
     });
-  pinkLog('saveFileAndGenerateUrl 2 url', url);
 
   return { fileId, url };
 };
