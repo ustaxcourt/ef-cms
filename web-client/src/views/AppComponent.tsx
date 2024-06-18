@@ -21,6 +21,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { ChangePassword } from '@web-client/views/Login/ChangePassword';
+import { ColdCaseReport } from '@web-client/views/ColdCaseReport/ColdCaseReport';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -92,6 +93,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -125,6 +127,7 @@ const pages = {
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
   ChangePassword,
+  ColdCaseReport,
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,
@@ -189,6 +192,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -219,9 +223,11 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
-    const focusMain = e => {
+    const focusMain = (e?: any) => {
       e && e.preventDefault();
-      const header = window.document.querySelector('#main-content h1');
+      const header = window.document.querySelector(
+        '#main-content h1',
+      ) as HTMLElement;
       if (header) header.focus();
       return;
     };

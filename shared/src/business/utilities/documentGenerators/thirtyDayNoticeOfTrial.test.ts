@@ -12,6 +12,7 @@ describe('ThirtyDayNoticeOfTrial In Person', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Davonte McGill',
+          dateServed: '' as unknown as string,
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
@@ -40,6 +41,7 @@ describe('ThirtyDayNoticeOfTrial In Person', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Davonte McGill',
+          dateServed: '' as unknown as string,
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
@@ -70,6 +72,7 @@ describe('ThirtyDayNoticeOfTrial Standalone Remote', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Davonte McGill',
+          dateServed: '' as unknown as string,
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
@@ -93,6 +96,7 @@ describe('ThirtyDayNoticeOfTrial Standalone Remote', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Davonte McGill',
+          dateServed: '' as unknown as string,
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
@@ -118,6 +122,7 @@ describe('ThirtyDayNoticeOfTrial Remote', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Davonte McGill',
+          dateServed: '' as unknown as string,
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
@@ -142,6 +147,7 @@ describe('ThirtyDayNoticeOfTrial Remote', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Davonte McGill',
+          dateServed: '' as unknown as string,
           docketNumberWithSuffix: '123-45S',
           judgeName: 'Chief Special Trial Judge Carluzzo',
           nameOfClerk: 'Stephanie A. Servoss',
