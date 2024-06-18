@@ -32,7 +32,7 @@ describe('IRS Practitioner files Entry of Appearance as First IRS Document', () 
         cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should(
           'exist',
         );
-        cy.get('[data-testid="request-access-review-submit-document"]').click();
+        cy.get('[data-testid="submit-entry-of-appearance-button"]').click();
 
         cy.get('[data-testid="document-download-link-EA"]').should(
           'contain.text',

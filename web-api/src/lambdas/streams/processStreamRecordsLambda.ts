@@ -1,5 +1,5 @@
 import { createApplicationContext } from '@web-api/applicationContext';
-import { shouldProcessRecord } from '@shared/business/useCases/processStreamRecords/processStreamUtilities';
+import { shouldProcessRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 const applicationContext = createApplicationContext({});

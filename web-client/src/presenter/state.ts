@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
-import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
-import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
+import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
@@ -20,6 +20,7 @@ import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
+import { caseAssociationRequestHelper } from './computeds/caseAssociationRequestHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
@@ -115,7 +116,6 @@ import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { reportMenuHelper } from './computeds/reportMenuHelper';
-import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -196,6 +196,10 @@ export const computeds = {
   blockedCasesReportHelper: blockedCasesReportHelper as unknown as ReturnType<
     typeof blockedCasesReportHelper
   >,
+  caseAssociationRequestHelper:
+    caseAssociationRequestHelper as unknown as ReturnType<
+      typeof caseAssociationRequestHelper
+    >,
   caseDeadlineReportHelper: caseDeadlineReportHelper as unknown as ReturnType<
     typeof caseDeadlineReportHelper
   >,
@@ -467,9 +471,6 @@ export const computeds = {
     >,
   reportMenuHelper: reportMenuHelper as unknown as ReturnType<
     typeof reportMenuHelper
-  >,
-  requestAccessHelper: requestAccessHelper as unknown as ReturnType<
-    typeof requestAccessHelper
   >,
   reviewSavedPetitionHelper: reviewSavedPetitionHelper as unknown as ReturnType<
     typeof reviewSavedPetitionHelper

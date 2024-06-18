@@ -14,7 +14,7 @@ import { setProgressForFileUploadAction } from '@web-client/presenter/actions/se
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitCaseAssociationRequestAction } from '../actions/FileDocument/submitCaseAssociationRequestAction';
-import { unsetRequestAccessWizardStepAction } from '../actions/unsetRequestAccessWizardStepAction';
+import { unsetCaseAssociationRequestWizardStepAction } from '../actions/unsetCaseAssociationRequestWizardStepAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 export const submitCaseAssociationRequestSequence = debounceSequenceDecorator(
@@ -34,7 +34,7 @@ export const submitCaseAssociationRequestSequence = debounceSequenceDecorator(
         closeFileUploadStatusModalAction,
         getPrintableFilingReceiptSequence,
         getFileExternalDocumentAlertSuccessAction,
-        unsetRequestAccessWizardStepAction,
+        unsetCaseAssociationRequestWizardStepAction,
         setAlertSuccessAction,
         setSaveAlertsForNavigationAction,
         navigateToCaseDetailAction,
