@@ -15,18 +15,6 @@ export async function zipDocuments(
     useTempBucket: boolean;
   },
 ): Promise<void> {
-  // download all s3 files
-  const files = await Promise.all(
-    documents.map(async document => {
-      const pdf = await applicationContext.getPersistenceGateway().getDocument({
-        applicationContext,
-        key: document.documentId,
-        useTempBucket,
-      });
-      return { filePathInZip: document.filePathInZip, pdf };
-    }),
-  );
-
   const passThrough = new PassThrough();
 
   const upload = new Upload({
@@ -37,30 +25,32 @@ export async function zipDocuments(
       Key: outputZipName,
     },
   });
-
   upload.on('httpUploadProgress', progress => {
     console.log('s3 upload progress: ', progress);
   });
 
-  // combine downloaded files into a zip document
   const zip = archiver('zip');
-  zip.on('close', () => {
-    console.log('archiving is close');
-  });
-  zip.on('finish', () => {
-    console.log('archiving is finish');
-  });
   zip.on('error', err => {
-    console.log('archiving ERROR!!!!');
+    console.log(
+      `Error while creating zip file: ${outputZipName}. Zipping files:${documents.map(doc => ` ${doc.documentId}`)}`,
+    );
     throw err;
   });
-
-  files.map(file =>
-    zip.append(Buffer.from(file.pdf), { name: file.filePathInZip }),
-  );
   zip.pipe(passThrough);
-  await zip.finalize();
 
+  await Promise.all(
+    documents.map(async document => {
+      const pdf = await applicationContext.getPersistenceGateway().getDocument({
+        applicationContext,
+        key: document.documentId,
+        useTempBucket,
+      });
+
+      zip.append(Buffer.from(pdf), { name: document.filePathInZip });
+    }),
+  );
+
+  await zip.finalize();
   await upload.done();
 }
 
