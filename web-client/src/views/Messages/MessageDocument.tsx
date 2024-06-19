@@ -52,7 +52,6 @@ export const MessageDocument = connect(
             Edit
           </Button>
         )}
-
         {messageDocumentHelper.showEditButtonSigned && (
           <Button
             link
@@ -69,7 +68,6 @@ export const MessageDocument = connect(
             Edit
           </Button>
         )}
-
         {messageDocumentHelper.showEditCorrespondenceButton && (
           <Button
             link
@@ -79,7 +77,6 @@ export const MessageDocument = connect(
             Edit
           </Button>
         )}
-
         {messageDocumentHelper.showApplySignatureButton && (
           <Button
             link
@@ -89,7 +86,6 @@ export const MessageDocument = connect(
             Apply Signature
           </Button>
         )}
-
         {messageDocumentHelper.showRemoveSignatureButton && (
           <Button
             link
@@ -103,7 +99,6 @@ export const MessageDocument = connect(
             Remove Signature
           </Button>
         )}
-
         {messageDocumentHelper.showAddDocketEntryButton && (
           <Button
             link
@@ -113,7 +108,6 @@ export const MessageDocument = connect(
             Add Docket Entry
           </Button>
         )}
-
         {messageDocumentHelper.showServeCourtIssuedDocumentButton && (
           <Button
             link
@@ -129,7 +123,6 @@ export const MessageDocument = connect(
             Serve
           </Button>
         )}
-
         {messageDocumentHelper.showServePaperFiledDocumentButton && (
           <Button
             link
@@ -145,7 +138,6 @@ export const MessageDocument = connect(
             Serve
           </Button>
         )}
-
         {messageDocumentHelper.showServePetitionButton && (
           <Button
             link
@@ -156,7 +148,6 @@ export const MessageDocument = connect(
             Review and Serve Petition
           </Button>
         )}
-
         {messageDocumentHelper.showSignStipulatedDecisionButton && (
           <Button
             link
@@ -166,7 +157,6 @@ export const MessageDocument = connect(
             Sign Stipulated Decision
           </Button>
         )}
-
         {messageDocumentHelper.showApplyStampButton && (
           <Button
             link
@@ -178,6 +168,19 @@ export const MessageDocument = connect(
             }}
           >
             Apply Stamp
+          </Button>
+        )}
+        {messageDocumentHelper.showOrderResponseButton && (
+          <Button
+            link
+            icon="edit"
+            onClick={() => {
+              navigateToPathSequence({
+                path: messageDocumentHelper.orderResponseFromMessagesLink,
+              });
+            }}
+          >
+            Order Response
           </Button>
         )}
 

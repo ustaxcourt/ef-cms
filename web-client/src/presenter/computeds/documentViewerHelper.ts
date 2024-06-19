@@ -12,6 +12,7 @@ export const documentViewerHelper = (
 ): any => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
@@ -98,6 +99,12 @@ export const documentViewerHelper = (
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
+  const showOrderResponseButton =
+    permissions.ORDER_RESPONSE &&
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
+      formattedDocumentToDisplay.eventCode,
+    );
+
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
@@ -105,6 +112,7 @@ export const documentViewerHelper = (
     showApplyStampButton,
     showCompleteQcButton,
     showNotServed,
+    showOrderResponseButton,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
