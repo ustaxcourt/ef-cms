@@ -2,6 +2,7 @@ import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
+  SCRAPING_ENABLED_EVENT_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -252,6 +253,26 @@ export const fileAndServeCourtIssuedDocument = async (
     },
     userId: user.userId,
   });
+
+  const shouldScrapePDFContents =
+    !docketEntryToServe.documentContents &&
+    SCRAPING_ENABLED_EVENT_CODES.includes(docketEntryToServe.eventCode);
+
+  if (shouldScrapePDFContents) {
+    const { Body: pdfBuffer } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: docketEntryToServe.docketEntryId,
+      })
+      .promise();
+
+    const contents: string = await applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
+
+    docketEntryToServe.documentContents = `${contents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
+  }
 };
 
 export const determineEntitiesToLock = (
