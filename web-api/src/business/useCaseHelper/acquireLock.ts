@@ -1,6 +1,7 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const checkLock = async ({
   applicationContext,
@@ -131,6 +132,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
   interactor: (
     applicationContext: ServerApplicationContext,
     options: InteractorInput,
+    authorizedUser: UnknownAuthUser,
   ) => Promise<InteractorOutput>,
   getLockInfo: (
     applicationContext: ServerApplicationContext,
@@ -142,10 +144,12 @@ export function withLocking<InteractorInput, InteractorOutput>(
 ): (
   applicationContext: ServerApplicationContext,
   options: InteractorInput,
+  authorizedUser: UnknownAuthUser,
 ) => Promise<InteractorOutput> {
   return async function (
     applicationContext: ServerApplicationContext,
     options: InteractorInput,
+    authorizedUser: UnknownAuthUser,
   ) {
     const { identifiers, ttl } = await getLockInfo(applicationContext, options);
 
@@ -160,7 +164,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
     let caughtError;
     let results: InteractorOutput;
     try {
-      results = await interactor(applicationContext, options);
+      results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
       caughtError = err;
     }
