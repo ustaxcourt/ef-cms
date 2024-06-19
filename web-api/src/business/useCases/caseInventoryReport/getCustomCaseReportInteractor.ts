@@ -60,9 +60,9 @@ export type CustomCaseReportSearchAfter = {
 export const getCustomCaseReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCustomCaseReportRequest,
-  user: UnknownAuthUser,
+  authorizedUser: UnknownAuthUser,
 ): Promise<GetCustomCaseReportResponse> => {
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 
