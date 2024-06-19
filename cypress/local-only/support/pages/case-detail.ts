@@ -7,7 +7,7 @@ export const getActionMenuButton = () => {
 };
 
 export const getEditCaseCaptionButton = () => {
-  return cy.get('button#menu-edit-case-context-button');
+  return cy.get('[data-testid="menu-edit-case-context-button"]');
 };
 
 export const getCaptionTextArea = () => {
