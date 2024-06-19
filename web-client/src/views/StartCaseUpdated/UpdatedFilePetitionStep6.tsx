@@ -314,7 +314,7 @@ function IRSNoticeInformation({ petitionFormatted }) {
           {petitionFormatted.hasIrsNotice &&
             petitionFormatted.irsNotices.map((irsNotice, index) => (
               <div
-                className="tablet:grid-col-2 line-height-2"
+                className="tablet:grid-col-2 line-height-2 margin-bottom-105"
                 key={`${irsNotice.caseType}`}
               >
                 <div className="margin-bottom-1 semi-bold">
@@ -418,9 +418,11 @@ const CardHeader = connect(
   },
   function CardHeader({ step, title, updateStepIndicatorSequence }) {
     return (
-      <h3>
-        {step}. {title}
-        <span>
+      <h3 className="create-petition-review-step-title">
+        <div>
+          {step}. {title}
+        </div>
+        <div>
           <Button
             link
             className="margin-left-2 padding-0"
@@ -431,7 +433,7 @@ const CardHeader = connect(
           >
             Edit
           </Button>
-        </span>
+        </div>
       </h3>
     );
   },
