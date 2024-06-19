@@ -22,7 +22,7 @@ export const Paginator = ({
     <>
       <nav
         aria-label="Pagination"
-        className="usa-pagination margin-bottom-0"
+        className="usa-pagination margin-bottom-0 margin-top-0"
         id={id}
       >
         <ReactPaginate
