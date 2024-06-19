@@ -75,10 +75,6 @@ describe('generatePrintablePendingReportInteractor', () => {
   ];
 
   beforeAll(() => {
-    // applicationContext.getStorageClient.mockReturnValue({
-    //   upload: jest.fn((params, callback) => callback()),
-    // });
-
     applicationContext
       .getPersistenceGateway()
       .fetchPendingItems.mockResolvedValue({
