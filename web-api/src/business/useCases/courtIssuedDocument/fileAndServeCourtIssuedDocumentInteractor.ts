@@ -254,11 +254,18 @@ export const fileAndServeCourtIssuedDocument = async (
     userId: user.userId,
   });
 
+  // TODO: I think we still need to download the contents file from s3 using documentContentsId if it is set.
+
   const shouldScrapePDFContents =
     !docketEntryToServe.documentContents &&
-    SCRAPING_ENABLED_EVENT_CODES.includes(docketEntryToServe.eventCode);
+    SCRAPING_ENABLED_EVENT_CODES.includes(form.eventCode);
+
+  console.log('--------');
+  console.log(shouldScrapePDFContents);
+  console.log(docketEntryToServe);
 
   if (shouldScrapePDFContents) {
+    // TODO: look into if we can just use stampedPdf directly instead re-fetching it back from s3
     const { Body: pdfBuffer } = await applicationContext
       .getStorageClient()
       .getObject({
