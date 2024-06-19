@@ -2268,3 +2268,23 @@ button.change-scanner-button {
 .list-style-disc {
   list-style-type: disc;
 }
+
+.before-case-button {
+	margin-top: 2.5rem;
+}
+
+.before-case-follow-up-button {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    margin-top: 1.25rem;
+  }
+}
+
+.create-petition-navigation-buttons {
+	margin-top: 2.5rem;
+}
+
+.create-petition-navigation-follow-up-buttons {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    margin-top: 1.25rem;
+  }
+}
