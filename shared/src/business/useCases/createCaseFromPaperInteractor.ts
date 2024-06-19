@@ -81,9 +81,8 @@ export const createCaseFromPaperInteractor = async (
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
