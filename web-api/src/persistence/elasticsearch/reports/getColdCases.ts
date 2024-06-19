@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import {
   FORMATS,
@@ -98,7 +99,18 @@ export async function getColdCases({
   });
 
   entriesOfNotAtIssueCases.body.hits.hits.sort((a, b) => {
-    return a._source.filingDate.S.localeCompare(b._source.filingDate.S);
+    const compareFilingDate = a._source.filingDate.S.localeCompare(
+      b._source.filingDate.S,
+    );
+
+    if (compareFilingDate === 0) {
+      return Case.docketNumberSort(
+        a._source.docketNumber.S,
+        b._source.docketNumber.S,
+      );
+    } else {
+      return compareFilingDate;
+    }
   });
 
   const { results } = formatResults(entriesOfNotAtIssueCases.body) as {
