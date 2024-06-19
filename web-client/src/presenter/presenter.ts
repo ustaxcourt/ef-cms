@@ -59,6 +59,7 @@ import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalF
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
+import { clearStatusReportOrderResponseFormSequence } from './sequences/clearStatusReportOrderResponseFormSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
@@ -177,6 +178,7 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
+import { gotoOrderResponseSequence } from './sequences/gotoOrderResponseSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -660,6 +662,8 @@ export const presenterSequences = {
     clearPreferredTrialCitySequence as unknown as Function,
   clearSelectedWorkItemsSequence:
     clearSelectedWorkItemsSequence as unknown as Function,
+  clearStatusReportOrderResponseFormSequence:
+    clearStatusReportOrderResponseFormSequence as unknown as Function,
   clearViewerDocumentToDisplaySequence:
     clearViewerDocumentToDisplaySequence as unknown as Function,
   closeModalAndNavigateBackSequence:
@@ -854,6 +858,8 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
+  // TODO fix typing
+  gotoOrderResponseSequence: gotoOrderResponseSequence as unknown as Function,
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
