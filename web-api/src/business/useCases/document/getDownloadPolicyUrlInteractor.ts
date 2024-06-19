@@ -1,11 +1,11 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 

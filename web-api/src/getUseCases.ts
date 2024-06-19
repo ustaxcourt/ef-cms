@@ -95,7 +95,7 @@ import { getDocumentQCInboxForSectionInteractor } from './business/useCases/work
 import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
 import { getDocumentQCServedForSectionInteractor } from './business/useCases/workItems/getDocumentQCServedForSectionInteractor';
 import { getDocumentQCServedForUserInteractor } from './business/useCases/workItems/getDocumentQCServedForUserInteractor';
-import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
+import { getDownloadPolicyUrlInteractor } from './business/useCases/document/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
 import { getInboxMessagesForSectionInteractor } from './business/useCases/messages/getInboxMessagesForSectionInteractor';
