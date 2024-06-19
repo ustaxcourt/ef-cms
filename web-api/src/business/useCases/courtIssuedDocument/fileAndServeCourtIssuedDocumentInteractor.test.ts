@@ -580,4 +580,42 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       key: mockDocketEntryId,
     });
   });
+
+  it('should attempt to scrape the pdf if event code is scrape enabled', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [],
+      form: {
+        ...caseRecord.docketEntries[0],
+        documentType: 'Notice',
+        eventCode: 'O',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not attempt to scrape the pdf if event code is non-scrapable', async () => {
+    mockDocketEntryWithWorkItem.eventCode = 'EXH';
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [],
+      form: {
+        ...caseRecord.docketEntries[0],
+        documentType: 'Notice',
+        eventCode: 'EXH',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).not.toHaveBeenCalled();
+  });
 });
