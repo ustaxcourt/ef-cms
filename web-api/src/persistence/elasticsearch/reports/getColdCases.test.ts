@@ -41,6 +41,34 @@ describe('getColdCases', () => {
                   S: '2023-08-25T04:00:00.000Z',
                 },
                 docketNumber: {
+                  S: '101-24',
+                },
+              },
+              inner_hits: {
+                most_recent_child: {
+                  hits: {
+                    hits: [
+                      {
+                        _source: {
+                          eventCode: {
+                            S: 'O',
+                          },
+                          filingDate: {
+                            S: '2023-08-25T04:00:00.000Z',
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+            {
+              _source: {
+                createdAt: {
+                  S: '2023-08-25T04:00:00.000Z',
+                },
+                docketNumber: {
                   S: '101-20',
                 },
               },
@@ -78,6 +106,12 @@ describe('getColdCases', () => {
         docketNumber: '101-20',
         eventCode: 'A',
         filingDate: '08/25/2019',
+      },
+      {
+        createdAt: '08/25/2023',
+        docketNumber: '101-24',
+        eventCode: 'O',
+        filingDate: '08/25/2023',
       },
       {
         createdAt: '08/25/2023',

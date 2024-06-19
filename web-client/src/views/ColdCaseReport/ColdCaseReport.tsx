@@ -21,7 +21,7 @@ export const ColdCaseReport = connect(
             <h1>Cold Case Report</h1>
           </div>
 
-          <div className="margin-bottom-3">
+          <div className="margin-bottom-2">
             Showing cases not at issue with no activity in the last 120 days,
             sorted by date of the last docket entry.
           </div>
