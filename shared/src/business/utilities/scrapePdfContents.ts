@@ -12,6 +12,11 @@ export const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
   try {
     pdfjsLib = await applicationContext.getPdfJs();
 
+    // TODO: REMOVE ME BEFORE FINISHING STORY
+    if (process.env.ERROR_DURING_SCRAPE) {
+      throw new Error('FAKE ERROR');
+    }
+
     const document = await pdfjsLib.getDocument(pdfBuffer).promise;
 
     let scrapedText = '';

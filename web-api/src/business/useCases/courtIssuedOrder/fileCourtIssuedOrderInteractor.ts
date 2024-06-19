@@ -45,31 +45,11 @@ export const fileCourtIssuedOrder = async (
     });
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const shouldScrapePDFContents = !documentMetadata.documentContents;
-
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
     if (documentMetadata.draftOrderState) {
       documentMetadata.draftOrderState.freeText =
         documentMetadata.documentTitle;
-    }
-  }
-
-  if (shouldScrapePDFContents) {
-    const { Body: pdfBuffer } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: primaryDocumentFileId,
-      })
-      .promise();
-
-    const contents = await applicationContext
-      .getUseCaseHelpers()
-      .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
-
-    if (contents) {
-      documentMetadata.documentContents = contents;
     }
   }
 
