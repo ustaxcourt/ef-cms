@@ -795,34 +795,36 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/request-access',
+      '/case-detail/*/case-association-request',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Request access`,
+          `${getPageTitleDocketPrefix(docketNumber)} Represent a Party`,
         );
-        if (app.getState('wizardStep') === 'RequestAccessReview') {
+        if (app.getState('wizardStep') === 'CaseAssociationRequestReview') {
           return app.getSequence('chooseWizardStepSequence')({
-            value: 'RequestAccess',
+            value: 'CaseAssociationRequest',
           });
         } else {
-          return app.getSequence('gotoRequestAccessSequence')({ docketNumber });
+          return app.getSequence('gotoCaseAssociationRequestSequence')({
+            docketNumber,
+          });
         }
       }),
     );
 
     registerRoute(
-      '/case-detail/*/request-access/review',
+      '/case-detail/*/case-association-request/review',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Request access review`,
+          `${getPageTitleDocketPrefix(docketNumber)} Represent a Party review`,
         );
         if (!app.getState('wizardStep')) {
           return app.getSequence('navigateToPathSequence')({
-            path: `/case-detail/${docketNumber}/request-access`,
+            path: `/case-detail/${docketNumber}/case-association-request`,
           });
         } else {
           return app.getSequence('chooseWizardStepSequence')({
-            value: 'RequestAccessReview',
+            value: 'CaseAssociationRequestReview',
           });
         }
       }),
@@ -1127,11 +1129,6 @@ const router = {
           path: BASE_ROUTE,
         });
       }
-    });
-
-    registerRoute('/log-in...', () => {
-      setPageTitle('Login');
-      return app.getSequence('gotoOldLoginSequence')();
     });
 
     registerRoute('/forgot-password', () => {
