@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * getBlockedCasesInteractor
@@ -15,9 +16,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const getBlockedCasesInteractor = async (
   applicationContext: IApplicationContext,
   { trialLocation }: { trialLocation: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
