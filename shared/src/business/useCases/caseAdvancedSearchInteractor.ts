@@ -8,6 +8,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { caseSearchFilter } from '../utilities/caseFilter';
 import {
   createEndOfDayISO,
@@ -31,8 +32,8 @@ export const caseAdvancedSearchInteractor = async (
     petitionerState,
     startDate,
   }: CaseAdvancedSearchParamsRequestType,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
   let searchStartDate;
   let searchEndDate;
 
