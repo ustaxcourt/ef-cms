@@ -11,6 +11,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
@@ -58,7 +59,7 @@ export type CustomCaseReportSearchAfter = {
 };
 
 export const getCustomCaseReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   params: GetCustomCaseReportRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<GetCustomCaseReportResponse> => {

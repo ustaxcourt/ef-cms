@@ -2,7 +2,7 @@
 import {
   PreviousTerm,
   TrialLocationData,
-} from '@shared/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
+} from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
