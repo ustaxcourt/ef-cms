@@ -37,7 +37,7 @@ export const SessionNotes = connect(
               <h3 className="display-inline">Session Notes</h3>
               {sessionNotes && (
                 <>
-                  <div className="margin-top-1  margin-bottom-4">
+                  <div>
                     <PreformattedText text={sessionNotes} />
                   </div>
                   <div className="grid-row">
