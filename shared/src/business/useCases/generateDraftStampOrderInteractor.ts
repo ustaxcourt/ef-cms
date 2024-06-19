@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * generateDraftStampOrderInteractor
@@ -32,10 +33,9 @@ export const generateDraftStampOrderInteractor = async (
     stampData: any;
     stampedDocketEntryId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.STAMP_MOTION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.STAMP_MOTION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
