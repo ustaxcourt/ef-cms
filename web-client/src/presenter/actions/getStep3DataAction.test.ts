@@ -13,7 +13,11 @@ describe('getStep3DataAction', () => {
           testProps: 'testProps',
         },
         irsNoticeUploadFormInfo: [
-          { caseType: 'IRS_NOTICE_CASE_TYPE', file: {} },
+          {
+            caseType: 'IRS_NOTICE_CASE_TYPE',
+            file: {},
+            noticeIssuedDate: '2024-06-04T00:00:00.000-04:00',
+          },
           {},
           {},
         ],
@@ -25,7 +29,16 @@ describe('getStep3DataAction', () => {
       caseType: 'IRS_NOTICE_CASE_TYPE',
       hasIrsNotice: 'TEST_hasIrsNotice',
       hasUploadedIrsNotice: true,
-      irsNotices: [{ caseType: 'IRS_NOTICE_CASE_TYPE', file: {} }, {}, {}],
+      irsNotices: [
+        {
+          caseType: 'IRS_NOTICE_CASE_TYPE',
+          file: {},
+          noticeIssuedDate: '2024-06-04T00:00:00.000-04:00',
+          noticeIssuedDateFormatted: '06/04/24',
+        },
+        {},
+        {},
+      ],
       irsNoticesRedactionAcknowledgement:
         'TEST_irsNoticesRedactionAcknowledgement',
     });

@@ -2268,3 +2268,15 @@ button.change-scanner-button {
 .list-style-disc {
   list-style-type: disc;
 }
+
+.alpha-list {
+  padding-left: 20px;
+  margin-top: 5px;
+  list-style-type: lower-alpha;
+}
+
+.alpha-list-items {
+  padding-bottom: 3px;
+  font-weight: 400;
+  line-height: 21px;
+}
