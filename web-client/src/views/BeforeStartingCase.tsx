@@ -269,14 +269,14 @@ export const BeforeStartingCase = connect(
             </Accordion>
           </div>
           <Button
-            className="margin-top-05"
+            className="before-case-button"
             data-testid="go-to-step-1"
             href={redirectUrl}
           >
             {"I'm Ready to Start"}
           </Button>
           <Button
-            className="margin-top-05"
+            className="before-case-button before-case-follow-up-button"
             data-testid="print-this-page"
             href="javascript:void(0);"
             secondary={true}
@@ -297,6 +297,7 @@ export const BeforeStartingCase = connect(
           </Button>
           <Button
             link
+            className="before-case-button before-case-follow-up-button"
             data-testid="cancel-before-starting-case"
             href="javascript:void(0);"
             id="cancel"

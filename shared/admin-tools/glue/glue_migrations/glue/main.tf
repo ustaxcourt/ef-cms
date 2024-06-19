@@ -65,7 +65,7 @@ resource "aws_iam_role_policy_attachment" "AWSGlueServiceRole" {
 }
 
 
-resource "aws_s3_bucket_object" "python_mock_emails" {
+resource "aws_s3_object" "python_mock_emails" {
   bucket = aws_s3_bucket.job_scripts.id
   key    = "mock_emails.py"
   source = "${path.module}/python_scripts/mock_emails.py"
@@ -89,7 +89,7 @@ resource "aws_glue_job" "mock_emails" {
   }
 
   command {
-    script_location = "s3://${aws_s3_bucket.job_scripts.bucket}/${aws_s3_bucket_object.python_mock_emails.id}"
+    script_location = "s3://${aws_s3_bucket.job_scripts.bucket}/${aws_s3_object.python_mock_emails.id}"
     python_version  = "3"
   }
 }

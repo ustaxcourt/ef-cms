@@ -259,7 +259,7 @@ export const CaseInfo = connect(
           className="orders-needed"
           role="list"
         >
-          <FormGroup role="listitem">
+          <div role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={form.orderForRatification}
@@ -282,8 +282,8 @@ export const CaseInfo = connect(
             >
               Order for Ratification of Petition
             </label>
-          </FormGroup>
-          <FormGroup role="listitem">
+          </div>
+          <div role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={form.noticeOfAttachments}
@@ -306,8 +306,8 @@ export const CaseInfo = connect(
             >
               Notice of Attachments in the Nature of Evidence
             </label>
-          </FormGroup>
-          <FormGroup role="listitem">
+          </div>
+          <div role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={form.orderForAmendedPetition}
@@ -330,7 +330,7 @@ export const CaseInfo = connect(
             >
               Order for Amended Petition
             </label>
-          </FormGroup>
+          </div>
           <div className="usa-form-group margin-bottom-0" role="listitem">
             <input
               aria-describedby="orders-needed"

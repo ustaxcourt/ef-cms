@@ -16,7 +16,7 @@ const verifyCorrectFileDocumentButton = (
     docketNumber,
     shouldShowFileDocumentButton = false,
     shouldShowFileFirstDocumentButton = false,
-    shouldShowRequestAccessToCaseButton = false,
+    shouldshowRepresentAPartyButton = false,
   },
 ) => {
   return it('should verify the correct filing button is displayed', async () => {
@@ -31,15 +31,13 @@ const verifyCorrectFileDocumentButton = (
     const {
       showFileDocumentButton,
       showFileFirstDocumentButton,
-      showRequestAccessToCaseButton,
+      showRepresentAPartyButton,
     } = runCompute(caseDetailHeaderHelper, {
       state: cerebralTest.getState(),
     });
     expect(showFileFirstDocumentButton).toBe(shouldShowFileFirstDocumentButton);
     expect(showFileDocumentButton).toBe(shouldShowFileDocumentButton);
-    expect(showRequestAccessToCaseButton).toBe(
-      shouldShowRequestAccessToCaseButton,
-    );
+    expect(showRepresentAPartyButton).toBe(shouldshowRepresentAPartyButton);
   });
 };
 
@@ -127,7 +125,7 @@ describe('External User files a document across a consolidated case group', () =
 
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
-      shouldShowRequestAccessToCaseButton: true,
+      shouldshowRepresentAPartyButton: true,
     });
   });
 
@@ -154,11 +152,11 @@ describe('External User files a document across a consolidated case group', () =
 
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
-      shouldShowRequestAccessToCaseButton: true,
+      shouldshowRepresentAPartyButton: true,
     });
 
     it('practitioner requests access to case', async () => {
-      await cerebralTest.runSequence('gotoRequestAccessSequence', {
+      await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
         docketNumber: consolidatedCaseDocketNumber3,
       });
 
@@ -193,7 +191,7 @@ describe('External User files a document across a consolidated case group', () =
       await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+      await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
