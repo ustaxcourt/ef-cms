@@ -3,7 +3,7 @@ import {
   COUNTRY_TYPES,
   CountryTypes,
 } from '@shared/business/entities/EntityConstants';
-import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareFormDataForCaseSearchApi = (

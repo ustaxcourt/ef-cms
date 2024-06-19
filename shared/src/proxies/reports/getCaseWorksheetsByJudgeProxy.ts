@@ -1,7 +1,7 @@
 import {
   GetCasesByStatusAndByJudgeRequest,
   GetCasesByStatusAndByJudgeResponse,
-} from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+} from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { get } from '../requests';
 
 export const getCaseWorksheetsByJudgeInteractor = (

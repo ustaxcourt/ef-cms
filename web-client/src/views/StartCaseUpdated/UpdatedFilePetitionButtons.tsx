@@ -61,7 +61,7 @@ export const UpdatedFilePetitionButtons = connect(
     return (
       <>
         <Button
-          className="margin-top-05"
+          className="create-petition-navigation-buttons"
           data-testid={`step-${currentStep}-next-button`}
           disabled={isNextButtonDisabled}
           onClick={e => {
@@ -77,7 +77,7 @@ export const UpdatedFilePetitionButtons = connect(
         {currentStep > 1 && (
           <Button
             secondary
-            className="margin-top-05"
+            className="create-petition-navigation-buttons create-petition-navigation-follow-up-buttons"
             onClick={() => {
               updatedFilePetitionGoBackAStepSequence();
             }}
@@ -87,7 +87,7 @@ export const UpdatedFilePetitionButtons = connect(
         )}
         <Button
           link
-          className="margin-top-05"
+          className="create-petition-navigation-buttons create-petition-navigation-follow-up-buttons"
           onClick={() => {
             formCancelToggleCancelSequence();
           }}

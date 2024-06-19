@@ -104,6 +104,7 @@ export const AddressDisplay = connect<
             <span
               aria-label="sealed address"
               className="sealed-address sealed-contact-icon"
+              role="img"
             >
               <FontAwesomeIcon
                 className="margin-right-05"

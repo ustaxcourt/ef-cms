@@ -54,7 +54,10 @@ export const AddPetitionerToCase = connect(
       <>
         <CaseDetailHeader />
 
-        <section className="usa-section grid-container">
+        <section
+          className="usa-section grid-container"
+          data-testid="add-petitioner-to-case-container"
+        >
           <ErrorNotification />
 
           <h2>Add Party</h2>
@@ -155,6 +158,7 @@ export const AddPetitionerToCase = connect(
               />
               <label
                 className="usa-checkbox__label"
+                data-testid="use-existing-address-checkbox"
                 htmlFor="use-same-address-above"
                 id="use-same-address-above-label"
               >

@@ -71,7 +71,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     const baseTitleClassName = 'accordion-item-title grid-col-8';
     const titleClassName = classNames(baseTitleClassName, customTitleClassName);
 
-    const mobileBaseTitleClassName = 'accordion-item-title grid-col-11';
+    const mobileBaseTitleClassName = 'accordion-item-title grid-col-10';
     const mobileTitleClassName = classNames(
       mobileBaseTitleClassName,
       customTitleClassName,

@@ -3,7 +3,7 @@ import {
   FileUploadProgressType,
   FileUploadProgressValueType,
 } from '@shared/business/entities/EntityConstants';
-import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
+import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCaseInteractor';
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 

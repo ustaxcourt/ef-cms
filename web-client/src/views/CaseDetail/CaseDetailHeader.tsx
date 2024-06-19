@@ -52,15 +52,14 @@ export const CaseDetailHeader = connect<
             </Button>
           )}
 
-          {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
+          {caseDetailHeaderHelper.showRepresentAPartyButton && (
             <Button
               secondary
               className="tablet-full-width push-right margin-right-0"
-              data-testid="button-request-access"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-              id="button-request-access"
+              data-testid="request-represent-a-party-button"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/case-association-request`}
             >
-              Request Access to Case
+              Represent a Party
             </Button>
           )}
 
@@ -102,14 +101,13 @@ export const CaseDetailHeader = connect<
             </Button>
           )}
 
-          {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
+          {caseDetailHeaderHelper.showRepresentAPartyButton && (
             <Button
               className="tablet-full-width margin-right-0"
-              data-testid="button-request-access-mobile"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-              id="button-request-access"
+              data-testid="request-represent-a-party-button-mobile"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/case-association-request`}
             >
-              Request Access to Case
+              Represent a Party
             </Button>
           )}
 
@@ -139,7 +137,7 @@ export const CaseDetailHeader = connect<
     return (
       <>
         {caseDetailHeaderHelper.showSealedCaseBanner && (
-          <div className="red-warning-header sealed-banner">
+          <div className="red-warning-header" data-testid="sealed-case-banner">
             <div className="grid-container text-bold">
               <Icon
                 aria-label="sealed case"
@@ -158,6 +156,7 @@ export const CaseDetailHeader = connect<
                 <div className="margin-bottom-1">
                   <h1
                     className="heading-2 captioned docket-number-header"
+                    data-testid="docket-number-header"
                     tabIndex={-1}
                   >
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
@@ -185,18 +184,19 @@ export const CaseDetailHeader = connect<
                           <span aria-hidden="true">Lead case</span>
                         </span>
                       )}
-                      <span
+                      <label
                         aria-label={`status: ${formattedCaseDetail.status}`}
                         className={classNames(
                           'usa-tag',
                           formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
                         )}
                         data-testid="case-status"
+                        htmlFor="case-status"
                       >
-                        <span aria-hidden="true">
+                        <span aria-hidden="true" id="case-status">
                           {formattedCaseDetail.status}
                         </span>
-                      </span>
+                      </label>
                       {formattedCaseDetail.associatedJudge && (
                         <span
                           aria-label="associated judge"

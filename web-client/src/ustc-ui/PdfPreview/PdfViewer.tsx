@@ -18,7 +18,7 @@ export const PdfViewer = connect(
       pdfProps.src = `${pdfProps.src}#toolbar=0`;
     }
 
-    return <iframe {...pdfProps} />;
+    return <iframe {...pdfProps} title="pdf" />;
   },
 );
 
