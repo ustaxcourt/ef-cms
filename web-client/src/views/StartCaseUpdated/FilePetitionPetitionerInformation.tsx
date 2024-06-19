@@ -49,7 +49,7 @@ export const FilePetitionPetitionerInformation = connect(
               (filingType, index) => {
                 return (
                   <div
-                    className="usa-radio margin-bottom-2 filing-type-radio-option"
+                    className="usa-radio margin-bottom-2 filing-type-radio-option max-width-fit-content"
                     key={filingType}
                   >
                     <input
@@ -322,7 +322,7 @@ function BusinessInfo({
             businessTypes.partnershipOtherThanTaxMatters,
             businessTypes.partnershipBBA,
           ].map((businessType, idx) => (
-            <div className="usa-radio" key={businessType}>
+            <div className="usa-radio max-width-fit-content" key={businessType}>
               <input
                 aria-describedby="business-type-legend"
                 checked={selectedBusinessType === businessType}
@@ -468,7 +468,7 @@ function OtherInfo({
             'Transferee',
             'Deceased Spouse',
           ].map((otherType, idx) => (
-            <div className="usa-radio" key={otherType}>
+            <div className="usa-radio max-width-fit-content" key={otherType}>
               <input
                 aria-describedby="other-type-legend"
                 checked={selectedOtherType === otherType}
@@ -560,7 +560,7 @@ function SecondaryEstateOptions({
             estateTypes.estateWithoutExecutor,
             estateTypes.trust,
           ].map((estateType, idx) => (
-            <div className="usa-radio" key={estateType}>
+            <div className="usa-radio max-width-fit-content" key={estateType}>
               <input
                 aria-describedby="estate-type-legend"
                 checked={selectedEstateType === estateType}
@@ -616,7 +616,10 @@ function SecondaryMinorIncompetentOptions({
             minorIncompetentTypes.nextFriendForMinor,
             minorIncompetentTypes.nextFriendForIncompetentPerson,
           ].map((minorIncompetentType, idx) => (
-            <div className="usa-radio" key={minorIncompetentType}>
+            <div
+              className="usa-radio max-width-fit-content"
+              key={minorIncompetentType}
+            >
               <input
                 aria-describedby="minorIncompetent-type-legend"
                 checked={selectedMinorIncompetentType === minorIncompetentType}
