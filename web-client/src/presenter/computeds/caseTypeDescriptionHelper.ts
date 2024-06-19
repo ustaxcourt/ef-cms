@@ -22,32 +22,52 @@ export const caseTypeDescriptionHelper = (
     CASE_TYPES,
   } = applicationContext.getConstants();
 
-  let caseTypesWithDisclosure = cloneDeep(CASE_TYPES);
+  const caseTypesWithDisclosure: string[] = cloneDeep(CASE_TYPES);
   caseTypesWithDisclosure.push('Disclosure1', 'Disclosure2');
 
-  let caseTypesWithDescriptions = [];
-  if (form.hasIrsNotice) {
-    caseTypesWithDisclosure.forEach(caseType => {
-      const caseDescription = CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];
-      if (caseDescription) {
-        caseTypesWithDescriptions.push({
-          description: caseDescription,
-          type: caseType,
-        });
-      }
-    });
-  } else {
-    caseTypesWithDisclosure.forEach(caseType => {
-      const caseDescription =
-        CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
-      if (caseDescription) {
-        caseTypesWithDescriptions.push({
-          description: caseDescription,
-          type: caseType,
-        });
-      }
-    });
-  }
+  const caseTypesWithDescriptions: { description: string; type: string }[] = [];
+  const caseTypeDescriptions = form.hasIrsNotice
+    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE
+    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE;
 
-  return { caseTypes: caseTypesWithDescriptions };
+  caseTypesWithDisclosure.forEach(caseType => {
+    const caseDescription = caseTypeDescriptions[caseType];
+    if (caseDescription) {
+      caseTypesWithDescriptions.push({
+        description: caseDescription,
+        type: caseType,
+      });
+    }
+  });
+
+  return {
+    caseTypes: form.hasIrsNotice
+      ? reorderCaseTypesForIrsNoticeCaseTypes(caseTypesWithDescriptions)
+      : caseTypesWithDescriptions,
+  };
 };
+
+function reorderCaseTypesForIrsNoticeCaseTypes(
+  caseTypes: { description: string; type: string }[],
+) {
+  const specificOrder = [
+    'Notice of Deficiency',
+    'Notice of Determination Concerning Collection Action',
+    'Other',
+  ];
+
+  const orderedItems: { description: string; type: string }[] = [];
+  const otherItems: { description: string; type: string }[] = [];
+
+  caseTypes.forEach(item => {
+    if (specificOrder.includes(item.description)) {
+      orderedItems[specificOrder.indexOf(item.description)] = item;
+    } else {
+      otherItems.push(item);
+    }
+  });
+
+  otherItems.sort((a, b) => a.description.localeCompare(b.description));
+
+  return [...orderedItems, ...otherItems];
+}
