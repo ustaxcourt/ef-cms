@@ -219,8 +219,8 @@ export const createApplicationContext = (
           maxAttempts: 3,
           region: environment.region,
           requestHandler: new NodeHttpHandler({
-            connectionTimeout: 3_000,
-            requestTimeout: 5_000,
+            connectionTimeout: 3000,
+            requestTimeout: 5000,
           }),
         });
       }
