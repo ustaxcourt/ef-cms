@@ -40,4 +40,16 @@ describe('addAnotherIrsNoticeToFormAction', () => {
       todayDate: TEST_NOW_DATE,
     });
   });
+
+  it('should not add a new IRS form into state when there is already 5 in the array', async () => {
+    const result = await runAction(addAnotherIrsNoticeToFormAction, {
+      modules: { presenter },
+      state: {
+        irsNoticeUploadFormInfo: [{}, {}, {}, {}, {}],
+      },
+    });
+
+    const { irsNoticeUploadFormInfo } = result.state;
+    expect(irsNoticeUploadFormInfo.length).toEqual(5);
+  });
 });

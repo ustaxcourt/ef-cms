@@ -60,7 +60,12 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
     irsNotices: joi.when('hasIrsNotice', {
       is: true,
       otherwise: joi.array().optional(),
-      then: joi.array().min(1).required().items(IrsNoticeForm.VALIDATION_RULES),
+      then: joi
+        .array()
+        .min(1)
+        .max(5)
+        .required()
+        .items(IrsNoticeForm.VALIDATION_RULES),
     }),
     irsNoticesRedactionAcknowledgement: joi.when('hasUploadedIrsNotice', {
       is: true,

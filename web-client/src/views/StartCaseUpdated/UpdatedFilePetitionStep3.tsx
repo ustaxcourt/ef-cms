@@ -160,19 +160,21 @@ export const UpdatedFilePetitionStep3 = connect(
                     </>
                   );
                 })}
-                <Button
-                  link
-                  className={classNames('padding-top-0', 'text-left')}
-                  data-testid="add-another-irs-notice-button"
-                  onClick={() => addAnotherIrsNoticeToFormSequence()}
-                >
-                  <Icon
-                    className="fa-icon-blue"
-                    icon={['fas', 'plus']}
-                    size="1x"
-                  />
-                  Add another IRS Notice
-                </Button>
+                {irsNoticeUploadFormInfo.length < 5 && (
+                  <Button
+                    link
+                    className={classNames('padding-top-0', 'text-left')}
+                    data-testid="add-another-irs-notice-button"
+                    onClick={() => addAnotherIrsNoticeToFormSequence()}
+                  >
+                    <Icon
+                      className="fa-icon-blue"
+                      icon={['fas', 'plus']}
+                      size="1x"
+                    />
+                    Add another IRS Notice
+                  </Button>
+                )}
                 {startCaseHelper.irsNoticeRequiresRedactionAcknowledgement && (
                   <div className="grid-row grid-gap margin-top-05">
                     <span className="margin-bottom-1 font-sans-pro">
