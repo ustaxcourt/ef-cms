@@ -66,6 +66,7 @@ export const OrderResponse = connect(
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
+                        // TODO "allCasesInGroup" should be selected by default
                         aria-describedby="issue-order-radios"
                         aria-label="all cases in group"
                         checked={form.issueOrder === 'allCasesInGroup'}
@@ -178,7 +179,7 @@ export const OrderResponse = connect(
                     </label>
                     <DateSelector
                       defaultValue=""
-                      disabled={!form.statusReportOrStipulatedDecision}
+                      disabled={!form.orderType}
                       formGroupClassNames="display-inline-block padding-0 margin-left-5"
                       id="status-report-due-date"
                       minDate={orderResponseHelper.minDate}
@@ -292,8 +293,8 @@ export const OrderResponse = connect(
                         <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
-                        aria-describedby="tk"
-                        aria-label="tk"
+                        aria-describedby="additional-order-text-label"
+                        aria-label="additional order text"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="additional-order-text"
@@ -332,7 +333,7 @@ export const OrderResponse = connect(
                       </label>
                       <textarea
                         aria-describedby="docket-entry-description-label"
-                        aria-label="custom text"
+                        aria-label="docket entry description"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="docket-entry-description"
@@ -340,6 +341,7 @@ export const OrderResponse = connect(
                         // maxLength={constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
                         name="docketEntryDescription"
                         type="text"
+                        // TODO default value of this field should be just the string "Order"
                         value={form.docketEntryDescription}
                         onChange={e => {
                           updateFormValueSequence({
@@ -349,7 +351,7 @@ export const OrderResponse = connect(
                         }}
                       ></textarea>
                       {/*
-                      TODO does this need character limit hint
+                      TODO does this need character limit hint?
                       <CharactersRemainingHint
                         maxCharacters={
                           constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS
@@ -374,6 +376,9 @@ export const OrderResponse = connect(
 
               <div className="margin-bottom-1 display-flex flex-justify-end">
                 <Button
+                  // TODO this button must be disabled if none of the following fields
+                  // are populated: orderType, jusidiction, striken from the record
+                  // check box, or additional order text
                   className="margin-right-0"
                   data-testid="save-signature-button"
                   // disabled={!applyStampFormHelper.canSaveStampOrder}
