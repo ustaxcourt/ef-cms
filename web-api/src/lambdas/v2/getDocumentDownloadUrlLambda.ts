@@ -1,4 +1,6 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getDownloadPolicyUrlInteractor } from '@shared/business/useCases/getDownloadPolicyUrlInteractor';
 import { marshallDocumentDownloadUrl } from './marshallers/marshallDocumentDownloadUrl';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
@@ -9,19 +11,26 @@ import { v2ApiWrapper } from './v2ApiWrapper';
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getDocumentDownloadUrlLambda = (event, options = {}) =>
+export const getDocumentDownloadUrlLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+  options = {},
+) =>
   genericHandler(
     event,
     ({ applicationContext }) => {
       return v2ApiWrapper(async () => {
-        const urlObject = await applicationContext
-          .getUseCases()
-          .getDownloadPolicyUrlInteractor(applicationContext, {
+        const urlObject = await getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
             ...event.pathParameters,
-          });
+          },
+          authorizedUser,
+        );
 
         return marshallDocumentDownloadUrl(urlObject);
       });
     },
+    authorizedUser,
     options,
   );
