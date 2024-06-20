@@ -14,16 +14,13 @@ character length similar to "Additional order text" above?
 
 2. Update OrderResponse component to display validation messages (sequence, actions)
 
-3. Get "Cancel" button working to successfully take the user back the the page
-they were previously on
-
-4. Get logic working that conditionally includes the question that only applies
+3. Get logic working that conditionally includes the question that only applies
 to lead cases
 
-5. Get logic working that conditionally allows the user to it the "Save as Draft"
+4. Get logic working that conditionally allows the user to it the "Save as Draft"
 button depending on whether the minimum amount of fields are populated
 
-6. Figure out how to handle the side-by-side form and in-progress PDF situation
+5. Figure out how to handle the side-by-side form and in-progress PDF situation
 
 ## Notes
 
