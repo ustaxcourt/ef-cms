@@ -90,6 +90,24 @@ describe('File a petition - Step 3 IRS Notices', () => {
         cy.get('[data-testid="step-3-next-button"]').click();
         cy.get('[data-testid="step-indicator-current-step-4-icon"]');
       });
+
+      it('should remove the "Add another IRS Notice" Button when there are 5 IRS Notice already', () => {
+        cy.get('[data-testid="add-another-irs-notice-button"]').should('exist');
+        cy.get('[data-testid="add-another-irs-notice-button"]').click();
+
+        cy.get('[data-testid="add-another-irs-notice-button"]').should('exist');
+        cy.get('[data-testid="add-another-irs-notice-button"]').click();
+
+        cy.get('[data-testid="add-another-irs-notice-button"]').should('exist');
+        cy.get('[data-testid="add-another-irs-notice-button"]').click();
+
+        cy.get('[data-testid="add-another-irs-notice-button"]').should('exist');
+        cy.get('[data-testid="add-another-irs-notice-button"]').click();
+
+        cy.get('[data-testid="add-another-irs-notice-button"]').should(
+          'not.exist',
+        );
+      });
     });
   });
 
