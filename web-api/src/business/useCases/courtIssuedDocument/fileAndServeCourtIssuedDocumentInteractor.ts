@@ -144,7 +144,6 @@ export const fileAndServeCourtIssuedDocument = async (
         });
 
       documentContents = `${documentContents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
-
       documentContentsId = applicationContext.getUniqueId();
 
       const contentToStore = {

@@ -574,7 +574,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0],
+        .calls[1][0],
     ).toMatchObject({
       document: expect.anything(),
       key: mockDocketEntryId,
@@ -597,6 +597,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: expect.anything(),
+      key: expect.anything(),
+    });
   });
 
   it('should not attempt to scrape the pdf if event code is non-scrapable', async () => {
@@ -617,5 +624,32 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should log error and continue if thrown during scraping', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockRejectedValue(new Error('error'));
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: mockClientConnectionId,
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [],
+      form: {
+        ...caseRecord.docketEntries[0],
+        documentType: 'Notice',
+        eventCode: 'O',
+      },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: expect.anything(),
+      key: mockDocketEntryId,
+    });
   });
 });
