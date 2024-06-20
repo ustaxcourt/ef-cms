@@ -1,7 +1,7 @@
 import { PractitionersByName } from '@web-api/business/useCases/practitioner/getPractitionersByNameInteractor';
 import { get } from '../requests';
 
-export const getPractitionersByNameInteractor = (
+export const getPublicPractitionersByNameInteractor = (
   applicationContext: IApplicationContext,
   {
     name,
@@ -13,7 +13,7 @@ export const getPractitionersByNameInteractor = (
 ): Promise<PractitionersByName> => {
   return get({
     applicationContext,
-    endpoint: '/practitioners',
+    endpoint: '/public-api/practitioners',
     params: {
       name,
       searchAfter,
