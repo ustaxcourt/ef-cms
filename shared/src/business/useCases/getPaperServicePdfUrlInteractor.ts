@@ -3,14 +3,14 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getPaperServicePdfUrlInteractor = async (
   applicationContext: IApplicationContext,
   { fileId }: { fileId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
