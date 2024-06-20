@@ -22,7 +22,7 @@ export const OrderResponse = connect(
     orderResponseHelper: state.orderResponseHelper,
     // navigateBackSequence: sequences.navigateBackSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    // validationErrors: state.validationErrors,
+    validationErrors: state.validationErrors,
   },
   function OrderResponse({
     clearStatusReportOrderResponseFormSequence,
@@ -35,7 +35,7 @@ export const OrderResponse = connect(
     // navigateBackSequence,
     // setPDFStampDataSequence,
     updateFormValueSequence,
-    // validationErrors,
+    validationErrors,
   }) {
     return (
       <>
@@ -57,8 +57,8 @@ export const OrderResponse = connect(
                   {/* TODO this field will conditionally render if the case is a lead CaseDetail */}
                   <FormGroup
                     className="stamp-form-group"
+                    errorText={validationErrors.issueOrder}
                     // className={applyStampFormHelper.dispositionErrorClass}
-                    // errorText={validationErrors.disposition}
                   >
                     <label className="usa-label" htmlFor="issue-order-radios">
                       This is the lead case in a consolidateed group. Issue this
@@ -117,7 +117,10 @@ export const OrderResponse = connect(
 
                   <hr className="border-top-2px border-base-lighter" />
 
-                  <FormGroup className="stamp-form-group">
+                  <FormGroup
+                    className="stamp-form-group"
+                    errorText={validationErrors.orderType}
+                  >
                     <label className="usa-label" htmlFor="order-type-radios">
                       Order type
                     </label>
@@ -197,7 +200,10 @@ export const OrderResponse = connect(
 
                   <hr className="border-top-2px border-base-lighter" />
 
-                  <FormGroup className="grid-container stamp-form-group denied-checkboxes">
+                  <FormGroup
+                    className="grid-container stamp-form-group"
+                    errorText={validationErrors.strikenFromTrialSessions}
+                  >
                     <div className="display-inline-block grid-col-6">
                       <input
                         checked={form.strikenFromTrialSessions || false}
@@ -224,7 +230,10 @@ export const OrderResponse = connect(
 
                   <hr className="border-top-2px border-base-lighter" />
 
-                  <FormGroup className="stamp-form-group">
+                  <FormGroup
+                    className="stamp-form-group"
+                    errorText={validationErrors.jurisdiction}
+                  >
                     <label className="usa-label" htmlFor="jurisdiction-radios">
                       Jurisdiction
                     </label>
@@ -281,7 +290,7 @@ export const OrderResponse = connect(
 
                   <FormGroup
                     className="stamp-form-group"
-                    // errorText={validationErrors.customText}
+                    errorText={validationErrors.additionalOrderText}
                   >
                     <div>
                       <label
@@ -322,7 +331,7 @@ export const OrderResponse = connect(
 
                   <FormGroup
                     className="stamp-form-group"
-                    // errorText={validationErrors.customText}
+                    errorText={validationErrors.docketEntryDescription}
                   >
                     <div>
                       <label
