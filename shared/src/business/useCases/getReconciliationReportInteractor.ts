@@ -13,6 +13,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 function isValidTime(time: string): boolean {
   return isValidDateString(time, [FORMATS.TIME_24_HOUR]);
@@ -37,8 +38,8 @@ export const getReconciliationReportInteractor = async (
     end?: string;
     start?: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
