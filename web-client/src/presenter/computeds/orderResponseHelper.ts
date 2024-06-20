@@ -17,7 +17,6 @@ export const orderResponseHelper = (
   // is this the lead case in a consolidated group?
   //   - conditionally expose radio buttons to add just the case to the PDF or
   //   - to add all of the cases in the group to the PDF
-  // what is the current day's date? (for due date calendar picker)
 
   const { DATE_FORMATS } = applicationContext.getConstants();
 

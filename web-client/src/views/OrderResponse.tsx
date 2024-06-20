@@ -298,6 +298,7 @@ export const OrderResponse = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="additional-order-text"
+                        // TODO spec says 140 or 160, which is it?
                         maxLength={80}
                         name="additionalOrderText"
                         type="text"
@@ -310,6 +311,7 @@ export const OrderResponse = connect(
                         }}
                       ></textarea>
                       <CharactersRemainingHint
+                        // TODO spec says 140 or 160, which is it?
                         maxCharacters={80}
                         stringToCount={form.additionalOrderText}
                       />
