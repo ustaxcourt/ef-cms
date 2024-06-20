@@ -28,8 +28,10 @@ export const getPractitionersByNameInteractor = async (
   { name, searchAfter }: { name: string; searchAfter: string },
 ): Promise<PractitionersByName> => {
   const authenticatedUser = applicationContext.getCurrentUser();
+  const isLoggedInUser = !!authenticatedUser;
 
   if (
+    isLoggedInUser &&
     !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
   ) {
     throw new UnauthorizedError('Unauthorized for searching practitioners');
@@ -51,12 +53,20 @@ export const getPractitionersByNameInteractor = async (
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
     contact: {
-      state: foundUser.contact?.state,
+      state: isLoggedInUser
+        ? foundUser.contact?.state
+        : foundUser.originalBarState,
     },
     name: foundUser.name,
     practiceType: foundUser.practiceType,
     practitionerType: foundUser.practitionerType,
   }));
 
-  return { searchResults: { lastKey, practitioners, total } };
+  return {
+    searchResults: {
+      lastKey,
+      practitioners,
+      total,
+    },
+  };
 };
