@@ -6,6 +6,21 @@ const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
 type TableSort = { sortField: string; sortOrder?: string };
 
+export const SUPPORTED_SORT_FIELDS = [
+  'createdAt',
+  'completedAt',
+  'completedBy',
+  'completedBySection',
+  'completedMessage',
+  'subject',
+  'caseTitle',
+  'caseStatus',
+  'from',
+  'to',
+  'toSection',
+  'fromSectionFormatted',
+];
+
 export const sortFormattedMessages = (
   formattedCaseMessages,
   tableSort: null | TableSort = null,
@@ -15,21 +30,21 @@ export const sortFormattedMessages = (
 
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
-    } else if (
-      ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
-    ) {
+    } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
       sortNumber = a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
     } else if (tableSort.sortField === 'docketNumber') {
-      const aSplit = a.docketNumber.split('-');
-      const bSplit = b.docketNumber.split('-');
+      const [a_DocketNumberIndex, a_DocketNumberYear] =
+        a.docketNumber.split('-');
+      const [b_DocketNumberIndex, b_DocketNumberYear] =
+        b.docketNumber.split('-');
 
-      if (aSplit[1] !== bSplit[1]) {
+      if (a_DocketNumberYear !== b_DocketNumberYear) {
         // compare years if they aren't the same;
         // compare as strings, because they *might* have suffix
-        sortNumber = aSplit[1].localeCompare(bSplit[1]);
+        sortNumber = a_DocketNumberYear.localeCompare(b_DocketNumberYear);
       } else {
         // compare index if years are the same, compare as integers
-        sortNumber = +aSplit[0] - +bSplit[0];
+        sortNumber = +a_DocketNumberIndex - +b_DocketNumberIndex;
       }
     }
     return sortNumber;

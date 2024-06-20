@@ -1,5 +1,5 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { generateCoverSheetData } from '../../../../../shared/src/business/useCases/generateCoverSheetData';
+import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
 
 /**
  * a helper function which creates a coversheet with stampData on it, then returns the new coversheet pdf

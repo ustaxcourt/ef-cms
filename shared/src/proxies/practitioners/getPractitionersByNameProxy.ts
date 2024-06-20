@@ -3,7 +3,13 @@ import { get } from '../requests';
 
 export const getPractitionersByNameInteractor = (
   applicationContext: IApplicationContext,
-  { name, searchAfter }: { name: string; searchAfter: (string | number)[] },
+  {
+    name,
+    searchAfter,
+  }: {
+    name: string;
+    searchAfter: (string | number)[];
+  },
 ): Promise<PractitionersByName> => {
   return get({
     applicationContext,

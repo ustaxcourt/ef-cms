@@ -1,6 +1,6 @@
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
-import { FormattedTrialInfo } from '@shared/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
+import { FormattedTrialInfo } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
 
