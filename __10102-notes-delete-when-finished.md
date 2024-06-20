@@ -10,7 +10,7 @@ character length similar to "Additional order text" above?
 
 ## Things to do
 
-1. Finish validation logic for StatusReportOrderResponse entity
+1. Finish validation logic for StatusReportOrderResponseForm entity
 
 2. Update OrderResponse component to display validation messages (sequence, actions)
 

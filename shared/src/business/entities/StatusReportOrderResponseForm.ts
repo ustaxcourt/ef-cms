@@ -4,7 +4,7 @@ import joi from 'joi';
 
 export class StatusReportOrderResponseForm extends JoiValidationEntity {
   public issueOrder?: string;
-  public statusReportOrStipulatedDecision: string;
+  public orderType: string;
   public dueDate: string;
   public strikenFromTrialSessions: string;
   public jurisdiction: string;
@@ -15,8 +15,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     super('StatusReportOrderResponseForm');
 
     this.issueOrder = rawProps.issueOrder;
-    this.statusReportOrStipulatedDecision =
-      rawProps.statusReportOrStipulatedDecision;
+    this.orderType = rawProps.orderType;
     this.dueDate = rawProps.dueDate;
     this.strikenFromTrialSessions = rawProps.strikenFromTrialSessions;
     this.jurisdiction = rawProps.jurisdiction;
@@ -24,20 +23,13 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     this.docketEntryDescription = rawProps.docketEntryDescription;
   }
   static VALIDATION_RULES = joi.object().keys({
-    // confirmPassword: joi
-    //   .valid(joi.ref('password'))
-    //   .required()
-    //   .messages({ '*': 'Passwords must match' }),
-    // email: JoiValidationConstants.EMAIL.required()
-    //   .messages({
-    //     '*': 'Enter a valid email address',
-    //     'string.max': 'Email address must contain fewer than 100 characters',
-    //   })
-    //   .description('Email of user'),
-    // entityName:
-    //   JoiValidationConstants.STRING.valid('ChangePasswordForm').required(),
-    // password: PASSWORD_RULE,
-
+    dueDate: JoiValidationConstants.ISO_DATE.when('orderType', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
+      .description('When the status report or stipulated decision is due.')
+      .messages({ '*': 'Enter a valid due date' }),
     // TODO issueOrder radio button is only required if the case is a lead case
     issueOrder: JoiValidationConstants.STRING.valid([
       'allCasesInGroup',
