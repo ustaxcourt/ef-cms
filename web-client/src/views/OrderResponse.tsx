@@ -60,13 +60,14 @@ export const OrderResponse = connect(
                     // className={applyStampFormHelper.dispositionErrorClass}
                     // errorText={validationErrors.disposition}
                   >
-                    <label className="usa-label" htmlFor="issue-order">
+                    <label className="usa-label" htmlFor="issue-order-radios">
                       This is the lead case in a consolidateed group. Issue this
                       order in:
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        aria-label="stricken from trial session"
+                        aria-describedby="issue-order-radios"
+                        aria-label="all cases in group"
                         checked={form.issueOrder === 'allCasesInGroup'}
                         className="usa-radio__input"
                         id="all-cases-in-group"
@@ -89,13 +90,14 @@ export const OrderResponse = connect(
                     </div>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        aria-label="stricken from trial session"
-                        checked={form.issueOrder === 'orStipulatedDecision'}
+                        aria-describedby="issue-order-radios"
+                        aria-label="just this case"
+                        checked={form.issueOrder === 'justThisCase'}
                         className="usa-radio__input"
                         id="just-this-case"
                         name="issueOrder"
                         type="radio"
-                        value="orStipulatedDecision"
+                        value="justThisCase"
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -115,24 +117,19 @@ export const OrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup className="stamp-form-group">
-                    <label
-                      className="usa-label"
-                      htmlFor="stricken-from-trial-session-radio"
-                    >
+                    <label className="usa-label" htmlFor="order-type-radios">
                       Order type
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        aria-label="stricken from trial session"
-                        checked={
-                          form.statusReportOrStipulatedDecision ===
-                          'statusReport'
-                        }
+                        aria-describedby="order-type-radios"
+                        aria-label="status report"
+                        checked={form.orderType === 'statusReport'}
                         className="usa-radio__input"
                         id="status-report"
-                        name="statusReportOrStipulatedDecision"
+                        name="orderType"
                         type="radio"
-                        value={'statusReport'}
+                        value="statusReport"
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -142,21 +139,20 @@ export const OrderResponse = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'status-report'}
+                        htmlFor="status-report"
                       >
                         Status Report
                       </label>
                     </div>
+
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        aria-label="stricken from trial session"
-                        checked={
-                          form.statusReportOrStipulatedDecision ===
-                          'orStipulatedDecision'
-                        }
+                        aria-describedby="order-type-radios"
+                        aria-label="status report or stipulated decision"
+                        checked={form.orderType === 'orStipulatedDecision'}
                         className="usa-radio__input"
                         id="or-stipulated-decision"
-                        name="statusReportOrStipulatedDecision"
+                        name="orderType"
                         type="radio"
                         value="orStipulatedDecision"
                         onChange={e => {
@@ -168,20 +164,20 @@ export const OrderResponse = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'or-stipulated-decision'}
+                        htmlFor="or-stipulated-decision"
                       >
                         Status Report or Stipulated Decision
                       </label>
                     </div>
+
                     <label
                       className="usa-label"
-                      htmlFor="stricken-from-trial-session-radio"
+                      htmlFor="status-report-due-date"
                     >
                       Due date
                     </label>
-
                     <DateSelector
-                      defaultValue={''}
+                      defaultValue=""
                       disabled={!form.statusReportOrStipulatedDecision}
                       formGroupClassNames="display-inline-block padding-0 margin-left-5"
                       id="status-report-due-date"
@@ -205,7 +201,7 @@ export const OrderResponse = connect(
                       <input
                         checked={form.strikenFromTrialSessions || false}
                         className="usa-checkbox__input"
-                        id="strikenFromTrialSessions"
+                        id="striken-from-trial-sessions"
                         name="strikenFromTrialSessions"
                         type="checkbox"
                         onChange={e => {
@@ -217,7 +213,7 @@ export const OrderResponse = connect(
                       />
                       <label
                         className="usa-checkbox__label"
-                        htmlFor="strikenFromTrialSessions"
+                        htmlFor="striken-from-trial-sessions"
                         id="striken-from-trial-sessions-label"
                       >
                         Case is striken from the trial sessions
@@ -228,12 +224,13 @@ export const OrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup className="stamp-form-group">
-                    <label className="usa-label" htmlFor="jurisdiction">
+                    <label className="usa-label" htmlFor="jurisdiction-radios">
                       Jurisdiction
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        aria-label="tk"
+                        aria-describedby="jurisdiction-radios"
+                        aria-label="retained"
                         checked={form.jurisdiction === 'retained'}
                         className="usa-radio__input"
                         id="retained"
@@ -253,7 +250,8 @@ export const OrderResponse = connect(
                     </div>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        aria-label="tk"
+                        aria-describedby="jurisdiction-radios"
+                        aria-label="restored to general docket"
                         checked={
                           form.jurisdiction === 'restoredToGeneralDocket'
                         }
