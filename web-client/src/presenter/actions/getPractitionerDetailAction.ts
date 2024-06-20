@@ -9,7 +9,7 @@
 export const getPractitionerDetailAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps<{ barNumber: string }>) => {
   const { barNumber } = props;
 
   const practitionerDetail = await applicationContext
