@@ -1,5 +1,5 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition: Step 1 - Petitioner Information', () => {
   beforeEach(() => {

@@ -4,7 +4,7 @@ import {
   fillPetitionerInformation,
   selectInput,
 } from './petition-helper';
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 3 IRS Notices', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
