@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../entities/User';
 
 /**
@@ -14,15 +15,14 @@ import { User } from '../entities/User';
 export const getUploadPolicyInteractor = async (
   applicationContext: IApplicationContext,
   { key }: { key: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   // we don't want external users to be able to overwrite existing s3 files
-  if (User.isExternalUser(user.role)) {
+  if (User.isExternalUser(authorizedUser.role)) {
     const isFileExists = await applicationContext
       .getPersistenceGateway()
       .isFileExists({
