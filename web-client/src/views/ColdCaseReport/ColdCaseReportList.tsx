@@ -91,11 +91,12 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
         </div>
       )}
 
-      <div className="grid-row margin-bottom-2">
-        <div className="grid-col text-right">
+      <div className="margin-bottom-2">
+        <div className="text-right">
           <Button
             link
             aria-label="export pending report"
+            className="width-auto"
             data-testid="export-pending-report"
             disabled={entries.length === 0}
             icon="file-export"
