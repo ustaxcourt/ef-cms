@@ -1,16 +1,18 @@
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import type { SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
+
 export const sendEmailEventToQueue = async ({
   applicationContext,
   emailParams,
 }: {
   applicationContext: ServerApplicationContext;
-  emailParams: any; //todo: pretty sure this should be SendEmailCommandInput
-}) => {
+  emailParams: SendBulkTemplatedEmailCommandInput;
+}): Promise<void> => {
   const concurrencyLimit =
     applicationContext.getConstants().SES_CONCURRENCY_LIMIT;
 
-  const sqs: SQSClient = await applicationContext.getMessagingClient();
+  const sqs: SQSClient = applicationContext.getMessagingClient();
   const messageGroupId = Math.random() * parseInt(`${concurrencyLimit}`);
   const cmd = new SendMessageCommand({
     MessageBody: JSON.stringify(emailParams),
