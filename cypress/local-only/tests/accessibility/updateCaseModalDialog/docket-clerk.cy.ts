@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Update Case Modal Dialog - Docket Clerk Accessibility', () => {
@@ -12,6 +13,6 @@ describe('Update Case Modal Dialog - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="tab-case-information"]').click();
     cy.get('[data-testid="menu-edit-case-context-button"]').click();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -1,7 +1,10 @@
 /* eslint-disable max-lines */
-import * as DateHandler from '../utilities/DateHandler';
+import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
-import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -16,120 +19,123 @@ import {
   isLeadCase,
   isSealedCase,
   isUserPartOfGroup,
-} from '../entities/cases/Case';
-import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
+} from '@shared/business/entities/cases/Case';
+import {
+  DocketEntry,
+  getServedPartiesCode,
+} from '@shared/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
   getPublicSiteUrl,
   getUniqueId,
-} from '../../sharedAppContext';
-import { User } from '../entities/User';
-import { abbreviateState } from '../utilities/abbreviateState';
-import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
-import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';
-import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkIndexRecords';
+} from '@shared/sharedAppContext';
+import { User } from '@shared/business/entities/User';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { addDocketEntryForSystemGeneratedOrder } from '@web-api/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
+import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
-} from '../utilities/getFormattedTrialSessionDetails';
+} from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import {
   compareISODateStrings,
   compareStrings,
-} from '../utilities/sortFunctions';
-import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '../../../../web-api/src/persistence/dynamo/cases/createCase';
-import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
-import { createDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/docketNumberGenerator';
+} from '@shared/business/utilities/sortFunctions';
+import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
+import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
+import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
+import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
-import { deleteRecord } from '../../../../web-api/src/persistence/elasticsearch/deleteRecord';
-import { deleteWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/deleteWorkItem';
-import { documentUrlTranslator } from '../../../../web-api/src/utilities/documentUrlTranslator';
-import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
-import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
-import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
+import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
+import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
+import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
+import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
   formatCase,
   formatDocketEntry,
   getFormattedCaseDetail,
   sortDocketEntries,
-} from '../../../src/business/utilities/getFormattedCaseDetail';
-import { formatDollars } from '../utilities/formatDollars';
+} from '@shared/business/utilities/getFormattedCaseDetail';
+import { formatDollars } from '@shared/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
-} from '../../../src/business/utilities/getFormattedJudgeName';
+} from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
-import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
-import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
-import { generateChangeOfAddressHelper } from '@shared/business/useCaseHelper/generateChangeOfAddressHelper';
-import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
+import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
-} from '../utilities/generateChangeOfAddressTemplate';
-import { getAllFeatureFlagsInteractor } from '../useCases/featureFlag/getAllFeatureFlagsInteractor';
-import { getAllWebSocketConnections } from '../../../../web-api/src/persistence/dynamo/notifications/getAllWebSocketConnections';
-import { getCaseByDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDocketNumber } from '../../../../web-api/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+} from '@shared/business/utilities/generateChangeOfAddressTemplate';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
-} from '../../../../web-client/src/business/chambers/getJudgesChambers';
+} from '@web-client/business/chambers/getJudgesChambers';
 import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
-import { getConstants } from '../../../../web-client/src/getConstants';
-import { getCropBox } from '../../../src/business/utilities/getCropBox';
-import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
+import { getConstants } from '@web-client/getConstants';
+import { getCropBox } from '@shared/business/utilities/getCropBox';
+import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
 import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
-} from '../utilities/getWorkQueueFilters';
+} from '@shared/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
-import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '@web-api/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
-import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
+import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
-import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
-import { getTextByCount } from '../utilities/getTextByCount';
-import { getTrialSessionById } from '../../../../web-api/src/persistence/dynamo/trialSessions/getTrialSessionById';
-import { getUserById as getUserByIdPersistence } from '../../../../web-api/src/persistence/dynamo/users/getUserById';
-import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
-import { getWorkItemById as getWorkItemByIdPersistence } from '../../../../web-api/src/persistence/dynamo/workitems/getWorkItemById';
-import { incrementCounter } from '../../../../web-api/src/persistence/dynamo/helpers/incrementCounter';
-import { putWorkItemInOutbox } from '../../../../web-api/src/persistence/dynamo/workitems/putWorkItemInOutbox';
-import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
+import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
+import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
+import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
+import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
+import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
+import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
+import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
+import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { saveWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
-import { sealCaseInteractor } from '../useCases/sealCaseInteractor';
-import { sealDocketEntryInteractor } from '../useCases/docketEntry/sealDocketEntryInteractor';
-import { serveCaseDocument } from '../utilities/serveCaseDocument';
-import { setConsolidationFlagsForDisplay } from '../utilities/setConsolidationFlagsForDisplay';
+import { saveWorkItem } from '@web-api/persistence/dynamo/workitems/saveWorkItem';
+import { sealCaseInteractor } from '@shared/business/useCases/sealCaseInteractor';
+import { sealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/sealDocketEntryInteractor';
+import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
+import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setPdfFormFields } from '../useCaseHelper/pdf/setPdfFormFields';
-import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
-import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocument';
-import { unsealDocketEntryInteractor } from '../useCases/docketEntry/unsealDocketEntryInteractor';
-import { updateCase } from '../../../../web-api/src/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '../useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateCaseAutomaticBlock } from '../useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { updateCaseCorrespondence } from '../../../../web-api/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
-import { updateDocketEntry } from '../../../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
-import { updateUserRecords } from '../../../../web-api/src/persistence/dynamo/users/updateUserRecords';
-import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
-import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
-import { verifyCaseForUser } from '../../../../web-api/src/persistence/dynamo/cases/verifyCaseForUser';
+import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfFormFields';
+import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
+import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
+import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
+import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
+import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
+import { updateUserRecords } from '@web-api/persistence/dynamo/users/updateUserRecords';
+import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
+import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
+import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
 import sass from 'sass';

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Confirm Replace Petition Modal - Petitions Clerk Accessibility', () => {
@@ -13,6 +14,6 @@ describe('Confirm Replace Petition Modal - Petitions Clerk Accessibility', () =>
     cy.get('.remove-pdf-button').click();
     cy.get('.confirm-replace-petition-modal').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -6,8 +6,8 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('formatPetitionAction', () => {
   const PROPS = {
-    step1Data: {},
-    step2Data: {
+    petitionInformation: {},
+    petitionerInformation: {
       contactPrimary: {},
     },
     step3Data: {

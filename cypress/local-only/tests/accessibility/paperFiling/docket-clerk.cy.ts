@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Paper Filing - Docket Clerk Accessibility', () => {
@@ -11,7 +12,7 @@ describe('Paper Filing - Docket Clerk Accessibility', () => {
     cy.visit('/case-detail/103-19/add-paper-filing');
     cy.get('[data-testid="paper-filing-container"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   describe('Certificate of service date picker', () => {
@@ -23,7 +24,7 @@ describe('Paper Filing - Docket Clerk Accessibility', () => {
       cy.get('[data-testid="certificate-of-service-label"]').click();
       cy.get('[data-testid="service-date-picker"]');
 
-      cy.runA11y();
+      checkA11y();
     });
   });
 });

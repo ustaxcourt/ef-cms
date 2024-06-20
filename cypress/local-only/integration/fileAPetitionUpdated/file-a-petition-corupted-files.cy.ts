@@ -17,9 +17,9 @@ describe('File a petition - Corrupted Files', () => {
   });
 
   it('should display modal when a corrupted file is being used for petition', () => {
-    fillPetitionFileInformation(CORRUPTED_FILE);
-
     fillPetitionerInformation();
+
+    fillPetitionFileInformation(CORRUPTED_FILE);
 
     fillIrsNoticeInformation(VALID_FILE);
 
@@ -32,9 +32,9 @@ describe('File a petition - Corrupted Files', () => {
   });
 
   it('should display modal when a corrupted file is being used for IRS notice', () => {
-    fillPetitionFileInformation(VALID_FILE);
-
     fillPetitionerInformation();
+
+    fillPetitionFileInformation(VALID_FILE);
 
     fillIrsNoticeInformation(CORRUPTED_FILE);
 
@@ -47,9 +47,9 @@ describe('File a petition - Corrupted Files', () => {
   });
 
   it('should display modal when a corrupted file is being used for STIN', () => {
-    fillPetitionFileInformation(VALID_FILE);
-
     fillPetitionerInformation();
+
+    fillPetitionFileInformation(VALID_FILE);
 
     fillIrsNoticeInformation(VALID_FILE);
 
@@ -62,9 +62,9 @@ describe('File a petition - Corrupted Files', () => {
   });
 
   it('should successfully file a petition when all PDF being uploaded are valid', () => {
-    fillPetitionFileInformation(VALID_FILE);
-
     fillPetitionerInformation();
+
+    fillPetitionFileInformation(VALID_FILE);
 
     fillIrsNoticeInformation(VALID_FILE);
 

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Message Detail - Petitions Clerk Accessibility', () => {
@@ -12,7 +13,7 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     );
     cy.contains('Message');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when forwarding', () => {
@@ -23,7 +24,7 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     cy.get('#button-forward').click();
     cy.get('.modal-dialog').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when replying', () => {
@@ -34,7 +35,7 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     cy.get('#button-reply').click();
     cy.get('.modal-dialog').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 
   it('should be free of a11y issues when completing', () => {
@@ -45,6 +46,6 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     cy.get('#button-complete').click();
     cy.get('.modal-dialog').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

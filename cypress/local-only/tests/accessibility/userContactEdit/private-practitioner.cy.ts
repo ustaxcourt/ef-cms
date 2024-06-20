@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('User Contact Edit Page - Private Practitioner Accessibility', () => {
@@ -10,6 +11,6 @@ describe('User Contact Edit Page - Private Practitioner Accessibility', () => {
     cy.visit('/user/contact/edit');
     cy.get('[data-testid="save-edit-contact"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Unconsolidate Cases Modal - Docket Clerk Accessibility', () => {
@@ -14,6 +15,6 @@ describe('Unconsolidate Cases Modal - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="unconsolidate-cases-button"]').click();
     cy.get('[data-testid="modal-confirm"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

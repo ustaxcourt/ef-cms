@@ -142,7 +142,7 @@ import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/gene
 import { generateDocumentIds } from '../../shared/src/business/useCases/generateDocumentIds';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
-import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
+import { generateExternalDocumentTitle } from '@web-client/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePetitionPdfInteractor } from '@shared/proxies/generatePetitionPdfProxy';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
@@ -241,7 +241,6 @@ import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/g
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
-import { logOldLoginAttemptInteractor } from '@shared/proxies/auth/logOldLoginAttemptProxy';
 import { loginInteractor } from '@shared/proxies/auth/loginProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
@@ -522,7 +521,6 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
-  logOldLoginAttemptInteractor,
   loginInteractor,
   opinionAdvancedSearchInteractor,
   orderAdvancedSearchInteractor,

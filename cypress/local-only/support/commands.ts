@@ -1,9 +1,6 @@
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
 import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
-import { impactLevel } from '../../helpers/accessibility-impact';
-import { terminalLog } from '../../helpers/cypressTasks/logs';
-('../../helpers/cypressTasks/logs');
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {
@@ -115,22 +112,6 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
   waitAndSee(0);
 });
 
-Cypress.Commands.add('runA11y', () => {
-  cy.injectAxe();
-
-  cy.checkA11y(
-    undefined,
-    {
-      includedImpacts: impactLevel,
-      retries: 3,
-      rules: {
-        'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-      },
-    },
-    terminalLog,
-  );
-});
-
 export {};
 
 declare global {
@@ -152,7 +133,6 @@ declare global {
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;
       keepAliases: (args?: string[]) => void;
-      runA11y: () => void;
     }
   }
 }

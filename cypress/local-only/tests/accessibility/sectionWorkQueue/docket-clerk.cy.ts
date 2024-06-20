@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Document QC - Docket Clerk Accessibility', () => {
@@ -13,7 +14,7 @@ describe('Document QC - Docket Clerk Accessibility', () => {
         cy.visit('/document-qc/section/inbox');
         cy.get('[data-testid="checkbox-assign-work-item"]').first().click();
 
-        cy.runA11y();
+        checkA11y();
       });
     });
   });

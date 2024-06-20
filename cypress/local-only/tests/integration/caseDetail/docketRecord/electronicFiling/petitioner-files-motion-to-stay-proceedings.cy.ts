@@ -13,7 +13,7 @@ import { selectTypeaheadInput } from '../../../../../../helpers/components/typeA
  * When a docket clerk adds a paper filing,
  * Then they can choose MLSP option
  */
-describe('Private Practitioner requests access to case', () => {
+describe('Private Practitioner requests to represent a party to a case', () => {
   before(() => {
     cy.task('toggleFeatureFlag', {
       flag: 'updated-petition-flow',

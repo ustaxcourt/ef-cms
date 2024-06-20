@@ -18,9 +18,8 @@ describe('File a petition', () => {
 
   describe('Link Text for Petition', () => {
     it('should display "Preview in full screen" for petition when user generated a Petition file', () => {
-      fillGeneratePetitionFileInformation();
-
       fillPetitionerInformation();
+      fillGeneratePetitionFileInformation();
 
       cy.get('[data-testid="irs-notice-Yes"]').click();
 
@@ -45,9 +44,8 @@ describe('File a petition', () => {
     });
 
     it('should display the file name for petition when user uploads a PDF file', () => {
-      fillPetitionFileInformation(VALID_FILE);
-
       fillPetitionerInformation();
+      fillPetitionFileInformation(VALID_FILE);
 
       cy.get('[data-testid="irs-notice-Yes"]').click();
 

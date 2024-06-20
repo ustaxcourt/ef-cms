@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Add/Edit Practitioner Document - Admissions Clerk Accessibility', () => {
@@ -14,6 +15,6 @@ describe('Add/Edit Practitioner Document - Admissions Clerk Accessibility', () =
       '[data-testid="cancel-add-edit-practitioner-document-button"]',
     ).click();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

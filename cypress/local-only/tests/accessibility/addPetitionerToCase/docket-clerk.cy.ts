@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Add Petitioner To Case - Docket Clerk Accessibility', () => {
@@ -12,6 +13,6 @@ describe('Add Petitioner To Case - Docket Clerk Accessibility', () => {
     cy.get('[data-testid="add-petitioner-to-case-container"]');
     cy.get('[data-testid="use-existing-address-checkbox"]').click();
 
-    cy.runA11y();
+    checkA11y();
   });
 });

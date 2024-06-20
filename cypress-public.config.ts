@@ -23,7 +23,6 @@ export default defineConfig({
         },
         table(message) {
           console.table(message);
-
           return null;
         },
         toggleFeatureFlag(args) {

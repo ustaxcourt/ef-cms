@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Practitioner Details - Petition Clerk Accessibility', () => {
@@ -10,6 +11,6 @@ describe('Practitioner Details - Petition Clerk Accessibility', () => {
     cy.visit('/practitioner-detail/PT1234');
     cy.get('[data-testid="print-practitioner-case-list"]').should('exist');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

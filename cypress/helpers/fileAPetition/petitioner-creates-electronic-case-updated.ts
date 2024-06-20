@@ -5,9 +5,6 @@ export function petitionerCreatesElectronicCaseUpdated(
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  cy.get('[data-testid="petition-reason--1"]').type('First reason goes here');
-  cy.get('[data-testid="petition-fact--1"]').type('First fact goes here');
-  cy.get('[data-testid="step-1-next-button"]').click();
 
   cy.get('[data-testid="filing-type-0"]').click();
   cy.get('[data-testid="contact-primary-name"]').type(primaryFilerName);
@@ -17,6 +14,10 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
   cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
   cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
+  cy.get('[data-testid="step-1-next-button"]').click();
+
+  cy.get('[data-testid="petition-reason--1"]').type('First reason goes here');
+  cy.get('[data-testid="petition-fact--1"]').type('First fact goes here');
   cy.get('[data-testid="step-2-next-button"]').click();
 
   cy.get('[data-testid="irs-notice-Yes"]').click();
@@ -33,9 +34,8 @@ export function petitionerCreatesElectronicCaseUpdated(
   uploadFile('stin-file');
   cy.get('[data-testid="step-5-next-button"]').click();
 
-  cy.get('[data-testid="stin-preview-button"]').should('exist');
-  cy.get('[data-testid="petition-pdf-preview"]').should('exist');
   cy.get('[data-testid="atp-preview-button"]').should('exist');
+  cy.get('[data-testid="stin-preview-button"]').should('exist');
 
   cy.get('[data-testid="step-6-next-button"]').click();
 

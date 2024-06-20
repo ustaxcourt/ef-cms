@@ -18,7 +18,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.52.0"
+    aws = "5.54.0"
   }
 }
 
@@ -53,8 +53,8 @@ data "aws_dynamodb_table" "blue_dynamo_table" {
   name = var.blue_table_name
 }
 
-data "null_data_source" "locals" {
-  inputs = {
+resource "terraform_data" "locals" {
+  input = {
     AWS_ACCOUNT_ID                     = data.aws_caller_identity.current.account_id
     BOUNCE_ALERT_RECIPIENTS            = var.bounce_alert_recipients
     BOUNCE_ALERT_TEMPLATE              = "bounce_alert_${var.environment}"
@@ -96,7 +96,7 @@ module "api-east-blue" {
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
   lambda_role_arn     = module.lambda_role_blue.role_arn
-  lambda_environment = merge(data.null_data_source.locals.outputs, {
+  lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
     DYNAMODB_TABLE_NAME    = var.blue_table_name
@@ -133,7 +133,7 @@ module "api-west-blue" {
   lambda_role_arn     = module.lambda_role_blue.role_arn
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
-  lambda_environment = merge(data.null_data_source.locals.outputs, {
+  lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "blue"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
     DYNAMODB_TABLE_NAME    = var.blue_table_name
@@ -172,7 +172,7 @@ module "worker-east-blue" {
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   lambda_role_arn     = module.lambda_role_blue.role_arn
-  lambda_environment = merge(data.null_data_source.locals.outputs, {
+  lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
@@ -189,7 +189,7 @@ module "worker-west-blue" {
   color               = "blue"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
   lambda_role_arn     = module.lambda_role_blue.role_arn
-  lambda_environment = merge(data.null_data_source.locals.outputs, {
+  lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
@@ -209,7 +209,7 @@ module "ui-blue" {
   zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
   providers = {
-    aws.us-east-1 = aws.us-east-1
+    aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
 }

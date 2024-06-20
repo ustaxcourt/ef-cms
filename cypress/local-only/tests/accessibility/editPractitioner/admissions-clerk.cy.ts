@@ -1,3 +1,4 @@
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Edit Practitioner - Admissions Clerk Accessibility', () => {
@@ -11,6 +12,6 @@ describe('Edit Practitioner - Admissions Clerk Accessibility', () => {
     cy.visit('/users/edit-practitioner/PT1234');
     cy.get('[data-testid="save-practitioner-updates-button"]');
 
-    cy.runA11y();
+    checkA11y();
   });
 });

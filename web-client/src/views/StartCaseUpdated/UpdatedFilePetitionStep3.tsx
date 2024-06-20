@@ -72,7 +72,10 @@ export const UpdatedFilePetitionStep3 = connect(
         <div className="padding-bottom-0 margin-bottom-1">
           <div>
             <h2>{startCaseHelper.noticeLegend}</h2>
-            <FormGroup errorText={validationErrors.hasIrsNotice}>
+            <FormGroup
+              className="irs-notice-form"
+              errorText={validationErrors.hasIrsNotice}
+            >
               <fieldset
                 className="usa-fieldset margin-bottom-0"
                 id="irs-notice-radios"
@@ -136,6 +139,9 @@ export const UpdatedFilePetitionStep3 = connect(
                     <>
                       <IrsNoticeUploadForm
                         caseType={info.caseType}
+                        cityAndStateIssuingOffice={
+                          info.cityAndStateIssuingOffice
+                        }
                         file={info.file}
                         index={index}
                         key={info.key}
@@ -168,7 +174,7 @@ export const UpdatedFilePetitionStep3 = connect(
                   Add another IRS Notice
                 </Button>
                 {startCaseHelper.irsNoticeRequiresRedactionAcknowledgement && (
-                  <div className="grid-row grid-gap margin-top-5">
+                  <div className="grid-row grid-gap margin-top-05">
                     <span className="margin-bottom-1 font-sans-pro">
                       <b>
                         Please read and acknowledge before moving to the next
