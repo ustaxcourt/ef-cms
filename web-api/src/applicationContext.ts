@@ -217,7 +217,6 @@ export const createApplicationContext = (
       if (!sqsCache) {
         sqsCache = new SQSClient({
           maxAttempts: 3,
-          region: 'us-east-1',
           requestHandler: new NodeHttpHandler({
             connectionTimeout: 3_000,
             requestTimeout: 5_000,
