@@ -110,6 +110,28 @@ describe('UploadPetitionStep3', () => {
             ],
           });
         });
+
+        it('should return an error message for "irsNotices" when there is more than the max in array', () => {
+          const entity = new UploadPetitionStep3({
+            ...VALID_ENTITY,
+            irsNotices: [
+              VALID_ENTITY.irsNotices![0],
+              VALID_ENTITY.irsNotices![0],
+              VALID_ENTITY.irsNotices![0],
+              VALID_ENTITY.irsNotices![0],
+              VALID_ENTITY.irsNotices![0],
+              VALID_ENTITY.irsNotices![0],
+            ],
+          });
+
+          expect(entity).toBeDefined();
+
+          const errors = entity.getFormattedValidationErrors();
+          expect(errors).toEqual({
+            irsNotices:
+              '"irsNotices" must contain less than or equal to 5 items',
+          });
+        });
       });
     });
   });
