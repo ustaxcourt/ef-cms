@@ -46,6 +46,10 @@ export const fileCourtIssuedOrder = async (
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
+  console.log(
+    '********************** documentMetadata.documentContents the first time',
+    documentMetadata.documentContents,
+  );
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
@@ -56,6 +60,7 @@ export const fileCourtIssuedOrder = async (
   }
 
   if (shouldScrapePDFContents) {
+    console.log('*********************** We are scraping');
     const { Body: pdfBuffer } = await applicationContext
       .getStorageClient()
       .getObject({
@@ -75,6 +80,10 @@ export const fileCourtIssuedOrder = async (
 
   if (documentMetadata.documentContents) {
     documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
+    console.log(
+      '********************** documentMetadata.documentContents',
+      documentMetadata.documentContents,
+    );
 
     const documentContentsId = applicationContext.getUniqueId();
 
@@ -93,6 +102,10 @@ export const fileCourtIssuedOrder = async (
       useTempBucket: false,
     });
 
+    console.log(
+      '************** documentMetadata.draftOrderState',
+      documentMetadata.draftOrderState,
+    );
     if (documentMetadata.draftOrderState) {
       delete documentMetadata.draftOrderState.documentContents;
       delete documentMetadata.draftOrderState.richText;
