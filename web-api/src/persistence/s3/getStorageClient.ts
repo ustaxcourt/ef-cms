@@ -15,7 +15,7 @@ export function getStorageClient(): S3 {
       requestHandler: new NodeHttpHandler({
         connectionTimeout: 3000,
         httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
-        requestTimeout: 5000,
+        requestTimeout: 30000,
       }),
     });
   }
