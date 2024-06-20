@@ -22,6 +22,7 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
+  Role,
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -61,10 +62,10 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-import { type RawUser, User } from '../User';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
+import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
@@ -2024,13 +2025,13 @@ export class Case extends JoiValidationEntity {
     );
   }
 
-  userHasAccessToCase(user: RawUser): boolean {
+  userHasAccessToCase(user: { userId: string; role: Role }): boolean {
     return Case.userHasAccessToCase(this, user);
   }
 
   static userHasAccessToCase(
     rawCase: RawCase | RawPublicCase,
-    user: RawUser,
+    user: { userId: string; role: Role },
   ): boolean {
     return rawCase.leadDocketNumber
       ? isUserPartOfGroup({
@@ -2192,7 +2193,13 @@ export const caseHasServedPetition = rawCase => {
  * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
-export const isAssociatedUser = function ({ caseRaw, user }) {
+export const isAssociatedUser = function ({
+  caseRaw,
+  user,
+}: {
+  caseRaw: any;
+  user: { userId: string; role: Role };
+}) {
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);

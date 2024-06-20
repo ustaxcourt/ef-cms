@@ -6,15 +6,15 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 
 export const getDownloadPolicyUrlInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber, key }: { docketNumber: string; key: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -37,12 +37,12 @@ export const getDownloadPolicyUrlInteractor = async (
   if (key.includes('.pdf')) {
     if (
       caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key ||
-      !caseEntity.userHasAccessToCase(user)
+      !caseEntity.userHasAccessToCase(authorizedUser)
     ) {
       throw new UnauthorizedError('Unauthorized');
     }
   } else if (caseEntity.getCorrespondenceById({ correspondenceId: key })) {
-    if (!User.isInternalUser(user.role)) {
+    if (!User.isInternalUser(authorizedUser.role)) {
       throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
     }
   } else {
@@ -68,7 +68,7 @@ export const getDownloadPolicyUrlInteractor = async (
       !DocketEntry.isDownloadable(docketEntryEntity, {
         isTerminalUser: false,
         rawCase: caseData,
-        user,
+        user: authorizedUser,
         visibilityChangeDate: documentVisibilityChangeDate,
       })
     ) {
