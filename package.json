@@ -64,6 +64,7 @@
     "diff-arrays-of-objects": "1.1.9",
     "english-ordinals": "3.3.0",
     "express": "4.19.2",
+    "fflate": "^0.8.2",
     "form-data": "4.0.0",
     "image-blob-reduce": "4.1.0",
     "joi": "17.13.1",
