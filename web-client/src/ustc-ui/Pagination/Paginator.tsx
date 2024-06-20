@@ -22,7 +22,7 @@ export const Paginator = ({
     <>
       <nav
         aria-label="Pagination"
-        className="usa-pagination margin-bottom-0"
+        className="usa-pagination margin-bottom-0 margin-top-0"
         id={id}
       >
         <ReactPaginate
@@ -33,13 +33,13 @@ export const Paginator = ({
           disabledClassName="hide"
           forcePage={forcePage}
           marginPagesDisplayed={marginPagesDisplayed}
-          nextClassName="usa-pagination__item usa-pagination__arrow"
+          nextClassName="usa-pagination__item"
           nextLinkClassName="usa-pagination__link usa-pagination__next-page cursor-pointer"
           pageClassName="usa-pagination__item usa-pagination__page-no"
           pageCount={pageCount}
           pageLinkClassName="usa-pagination__button cursor-pointer"
           pageRangeDisplayed={pageRangeDisplayed}
-          previousClassName="usa-pagination__item usa-pagination__arrow"
+          previousClassName="usa-pagination__item"
           previousLinkClassName="usa-pagination__link usa-pagination__previous-page cursor-pointer"
           renderOnZeroPageCount={null}
           onPageChange={onPageChange}

@@ -1,4 +1,5 @@
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
@@ -63,7 +64,9 @@ export const DisplayHearings = connect(
         </tr>
         {hearing.calendarNotes && (
           <tr>
-            <td colSpan={4}>{hearing.calendarNotes}</td>
+            <td colSpan={4}>
+              <PreformattedText text={hearing.calendarNotes} />
+            </td>
           </tr>
         )}
       </tbody>

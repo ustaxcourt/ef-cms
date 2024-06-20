@@ -1,4 +1,5 @@
 import { EmailResponse } from './sendEmailToUser';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { SESClient } from '@aws-sdk/client-ses';
 
 let sesCache: SESClient;
@@ -16,7 +17,10 @@ export function getEmailClient() {
     if (!sesCache) {
       sesCache = new SESClient({
         maxAttempts: 3,
-        region: 'us-east-1',
+        requestHandler: new NodeHttpHandler({
+          connectionTimeout: 3_000,
+          requestTimeout: 5_000,
+        }),
       });
     }
     return sesCache;

@@ -1,17 +1,21 @@
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { hasPractitionerDetailAction } from './hasPractitionerDetailAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('hasPractitionerDetailAction', () => {
-  let presenter;
+  const presenter = {
+    providers: {
+      applicationContext: undefined as unknown as any,
+      path: undefined as unknown as any,
+    },
+  };
 
   beforeAll(() => {
-    presenter = {
-      providers: {
-        path: {
-          navigateToPractitionerDetails: jest.fn(),
-          setResultsInState: jest.fn(),
-        },
-      },
+    applicationContext.isPublicUser = jest.fn().mockImplementation(() => false);
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      navigateToPractitionerDetails: jest.fn(),
+      setResultsInState: jest.fn(),
     };
   });
 
@@ -44,12 +48,13 @@ describe('hasPractitionerDetailAction', () => {
   });
 
   it('calls the "setResultsInState" function when a public user get results back', async () => {
+    applicationContext.isPublicUser = jest.fn().mockImplementation(() => true);
+
     await runAction(hasPractitionerDetailAction, {
       modules: {
         presenter,
       },
       props: {
-        isPublicUser: true,
         practitionerDetail: {
           barNumber: 'PD1234',
         },
