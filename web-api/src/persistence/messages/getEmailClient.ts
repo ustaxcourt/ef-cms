@@ -17,7 +17,6 @@ export function getEmailClient() {
     if (!sesCache) {
       sesCache = new SESClient({
         maxAttempts: 3,
-        region: 'us-east-1',
         requestHandler: new NodeHttpHandler({
           connectionTimeout: 3_000,
           requestTimeout: 5_000,
