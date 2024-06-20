@@ -32,12 +32,6 @@ describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
     });
   });
 
-  it('should display validation error message when user presses "Next" button without selecting a procedure type', () => {
-    cy.get('[data-testid="procedure-type-error-message"]').should('not.exist');
-    cy.get('[data-testid="step-4-next-button"]').click();
-    cy.get('[data-testid="procedure-type-error-message"]').should('exist');
-  });
-
   it('should display validation error message when user presses "Next" button without selecting a procedure type but clear when user makes a selection', () => {
     cy.get('[data-testid="procedure-type-error-message"]').should('not.exist');
     cy.get('[data-testid="step-4-next-button"]').click();
