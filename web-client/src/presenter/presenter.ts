@@ -444,6 +444,7 @@ import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPra
 import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitStampMotionSequence } from './sequences/submitStampMotionSequence';
+import { submitStatusReportOrderResponseSequence } from './sequences/submitStatusReportOrderResponseSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateAddDocketNumbersToOrderSequence } from './sequences/submitUpdateAddDocketNumbersToOrderSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
@@ -858,7 +859,7 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
-  // TODO fix typing
+  // TODO 10102: fix typing
   gotoOrderResponseSequence: gotoOrderResponseSequence as unknown as Function,
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
@@ -1319,6 +1320,9 @@ export const presenterSequences = {
   submitRemoveConsolidatedCasesSequence:
     submitRemoveConsolidatedCasesSequence as unknown as Function,
   submitStampMotionSequence: submitStampMotionSequence as unknown as Function,
+  // TODO 10102: fix typing
+  submitStatusReportOrderResponseSequence:
+    submitStatusReportOrderResponseSequence as unknown as Function,
   submitTrialSessionSequence: submitTrialSessionSequence as unknown as Function,
   submitUpdateAddDocketNumbersToOrderSequence:
     submitUpdateAddDocketNumbersToOrderSequence as unknown as Function,

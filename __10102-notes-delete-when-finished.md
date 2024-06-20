@@ -1,26 +1,31 @@
 # 10102
 
-## Questions for UX
+## Cases for testing during development
 
-1. Should the "Docket entry description" textarea field have a restriction on its
-character length similar to "Additional order text" above?
+- Regular case: 107-19L
+- Lead case: 102-67L
 
-2. The test case says that the "Additional order text" field should be only 140 or
-160 characters long. Which is it?
+## Questions for UX/PO
+
+*Question*: Should the "Docket entry description" textarea field have a
+restriction on its character length similar to "Additional order text" above?
+*Answer*: Check docket entry description field for docket clerks.
+
+*Question*: The test case says that the "Additional order text" field should be
+only 140 or 160 characters long. Which is it?
+*Answer*: Check the stamp disposition workflow.
 
 ## Things to do
 
-1. Finish validation logic for StatusReportOrderResponseForm entity
+1. Update OrderResponse component to display all validation messages
 
-2. Update OrderResponse component to display validation messages (sequence, actions)
+2. Get logic working that conditionally makes the first question required only
+if the case is a lead case
 
-3. Get logic working that conditionally includes the question that only applies
-to lead cases
-
-4. Get logic working that conditionally allows the user to it the "Save as Draft"
+3. Get logic working that conditionally allows the user to it the "Save as Draft"
 button depending on whether the minimum amount of fields are populated
 
-5. Figure out how to handle the side-by-side form and in-progress PDF situation
+4. Figure out how to handle the side-by-side form and in-progress PDF situation
 
 ## Notes
 

@@ -24,31 +24,36 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
   }
   static VALIDATION_RULES = joi.object().keys({
     additionalOrderText: JoiValidationConstants.STRING.max(80).optional(),
-    // TODO docketEntryDescription char limit?
+    docketEntryDescription: JoiValidationConstants.STRING.max(80).optional(),
     dueDate: JoiValidationConstants.ISO_DATE.when('orderType', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
-      then: joi.required(),
+      then: joi.required().messages({
+        'any.required':
+          'Due date is required for status reports and stipulated decisions',
+      }),
     })
       .description('When the status report or stipulated decision is due.')
-      .messages({ '*': 'Enter a valid due date' }),
+      .messages({
+        '*': 'Enter a valid date',
+      }),
     // TODO issueOrder radio button is only required if the case is a lead case
-    issueOrder: JoiValidationConstants.STRING.valid([
+    issueOrder: JoiValidationConstants.STRING.valid(
       'allCasesInGroup',
       'justThisCase',
-    ])
+    )
       .optional()
       .allow(null),
-    jurisdiction: JoiValidationConstants.STRING.valid([
+    jurisdiction: JoiValidationConstants.STRING.valid(
       'retained',
       'restoredToGeneralDocket',
-    ])
+    )
       .optional()
       .allow(null),
-    orderType: JoiValidationConstants.STRING.valid([
+    orderType: JoiValidationConstants.STRING.valid(
       'statusReport',
       'orStipulatedDecision',
-    ])
+    )
       .optional()
       .allow(null),
   });
