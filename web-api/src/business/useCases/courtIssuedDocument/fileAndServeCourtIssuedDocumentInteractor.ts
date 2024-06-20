@@ -2,7 +2,6 @@ import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
-  SCRAPING_ENABLED_EVENT_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -130,6 +129,39 @@ export const fileAndServeCourtIssuedDocument = async (
 
   let caseEntities: Case[] = [];
   let serviceResults;
+  let documentContentsId;
+  try {
+    const shouldScrapePDFContents =
+      !docketEntryToServe.documentContents &&
+      DocketEntry.isSearchable(form.eventCode);
+
+    if (shouldScrapePDFContents) {
+      let documentContents: string = await applicationContext
+        .getUseCaseHelpers()
+        .parseAndScrapePdfContents({
+          applicationContext,
+          pdfBuffer: stampedPdf,
+        });
+
+      documentContents = `${documentContents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
+
+      documentContentsId = applicationContext.getUniqueId();
+
+      const contentToStore = {
+        documentContents,
+      };
+
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        contentType: 'application/json',
+        document: Buffer.from(JSON.stringify(contentToStore)),
+        key: documentContentsId,
+        useTempBucket: false,
+      });
+    }
+  } catch (e) {
+    applicationContext.logger.error(e);
+  }
 
   try {
     for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
@@ -151,6 +183,7 @@ export const fileAndServeCourtIssuedDocument = async (
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,
+            documentContentsId,
             documentTitle: form.generatedDocumentTitle,
             documentType: form.documentType,
             editState: JSON.stringify({
@@ -253,33 +286,6 @@ export const fileAndServeCourtIssuedDocument = async (
     },
     userId: user.userId,
   });
-
-  // TODO: I think we still need to download the contents file from s3 using documentContentsId if it is set.
-
-  const shouldScrapePDFContents =
-    !docketEntryToServe.documentContents &&
-    SCRAPING_ENABLED_EVENT_CODES.includes(form.eventCode);
-
-  console.log('--------');
-  console.log(shouldScrapePDFContents);
-  console.log(docketEntryToServe);
-
-  if (shouldScrapePDFContents) {
-    // TODO: look into if we can just use stampedPdf directly instead re-fetching it back from s3
-    const { Body: pdfBuffer } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryToServe.docketEntryId,
-      })
-      .promise();
-
-    const contents: string = await applicationContext
-      .getUseCaseHelpers()
-      .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
-
-    docketEntryToServe.documentContents = `${contents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
-  }
 };
 
 export const determineEntitiesToLock = (
