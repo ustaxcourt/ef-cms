@@ -1,4 +1,9 @@
 import {
+  AuthUser,
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import {
   Case,
   canAllowDocumentServiceForCase,
   canAllowPrintableDocketRecord,
@@ -6,7 +11,7 @@ import {
   isAssociatedUser,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { NotFoundError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
 import {
   ROLE_PERMISSIONS,
@@ -20,27 +25,27 @@ import {
 
 const getSealedCase = ({
   applicationContext,
+  authorizedUser,
   caseRecord,
   isAssociatedWithCase,
 }: {
   applicationContext: IApplicationContext;
   caseRecord: RawCase;
   isAssociatedWithCase: boolean;
+  authorizedUser: AuthUser;
 }): RawCase | RawPublicCase => {
-  const currentUser = applicationContext.getCurrentUser();
-
   let isAuthorizedToViewSealedCase = isAuthorized(
-    currentUser,
+    authorizedUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
   );
 
   if (!isAuthorizedToViewSealedCase) {
-    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    const petitioner = getPetitionerById(caseRecord, authorizedUser.userId);
     if (petitioner) {
       isAuthorizedToViewSealedCase = isAuthorized(
-        currentUser,
+        authorizedUser,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-        getPetitionerById(caseRecord, currentUser.userId).contactId,
+        getPetitionerById(caseRecord, authorizedUser.userId).contactId,
       );
     }
   }
@@ -106,7 +111,14 @@ export const decorateForCaseStatus = (caseRecord: RawCase) => {
 export const getCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnauthorizedError(
+      `Invalid User attempting to view docket Number: ${docketNumber}`,
+    );
+  }
+
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
@@ -122,31 +134,29 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  const currentUser = applicationContext.getCurrentUser();
-
   let isAuthorizedToGetCase = isAuthorized(
-    currentUser,
+    authorizedUser,
     ROLE_PERMISSIONS.GET_CASE,
   );
   if (!isAuthorizedToGetCase) {
-    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    const petitioner = getPetitionerById(caseRecord, authorizedUser.userId);
     if (petitioner) {
       isAuthorizedToGetCase = isAuthorized(
-        currentUser,
+        authorizedUser,
         ROLE_PERMISSIONS.GET_CASE,
-        getPetitionerById(caseRecord, currentUser.userId).contactId,
+        getPetitionerById(caseRecord, authorizedUser.userId).contactId,
       );
     } else if (caseRecord.leadDocketNumber) {
       isAuthorizedToGetCase = isUserPartOfGroup({
         consolidatedCases: caseRecord.consolidatedCases,
-        userId: currentUser.userId,
+        userId: authorizedUser.userId,
       });
     }
   }
 
   let isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
-    user: currentUser,
+    user: authorizedUser,
   });
 
   if (caseRecord.leadDocketNumber) {
@@ -154,7 +164,7 @@ export const getCaseInteractor = async (
       isAssociatedWithCase ||
       isUserPartOfGroup({
         consolidatedCases: caseRecord.consolidatedCases,
-        userId: currentUser.userId,
+        userId: authorizedUser.userId,
       });
   }
 
@@ -168,11 +178,12 @@ export const getCaseInteractor = async (
   if (isSealedCase) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
+      authorizedUser,
       caseRecord,
       isAssociatedWithCase,
     });
   } else {
-    const { role: userRole } = currentUser;
+    const { role: userRole } = authorizedUser;
     const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
@@ -189,6 +200,9 @@ export const getCaseInteractor = async (
     }
   }
 
-  caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
+  caseDetailRaw = caseContactAddressSealedFormatter(
+    caseDetailRaw,
+    authorizedUser,
+  );
   return caseDetailRaw;
 };

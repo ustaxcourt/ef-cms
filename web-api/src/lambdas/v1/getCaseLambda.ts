@@ -1,4 +1,6 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
 import { marshallCase } from './marshallers/marshallCase';
 import { v1ApiWrapper } from './v1ApiWrapper';
 
@@ -9,18 +11,25 @@ import { v1ApiWrapper } from './v1ApiWrapper';
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getCaseLambda = (event, options) =>
+export const getCaseLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+  options,
+) =>
   genericHandler(
     event,
     ({ applicationContext }) =>
       v1ApiWrapper(async () => {
-        const caseObject = await applicationContext
-          .getUseCases()
-          .getCaseInteractor(applicationContext, {
+        const caseObject = await getCaseInteractor(
+          applicationContext,
+          {
             docketNumber: event.pathParameters.docketNumber,
-          });
+          },
+          authorizedUser,
+        );
 
         return marshallCase(caseObject);
       }),
+    authorizedUser,
     options,
   );
