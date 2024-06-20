@@ -2300,3 +2300,13 @@ button.change-scanner-button {
     margin-top: 1.25rem;
   }
 }
+
+.create-petition-review-step-title {
+  display: flex;
+  align-items: center;
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    justify-content: space-between;
+  }
+}
+
