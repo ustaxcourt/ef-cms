@@ -21,19 +21,20 @@ export const OrderResponse = connect(
       sequences.formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     orderResponseHelper: state.orderResponseHelper,
+    submitStatusReportOrderResponseSequence:
+      sequences.submitStatusReportOrderResponseSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
     // clearDueDateSequence,
-    // clearOptionalFieldsStampFormSequence,
     clearStatusReportOrderResponseFormSequence,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence,
-    // setPDFStampDataSequence,
     orderResponseHelper,
+    submitStatusReportOrderResponseSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -54,7 +55,6 @@ export const OrderResponse = connect(
                   Select one or more options:
                 </div>
                 <div className="stamp-order-form">
-                  {/* TODO this field will conditionally render if the case is a lead CaseDetail */}
                   {orderResponseHelper.isLeadCase && (
                     <>
                       <FormGroup
@@ -199,6 +199,9 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.MMDDYY,
                           value: e.target.value,
                         });
+                        // TODO is it necessary to run validation here, or can
+                        // we just validate upon form submission? Current lean
+                        // is toward the latter
                         //validateStampSequence();
                       }}
                     />
@@ -313,7 +316,8 @@ export const OrderResponse = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="additional-order-text"
-                        // TODO spec says 140 or 160, which is it?
+                        // TODO find the character limit used in the ApplyStamp
+                        // component and use that
                         maxLength={80}
                         name="additionalOrderText"
                         type="text"
@@ -326,7 +330,7 @@ export const OrderResponse = connect(
                         }}
                       ></textarea>
                       <CharactersRemainingHint
-                        // TODO spec says 140 or 160, which is it?
+                        // TODO see above
                         maxCharacters={80}
                         stringToCount={form.additionalOrderText}
                       />
@@ -354,8 +358,9 @@ export const OrderResponse = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="docket-entry-description"
-                        // TODO 10102 should there be a character limit for this field?
-                        // maxLength={constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
+                        // TODO find the character limit used in the ApplyStamp
+                        // component and use that
+                        maxLength={80}
                         name="docketEntryDescription"
                         type="text"
                         // TODO default value of this field should be just the string "Order"
@@ -367,14 +372,11 @@ export const OrderResponse = connect(
                           });
                         }}
                       ></textarea>
-                      {/*
-                      TODO does this need character limit hint?
                       <CharactersRemainingHint
-                        maxCharacters={
-                          constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS
-                        }
+                        // TODO see above
+                        maxCharacters={80}
                         stringToCount={form.customText}
-                      /> */}
+                      />
                     </div>
                   </FormGroup>
                 </div>
@@ -394,13 +396,13 @@ export const OrderResponse = connect(
               <div className="margin-bottom-1 display-flex flex-justify-end">
                 <Button
                   // TODO this button must be disabled if none of the following fields
-                  // are populated: orderType, jusidiction, striken from the record
+                  // are populated: orderType, jurisdiction, stricken from the record
                   // check box, or additional order text
                   className="margin-right-0"
                   data-testid="save-signature-button"
                   // disabled={!applyStampFormHelper.canSaveStampOrder}
                   id="save-signature-button"
-                  // onClick={() => submitStampMotionSequence()}
+                  onClick={() => submitStatusReportOrderResponseSequence()}
                 >
                   Save as Draft
                 </Button>
