@@ -9,6 +9,8 @@
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const orderResponseHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -18,6 +20,10 @@ export const orderResponseHelper = (
   //   - conditionally expose radio buttons to add just the case to the PDF or
   //   - to add all of the cases in the group to the PDF
 
+  const caseDetail = get(state.caseDetail);
+
+  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+
   const { DATE_FORMATS } = applicationContext.getConstants();
 
   const minDate = applicationContext
@@ -25,6 +31,7 @@ export const orderResponseHelper = (
     .formatNow(DATE_FORMATS.YYYYMMDD);
 
   return {
+    isLeadCase,
     minDate,
   };
 };

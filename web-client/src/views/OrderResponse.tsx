@@ -19,21 +19,21 @@ export const OrderResponse = connect(
 
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     orderResponseHelper: state.orderResponseHelper,
-    // navigateBackSequence: sequences.navigateBackSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
-    clearStatusReportOrderResponseFormSequence,
     // clearDueDateSequence,
     // clearOptionalFieldsStampFormSequence,
+    clearStatusReportOrderResponseFormSequence,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
-    orderResponseHelper,
-    // navigateBackSequence,
+    navigateBackSequence,
     // setPDFStampDataSequence,
+    orderResponseHelper,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -55,67 +55,73 @@ export const OrderResponse = connect(
                 </div>
                 <div className="stamp-order-form">
                   {/* TODO this field will conditionally render if the case is a lead CaseDetail */}
-                  <FormGroup
-                    className="stamp-form-group"
-                    errorText={validationErrors.issueOrder}
-                    // className={applyStampFormHelper.dispositionErrorClass}
-                  >
-                    <label className="usa-label" htmlFor="issue-order-radios">
-                      This is the lead case in a consolidateed group. Issue this
-                      order in:
-                    </label>
-                    <div className="usa-radio usa-radio__inline">
-                      <input
-                        // TODO "allCasesInGroup" should be selected by default
-                        aria-describedby="issue-order-radios"
-                        aria-label="all cases in group"
-                        checked={form.issueOrder === 'allCasesInGroup'}
-                        className="usa-radio__input"
-                        id="all-cases-in-group"
-                        name="issueOrder"
-                        type="radio"
-                        value="allCasesInGroup"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor="all-cases-in-group"
+                  {orderResponseHelper.isLeadCase && (
+                    <>
+                      <FormGroup
+                        className="stamp-form-group"
+                        errorText={validationErrors.issueOrder}
+                        // className={applyStampFormHelper.dispositionErrorClass}
                       >
-                        All cases in this group
-                      </label>
-                    </div>
-                    <div className="usa-radio usa-radio__inline">
-                      <input
-                        aria-describedby="issue-order-radios"
-                        aria-label="just this case"
-                        checked={form.issueOrder === 'justThisCase'}
-                        className="usa-radio__input"
-                        id="just-this-case"
-                        name="issueOrder"
-                        type="radio"
-                        value="justThisCase"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor="just-this-case"
-                      >
-                        Just this case
-                      </label>
-                    </div>
-                  </FormGroup>
-
-                  <hr className="border-top-2px border-base-lighter" />
+                        <label
+                          className="usa-label"
+                          htmlFor="issue-order-radios"
+                        >
+                          This is the lead case in a consolidateed group. Issue
+                          this order in:
+                        </label>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            // TODO "allCasesInGroup" should be selected by default
+                            aria-describedby="issue-order-radios"
+                            aria-label="all cases in group"
+                            checked={form.issueOrder === 'allCasesInGroup'}
+                            className="usa-radio__input"
+                            id="all-cases-in-group"
+                            name="issueOrder"
+                            type="radio"
+                            value="allCasesInGroup"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="all-cases-in-group"
+                          >
+                            All cases in this group
+                          </label>
+                        </div>
+                        <div className="usa-radio usa-radio__inline">
+                          <input
+                            aria-describedby="issue-order-radios"
+                            aria-label="just this case"
+                            checked={form.issueOrder === 'justThisCase'}
+                            className="usa-radio__input"
+                            id="just-this-case"
+                            name="issueOrder"
+                            type="radio"
+                            value="justThisCase"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor="just-this-case"
+                          >
+                            Just this case
+                          </label>
+                        </div>
+                      </FormGroup>
+                      <hr className="border-top-2px border-base-lighter" />
+                    </>
+                  )}
 
                   <FormGroup
                     className="stamp-form-group"
@@ -402,7 +408,7 @@ export const OrderResponse = connect(
                 <Button
                   link
                   icon={['fa', 'arrow-alt-circle-left']}
-                  // onClick={() => navigateBackSequence()}
+                  onClick={() => navigateBackSequence()}
                 >
                   Cancel
                 </Button>

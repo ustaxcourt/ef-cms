@@ -4,11 +4,11 @@ import joi from 'joi';
 
 export class StatusReportOrderResponseForm extends JoiValidationEntity {
   public issueOrder?: string;
-  public orderType: string;
-  public dueDate: string;
-  public strikenFromTrialSessions: string;
-  public jurisdiction: string;
-  public additionalOrderText: string;
+  public orderType?: string;
+  public dueDate?: string;
+  public strikenFromTrialSessions?: string;
+  public jurisdiction?: string;
+  public additionalOrderText?: string;
   public docketEntryDescription: string;
 
   constructor(rawProps) {
@@ -20,9 +20,11 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     this.strikenFromTrialSessions = rawProps.strikenFromTrialSessions;
     this.jurisdiction = rawProps.jurisdiction;
     this.additionalOrderText = rawProps.additionalOrderText;
-    this.docketEntryDescription = rawProps.docketEntryDescription;
+    this.docketEntryDescription = rawProps.docketEntryDescription || 'Order';
   }
   static VALIDATION_RULES = joi.object().keys({
+    additionalOrderText: JoiValidationConstants.STRING.max(80).optional(),
+    // TODO docketEntryDescription char limit?
     dueDate: JoiValidationConstants.ISO_DATE.when('orderType', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
@@ -34,15 +36,21 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     issueOrder: JoiValidationConstants.STRING.valid([
       'allCasesInGroup',
       'justThisCase',
-    ]),
+    ])
+      .optional()
+      .allow(null),
     jurisdiction: JoiValidationConstants.STRING.valid([
       'retained',
       'restoredToGeneralDocket',
-    ]),
+    ])
+      .optional()
+      .allow(null),
     orderType: JoiValidationConstants.STRING.valid([
       'statusReport',
       'orStipulatedDecision',
-    ]),
+    ])
+      .optional()
+      .allow(null),
   });
 
   getValidationRules() {
