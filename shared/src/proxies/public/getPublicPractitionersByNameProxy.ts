@@ -1,8 +1,9 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { PractitionersByName } from '@web-api/business/useCases/practitioner/getPractitionersByNameInteractor';
 import { get } from '../requests';
 
 export const getPublicPractitionersByNameInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   {
     name,
     searchAfter,

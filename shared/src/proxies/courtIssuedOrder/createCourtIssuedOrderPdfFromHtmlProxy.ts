@@ -1,7 +1,8 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { post } from '../requests';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   {
     addedDocketNumbers,
     contentHtml,
