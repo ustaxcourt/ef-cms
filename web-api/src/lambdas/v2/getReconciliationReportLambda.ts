@@ -1,4 +1,6 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getReconciliationReportInteractor } from '@shared/business/useCases/getReconciliationReportInteractor';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
 /**
@@ -10,7 +12,11 @@ import { v2ApiWrapper } from './v2ApiWrapper';
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the reconciliation report
  */
-export const getReconciliationReportLambda = (event, options = {}) =>
+export const getReconciliationReportLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+  options = {},
+) =>
   genericHandler(
     event,
     ({ applicationContext }) => {
@@ -18,12 +24,15 @@ export const getReconciliationReportLambda = (event, options = {}) =>
         const { end, start } = event.queryStringParameters;
         //url will contain the reconciliation date in path parameters, and times in the query string
         const parms = { ...event.pathParameters, end, start };
-        const report = await applicationContext
-          .getUseCases()
-          .getReconciliationReportInteractor(applicationContext, parms);
+        const report = await getReconciliationReportInteractor(
+          applicationContext,
+          parms,
+          authorizedUser,
+        );
 
         return report;
       });
     },
+    authorizedUser,
     options,
   );
