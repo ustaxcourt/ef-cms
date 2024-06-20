@@ -31,6 +31,8 @@ type PractitionerSearchHelperResult = {
   pageCount: number;
   pageSize: number;
   showPaginator: boolean;
+  isPublicUser: boolean;
+  stateHeaderText: string;
 };
 
 export const practitionerSearchHelper = (
@@ -38,16 +40,19 @@ export const practitionerSearchHelper = (
   applicationContext: ClientApplicationContext,
 ): PractitionerSearchHelperResult => {
   const searchResults = get(state.searchResults['practitioner']);
+  const isPublicUser = applicationContext.isPublicUser();
 
   let result: PractitionerSearchHelperResult = {
     activePage: 0,
     formattedSearchResults: [],
+    isPublicUser,
     numberOfResults: '0',
     pageCount: 0,
     pageSize: 0,
     showNoMatches: false,
     showPaginator: false,
     showSearchResults: false,
+    stateHeaderText: isPublicUser ? 'Original Bar State' : 'State',
   };
 
   if (searchResults && !searchResults.total) {
