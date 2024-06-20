@@ -39,7 +39,15 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     // password: PASSWORD_RULE,
 
     // TODO issueOrder radio button is only required if the case is a lead case
-    statusReportOrStipulatedDecision: JoiValidationConstants.STRING.valid([
+    issueOrder: JoiValidationConstants.STRING.valid([
+      'allCasesInGroup',
+      'justThisCase',
+    ]),
+    jurisdiction: JoiValidationConstants.STRING.valid([
+      'retained',
+      'restoredToGeneralDocket',
+    ]),
+    orderType: JoiValidationConstants.STRING.valid([
       'statusReport',
       'orStipulatedDecision',
     ]),
