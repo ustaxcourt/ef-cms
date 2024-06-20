@@ -19,38 +19,25 @@ describe('caseTypeDescriptionHelper', () => {
     expect(result).toMatchObject({
       caseTypes: [
         {
-          description: 'Notice of Determination Concerning Collection Action',
-          type: CASE_TYPES_MAP.cdp,
-        },
-        {
           description: 'Notice of Deficiency',
           type: CASE_TYPES_MAP.deficiency,
         },
         {
-          description:
-            'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
-          type: CASE_TYPES_MAP.innocentSpouse,
-        },
-        {
-          description:
-            'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
-          type: CASE_TYPES_MAP.interestAbatement,
+          description: 'Notice of Determination Concerning Collection Action',
+          type: CASE_TYPES_MAP.cdp,
         },
         {
           description: 'Other',
           type: CASE_TYPES_MAP.other,
         },
         {
-          description: 'Partnership Action Under BBA Section 1101',
-          type: CASE_TYPES_MAP.partnershipSection1101,
-        },
-        {
-          description: 'Readjustment of Partnership Items Code Section 6226',
-          type: CASE_TYPES_MAP.partnershipSection6226,
-        },
-        {
           description: 'Adjustment of Partnership Items Code Section 6228',
           type: CASE_TYPES_MAP.partnershipSection6228,
+        },
+        {
+          description:
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          type: 'Disclosure2',
         },
         {
           description:
@@ -59,22 +46,34 @@ describe('caseTypeDescriptionHelper', () => {
         },
         {
           description:
-            'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
-          type: CASE_TYPES_MAP.whistleblower,
+            'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
+          type: CASE_TYPES_MAP.innocentSpouse,
         },
         {
           description: 'Notice of Determination of Worker Classification',
           type: CASE_TYPES_MAP.workerClassification,
         },
         {
+          description:
+            'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
+          type: CASE_TYPES_MAP.whistleblower,
+        },
+        {
+          description:
+            'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
+          type: CASE_TYPES_MAP.interestAbatement,
+        },
+        {
           description: 'Notice of Intention to Disclose',
           type: 'Disclosure1',
         },
-
         {
-          description:
-            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
-          type: 'Disclosure2',
+          description: 'Partnership Action Under BBA Section 1101',
+          type: CASE_TYPES_MAP.partnershipSection1101,
+        },
+        {
+          description: 'Readjustment of Partnership Items Code Section 6226',
+          type: CASE_TYPES_MAP.partnershipSection6226,
         },
       ],
     });
@@ -86,11 +85,16 @@ describe('caseTypeDescriptionHelper', () => {
         form: { hasIrsNotice: false },
       },
     });
+
     expect(result).toMatchObject({
       caseTypes: [
         {
           description: 'CDP (Lien/Levy)',
           type: CASE_TYPES_MAP.cdp,
+        },
+        {
+          description: 'Notice of Deficiency',
+          type: CASE_TYPES_MAP.deficiency,
         },
         {
           description: 'Declaratory Judgment (Exempt Organization)',
@@ -116,6 +120,10 @@ describe('caseTypeDescriptionHelper', () => {
         {
           description: 'Other',
           type: CASE_TYPES_MAP.other,
+        },
+        {
+          description: 'Passport',
+          type: CASE_TYPES_MAP.passport,
         },
         {
           description: 'Whistleblower',

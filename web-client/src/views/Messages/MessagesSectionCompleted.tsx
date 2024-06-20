@@ -85,9 +85,48 @@ export const MessagesSectionCompleted = connect(
                   onClickSequence={sortTableSequence}
                 />
               </th>
-              <th>Comment</th>
-              <th>Completed By</th>
-              <th>Section</th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-comment-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="completedMessage"
+                  title="Comment"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-completed-by-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="completedBy"
+                  title="Completed By"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-section-completed-by-section-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="completedBySection"
+                  title="Section"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
             </tr>
           </thead>
           {formattedMessages.completedMessages.map(message => (
