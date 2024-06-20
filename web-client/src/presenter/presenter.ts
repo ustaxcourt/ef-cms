@@ -507,6 +507,7 @@ import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFil
 import { updateFilingTypeSequence } from './sequences/updateFilingTypeSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
+import { updateFormValueCountryTypeSequence } from '@web-client/presenter/sequences/updateFormValueCountryTypeSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateFormValueUpdatedSequence } from '@web-client/presenter/sequences/updateFormValueUpdatedSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
@@ -529,6 +530,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
+import { updateStepIndicatorSequence } from '@web-client/presenter/sequences/updateStepIndicatorSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
@@ -1444,6 +1446,8 @@ export const presenterSequences = {
     updateFormValueAndCaseCaptionSequence as unknown as Function,
   updateFormValueAndSecondaryContactInfoSequence:
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
+  updateFormValueCountryTypeSequence:
+    updateFormValueCountryTypeSequence as unknown as Function,
   updateFormValueSequence: updateFormValueSequence as unknown as Function,
   updateFormValueUpdatedSequence:
     updateFormValueUpdatedSequence as unknown as Function,
@@ -1482,6 +1486,8 @@ export const presenterSequences = {
     updateStartCaseInternalPartyTypeSequence as unknown as Function,
   updateStatisticsFormValueSequence:
     updateStatisticsFormValueSequence as unknown as Function,
+  updateStepIndicatorSequence:
+    updateStepIndicatorSequence as unknown as Function,
   updateTrialSessionCompleteSequence:
     updateTrialSessionCompleteSequence as unknown as Function,
   updateTrialSessionFormDataSequence:

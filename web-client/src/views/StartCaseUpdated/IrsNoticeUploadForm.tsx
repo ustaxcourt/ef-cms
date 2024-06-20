@@ -3,13 +3,12 @@ import { CaseTypeSelect } from '@web-client/views/StartCase/CaseTypeSelect';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import classNames from 'classnames';
 
 const props = cerebralProps as unknown as {
@@ -27,6 +26,7 @@ const props = cerebralProps as unknown as {
   caseType: string;
   file: File;
   cityAndStateIssuingOffice: string;
+  refProp: MutableRefObject<Object>;
 };
 
 export const IrsNoticeUploadForm = connect(
@@ -74,7 +74,7 @@ export const IrsNoticeUploadForm = connect(
     return (
       <>
         {index !== 0 && <LineBreak />}
-        <div className={classNames('usa-form-group', 'margin-bottom-0')}>
+        <div className="usa-form-group margin-bottom-0 irs-notice-form">
           <FormGroup errorText={[validationError.file, validationError.size]}>
             <label
               className={classNames(
@@ -89,7 +89,8 @@ export const IrsNoticeUploadForm = connect(
             </label>
             <span className="usa-hint" id="atp-files-upload-hint">
               Make sure file is not encrypted or password protected. Max file
-              size {constants.MAX_FILE_SIZE_MB}MB.
+              size {constants.MAX_FILE_SIZE_MB}MB. You may upload up to five PDF
+              files.
             </span>
             <StateDrivenFileInput
               aria-describedby={`irs-notice-upload-${index}-label`}
@@ -107,7 +108,7 @@ export const IrsNoticeUploadForm = connect(
               {index !== 0 && (
                 <Button
                   link
-                  className="margin-left-10 irs-notice-remove-button"
+                  className="margin-left-1 irs-notice-remove-button"
                   onClick={() => removeIrsNoticeFromFormSequence({ index })}
                 >
                   <Icon
@@ -115,44 +116,45 @@ export const IrsNoticeUploadForm = connect(
                     icon={['fas', 'times']}
                     size="1x"
                   />
-                  <span style={{ marginLeft: '-5px' }}>Remove</span>
+                  <span className="margin-left-neg-05">Remove</span>
                 </Button>
               )}
             </h2>
           </div>
-
-          <Mobile>
-            <CaseTypeSelect
-              allowDefaultOption={true}
-              caseTypes={caseTypeDescriptionHelper.caseTypes}
-              errorMessageId={`case-type-${index}-error-message`}
-              hint="(required)"
-              legend="Type of notice/case"
-              name={index.toString()}
-              refProp={refProp}
-              validationError={validationError}
-              value={caseType}
-              onBlurSequence={() => {
-                petitionGenerationLiveValidationSequence({
-                  validationKey: [
-                    'irsNotices',
-                    { property: 'index', value: index },
-                    'caseType',
-                  ],
-                });
-              }}
-              onChange={info => {
-                updateIrsNoticeIndexPropertySequence(info);
-                deleteValidationErrorMessageSequence({
-                  validationKey: [
-                    'irsNotices',
-                    { property: 'index', value: index },
-                    'caseType',
-                  ],
-                });
-              }}
-            />
-            <div>
+          <div className="grid-row">
+            <div className="mobile:grid-col-12 desktop:grid-col-8">
+              <CaseTypeSelect
+                allowDefaultOption={true}
+                caseTypes={caseTypeDescriptionHelper.caseTypes}
+                errorMessageId={`case-type-${index}-error-message`}
+                hint="(required)"
+                legend="Type of notice/case"
+                name={index.toString()}
+                refProp={refProp}
+                validationError={validationError}
+                value={caseType}
+                onBlurSequence={() => {
+                  petitionGenerationLiveValidationSequence({
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'caseType',
+                    ],
+                  });
+                }}
+                onChange={info => {
+                  updateIrsNoticeIndexPropertySequence(info);
+                  deleteValidationErrorMessageSequence({
+                    validationKey: [
+                      'irsNotices',
+                      { property: 'index', value: index },
+                      'caseType',
+                    ],
+                  });
+                }}
+              />
+            </div>
+            <div className="mobile:grid-col-12 desktop:grid-col-4">
               <DateSelector
                 defaultValue={noticeIssuedDate}
                 errorText={validationError.noticeIssuedDate}
@@ -186,13 +188,19 @@ export const IrsNoticeUploadForm = connect(
                 }}
               />
             </div>
-            <FormGroup errorText={validationError.taxYear}>
+          </div>
+          <div className="grid-row grid-gap">
+            <FormGroup
+              className="mobile:grid-col-12 desktop:grid-col-6"
+              errorText={validationError.taxYear}
+            >
               <label className="usa-label" htmlFor="noticeIssuesTaxYear">
                 Tax year or period for which the notice was issued
               </label>
               <input
                 autoCapitalize="none"
                 className="usa-input"
+                data-testid={`irs-notice-tax-year-${index}`}
                 id="noticeIssuesTaxYear"
                 name="taxYear"
                 type="text"
@@ -223,7 +231,7 @@ export const IrsNoticeUploadForm = connect(
                 }}
               />
             </FormGroup>
-            <div>
+            <FormGroup className="mobile:grid-col-12 desktop:grid-col-6">
               <label className="usa-label" htmlFor="cityAndStateIssuingOffice">
                 City and state of issuing office
               </label>
@@ -260,162 +268,8 @@ export const IrsNoticeUploadForm = connect(
                   });
                 }}
               />
-            </div>
-          </Mobile>
-          <NonMobile>
-            <div className="grid-row grid-gap">
-              <div className="grid-col-8">
-                <CaseTypeSelect
-                  allowDefaultOption={true}
-                  caseTypes={caseTypeDescriptionHelper.caseTypes}
-                  errorMessageId={`case-type-${index}-error-message`}
-                  hint="(required)"
-                  legend="Type of notice/case"
-                  name={index.toString()}
-                  refProp={refProp}
-                  validationError={validationError}
-                  value={caseType}
-                  onBlurSequence={() => {
-                    petitionGenerationLiveValidationSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'caseType',
-                      ],
-                    });
-                  }}
-                  onChange={info => {
-                    updateIrsNoticeIndexPropertySequence(info);
-                    deleteValidationErrorMessageSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'caseType',
-                      ],
-                    });
-                  }}
-                />
-              </div>
-              <div className="grid-col-4">
-                <DateSelector
-                  defaultValue={noticeIssuedDate}
-                  errorText={validationError.noticeIssuedDate}
-                  id={`notice-issued-date-${index}`}
-                  label="Date IRS issued the notice"
-                  maxDate={todayDate}
-                  onBlur={() => {
-                    petitionGenerationLiveValidationSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'noticeIssuedDate',
-                      ],
-                    });
-                  }}
-                  onChange={e => {
-                    updateIrsNoticeIndexPropertySequence({
-                      key: index.toString(),
-                      property: 'noticeIssuedDate',
-                      toFormat: DATE_FORMATS.ISO,
-                      value: e.target.value,
-                    });
-
-                    deleteValidationErrorMessageSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'noticeIssuedDate',
-                      ],
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            <div className="grid-row grid-gap">
-              <FormGroup
-                className="grid-col-8"
-                errorText={validationError.taxYear}
-              >
-                <label className="usa-label" htmlFor="noticeIssuesTaxYear">
-                  Tax year or period for which the notice was issued
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  data-testid={`irs-notice-tax-year-${index}`}
-                  id="noticeIssuesTaxYear"
-                  name="taxYear"
-                  type="text"
-                  value={taxYear}
-                  onBlur={() => {
-                    petitionGenerationLiveValidationSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'taxYear',
-                      ],
-                    });
-                  }}
-                  onChange={e => {
-                    updateIrsNoticeIndexPropertySequence({
-                      key: index.toString(),
-                      property: 'taxYear',
-                      value: e.target.value,
-                    });
-
-                    deleteValidationErrorMessageSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'taxYear',
-                      ],
-                    });
-                  }}
-                />
-              </FormGroup>{' '}
-              <div className="grid-col-4">
-                <label
-                  className="usa-label"
-                  htmlFor="cityAndStateIssuingOffice"
-                >
-                  City and state of issuing office
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  data-testid={`city-and-state-issuing-office-${index}`}
-                  id="cityAndStateIssuingOffice"
-                  name="cityAndStateIssuingOffice"
-                  type="text"
-                  value={cityAndStateIssuingOffice}
-                  onBlur={() => {
-                    petitionGenerationLiveValidationSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'cityAndStateIssuingOffice',
-                      ],
-                    });
-                  }}
-                  onChange={e => {
-                    updateIrsNoticeIndexPropertySequence({
-                      key: index.toString(),
-                      property: 'cityAndStateIssuingOffice',
-                      value: e.target.value,
-                    });
-
-                    deleteValidationErrorMessageSequence({
-                      validationKey: [
-                        'irsNotices',
-                        { property: 'index', value: index },
-                        'cityAndStateIssuingOffice',
-                      ],
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </NonMobile>
+            </FormGroup>
+          </div>
         </div>
       </>
     );

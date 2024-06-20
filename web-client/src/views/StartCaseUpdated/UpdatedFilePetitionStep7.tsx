@@ -11,22 +11,21 @@ export function UpdatedFilePetitionStep7() {
     <>
       <SuccessNotification isDismissible={false} />
       <div className="petitioner-flow-text">
-        Once the Petition is processed by the Court, you will be able to check
-        the status of your case, submit new documents and view activity on the
-        case on the docket record.
+        Once the Petition is processed by the Court, you will be able to view
+        and submit documents.
       </div>
-      <h3 className="margin-top-20">Pay $60 filing fee</h3>
+      <h3 className="margin-top-205">Pay $60 filing fee</h3>
       <div className="petitioner-flow-text">
-        Pay by credit/debit card, Amazon, PayPal or ACH (bank account) online.
-        You’ll need your docket number.
+        Pay by credit/debit card, Amazon Pay, PayPal or ACH (bank account)
+        online. You’ll need your docket number.
       </div>
-      <div className="petitioner-flow-text margin-top-3">
+      <div className="petitioner-flow-text margin-top-1">
         Your case’s filing fee status may take 2-3 business days from payment
-        date to update in your case.
+        date to update.
       </div>
 
       <Button
-        className="margin-top-20"
+        className="margin-top-205"
         href="https://www.pay.gov/public/form/start/60485840"
         rel="noopener noreferrer"
         target="_blank"
@@ -34,7 +33,7 @@ export function UpdatedFilePetitionStep7() {
         Pay Now Online
       </Button>
 
-      <div className="grid-row grid-gap margin-top-20">
+      <div className="grid-row grid-gap margin-top-205">
         <Accordion
           className="petitioner-accordion-title"
           headingLevel="3"
@@ -45,14 +44,14 @@ export function UpdatedFilePetitionStep7() {
             key="Mail-in payment"
             title="Mail-in payment"
           >
-            <div className="line-height-24">
-              <div className="margin-bottom-5">
+            <div className="line-height-2">
+              <div className="margin-bottom-1">
                 Make checks/money orders payable to:{' '}
               </div>
               <div>Clerk, United States Tax Court</div>
               <div>400 Second Street, NW </div>
               <div>Washington, DC 20217 </div>
-              <div className="margin-bottom-8">
+              <div className="margin-top-1">
                 {`On the memo line of the check or money order, write "filing
                   fee" and your docket number.`}
               </div>
@@ -69,7 +68,7 @@ export function UpdatedFilePetitionStep7() {
             key="Can’t afford to pay the filing fee?"
             title="Can’t afford to pay the filing fee?"
           >
-            <div className="line-height-24">
+            <div className="line-height-2">
               <span>Submit an </span>
               <Button
                 link
@@ -83,25 +82,25 @@ export function UpdatedFilePetitionStep7() {
                 Application for Waiver of Filing Fee.
               </Button>
               <span>
-                This form requires detailed information and must be signed under
-                penalty of perjury.
+                This form requires detailed financial information and must be
+                signed under penalty of perjury.
               </span>
-              <ol className="margin-top-5 padding-left-25">
+              <ol className="margin-top-1 padding-left-4">
                 <li>Download and fill in the form.</li>
                 <li>
                   Print the completed form or save a PDF of the form to your
                   computer/device.
                 </li>
                 <li>
-                  File the form to your case:
-                  <ul className="list-style-disc padding-left-20">
+                  File the form:
+                  <ul className="list-style-disc padding-left-4">
                     <li>
                       You may electronically file the form after your Petition
                       has been processed by the Court.
                     </li>
                     <li>
                       <div>You may mail or bring the form to:</div>
-                      <div className="margin-top-3">
+                      <div className="margin-top-1">
                         Clerk, United States Tax Court
                       </div>
                       <div>400 Second Street, NW</div>
@@ -115,7 +114,7 @@ export function UpdatedFilePetitionStep7() {
         </Accordion>
       </div>
 
-      <Button secondary className="margin-top-20" href="/">
+      <Button secondary className="margin-top-205" href="/">
         Go to My Cases
       </Button>
     </>

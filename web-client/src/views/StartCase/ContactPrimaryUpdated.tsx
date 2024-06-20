@@ -24,6 +24,7 @@ const props = cerebralProps as unknown as {
   placeOfLegalResidenceTitle?: string;
   showInCareOf?: boolean;
   showInCareOfOptional?: boolean;
+  onChangeCountryType: string;
 };
 
 export const ContactPrimaryUpdated = connect(
@@ -35,6 +36,7 @@ export const ContactPrimaryUpdated = connect(
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
+    onChangeCountryType: props.onChangeCountryType,
     onChangeSequence: sequences[props.onChange],
     placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
     registerRef: props.registerRef,
@@ -54,6 +56,7 @@ export const ContactPrimaryUpdated = connect(
     onBlur,
     onBlurSequence,
     onChange,
+    onChangeCountryType,
     onChangeSequence,
     placeOfLegalResidenceTitle,
     registerRef,
@@ -207,6 +210,7 @@ export const ContactPrimaryUpdated = connect(
             type="contactPrimary"
             onBlur={onBlur}
             onChange={onChange}
+            onChangeCountryType={onChangeCountryType}
           />
 
           {data.contactPrimary.countryType ===
