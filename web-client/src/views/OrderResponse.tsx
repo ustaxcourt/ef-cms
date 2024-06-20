@@ -7,7 +7,7 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-// import React, { useEffect, useRef } from 'react';
+import React from 'react'; //{ useEffect, useRef }
 
 export const OrderResponse = connect(
   {
@@ -56,8 +56,9 @@ export const OrderResponse = connect(
                 <div className="stamp-order-form">
                   {/* TODO this field will conditionally render if the case is a lead CaseDetail */}
                   <FormGroup
-                  // className={applyStampFormHelper.dispositionErrorClass}
-                  // errorText={validationErrors.disposition}
+                    className="stamp-form-group"
+                    // className={applyStampFormHelper.dispositionErrorClass}
+                    // errorText={validationErrors.disposition}
                   >
                     <label className="usa-label" htmlFor="issue-order">
                       This is the lead case in a consolidateed group. Issue this
