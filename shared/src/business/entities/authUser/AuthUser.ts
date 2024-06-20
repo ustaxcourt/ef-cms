@@ -1,5 +1,4 @@
 import { ROLES, Role } from '@shared/business/entities/EntityConstants';
-import { pinkLog } from '@shared/tools/pinkLog';
 import joi from 'joi';
 
 export type AuthUser = {
@@ -29,7 +28,6 @@ export function isAuthUser(user): user is AuthUser {
   });
 
   if (error) {
-    pinkLog('isAuthUser error', error);
     return false;
   }
 
