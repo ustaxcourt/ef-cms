@@ -10,6 +10,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../entities/User';
 import { caseSearchFilter } from '../utilities/caseFilter';
 import { omit } from 'lodash';
@@ -35,9 +36,8 @@ export const orderAdvancedSearchInteractor = async (
     keyword: string;
     startDate: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
