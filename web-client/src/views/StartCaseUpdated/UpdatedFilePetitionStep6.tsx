@@ -338,7 +338,7 @@ function IRSNoticeInformation({ petitionFormatted }) {
                   <Button
                     link
                     className="padding-0 text-left word-break"
-                    data-testid="irs-notice-preview-button"
+                    data-testid="atp-preview-button"
                     href={irsNotice.irsNoticeFileUrl}
                     rel="noopener noreferrer"
                     target="_blank"
