@@ -1,15 +1,4 @@
-import {
-  AsyncGzip,
-  AsyncUnzipInflate,
-  AsyncZipDeflate,
-  Unzip,
-  Zip,
-  gzip,
-  strFromU8,
-  unzip,
-  zip,
-  zlib,
-} from 'fflate';
+import { AsyncZipDeflate, Gzip, Zip, ZipDeflate } from 'fflate';
 import { PassThrough, Writable } from 'stream';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Upload } from '@aws-sdk/lib-storage';
@@ -46,12 +35,31 @@ export async function zipDocuments(
       callback();
     },
   });
+
   passThrough.pipe(writable);
 
   // Start the upload process
   const uploadPromise = upload.done();
 
-  let count = 1;
+  const zip = new Zip((err, data, final) => {
+    console.log('zip data is available');
+    passThrough.write(data);
+
+    if (err) {
+      console.log('error: ', err);
+    }
+
+    if (final) {
+      console.log('FINAL');
+      passThrough.end();
+    }
+  });
+  // zip.ondata = (err, chunk, _final) => {
+  //   console.log('ZIP GOT DATA');
+  //   passThrough.write(chunk);
+  // };
+
+  let count = 0;
   for (let document of documents) {
     const response = await applicationContext.getStorageClient().getObject({
       Bucket: useTempBucket
@@ -61,22 +69,16 @@ export async function zipDocuments(
     });
     const bigArray = await response.Body?.transformToByteArray()!;
 
-    await new Promise((resolve, reject) => {
-      zlib(bigArray, { consume: true, level: 6 }, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          passThrough.write(data, () => {
-            resolve(true);
-          });
-        }
-      });
-    });
+    const exampleFile = new AsyncZipDeflate(document.filePathInZip, {});
+    zip.add(exampleFile);
+    exampleFile.push(bigArray, true);
 
     count = count + 1;
     console.log('CompletedDocuments: ', count);
   }
-  passThrough.end();
+
+  zip.end();
+  // passThrough.end();
 
   await uploadPromise;
 }
