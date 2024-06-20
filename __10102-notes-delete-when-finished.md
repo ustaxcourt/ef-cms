@@ -2,7 +2,7 @@
 
 ## Questions for UX
 
-1. Should the "Docket entry descripton" textarea field have a restriction on its
+1. Should the "Docket entry description" textarea field have a restriction on its
 character length similar to "Additional order text" above?
 
 2. The test case says that the "Additional order text" field should be only 140 or
