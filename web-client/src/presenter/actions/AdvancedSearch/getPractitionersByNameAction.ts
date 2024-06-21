@@ -5,7 +5,9 @@ export const getPractitionersByNameAction = async ({
   get,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{ selectedPage: number }>) => {
+  const { selectedPage } = props;
+
   const {
     lastKeysOfPages,
     practitionerName,
@@ -17,19 +19,19 @@ export const getPractitionersByNameAction = async ({
 
   store.set(
     state.advancedSearchForm.practitionerSearchByName.pageNum,
-    props.selectedPage,
+    selectedPage,
   );
 
   const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
-      searchAfter: lastKeysOfPages[props.selectedPage],
+      searchAfter: lastKeysOfPages[selectedPage],
     });
 
   store.set(
     state.advancedSearchForm.practitionerSearchByName.lastKeysOfPages[
-      props.selectedPage + 1
+      selectedPage + 1
     ],
     searchResults.lastKey,
   );
