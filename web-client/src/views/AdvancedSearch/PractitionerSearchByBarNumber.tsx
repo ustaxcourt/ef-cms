@@ -78,7 +78,7 @@ export const PractitionerSearchByBarNumber = connect(
                 </Button>
                 <Button
                   link
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                  className="margin-top-1"
                   data-testid="clear-practitioner-search"
                   onClick={e => {
                     e.preventDefault();
