@@ -2,10 +2,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const generatePrintablePendingReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, judge }: { docketNumber?: string; judge?: string },
 ): Promise<string> => {
   const authorizedUser = applicationContext.getCurrentUser();

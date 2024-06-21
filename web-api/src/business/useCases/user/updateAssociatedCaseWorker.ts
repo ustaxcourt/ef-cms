@@ -123,7 +123,7 @@ const updateCaseEntityAndGenerateChange = async ({
   rawCaseData,
   user,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   rawCaseData: RawCase;
   user: RawUser;
 }): Promise<RawCase | undefined> => {

@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -16,7 +17,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {Promise<Object>} the case details with the uploaded document(s) attached
  */
 export const uploadExternalDocumentsInteractor = async (
-  applicationContext: any,
+  applicationContext: ClientApplicationContext,
   {
     documentFiles,
     documentMetadata,
