@@ -40,8 +40,7 @@ export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
       })
       .messages({
         '*': 'Enter a date',
-        'date.min':
-          'Date must be no earlier than yesterday. Enter a valid date.',
+        'date.min': 'Due date cannot be prior to today. Enter a valid date.',
       }),
   };
 
