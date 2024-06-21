@@ -3,16 +3,25 @@ import { PassThrough, Writable } from 'stream';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Upload } from '@aws-sdk/lib-storage';
 
+export type ProgressData = {
+  totalFiles: number;
+  filesCompleted: number;
+};
+
 export async function zipDocuments(
   applicationContext: ServerApplicationContext,
   {
     documents,
+    onProgress,
     outputZipName,
-    useTempBucket,
   }: {
-    documents: { documentId: string; filePathInZip: string }[];
+    onProgress: (params: ProgressData) => Promise<void> | void;
+    documents: {
+      documentId: string;
+      filePathInZip: string;
+      useTempBucket: boolean;
+    }[];
     outputZipName: string;
-    useTempBucket: boolean;
   },
 ): Promise<void> {
   const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 300 });
@@ -53,11 +62,12 @@ export async function zipDocuments(
     }
   });
 
-  for (let document of documents) {
+  for (let index = 0; index < documents.length; index++) {
+    const document = documents[index];
     const pdf = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key: document.documentId,
-      useTempBucket,
+      useTempBucket: document.useTempBucket,
     });
     const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
     zip.add(compressedPdfStream);
@@ -67,10 +77,13 @@ export async function zipDocuments(
       // Wait for the buffer to be drained, before downloading more files
       await new Promise(resolve => setTimeout(resolve, 10));
     }
+
+    await onProgress({
+      filesCompleted: index + 1,
+      totalFiles: documents.length,
+    });
   }
 
   zip.end();
   await uploadPromise;
 }
-
-// Progress indicator functionality
