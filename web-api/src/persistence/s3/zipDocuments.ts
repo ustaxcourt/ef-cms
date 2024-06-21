@@ -1,4 +1,4 @@
-import { AsyncZipDeflate, Gzip, Zip, ZipDeflate } from 'fflate';
+import { AsyncZipDeflate, Zip } from 'fflate';
 import { PassThrough, Writable } from 'stream';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Upload } from '@aws-sdk/lib-storage';
@@ -15,7 +15,7 @@ export async function zipDocuments(
     useTempBucket: boolean;
   },
 ): Promise<void> {
-  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 1 });
+  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 512 });
 
   const upload = new Upload({
     client: applicationContext.getStorageClient(),
@@ -29,11 +29,9 @@ export async function zipDocuments(
     console.log('s3 upload progress: ', progress);
   });
 
-  let isProcessing = false;
   const writable = new Writable({
     write(chunk, encoding, callback) {
       console.log('Received chunk:');
-      isProcessing = false;
       callback();
     },
   });
@@ -44,11 +42,15 @@ export async function zipDocuments(
   const uploadPromise = upload.done();
 
   const zip = new Zip((err, data, final) => {
-    console.log('zip data is available');
-    passThrough.write(data);
-
     if (err) {
-      console.log('error: ', err);
+      console.log('Error creating zip stream');
+      throw err;
+    }
+
+    console.log('zip data is available');
+    const idk = passThrough.write(data);
+    if (!idk) {
+      console.log('UH OH WE ARE OVERFLOWING');
     }
 
     if (final) {
@@ -67,11 +69,11 @@ export async function zipDocuments(
     });
     const bigArray = await response.Body?.transformToByteArray()!;
 
-    const exampleFile = new AsyncZipDeflate(document.filePathInZip, {});
+    const exampleFile = new AsyncZipDeflate(document.filePathInZip);
     zip.add(exampleFile);
     exampleFile.push(bigArray, true);
-    isProcessing = true;
-    while (isProcessing) {
+    while (passThrough.readableLength > 1024 * 1024 * 256) {
+      console.log('Draining: ', passThrough.readableLength);
       await new Promise(resolve => setTimeout(resolve, 10));
     }
 
@@ -80,10 +82,8 @@ export async function zipDocuments(
   }
 
   zip.end();
-  // passThrough.end();
 
   await uploadPromise;
 }
 
-// Pdfs are not being named correctly
 // Progress indicator functionality
