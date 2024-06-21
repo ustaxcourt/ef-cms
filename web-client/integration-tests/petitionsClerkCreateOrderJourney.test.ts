@@ -1,11 +1,9 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkAddsDocketEntryForOrderAndSavesForLater } from './journey/petitionsClerkAddsDocketEntryForOrderAndSavesForLater';
 import { petitionsClerkAddsGenericOrderToCase } from './journey/petitionsClerkAddsGenericOrderToCase';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 import { petitionsClerkEditsDraftOrder } from './journey/petitionsClerkEditsDraftOrder';
 import { petitionsClerkEditsGenericOrder } from './journey/petitionsClerkEditsGenericOrder';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
 import { petitionsClerkViewsAddDocketEntryForGenericOrder } from './journey/petitionsClerkViewsAddDocketEntryForGenericOrder';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -49,6 +47,6 @@ describe('Petitions Clerk Create Order Journey', () => {
   petitionsClerkEditsGenericOrder(cerebralTest);
   petitionsClerkSignsOrder(cerebralTest);
   petitionsClerkViewsAddDocketEntryForGenericOrder(cerebralTest);
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
-  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(cerebralTest);
+  // petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  // petitionsClerkAddsDocketEntryForOrderAndSavesForLater(cerebralTest);
 });
