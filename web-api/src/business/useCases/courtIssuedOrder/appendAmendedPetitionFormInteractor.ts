@@ -1,10 +1,10 @@
 import { AMENDED_PETITION_FORM_NAME } from '../../../../../shared/src/business/entities/EntityConstants';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const appendAmendedPetitionFormInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -21,18 +21,13 @@ export const appendAmendedPetitionFormInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let orderDocument;
-  try {
-    orderDocument = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        key: docketEntryId,
-        useTempBucket: false,
-      });
-  } catch (e) {
-    throw new NotFoundError(`Docket entry ${docketEntryId} was not found`);
-  }
+  const orderDocument = await applicationContext
+    .getPersistenceGateway()
+    .getDocument({
+      applicationContext,
+      key: docketEntryId,
+      useTempBucket: false,
+    });
 
   const amendedPetitionFormData = await applicationContext
     .getPersistenceGateway()

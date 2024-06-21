@@ -43,19 +43,10 @@ export const addCoversheetInteractor = async (
     caseEntity = new Case(caseRecord, { applicationContext });
   }
 
-  let pdfData;
-  try {
-    pdfData = await applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
-      key: docketEntryId,
-    });
-  } catch (err) {
-    applicationContext.logger.error(
-      `Failed to get document for docket entry id ${docketEntryId} `,
-      err,
-    );
-    throw err;
-  }
+  const pdfData = await applicationContext.getPersistenceGateway().getDocument({
+    applicationContext,
+    key: docketEntryId,
+  });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
