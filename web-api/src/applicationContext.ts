@@ -48,6 +48,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -75,7 +76,6 @@ import sass from 'sass';
 let s3Cache: AWS.S3 | undefined;
 let sqsCache;
 let searchClientCache: Client;
-let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -244,28 +244,7 @@ export const createApplicationContext = (
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
-    getNotificationService: () => {
-      if (notificationServiceCache) {
-        return notificationServiceCache;
-      }
-
-      if (environment.stage === 'local') {
-        notificationServiceCache = {
-          publish: () => ({
-            promise: () => {},
-          }),
-        };
-      } else {
-        notificationServiceCache = new AWS.SNS({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-        });
-      }
-      return notificationServiceCache;
-    },
+    getNotificationService,
     getPdfJs: () => {
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
