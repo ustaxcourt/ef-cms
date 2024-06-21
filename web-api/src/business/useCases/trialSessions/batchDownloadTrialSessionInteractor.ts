@@ -72,15 +72,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
       trialSessionId,
     });
 
-  const trialDate = formatDateString(
-    trialSessionDetails.startDate,
-    FORMATS.FILENAME_DATE,
-  );
-  const { trialLocation } = trialSessionDetails;
-  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
-    .replace(/\s/g, '_')
-    .replace(/,/g, '');
-
   const batchableSessionCases = allSessionCases
     .filter(
       caseToFilter => !isClosed(caseToFilter) && !caseToFilter.removedFromTrial,
@@ -97,7 +88,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
     });
 
   const documentsToZip: {
-    documentId: string;
+    key: string;
     filePathInZip: string;
     useTempBucket: boolean;
   }[] = [];
@@ -113,8 +104,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
       const filename = generateValidDocketEntryFilename(docketEntry);
       const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
       documentsToZip.push({
-        documentId: docketEntry.docketEntryId,
         filePathInZip: pdfTitle,
+        key: docketEntry.docketEntryId,
         useTempBucket: false,
       });
     }
@@ -155,8 +146,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
     await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
 
     documentsToZip.push({
-      documentId: result.fileId,
       filePathInZip: `${sessionCase.caseFolder}/0_Docket Record.pdf`,
+      key: result.fileId,
       useTempBucket: true,
     });
   }
@@ -167,7 +158,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
       message: {
         action: 'batch_download_progress',
         filesCompleted: progressData.filesCompleted,
-        totalFiles: documentsToZip.length,
+        totalFiles: progressData.totalFiles,
       },
       userId: user.userId,
     });
@@ -182,6 +173,16 @@ const batchDownloadTrialSessionInteractorHelper = async (
     },
     userId: user.userId,
   });
+
+  const trialDate = formatDateString(
+    trialSessionDetails.startDate,
+    FORMATS.FILENAME_DATE,
+  );
+  const zipName = sanitize(
+    `${trialDate}-${trialSessionDetails.trialLocation}.zip`,
+  )
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
 
   await applicationContext
     .getPersistenceGateway()
@@ -213,7 +214,11 @@ export const generateValidDocketEntryFilename = ({
   documentTitle,
   filingDate,
   index,
-}) => {
+}: {
+  documentTitle: string;
+  filingDate: string;
+  index: string;
+}): string => {
   const MAX_OVERALL_FILE_LENGTH = 64;
   const EXTENSION = '.pdf';
   const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;

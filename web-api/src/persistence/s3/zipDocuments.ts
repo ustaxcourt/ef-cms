@@ -17,7 +17,7 @@ export async function zipDocuments(
   }: {
     onProgress: (params: ProgressData) => Promise<void> | void;
     documents: {
-      documentId: string;
+      key: string;
       filePathInZip: string;
       useTempBucket: boolean;
     }[];
@@ -66,7 +66,7 @@ export async function zipDocuments(
     const document = documents[index];
     const pdf = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
-      key: document.documentId,
+      key: document.key,
       useTempBucket: document.useTempBucket,
     });
     const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
