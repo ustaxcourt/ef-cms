@@ -1,7 +1,8 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { get } from '../requests';
 
 export const checkEmailAvailabilityInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   { email }: { email: string },
 ): Promise<{ isAccountUnverified: boolean; isEmailAvailable: boolean }> => {
   return get({
