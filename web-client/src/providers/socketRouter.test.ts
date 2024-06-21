@@ -65,10 +65,6 @@ describe('socketRouter', () => {
       sequence: 'updateBatchDownloadProgressSequence',
     },
     {
-      message: { action: 'batch_download_upload_start' },
-      sequence: 'updateBatchDownloadProgressSequence',
-    },
-    {
       message: { action: 'batch_download_progress' },
       sequence: 'updateBatchDownloadProgressSequence',
     },
