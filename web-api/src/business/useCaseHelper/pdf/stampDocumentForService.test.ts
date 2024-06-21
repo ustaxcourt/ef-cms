@@ -1,4 +1,4 @@
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { SERVICE_STAMP_OPTIONS } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { stampDocumentForService } from './stampDocumentForService';
 
@@ -6,11 +6,12 @@ describe('stampDocumentForService', () => {
   it('should set `Served` as the stamp text when the documentType is NOT order and the document eventCode is not one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await stampDocumentForService({
       applicationContext,
+      docketEntryId: '34ceb7ca-20a7-42cb-b69c-a726991f245f',
       documentToStamp: {
         documentType: 'Motion to Withdraw as Counsel',
         eventCode: 'M112',
+        serviceStamp: SERVICE_STAMP_OPTIONS[0],
       },
-      pdfData: {},
     });
 
     expect(
@@ -24,11 +25,12 @@ describe('stampDocumentForService', () => {
 
     await stampDocumentForService({
       applicationContext,
+      docketEntryId: 'e7107cab-1e26-40be-bd06-eda0f6b439e0',
       documentToStamp: {
         documentType: 'Order',
+        eventCode: 'O',
         serviceStamp: mockServiceStamp,
       },
-      pdfData: {},
     });
 
     expect(
@@ -40,10 +42,12 @@ describe('stampDocumentForService', () => {
   it('should set `Entered and Served` as the stamp text when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await stampDocumentForService({
       applicationContext,
+      docketEntryId: '999d79bd-5699-438b-8a57-c6ffb3eb9514',
       documentToStamp: {
-        eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
+        documentType: 'Order of Dismissal for Lack of Jurisdiction',
+        eventCode: 'ODJ',
+        serviceStamp: SERVICE_STAMP_OPTIONS[0],
       },
-      pdfData: {},
     });
 
     expect(
@@ -64,8 +68,12 @@ describe('stampDocumentForService', () => {
 
     await stampDocumentForService({
       applicationContext,
-      documentToStamp: {},
-      pdfData: {},
+      docketEntryId: '1ed90cf7-2816-4e1b-a777-4ae3229b05eb',
+      documentToStamp: {
+        documentType: 'Order of Dismissal for Lack of Jurisdiction',
+        eventCode: 'ODJ',
+        serviceStamp: SERVICE_STAMP_OPTIONS[0],
+      },
     });
 
     expect(

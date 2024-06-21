@@ -33,8 +33,8 @@ describe('uploadDocument', () => {
     await expect(
       uploadDocument({
         applicationContext,
+        pdfData: testPdfDoc,
         pdfName: mockPdfName,
-        testPdfDoc,
       }),
     ).rejects.toEqual('there was an error uploading');
     expect(applicationContext.logger.error).toHaveBeenCalled();
@@ -64,8 +64,8 @@ describe('uploadDocument', () => {
 
     await uploadDocument({
       applicationContext,
+      pdfData: testPdfDoc,
       pdfName: mockPdfName,
-      testPdfDoc,
     });
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });

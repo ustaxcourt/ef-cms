@@ -12,6 +12,7 @@ import {
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   ORDER_TYPES,
+  Role,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -104,7 +105,7 @@ export const createApplicationContext = (
   }
 
   const getCurrentUser = (): {
-    role: string;
+    role: Role;
     userId: string;
     email: string;
     name: string;
