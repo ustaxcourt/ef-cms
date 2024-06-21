@@ -39,7 +39,7 @@ export const trialCitiesHelper =
 
     const getTrialLocationName = trialLocation =>
       `${trialLocation.city}, ${trialLocation.state}`;
-    let states = [];
+    const states: { cities: string[]; state: string }[] = [];
 
     const convertCityTypeFromStringToArray = trialCities.map(trialLocation =>
       trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote

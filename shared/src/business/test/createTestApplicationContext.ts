@@ -442,6 +442,7 @@ export const createTestApplicationContext = ({
     noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    petition: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     printableWorkingCopySessionList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
@@ -568,8 +569,7 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetMessagingClient = {
-    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
-    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();

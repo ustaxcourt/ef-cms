@@ -4,7 +4,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TextView } from '../../ustc-ui/Text/TextView';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -108,7 +108,10 @@ const getCaseRow = ({
           <td></td>
           <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Calendar notes:</span>
-            {formattedCase.calendarNotes}
+            <PreformattedText
+              className="margin-y-0"
+              text={formattedCase.calendarNotes}
+            />
           </td>
           <td></td>
         </tr>
@@ -120,8 +123,9 @@ const getCaseRow = ({
           <td></td>
           <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Notes:</span>
-            <TextView
-              bind={`trialSessionWorkingCopy.userNotes.${formattedCase.docketNumber}.notes`}
+            <PreformattedText
+              className="margin-y-0"
+              text={formattedCase.userNotes}
             />
           </td>
           <td>

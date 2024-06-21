@@ -74,6 +74,7 @@ import {
 } from './persistence/dynamo/users/getCasesForUser';
 import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
+import { getColdCases } from './persistence/elasticsearch/reports/getColdCases';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConsolidatedCasesCount } from '@web-api/persistence/dynamo/cases/getConsolidatedCasesCount';
 import { getCountOfConsolidatedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidatedCases';
@@ -98,7 +99,6 @@ import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
 import { getMessageById } from './persistence/dynamo/messages/getMessageById';
 import { getMessageThreadByParentId } from './persistence/dynamo/messages/getMessageThreadByParentId';
-import { getMessages } from './persistence/sqs/getMessages';
 import { getMessagesByDocketNumber } from './persistence/dynamo/messages/getMessagesByDocketNumber';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
@@ -314,6 +314,7 @@ const gatewayMethods = {
   getCasesForUser,
   getCasesMetadataByLeadDocketNumber,
   getClientId,
+  getColdCases,
   getConfigurationItemValue,
   getConsolidatedCasesCount,
   getCountOfConsolidatedCases,
@@ -341,7 +342,6 @@ const gatewayMethods = {
   getMaintenanceMode,
   getMessageById,
   getMessageThreadByParentId,
-  getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
   getPractitionerDocumentByFileId,

@@ -144,6 +144,7 @@ import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/docu
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '@web-client/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
+import { generatePetitionPdfInteractor } from '@shared/proxies/generatePetitionPdfProxy';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
@@ -170,6 +171,7 @@ import {
   getJudgesChambers,
 } from './business/chambers/getJudgesChambers';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
+import { getColdCaseReportInteractor } from '../../shared/src/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getConstants } from './getConstants';
@@ -449,6 +451,7 @@ const allUseCases = {
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
+  generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,
@@ -468,6 +471,7 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
+  getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
@@ -811,6 +815,7 @@ const applicationContext = {
   isFeatureEnabled: featureName => {
     return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
+  isPublicUser: () => false,
   setCurrentUser,
   setCurrentUserToken,
   setForceRefreshCallback(callback) {
