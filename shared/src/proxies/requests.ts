@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import moize from 'moize';
 
 const MAX_RETRIES = 10;
@@ -35,7 +36,7 @@ const internalGet = async ({
   endpoint,
   params,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ClientApplicationContext;
   endpoint: string;
   params?: any;
 }) => {
