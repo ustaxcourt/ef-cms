@@ -29,9 +29,11 @@ export async function zipDocuments(
     console.log('s3 upload progress: ', progress);
   });
 
+  let isProcessing = false;
   const writable = new Writable({
     write(chunk, encoding, callback) {
       console.log('Received chunk:');
+      isProcessing = false;
       callback();
     },
   });
@@ -54,10 +56,6 @@ export async function zipDocuments(
       passThrough.end();
     }
   });
-  // zip.ondata = (err, chunk, _final) => {
-  //   console.log('ZIP GOT DATA');
-  //   passThrough.write(chunk);
-  // };
 
   let count = 0;
   for (let document of documents) {
@@ -72,6 +70,10 @@ export async function zipDocuments(
     const exampleFile = new AsyncZipDeflate(document.filePathInZip, {});
     zip.add(exampleFile);
     exampleFile.push(bigArray, true);
+    isProcessing = true;
+    while (isProcessing) {
+      await new Promise(resolve => setTimeout(resolve, 10));
+    }
 
     count = count + 1;
     console.log('CompletedDocuments: ', count);
