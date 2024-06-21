@@ -19,14 +19,10 @@ export const validateRemoveFromTrialSessionAction = ({
     applicationContext.getConstants();
 
   let errors: {
-    disposition: string;
-    caseStatus: string;
-    associatedJudge: string;
-  } = {
-    associatedJudge: '',
-    caseStatus: '',
-    disposition: '',
-  };
+    disposition?: string;
+    caseStatus?: string;
+    associatedJudge?: string;
+  } = {};
   if (!disposition) {
     errors.disposition = 'Enter a disposition';
   }
