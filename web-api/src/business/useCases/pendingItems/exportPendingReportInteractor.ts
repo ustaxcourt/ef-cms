@@ -2,11 +2,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { stringify } from 'csv-stringify/sync';
 
 export const exportPendingReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { judge }: { judge?: string },
 ): Promise<string> => {
   const authorizedUser = applicationContext.getCurrentUser();

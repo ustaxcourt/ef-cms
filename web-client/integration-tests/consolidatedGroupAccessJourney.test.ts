@@ -60,7 +60,7 @@ describe('User accesses a case that does not belong to them, but is part of a co
   describe('Private Practitioner', () => {
     loginAs(cerebralTest, 'privatePractitioner@example.com');
 
-    it('navigate to case 104-23 and verify the links are clickable, and "request access to case" is visible', async () => {
+    it('navigate to case 104-23 and verify the links are clickable, and "represent a party" is visible', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: '104-23',
       });
@@ -75,12 +75,14 @@ describe('User accesses a case that does not belong to them, but is part of a co
         ),
       ).toBe(true);
 
-      const { showFileDocumentButton, showRequestAccessToCaseButton } =
-        runCompute(caseDetailHeaderHelper, {
+      const { showFileDocumentButton, showRepresentAPartyButton } = runCompute(
+        caseDetailHeaderHelper,
+        {
           state: cerebralTest.getState(),
-        });
+        },
+      );
       expect(showFileDocumentButton).toBe(false);
-      expect(showRequestAccessToCaseButton).toBe(true);
+      expect(showRepresentAPartyButton).toBe(true);
     });
 
     it('navigate to case 106-23 and verify the "File a Document" button is visible', async () => {

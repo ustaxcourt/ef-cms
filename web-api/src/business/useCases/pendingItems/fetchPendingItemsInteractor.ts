@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const pendingItemCaseSource = [
@@ -31,7 +32,7 @@ export type PendingItem = Pick<
   Pick<RawDocketEntry, (typeof pendingItemDocketEntrySource)[number]>;
 
 export const fetchPendingItemsInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { judge, page }: { judge: string; page: number },
 ): Promise<{
   foundDocuments: PendingItem[];

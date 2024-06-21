@@ -1,5 +1,5 @@
 import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
-import { GetCountOfCaseDocumentsFiledByJudgesRequest } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { GetCountOfCaseDocumentsFiledByJudgesRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { get } from '../requests';
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = (

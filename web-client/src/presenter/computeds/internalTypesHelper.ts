@@ -3,16 +3,19 @@ import { Get } from 'cerebral';
 import { flatten, orderBy, values } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getDocumentTypesForSelect = (
-  typeMap,
-): {
+export interface DocumentTypeBase {
   documentTitleTemplate: string;
   documentType: string;
   eventCode: string;
   scenario: string;
+}
+
+export const getDocumentTypesForSelect = <T extends DocumentTypeBase>(
+  typeMap,
+): (T & {
   label: string;
   value: string;
-}[] => {
+})[] => {
   let filteredTypeList = flatten(values(typeMap)).map(t => {
     return { ...t, label: t.documentType, value: t.eventCode };
   });
