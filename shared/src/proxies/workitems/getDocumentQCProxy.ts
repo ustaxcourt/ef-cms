@@ -1,13 +1,13 @@
+import { WorkItemBox } from '@web-api/business/useCases/workItems/getDocumentQCForUserInteractor';
 import { get } from '../requests';
 
-/**
- * getDocumentQCInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.userId the user to get the document qc
- * @returns {Promise<*>} the promise of the api call
- */
+export type UserGroup = 'user' | 'section';
+
+export type Recipient = {
+  group: UserGroup;
+  identifier: string;
+};
+
 export const getDocumentQCInteractor = (
   applicationContext,
   {
@@ -15,12 +15,9 @@ export const getDocumentQCInteractor = (
     judgeUser,
     recipient,
   }: {
-    recipient: {
-      group: 'user' | 'section';
-      identifier: string;
-    };
+    recipient: Recipient;
     judgeUser?: { name: string };
-    box: 'inbox' | 'inProgress' | 'outbox';
+    box: WorkItemBox;
   },
 ) => {
   const prefix = recipient.group === 'user' ? 'users' : 'sections';
