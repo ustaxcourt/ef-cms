@@ -101,7 +101,7 @@ import {
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '@web-api/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { getFakeFile } from './getFakeFile';
+import { getFakeFile, testPdfDoc } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
@@ -463,11 +463,13 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetStorageClient = appContextProxy({
-    deleteObject: jest.fn().mockReturnValue({ promise: () => {} }),
-    getObject: jest.fn().mockReturnValue({
-      promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
+    deleteObject: jest.fn().mockReturnValue({}),
+    getObject: jest.fn().mockResolvedValue({
+      Body: {
+        transformToByteArray: () => Promise.resolve(new Uint8Array(10)),
+      },
     }),
-    putObject: jest.fn().mockReturnValue({ promise: () => {} }),
+    putObject: jest.fn().mockReturnValue({}),
   });
 
   const mockGetPersistenceGateway = appContextProxy({
@@ -505,7 +507,7 @@ export const createTestApplicationContext = ({
       .mockImplementation(getConfigurationItemValue),
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
-    getDocument: jest.fn(),
+    getDocument: jest.fn().mockResolvedValue(testPdfDoc),
     getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest.fn(),
     getDocumentQCServedForSection: jest
