@@ -15,7 +15,7 @@ export async function zipDocuments(
     useTempBucket: boolean;
   },
 ): Promise<void> {
-  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 512 });
+  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 256 });
 
   const upload = new Upload({
     client: applicationContext.getStorageClient(),
@@ -31,7 +31,6 @@ export async function zipDocuments(
 
   const writable = new Writable({
     write(chunk, encoding, callback) {
-      console.log('Received chunk:');
       callback();
     },
   });
@@ -47,19 +46,11 @@ export async function zipDocuments(
       throw err;
     }
 
-    console.log('zip data is available');
-    const idk = passThrough.write(data);
-    if (!idk) {
-      console.log('UH OH WE ARE OVERFLOWING');
-    }
-
     if (final) {
-      console.log('FINAL');
       passThrough.end();
     }
   });
 
-  let count = 0;
   for (let document of documents) {
     const response = await applicationContext.getStorageClient().getObject({
       Bucket: useTempBucket
@@ -72,17 +63,13 @@ export async function zipDocuments(
     const exampleFile = new AsyncZipDeflate(document.filePathInZip);
     zip.add(exampleFile);
     exampleFile.push(bigArray, true);
-    while (passThrough.readableLength > 1024 * 1024 * 256) {
-      console.log('Draining: ', passThrough.readableLength);
+    while (passThrough.readableLength > 1024 * 1024 * 50) {
+      // Wait for the buffer to be drained, before downloading more files
       await new Promise(resolve => setTimeout(resolve, 10));
     }
-
-    count = count + 1;
-    console.log('CompletedDocuments: ', count);
   }
 
   zip.end();
-
   await uploadPromise;
 }
 
