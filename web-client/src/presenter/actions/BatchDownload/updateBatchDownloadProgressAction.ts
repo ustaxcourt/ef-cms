@@ -1,13 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * set the batch download progress state
- *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store
- * @param {object} providers.get the cerebral get function used for getting state
- * @param {object} providers.props the cerebral props object
- */
 export const updateBatchDownloadProgressAction = ({
   get,
   props,
@@ -28,7 +20,7 @@ export const updateBatchDownloadProgressAction = ({
     case 'batch_download_docket_generated':
       store.set(
         state.batchDownloads.title,
-        'Generating Printable Docket Records',
+        'Generating Printable Docket Records and Docket Entries',
       );
       done = filesCompleted;
       break;
