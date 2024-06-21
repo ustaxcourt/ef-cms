@@ -15,7 +15,7 @@ export async function zipDocuments(
     useTempBucket: boolean;
   },
 ): Promise<void> {
-  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 256 });
+  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 300 });
 
   const upload = new Upload({
     client: applicationContext.getStorageClient(),
@@ -46,23 +46,23 @@ export async function zipDocuments(
       throw err;
     }
 
+    passThrough.write(data);
+
     if (final) {
       passThrough.end();
     }
   });
 
   for (let document of documents) {
-    const response = await applicationContext.getStorageClient().getObject({
-      Bucket: useTempBucket
-        ? applicationContext.environment.tempDocumentsBucketName
-        : applicationContext.environment.documentsBucketName,
-      Key: document.documentId,
+    const pdf = await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      key: document.documentId,
+      useTempBucket,
     });
-    const bigArray = await response.Body?.transformToByteArray()!;
+    const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
+    zip.add(compressedPdfStream);
+    compressedPdfStream.push(pdf, true);
 
-    const exampleFile = new AsyncZipDeflate(document.filePathInZip);
-    zip.add(exampleFile);
-    exampleFile.push(bigArray, true);
     while (passThrough.readableLength > 1024 * 1024 * 50) {
       // Wait for the buffer to be drained, before downloading more files
       await new Promise(resolve => setTimeout(resolve, 10));
