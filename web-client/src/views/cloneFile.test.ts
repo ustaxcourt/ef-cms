@@ -1,8 +1,8 @@
 import { cloneFile } from './cloneFile';
 
 describe('cloneFile', () => {
-  const readAsArrayBufferSpy = jest.fn().mockResolvedValue();
-  const keys = {};
+  const readAsArrayBufferSpy = jest.fn().mockResolvedValue(undefined);
+  const keys: Record<string, Function> = {};
 
   const addEventListenerSpy = jest.fn().mockImplementation((key, cb) => {
     keys[key] = cb;
@@ -11,12 +11,15 @@ describe('cloneFile', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    global.File = function () {};
+    global.File = function () {} as any;
 
-    jest.spyOn(global, 'FileReader').mockImplementation(() => ({
-      addEventListener: addEventListenerSpy,
-      readAsArrayBuffer: readAsArrayBufferSpy,
-    }));
+    jest.spyOn(global, 'FileReader').mockImplementation(
+      () =>
+        ({
+          addEventListener: addEventListenerSpy,
+          readAsArrayBuffer: readAsArrayBufferSpy,
+        }) as unknown as FileReader,
+    );
   });
 
   afterEach(() => {
