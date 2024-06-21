@@ -24,6 +24,7 @@ export const UpdatedFilePetitionStep3 = connect(
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
+    setHasIrsNoticeSequence: sequences.setHasIrsNoticeSequence,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -35,6 +36,7 @@ export const UpdatedFilePetitionStep3 = connect(
     form,
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
+    setHasIrsNoticeSequence,
     startCaseHelper,
     updateFormValueSequence,
     validationErrors,
@@ -92,11 +94,10 @@ export const UpdatedFilePetitionStep3 = connect(
                       type="radio"
                       value={option === 'Yes'}
                       onChange={e => {
-                        updateFormValueSequence({
+                        setHasIrsNoticeSequence({
                           key: e.target.name,
                           value: e.target.value === 'true',
                         });
-
                         deleteValidationErrorMessageSequence({
                           validationKey: ['hasIrsNotice'],
                         });
