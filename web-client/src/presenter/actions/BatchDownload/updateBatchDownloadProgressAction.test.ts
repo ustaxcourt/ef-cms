@@ -49,7 +49,7 @@ describe('updateBatchDownloadProgressAction', () => {
   });
 
   it('should handle "batch_download_csv_data" messages correctly', async () => {
-    const numberOfRecordsDownloaded = 999;
+    const filesCompleted = 999;
     const totalFiles = 999;
     const result = await runAction(updateBatchDownloadProgressAction, {
       modules: {
@@ -57,7 +57,7 @@ describe('updateBatchDownloadProgressAction', () => {
       },
       props: {
         action: 'batch_download_csv_data',
-        numberOfRecordsDownloaded,
+        filesCompleted,
         totalFiles,
       },
       state: {
@@ -68,9 +68,7 @@ describe('updateBatchDownloadProgressAction', () => {
       },
     });
 
-    expect(result.state.batchDownloads.fileCount).toEqual(
-      numberOfRecordsDownloaded,
-    );
+    expect(result.state.batchDownloads.fileCount).toEqual(filesCompleted);
     expect(result.state.batchDownloads.totalFiles).toEqual(totalFiles);
   });
 });
