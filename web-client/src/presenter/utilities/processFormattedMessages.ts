@@ -31,7 +31,10 @@ export const sortFormattedMessages = (
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
     } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
-      sortNumber = a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
+      const a_sortFieldValue: string = a[tableSort.sortField] || '';
+      const b_sortFieldValue: string = b[tableSort.sortField] || '';
+
+      sortNumber = a_sortFieldValue.localeCompare(b_sortFieldValue);
     } else if (tableSort.sortField === 'docketNumber') {
       const [a_DocketNumberIndex, a_DocketNumberYear] =
         a.docketNumber.split('-');

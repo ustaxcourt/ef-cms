@@ -107,6 +107,7 @@ describe('processFormattedMessages', () => {
           { [sortField]: 'fff' },
           { [sortField]: 'ccc' },
           { [sortField]: 'ddd' },
+          { [sortField]: null },
           { [sortField]: 'aaa' },
           { [sortField]: 'eee' },
         ];
@@ -116,6 +117,7 @@ describe('processFormattedMessages', () => {
         });
 
         expect(result).toMatchObject([
+          { [sortField]: null },
           { [sortField]: 'aaa' },
           { [sortField]: 'bbb' },
           { [sortField]: 'ccc' },
@@ -133,6 +135,7 @@ describe('processFormattedMessages', () => {
           { [sortField]: 'fff' },
           { [sortField]: 'ccc' },
           { [sortField]: 'ddd' },
+          { [sortField]: null },
           { [sortField]: 'aaa' },
           { [sortField]: 'eee' },
         ];
@@ -149,6 +152,7 @@ describe('processFormattedMessages', () => {
           { [sortField]: 'ccc' },
           { [sortField]: 'bbb' },
           { [sortField]: 'aaa' },
+          { [sortField]: null },
         ]);
       });
     });
