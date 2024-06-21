@@ -46,12 +46,14 @@ describe('practitionerSearchHelper', () => {
   const defaultResult = {
     activePage: 0,
     formattedSearchResults: [],
+    isPublicUser: false,
     numberOfResults: '0',
     pageCount: 0,
     pageSize: 0,
     showNoMatches: false,
     showPaginator: false,
     showSearchResults: false,
+    stateHeaderText: 'State',
   };
 
   beforeEach(() => {
@@ -61,7 +63,7 @@ describe('practitionerSearchHelper', () => {
     };
   });
 
-  it('returns default search results when searchResults is undefined (when the search has never been run)', () => {
+  it('should return default search results when searchResults is undefined and isPublicUser is false (when the search has never been run)', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -70,6 +72,38 @@ describe('practitionerSearchHelper', () => {
       },
     });
     expect(result).toEqual(defaultResult);
+  });
+
+  it('should return default search results when searchResults is undefined and isPublicUser is true (when the search has never been run)', () => {
+    const test_practitionerSearchHelper = withAppContextDecorator(
+      practitionerSearchHelperComputed,
+      {
+        ...applicationContext,
+        getConstants: () => {
+          return {
+            ...applicationContext.getConstants(),
+            PRACTITIONER_SEARCH_PAGE_SIZE: pageSizeOverride,
+          };
+        },
+        getCurrentUser: () => {
+          return globalUser;
+        },
+        isPublicUser: () => true,
+      },
+    );
+
+    const result = runCompute(test_practitionerSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: {},
+        advancedSearchTab: 'practitioner',
+      },
+    });
+    expect(result).toEqual({
+      ...defaultResult,
+      isPublicUser: true,
+      stateHeaderText: 'Original Bar State',
+    });
   });
 
   it('returns showNoMatches true and showSearchResults false if searchResults comes up empty', () => {

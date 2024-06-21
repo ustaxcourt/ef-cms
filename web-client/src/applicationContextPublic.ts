@@ -70,6 +70,8 @@ import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/mai
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
+import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
+import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
@@ -91,6 +93,7 @@ const ADVANCED_SEARCH_TABS = {
   CASE: 'case',
   OPINION: 'opinion',
   ORDER: 'order',
+  PRACTITIONER: 'practitioner',
 };
 
 const allUseCases = {
@@ -106,6 +109,9 @@ const allUseCases = {
   getHealthCheckInteractor,
   getItemInteractor,
   getMaintenanceModePublicInteractor,
+  getPractitionerByBarNumberInteractor:
+    getPublicPractitionerByBarNumberInteractor,
+  getPractitionersByNameInteractor: getPublicPractitionersByNameInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
@@ -226,6 +232,7 @@ const applicationContextPublic = {
   isFeatureEnabled: featureName => {
     return getIsFeatureEnabled(featureName, {}, getEnvironment().stage);
   },
+  isPublicUser: () => true,
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },

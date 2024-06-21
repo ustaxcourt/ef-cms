@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -13,7 +14,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {string} uploaded docket entry id
  */
 export const uploadOrderDocumentInteractor = async (
-  applicationContext: any,
+  applicationContext: ClientApplicationContext,
   {
     documentFile,
     fileIdToOverwrite,
