@@ -13,7 +13,6 @@ import {
   docketClerkUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -82,10 +81,6 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      Body: testPdfDoc,
-    });
 
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
