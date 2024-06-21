@@ -1,6 +1,6 @@
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
 import { loginAs, setupTest, waitForExpectedItemToExist } from './helpers';
-import AdmZip from 'adm-zip';
+import AdmZip from 'adm-zip'; // 10336 TODO: remove this package
 import fs from 'fs';
 import http from 'http';
 
