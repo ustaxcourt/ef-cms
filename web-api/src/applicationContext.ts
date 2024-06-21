@@ -47,6 +47,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -226,17 +227,7 @@ export const createApplicationContext = (
     getNodeSass: () => {
       return sass;
     },
-    getNotificationClient: ({ endpoint }) => {
-      if (endpoint.includes('localhost')) {
-        endpoint = 'http://localhost:3011';
-      }
-      return new AWS.ApiGatewayManagementApi({
-        endpoint,
-        httpOptions: {
-          timeout: 900000, // 15 minutes
-        },
-      });
-    },
+    getNotificationClient,
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
       saveRequestResponse,

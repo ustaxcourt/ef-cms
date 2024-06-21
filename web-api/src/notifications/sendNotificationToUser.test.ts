@@ -25,13 +25,11 @@ describe('send websocket notification to browser', () => {
     },
   ];
 
-  const postToConnection = jest
-    .fn()
-    .mockReturnValue({ promise: () => Promise.resolve('ok') });
+  const send = jest.fn().mockResolvedValue('ok');
 
   beforeEach(() => {
     applicationContext.getNotificationClient.mockImplementation(() => {
-      return { postToConnection };
+      return { send };
     });
 
     applicationContext
