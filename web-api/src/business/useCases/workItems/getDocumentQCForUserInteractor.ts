@@ -5,20 +5,11 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 
-/**
- * getDocumentQCInboxForUserInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.userId the user to get the document qc
- * @returns {object} the work items in the user document inbox
- */
+export type WorkItemBox = 'inbox' | 'inProgress' | 'outbox';
+
 export const getDocumentQCForUserInteractor = async (
   applicationContext: IApplicationContext,
-  {
-    box,
-    userId,
-  }: { box: 'inbox' | 'inProgress' | 'outbox'; userId: string | null },
+  { box, userId }: { box: WorkItemBox; userId: string | null },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

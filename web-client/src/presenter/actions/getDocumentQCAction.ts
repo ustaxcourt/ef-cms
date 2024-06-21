@@ -1,3 +1,8 @@
+import {
+  Recipient,
+  UserGroup,
+} from '@shared/proxies/workitems/getDocumentQCProxy';
+import { WorkItemBox } from '@web-api/business/useCases/workItems/getDocumentQCForUserInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getDocumentQCAction = async ({
@@ -5,8 +10,10 @@ export const getDocumentQCAction = async ({
   get,
 }: ActionProps) => {
   const queue = get(state.workQueueToDisplay.queue);
-  const box = get(state.workQueueToDisplay.box);
-  const selectedSection = get(state.workQueueToDisplay.section);
+  const box: WorkItemBox = get(state.workQueueToDisplay.box);
+  const selectedSection: UserGroup | string = get(
+    state.workQueueToDisplay.section,
+  );
   const user = applicationContext.getCurrentUser();
   const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
 
@@ -15,13 +22,13 @@ export const getDocumentQCAction = async ({
     judgeUser = { name: CHIEF_JUDGE };
   }
 
-  const recipient =
+  const recipient: Recipient =
     queue === 'my'
       ? {
           group: 'user',
-          identifier: applicationContext.getCurrentUser().userId,
+          identifier: applicationContext.getCurrentUser().userId!,
         }
-      : { group: 'section', identifier: selectedSection || user.section };
+      : { group: 'section', identifier: selectedSection || user.section! };
 
   const workItems = await applicationContext
     .getUseCases()
