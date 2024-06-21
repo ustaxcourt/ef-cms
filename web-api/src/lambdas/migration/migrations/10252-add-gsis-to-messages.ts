@@ -68,6 +68,8 @@ export const migrateItems = items => {
           gsiUserBox: undefined,
         });
       }
+    } else {
+      itemsAfter.push(item);
     }
   }
 
