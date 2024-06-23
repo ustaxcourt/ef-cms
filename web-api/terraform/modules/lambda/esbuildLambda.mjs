@@ -18,7 +18,7 @@ await esbuild.build({
   entryPoints: [getPathFromRoot(handlerPath)],
   external: ['@sparticuz/chromium', 'puppeteer-core'], // Do not bundle these packages as they are too large to bundle. Include in lambda layer.
   format: 'cjs',
-  keepNames: true,
+  keepNames: false,
   loader: {
     '.node': 'file',
   },
