@@ -50,7 +50,7 @@ export const FilePetitionPetitionInformation = connect(
             }}
           />
           <label className="usa-radio__label" htmlFor="generate-a-petition">
-            Answer some questions and have DAWSON create the petition.
+            Answer some questions and have DAWSON create the Petition.
           </label>
           <input
             checked={form.petitionType === PETITION_TYPES.userUploaded}
