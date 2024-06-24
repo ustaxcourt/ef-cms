@@ -204,6 +204,7 @@ export function TabsComponent({
               { 'grid-row': boxed },
               !marginBottom && 'margin-bottom-0',
             )}
+            data-testid="tabs-menu"
             role="tablist"
           >
             {map(children, TabComponent)}
