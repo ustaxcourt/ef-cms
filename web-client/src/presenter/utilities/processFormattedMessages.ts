@@ -25,33 +25,37 @@ export const sortFormattedMessages = (
   formattedCaseMessages,
   tableSort: null | TableSort = null,
 ) => {
-  const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
-    let sortNumber = 0;
+  const sortedFormattedMessages = formattedCaseMessages.sort(
+    (messageA, messageB) => {
+      let sortNumber = 0;
 
-    if (!tableSort) {
-      sortNumber = a.createdAt.localeCompare(b.createdAt);
-    } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
-      const a_sortFieldValue: string = a[tableSort.sortField] || '';
-      const b_sortFieldValue: string = b[tableSort.sortField] || '';
+      if (!tableSort) {
+        sortNumber = messageA.createdAt.localeCompare(messageB.createdAt);
+      } else if (SUPPORTED_SORT_FIELDS.includes(tableSort.sortField)) {
+        const messageASortField: string = messageA[tableSort.sortField] || '';
+        const messageBSortField: string = messageB[tableSort.sortField] || '';
 
-      sortNumber = a_sortFieldValue.localeCompare(b_sortFieldValue);
-    } else if (tableSort.sortField === 'docketNumber') {
-      const [a_DocketNumberIndex, a_DocketNumberYear] =
-        a.docketNumber.split('-');
-      const [b_DocketNumberIndex, b_DocketNumberYear] =
-        b.docketNumber.split('-');
+        sortNumber = messageASortField.localeCompare(messageBSortField);
+      } else if (tableSort.sortField === 'docketNumber') {
+        const [messageADocketNumberIndex, messageADocketNumberYear] =
+          messageA.docketNumber.split('-');
+        const [messageBDocketNumberIndex, messageBDocketNumberYear] =
+          messageB.docketNumber.split('-');
 
-      if (a_DocketNumberYear !== b_DocketNumberYear) {
-        // compare years if they aren't the same;
-        // compare as strings, because they *might* have suffix
-        sortNumber = a_DocketNumberYear.localeCompare(b_DocketNumberYear);
-      } else {
-        // compare index if years are the same, compare as integers
-        sortNumber = +a_DocketNumberIndex - +b_DocketNumberIndex;
+        if (messageADocketNumberYear !== messageBDocketNumberYear) {
+          // compare years if they aren't the same;
+          // compare as strings, because they *might* have suffix
+          sortNumber = messageADocketNumberYear.localeCompare(
+            messageBDocketNumberYear,
+          );
+        } else {
+          // compare index if years are the same, compare as integers
+          sortNumber = +messageADocketNumberIndex - +messageBDocketNumberIndex;
+        }
       }
-    }
-    return sortNumber;
-  });
+      return sortNumber;
+    },
+  );
 
   if (tableSort && tableSort.sortOrder === DESCENDING) {
     return sortedFormattedMessages.reverse();
