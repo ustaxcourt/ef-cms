@@ -139,9 +139,7 @@ export const AddressDisplay = connect<
               ),
           )}
         </div>
-        <div className="margin-bottom-2">
-          {!contact.sealedAndUnavailable && contactDetails()}
-        </div>
+        <div>{!contact.sealedAndUnavailable && contactDetails()}</div>
         {contact.sealedAndUnavailable && (
           <div className="sealed-address">Address sealed</div>
         )}
