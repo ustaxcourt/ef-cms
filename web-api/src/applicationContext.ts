@@ -12,6 +12,7 @@ import {
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   ORDER_TYPES,
+  Role,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -48,6 +49,7 @@ import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
 import { getUserGateway } from '@web-api/getUserGateway';
@@ -66,12 +68,11 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SQS } from 'aws-sdk';
+import AWS, { SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
-let s3Cache: AWS.S3 | undefined;
 let sqsCache;
 let searchClientCache: Client;
 let notificationServiceCache;
@@ -104,7 +105,7 @@ export const createApplicationContext = (
   }
 
   const getCurrentUser = (): {
-    role: string;
+    role: Role;
     userId: string;
     email: string;
     name: string;
@@ -310,21 +311,7 @@ export const createApplicationContext = (
       return searchClientCache;
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
-    getStorageClient: () => {
-      if (!s3Cache) {
-        s3Cache = new S3({
-          endpoint: environment.s3Endpoint,
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-          region: 'us-east-1',
-          s3ForcePathStyle: true,
-        });
-      }
-      return s3Cache;
-    },
+    getStorageClient,
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,
