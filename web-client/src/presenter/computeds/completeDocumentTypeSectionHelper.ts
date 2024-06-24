@@ -1,5 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
+  DocumentTypeBase,
   getDocumentTypesForSelect,
   getSortFunction,
 } from './internalTypesHelper';
@@ -17,7 +18,27 @@ export const completeDocumentTypeSectionHelper = (
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  let returnData = {};
+  let returnData: {
+    primary: any;
+    secondary: any;
+    documentTypesForSelect: (DocumentTypeBase & { documentTitle: string })[];
+    documentTypesForSecondarySelect: (DocumentTypeBase & {
+      documentTitle: string;
+    })[];
+    documentTypesForSelectSorted: (DocumentTypeBase & {
+      documentTitle: string;
+    })[];
+    documentTypesForSecondarySelectSorted: (DocumentTypeBase & {
+      documentTitle: string;
+    })[];
+  } = {
+    documentTypesForSecondarySelect: [],
+    documentTypesForSecondarySelectSorted: [],
+    documentTypesForSelect: [],
+    documentTypesForSelectSorted: [],
+    primary: undefined,
+    secondary: undefined,
+  };
 
   if (isEmpty(caseDetail)) {
     return {};
@@ -29,7 +50,9 @@ export const completeDocumentTypeSectionHelper = (
     USER_ROLES,
   } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
-  const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);
+  const documentTypesForSelect = getDocumentTypesForSelect<
+    DocumentTypeBase & { documentTitle: string }
+  >(CATEGORY_MAP);
 
   const documentTypesForSelectFilterFunction = (documentType): boolean => {
     const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
@@ -37,12 +60,15 @@ export const completeDocumentTypeSectionHelper = (
     );
 
     const currentUser = applicationContext.getCurrentUser();
-    if (
-      currentUser.role === USER_ROLES.irsPractitioner &&
-      documentType.eventCode === 'EA'
-    ) {
-      if (!Case.isFirstIrsFiling(caseDetail)) return false;
-      documentType.documentTitle += ' for Respondent';
+    if (currentUser.role === USER_ROLES.irsPractitioner) {
+      if (
+        Case.isFirstIrsFiling(caseDetail) &&
+        !documentType.canBeFirstIrsDocument
+      )
+        return false;
+
+      if (!Case.isFirstIrsFiling(caseDetail) && documentType.eventCode === 'EA')
+        return false;
     } else if (documentType.eventCode === 'EA') return false;
 
     return (
@@ -54,7 +80,17 @@ export const completeDocumentTypeSectionHelper = (
 
   returnData.documentTypesForSelectSorted = documentTypesForSelect
     .sort(getSortFunction(searchText))
-    .filter(documentType => documentTypesForSelectFilterFunction(documentType));
+    .filter(documentType => documentTypesForSelectFilterFunction(documentType))
+    .map(documentType => {
+      return {
+        ...documentType,
+        documentTitle:
+          applicationContext.getCurrentUser().role ===
+            USER_ROLES.irsPractitioner && documentType.eventCode === 'EA'
+            ? `${documentType.documentTitle} for Respondent`
+            : documentType.documentTitle,
+      };
+    });
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(
       entry => entry.scenario !== 'Nonstandard H',

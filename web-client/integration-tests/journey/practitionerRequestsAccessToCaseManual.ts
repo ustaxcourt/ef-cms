@@ -1,7 +1,7 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { caseAssociationRequestHelper as caseAssociationRequestHelperComputed } from '../../src/presenter/computeds/caseAssociationRequestHelper';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
-import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -12,8 +12,8 @@ export const practitionerRequestsAccessToCaseManual = (
   const caseDetailHeaderHelper = withAppContextDecorator(
     caseDetailHeaderHelperComputed,
   );
-  const requestAccessHelper = withAppContextDecorator(
-    requestAccessHelperComputed,
+  const caseAssociationRequestHelper = withAppContextDecorator(
+    caseAssociationRequestHelperComputed,
   );
 
   return it('Practitioner requests access to case', async () => {
@@ -25,13 +25,13 @@ export const practitionerRequestsAccessToCaseManual = (
       state: cerebralTest.getState(),
     });
 
-    expect(headerHelper.showRequestAccessToCaseButton).toBeTruthy();
+    expect(headerHelper.showRepresentAPartyButton).toBeTruthy();
 
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const requestHelper = runCompute(requestAccessHelper, {
+    const requestHelper = runCompute(caseAssociationRequestHelper, {
       state: cerebralTest.getState(),
     });
 
@@ -41,7 +41,7 @@ export const practitionerRequestsAccessToCaseManual = (
       'Jimothy Schultz',
     );
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       documentTitleTemplate: 'Select a document',
@@ -144,7 +144,7 @@ export const practitionerRequestsAccessToCaseManual = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Limited Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',

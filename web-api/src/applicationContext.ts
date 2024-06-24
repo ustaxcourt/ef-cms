@@ -45,6 +45,7 @@ import {
 import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
+import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -65,13 +66,12 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SES, SQS } from 'aws-sdk';
+import AWS, { S3, SQS } from 'aws-sdk';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
 let s3Cache: AWS.S3 | undefined;
-let sesCache;
 let sqsCache;
 let searchClientCache: Client;
 let notificationServiceCache;
@@ -177,50 +177,7 @@ export const createApplicationContext = (
     getDocumentClient,
     getDocumentGenerators,
     getDynamoClient,
-    getEmailClient: () => {
-      if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
-        return {
-          getSendStatistics: () => {
-            // mock this out so the health checks pass on smoke tests
-            return {
-              promise: () => ({
-                SendDataPoints: [
-                  {
-                    Rejects: 0,
-                  },
-                ],
-              }),
-            };
-          },
-          sendBulkTemplatedEmail: () => {
-            return {
-              promise: () => {
-                return { Status: [] };
-              },
-            };
-          },
-          sendEmail: () => {
-            return {
-              promise: (): SES.SendEmailResponse => {
-                return { MessageId: '' };
-              },
-            };
-          },
-        };
-      } else {
-        if (!sesCache) {
-          sesCache = new SES({
-            httpOptions: {
-              connectTimeout: 3000,
-              timeout: 5000,
-            },
-            maxRetries: 3,
-            region: 'us-east-1',
-          });
-        }
-        return sesCache;
-      }
-    },
+    getEmailClient,
     getEntityByName: name => {
       return entitiesByName[name];
     },
