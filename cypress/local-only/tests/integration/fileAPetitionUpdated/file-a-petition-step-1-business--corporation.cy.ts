@@ -1,5 +1,5 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition: Step 1 - Petitioner Information', () => {
   beforeEach(() => {
@@ -34,9 +34,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       cy.get('[data-testid="business-type-error-message"]').should('exist');
     });
 
-    describe('Partnership (as a partnership representative under BBA)', () => {
+    describe('Corporation', () => {
       beforeEach(() => {
-        cy.get('.business-type-radio-option').eq(3).click();
+        cy.get('.business-type-radio-option').eq(0).click();
       });
 
       describe('Domestic', () => {
@@ -47,7 +47,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         it('should display a validation error message when Corporation form is empty', () => {
           const ERROR_MESSAGES_DATA_TEST_ID = [
             'primary-contact-name-error-message',
-            'primary-secondary-contact-name-error-message',
             'address-1-error-message',
             'city-error-message',
             'state-error-message',
@@ -77,11 +76,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'primary-contact-name-error-message',
               input: 'contact-primary-name',
-              inputValue: 'John Cruz',
-            },
-            {
-              errorMessage: 'primary-secondary-contact-name-error-message',
-              input: 'contact-primary-secondary-name',
               inputValue: 'John Cruz',
             },
             {
@@ -141,11 +135,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'primary-contact-name-error-message',
               input: 'contact-primary-name',
-              inputValue: 'John Cruz',
-            },
-            {
-              errorMessage: 'primary-secondary-contact-name-error-message',
-              input: 'contact-primary-secondary-name',
               inputValue: 'John Cruz',
             },
             {
@@ -211,7 +200,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         it('should display a validation error message when Corporation form is empty', () => {
           const ERROR_MESSAGES_DATA_TEST_ID = [
             'primary-contact-name-error-message',
-            'primary-secondary-contact-name-error-message',
             'country-error-message',
             'address-1-error-message',
             'city-error-message',
@@ -241,11 +229,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'primary-contact-name-error-message',
               input: 'contact-primary-name',
-              inputValue: 'John Cruz',
-            },
-            {
-              errorMessage: 'primary-secondary-contact-name-error-message',
-              input: 'contact-primary-secondary-name',
               inputValue: 'John Cruz',
             },
             {
@@ -305,11 +288,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'primary-contact-name-error-message',
               input: 'contact-primary-name',
-              inputValue: 'John Cruz',
-            },
-            {
-              errorMessage: 'primary-secondary-contact-name-error-message',
-              input: 'contact-primary-secondary-name',
               inputValue: 'John Cruz',
             },
             {

@@ -4,15 +4,15 @@
   $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
   $theme-font-weight-semibold: 600,
   $theme-utility-breakpoints: (
-    "card": false,
-    "card-lg": false,
+    "card": true,
+    "card-lg": true,
     "mobile": true,
-    "mobile-lg": false,
+    "mobile-lg": true,
     "tablet": true,
     "tablet-lg": true,
     "desktop": true,
-    "desktop-lg": false,
-    "widescreen": false
+    "desktop-lg": true,
+    "widescreen": true
   ),
 );
 @forward 'uswds-global';

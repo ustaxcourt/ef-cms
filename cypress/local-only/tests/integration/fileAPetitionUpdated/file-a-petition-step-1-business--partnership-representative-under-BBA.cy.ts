@@ -1,5 +1,5 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition: Step 1 - Petitioner Information', () => {
   beforeEach(() => {
@@ -34,9 +34,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       cy.get('[data-testid="business-type-error-message"]').should('exist');
     });
 
-    describe('Partnership (as the Tax Matters Partner)', () => {
+    describe('Partnership (as a partnership representative under BBA)', () => {
       beforeEach(() => {
-        cy.get('.business-type-radio-option').eq(1).click();
+        cy.get('.business-type-radio-option').eq(3).click();
       });
 
       describe('Domestic', () => {
