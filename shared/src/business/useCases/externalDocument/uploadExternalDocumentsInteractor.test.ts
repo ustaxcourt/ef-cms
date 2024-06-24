@@ -24,7 +24,10 @@ describe('uploadExternalDocumentsInteractor', () => {
         },
         documentMetadata: {},
         fileUploadProgressMap: {
-          primary: () => {},
+          primary: {
+            file: undefined,
+            uploadProgress: () => {},
+          },
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -44,7 +47,10 @@ describe('uploadExternalDocumentsInteractor', () => {
         primaryDocumentFile: {},
       },
       fileUploadProgressMap: {
-        primary: () => {},
+        primary: {
+          file: undefined,
+          uploadProgress: () => {},
+        },
       },
     });
     expect(result).toMatchObject({
@@ -76,10 +82,22 @@ describe('uploadExternalDocumentsInteractor', () => {
           supportingDocuments: [{ supportingDocument: 'something' }],
         },
         fileUploadProgressMap: {
-          primary: () => 'something',
-          primarySupporting0: () => 'something3',
-          secondary: () => 'something2',
-          secondarySupporting0: () => 'something4',
+          primary: {
+            file: undefined,
+            uploadProgress: () => 'something',
+          },
+          primarySupporting0: {
+            file: undefined,
+            uploadProgress: () => 'something3',
+          },
+          secondary: {
+            file: undefined,
+            uploadProgress: () => 'something2',
+          },
+          secondarySupporting0: {
+            file: undefined,
+            uploadProgress: () => 'something4',
+          },
         },
       }),
     ).resolves.not.toThrow();
@@ -104,10 +122,22 @@ describe('uploadExternalDocumentsInteractor', () => {
           secondaryDocument: {},
         },
         fileUploadProgressMap: {
-          primary: 'something',
-          primarySupporting0: 'something3',
-          secondary: 'something2',
-          secondarySupporting0: 'something4',
+          primary: {
+            file: undefined,
+            uploadProgress: () => 'something',
+          },
+          primarySupporting0: {
+            file: undefined,
+            uploadProgress: () => 'something3',
+          },
+          secondary: {
+            file: undefined,
+            uploadProgress: () => 'something2',
+          },
+          secondarySupporting0: {
+            file: undefined,
+            uploadProgress: () => 'something4',
+          },
         },
       }),
     ).resolves.not.toThrow();
