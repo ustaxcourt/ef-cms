@@ -79,8 +79,6 @@ When an admin runs the `npm run deploy:account-specific` command, these permissi
 
 ## Github Actions
 
-Due to the high cost of CircleCI, there is an effort to try to transition our builds over to GitHub Actions since they are free for public repositories.  Right now we use GitHub Actions to run certain pre-merge checks, including linting the project, running the unit tests, and verifying some scripts.  The main reason we haven't switched everything over to GitHub Actions just yet is because a lot of our heavy lifting tasks, such as Pa11y and our integration tests require a lot of memory to run.
-
 All of our actions are defined in [.github/workflows](https://github.com/ustaxcourt/ef-cms/tree/staging/.github/workflows).  There is a separate .yml file for each individual action.  Similar to CircleCi, an action is defined in a yml file and is broken down into various `steps`.  You can specify when the job runs (such as on pull_requests), which version of node to test on, which docker image (ubuntu-latest), and also run community run actions if needed.
 
 Here is an example of our `test:client:unit` action:
@@ -104,7 +102,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.13.1'
+          node-version: '20.14.0'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:

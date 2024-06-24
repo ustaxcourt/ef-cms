@@ -10,7 +10,6 @@ export const AppTimeoutModal = connect(
   function AppTimeoutModal({ confirmSequence }) {
     return (
       <ModalDialog
-        preventCancelOnBlur
         className="app-timeout-modal"
         confirmLabel="Yes!"
         confirmSequence={confirmSequence}

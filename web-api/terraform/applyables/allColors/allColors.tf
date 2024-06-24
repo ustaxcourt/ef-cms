@@ -17,7 +17,7 @@ terraform {
   }
 
   required_providers {
-    aws = "5.52.0"
+    aws = "5.55.0"
   }
 }
 
@@ -67,6 +67,7 @@ module "ui-public-www-redirect" {
 
 module "dynamsoft_us_east" {
   source = "../../modules/dynamsoft"
+  count  = var.is_dynamsoft_enabled
   providers = {
     aws = aws.us-east-1
   }
@@ -77,7 +78,6 @@ module "dynamsoft_us_east" {
   zone_name              = var.zone_name
   ami                    = "ami-0a313d6098716f372"
   availability_zones     = ["us-east-1a"]
-  is_dynamsoft_enabled   = var.is_dynamsoft_enabled # 10345 refactor this to be count vs var
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys
@@ -85,6 +85,7 @@ module "dynamsoft_us_east" {
 
 module "dynamsoft_us_west" {
   source = "../../modules/dynamsoft"
+  count  = var.is_dynamsoft_enabled
   providers = {
     aws = aws.us-west-1
   }
@@ -95,7 +96,6 @@ module "dynamsoft_us_west" {
   zone_name              = var.zone_name
   ami                    = "ami-06397100adf427136"
   availability_zones     = ["us-west-1a"]
-  is_dynamsoft_enabled   = var.is_dynamsoft_enabled
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys

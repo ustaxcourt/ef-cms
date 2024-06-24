@@ -143,8 +143,40 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.documentTypesForSelectSorted).toBeDefined();
     expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).toEqual(
-      expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
+      expect.arrayContaining([
+        expect.objectContaining({
+          documentTitle: 'Entry of Appearance for Respondent',
+          eventCode: 'EA',
+        }),
+      ]),
     );
+  });
+
+  it('returns an array of documentTypes for select that only contains documents with canBeFirstIrsDocument for IRS Pracitioners on filing first IRS document', () => {
+    applicationContext.getCurrentUser = jest
+      .fn()
+      .mockReturnValue(irsPractitionerUser);
+    applicationContext.getUtilities().isSealedCase = jest
+      .fn()
+      .mockReturnValue(false);
+
+    const result = runCompute(completeDocumentTypeSectionHelper, {
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        form: {},
+      },
+    });
+
+    expect(result.primary).toBeTruthy();
+    expect(result.documentTypesForSelectSorted).toBeDefined();
+    expect(result.documentTypesForSelectSorted.length).toBeGreaterThan(0);
+    expect(
+      result.documentTypesForSelectSorted.every(
+        entry => entry.canBeFirstIrsDocument === true,
+      ),
+    ).toBeTruthy();
   });
 
   it('returns an array of documentTypes for select excluding Entry of Appearance for IRS Practitioners on non-first filing', () => {

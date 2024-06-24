@@ -110,7 +110,7 @@ export const FileEntryOfAppearanceReview = ({
               <div className="margin-top-4">
                 <Button
                   className="margin-bottom-1"
-                  data-testid="request-access-review-submit-document"
+                  data-testid="submit-entry-of-appearance-button"
                   id="submit-document"
                   type="submit"
                   onClick={() => {

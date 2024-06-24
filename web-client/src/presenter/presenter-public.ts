@@ -27,15 +27,19 @@ import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/n
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { openAppUpdatedModalSequence } from '@web-client/presenter/sequences/openAppUpdatedModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
 import { redirectToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/redirectToCreatePetitionerAccountSequence';
+import { redirectToDashboardSequence } from '@web-client/presenter/sequences/redirectToDashboardSequence';
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
+import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
+import { submitPractitionerNameSearchSequence } from '@web-client/presenter/sequences/submitPractitionerNameSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
@@ -55,6 +59,8 @@ import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCase
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
+import { validatePractitionerSearchByBarNumberFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByBarNumberFormSequence';
+import { validatePractitionerSearchByNameFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByNameFormSequence';
 
 export const presenterSequences = {
   advancedSearchTabChangeSequence,
@@ -93,13 +99,17 @@ export const presenterSequences = {
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,
+  openAppUpdatedModalSequence,
   openCaseDocumentDownloadUrlSequence,
   persistFormsOnReloadSequence,
   redirectToCreatePetitionerAccountSequence,
+  redirectToDashboardSequence,
   redirectToLoginSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
   submitLoginSequence,
+  submitPractitionerBarNumberSearchSequence,
+  submitPractitionerNameSearchSequence,
   submitPublicCaseAdvancedSearchSequence,
   submitPublicCaseDocketNumberSearchSequence,
   submitPublicOpinionAdvancedSearchSequence,
@@ -119,6 +129,8 @@ export const presenterSequences = {
   validateCaseDocketNumberSearchFormSequence,
   validateOpinionSearchSequence,
   validateOrderSearchSequence,
+  validatePractitionerSearchByBarNumberFormSequence,
+  validatePractitionerSearchByNameFormSequence,
 };
 
 export const presenter = {
