@@ -21,6 +21,7 @@ import { changePasswordInteractor } from '@web-api/business/useCases/auth/change
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from './business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from './business/useCases/trialSessions/closeTrialSessionInteractor';
+import { coldCaseReportInteractor } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { completeDocketEntryQCInteractor } from './business/useCases/docketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from './business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from './business/useCases/workItems/completeWorkItemInteractor';
@@ -63,6 +64,7 @@ import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trial
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePdfFromHtmlInteractor } from './business/useCases/pdf/generatePdfFromHtmlInteractor';
+import { generatePetitionPdfInteractor } from '../../shared/src/business/useCases/generatePetitionPdfInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
 import { generatePrintableFilingReceiptInteractor } from './business/useCases/docketEntry/generatePrintableFilingReceiptInteractor';
@@ -233,6 +235,7 @@ const useCases = {
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
+  coldCaseReportInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
@@ -275,6 +278,7 @@ const useCases = {
   generateNoticesForCaseTrialSessionCalendarInteractor,
   generatePDFFromJPGDataInteractor,
   generatePdfFromHtmlInteractor,
+  generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,

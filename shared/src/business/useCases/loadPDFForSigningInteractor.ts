@@ -53,7 +53,10 @@ export const loadPDFForSigningInteractor = async (
     } else {
       formattedArrayBuffer = arrayBuffer;
     }
-    return await pdfjsLib.getDocument(formattedArrayBuffer).promise;
+    return await pdfjsLib.getDocument({
+      data: formattedArrayBuffer,
+      isEvalSupported: false,
+    }).promise;
   } catch (err) {
     applicationContext.logger.error(
       `error loading PDF for signing with docketEntryId ${docketEntryId}`,
