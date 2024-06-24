@@ -142,7 +142,7 @@ import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/gene
 import { generateDocumentIds } from '../../shared/src/business/useCases/generateDocumentIds';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
 import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
-import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
+import { generateExternalDocumentTitle } from '@web-client/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
@@ -386,6 +386,8 @@ const getCurrentUserToken = () => {
 const setCurrentUserToken = newToken => {
   token = newToken;
 };
+
+let forceRefreshCallback: () => {};
 
 const allUseCases = {
   addCaseToTrialSessionInteractor,
@@ -656,7 +658,12 @@ const applicationContext = {
   getCurrentUserToken,
   getEnvironment,
   getFileReaderInstance: () => new FileReader(),
-  getHttpClient,
+  getForceRefreshCallback() {
+    return forceRefreshCallback;
+  },
+  getHttpClient: () => {
+    return getHttpClient(forceRefreshCallback);
+  },
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
@@ -810,8 +817,12 @@ const applicationContext = {
   isFeatureEnabled: featureName => {
     return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
+  isPublicUser: () => false,
   setCurrentUser,
   setCurrentUserToken,
+  setForceRefreshCallback(callback) {
+    forceRefreshCallback = callback;
+  },
   setTimeout: (callback, timeout) => setTimeout(callback, timeout),
 };
 
