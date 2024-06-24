@@ -360,10 +360,13 @@ describe('reviewSavedPetitionHelper', () => {
     });
 
     expect(result).toMatchObject({
-      attachmentToPetitionFile: {
-        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
-      },
+      attachmentToPetitionFiles: [
+        {
+          documentType:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+        },
+      ],
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
