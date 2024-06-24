@@ -84,6 +84,7 @@ export const TrialSessionWorkingCopy = connect(
                 <Button
                   link
                   aria-label="Download batch of documents in a trial session"
+                  data-testid="download-all-trial-session-cases-button"
                   onClick={() =>
                     batchDownloadTrialSessionSequence({
                       allowRetry: true,
