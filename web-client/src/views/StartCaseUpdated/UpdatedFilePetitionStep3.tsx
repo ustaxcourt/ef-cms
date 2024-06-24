@@ -121,7 +121,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message:
-                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) for every form except the Statement of Taxpayer Identification.',
+                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) of every form except the Statement of Taxpayer Identification Number.',
                   }}
                   dismissible={false}
                   scrollToTop={false}
