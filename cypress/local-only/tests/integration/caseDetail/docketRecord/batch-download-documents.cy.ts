@@ -8,7 +8,6 @@ import {
 } from '../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
-import { retry } from '../../../../../helpers/retry';
 
 const confirmCountOfDocumentsToDownload = (documentsCreatedCount: number) => {
   const docketEntriesText = `${documentsCreatedCount} ${documentsCreatedCount === 1 ? 'docket entry' : 'docket entries'}`;
@@ -29,18 +28,6 @@ const includePrintableDocketRecord = () => {
   cy.get(
     '[data-testid="include-printable-docket-record-checkbox-checkbox-label"]',
   ).click();
-};
-
-const verifyDownloadedFiles = ({
-  downloadPath,
-  zipName,
-}: {
-  downloadPath: string;
-  zipName: string;
-}) => {
-  return cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
-    return files.includes(zipName);
-  });
 };
 
 const checkFileCounts = ({
@@ -69,14 +56,8 @@ const checkFileCounts = ({
 };
 
 describe('Batch Download Documents', () => {
-  beforeEach(() => {
-    const downloadPath = Cypress.config('downloadsFolder');
-    cy.task('ensureFolderExists', downloadPath);
-  });
-
   afterEach(() => {
-    const downloadPath = Cypress.config('downloadsFolder');
-    cy.task('deleteAllFilesInFolder', downloadPath);
+    cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
 
   it('allows only internal court users to batch download case documents', () => {
@@ -116,8 +97,6 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download all eligible documents that are not stricken with the printable docket record, with all files in a flat directory', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
         const zipName = `${docketNumber}, ${name}.zip`;
@@ -130,11 +109,10 @@ describe('Batch Download Documents', () => {
         expectedFileCount++;
         cy.get('[data-testid="modal-button-confirm"]').click();
 
-        retry(() => verifyDownloadedFiles({ downloadPath, zipName }));
+        cy.readFile(`cypress/downloads/${zipName}`);
 
-        cy.unzipFile({
-          destinationPath: downloadPath,
-          filePath: `${downloadPath}/${zipName}`,
+        cy.task<string[]>('unzipFile', {
+          fileName: zipName,
         }).then(files => {
           checkFileCounts({
             expectedFileCount,
@@ -148,8 +126,6 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download all eligible documents with some stricken and some sealed, labeling files and adding sealed docs to sealed directory', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
         const zipName = `${docketNumber}, ${name}.zip`;
@@ -184,11 +160,10 @@ describe('Batch Download Documents', () => {
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         cy.get('[data-testid="modal-button-confirm"]').click();
 
-        retry(() => verifyDownloadedFiles({ downloadPath, zipName }));
+        cy.readFile(`cypress/downloads/${zipName}`);
 
-        cy.unzipFile({
-          destinationPath: downloadPath,
-          filePath: `${downloadPath}/${zipName}`,
+        cy.task<string[]>('unzipFile', {
+          fileName: zipName,
         }).then(files => {
           checkFileCounts({
             expectedFileCount,
@@ -202,8 +177,6 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download selected documents, labeling stricken documents and putting everything except the printable docket record into the sealed directory when then the case is sealed', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(
       ({ docketNumber, documentsCreated, name }) => {
         const zipName = `${docketNumber}, ${name}.zip`;
@@ -238,11 +211,10 @@ describe('Batch Download Documents', () => {
         expectedFileCount++;
         cy.get('[data-testid="modal-button-confirm"]').click();
 
-        retry(() => verifyDownloadedFiles({ downloadPath, zipName }));
+        cy.readFile(`cypress/downloads/${zipName}`);
 
-        cy.unzipFile({
-          destinationPath: downloadPath,
-          filePath: `${downloadPath}/${zipName}`,
+        cy.task<string[]>('unzipFile', {
+          fileName: zipName,
         }).then(files => {
           checkFileCounts({
             expectedFileCount,
@@ -256,8 +228,6 @@ describe('Batch Download Documents', () => {
   });
 
   it('should download selected documents filtered by document type', () => {
-    const downloadPath = Cypress.config('downloadsFolder');
-
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       const zipName = `${docketNumber}, ${name}.zip`;
       const documentsFilteredByDocumentType = [{ eventCode: 'O' }];
@@ -284,11 +254,10 @@ describe('Batch Download Documents', () => {
 
       cy.get('[data-testid="modal-button-confirm"]').click();
 
-      retry(() => verifyDownloadedFiles({ downloadPath, zipName }));
+      cy.readFile(`cypress/downloads/${zipName}`);
 
-      cy.unzipFile({
-        destinationPath: downloadPath,
-        filePath: `${downloadPath}/${zipName}`,
+      cy.task<string[]>('unzipFile', {
+        fileName: zipName,
       }).then(files => {
         checkFileCounts({
           expectedFileCount,

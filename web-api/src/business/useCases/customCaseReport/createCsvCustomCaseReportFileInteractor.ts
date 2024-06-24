@@ -112,7 +112,9 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const csvString = getCsvString(formattedCases);
   const csvBuffer = Buffer.from(csvString);
 
-  const today = applicationContext.getUtilities().formatNow(FORMATS.MMDDYYYY);
+  const today = applicationContext
+    .getUtilities()
+    .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = 'Custom Case Report - ' + today;
 
   const fileInfo = await applicationContext

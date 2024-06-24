@@ -23,6 +23,7 @@ export const TrialSessionsSummary = connect(
           <Button
             link
             className="margin-left-205"
+            data-testid="view-all-trial-sessions-button"
             href={`/trial-sessions?judge[userId]=${trialSessionsSummaryHelper.judgeUserId}`}
           >
             View All
