@@ -171,6 +171,7 @@ import {
   getJudgesChambers,
 } from './business/chambers/getJudgesChambers';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
+import { getColdCaseReportInteractor } from '../../shared/src/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getConstants } from './getConstants';
@@ -473,6 +474,7 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
+  getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,

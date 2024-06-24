@@ -196,7 +196,7 @@ export const BeforeStartingCase = connect(
                 file.
               </b>{' '}
               Petitions received after this date may be untimely and your case
-              may be dismissed.
+              may be dismissed for lack of jurisdiction.
             </div>
           </div>
           <div className="grid-row grid-gap">

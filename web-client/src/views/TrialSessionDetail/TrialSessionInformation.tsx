@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { SessionAssignments } from '../TrialSessionWorkingCopy/SessionAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -241,7 +242,9 @@ export const TrialSessionInformation = connect(
                 <div className="card trial-session-card height-full">
                   <div className="content-wrapper">
                     <h3 className="underlined">Notes</h3>
-                    {formattedTrialSessionDetails.notes}
+                    <PreformattedText
+                      text={formattedTrialSessionDetails.notes}
+                    />
                   </div>
                 </div>
               </div>
