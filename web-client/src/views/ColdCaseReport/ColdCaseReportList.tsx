@@ -157,7 +157,7 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
         ))}
       </table>
 
-      {entries.length === 0 && <p>There is no cold cases.</p>}
+      {entries.length === 0 && <p>There are no cold cases.</p>}
 
       {totalPages > 1 && (
         <Paginator
