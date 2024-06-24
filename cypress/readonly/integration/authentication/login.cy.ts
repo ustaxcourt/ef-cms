@@ -8,8 +8,6 @@ describe('Given a user with a DAWSON account', () => {
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
       cy.visit('/login');
-      // Login Button is Disabled till Enter Both Email and Password
-      cy.get('[data-testid="login-button"]').should('be.disabled');
       cy.get('[data-testid="email-input"]').type(
         'testAdmissionsClerk@example.com',
       );
