@@ -23,8 +23,10 @@ import { Correspondence } from '../../shared/src/business/entities/Correspondenc
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { SQSClient } from '@aws-sdk/client-sqs';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -66,13 +68,14 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SQS } from 'aws-sdk';
+import AWS, { S3 } from 'aws-sdk';
+
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
 let s3Cache: AWS.S3 | undefined;
-let sqsCache;
+let sqsCache: SQSClient;
 let searchClientCache: Client;
 let notificationServiceCache;
 
@@ -212,13 +215,13 @@ export const createApplicationContext = (
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
-        sqsCache = new SQS({
-          apiVersion: '2012-11-05',
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
+        sqsCache = new SQSClient({
+          maxAttempts: 3,
+          region: environment.region,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3_000,
+            requestTimeout: 5_000,
+          }),
         });
       }
       return sqsCache;
