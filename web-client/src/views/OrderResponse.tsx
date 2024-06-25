@@ -71,10 +71,12 @@ export const OrderResponse = connect(
                         </label>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            // TODO "allCasesInGroup" should be selected by default
                             aria-describedby="issue-order-radios"
                             aria-label="all cases in group"
-                            checked={form.issueOrder === 'allCasesInGroup'}
+                            checked={
+                              !form.issueOrder ||
+                              form.issueOrder === 'allCasesInGroup'
+                            }
                             className="usa-radio__input"
                             id="all-cases-in-group"
                             name="issueOrder"
@@ -179,7 +181,12 @@ export const OrderResponse = connect(
                         Status Report or Stipulated Decision
                       </label>
                     </div>
+                  </FormGroup>
 
+                  <FormGroup
+                    className="grid-container stamp-form-group"
+                    errorText={orderResponseHelper.dueDateErrorText}
+                  >
                     <label
                       className="usa-label"
                       htmlFor="status-report-due-date"
@@ -241,7 +248,7 @@ export const OrderResponse = connect(
 
                   <FormGroup
                     className="stamp-form-group"
-                    errorText={validationErrors.jurisdiction}
+                    errorText={orderResponseHelper.jurisdictionErrorText}
                   >
                     <label className="usa-label" htmlFor="jurisdiction-radios">
                       Jurisdiction

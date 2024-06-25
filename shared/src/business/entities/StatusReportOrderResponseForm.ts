@@ -48,6 +48,14 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
       'retained',
       'restoredToGeneralDocket',
     )
+      .when('strikenFromTrialSessions', {
+        is: joi.exist().not(null),
+        otherwise: joi.optional().allow(null),
+        then: joi.required().messages({
+          'any.required':
+            'Jurisdiction is required since case is stricken from the trial session',
+        }),
+      })
       .optional()
       .allow(null),
     orderType: JoiValidationConstants.STRING.valid(
