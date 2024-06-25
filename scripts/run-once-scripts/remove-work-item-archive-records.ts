@@ -25,12 +25,8 @@ const findWorkItemArchiveRecords = async ({ applicationContext }) => {
   const allResults = results.filter(
     result => result.pk.split('|').length === 3,
   );
-  console.log('all results', allResults[0]);
-  const resultPks = allResults.map(result => ({
-    pk: result.pk,
-    sk: result.sk,
-  }));
-  return resultPks;
+  
+  return allResults;
 };
 
 const removeWorkItemRecords = async ({
@@ -38,7 +34,6 @@ const removeWorkItemRecords = async ({
   workItemRecords,
 }) => {
   await batchDelete({ applicationContext, items: workItemRecords });
-  // reprocess items
 };
 
 (async () => {
@@ -47,5 +42,5 @@ const removeWorkItemRecords = async ({
     applicationContext,
   });
   console.log(workItemRecords);
-  //   await removeWorkItemRecords({ workItemRecords, applicationContext });
+    await removeWorkItemRecords({ workItemRecords, applicationContext });
 })();
