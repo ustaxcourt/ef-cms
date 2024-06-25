@@ -58,8 +58,8 @@ export default defineConfig({
         toggleFeatureFlag(args) {
           return toggleFeatureFlag(args);
         },
-        unzipFile({ destinationPath, filePath }) {
-          return unzipFile({ destinationPath, filePath });
+        unzipFile({ fileName }) {
+          return unzipFile({ fileName });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
