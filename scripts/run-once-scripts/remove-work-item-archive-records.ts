@@ -1,20 +1,10 @@
 // usage: npx ts-node --transpile-only scripts/run-once-scripts/remove-work-item-archive-records.ts
 
-import { DeleteCommand, DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import {
   batchDelete,
   scan,
 } from '../../web-api/src/persistence/dynamodbClientService';
-
-const dynamoClient = new DynamoDBClient({
-  region: 'us-east-1',
-});
-
-const documentClient = DynamoDBDocument.from(dynamoClient, {
-  marshallOptions: { removeUndefinedValues: true },
-});
 
 const findWorkItemArchiveRecords = async ({ applicationContext }) => {
   const userOutboxResults = await scan({
@@ -48,6 +38,7 @@ const removeWorkItemRecords = async ({
   workItemRecords,
 }) => {
   await batchDelete({ applicationContext, items: workItemRecords });
+  // reprocess items
 };
 
 (async () => {
