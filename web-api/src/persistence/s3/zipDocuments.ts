@@ -86,7 +86,7 @@ export async function zipDocuments(
         continue;
       }
       compressedPdfStream.push(unzippedChunk.value, unzippedChunk.done);
-      while (passThrough.readableLength > 1024 * 1024 * 50) {
+      while (passThrough.readableLength > 1024 * 1024 * 10) {
         // Wait for the buffer to be drained, before downloading more files
         await new Promise(resolve => setTimeout(resolve, 10));
       }
