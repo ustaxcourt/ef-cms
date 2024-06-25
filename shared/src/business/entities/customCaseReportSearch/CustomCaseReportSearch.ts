@@ -1,5 +1,5 @@
 import {
-  CASE_STATUSES,
+  CASE_STATUS_TYPES,
   CASE_TYPES,
   CaseStatus,
   CaseType,
@@ -58,7 +58,9 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
+      caseStatuses: joi
+        .array()
+        .items(joi.string().valid(...Object.values(CASE_STATUS_TYPES))),
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
       endDate: joi
         .alternatives()
