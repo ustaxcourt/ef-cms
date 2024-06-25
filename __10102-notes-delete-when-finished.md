@@ -17,15 +17,13 @@ only 140 or 160 characters long. Which is it?
 
 ## Things to do
 
-1. Update OrderResponse component to display all validation messages
+1. Get logic working that conditionally allows the user to it the "Save as Draft" button depending on whether the minimum amount of fields are populated
 
-2. Get logic working that conditionally makes the first question required only
-if the case is a lead case
+2. Submit Order as Draft (Note: Edit should reopen form, maybe special order type?)
 
-3. Get logic working that conditionally allows the user to it the "Save as Draft"
-button depending on whether the minimum amount of fields are populated
+3. Figure out how to handle the side-by-side form and in-progress PDF situation
 
-4. Figure out how to handle the side-by-side form and in-progress PDF situation
+4. Undraft order to case
 
 ## Notes
 
