@@ -25,8 +25,6 @@ only 140 or 160 characters long. Which is it?
 
 - Figure out how to handle the Preview Pdf Functionality (UX committed to creating additional mock on 6/26/2024)
 
-- Validation for Docket Entry Description as required, Enter docket entry description (as could be blanked out)
-
 - Update CSS to Match Mocks
 
 - Determine if Additional order text should maintain formatting (line breaks + spacing, thought is yes?)
