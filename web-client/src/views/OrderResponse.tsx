@@ -7,11 +7,10 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react'; //{ useEffect, useRef }
+import React from 'react';
 
 export const OrderResponse = connect(
   {
-    // clearDueDateSequence: sequences.clearDueDateSequence,
     clearStatusReportOrderResponseFormSequence:
       sequences.clearStatusReportOrderResponseFormSequence,
     constants: state.constants,
@@ -27,7 +26,6 @@ export const OrderResponse = connect(
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
-    // clearDueDateSequence,
     clearStatusReportOrderResponseFormSequence,
     constants,
     form,
@@ -60,7 +58,6 @@ export const OrderResponse = connect(
                       <FormGroup
                         className="stamp-form-group"
                         errorText={validationErrors.issueOrder}
-                        // className={applyStampFormHelper.dispositionErrorClass}
                       >
                         <label
                           className="usa-label"
@@ -206,10 +203,6 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.MMDDYY,
                           value: e.target.value,
                         });
-                        // TODO is it necessary to run validation here, or can
-                        // we just validate upon form submission? Current lean
-                        // is toward the latter
-                        //validateStampSequence();
                       }}
                     />
                   </FormGroup>
@@ -327,7 +320,6 @@ export const OrderResponse = connect(
                         // component and use that
                         maxLength={80}
                         name="additionalOrderText"
-                        type="text"
                         value={form.additionalOrderText}
                         onChange={e => {
                           updateFormValueSequence({
@@ -368,7 +360,6 @@ export const OrderResponse = connect(
                         // component and use that
                         maxLength={80}
                         name="docketEntryDescription"
-                        type="text"
                         // TODO default value of this field should be just the string "Order"
                         value={form.docketEntryDescription}
                         onChange={e => {
@@ -404,12 +395,8 @@ export const OrderResponse = connect(
 
               <div className="margin-bottom-1 display-flex flex-justify-end">
                 <Button
-                  // TODO this button must be disabled if none of the following fields
-                  // are populated: orderType, jurisdiction, stricken from the record
-                  // check box, or additional order text
                   className="margin-right-0"
                   data-testid="save-signature-button"
-                  // disabled={!applyStampFormHelper.canSaveStampOrder}
                   id="save-signature-button"
                   onClick={() => submitStatusReportOrderResponseSequence()}
                 >

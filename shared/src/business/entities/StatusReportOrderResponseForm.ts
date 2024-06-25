@@ -20,11 +20,15 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     this.strikenFromTrialSessions = rawProps.strikenFromTrialSessions;
     this.jurisdiction = rawProps.jurisdiction;
     this.additionalOrderText = rawProps.additionalOrderText;
-    this.docketEntryDescription = rawProps.docketEntryDescription || 'Order';
+    this.docketEntryDescription = rawProps.docketEntryDescription;
   }
   static VALIDATION_RULES = joi.object().keys({
     additionalOrderText: JoiValidationConstants.STRING.max(80).optional(),
-    docketEntryDescription: JoiValidationConstants.STRING.max(80).optional(),
+    docketEntryDescription: JoiValidationConstants.STRING.max(80)
+      .required()
+      .messages({
+        '*': 'Enter a docket entry description',
+      }),
     dueDate: JoiValidationConstants.ISO_DATE.when('orderType', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
@@ -37,7 +41,6 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
       .messages({
         '*': 'Enter a valid date',
       }),
-    // TODO issueOrder radio button is only required if the case is a lead case
     issueOrder: JoiValidationConstants.STRING.valid(
       'allCasesInGroup',
       'justThisCase',
