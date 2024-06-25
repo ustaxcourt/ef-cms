@@ -27,10 +27,6 @@ export const uploadDocument = async ({
       },
     });
 
-    parallelUploadS3.on('httpUploadProgress', progress => {
-      console.log(progress);
-    });
-
     await parallelUploadS3.done();
   } catch (e) {
     applicationContext.logger.error(
