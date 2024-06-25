@@ -67,8 +67,34 @@ export const MessagesIndividualCompleted = connect(
                   onClickSequence={sortTableSequence}
                 />
               </th>
-              <th>Comment</th>
-              <th>Case Title</th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-comment-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="completedMessage"
+                  title="Comment"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
+              <th>
+                <SortableColumn
+                  ascText={constants.ALPHABETICALLY_ASCENDING}
+                  currentlySortedField={tableSort.sortField}
+                  currentlySortedOrder={tableSort.sortOrder}
+                  data-testid="message-individual-case-title-header-button"
+                  defaultSortOrder={constants.ASCENDING}
+                  descText={constants.ALPHABETICALLY_DESCENDING}
+                  hasRows={formattedMessages.hasMessages}
+                  sortField="caseTitle"
+                  title="Case Title"
+                  onClickSequence={sortTableSequence}
+                />
+              </th>
             </tr>
           </thead>
           {formattedMessages.completedMessages.map(message => {
