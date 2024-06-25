@@ -222,6 +222,15 @@ describe('processFormattedMessages', () => {
         },
       ]);
     });
+
+    it('should not change any order when all messages have the same sort field', () => {
+      const result = sortFormattedMessages(messages, {
+        sortField: 'UNKNOWN',
+        sortOrder: ASCENDING,
+      });
+
+      expect(result).toMatchObject(messages);
+    });
   });
 
   describe('sortCompletedMessages', () => {
