@@ -50,7 +50,7 @@ export const FilePetitionPetitionInformation = connect(
             }}
           />
           <label className="usa-radio__label" htmlFor="generate-a-petition">
-            Answer some questions and have DAWSON create the petition.
+            Answer some questions and have DAWSON create the Petition.
           </label>
           <input
             checked={form.petitionType === PETITION_TYPES.userUploaded}
@@ -80,7 +80,7 @@ export const FilePetitionPetitionInformation = connect(
             <WarningNotificationComponent
               alertWarning={{
                 message:
-                  'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification.',
+                  'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.',
               }}
               dismissible={false}
               scrollToTop={false}
