@@ -34,9 +34,6 @@ export async function zipDocuments(
       Key: outputZipName,
     },
   });
-  upload.on('httpUploadProgress', progress => {
-    console.log('s3 upload progress: ', progress);
-  });
 
   const writable = new Writable({
     write(chunk, encoding, callback) {
