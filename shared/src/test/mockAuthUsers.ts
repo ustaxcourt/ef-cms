@@ -11,7 +11,7 @@ export const mockDocketClerkUser: AuthUser = {
   email: 'mockDocketClerk@example.com',
   name: 'Dimmy Docket',
   role: ROLES.docketClerk,
-  userId: 'e4988d2d-deb0-4b65-a97f-5abfadb0970a',
+  userId: '612e3eb3-332c-4f1f-aaff-44ac8eae9a5f',
 };
 
 export const mockJudgeUser: AuthUser = {
@@ -19,4 +19,11 @@ export const mockJudgeUser: AuthUser = {
   name: 'Judge Judy',
   role: ROLES.judge,
   userId: '3a13531b-0fc5-4a4c-8188-c72f50b1889d',
+};
+
+export const mockPetitionsClerkUser: AuthUser = {
+  email: 'mockPetitionsClerke@example.com',
+  name: 'Patty Petitions Clerk',
+  role: ROLES.petitionsClerk,
+  userId: 'd5234a80-64aa-4e3e-b0fd-59e6a835585e',
 };
