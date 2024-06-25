@@ -3,6 +3,7 @@
 ## Cases for testing during development
 
 - Regular case: 107-19L
+http://localhost:1234/case-detail/107-19/documents/1a4f0f89-3441-4334-b6b3-e35b93b16c22/order-response
 - Lead case: 102-67L
 
 ## Questions for UX/PO
@@ -15,15 +16,21 @@ restriction on its character length similar to "Additional order text" above?
 only 140 or 160 characters long. Which is it?
 *Answer*: Check the stamp disposition workflow.
 
+*Question*: When should we enable/disable "Save as Draft" button?
+*Answer*: Always leave it enabled per Chris + UX. 
+
 ## Things to do
 
-1. Get logic working that conditionally allows the user to it the "Save as Draft" button depending on whether the minimum amount of fields are populated
+- Submit Order as Draft (Note: Edit should reopen form, maybe special order type?)
 
-2. Submit Order as Draft (Note: Edit should reopen form, maybe special order type?)
+- Figure out how to handle the Preview Pdf Functionality (UX committed to creating additional mock on 6/26/2024)
 
-3. Figure out how to handle the side-by-side form and in-progress PDF situation
+- Validation for Docket Entry Description as required, Enter docket entry description (as could be blanked out)
 
-4. Undraft order to case
+- Update CSS to Match Mocks
+
+- Determine if Additional order text should maintain formatting (line breaks + spacing, thought is yes?)
+
 
 ## Notes
 
