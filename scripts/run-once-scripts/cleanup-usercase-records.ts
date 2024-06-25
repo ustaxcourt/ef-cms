@@ -156,7 +156,7 @@ async function updateUserCaseRecords(
   await batchWrite(applicationContext, putRequests);
 }
 
-async function batchWrite(
+export async function batchWrite(
   applicationContext: IServerApplicationContext,
   commands: PutRequest[],
 ): Promise<void> {
