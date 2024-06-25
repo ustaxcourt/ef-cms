@@ -811,6 +811,7 @@ const applicationContext = {
   isFeatureEnabled: featureName => {
     return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
+  isPublicUser: () => false,
   setCurrentUser,
   setCurrentUserToken,
   setForceRefreshCallback(callback) {

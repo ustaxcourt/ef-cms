@@ -606,6 +606,7 @@ const createTestApplicationContext = () => {
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
+    isPublicUser: jest.fn().mockImplementation(() => false),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };
