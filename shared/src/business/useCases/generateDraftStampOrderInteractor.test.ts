@@ -1,9 +1,9 @@
-import { MOTION_DISPOSITIONS, ROLES } from '../entities/EntityConstants';
+import { MOTION_DISPOSITIONS } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generateDraftStampOrderInteractor } from './generateDraftStampOrderInteractor';
+import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('generateDraftStampOrderInteractor', () => {
-  let mockCurrentUser;
   const docketNumber = '999-99';
   const formattedDraftDocumentTitle = 'Motion GRANTED';
   const motionDocketEntryId = '67fb412e-cb00-454c-9739-fa90a09dca1d';
@@ -11,48 +11,41 @@ describe('generateDraftStampOrderInteractor', () => {
   const stampData = { disposition: MOTION_DISPOSITIONS.GRANTED };
   const stampedDocketEntryId = 'e9bdeaa1-8c49-479e-9f21-6f3303307f48';
 
-  beforeEach(() => {
-    mockCurrentUser = {
-      role: ROLES.judge,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
+  it('throws an Unauthorized error when the user role is not allowed to access the method', async () => {
+    await expect(
+      generateDraftStampOrderInteractor(
+        applicationContext,
+        {
+          docketNumber,
+          formattedDraftDocumentTitle,
+          motionDocketEntryId,
+          parentMessageId,
+          stampData,
+          stampedDocketEntryId,
+        },
+        mockPetitionerUser,
+      ),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    mockCurrentUser = {
-      role: ROLES.petitioner,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
-    await expect(
-      generateDraftStampOrderInteractor(applicationContext, {
+  it('should add a docket entry for the draft stamp order', async () => {
+    await generateDraftStampOrderInteractor(
+      applicationContext,
+      {
         docketNumber,
         formattedDraftDocumentTitle,
         motionDocketEntryId,
         parentMessageId,
         stampData,
         stampedDocketEntryId,
-      }),
-    ).rejects.toThrow('Unauthorized');
-  });
-
-  it('should add a docket entry for the draft stamp order', async () => {
-    await generateDraftStampOrderInteractor(applicationContext, {
-      docketNumber,
-      formattedDraftDocumentTitle,
-      motionDocketEntryId,
-      parentMessageId,
-      stampData,
-      stampedDocketEntryId,
-    });
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers()
         .addDraftStampOrderDocketEntryInteractor,
     ).toHaveBeenCalled();
-
     expect(
       applicationContext.getUseCaseHelpers()
         .addDraftStampOrderDocketEntryInteractor.mock.calls[0][1],
@@ -67,14 +60,18 @@ describe('generateDraftStampOrderInteractor', () => {
   });
 
   it('should generate a stamped coversheet for the draft stamp order', async () => {
-    await generateDraftStampOrderInteractor(applicationContext, {
-      docketNumber,
-      formattedDraftDocumentTitle,
-      motionDocketEntryId,
-      parentMessageId,
-      stampData,
-      stampedDocketEntryId,
-    });
+    await generateDraftStampOrderInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        formattedDraftDocumentTitle,
+        motionDocketEntryId,
+        parentMessageId,
+        stampData,
+        stampedDocketEntryId,
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers()
