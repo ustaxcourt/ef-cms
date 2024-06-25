@@ -30,8 +30,23 @@ export const orderResponseHelper = (
     .getUtilities()
     .formatNow(DATE_FORMATS.YYYYMMDD);
 
+  const validationErrors = get(state.validationErrors);
+
+  const customDueDateError =
+    validationErrors.dueDate &&
+    validationErrors.dueDate.includes('stipulated decision');
+
+  const dueDateErrorText = customDueDateError
+    ? 'Select due date'
+    : validationErrors.dueDate;
+
+  const jurisdictionErrorText =
+    validationErrors.jurisdiction && 'Select jurisdiction';
+
   return {
+    dueDateErrorText,
     isLeadCase,
+    jurisdictionErrorText,
     minDate,
   };
 };
