@@ -4,6 +4,7 @@
 
 - Regular case: 107-19L
 http://localhost:1234/case-detail/107-19/documents/1a4f0f89-3441-4334-b6b3-e35b93b16c22/order-response
+
 - Lead case: 102-67L
 
 ## Questions for UX/PO
@@ -19,9 +20,12 @@ only 140 or 160 characters long. Which is it?
 *Question*: When should we enable/disable "Save as Draft" button?
 *Answer*: Always leave it enabled per Chris + UX. 
 
+*Question*: What should the order title be? Same as docket entry description? 
+*Answer*: ??
+
 ## Things to do
 
-- Submit Order as Draft (Note: Edit should reopen form, maybe special order type?)
+- Finish submit Order as Draft (Note: Edit should reopen form, maybe special order type?)
 
 - Figure out how to handle the Preview Pdf Functionality (UX committed to creating additional mock on 6/26/2024)
 
