@@ -1,3 +1,5 @@
+// usage: npx ts-node --transpile-only scripts/run-once-scripts/add-gsis-to-messages.ts
+
 /* eslint-disable */
 import { calculateTimeToLive } from '../../web-api/src/persistence/dynamo/calculateTimeToLive';
 import { TDynamoRecord } from '../../web-api/src/persistence/dynamo/dynamoTypes';
@@ -8,26 +10,18 @@ import { getClient } from '../../web-api/elasticsearch/client';
 
 const environmentName = process.env.ENV!;
 
+/** ideas:
+- use elasticsearch to get all cases that have messages, then use those PKs 
+  to get messages in dynamo, then push to dynamo
+- just do a dynamo table scan
+- trust ES message data and do a one-to-one pull -> upsert
+*/
+
 const getMessages = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
 }): Promise<RawCase[]> => {
-  // const searchOutput = await searchAll({
-  //   applicationContext,
-  //   searchParameters: {
-  //     body: {
-  //       query: {
-  //         bool: {
-  //           must: [{ prefix: { pk: 'case|' } },
-  //             // { prefix: { sk: 'case|' } }
-  //           ],
-  //         },
-  //       },
-  //     },
-  //     index: 'efcms-message',
-  //   },
-  // });
   const searchOutput = await applicationContext.getSearchClient().search({
     index: 'efcms-message',
     body: {
@@ -35,7 +29,7 @@ const getMessages = async ({
         // match_all: {},
         bool: {
           must: [
-            { match: { 'pk.S': 'case|261-20' } },
+            { term: { 'entityName.S': 'Message' } },
             // { prefix: { 'sk.keyword': 'case|' } },
           ],
         },
@@ -43,52 +37,16 @@ const getMessages = async ({
     },
   });
 
-  console.log('output', searchOutput.body.hits.hits);
+  // console.log('output', searchOutput.body.hits.hits);
   // const results = searchOutput.body.hits.hits;
   // console.log(results.body.hits.hits)
-  console.log('results', searchOutput.body.hits.hits[0]);
+  console.log('results', searchOutput.body.hits.hits);
   return [] as unknown as RawCase[];
 };
-
-// const getMessages = async () => {
-//   const esClient = await getClient({ environmentName });
-//   //   const searchOutput = await applicationContext.getSearchClient().search({
-//   //     index: 'efcms-message',
-//   //     body: {
-//   // query: {
-//   //   // match_all: {},
-//   //   bool: {
-//   //     must: [
-//   //       { match: { 'pk.S': 'case|261-20' } },
-//   //       // { prefix: { 'sk.keyword': 'case|' } },
-//   //     ],
-//   //   },
-//   // },
-//   //     },
-//   //   });
-
-//   // const query = {
-//   //   match: { 'pk.S': 'case|261-20' },
-//   // };
-
-//   try {
-//     const searchOutput = await esClient.search({
-//       body: { query },
-//       index: 'efcms-message',
-//     });
-
-//     return searchOutput.body.hits.hits.map(hit => {
-//       return hit;
-//     });
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
 
 const applyMessageChanges = ({ messages: items }) => {
   const itemsAfter: TDynamoRecord[] = [];
   for (const item of items) {
-    console.log(item);
     if (!item.completedAt) {
       const ttl = calculateTimeToLive({
         numDays: 8,
@@ -157,7 +115,7 @@ const applyMessageChanges = ({ messages: items }) => {
   const applicationContext = createApplicationContext({});
   // const messages = await getMessages();
   const messages = await getMessages({ applicationContext });
-  console.log(messages);
+  // console.log(messages);
 
   // const updatedMessages = applyMessageChanges({ messages });
   // console.log(updatedMessages[0]);
