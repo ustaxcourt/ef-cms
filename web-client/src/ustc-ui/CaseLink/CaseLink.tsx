@@ -25,6 +25,7 @@ export const CaseLink = ({
   ) : (
     <a
       className={classNames('no-wrap', className)}
+      data-testid="case-link"
       href={`/case-detail/${formattedCase.docketNumber}`}
       rel={rel}
       target={target}
