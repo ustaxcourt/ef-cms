@@ -1123,7 +1123,9 @@ describe('serveCaseToIrsInteractor', () => {
     await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should generate an order and upload it to s3 for orderDesignatingPlaceOfTrial', async () => {
@@ -1144,7 +1146,9 @@ describe('serveCaseToIrsInteractor', () => {
       eventCode: 'O',
     });
 
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
 
     const petitionFilingDate = mockCase.docketEntries.find(
       doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -1188,7 +1192,9 @@ describe('serveCaseToIrsInteractor', () => {
     await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should replace brackets in orderToShowCause content with a filing date and todayPlus60', async () => {
@@ -1354,7 +1360,9 @@ describe('serveCaseToIrsInteractor', () => {
     await serveCaseToIrsInteractor(applicationContext, mockParams);
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
 
     expect(
       await applicationContext.getUseCaseHelpers()

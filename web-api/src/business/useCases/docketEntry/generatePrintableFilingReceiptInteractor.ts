@@ -1,13 +1,14 @@
-import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
-import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 const getDocumentInfo = ({
   applicationContext,
   documentData,
   petitioners,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   documentData: any;
   petitioners?: any[];
 }) => {
@@ -40,7 +41,7 @@ const getDocumentInfo = ({
  * @returns {string} url for the generated document on the storage client
  */
 export const generatePrintableFilingReceiptInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     documentsFiled,
