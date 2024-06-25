@@ -22,8 +22,15 @@ export const mockJudgeUser: AuthUser = {
 };
 
 export const mockPetitionsClerkUser: AuthUser = {
-  email: 'mockPetitionsClerke@example.com',
+  email: 'mockPetitionsClerk@example.com',
   name: 'Patty Petitions Clerk',
   role: ROLES.petitionsClerk,
   userId: 'd5234a80-64aa-4e3e-b0fd-59e6a835585e',
+};
+
+export const mockPrivatePractitionerUser: AuthUser = {
+  email: 'mockPrivatePractitioner@example.com',
+  name: 'Reginald Barclay',
+  role: ROLES.privatePractitioner,
+  userId: '73dedd03-e353-4703-bf6b-5b864b8c16ae',
 };
