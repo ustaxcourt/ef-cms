@@ -113,6 +113,25 @@ export const search = async <T>({
   }
 };
 
+export const searchRaw = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: Search;
+}): Promise<any> => {
+  updateIndex({ searchParameters });
+  try {
+    const response = await applicationContext
+      .getSearchClient()
+      .search(searchParameters);
+    return response;
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
+  }
+};
+
 export const searchAll = async ({
   applicationContext,
   searchParameters,
