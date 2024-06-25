@@ -15,7 +15,7 @@ export async function zipDocuments(
     onProgress,
     outputZipName,
   }: {
-    onProgress: (params: ProgressData) => Promise<void> | void;
+    onProgress?: (params: ProgressData) => Promise<void> | void;
     documents: {
       key: string;
       filePathInZip: string;
@@ -24,7 +24,7 @@ export async function zipDocuments(
     outputZipName: string;
   },
 ): Promise<void> {
-  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 300 });
+  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 100 });
 
   const upload = new Upload({
     client: applicationContext.getStorageClient(),
@@ -61,24 +61,43 @@ export async function zipDocuments(
 
   for (let index = 0; index < documents.length; index++) {
     const document = documents[index];
-    const pdf = await applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
-      key: document.key,
-      useTempBucket: document.useTempBucket,
+
+    const response = await applicationContext.getStorageClient().getObject({
+      Bucket: document.useTempBucket
+        ? applicationContext.environment.tempDocumentsBucketName
+        : applicationContext.environment.documentsBucketName,
+      Key: document.key,
     });
+    console.log(
+      `content length :  ${response.ContentLength / (1024 * 1024)} MB`,
+    );
+    const bodyStream: ReadableStream<Uint8Array> =
+      response.Body?.transformToWebStream()!;
+    const reader = bodyStream.getReader();
     const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
     zip.add(compressedPdfStream);
-    compressedPdfStream.push(pdf, true);
 
-    while (passThrough.readableLength > 1024 * 1024 * 50) {
-      // Wait for the buffer to be drained, before downloading more files
-      await new Promise(resolve => setTimeout(resolve, 10));
+    let continueReading = true;
+    while (continueReading) {
+      const unzippedChunk = await reader.read();
+      if (unzippedChunk.done) {
+        continueReading = false;
+        compressedPdfStream.push(new Uint8Array(), unzippedChunk.done);
+        continue;
+      }
+      compressedPdfStream.push(unzippedChunk.value, unzippedChunk.done);
+      while (passThrough.readableLength > 1024 * 1024 * 50) {
+        // Wait for the buffer to be drained, before downloading more files
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
     }
+    reader.releaseLock();
 
-    await onProgress({
-      filesCompleted: index + 1,
-      totalFiles: documents.length,
-    });
+    if (onProgress)
+      await onProgress({
+        filesCompleted: index + 1,
+        totalFiles: documents.length,
+      });
   }
 
   zip.end();
