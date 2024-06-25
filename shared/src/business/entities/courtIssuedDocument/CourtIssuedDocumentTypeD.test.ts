@@ -50,7 +50,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: 'Date must be no earlier than yesterday. Enter a valid date.',
+        date: 'Due date cannot be prior to today. Enter a valid date.',
       });
     });
 
