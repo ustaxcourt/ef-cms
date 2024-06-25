@@ -100,10 +100,7 @@ export const FilingsAndProceedings = connect<
         {entry.showDocumentProcessing && (
           <>
             {caseDetailHelper.showDocketRecordInProgressState && (
-              <span
-                aria-description="document uploading marker"
-                className="usa-tag"
-              >
+              <span aria-label="document uploading marker" className="usa-tag">
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
