@@ -1,15 +1,13 @@
-import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePractitionerCaseListPdfInteractor } from './generatePractitionerCaseListPdfInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generatePractitionerCaseListPdfInteractor', () => {
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
-  });
-
   beforeEach(() => {
     applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       barNumber: 'PT1234',
@@ -18,14 +16,14 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
   });
 
   it('returns an unauthorized error on non internal users', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.petitioner,
-    });
-
     await expect(
-      generatePractitionerCaseListPdfInteractor(applicationContext, {
-        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      generatePractitionerCaseListPdfInteractor(
+        applicationContext,
+        {
+          userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -51,9 +49,13 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       .fn()
       .mockResolvedValue('pdf');
 
-    await generatePractitionerCaseListPdfInteractor(applicationContext, {
-      userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await generatePractitionerCaseListPdfInteractor(
+      applicationContext,
+      {
+        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUserById,
@@ -70,9 +72,13 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     });
 
     await expect(
-      generatePractitionerCaseListPdfInteractor(applicationContext, {
-        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      generatePractitionerCaseListPdfInteractor(
+        applicationContext,
+        {
+          userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Practitioner not found');
   });
 
@@ -104,9 +110,13 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       .fn()
       .mockResolvedValue('pdf');
 
-    await generatePractitionerCaseListPdfInteractor(applicationContext, {
-      userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await generatePractitionerCaseListPdfInteractor(
+      applicationContext,
+      {
+        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
@@ -146,9 +156,13 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       .fn()
       .mockResolvedValue('pdf');
 
-    await generatePractitionerCaseListPdfInteractor(applicationContext, {
-      userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await generatePractitionerCaseListPdfInteractor(
+      applicationContext,
+      {
+        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
