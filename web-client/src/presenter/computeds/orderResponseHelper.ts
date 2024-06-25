@@ -43,6 +43,10 @@ export const orderResponseHelper = (
   const jurisdictionErrorText =
     validationErrors.jurisdiction && 'Select jurisdiction';
 
+  // TODO variable determining wheter or not "Save as Draft" button is
+  // clickable
+  // const canSaveAsDraft = ...
+
   return {
     dueDateErrorText,
     isLeadCase,

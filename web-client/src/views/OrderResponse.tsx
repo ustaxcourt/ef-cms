@@ -356,8 +356,7 @@ export const OrderResponse = connect(
                         htmlFor="docket-entry-description"
                         id="docket-entry-description-label"
                       >
-                        Docket entry description{' '}
-                        <span className="usa-hint">(optional)</span>
+                        Docket entry description
                       </label>
                       <textarea
                         aria-describedby="docket-entry-description-label"
@@ -378,11 +377,14 @@ export const OrderResponse = connect(
                             value: e.target.value,
                           });
                         }}
-                      ></textarea>
+                      >
+                        Order
+                      </textarea>
                       <CharactersRemainingHint
-                        // TODO see above
+                        // TODO character counter doesn't work when setting the
+                        // default value of the field within the textarea
                         maxCharacters={80}
-                        stringToCount={form.customText}
+                        stringToCount={form.docketEntryDescription}
                       />
                     </div>
                   </FormGroup>
