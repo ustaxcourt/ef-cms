@@ -15,7 +15,6 @@ export const OrderResponse = connect(
       sequences.clearStatusReportOrderResponseFormSequence,
     constants: state.constants,
     form: state.form,
-
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence: sequences.navigateBackSequence,
