@@ -19,7 +19,7 @@ export const createCaseAction = async ({
 
   const form: ElectronicCreatedCaseType = omit(petitionMetadata, 'trialCities');
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   form.contactPrimary.email = user.email;
 
   let caseDetail;

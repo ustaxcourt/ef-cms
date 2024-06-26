@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createCaseFromPaperInteractor } from '@shared/business/useCases/createCaseFromPaperInteractor';
+import { createCaseFromPaperInteractor } from '@web-api/business/useCases/createCaseFromPaperInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

@@ -67,9 +67,6 @@ describe('createCaseAction', () => {
       petitionFileId: '123',
       stinFileId: '123',
     });
-    applicationContext.getCurrentUser.mockReturnValue({
-      email: 'petitioner1@example.com',
-    });
   });
 
   it('should call createCaseInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files, then call the success path after completion', async () => {
@@ -105,6 +102,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: mockPetitionMetadata,
+        user: { email: 'petitioner1@example.com' },
       },
     });
 
@@ -144,6 +142,7 @@ describe('createCaseAction', () => {
       },
       state: {
         form: mockPetitionMetadata,
+        user: { email: 'petitioner1@example.com' },
       },
     });
 
