@@ -143,22 +143,19 @@ export const ContactSecondaryUpdated = connect(
                   onChange={onChange}
                 />
               )}
-              <PlaceOfLegalResidenceDropdown
-                bind={bind}
-                registerRef={registerRef}
-                type="contactSecondary"
-                onBlurSequence={() => {
-                  onBlurSequence({
-                    validationKey: [
-                      'contactSecondary',
-                      'placeOfLegalResidence',
-                    ],
-                  });
-                }}
-                onChange={onChange}
-              />
             </>
           )}
+          <PlaceOfLegalResidenceDropdown
+            bind={bind}
+            registerRef={registerRef}
+            type="contactSecondary"
+            onBlurSequence={() => {
+              onBlurSequence({
+                validationKey: ['contactSecondary', 'placeOfLegalResidence'],
+              });
+            }}
+            onChange={onChange}
+          />
           <FormGroup
             className="phone-input"
             errorText={
