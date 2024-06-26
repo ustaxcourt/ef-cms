@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { addPetitionerToCaseInteractor } from '@shared/business/useCases/addPetitionerToCaseInteractor';
+import { addPetitionerToCaseInteractor } from '@web-api/business/useCases/addPetitionerToCaseInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

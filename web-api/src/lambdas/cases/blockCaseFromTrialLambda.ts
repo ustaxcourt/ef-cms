@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { blockCaseFromTrialInteractor } from '@shared/business/useCases/blockCaseFromTrialInteractor';
+import { blockCaseFromTrialInteractor } from '@web-api/business/useCases/blockCaseFromTrialInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

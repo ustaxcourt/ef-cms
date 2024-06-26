@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { archiveDraftDocumentInteractor } from '@shared/business/useCases/archiveDraftDocumentInteractor';
+import { archiveDraftDocumentInteractor } from '@web-api/business/useCases/archiveDraftDocumentInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { caseAdvancedSearchInteractor } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { caseAdvancedSearchInteractor } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
