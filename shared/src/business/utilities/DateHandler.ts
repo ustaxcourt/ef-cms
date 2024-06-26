@@ -32,8 +32,7 @@ export const FORMATS = {
   YYYYMMDD: 'yyyy-MM-dd',
   YYYYMMDD_NUMERIC: 'yyyyMMdd',
 } as const;
-const FORMATS1 = Object.values(FORMATS);
-export type TimeFormats = (typeof FORMATS1)[number];
+export type TimeFormats = (typeof FORMATS)[keyof typeof FORMATS];
 export type TimeFormatNames = keyof typeof FORMATS;
 
 export const PATTERNS = {
