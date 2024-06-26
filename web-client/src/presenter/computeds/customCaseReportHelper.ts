@@ -1,5 +1,5 @@
 import {
-  CASE_STATUSES,
+  CASE_STATUS_TYPES,
   CASE_TYPES,
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
@@ -37,7 +37,7 @@ export const customCaseReportHelper = (
   today: string;
   trialCitiesByState: InputOption[];
 } => {
-  const caseStatuses = CASE_STATUSES.map(status => ({
+  const caseStatuses = Object.values(CASE_STATUS_TYPES).map(status => ({
     label: status,
     value: status,
   }));
