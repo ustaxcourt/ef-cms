@@ -231,7 +231,7 @@ describe('Message', () => {
       ]);
     });
 
-    it('should be false when attachements are provided that are missing required fields', () => {
+    it('should be false when attachments are provided that are missing required fields', () => {
       const message = new Message(
         {
           ...mockMessage,

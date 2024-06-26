@@ -1,47 +1,44 @@
 // usage: npx ts-node --transpile-only scripts/run-once-scripts/add-gsis-to-messages.ts
 
-/* eslint-disable */
-import { calculateTimeToLive } from '../../web-api/src/persistence/dynamo/calculateTimeToLive';
-import { TDynamoRecord } from '../../web-api/src/persistence/dynamo/dynamoTypes';
-import { createApplicationContext } from '../../web-api/src/applicationContext';
-import { marshall } from '@aws-sdk/util-dynamodb';
-import { searchAll } from '../../web-api/src/persistence/elasticsearch/searchClient';
-import { getClient } from '../../web-api/elasticsearch/client';
+import { Message } from '@shared/business/entities/Message';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { calculateTimeToLive } from '@web-api/persistence/dynamo/calculateTimeToLive';
+import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { exit } from 'process';
+import { updateRecords } from 'scripts/run-once-scripts/add-gsis-to-work-items';
 
 const environmentName = process.env.ENV!;
 
 /** ideas:
-- use elasticsearch to get all cases that have messages, then use those PKs 
-  to get messages in dynamo, then push to dynamo
-- just do a dynamo table scan
 - trust ES message data and do a one-to-one pull -> upsert
 */
-
+// !!!! NEED TO ADD DYNAMO FIELDS TO UNTOUCHED RECORDS
 const getMessages = async ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
-}): Promise<RawCase[]> => {
-  const searchOutput = await applicationContext.getSearchClient().search({
-    index: 'efcms-message',
+  applicationContext: ServerApplicationContext;
+}) => {
+  const query = {
     body: {
       query: {
-        // match_all: {},
         bool: {
-          must: [
-            { term: { 'entityName.S': 'Message' } },
-            // { prefix: { 'sk.keyword': 'case|' } },
-          ],
+          must: [{ term: { 'entityName.S': 'Message' } }],
         },
       },
     },
+    index: 'efcms-message',
+  };
+
+  const { results } = await search({
+    applicationContext,
+    searchParameters: query,
   });
 
-  // console.log('output', searchOutput.body.hits.hits);
-  // const results = searchOutput.body.hits.hits;
-  // console.log(results.body.hits.hits)
-  console.log('results', searchOutput.body.hits.hits);
-  return [] as unknown as RawCase[];
+  return results;
 };
 
 const applyMessageChanges = ({ messages: items }) => {
@@ -113,11 +110,26 @@ const applyMessageChanges = ({ messages: items }) => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async function () {
   const applicationContext = createApplicationContext({});
-  // const messages = await getMessages();
   const messages = await getMessages({ applicationContext });
-  // console.log(messages);
+  try {
+    messages.forEach(message => {
+      message = new Message(message, {
+        applicationContext,
+      }).validate();
+    });
+  } catch (e) {
+    console.log('Error migrating message records:', e);
+    exit(); //???
+  }
 
-  // const updatedMessages = applyMessageChanges({ messages });
-  // console.log(updatedMessages[0]);
-  // write to Dynamo
+  const migratedItems = applyMessageChanges({ messages });
+
+  console.log('Sample migrated item:', migratedItems[0]);
+
+  try {
+    await updateRecords(applicationContext, migratedItems);
+  } catch (e) {
+    console.log('Error writing migrated message records to dynamo:', e);
+    exit(); //???
+  }
 })();

@@ -54,7 +54,8 @@ const migrateItems = items => {
   return items as unknown as TDynamoRecord[];
 };
 
-async function updateWorkItemRecords(
+// extract to helper?
+export async function updateRecords(
   applicationContext: ServerApplicationContext,
   migratedRecords: TDynamoRecord[],
 ): Promise<void> {
@@ -71,5 +72,5 @@ async function updateWorkItemRecords(
   const workItems = await findWorkItems({ applicationContext });
   const migratedItems = migrateItems(workItems);
 
-  updateWorkItemRecords(applicationContext, migratedItems);
+  updateRecords(applicationContext, migratedItems);
 })();
