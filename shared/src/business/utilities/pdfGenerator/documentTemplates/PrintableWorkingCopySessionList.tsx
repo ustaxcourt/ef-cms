@@ -1,3 +1,4 @@
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { SelectedFiltersSection } from '../components/SelectedFiltersSection';
@@ -114,12 +115,14 @@ export const PrintableWorkingCopySessionList = ({
                     <td colSpan={1}></td>
                     <td colSpan={5}>
                       {formattedCase.calendarNotes && (
-                        <span>
+                        <div>
                           <span className="text-bold margin-right-1">
-                            Calendar Notes:
+                            Calendar Notes:{' '}
                           </span>
-                          {formattedCase.calendarNotes}
-                        </span>
+                          <PreformattedText
+                            text={formattedCase.calendarNotes}
+                          />
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -127,12 +130,12 @@ export const PrintableWorkingCopySessionList = ({
                     <td colSpan={1}></td>
                     <td colSpan={5}>
                       {showCaseNotes && formattedCase.userNotes && (
-                        <span>
+                        <div>
                           <span className="text-bold margin-right-1">
-                            Notes:
+                            Notes:{' '}
                           </span>
-                          {formattedCase.userNotes}
-                        </span>
+                          <PreformattedText text={formattedCase.userNotes} />
+                        </div>
                       )}
                     </td>
                   </tr>
