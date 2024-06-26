@@ -64,36 +64,19 @@ export const Petition = ({
           )}
           <li className="list-bold">
             If applicable, provide the date(s) the IRS issued the NOTICE(S) for
-            the above:
+            the above and the city and state of the IRS office(s) issuing the
+            NOTICE(S):
           </li>
           {irsNotices.length > 1 ? (
             <ol className="list-disc">
-              {irsNotices.map(irsNotice => {
-                if (
-                  !irsNotice.noticeIssuedDateFormatted &&
-                  !irsNotice.cityAndStateIssuingOffice
-                ) {
-                  return (
-                    <li key={irsNotice.key}>
-                      <span>N/A</span>
-                    </li>
-                  );
-                } else {
-                  return (
-                    <li key={irsNotice.key}>
-                      <span>
-                        {irsNotice.noticeIssuedDateFormatted || 'N/A'}
-                      </span>
-                      <span>
-                        {irsNotice.cityAndStateIssuingOffice || 'N/A'}
-                      </span>
-                    </li>
-                  );
-                }
-              })}
+              {irsNotices.map(irsNotice => (
+                <li key={irsNotice.key || 'single'}>
+                  {renderIrsNotice(irsNotice)}
+                </li>
+              ))}
             </ol>
           ) : (
-            <p>{noticeIssuedDate ? `${noticeIssuedDate}` : 'N/A'}</p>
+            <p>{renderIrsNotice(irsNotices[0])}</p>
           )}
           <li className="list-bold">
             Provide the year(s) or period(s) for which the NOTICE(S) was/were
@@ -263,4 +246,19 @@ export const Petition = ({
       </div>
     </div>
   );
+};
+
+const renderIrsNotice = irsNotice => {
+  if (
+    !irsNotice.noticeIssuedDateFormatted &&
+    !irsNotice.cityAndStateIssuingOffice
+  ) {
+    return <span>N/A</span>;
+  } else {
+    return (
+      <span>
+        {`${irsNotice.noticeIssuedDateFormatted || 'N/A'} - ${irsNotice.cityAndStateIssuingOffice || 'N/A'}`}
+      </span>
+    );
+  }
 };
