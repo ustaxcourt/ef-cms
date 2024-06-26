@@ -1,6 +1,6 @@
 import {
   addOrderToDocketEntry,
-  createOrderAndDecision,
+  createOrder,
 } from '../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
@@ -12,16 +12,16 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 import { retry } from '../../../../helpers/retry';
 
 describe('Docket clerk', () => {
-  it('should should be able to search for orders after creating them)', () => {
+  it('should should be able to search for orders using the document contents', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       loginAsDocketClerk1();
       goToCase(docketNumber);
-      createOrderAndDecision('welcome to flavortown');
+      createOrder({ contents: 'welcome to flavortown' });
       addOrderToDocketEntry();
 
-      createOrderAndDecision('leaving flavortown');
+      createOrder({ contents: 'leaving flavortown' });
       addOrderToDocketEntry();
 
       cy.get('[data-testid="search-link"]').click();
