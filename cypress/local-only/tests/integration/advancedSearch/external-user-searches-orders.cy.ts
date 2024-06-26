@@ -26,6 +26,12 @@ describe('Private privatePractitioner', () => {
       createOrder({ contents: "leaving' $ flavortown." });
       addOrderToDocketEntry();
 
+      createOrder({
+        contents: 'Coca-cola',
+        title: `testing title search ${docketNumber}`,
+      });
+      addOrderToDocketEntry();
+
       loginAsPrivatePractitioner();
       cy.get('[data-testid="advanced-search-link"]').click();
       cy.get('[data-testid="order-search-tab"]').click();
@@ -43,6 +49,32 @@ describe('Private privatePractitioner', () => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
               .length === 2
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('cola | "welcome"');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 2
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type(
+          `testing & ${docketNumber}`,
+        );
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 1
           );
         });
       });
