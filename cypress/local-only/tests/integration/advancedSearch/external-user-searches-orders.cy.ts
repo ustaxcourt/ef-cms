@@ -26,6 +26,9 @@ describe('Private privatePractitioner', () => {
       createOrder({ contents: "leaving' $ flavortown." });
       addOrderToDocketEntry();
 
+      createOrder({ contents: 'welcome to flavortown.' });
+      addOrderToDocketEntry();
+
       createOrder({
         contents: 'Coca-cola',
         title: `testing title search ${docketNumber}`,
@@ -55,12 +58,26 @@ describe('Private privatePractitioner', () => {
 
       retry(() => {
         cy.get('[data-testid="keyword-search-input"]').clear();
-        cy.get('[data-testid="keyword-search-input"]').type('cola | "welcome"');
+        cy.get('[data-testid="keyword-search-input"]').type('"to flavortown"');
         cy.get('[data-testid="submit-order-advanced-search-button"]').click();
         return cy.get('body').then(body => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 2
+              .length === 1
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type(
+          'cola | "welcome to"',
+        );
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 1
           );
         });
       });
