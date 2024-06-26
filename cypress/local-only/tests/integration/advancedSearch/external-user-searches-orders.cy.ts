@@ -1,0 +1,255 @@
+import {
+  addOrderToDocketEntry,
+  createOrderAndDecision,
+} from '../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import {
+  loginAsDocketClerk1,
+  loginAsPetitioner,
+  loginAsPrivatePractitioner,
+} from '../../../../helpers/authentication/login-as-helpers';
+import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { retry } from '../../../../helpers/retry';
+
+describe('External user', () => {
+  it('should allow for searching for orders after serving them if not sealed', () => {
+    loginAsPetitioner();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      petitionsClerkServesPetition(docketNumber);
+
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      createOrderAndDecision("welcome' & flavortown.");
+      addOrderToDocketEntry();
+
+      createOrderAndDecision("leaving' $ flavortown.");
+      addOrderToDocketEntry();
+
+      loginAsPrivatePractitioner();
+      cy.get('[data-testid="advanced-search-link"]').click();
+      cy.get('[data-testid="order-search-tab"]').click();
+      cy.get('#docket-number').type(docketNumber);
+
+      cy.get('[data-testid="keyword-search-input"]').type('welcome + leaving');
+      cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+      cy.get('#no-search-results > .margin-top-4').should('be.visible');
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('& flavortown');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 2
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('flavortown.');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 2
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('flavortown');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 2
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('welcome');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 1
+          );
+        });
+      });
+
+      retry(() => {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('leaving');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 1
+          );
+        });
+      });
+    });
+  });
+
+  it('should not show orders in a sealed case to unassociated user in search results', () => {
+    loginAsPetitioner();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      petitionsClerkServesPetition(docketNumber);
+
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      createOrderAndDecision('welcome to flavortown');
+      addOrderToDocketEntry();
+      createOrderAndDecision('leaving flavortown');
+      addOrderToDocketEntry();
+
+      cy.get('[data-testid="tab-case-information"] > .button-text').click();
+      cy.get('[data-testid="seal-case-button"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      loginAsPrivatePractitioner();
+
+      cy.get('[data-testid="advanced-search-link"]').click();
+      cy.get('[data-testid="order-search-tab"]').click();
+      cy.get('#docket-number').type(docketNumber);
+
+      // Run this check a couple times
+      // For the same reason we put checks for _existence_ of search results in a retry (we sometimes need to wait for opensearch)
+      // we should also verify _nonexistence_ a few times, so that we don't inadvertently pass a test just because
+      // we didn't wait long enough for indexing to occur.
+      for (let i = 0; i < 3; ++i) {
+        cy.get('[data-testid="keyword-search-input"]').clear();
+        cy.get('[data-testid="keyword-search-input"]').type('flavortown');
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        cy.get('#no-search-results').should('be.visible');
+      }
+    });
+  });
+
+  it('should not show sealed orders in an unsealed case to unassociated user in search results', () => {
+    loginAsPetitioner();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      petitionsClerkServesPetition(docketNumber);
+
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      createOrderAndDecision('welcome to flavortown');
+      addOrderToDocketEntry();
+      createOrderAndDecision('leaving to flavortown');
+      addOrderToDocketEntry();
+
+      cy.get('[data-testid="seal-docket-entry-button-5"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      loginAsPrivatePractitioner();
+
+      cy.get('[data-testid="advanced-search-link"]').click();
+      cy.get('[data-testid="order-search-tab"]').click();
+      cy.get('#docket-number').type(docketNumber);
+
+      cy.get('[data-testid="keyword-search-input"]').clear();
+      cy.get('[data-testid="keyword-search-input"]').type('flavortown');
+      retry(() => {
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 1
+          );
+        });
+      });
+    });
+  });
+
+  // TODO Question: is this an accurate statement of desired behavior?
+  // it.only('should show sealed-from-public orders in an unsealed case to associated user in search results', () => {
+  //   loginAsPetitioner();
+  //   petitionerCreatesElectronicCase().then(docketNumber => {
+  //     petitionsClerkServesPetition(docketNumber);
+
+  //     loginAsDocketClerk1();
+  //     goToCase(docketNumber);
+  //     createOrderAndDecision('welcome to flavortown');
+  //     addOrderToDocketEntry();
+
+  //     cy.get('[data-testid="tab-case-information"] > .button-text').click();
+  //     cy.get('[data-testid="tab-parties"] > .button-text').click();
+  //     cy.get('[data-testid="practitioner-search-input"]').clear();
+  //     cy.get('[data-testid="practitioner-search-input"]').type('PT5432');
+  //     cy.get('.usa-search__submit-text').click();
+  //     cy.get('[data-testid="practitioner-representing-0"]').click();
+  //     cy.get('[data-testid="modal-button-confirm"]').click();
+
+  //     cy.get('#tab-overview').click();
+  //     cy.get('[data-testid="seal-case-button"]').click();
+  //     cy.get('[data-testid="modal-button-confirm"]').click();
+
+  //     loginAsPrivatePractitioner('privatePractitioner1');
+
+  //     cy.get('[data-testid="advanced-search-link"]').click();
+  //     cy.get('[data-testid="order-search-tab"]').click();
+  //     cy.get('#docket-number').type(docketNumber);
+
+  //     retry(() => {
+  //       cy.get('[data-testid="keyword-search-input"]').clear();
+  //       cy.get('[data-testid="keyword-search-input"]').type('welcome');
+  //       cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+  //       return cy.get('body').then(body => {
+  //         return (
+  //           body.find(`[data-testid="docket-number-${docketNumber}"]`)
+  //             .length === 1
+  //         );
+  //       });
+  //     });
+  //   });
+  // });
+
+  it('should not show sealed-from-all orders in an unsealed case to associated user in search results', () => {
+    loginAsPetitioner();
+    petitionerCreatesElectronicCase().then(docketNumber => {
+      petitionsClerkServesPetition(docketNumber);
+
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      createOrderAndDecision('welcome to flavortown');
+      addOrderToDocketEntry();
+      createOrderAndDecision('leaving flavortown');
+      addOrderToDocketEntry();
+
+      cy.get('[data-testid="tab-case-information"] > .button-text').click();
+      cy.get('[data-testid="tab-parties"] > .button-text').click();
+      cy.get('[data-testid="practitioner-search-input"]').clear();
+      cy.get('[data-testid="practitioner-search-input"]').type('PT5432');
+      cy.get('.usa-search__submit-text').click();
+      cy.get('[data-testid="practitioner-representing-0"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      cy.get('[data-testid="tab-docket-record"] > .button-text').click();
+      cy.get('[data-testid="seal-docket-entry-button-5"]').click();
+      cy.get('#docket-entry-sealed-to-external').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      loginAsPrivatePractitioner('privatePractitioner1');
+
+      cy.get('[data-testid="advanced-search-link"]').click();
+      cy.get('[data-testid="order-search-tab"]').click();
+      cy.get('#docket-number').type(docketNumber);
+
+      retry(() => {
+        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
+        return cy.get('body').then(body => {
+          return (
+            body.find(`[data-testid="docket-number-${docketNumber}"]`)
+              .length === 1
+          );
+        });
+      });
+    });
+  });
+});
