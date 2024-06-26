@@ -24,6 +24,7 @@ export const UpdatedFilePetitionStep3 = connect(
     irsNoticeUploadFormInfo: state.irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence:
       sequences.petitionGenerationLiveValidationSequence,
+    setHasIrsNoticeSequence: sequences.setHasIrsNoticeSequence,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -35,6 +36,7 @@ export const UpdatedFilePetitionStep3 = connect(
     form,
     irsNoticeUploadFormInfo,
     petitionGenerationLiveValidationSequence,
+    setHasIrsNoticeSequence,
     startCaseHelper,
     updateFormValueSequence,
     validationErrors,
@@ -92,11 +94,10 @@ export const UpdatedFilePetitionStep3 = connect(
                       type="radio"
                       value={option === 'Yes'}
                       onChange={e => {
-                        updateFormValueSequence({
+                        setHasIrsNoticeSequence({
                           key: e.target.name,
                           value: e.target.value === 'true',
                         });
-
                         deleteValidationErrorMessageSequence({
                           validationKey: ['hasIrsNotice'],
                         });
@@ -120,7 +121,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message:
-                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) for every form except the Statement of Taxpayer Identification.',
+                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) of every form except the Statement of Taxpayer Identification Number.',
                   }}
                   dismissible={false}
                   scrollToTop={false}
@@ -160,19 +161,21 @@ export const UpdatedFilePetitionStep3 = connect(
                     </>
                   );
                 })}
-                <Button
-                  link
-                  className={classNames('padding-top-0', 'text-left')}
-                  data-testid="add-another-irs-notice-button"
-                  onClick={() => addAnotherIrsNoticeToFormSequence()}
-                >
-                  <Icon
-                    className="fa-icon-blue"
-                    icon={['fas', 'plus']}
-                    size="1x"
-                  />
-                  Add another IRS Notice
-                </Button>
+                {irsNoticeUploadFormInfo.length < 5 && (
+                  <Button
+                    link
+                    className={classNames('padding-top-0', 'text-left')}
+                    data-testid="add-another-irs-notice-button"
+                    onClick={() => addAnotherIrsNoticeToFormSequence()}
+                  >
+                    <Icon
+                      className="fa-icon-blue"
+                      icon={['fas', 'plus']}
+                      size="1x"
+                    />
+                    Add another IRS Notice
+                  </Button>
+                )}
                 {startCaseHelper.irsNoticeRequiresRedactionAcknowledgement && (
                   <div className="grid-row grid-gap margin-top-05">
                     <span className="margin-bottom-1 font-sans-pro">

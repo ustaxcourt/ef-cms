@@ -18,47 +18,14 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { addServedStampToDocument } from '../courtIssuedDocument/addServedStampToDocument';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getDocumentTitleForNoticeOfChange } from '../../../../../shared/src/business/utilities/getDocumentTitleForNoticeOfChange';
-import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
+import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-export const needsNewCoversheet = ({
-  applicationContext,
-  currentDocketEntry,
-  updatedDocketEntry,
-}) => {
-  const receivedAtUpdated =
-    dateStringsCompared(
-      currentDocketEntry.receivedAt,
-      updatedDocketEntry.receivedAt,
-    ) !== 0;
-  const certificateOfServiceUpdated =
-    currentDocketEntry.certificateOfService !==
-    updatedDocketEntry.certificateOfService;
-  const documentTitleUpdated =
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: currentDocketEntry,
-    }) !==
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: updatedDocketEntry,
-    });
-
-  return (
-    receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
-  );
-};
-
-/**
- * completeDocketEntryQCInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.entryMetadata the entry metadata
- * @returns {object} the updated case after the documents are added
- */
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
@@ -250,13 +217,12 @@ const completeDocketEntryQC = async (
     CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType)
   ) {
     if (servedParties.paper.length > 0) {
-      const { Body: pdfData } = await applicationContext
-        .getStorageClient()
-        .getObject({
-          Bucket: applicationContext.environment.documentsBucketName,
-          Key: updatedDocketEntry.docketEntryId,
-        })
-        .promise();
+      const pdfData = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: updatedDocketEntry.docketEntryId,
+        });
 
       const noticeDoc = await PDFDocument.load(pdfData);
 
@@ -328,18 +294,17 @@ const completeDocketEntryQC = async (
 
     caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
 
-    const { Body: pdfData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: noticeUpdatedDocketEntry.docketEntryId,
-      })
-      .promise();
-
     const serviceStampDate = formatDateString(
       noticeUpdatedDocketEntry.servedAt!,
       FORMATS.MMDDYY,
     );
+
+    const pdfData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: noticeUpdatedDocketEntry.docketEntryId,
+      });
 
     const newPdfData = await addServedStampToDocument({
       applicationContext,
@@ -396,3 +361,29 @@ export const completeDocketEntryQCInteractor = withLocking(
   }),
   new InvalidRequest('The document is currently being updated'),
 );
+
+export const needsNewCoversheet = ({
+  applicationContext,
+  currentDocketEntry,
+  updatedDocketEntry,
+}) => {
+  const receivedAtUpdated =
+    dateStringsCompared(
+      currentDocketEntry.receivedAt,
+      updatedDocketEntry.receivedAt,
+    ) !== 0;
+  const certificateOfServiceUpdated =
+    currentDocketEntry.certificateOfService !==
+    updatedDocketEntry.certificateOfService;
+  const documentTitleUpdated =
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: currentDocketEntry,
+    }) !==
+    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+      docketEntry: updatedDocketEntry,
+    });
+
+  return (
+    receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
+  );
+};

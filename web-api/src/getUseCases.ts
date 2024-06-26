@@ -63,11 +63,11 @@ import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/u
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
-import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
+import { generatePdfFromHtmlInteractor } from './business/useCases/pdf/generatePdfFromHtmlInteractor';
 import { generatePetitionPdfInteractor } from '../../shared/src/business/useCases/generatePetitionPdfInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
-import { generatePrintableFilingReceiptInteractor } from '../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor';
+import { generatePrintableFilingReceiptInteractor } from './business/useCases/docketEntry/generatePrintableFilingReceiptInteractor';
 import { generatePrintablePendingReportInteractor } from './business/useCases/pendingItems/generatePrintablePendingReportInteractor';
 import { generatePrintableTrialSessionCopyReportInteractor } from './business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor';
@@ -92,10 +92,10 @@ import { getCompletedMessagesForSectionInteractor } from './business/useCases/me
 import { getCompletedMessagesForUserInteractor } from './business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { getDocumentContentsForDocketEntryInteractor } from '@web-api/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
+import { getDocumentContentsForDocketEntryInteractor } from './business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCForSectionInteractor } from '@web-api/business/useCases/workItems/getDocumentQCForSectionInteractor';
 import { getDocumentQCForUserInteractor } from '@web-api/business/useCases/workItems/getDocumentQCForUserInteractor';
-import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
+import { getDownloadPolicyUrlInteractor } from './business/useCases/document/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
 import { getInboxMessagesForSectionInteractor } from './business/useCases/messages/getInboxMessagesForSectionInteractor';
@@ -128,7 +128,7 @@ import { getTrialSessionWorkingCopyInteractor } from './business/useCases/trialS
 import { getTrialSessionsForJudgeActivityReportInteractor } from './business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { getTrialSessionsForJudgeInteractor } from './business/useCases/trialSessions/getTrialSessionsForJudgeInteractor';
 import { getTrialSessionsInteractor } from './business/useCases/trialSessions/getTrialSessionsInteractor';
-import { getUploadPolicyInteractor } from '../../shared/src/business/useCases/getUploadPolicyInteractor';
+import { getUploadPolicyInteractor } from './business/useCases/document/getUploadPolicyInteractor';
 import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';

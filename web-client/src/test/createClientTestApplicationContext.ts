@@ -332,7 +332,6 @@ const createTestApplicationContext = () => {
       .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
-    uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
       .fn()
       .mockImplementation(DateHandler.validateDateAndCreateISO),

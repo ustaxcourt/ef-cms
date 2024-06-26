@@ -104,7 +104,6 @@ import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPracti
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
-import { getPublicDownloadPolicyUrl } from './persistence/s3/getPublicDownloadPolicyUrl';
 import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTrialCases';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
@@ -175,6 +174,7 @@ import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserCaseNote } from './persistence/dynamo/userCaseNotes/updateUserCaseNote';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { upsertMessage } from './persistence/dynamo/messages/upsertMessage';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
@@ -347,7 +347,6 @@ const gatewayMethods = {
   getPractitionerDocumentByFileId,
   getPractitionerDocuments,
   getPractitionersByName,
-  getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
   getRequestResults,
@@ -385,6 +384,7 @@ const gatewayMethods = {
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
+  uploadDocument,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,

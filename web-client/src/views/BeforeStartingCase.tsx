@@ -179,7 +179,7 @@ export const BeforeStartingCase = connect(
           <InfoNotificationComponent
             alertInfo={{
               message:
-                'Do not include any additional documents (such as tax returns) with your Petition, except for any IRS Notices, the Statement of Taxpayer Identification and the Corporate Disclosure Statement (if filing for a business). Documents that might be evidence can be submitted at a later time.',
+                'Do not include any additional documents (such as tax returns) with your Petition, except for any IRS Notices, the Statement of Taxpayer Identification Number and the Corporate Disclosure Statement (if filing for a business). Documents that might be evidence can be submitted at a later time.',
             }}
             dismissible={false}
             scrollToTop={false}
@@ -196,7 +196,7 @@ export const BeforeStartingCase = connect(
                 file.
               </b>{' '}
               Petitions received after this date may be untimely and your case
-              may be dismissed for lack of jurisdiction.
+              may be dismissed.
             </div>
           </div>
           <div className="grid-row grid-gap">

@@ -4,15 +4,6 @@ import { getDocument } from './getDocument';
 describe('getDocument', () => {
   const key = '123';
 
-  beforeEach(() => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Body: 'abc',
-        }),
-    });
-  });
-
   it('should retrieve the specified document from the temp bucket when useTempBucket is true', async () => {
     const tempBucketName = 'tempBucket';
     applicationContext.environment.tempDocumentsBucketName = tempBucketName;
