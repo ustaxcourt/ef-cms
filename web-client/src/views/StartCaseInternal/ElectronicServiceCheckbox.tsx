@@ -18,7 +18,10 @@ export const ElectronicServiceConsentCheckbox = connect(
     updateFormValueSequence,
   }) {
     return (
-      <FormGroup>
+      <FormGroup
+        className="max-width-fit-content margin-bottom-4"
+        omitFormGroupClass={true}
+      >
         <input
           checked={data[contactType].hasConsentedToEService || false}
           className="usa-checkbox__input"

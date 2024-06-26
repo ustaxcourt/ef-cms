@@ -245,7 +245,10 @@ function SameAddressCheckbox({
   useSameAsPrimary,
 }) {
   return (
-    <FormGroup>
+    <FormGroup
+      className="max-width-fit-content margin-bottom-4"
+      omitFormGroupClass={true}
+    >
       <input
         checked={useSameAsPrimary}
         className="usa-checkbox__input"
