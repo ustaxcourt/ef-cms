@@ -28,7 +28,6 @@ export const resetContactSecondaryAction = ({
       store.unset(state.form.contactSecondary.state);
       store.unset(state.form.contactSecondary.postalCode);
       store.unset(state.form.contactSecondary.country);
-      store.unset(state.form.contactSecondary.phone);
     } else {
       store.set(state.form.useSameAsPrimary, false);
       store.set(

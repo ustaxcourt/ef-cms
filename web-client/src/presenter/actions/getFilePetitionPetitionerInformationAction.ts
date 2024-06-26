@@ -34,7 +34,6 @@ export const getFilePetitionPetitionerInformationAction = ({
             'country',
             'city',
             'countryType',
-            'placeOfLegalResidence',
             'postalCode',
             'state',
           ]),
