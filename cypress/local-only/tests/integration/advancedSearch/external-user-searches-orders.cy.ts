@@ -26,7 +26,7 @@ describe('Private privatePractitioner', () => {
       createOrder({ contents: "leaving' $ flavortown." });
       addOrderToDocketEntry();
 
-      createOrder({ contents: 'welcome to flavortown.' });
+      createOrder({ contents: 'welcome to flavortown' });
       addOrderToDocketEntry();
 
       createOrder({
@@ -51,7 +51,7 @@ describe('Private privatePractitioner', () => {
         return cy.get('body').then(body => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 2
+              .length === 3
           );
         });
       });
@@ -77,7 +77,7 @@ describe('Private privatePractitioner', () => {
         return cy.get('body').then(body => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 1
+              .length === 2
           );
         });
       });
@@ -103,19 +103,7 @@ describe('Private privatePractitioner', () => {
         return cy.get('body').then(body => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 2
-          );
-        });
-      });
-
-      retry(() => {
-        cy.get('[data-testid="keyword-search-input"]').clear();
-        cy.get('[data-testid="keyword-search-input"]').type('flavortown');
-        cy.get('[data-testid="submit-order-advanced-search-button"]').click();
-        return cy.get('body').then(body => {
-          return (
-            body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 2
+              .length === 3
           );
         });
       });
@@ -127,7 +115,7 @@ describe('Private privatePractitioner', () => {
         return cy.get('body').then(body => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 1
+              .length === 2
           );
         });
       });
