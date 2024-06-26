@@ -2243,3 +2243,8 @@ button.change-scanner-button {
     padding-bottom: 2rem;
   }
 }
+
+.preformatted-text {
+  font-family: $font-source-sans;
+  text-wrap: balance;
+}

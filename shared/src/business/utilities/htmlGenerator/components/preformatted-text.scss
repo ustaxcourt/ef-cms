@@ -1,0 +1,11 @@
+.preformatted-text {
+  width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  font-family: 'nimbus_roman', sans-serif;
+  font-size: 14px;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
