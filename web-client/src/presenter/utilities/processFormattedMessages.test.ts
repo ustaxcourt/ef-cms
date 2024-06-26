@@ -1,20 +1,19 @@
 /* eslint-disable max-lines */
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
+  SUPPORTED_SORT_FIELDS,
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,
   getFormattedMessages,
   sortCompletedMessages,
   sortFormattedMessages,
 } from './processFormattedMessages';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 describe('processFormattedMessages', () => {
   const DOCKET_NUMBER_1 = '101-19';
   const DOCKET_NUMBER_2 = '101-20';
   const DOCKET_NUMBER_3 = '105-20';
   const PARENT_MESSAGE_ID = '078ffe53-23ed-4386-9cc5-d7a175f5c948';
-
-  const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
   const {
     ASCENDING,
@@ -101,55 +100,59 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    QUALIFIED_SORT_FIELDS.forEach(sortField => {
+    SUPPORTED_SORT_FIELDS.forEach(sortField => {
       it(`should sort messages in ascending order based on ${sortField}`, () => {
-        const result = sortFormattedMessages(messages, {
+        const TEST_MESSAGES = [
+          { [sortField]: 'bbb' },
+          { [sortField]: 'fff' },
+          { [sortField]: 'ccc' },
+          { [sortField]: 'ddd' },
+          { [sortField]: null },
+          { [sortField]: 'aaa' },
+          { [sortField]: 'eee' },
+        ];
+
+        const result = sortFormattedMessages(TEST_MESSAGES, {
           sortField,
         });
 
         expect(result).toMatchObject([
-          {
-            completedAt: '2019-01-02T16:29:13.122Z',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_1,
-          },
-          {
-            completedAt: '2019-01-02T17:29:13.122Z',
-            createdAt: '2019-01-01T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_2,
-          },
-          {
-            completedAt: '2019-01-03T17:29:13.122Z',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_3,
-          },
+          { [sortField]: null },
+          { [sortField]: 'aaa' },
+          { [sortField]: 'bbb' },
+          { [sortField]: 'ccc' },
+          { [sortField]: 'ddd' },
+          { [sortField]: 'eee' },
+          { [sortField]: 'fff' },
         ]);
       });
     });
 
-    QUALIFIED_SORT_FIELDS.forEach(sortField => {
+    SUPPORTED_SORT_FIELDS.forEach(sortField => {
       it(`should sort messages in descending order based on ${sortField}`, () => {
-        const result = sortFormattedMessages(messages, {
+        const TEST_MESSAGES = [
+          { [sortField]: 'bbb' },
+          { [sortField]: 'fff' },
+          { [sortField]: 'ccc' },
+          { [sortField]: 'ddd' },
+          { [sortField]: null },
+          { [sortField]: 'aaa' },
+          { [sortField]: 'eee' },
+        ];
+
+        const result = sortFormattedMessages(TEST_MESSAGES, {
           sortField,
           sortOrder: DESCENDING,
         });
 
         expect(result).toMatchObject([
-          {
-            completedAt: '2019-01-03T17:29:13.122Z',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_3,
-          },
-          {
-            completedAt: '2019-01-02T17:29:13.122Z',
-            createdAt: '2019-01-01T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_2,
-          },
-          {
-            completedAt: '2019-01-02T16:29:13.122Z',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_1,
-          },
+          { [sortField]: 'fff' },
+          { [sortField]: 'eee' },
+          { [sortField]: 'ddd' },
+          { [sortField]: 'ccc' },
+          { [sortField]: 'bbb' },
+          { [sortField]: 'aaa' },
+          { [sortField]: null },
         ]);
       });
     });
@@ -218,6 +221,15 @@ describe('processFormattedMessages', () => {
           docketNumber: DOCKET_NUMBER_1,
         },
       ]);
+    });
+
+    it('should not change any order when all messages have the same sort field', () => {
+      const result = sortFormattedMessages(messages, {
+        sortField: 'UNKNOWN',
+        sortOrder: ASCENDING,
+      });
+
+      expect(result).toMatchObject(messages);
     });
   });
 
