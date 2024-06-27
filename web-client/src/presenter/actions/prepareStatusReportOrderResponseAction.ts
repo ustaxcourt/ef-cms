@@ -4,26 +4,34 @@ export const prepareStatusReportOrderResponseAction = ({
   get,
   store,
 }: ActionProps) => {
-  // TODO, setup actual text here..
   const {
     additionalOrderText,
+    dueDate,
     jurisdiction,
     orderType,
     strickenFromTrialSessions,
   } = get(state.form);
+  console.log(
+    'statusReportOrderResponse',
+    get(state.statusReportOrderResponse),
+  );
+
+  const { statusReportFilingDate, statusReportIndex } = get(
+    state.statusReportOrderResponse,
+  );
+
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const filedLine =
-    'On [FILED DATE OF SR], a status report was filed in this case (Index no. [INDEX_NUMBER_OF_STATUS_REPORT]). For cause, it is';
+  const filedLine = `On ${statusReportFilingDate}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is`;
 
   const orderTypeLine =
     hasOrderType && orderType === 'statusReport'
-      ? 'ORDERED that the parties shall file a further status report by [DATE SELECTED].'
+      ? `ORDERED that the parties shall file a further status report by ${dueDate}.`
       : hasOrderType
-        ? 'ORDERED that the parties shall file a status report or proposed stipulated decision by [DATE SELECTED].'
+        ? `ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDate}.`
         : '';
 
   const strickenLine = hasStrickenFromTrialSessions

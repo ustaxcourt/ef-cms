@@ -18,10 +18,11 @@ export const DocumentViewerDocument = connect(
     documentViewerLinksHelper: state.documentViewerLinksHelper,
     gotoCompleteDocketEntryQCSequence:
       sequences.gotoCompleteDocketEntryQCSequence,
+    gotoStatusReportOrderResponseSequence:
+      sequences.gotoStatusReportOrderResponseSequence,
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence:
@@ -40,9 +41,9 @@ export const DocumentViewerDocument = connect(
     documentViewerHelper,
     documentViewerLinksHelper,
     gotoCompleteDocketEntryQCSequence,
+    gotoStatusReportOrderResponseSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
-    navigateToPathSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
@@ -190,8 +191,11 @@ export const DocumentViewerDocument = connect(
                   link
                   icon="edit"
                   onClick={() => {
-                    navigateToPathSequence({
-                      path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
+                    gotoStatusReportOrderResponseSequence({
+                      statusReportFilingDate:
+                        viewerDocumentToDisplay.filingDate,
+                      statusReportIndex: viewerDocumentToDisplay.index,
+                      url: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
                     });
                   }}
                 >

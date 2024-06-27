@@ -199,6 +199,7 @@ import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
+import { gotoStatusReportOrderResponseSequence } from './sequences/gotoStatusReportOrderResponseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
@@ -896,6 +897,8 @@ export const presenterSequences = {
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,
   gotoStartCaseWizardSequence:
     gotoStartCaseWizardSequence as unknown as Function,
+  gotoStatusReportOrderResponseSequence:
+    gotoStatusReportOrderResponseSequence as unknown as Function,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence:
     gotoTrialSessionDetailSequence as unknown as Function,

@@ -1,6 +1,14 @@
+import {
+  FORMATS,
+  createISODateAtStartOfDayEST,
+  formatDateString,
+} from '../utilities/DateHandler';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import joi from 'joi';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
+
+const joi: Root = joiImported.extend(joiDate);
 
 export class StatusReportOrderResponseForm extends JoiValidationEntity {
   public issueOrder?: string;
@@ -22,24 +30,34 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     this.additionalOrderText = rawProps.additionalOrderText;
     this.docketEntryDescription = rawProps.docketEntryDescription;
   }
-  static VALIDATION_RULES = joi.object().keys({
+
+  static TODAY = formatDateString(
+    createISODateAtStartOfDayEST(),
+    FORMATS.MMDDYY,
+  );
+
+  static VALIDATION_RULES = {
     additionalOrderText: JoiValidationConstants.STRING.max(80).optional(),
     docketEntryDescription: JoiValidationConstants.STRING.max(80)
       .required()
       .messages({
         '*': 'Enter a docket entry description',
       }),
-    dueDate: JoiValidationConstants.ISO_DATE.when('orderType', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional().allow(null),
-      then: joi.required().messages({
-        'any.required':
-          'Due date is required for status reports and stipulated decisions',
-      }),
-    })
-      .description('When the status report or stipulated decision is due.')
+    dueDate: joi
+      .when('orderType', {
+        is: joi.exist().not(null),
+        otherwise: joi.optional().allow(null),
+        then: joi
+          .date()
+          .iso()
+          .format(['MM/DD/YY'])
+          .min(StatusReportOrderResponseForm.TODAY)
+          .required()
+          .description('When the status report or stipulated decision is due.'),
+      })
       .messages({
         '*': 'Enter a valid date',
+        'date.min': 'Due date cannot be prior to today. Enter a valid date.',
       }),
     issueOrder: JoiValidationConstants.STRING.valid(
       'allCasesInGroup',
@@ -67,7 +85,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     )
       .optional()
       .allow(null),
-  });
+  };
 
   getValidationRules() {
     return StatusReportOrderResponseForm.VALIDATION_RULES;
