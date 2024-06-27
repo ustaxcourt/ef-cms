@@ -54,7 +54,7 @@ export const UploadCourtIssuedDocument = connect(
             </div>
 
             <form
-              data-testid="upload-court-issued-document"
+              data-testid="upload-court-issued-document-form"
               onSubmit={e => {
                 e.preventDefault();
                 uploadCourtIssuedDocumentSequence({

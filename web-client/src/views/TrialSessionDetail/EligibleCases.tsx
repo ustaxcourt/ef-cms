@@ -1,6 +1,7 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -106,6 +107,7 @@ export const EligibleCases = connect(
                       <FontAwesomeIcon
                         className="mini-success"
                         icon="calendar-plus"
+                        title="Manually added"
                       />
                     </span>
                   )}
@@ -123,7 +125,7 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.caseType}</td>
                 <td>
-                  <div>{item.calendarNotes}</div>
+                  <PreformattedText text={item.calendarNotes} />
                 </td>
                 {trialSessionDetailsHelper.showQcComplete && (
                   <td>
@@ -149,7 +151,9 @@ export const EligibleCases = connect(
                       <label
                         className="usa-checkbox__label"
                         htmlFor={`${item.docketNumber}-complete`}
-                      ></label>
+                      >
+                        {''}
+                      </label>
                     </div>
                   </td>
                 )}

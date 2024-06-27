@@ -1,6 +1,7 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -68,6 +69,7 @@ export const OpenCases = connect(
                       <FontAwesomeIcon
                         className="mini-success"
                         icon="calendar-plus"
+                        title="Manually added"
                       />
                     </span>
                   )}
@@ -84,7 +86,7 @@ export const OpenCases = connect(
                   ))}
                 </td>
                 <td>
-                  <div>{item.calendarNotes}</div>
+                  <PreformattedText text={item.calendarNotes} />
                 </td>
               </tr>
             </tbody>

@@ -1,6 +1,7 @@
 import { Button } from '../../../ustc-ui/Button/Button';
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
@@ -166,7 +167,9 @@ export const TrialInformation = connect(
                   </tr>
                   {caseDetail.trialSessionNotes && (
                     <tr>
-                      <td colSpan={4}>{caseDetail.trialSessionNotes}</td>
+                      <td colSpan={4}>
+                        <PreformattedText text={caseDetail.trialSessionNotes} />
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -310,7 +313,9 @@ export const TrialInformation = connect(
                   </tr>
                   {caseDetail.trialSessionNotes && (
                     <tr>
-                      <td colSpan={4}>{caseDetail.trialSessionNotes}</td>
+                      <td colSpan={4}>
+                        <PreformattedText text={caseDetail.trialSessionNotes} />
+                      </td>
                     </tr>
                   )}
                 </tbody>

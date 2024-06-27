@@ -48,15 +48,15 @@ export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
 } as const;
-const TRIAL_PROCEEDINGS = Object.values(TRIAL_SESSION_PROCEEDING_TYPES);
-export type TrialSessionProceedingType = (typeof TRIAL_PROCEEDINGS)[number];
+export type TrialSessionProceedingType =
+  (typeof TRIAL_SESSION_PROCEEDING_TYPES)[keyof typeof TRIAL_SESSION_PROCEEDING_TYPES];
 
 export const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
 } as const;
-const TRIAL_SESSION_SCOPES = Object.values(TRIAL_SESSION_SCOPE_TYPES);
-export type TrialSessionScope = (typeof TRIAL_SESSION_SCOPES)[number];
+export type TrialSessionScope =
+  (typeof TRIAL_SESSION_SCOPE_TYPES)[keyof typeof TRIAL_SESSION_SCOPE_TYPES];
 
 export const JURISDICTIONAL_OPTIONS = {
   restoredToDocket: 'The case is restored to the general docket',
@@ -77,11 +77,6 @@ export const PARTY_VIEW_TABS = {
 export const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
-  },
-  CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS: {
-    disabledMessage:
-      'The ability to add multiple docket entries to an order is disabled.',
-    key: 'consolidated-cases-add-docket-numbers',
   },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
@@ -173,8 +168,8 @@ export const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
   submittedRule122: 'Submitted - Rule 122', // Case submitted for decision without requiring a trial
 } as const;
-export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
-export type CaseStatus = (typeof CASE_STATUSES)[number];
+export type CaseStatus =
+  (typeof CASE_STATUS_TYPES)[keyof typeof CASE_STATUS_TYPES];
 
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.cav,
@@ -615,16 +610,15 @@ export const DOCKET_RECORD_FILTER_OPTIONS = {
   exhibits: 'Exhibits',
   motions: 'Motions',
   orders: 'Orders',
-};
+} as const;
 
 export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
   DOCKET_RECORD_FILTER_OPTIONS,
   ['exhibits'],
 );
-export const FILTER_OPTIONS = Object.values(
-  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-);
-export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
+
+export type PUBLIC_DOCKET_RECORD_FILTER =
+  (typeof PUBLIC_DOCKET_RECORD_FILTER_OPTIONS)[keyof typeof PUBLIC_DOCKET_RECORD_FILTER_OPTIONS];
 
 export const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
@@ -897,8 +891,8 @@ export const PAYMENT_STATUS = {
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
 };
-const PAYMENT_TYPES = Object.values(PAYMENT_STATUS);
-export type PaymentStatusTypes = (typeof PAYMENT_TYPES)[number];
+export type PaymentStatusTypes =
+  (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
@@ -978,7 +972,7 @@ export const CASE_TYPES_MAP = {
 } as const;
 
 export const CASE_TYPES = Object.values(CASE_TYPES_MAP);
-export type CaseType = (typeof CASE_TYPES)[number];
+export type CaseType = (typeof CASE_TYPES_MAP)[keyof typeof CASE_TYPES_MAP];
 
 export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
@@ -1039,8 +1033,7 @@ export const ROLES = {
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
 } as const;
-const ROLES_TYPES = Object.values(ROLES);
-export type Role = (typeof ROLES_TYPES)[number];
+export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
@@ -1134,12 +1127,6 @@ export const US_STATES_OTHER = {
   VI: 'Virgin Islands',
 } as const;
 
-const statesArray = [
-  ...Object.values(US_STATES),
-  ...Object.values(US_STATES_OTHER),
-];
-export type States = (typeof statesArray)[number];
-
 export type AbbrevatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
@@ -1170,8 +1157,7 @@ export const PARTY_TYPES = {
   transferee: 'Transferee',
   trust: 'Trust',
 } as const;
-const partyTypeArray = Object.values(PARTY_TYPES);
-export type PartyType = (typeof partyTypeArray)[number];
+export type PartyType = (typeof PARTY_TYPES)[keyof typeof PARTY_TYPES];
 
 export const BUSINESS_TYPES = {
   corporation: PARTY_TYPES.corporation,
@@ -1337,8 +1323,8 @@ export const SESSION_TYPES = {
   special: 'Special',
   motionHearing: 'Motion/Hearing',
 } as const;
-const TRIAL_SESSION_TYPES = Object.values(SESSION_TYPES);
-export type TrialSessionTypes = (typeof TRIAL_SESSION_TYPES)[number];
+export type TrialSessionTypes =
+  (typeof SESSION_TYPES)[keyof typeof SESSION_TYPES];
 
 export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
   'hybrid',
@@ -1495,6 +1481,7 @@ export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for ea
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
 export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
+export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([

@@ -12,25 +12,25 @@ import React from 'react';
 
 export const EditDeficiencyStatistic = connect(
   {
-    calculatePenaltiesSequence: sequences.calculatePenaltiesSequence,
     cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
+    clearModalSequence: sequences.clearModalSequence,
+    deleteDeficiencyStatisticsSequence:
+      sequences.deleteDeficiencyStatisticsSequence,
     editStatisticFormHelper: state.editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence:
       sequences.openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal: state.modal.showModal,
     submitEditDeficiencyStatisticSequence:
       sequences.submitEditDeficiencyStatisticSequence,
-    validateAddDeficiencyStatisticsSequence:
-      sequences.validateAddDeficiencyStatisticsSequence,
   },
   function EditDeficiencyStatistic({
-    calculatePenaltiesSequence,
     cancelAddStatisticSequence,
+    clearModalSequence,
+    deleteDeficiencyStatisticsSequence,
     editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal,
     submitEditDeficiencyStatisticSequence,
-    validateAddDeficiencyStatisticsSequence,
   }) {
     return (
       <>
@@ -76,21 +76,14 @@ export const EditDeficiencyStatistic = connect(
             </Button>
           </div>
         </section>
-        {showModal === 'CalculatePenaltiesModal' && (
-          <CalculatePenaltiesModal
-            confirmSequenceOverride={async () => {
-              await calculatePenaltiesSequence();
-              await validateAddDeficiencyStatisticsSequence();
-            }}
-          />
-        )}
+        {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
         {showModal === 'ConfirmDeleteDeficiencyStatisticsModal' && (
           <ConfirmModal
             cancelLabel="Cancel"
             confirmLabel="Yes, Delete"
             title="Confirm Delete Year/Period"
-            onCancelSequence="clearModalSequence"
-            onConfirmSequence="deleteDeficiencyStatisticsSequence"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={deleteDeficiencyStatisticsSequence}
           >
             Are you sure you want to delete the year/period?
           </ConfirmModal>

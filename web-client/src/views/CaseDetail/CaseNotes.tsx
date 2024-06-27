@@ -1,8 +1,8 @@
 import { AddEditUserCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
-import { DeleteUserCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteUserCaseNoteConfirmModal';
-import { TextView } from '../../ustc-ui/Text/TextView';
+import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -12,6 +12,10 @@ export const CaseNotes = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
+    clearModalSequence: sequences.clearModalSequence,
+    deleteCaseNoteSequence: sequences.deleteCaseNoteSequence,
+    deleteJudgesCaseNoteFromCaseDetailSequence:
+      sequences.deleteJudgesCaseNoteFromCaseDetailSequence,
     judgesNote: state.judgesNote,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
@@ -22,16 +26,22 @@ export const CaseNotes = connect(
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
     showModal: state.modal.showModal,
+    updateJudgesCaseNoteOnCaseDetailSequence:
+      sequences.updateJudgesCaseNoteOnCaseDetailSequence,
   },
   function CaseNotes({
     caseDetail,
     caseDetailHelper,
+    clearModalSequence,
+    deleteCaseNoteSequence,
+    deleteJudgesCaseNoteFromCaseDetailSequence,
     judgesNote,
     openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     showModal,
+    updateJudgesCaseNoteOnCaseDetailSequence,
   }) {
     return (
       <>
@@ -84,7 +94,7 @@ export const CaseNotes = connect(
 
                     <h3 className="underlined">Case Notes</h3>
                     <div className="margin-top-1 margin-bottom-4">
-                      <TextView bind="caseDetail.caseNote" />
+                      <PreformattedText text={caseDetail.caseNote} />
                     </div>
                   </div>
                 </div>
@@ -108,41 +118,38 @@ export const CaseNotes = connect(
                           Add Note
                         </Button>
                       )}
-                      <h3 className="underlined">Judge’s Notes</h3>
-                      <div className="margin-top-1  margin-bottom-4">
-                        <TextView bind="judgesNote.notes" />
-                      </div>
                       {judgesNote && judgesNote.notes && (
-                        <div className="grid-row">
-                          <div className="tablet:grid-col-6">
-                            <Button
-                              link
-                              icon="edit"
-                              onClick={() => {
-                                openAddEditUserCaseNoteModalFromDetailSequence({
-                                  docketNumber: caseDetail.docketNumber,
-                                });
-                              }}
-                            >
-                              Edit Note
-                            </Button>
-                          </div>
-                          <div className="tablet:grid-col-6 text-align-right">
-                            <Button
-                              link
-                              className="red-warning no-wrap"
-                              icon="trash"
-                              onClick={() => {
-                                openDeleteUserCaseNoteConfirmModalSequence({
-                                  docketNumber: caseDetail.docketNumber,
-                                });
-                              }}
-                            >
-                              Delete Note
-                            </Button>
-                          </div>
+                        <div className="float-right margin-top-1">
+                          <Button
+                            link
+                            className="padding-0 margin-right-0"
+                            icon="edit"
+                            onClick={() => {
+                              openAddEditUserCaseNoteModalFromDetailSequence({
+                                docketNumber: caseDetail.docketNumber,
+                              });
+                            }}
+                          >
+                            Edit Note
+                          </Button>
+                          <Button
+                            link
+                            className="red-warning padding-0 margin-left-205 margin-right-0"
+                            icon="trash"
+                            onClick={() => {
+                              openDeleteUserCaseNoteConfirmModalSequence({
+                                docketNumber: caseDetail.docketNumber,
+                              });
+                            }}
+                          >
+                            Delete Note
+                          </Button>
                         </div>
                       )}
+                      <h3 className="underlined">Judge’s Notes</h3>
+                      <div className="margin-top-1  margin-bottom-4">
+                        <PreformattedText text={judgesNote.notes} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -151,13 +158,26 @@ export const CaseNotes = connect(
           </div>
         </div>
         {showModal === 'DeleteUserCaseNoteConfirmModal' && (
-          <DeleteUserCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromCaseDetailSequence" />
+          <ConfirmModal
+            noCloseBtn
+            cancelLabel="No, Cancel"
+            confirmLabel="Yes, Delete"
+            title="Are You Sure You Want to Delete This Note?"
+            onCancelSequence={clearModalSequence}
+            onConfirmSequence={deleteJudgesCaseNoteFromCaseDetailSequence}
+          >
+            <p>This action cannot be undone.</p>
+          </ConfirmModal>
         )}
         {showModal === 'AddEditUserCaseNoteModal' && (
-          <AddEditUserCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
+          <AddEditUserCaseNoteModal
+            onConfirmSequence={updateJudgesCaseNoteOnCaseDetailSequence}
+          />
         )}
         {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteSequence" />
+          <DeleteCaseNoteConfirmModal
+            onConfirmSequence={deleteCaseNoteSequence}
+          />
         )}
       </>
     );
