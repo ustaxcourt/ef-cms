@@ -21,6 +21,7 @@ import { changePasswordInteractor } from '@web-api/business/useCases/auth/change
 import { checkEmailAvailabilityInteractor } from './business/useCases/user/checkEmailAvailabilityInteractor';
 import { checkForReadyForTrialCasesInteractor } from './business/useCases/checkForReadyForTrialCasesInteractor';
 import { closeTrialSessionInteractor } from './business/useCases/trialSessions/closeTrialSessionInteractor';
+import { coldCaseReportInteractor } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import { completeDocketEntryQCInteractor } from './business/useCases/docketEntry/completeDocketEntryQCInteractor';
 import { completeMessageInteractor } from './business/useCases/messages/completeMessageInteractor';
 import { completeWorkItemInteractor } from './business/useCases/workItems/completeWorkItemInteractor';
@@ -62,10 +63,11 @@ import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/u
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
-import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
+import { generatePdfFromHtmlInteractor } from './business/useCases/pdf/generatePdfFromHtmlInteractor';
+import { generatePetitionPdfInteractor } from '../../shared/src/business/useCases/generatePetitionPdfInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
-import { generatePrintableFilingReceiptInteractor } from '../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor';
+import { generatePrintableFilingReceiptInteractor } from './business/useCases/docketEntry/generatePrintableFilingReceiptInteractor';
 import { generatePrintablePendingReportInteractor } from './business/useCases/pendingItems/generatePrintablePendingReportInteractor';
 import { generatePrintableTrialSessionCopyReportInteractor } from './business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor';
@@ -95,7 +97,7 @@ import { getDocumentQCInboxForSectionInteractor } from './business/useCases/work
 import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
 import { getDocumentQCServedForSectionInteractor } from './business/useCases/workItems/getDocumentQCServedForSectionInteractor';
 import { getDocumentQCServedForUserInteractor } from './business/useCases/workItems/getDocumentQCServedForUserInteractor';
-import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
+import { getDownloadPolicyUrlInteractor } from './business/useCases/document/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
 import { getInboxMessagesForSectionInteractor } from './business/useCases/messages/getInboxMessagesForSectionInteractor';
@@ -128,7 +130,7 @@ import { getTrialSessionWorkingCopyInteractor } from './business/useCases/trialS
 import { getTrialSessionsForJudgeActivityReportInteractor } from './business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { getTrialSessionsForJudgeInteractor } from './business/useCases/trialSessions/getTrialSessionsForJudgeInteractor';
 import { getTrialSessionsInteractor } from './business/useCases/trialSessions/getTrialSessionsInteractor';
-import { getUploadPolicyInteractor } from '../../shared/src/business/useCases/getUploadPolicyInteractor';
+import { getUploadPolicyInteractor } from './business/useCases/document/getUploadPolicyInteractor';
 import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
@@ -233,6 +235,7 @@ const useCases = {
   checkEmailAvailabilityInteractor,
   checkForReadyForTrialCasesInteractor,
   closeTrialSessionInteractor,
+  coldCaseReportInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
@@ -275,6 +278,7 @@ const useCases = {
   generateNoticesForCaseTrialSessionCalendarInteractor,
   generatePDFFromJPGDataInteractor,
   generatePdfFromHtmlInteractor,
+  generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,

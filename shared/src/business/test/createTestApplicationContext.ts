@@ -101,7 +101,7 @@ import {
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '@web-api/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { getFakeFile } from './getFakeFile';
+import { getFakeFile, testPdfDoc } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
@@ -351,7 +351,6 @@ export const createTestApplicationContext = ({
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sleep: jest.fn(),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
-    uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
       .fn()
       .mockImplementation(DateHandler.validateDateAndCreateISO),
@@ -444,6 +443,7 @@ export const createTestApplicationContext = ({
     noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    petition: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     printableWorkingCopySessionList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
@@ -465,11 +465,13 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetStorageClient = appContextProxy({
-    deleteObject: jest.fn().mockReturnValue({ promise: () => {} }),
-    getObject: jest.fn().mockReturnValue({
-      promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
+    deleteObject: jest.fn().mockReturnValue({}),
+    getObject: jest.fn().mockResolvedValue({
+      Body: {
+        transformToByteArray: () => Promise.resolve(new Uint8Array(10)),
+      },
     }),
-    putObject: jest.fn().mockReturnValue({ promise: () => {} }),
+    putObject: jest.fn().mockReturnValue({}),
   });
 
   const mockGetPersistenceGateway = appContextProxy({
@@ -507,7 +509,7 @@ export const createTestApplicationContext = ({
       .mockImplementation(getConfigurationItemValue),
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
-    getDocument: jest.fn(),
+    getDocument: jest.fn().mockResolvedValue(testPdfDoc),
     getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest.fn(),
     getDocumentQCServedForSection: jest
@@ -562,6 +564,7 @@ export const createTestApplicationContext = ({
       .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
+    uploadDocument: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
@@ -571,8 +574,7 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetMessagingClient = {
-    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
-    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
