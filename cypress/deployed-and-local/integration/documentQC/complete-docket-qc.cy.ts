@@ -1,4 +1,5 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { assertExists, retry } from '../../../helpers/retry';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
@@ -66,14 +67,16 @@ describe('Document QC Complete', () => {
         'petitions',
       );
 
-      cy.login('caseServicesSupervisor1', '/messages/my/inbox');
-
-      assertMessageRecordCountForDocketNumberAndSubject(
-        docketNumber,
-        docketSectionMessage,
-        1,
-        'individual',
-      );
+      retry(() => {
+        cy.login('caseServicesSupervisor1', '/messages/my/inbox');
+        cy.get('table.usa-table');
+        return assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
+          docketNumber,
+          docketSectionMessage,
+          1,
+          'individual',
+        );
+      });
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
         petitionsSectionMessage,
@@ -82,6 +85,7 @@ describe('Document QC Complete', () => {
       );
 
       cy.visit('/messages/section/inbox/selectedSection?section=docket');
+      cy.get('table.usa-table');
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
         docketSectionMessage,
@@ -96,6 +100,7 @@ describe('Document QC Complete', () => {
       );
 
       cy.visit('/messages/section/inbox/selectedSection?section=petitions');
+      cy.get('table.usa-table');
       assertMessageRecordCountForDocketNumberAndSubject(
         docketNumber,
         docketSectionMessage,
@@ -125,9 +130,23 @@ describe('Document QC Complete', () => {
         DOCKET_CLERK_INFO.name,
       );
 
-      cy.get(`[data-testid="work-item-${docketNumber}"]`)
-        .find('[data-testid="table-column-work-item-assigned-to"]')
-        .should('have.text', DOCKET_CLERK_INFO.name);
+      retry(() => {
+        cy.login(
+          'caseServicesSupervisor1',
+          '/document-qc/section/inbox/selectedSection?section=docket',
+        );
+        cy.get('table.usa-table');
+        return cy.get('body').then(body => {
+          const workItem = body.find(
+            `[data-testid="work-item-${docketNumber}"]`,
+          );
+          const assigneeName = workItem.find(
+            '[data-testid="table-column-work-item-assigned-to"]',
+          );
+          const text = assigneeName.text();
+          return cy.wrap(text.includes(DOCKET_CLERK_INFO.name));
+        });
+      });
 
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('.message-document-title')
@@ -146,14 +165,17 @@ describe('Document QC Complete', () => {
   });
 
   it('should have the unserved case in the petition qc assigned', () => {
-    cy.login(
-      'caseServicesSupervisor1',
-      '/document-qc/section/inbox/selectedSection?section=petitions',
-    );
     cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
-      cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`).should(
-        'exist',
-      );
+      retry(() => {
+        cy.login(
+          'caseServicesSupervisor1',
+          '/document-qc/section/inbox/selectedSection?section=petitions',
+        );
+        cy.get('[data-testid="section-work-queue-inbox"]').should('be.visible');
+        return assertExists(
+          `[data-testid="work-item-${unservedDocketNumber}"]`,
+        );
+      });
 
       cy.get(`[data-testid="work-item-${unservedDocketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
@@ -214,6 +236,30 @@ function assertMessageRecordCountForDocketNumberAndSubject(
   );
 }
 
+function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
+  docketNumber: string,
+  subject: string,
+  count: number,
+  inboxType: string,
+) {
+  return cy.get('body').then(body => {
+    const $elements = body.find(
+      `[data-testid="${inboxType}-message-inbox-docket-number-cell"]`,
+    );
+
+    const parentElements = $elements.map((index, element) =>
+      Cypress.$(element).parent(),
+    );
+
+    const matchingParents = parentElements.filter((_, parentElement) => {
+      const parentText = Cypress.$(parentElement).text();
+      return parentText.includes(docketNumber) && parentText.includes(subject);
+    });
+
+    return cy.wrap(matchingParents.length === count);
+  });
+}
+
 function sendMessages(userId: string, subject: string, section: string) {
   cy.get('[data-testid="case-detail-menu-button"]').click();
   cy.get('[data-testid="menu-button-add-new-message"]').click();
@@ -222,5 +268,6 @@ function sendMessages(userId: string, subject: string, section: string) {
   cy.get('[data-testid="message-subject"]').type(subject);
   cy.get('[data-testid="message-body"]').type('Message');
   cy.get('[data-testid="modal-confirm"]').click();
+  cy.get('[data-testid="loading-overlay"]').should('not.exist');
   cy.get('[data-testid="success-alert"]').should('exist');
 }
