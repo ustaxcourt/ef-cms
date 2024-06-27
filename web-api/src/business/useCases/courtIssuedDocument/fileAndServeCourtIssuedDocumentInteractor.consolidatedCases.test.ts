@@ -207,6 +207,6 @@ describe('consolidated cases', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalledTimes(1);
+    ).toHaveBeenCalledTimes(2);
   });
 });

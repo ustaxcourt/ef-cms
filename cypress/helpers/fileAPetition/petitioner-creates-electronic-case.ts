@@ -39,14 +39,14 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
     });
 }
 
-export function petitionerCreatesElectronicCase() {
+export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
   return cy
     .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
     .then(updatedFlow => {
       if (updatedFlow) {
-        return petitionerCreatesElectronicCaseUpdated();
+        return petitionerCreatesElectronicCaseUpdated(primaryFilerName);
       } else {
-        return petitionerCreatesElectronicCaseOld();
+        return petitionerCreatesElectronicCaseOld(primaryFilerName);
       }
     });
 }

@@ -90,7 +90,7 @@ describe('getDocumentContentsAction', () => {
     });
   });
 
-  it('returns undefined if requested docket entry ID cannot be found', async () => {
+  it('returns empty state document contents object if requested docket entry ID cannot be found', async () => {
     const { output } = await runAction(getDocumentContentsAction, {
       modules: {
         presenter,
@@ -107,6 +107,6 @@ describe('getDocumentContentsAction', () => {
         docketEntryIdToEdit: 'not-found',
       },
     });
-    expect(output).toBeUndefined();
+    expect(output).toEqual({ documentContents: '', richText: '' });
   });
 });
