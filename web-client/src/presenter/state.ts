@@ -753,6 +753,10 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  statusReportOrderResponse: {
+    statusReportFilingDate: '',
+    statusReportIndex: 1,
+  },
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
   },
