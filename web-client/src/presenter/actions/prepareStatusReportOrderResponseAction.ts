@@ -1,36 +1,47 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareStatusReportOrderResponseAction = ({
+  get,
   store,
 }: ActionProps) => {
   // TODO, setup actual text here..
-  const hasOrderType = !!state.form.orderType;
-  const hasStrickenFromTrialSessions = !!state.form.strikenFromTrialSessions;
-  const hasJurisdiction = !!state.form.jurisdiction;
-  const hasAdditionalOrderText = !!state.form.additionalOrderText;
+  const {
+    additionalOrderText,
+    jurisdiction,
+    orderType,
+    strickenFromTrialSessions,
+  } = get(state.form);
+  const hasOrderType = !!orderType;
+  const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
+  const hasJurisdiction = !!jurisdiction;
+  const hasAdditionalOrderText = !!additionalOrderText;
 
   const filedLine =
     'On [FILED DATE OF SR], a status report was filed in this case (Index no. [INDEX_NUMBER_OF_STATUS_REPORT]). For cause, it is';
 
   const orderTypeLine =
-    hasOrderType && state.form.orderType === 'statusReport'
+    hasOrderType && orderType === 'statusReport'
       ? 'ORDERED that the parties shall file a further status report by [DATE SELECTED].'
-      : `ORDERED that the parties shall file a status report or proposed stipulated decision by
-  [DATE SELECTED].`;
+      : hasOrderType
+        ? 'ORDERED that the parties shall file a status report or proposed stipulated decision by [DATE SELECTED].'
+        : '';
 
-  const strickenLine =
-    hasStrickenFromTrialSessions &&
-    'ORDERED that this case is stricken from the trial session. It is further';
+  const strickenLine = hasStrickenFromTrialSessions
+    ? 'ORDERED that this case is stricken from the trial session. It is further'
+    : '';
 
   const jurisdictionLine =
-    hasJurisdiction && state.form.jurisdiction === 'retained'
+    hasJurisdiction && jurisdiction === 'retained'
       ? 'ORDERED that this case is restored to the general docket'
-      : 'ORDERED that jurisdiction is retained by the undersigned.';
+      : hasJurisdiction
+        ? 'ORDERED that jurisdiction is retained by the undersigned.'
+        : '';
 
-  const additionalTextLine =
-    hasAdditionalOrderText && `ORDERED that ${state.form.additionalOrderText}.`;
+  const additionalTextLine = hasAdditionalOrderText
+    ? `ORDERED that ${additionalOrderText}`
+    : '';
 
-  const richText = `${filedLine}\n\n${hasOrderType && orderTypeLine}\n\n${hasStrickenFromTrialSessions && strickenLine}\n\n${hasJurisdiction && jurisdictionLine}\n\n${hasAdditionalOrderText && additionalTextLine}\n\n`;
+  const richText = `${filedLine}\n\n${orderTypeLine}\n\n${strickenLine}\n\n${jurisdictionLine}\n\n${additionalTextLine}\n\n`;
 
   // TODO, maybe add documentType=Order ?
   store.set(state.form.documentTitle, 'Order');

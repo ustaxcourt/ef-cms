@@ -6,7 +6,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
   public issueOrder?: string;
   public orderType?: string;
   public dueDate?: string;
-  public strikenFromTrialSessions?: string;
+  public strickenFromTrialSessions?: string;
   public jurisdiction?: string;
   public additionalOrderText?: string;
   public docketEntryDescription: string;
@@ -17,7 +17,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
     this.issueOrder = rawProps.issueOrder;
     this.orderType = rawProps.orderType;
     this.dueDate = rawProps.dueDate;
-    this.strikenFromTrialSessions = rawProps.strikenFromTrialSessions;
+    this.strickenFromTrialSessions = rawProps.strickenFromTrialSessions;
     this.jurisdiction = rawProps.jurisdiction;
     this.additionalOrderText = rawProps.additionalOrderText;
     this.docketEntryDescription = rawProps.docketEntryDescription;
@@ -51,7 +51,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
       'retained',
       'restoredToGeneralDocket',
     )
-      .when('strikenFromTrialSessions', {
+      .when('strickenFromTrialSessions', {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
         then: joi.required().messages({
