@@ -12,7 +12,7 @@ export const validateStatusReportOrderResponseFormAction = ({
     issueOrder,
     jurisdiction,
     orderType,
-    strikenFromTrialSessions,
+    strickenFromTrialSessions,
   } = get(state.form);
 
   const errors = new StatusReportOrderResponseForm({
@@ -22,7 +22,7 @@ export const validateStatusReportOrderResponseFormAction = ({
     issueOrder,
     jurisdiction,
     orderType,
-    strikenFromTrialSessions,
+    strickenFromTrialSessions,
   }).getFormattedValidationErrors();
 
   if (!errors) {

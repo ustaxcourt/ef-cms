@@ -210,14 +210,14 @@ export const OrderResponse = connect(
 
                   <FormGroup
                     className="grid-container stamp-form-group"
-                    errorText={validationErrors.strikenFromTrialSessions}
+                    errorText={validationErrors.strickenFromTrialSessions}
                   >
                     <div className="display-inline-block grid-col-6">
                       <input
-                        checked={form.strikenFromTrialSessions || false}
+                        checked={form.strickenFromTrialSessions || false}
                         className="usa-checkbox__input"
                         id="striken-from-trial-sessions"
-                        name="strikenFromTrialSessions"
+                        name="strickenFromTrialSessions"
                         type="checkbox"
                         onChange={e => {
                           updateFormValueSequence({
