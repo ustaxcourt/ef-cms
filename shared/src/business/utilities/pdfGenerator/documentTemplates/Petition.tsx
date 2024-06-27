@@ -109,7 +109,7 @@ export const Petition = ({
             Explain why you disagree with the IRS action(s) in this case (please
             add each reason separately):
           </li>
-          <ol>
+          <ol className="petition-list-item">
             {petitionReasons.map(reason => {
               return <li key={reason}>{reason}</li>;
             })}
@@ -118,7 +118,7 @@ export const Petition = ({
             State the facts upon which you rely (please add each fact
             separately):
           </li>
-          <ol>
+          <ol className="petition-list-item">
             {petitionFacts.map(fact => {
               return <li key={fact}>{fact}</li>;
             })}
