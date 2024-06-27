@@ -1,15 +1,9 @@
 // usage: npx ts-node --transpile-only scripts/run-once-scripts/add-gsis-to-work-items.ts
 
-import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '../../web-api/src/applicationContext';
+import { createApplicationContext } from '../../web-api/src/applicationContext';
 import { scan } from '../../web-api/src/persistence/dynamodbClientService';
-import {
-  PutRequest,
-  TDynamoRecord,
-} from '../../web-api/src/persistence/dynamo/dynamoTypes';
-import { batchWrite } from './cleanup-usercase-records';
+import { TDynamoRecord } from '../../web-api/src/persistence/dynamo/dynamoTypes';
+import { updateRecords } from 'scripts/run-once-scripts/scriptHelper';
 
 const findWorkItems = async ({ applicationContext }) => {
   const result = await scan({
@@ -46,19 +40,6 @@ const migrateItems = items => {
 
   return items as unknown as TDynamoRecord[];
 };
-
-// extract to helper? Zach - I think this function and batchWrite need to be extracted to a file because they have scripts at the bottom which means unintentional scripts will run on import.
-export async function updateRecords(
-  applicationContext: ServerApplicationContext,
-  migratedRecords: TDynamoRecord[],
-): Promise<void> {
-  const putRequests: PutRequest[] = migratedRecords.map(workItemRecord => {
-    return {
-      PutRequest: { Item: workItemRecord },
-    };
-  });
-  await batchWrite(applicationContext, putRequests);
-}
 
 (async () => {
   const applicationContext = createApplicationContext({});
