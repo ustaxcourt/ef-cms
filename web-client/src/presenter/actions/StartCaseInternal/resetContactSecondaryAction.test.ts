@@ -70,7 +70,6 @@ describe('resetContactSecondaryAction', () => {
             city: 'city',
             country: 'country',
             countryType: 'countryType',
-            phone: 'phone',
             postalCode: 'postalCode',
             state: 'state',
           },
