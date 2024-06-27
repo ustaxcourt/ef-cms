@@ -236,12 +236,10 @@ const completeDocketEntryQC = async (
     sentByUserId: user.userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemForDocketClerkFilingExternalDocument({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;

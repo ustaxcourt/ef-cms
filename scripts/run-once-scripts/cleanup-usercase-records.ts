@@ -1,10 +1,7 @@
 /**
  * To run: npx ts-node --transpile-only scripts/run-once-scripts/cleanup-usercase-records.ts
  */
-import {
-  BatchWriteCommandOutput,
-  DynamoDBDocument,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   IServerApplicationContext,
@@ -15,8 +12,8 @@ import {
   TDynamoRecord,
 } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
-import { chunk, isEmpty } from 'lodash';
-import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+import { isEmpty } from 'lodash';
+import { batchWrite } from 'scripts/run-once-scripts/scriptHelper';
 
 const dynamodb = new DynamoDBClient({ maxAttempts: 0, region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamodb, {
@@ -154,71 +151,4 @@ async function updateUserCaseRecords(
     };
   });
   await batchWrite(applicationContext, putRequests);
-}
-
-async function batchWrite(
-  applicationContext: IServerApplicationContext,
-  commands: PutRequest[],
-): Promise<void> {
-  commands.forEach(command => filterEmptyStrings(command));
-
-  const chunks = chunk(commands, 25);
-  const parallelRequests = 10;
-
-  for (let i = 0; i < chunks.length; i += parallelRequests) {
-    await Promise.all(
-      chunks
-        .slice(i, i + parallelRequests)
-        .map(commandChunk => writeChunk(applicationContext, commandChunk, 0)),
-    );
-  }
-
-  return;
-}
-
-async function writeChunk(
-  applicationContext: IServerApplicationContext,
-  commandChunk: PutRequest[],
-  attempt: number,
-) {
-  let result: BatchWriteCommandOutput;
-  try {
-    result = await documentClient.batchWrite({
-      RequestItems: {
-        [applicationContext.environment.dynamoDbTableName]: commandChunk,
-      },
-    });
-  } catch (err) {
-    const wholeError = JSON.stringify(err);
-    console.log('An error occurred: ', wholeError);
-    if (wholeError.includes('ThrottlingException')) {
-      console.log('All requests in the chunk failed.', err);
-
-      await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
-
-      return writeChunk(applicationContext, commandChunk, attempt + 1);
-    }
-    console.log('Unhandled Exception occurred!');
-  }
-
-  if (isEmpty(result.UnprocessedItems)) {
-    console.log('Successfully processed Chunk');
-    return;
-  } else {
-    console.log(
-      'Unprocessed items: ',
-      result.UnprocessedItems[applicationContext.environment.dynamoDbTableName]
-        .length,
-      'Attempt #',
-      attempt,
-    );
-
-    await new Promise(resolve => setTimeout(resolve, 2000 * 2 ** attempt));
-
-    return writeChunk(
-      applicationContext,
-      result.UnprocessedItems[applicationContext.environment.dynamoDbTableName],
-      attempt + 1,
-    );
-  }
 }

@@ -90,11 +90,9 @@ import { getCompletedMessagesForSectionInteractor } from './business/useCases/me
 import { getCompletedMessagesForUserInteractor } from './business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getCustomCaseReportInteractor } from './business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { getDocumentContentsForDocketEntryInteractor } from './business/useCases/document/getDocumentContentsForDocketEntryInteractor';
-import { getDocumentQCInboxForSectionInteractor } from './business/useCases/workItems/getDocumentQCInboxForSectionInteractor';
-import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
-import { getDocumentQCServedForSectionInteractor } from './business/useCases/workItems/getDocumentQCServedForSectionInteractor';
-import { getDocumentQCServedForUserInteractor } from './business/useCases/workItems/getDocumentQCServedForUserInteractor';
+import { getDocumentContentsForDocketEntryInteractor } from '@web-api/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
+import { getDocumentQCForSectionInteractor } from '@web-api/business/useCases/workItems/getDocumentQCForSectionInteractor';
+import { getDocumentQCForUserInteractor } from '@web-api/business/useCases/workItems/getDocumentQCForUserInteractor';
 import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
@@ -303,10 +301,8 @@ const useCases = {
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCustomCaseReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
-  getDocumentQCInboxForSectionInteractor,
-  getDocumentQCInboxForUserInteractor,
-  getDocumentQCServedForSectionInteractor,
-  getDocumentQCServedForUserInteractor,
+  getDocumentQCForSectionInteractor,
+  getDocumentQCForUserInteractor,
   getDownloadPolicyUrlInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,

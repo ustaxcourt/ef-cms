@@ -99,18 +99,24 @@ describe('verify old sent work items do not show up in the outbox', () => {
       workItemId: `${workItemIdNMinus1}`,
     };
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
+      section: 'petitions',
+      userId: workItemNPlus1Days.completedByUserId,
       workItem: workItemNPlus1Days,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
+      section: 'petitions',
+      userId: workItemNDays.completedByUserId,
       workItem: workItemNDays,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
+      section: 'petitions',
+      userId: workItemNMinus1Days.completedByUserId,
       workItem: workItemNMinus1Days,
     });
   });

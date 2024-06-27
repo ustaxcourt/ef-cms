@@ -1,4 +1,3 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   Message,
   RawMessage,
@@ -46,10 +45,9 @@ export const createMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseEntity = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()
@@ -62,10 +60,6 @@ export const createMessageInteractor = async (
   const validatedRawMessage = new Message(
     {
       attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      docketNumberWithSuffix,
       from: fromUser.name,
       fromSection: fromUser.section,
       fromUserId: fromUser.userId,
@@ -75,12 +69,12 @@ export const createMessageInteractor = async (
       toSection,
       toUserId,
     },
-    { applicationContext },
+    { applicationContext, caseEntity },
   )
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
+  await applicationContext.getPersistenceGateway().upsertMessage({
     applicationContext,
     message: validatedRawMessage,
   });

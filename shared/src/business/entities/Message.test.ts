@@ -1,4 +1,6 @@
 import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
+import { Case } from './cases/Case';
+import { MOCK_CASE } from '../../test/mockCase';
 import { Message, RawMessage } from './Message';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createISODateString } from '../utilities/DateHandler';
@@ -84,6 +86,16 @@ describe('Message', () => {
       );
 
       expect(message.parentMessageId).toEqual(mockMessage.messageId);
+    });
+
+    it('should grab fields from caseEntity if caseEntity is passed in', () => {
+      const message = new Message(
+        { ...mockMessage },
+        { applicationContext, caseEntity: MOCK_CASE },
+      );
+      const expectedCaseTitle = Case.getCaseTitle(MOCK_CASE.caseCaption);
+      expect(message.caseStatus).toEqual(MOCK_CASE.status);
+      expect(message.caseTitle).toEqual(expectedCaseTitle);
     });
   });
 
@@ -219,7 +231,7 @@ describe('Message', () => {
       ]);
     });
 
-    it('should be false when attachements are provided that are missing required fields', () => {
+    it('should be false when attachments are provided that are missing required fields', () => {
       const message = new Message(
         {
           ...mockMessage,

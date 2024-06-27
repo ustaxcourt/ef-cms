@@ -51,7 +51,11 @@ const createTable = ({
         AttributeType: 'S',
       },
       {
-        AttributeName: 'gsi2pk',
+        AttributeName: 'gsiUserBox',
+        AttributeType: 'S',
+      },
+      {
+        AttributeName: 'gsiSectionBox',
         AttributeType: 'S',
       },
     ],
@@ -77,10 +81,30 @@ const createTable = ({
         },
       },
       {
-        IndexName: 'gsi2',
+        IndexName: 'gsiUserBox',
         KeySchema: [
           {
-            AttributeName: 'gsi2pk',
+            AttributeName: 'gsiUserBox',
+            KeyType: 'HASH',
+          },
+          {
+            AttributeName: 'sk',
+            KeyType: 'RANGE',
+          },
+        ],
+        Projection: {
+          ProjectionType: 'ALL',
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 1,
+          WriteCapacityUnits: 1,
+        },
+      },
+      {
+        IndexName: 'gsiSectionBox',
+        KeySchema: [
+          {
+            AttributeName: 'gsiSectionBox',
             KeyType: 'HASH',
           },
           {

@@ -1,16 +1,24 @@
-import { OutboxDynamoRecord } from '../dynamoTypes';
+import {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} from '@shared/business/utilities/DateHandler';
 import { queryFull } from '../../dynamodbClientService';
+import type { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const getDocumentQCServedForSection = ({
-  afterDate,
   applicationContext,
   section,
 }: {
-  afterDate: string;
   applicationContext: IApplicationContext;
   section: string;
-}) => {
-  return queryFull({
+}): Promise<RawWorkItem[]> => {
+  const afterDate = calculateISODate({
+    dateString: createISODateAtStartOfDayEST(),
+    howMuch: -7,
+    units: 'days',
+  });
+
+  const results = queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -21,5 +29,7 @@ export const getDocumentQCServedForSection = ({
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
-  }) as Promise<OutboxDynamoRecord[]>;
+  }) as unknown as Promise<RawWorkItem[]>;
+
+  return results;
 };

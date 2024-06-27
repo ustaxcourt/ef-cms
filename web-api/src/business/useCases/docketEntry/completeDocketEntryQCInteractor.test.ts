@@ -141,12 +141,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
     ).toMatchObject({ leadDocketNumber: caseRecord.docketNumber });
     expect(
@@ -163,8 +158,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -440,8 +434,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -477,8 +470,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -500,8 +492,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -604,8 +595,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     const assignedWorkItem =
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem;
 
     expect(assignedWorkItem.section).toEqual(DOCKET_SECTION);
@@ -628,8 +618,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     const assignedWorkItem =
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem;
 
     expect(assignedWorkItem.section).toEqual(CASE_SERVICES_SUPERVISOR_SECTION);

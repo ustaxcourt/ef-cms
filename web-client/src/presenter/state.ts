@@ -5,6 +5,7 @@ import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { WorkItemBox } from '@web-api/business/useCases/workItems/getDocumentQCForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -771,7 +772,7 @@ export const baseState = {
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox' as WorkItemBox, queue: 'my', section: '' },
   workitemAllCheckbox: false,
 };
 

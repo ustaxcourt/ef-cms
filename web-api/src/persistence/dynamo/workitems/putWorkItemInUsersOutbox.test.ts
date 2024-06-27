@@ -42,35 +42,19 @@ describe('putWorkItemInUsersOutbox', () => {
     expect(putStub.mock.calls[0][0].Item.pk).toBe(
       'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
     );
-    expect(putStub.mock.calls[1][0].Item.pk).toMatch(
-      /user-outbox\|1805d1ab-18d0-43ec-bafb-654e83405416\|\d{4}-w\d+/,
-    );
-    expect(putStub.mock.calls[2][0].Item.pk).toBe('section-outbox|docket');
-    expect(putStub.mock.calls[3][0].Item.pk).toMatch(
-      /section-outbox|docket\|\d{4}-\d{2}-\d{2}/,
-    );
+    expect(putStub.mock.calls[1][0].Item.pk).toBe('section-outbox|docket');
 
     expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
         sk: timestamp,
+        ttl: expect.anything(),
         workItemId: '123',
       },
     });
     expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
         sk: timestamp,
-        workItemId: '123',
-      },
-    });
-    expect(putStub.mock.calls[1][0]).toMatchObject({
-      Item: {
-        sk: timestamp,
-        workItemId: '123',
-      },
-    });
-    expect(putStub.mock.calls[1][0]).toMatchObject({
-      Item: {
-        sk: timestamp,
+        ttl: expect.anything(),
         workItemId: '123',
       },
     });

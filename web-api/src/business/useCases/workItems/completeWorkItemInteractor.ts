@@ -40,11 +40,17 @@ export const completeWorkItem = async (
       applicationContext,
       workItemId,
     });
-  const originalWorkItemEntity = new WorkItem(originalWorkItem, {
-    applicationContext,
-  });
+  const completedWorkItem = new WorkItem(
+    {
+      ...originalWorkItem,
+      createdAt: createISODateString(),
+    },
+    {
+      applicationContext,
+    },
+  );
 
-  const completedWorkItem = originalWorkItemEntity
+  completedWorkItem
     .setAsCompleted({
       message: completedMessage,
       user,
@@ -52,17 +58,15 @@ export const completeWorkItem = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-    applicationContext,
-    workItem: {
-      ...completedWorkItem,
-      createdAt: createISODateString(),
-    },
-  });
+  const authorizedUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: user.userId });
+
+  completedWorkItem.section = authorizedUser.section!;
 
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItem: completedWorkItem,
+    workItem: completedWorkItem.validate().toRawObject(),
   });
 
   const caseObject = await applicationContext
@@ -74,13 +78,12 @@ export const completeWorkItem = async (
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
 
-  const workItemEntity = new WorkItem(completedWorkItem, {
-    applicationContext,
-  });
-
   caseToUpdate.docketEntries.forEach(doc => {
-    if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
-      doc.workItem = workItemEntity;
+    if (
+      doc.workItem &&
+      doc.workItem.workItemId === completedWorkItem.workItemId
+    ) {
+      doc.workItem = completedWorkItem;
     }
   });
 
@@ -96,12 +99,12 @@ export const determineEntitiesToLock = async (
   applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
 ) => {
-  const originalWorkItem: RawWorkItem = await applicationContext
+  const originalWorkItem = (await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
       applicationContext,
       workItemId,
-    });
+    })) as unknown as RawWorkItem;
 
   return {
     identifiers: [`case|${originalWorkItem.docketNumber}`],

@@ -45,7 +45,9 @@ describe('completeWorkItemInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getPersistenceGateway().putWorkItemInOutbox = jest.fn();
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => docketClerkUser);
   });
 
   beforeEach(() => {

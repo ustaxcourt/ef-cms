@@ -33,7 +33,10 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
 
   const miscellaneousCaseMessageForm = {
     message: 'You should not see any checkboxes on the service modal!',
-    subject: 'Here is a court issued filing on a lead case to be served!',
+    subject:
+      'Here is a court issued filing on a lead case to be served! ' +
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      new Date().getTime(),
     toUserId: '2805d1ab-18d0-43ec-bafb-654e83405416', // docketClerk1
   };
 
