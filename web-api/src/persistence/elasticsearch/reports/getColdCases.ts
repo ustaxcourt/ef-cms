@@ -1,3 +1,4 @@
+import { COLD_CASE_LOOKBACK_IN_DAYS } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { ColdCaseEntry } from '@web-api/business/useCases/reports/coldCaseReportInteractor';
 import {
@@ -68,7 +69,7 @@ export async function getColdCases({
                       {
                         range: {
                           'filingDate.S': {
-                            gt: 'now-120d/d',
+                            gt: `now-${COLD_CASE_LOOKBACK_IN_DAYS}d/d`,
                           },
                         },
                       },
