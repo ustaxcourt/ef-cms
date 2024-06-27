@@ -7,39 +7,39 @@ import {
 } from '../../web-api/src/applicationContext';
 import { calculateTimeToLive } from '../../web-api/src/persistence/dynamo/calculateTimeToLive';
 import { TDynamoRecord } from '../../web-api/src/persistence/dynamo/dynamoTypes';
-import { search } from '../../web-api/src/persistence/elasticsearch/searchClient';
+import {
+  formatResults,
+  search,
+} from '../../web-api/src/persistence/elasticsearch/searchClient';
 import { exit } from 'process';
-import { updateRecords } from '../../scripts/run-once-scripts/add-gsis-to-work-items';
+import { get } from 'lodash';
+import { updateRecords } from 'scripts/run-once-scripts/scriptHelper';
 
-/** ideas:
-- trust ES message data and do a one-to-one pull -> upsert
-*/
-// !!!! NEED TO ADD DYNAMO FIELDS TO UNTOUCHED RECORDS
-const getMessages = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}) => {
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [{ term: { 'entityName.S': 'Message' } }],
-        },
-      },
-    },
-    index: 'efcms-message',
-  };
+// const getMessages = async ({
+//   applicationContext,
+// }: {
+//   applicationContext: ServerApplicationContext;
+// }) => {
+//   const query = {
+//     body: {
+//       query: {
+//         bool: {
+//           must: [{ term: { 'entityName.S': 'Message' } }],
+//         },
+//       },
+//     },
+//     index: 'efcms-message',
+//   };
 
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
-  });
+//   const { results } = await search({
+//     applicationContext,
+//     searchParameters: query,
+//   });
 
-  return results;
-};
+//   return results;
+// };
 
-const applyMessageChanges = ({ messages: items }) => {
+const applyMessageChanges = ({ items }) => {
   const itemsAfter: TDynamoRecord[] = [];
   for (const item of items) {
     if (!item.completedAt) {
@@ -106,28 +106,125 @@ const applyMessageChanges = ({ messages: items }) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
+// (async function () {
+//   const applicationContext = createApplicationContext({});
+//   const items = await getMessages({ applicationContext }); // Zach: How many messages are there in the system? You may not be able to fetch all messages at once, but need to batch get messages, migrate, then get messages again.
+//   try {
+//     items.forEach(message => {
+//       message = new Message(message, {
+//         applicationContext,
+//       }).validate();
+//     });
+//   } catch (e) {
+//     console.log('Error migrating message records:', e);
+//     exit(); //???
+//   }
+
+//   const migratedItems = applyMessageChanges({ items });
+
+//   try {
+//     await updateRecords(applicationContext, migratedItems); // Zach: This needs to be extracted to a helper somewhere because there is a function in the file you are importing which will automatically start running when you import updateRecords();
+//   } catch (e) {
+//     console.log('Error writing migrated message records to dynamo:', e);
+//     exit(); //???
+//   }
+// })();
+
 (async function () {
+  const dryRun = process.argv.slice(2)[0] || true;
+
   const applicationContext = createApplicationContext({});
-  const messages = await getMessages({ applicationContext }); // Zach: How many messages are there in the system? You may not be able to fetch all messages at once, but need to batch get messages, migrate, then get messages again.
+  const searchParameters = {
+    body: {
+      query: {
+        bool: {
+          must: [{ term: { 'entityName.S': 'Message' } }],
+        },
+      },
+      sort: [{ 'createdAt.S': 'asc' }],
+    },
+    index: 'efcms-message',
+    size: 10000,
+  };
+
+  const index = searchParameters.index || '';
+  const query = searchParameters.body?.query || {};
+  const size = searchParameters.size;
+
+  let countQ;
   try {
-    messages.forEach(message => {
-      message = new Message(message, {
-        applicationContext,
-      }).validate();
+    countQ = await applicationContext.getSearchClient().count({
+      body: {
+        query,
+      },
+      index,
     });
-  } catch (e) {
-    console.log('Error migrating message records:', e);
-    exit(); //???
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
   }
 
-  const migratedItems = applyMessageChanges({ messages });
+  const _source = searchParameters.body?._source || [];
+  const sort = searchParameters.body?.sort; // sort is required for paginated queries
 
-  console.log('Sample migrated item:', migratedItems[0]);
+  const expected = get(countQ, 'body.count', 0);
 
-  try {
-    await updateRecords(applicationContext, migratedItems); // Zach: This needs to be extracted to a helper somewhere because there is a function in the file you are importing which will automatically start running when you import updateRecords();
-  } catch (e) {
-    console.log('Error writing migrated message records to dynamo:', e);
-    exit(); //???
+  let i = 0;
+  let search_after = [0];
+  while (i < expected) {
+    let searchResults = [];
+    const chunk = await applicationContext.getSearchClient().search({
+      _source,
+      body: {
+        query,
+        search_after,
+        sort,
+      },
+      index,
+      size,
+    });
+    const hits = get(chunk, 'body.hits.hits', []);
+
+    if (hits.length > 0) {
+      searchResults = searchResults.concat(hits);
+      search_after = hits[hits.length - 1].sort;
+    }
+
+    i += size; // this avoids an endless loop if expected is somehow greater than the sum of all hits
+
+    const { results } = formatResults({
+      hits: {
+        hits: searchResults,
+        total: {
+          value: searchResults.length,
+        },
+      },
+    });
+
+    let items;
+    try {
+      items = results.map(message => {
+        delete message._score;
+        delete message.sort;
+        new Message(message, {
+          applicationContext,
+        }).validate();
+        return message;
+      });
+    } catch (e) {
+      console.log('Error migrating message records:', e);
+      exit(); //???
+    }
+
+    const migratedItems = applyMessageChanges({ items });
+
+    if (dryRun != true) {
+      try {
+        await updateRecords(applicationContext, migratedItems);
+      } catch (e) {
+        console.log('Error writing migrated message records to dynamo:', e);
+        exit(); //???
+      }
+    }
   }
 })();
