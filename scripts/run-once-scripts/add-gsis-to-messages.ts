@@ -1,10 +1,7 @@
 // usage: npx ts-node --transpile-only scripts/run-once-scripts/add-gsis-to-messages.ts
 
 import { Message } from '../../shared/src/business/entities/Message';
-import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '../../web-api/src/applicationContext';
+import { createApplicationContext } from '../../web-api/src/applicationContext';
 import { calculateTimeToLive } from '../../web-api/src/persistence/dynamo/calculateTimeToLive';
 import { TDynamoRecord } from '../../web-api/src/persistence/dynamo/dynamoTypes';
 import {
@@ -14,30 +11,6 @@ import {
 import { exit } from 'process';
 import { get } from 'lodash';
 import { updateRecords } from 'scripts/run-once-scripts/scriptHelper';
-
-// const getMessages = async ({
-//   applicationContext,
-// }: {
-//   applicationContext: ServerApplicationContext;
-// }) => {
-//   const query = {
-//     body: {
-//       query: {
-//         bool: {
-//           must: [{ term: { 'entityName.S': 'Message' } }],
-//         },
-//       },
-//     },
-//     index: 'efcms-message',
-//   };
-
-//   const { results } = await search({
-//     applicationContext,
-//     searchParameters: query,
-//   });
-
-//   return results;
-// };
 
 const applyMessageChanges = ({ items }) => {
   const itemsAfter: TDynamoRecord[] = [];
@@ -105,31 +78,6 @@ const applyMessageChanges = ({ items }) => {
   return itemsAfter;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-// (async function () {
-//   const applicationContext = createApplicationContext({});
-//   const items = await getMessages({ applicationContext }); // Zach: How many messages are there in the system? You may not be able to fetch all messages at once, but need to batch get messages, migrate, then get messages again.
-//   try {
-//     items.forEach(message => {
-//       message = new Message(message, {
-//         applicationContext,
-//       }).validate();
-//     });
-//   } catch (e) {
-//     console.log('Error migrating message records:', e);
-//     exit(); //???
-//   }
-
-//   const migratedItems = applyMessageChanges({ items });
-
-//   try {
-//     await updateRecords(applicationContext, migratedItems); // Zach: This needs to be extracted to a helper somewhere because there is a function in the file you are importing which will automatically start running when you import updateRecords();
-//   } catch (e) {
-//     console.log('Error writing migrated message records to dynamo:', e);
-//     exit(); //???
-//   }
-// })();
-
 (async function () {
   const dryRun = process.argv.slice(2)[0] || true;
 
@@ -141,7 +89,6 @@ const applyMessageChanges = ({ items }) => {
           must: [{ term: { 'entityName.S': 'Message' } }],
         },
       },
-      sort: [{ 'createdAt.S': 'asc' }],
     },
     index: 'efcms-message',
     size: 10000,
@@ -164,9 +111,6 @@ const applyMessageChanges = ({ items }) => {
     throw new Error('Search client encountered an error.');
   }
 
-  const _source = searchParameters.body?._source || [];
-  const sort = searchParameters.body?.sort; // sort is required for paginated queries
-
   const expected = get(countQ, 'body.count', 0);
 
   let i = 0;
@@ -174,11 +118,11 @@ const applyMessageChanges = ({ items }) => {
   while (i < expected) {
     let searchResults = [];
     const chunk = await applicationContext.getSearchClient().search({
-      _source,
+      _source: [],
       body: {
         query,
         search_after,
-        sort,
+        sort: [{ 'createdAt.S': 'asc' }],
       },
       index,
       size,
@@ -192,7 +136,7 @@ const applyMessageChanges = ({ items }) => {
 
     i += size; // this avoids an endless loop if expected is somehow greater than the sum of all hits
 
-    const { results } = formatResults({
+    let { results } = formatResults({
       hits: {
         hits: searchResults,
         total: {
@@ -201,9 +145,8 @@ const applyMessageChanges = ({ items }) => {
       },
     });
 
-    let items;
     try {
-      items = results.map(message => {
+      results = results.map(message => {
         delete message._score;
         delete message.sort;
         new Message(message, {
@@ -216,7 +159,7 @@ const applyMessageChanges = ({ items }) => {
       exit(); //???
     }
 
-    const migratedItems = applyMessageChanges({ items });
+    const migratedItems = applyMessageChanges({ items: results });
 
     if (dryRun != true) {
       try {
