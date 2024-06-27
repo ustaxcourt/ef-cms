@@ -49,7 +49,7 @@ export const prepareStatusReportOrderResponseAction = ({
     ? `ORDERED that ${additionalOrderText}`
     : '';
 
-  const richText = `${filedLine}\n\n${orderTypeLine}\n\n${strickenLine}\n\n${jurisdictionLine}\n\n${additionalTextLine}\n\n`;
+  const richText = `<p>${filedLine}</p><p>${orderTypeLine}</p><p>${strickenLine}</p><p>${jurisdictionLine}</p><pre>${additionalTextLine}</pre>`;
 
   // TODO, maybe add documentType=Order ?
   store.set(state.form.documentTitle, 'Order');
