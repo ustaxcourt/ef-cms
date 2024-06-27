@@ -146,6 +146,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
+import { gotoColdCaseReportSequence } from './sequences/gotoColdCaseReportSequence';
 import { gotoCompleteDocketEntryQCSequence } from './sequences/gotoCompleteDocketEntryQCSequence';
 import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
@@ -806,6 +807,7 @@ export const presenterSequences = {
     gotoCaseSearchNoMatchesSequence as unknown as Function,
   gotoChangeLoginAndServiceEmailSequence:
     gotoChangeLoginAndServiceEmailSequence as unknown as Function,
+  gotoColdCaseReportSequence: gotoColdCaseReportSequence as unknown as Function,
   gotoCompleteDocketEntryQCSequence:
     gotoCompleteDocketEntryQCSequence as unknown as Function,
   gotoContactEditSequence: gotoContactEditSequence as unknown as Function,
