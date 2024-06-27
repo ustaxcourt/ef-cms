@@ -8,13 +8,19 @@ import React from 'react';
 
 export const AddEditCalendarNoteModal = connect(
   {
+    clearModalFormSequence: sequences.clearModalFormSequence,
+    deleteCalendarNoteSequence: sequences.deleteCalendarNoteSequence,
     isEditing: state.modal.isEditing,
+    updateCalendarNoteSequence: sequences.updateCalendarNoteSequence,
     validateTrialSessionNoteSequence:
       sequences.validateTrialSessionNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCalendarNoteModal({
+    clearModalFormSequence,
+    deleteCalendarNoteSequence,
     isEditing,
+    updateCalendarNoteSequence,
     validateTrialSessionNoteSequence,
     validationErrors,
   }) {
@@ -24,12 +30,11 @@ export const AddEditCalendarNoteModal = connect(
         className="add-edit-calendar-note-modal"
         confirmLabel="Save"
         deleteLabel="Delete Note"
-        preventCancelOnBlur={true}
         showDelete={isEditing}
         title="Add/Edit Calendar Note"
-        onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateCalendarNoteSequence"
-        onDeleteSequence="deleteCalendarNoteSequence"
+        onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={updateCalendarNoteSequence}
+        onDeleteSequence={deleteCalendarNoteSequence}
       >
         <FormGroup
           className="margin-bottom-2"

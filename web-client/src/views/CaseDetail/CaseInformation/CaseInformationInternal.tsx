@@ -4,7 +4,6 @@ import { CaseDetails } from './CaseDetails';
 import { ConsolidatedCases } from './ConsolidatedCases';
 import { DisplayHearings } from './DisplayHearings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../../ustc-ui/If/If';
 import { SetForHearingModal } from '../SetForHearingModal';
 import { TrialInformation } from './TrialInformation';
 import { UnconsolidateCasesModal } from '../UnconsolidateCasesModal';
@@ -38,6 +37,8 @@ export const CaseInformationInternal = connect(
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
+    showPrintConfirmationLink:
+      state.formattedCaseDetail.showPrintConfirmationLink,
     trialSessionJudge: state.trialSessionJudge,
   },
 
@@ -59,6 +60,7 @@ export const CaseInformationInternal = connect(
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
     showModal,
+    showPrintConfirmationLink,
     trialSessionJudge,
   }) {
     return (
@@ -72,7 +74,6 @@ export const CaseInformationInternal = connect(
                   className="margin-0"
                   data-testid="menu-edit-case-context-button"
                   icon="edit"
-                  id="menu-edit-case-context-button"
                   onClick={() => {
                     resetCaseMenuSequence();
                     openUpdateCaseModalSequence();
@@ -87,7 +88,7 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Case Details
-                    <If bind="formattedCaseDetail.showPrintConfirmationLink">
+                    {showPrintConfirmationLink && (
                       <Button
                         link
                         className="float-right margin-right-0 margin-left-205 margin-top-1 padding-0 "
@@ -104,7 +105,7 @@ export const CaseInformationInternal = connect(
                         />
                         Print Confirmation
                       </Button>
-                    </If>
+                    )}
                     {caseDetailHelper.showEditCaseDetailsButton && (
                       <Button
                         link
@@ -167,6 +168,7 @@ export const CaseInformationInternal = connect(
                         link
                         aria-label="unconsolidate cases"
                         className="red-warning margin-right-0 margin-left-205 margin-top-1 padding-0 float-right"
+                        data-testid="unconsolidate-cases-button"
                         icon="minus-circle"
                         onClick={() => {
                           openCleanModalSequence({

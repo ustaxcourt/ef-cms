@@ -1,25 +1,40 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/* gets practitioners matching the name
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get cerebral get function
- * @returns {object} contains the practitioners returned from the getPractitionersByNameInteractor use case
- */
 export const getPractitionersByNameAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
-  const { practitionerName } = get(
-    state.advancedSearchForm.practitionerSearchByName,
+  props,
+  store,
+}: ActionProps<{ selectedPage: number }>) => {
+  const { selectedPage } = props;
+
+  const {
+    lastKeysOfPages,
+    practitionerName,
+  }: {
+    practitionerName: string;
+    pageNum: number;
+    lastKeysOfPages: Array<string | number>;
+  } = get(state.advancedSearchForm.practitionerSearchByName);
+
+  store.set(
+    state.advancedSearchForm.practitionerSearchByName.pageNum,
+    selectedPage,
   );
 
-  const practitioners = await applicationContext
+  const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
+      searchAfter: lastKeysOfPages[selectedPage],
     });
 
-  return { searchResults: practitioners };
+  store.set(
+    state.advancedSearchForm.practitionerSearchByName.lastKeysOfPages[
+      selectedPage + 1
+    ],
+    searchResults.lastKey,
+  );
+
+  return { searchResults };
 };

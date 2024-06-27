@@ -1,6 +1,6 @@
-# Note: this is debian 11 (bullseye)
+# Note: node-20.14.0-chrome-125.0.* is debian 12.5 (bookworm)
 
-FROM cypress/browsers:node-20.13.0-chrome-124.0.6367.155-1-ff-125.0.3-edge-124.0.2478.80-1
+FROM cypress/browsers:node-20.14.0-chrome-125.0.6422.141-1-ff-126.0.1-edge-125.0.2535.85-1
 
 WORKDIR /home/app
 
@@ -10,21 +10,24 @@ RUN mkdir -p /usr/share/man/man1
 RUN apt-get update
 
 RUN apt-get install -y \
-  openjdk-11-jre-headless \
-  openjdk-11-jdk-headless \
-  openjdk-11-jre \
-  openjdk-11-jdk \
+  openjdk-17-jre-headless \
+  openjdk-17-jdk-headless \
+  openjdk-17-jre \
+  openjdk-17-jdk \
   zip \
   curl \
   wget \
   git \
   less \
-  python \
-  python-dev \
-  python3-pip \
+  python-is-python3 \
+  2to3 \
+  python3 \
+  python3-dev \
+  python-dev-is-python3 \
+  python3-pip=23.0.1+dfsg-1 \
   jq \
-  graphicsmagick=1.4+really1.3.36+hg16481-2+deb11u1 \
-  ghostscript=9.53.3~dfsg-7+deb11u6 \
+  graphicsmagick \
+  ghostscript \
   chromium \
   openssh-client \
   sudo
@@ -34,13 +37,12 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.46.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.16.12.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
-RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.8.3/terraform_1.8.3_linux_amd64.zip && \ 
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip && \ 
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

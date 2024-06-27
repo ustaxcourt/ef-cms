@@ -3,7 +3,7 @@
 ENV=$1
 
 DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
-MIGRATE_FLAG=$(../../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
+MIGRATE_FLAG=$(../../../../scripts/migration/get-migrate-flag.sh "${ENV}")
 
 export DEPLOYING_COLOR
 export MIGRATE_FLAG
@@ -101,9 +101,9 @@ else
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
-  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
+  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
 else
-  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
+  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
 fi
 
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
@@ -129,6 +129,11 @@ export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME
+
+if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
+then
+  export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
+fi
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

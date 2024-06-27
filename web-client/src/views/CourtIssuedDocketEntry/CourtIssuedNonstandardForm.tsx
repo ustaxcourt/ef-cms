@@ -153,6 +153,7 @@ export const CourtIssuedNonstandardForm = connect(
             <input
               aria-describedby="free-text-label"
               className="usa-input usa-input--inline"
+              data-testid="document-description-input"
               id="free-text"
               name="freeText"
               value={form.freeText || ''}

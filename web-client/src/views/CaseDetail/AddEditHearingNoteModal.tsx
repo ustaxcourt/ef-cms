@@ -8,11 +8,15 @@ import React from 'react';
 
 export const AddEditHearingNoteModal = connect(
   {
+    clearModalFormSequence: sequences.clearModalFormSequence,
+    updateHearingNoteSequence: sequences.updateHearingNoteSequence,
     validateTrialSessionHearingNoteSequence:
       sequences.validateTrialSessionHearingNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditHearingNoteModal({
+    clearModalFormSequence,
+    updateHearingNoteSequence,
     validateTrialSessionHearingNoteSequence,
     validationErrors,
   }) {
@@ -21,10 +25,9 @@ export const AddEditHearingNoteModal = connect(
         cancelLabel="Cancel"
         className="add-edit-calendar-note-modal"
         confirmLabel="Save"
-        preventCancelOnBlur={true}
         title="Add/Edit Hearing Note"
-        onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateHearingNoteSequence"
+        onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={updateHearingNoteSequence}
       >
         <FormGroup
           className="margin-bottom-2"

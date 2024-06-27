@@ -8,9 +8,11 @@ import React from 'react';
 
 export const ForwardMessageModalDialog = connect(
   {
+    clearModalFormSequence: sequences.clearModalFormSequence,
     constants: state.constants,
     createMessageModalHelper: state.createMessageModalHelper,
     form: state.modal.form,
+    forwardMessageSequence: sequences.forwardMessageSequence,
     messageModalHelper: state.messageModalHelper,
     showChambersSelect: state.modal.showChambersSelect,
     updateChambersInCreateMessageModalSequence:
@@ -23,8 +25,10 @@ export const ForwardMessageModalDialog = connect(
     validationErrors: state.validationErrors,
   },
   function ForwardMessageModalDialog({
+    clearModalFormSequence,
     createMessageModalHelper,
     form,
+    forwardMessageSequence,
     messageModalHelper,
     showChambersSelect,
     updateChambersInCreateMessageModalSequence,
@@ -37,10 +41,9 @@ export const ForwardMessageModalDialog = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Send"
-        preventCancelOnBlur={true}
         title="Forward Message"
-        onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="forwardMessageSequence"
+        onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={forwardMessageSequence}
       >
         <FormGroup
           errorText={!showChambersSelect && validationErrors.toSection}

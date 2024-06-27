@@ -43,7 +43,10 @@ export const PaperFiling = connect(
       <>
         <CaseDetailHeader />
 
-        <section className="usa-section grid-container">
+        <section
+          className="usa-section grid-container"
+          data-testid="paper-filing-container"
+        >
           <SuccessNotification />
           <ErrorNotification />
 

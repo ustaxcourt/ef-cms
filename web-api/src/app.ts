@@ -125,7 +125,6 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
-import { logOldLoginAttemptLambda } from '@web-api/lambdas/auth/oldLoginAttemptLambda';
 import { logger } from './logger';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
@@ -254,6 +253,25 @@ app.use((req, res, next) => {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
   }
+  next();
+});
+app.use((req, res, next) => {
+  /**
+   * This environment variable is set to true by default on deployment of the API lambdas
+   * to prevent traffic from hitting the deploying color during deployment.
+   * It is also set to true on the newly-passive color at the end of a deployment as we switch colors
+   * to prevent traffic to the inactive color.
+   */
+  const shouldForceRefresh =
+    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
+
+  if (shouldForceRefresh) {
+    res.set('X-Force-Refresh', 'true');
+    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    res.status(500).send('this api is disabled due to a deployment');
+    return;
+  }
+
   next();
 });
 app.use(logger());
@@ -1053,7 +1071,6 @@ app.delete(
 {
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
-  app.get('/system/metrics/old-login', lambdaWrapper(logOldLoginAttemptLambda));
 }
 
 /**

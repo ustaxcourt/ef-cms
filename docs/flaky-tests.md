@@ -67,7 +67,7 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          npm run cypress:integration:file cypress/local-only/integration/start-a-case-practitioner.cy.ts
+          npm run cypress:integration:file cypress/local-only/integration/tests/start-a-case-practitioner.cy.ts
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v4

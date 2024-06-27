@@ -1,8 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
-import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
+import { PIIRedactedWarning } from '@web-client/views/CaseAssociationRequest/PIIRedactedWarning';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -37,10 +36,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="primary-document"
               id="primary-document-label"
             >
-              Upload document PDF (.pdf){' '}
-              <span className="success-message padding-left-1">
-                <FontAwesomeIcon icon="check-circle" size="sm" />
-              </span>
+              Upload document PDF (.pdf)
             </label>
             <span className="usa-hint">
               Make sure file is not encrypted or password protected. Max file

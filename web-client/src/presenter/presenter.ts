@@ -140,6 +140,7 @@ import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequen
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
+import { gotoCaseAssociationRequestSequence } from './sequences/gotoCaseAssociationRequestSequence';
 import { gotoCaseDeadlineReportSequence } from './sequences/gotoCaseDeadlineReportSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
@@ -176,7 +177,6 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
-import { gotoOldLoginSequence } from '@web-client/presenter/sequences/Login/gotoOldLoginSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -194,7 +194,6 @@ import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrint
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoPrintableTrialSessionWorkingCopySequence } from './sequences/gotoPrintableTrialSessionWorkingCopySequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
-import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
@@ -247,6 +246,7 @@ import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPract
 import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { openAppUpdatedModalSequence } from './sequences/openAppUpdatedModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
@@ -314,6 +314,7 @@ import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSe
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
+import { redirectToDashboardSequence } from './sequences/redirectToDashboardSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -334,8 +335,8 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
+import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
-import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveCourtIssuedDocketEntrySequence } from './sequences/saveCourtIssuedDocketEntrySequence';
 import { saveDocketEntryForLaterCompleteSequence } from './sequences/saveDocketEntryForLaterCompleteSequence';
@@ -793,6 +794,8 @@ export const presenterSequences = {
     gotoBeforeYouFileDocumentSequence as unknown as Function,
   gotoBlockedCasesReportSequence:
     gotoBlockedCasesReportSequence as unknown as Function,
+  gotoCaseAssociationRequestSequence:
+    gotoCaseAssociationRequestSequence as unknown as Function,
   gotoCaseDeadlineReportSequence:
     gotoCaseDeadlineReportSequence as unknown as Function,
   gotoCaseDetailSequence: gotoCaseDetailSequence as unknown as Function,
@@ -851,7 +854,6 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
-  gotoOldLoginSequence: gotoOldLoginSequence as unknown as Function,
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
@@ -882,7 +884,6 @@ export const presenterSequences = {
   gotoPrintableTrialSessionWorkingCopySequence:
     gotoPrintableTrialSessionWorkingCopySequence as unknown as Function,
   gotoPrivacySequence: gotoPrivacySequence as unknown as Function,
-  gotoRequestAccessSequence: gotoRequestAccessSequence as unknown as Function,
   gotoReviewSavedPetitionSequence:
     gotoReviewSavedPetitionSequence as unknown as Function,
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,
@@ -902,7 +903,7 @@ export const presenterSequences = {
     gotoUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoUserContactEditSequence:
     gotoUserContactEditSequence as unknown as Function,
-  gotoVerifyEmailSequence: gotoVerifyEmailSequence as unknown as Function,
+  gotoVerifyEmailSequence,
   gotoViewAllDocumentsSequence:
     gotoViewAllDocumentsSequence as unknown as Function,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
@@ -971,6 +972,8 @@ export const presenterSequences = {
     openAddToTrialModalSequence as unknown as Function,
   openAppMaintenanceModalSequence:
     openAppMaintenanceModalSequence as unknown as Function,
+  openAppUpdatedModalSequence:
+    openAppUpdatedModalSequence as unknown as Function,
   openBlockFromTrialModalSequence:
     openBlockFromTrialModalSequence as unknown as Function,
   openCancelDraftDocumentModalSequence:
@@ -1100,6 +1103,8 @@ export const presenterSequences = {
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
   prioritizeCaseSequence: prioritizeCaseSequence as unknown as Function,
+  redirectToDashboardSequence:
+    redirectToDashboardSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
   refreshStatisticsSequence: refreshStatisticsSequence as unknown as Function,
   removeBatchSequence: removeBatchSequence as unknown as Function,
@@ -1129,10 +1134,10 @@ export const presenterSequences = {
   resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
+  reviewCaseAssociationRequestSequence:
+    reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  reviewRequestAccessInformationSequence:
-    reviewRequestAccessInformationSequence as unknown as Function,
   runTrialSessionPlanningReportSequence:
     runTrialSessionPlanningReportSequence as unknown as Function,
   saveCourtIssuedDocketEntrySequence:

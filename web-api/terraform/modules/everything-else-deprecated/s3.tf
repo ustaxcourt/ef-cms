@@ -1,9 +1,67 @@
 data "aws_caller_identity" "current" {}
 
+resource "aws_iam_role" "s3_replication_role" {
+  name = "s3_bucket_replication_role_${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "s3_replication_policy" {
+  name = "s3_replication_policy_${var.environment}"
+  role = aws_iam_role.s3_replication_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:*",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_s3_bucket" "documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
-  acl      = "private"
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_replication_configuration" "documents_s3_replication_us_east_1" {
+  depends_on = [aws_s3_bucket_versioning.documents_s3_versioning_us_east_1]
+  role       = aws_iam_role.s3_replication_role.arn
+  bucket     = aws_s3_bucket.documents_us_east_1.id
+
+  rule {
+    id     = "duplicate all documents from east to west"
+    status = "Enabled"
+    destination {
+      bucket        = aws_s3_bucket.documents_us_west_1.arn
+      storage_class = "STANDARD"
+    }
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_east_1" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
 
   cors_rule {
     allowed_headers = ["Authorization"]
@@ -11,44 +69,39 @@ resource "aws_s3_bucket" "documents_us_east_1" {
     allowed_origins = ["*"]
     max_age_seconds = 3000
   }
+}
 
-  versioning {
-    enabled = true
-  }
+resource "aws_s3_bucket_lifecycle_configuration" "documents_s3_lc_us_east_1" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
 
-  tags = {
-    environment = var.environment
-  }
-
-  lifecycle_rule {
-    prefix  = "paper-service-pdf/"
-    enabled = true
+  rule {
+    id     = "remove_paper_service_documents_rule"
+    status = "Enabled"
 
     expiration {
       days = 3
     }
-  }
 
-  replication_configuration {
-    role = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_${var.environment}"
-
-    rules {
-      status = "Enabled"
-      prefix = ""
-
-      destination {
-        bucket        = aws_s3_bucket.documents_us_west_1.arn
-        storage_class = "STANDARD"
-      }
+    filter {
+      prefix = "paper-service-pdf/"
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_versioning" "documents_s3_versioning_us_east_1" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_east_1" {
+  bucket = aws_s3_bucket.documents_us_east_1.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -93,7 +146,16 @@ resource "aws_s3_bucket_public_access_block" "block_documents_east" {
 resource "aws_s3_bucket" "documents_us_west_1" {
   provider = aws.us-west-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-west-1"
-  acl      = "private"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_west_1" {
+  bucket = aws_s3_bucket.documents_us_west_1.id
+
+  provider = aws.us-west-1
 
   cors_rule {
     allowed_headers = ["Authorization"]
@@ -101,30 +163,42 @@ resource "aws_s3_bucket" "documents_us_west_1" {
     allowed_origins = ["*"]
     max_age_seconds = 3000
   }
+}
 
-  versioning {
-    enabled = true
-  }
+resource "aws_s3_bucket_lifecycle_configuration" "documents_s3_lc_us_west_1" {
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
 
-  lifecycle_rule {
-    prefix  = "paper-service-pdf/"
-    enabled = true
+  rule {
+    id     = "remove_paper_service_documents_rule"
+    status = "Enabled"
 
     expiration {
       days = 3
     }
-  }
 
-  tags = {
-    environment = var.environment
+    filter {
+      prefix = "paper-service-pdf/"
+    }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_versioning" "documents_s3_versioning_us_west_1" {
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_west_1" {
+  bucket   = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -141,7 +215,14 @@ resource "aws_s3_bucket_public_access_block" "block_documents_west" {
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
-  acl      = "private"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_east_1" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
 
   cors_rule {
     allowed_headers = ["Authorization"]
@@ -149,29 +230,35 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
     allowed_origins = ["*"]
     max_age_seconds = 3000
   }
+}
 
-  versioning {
-    enabled = true
-  }
+resource "aws_s3_bucket_lifecycle_configuration" "temp_documents_s3_lc_us_east_1" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
 
-  tags = {
-    environment = var.environment
-  }
-
-  lifecycle_rule {
-    enabled = true
+  rule {
+    id     = "remove_temp_documents_rule"
+    status = "Enabled"
 
     expiration {
       days = 1
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_versioning" "temp_documents_s3_versioning_us_east_1" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "temp_documents_sse_us_east_1" {
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -188,7 +275,15 @@ resource "aws_s3_bucket_public_access_block" "block_temp_east" {
 resource "aws_s3_bucket" "temp_documents_us_west_1" {
   provider = aws.us-west-1
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
-  acl      = "private"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_west_1" {
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
 
   cors_rule {
     allowed_headers = ["Authorization"]
@@ -196,29 +291,39 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
     allowed_origins = ["*"]
     max_age_seconds = 3000
   }
+}
 
-  versioning {
-    enabled = true
-  }
+resource "aws_s3_bucket_lifecycle_configuration" "temp_documents_s3_lc_us_west_1" {
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
 
-  tags = {
-    environment = var.environment
-  }
-
-  lifecycle_rule {
-    enabled = true
+  rule {
+    id     = "remove_temp_documents_rule"
+    status = "Enabled"
 
     expiration {
       days = 1
     }
   }
+}
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+resource "aws_s3_bucket_versioning" "temp_documents_s3_versioning_us_west_1" {
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "temp_documents_sse_us_west_1" {
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -260,21 +365,20 @@ resource "aws_s3_bucket" "smoketest_email_inbox" {
   count    = var.environment == "prod" ? 0 : 1
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
-  acl      = "private"
-
-  versioning {
-    enabled = false
-  }
 
   tags = {
     environment = var.environment
   }
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "smoketest_email_inbox_sse" {
+  bucket = aws_s3_bucket.smoketest_email_inbox[0].id
+  count  = var.environment == "prod" ? 0 : 1
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }

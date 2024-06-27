@@ -1,15 +1,10 @@
-/**
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.key the key of the document to get
- * @returns {Promise<any>} the promise of the call to the storage client
- */
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const getPublicDownloadPolicyUrl = ({
   applicationContext,
   key,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   key: string;
 }): Promise<{ url: string }> => {
   return new Promise((resolve, reject) => {
@@ -29,7 +24,7 @@ export const getPublicDownloadPolicyUrl = ({
           return reject(err);
         }
         resolve({
-          url: applicationContext.documentUrlTranslator({
+          url: applicationContext.getUtilities().documentUrlTranslator({
             applicationContext,
             documentUrl: data,
             useTempBucket: false,
