@@ -1,10 +1,12 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const myAccountHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 
   const showMyContactInformation =

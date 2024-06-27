@@ -2,9 +2,7 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { saveDocumentFromLambda } from './saveDocumentFromLambda';
 
 describe('saveDocumentFromLambda', () => {
-  let putObjectStub = jest.fn().mockReturnValue({
-    promise: () => Promise.resolve(true),
-  });
+  let putObjectStub = jest.fn();
 
   const expectedDocketEntryId = 'abc';
   const expectedArray = new Uint8Array([123]);
@@ -78,10 +76,8 @@ describe('saveDocumentFromLambda', () => {
   it('should retry putObject call if it fails the first time', async () => {
     putObjectStub = jest
       .fn()
-      .mockReturnValueOnce(new Error('fail'))
-      .mockReturnValueOnce({
-        promise: () => Promise.resolve(true),
-      });
+      .mockRejectedValueOnce(new Error('fail'))
+      .mockResolvedValueOnce({});
 
     applicationContext.getStorageClient = () => ({
       putObject: putObjectStub,

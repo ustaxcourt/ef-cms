@@ -1,74 +1,107 @@
-import { zipS3Files } from './zipS3Files';
-import archiver from 'archiver';
-import s3FilesLib from 's3-files';
-import stream from 'stream';
+import { AsyncZipDeflate, Zip } from 'fflate';
+import { PassThrough, Writable } from 'stream';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { Upload } from '@aws-sdk/lib-storage';
 
-/**
- * zipDocuments
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Array} providers.fileNames the names of the files to zip
- * @param {Array} providers.s3Ids the s3 ids of the files to zip
- * @param {string} providers.zipName the name of the generated zip file
- * @returns {Promise} the created zip
- */
-export const zipDocuments = ({
-  applicationContext,
-  extraFileNames,
-  extraFiles,
-  fileNames,
-  onEntry,
-  onError,
-  onProgress,
-  onUploadStart,
-  s3Ids,
-  zipName,
-}: {
-  applicationContext: IApplicationContext;
-  extraFileNames: string[];
-  extraFiles: any[];
-  fileNames: string[];
-  onEntry: (entryData: any) => void;
-  onError: (error: any) => void;
-  onProgress: (data: any) => void;
-  onUploadStart: () => void;
-  s3Ids: string[];
-  zipName: string;
-}) => {
-  return new Promise((resolve, reject) => {
-    const { documentsBucketName, tempDocumentsBucketName } =
-      applicationContext.environment;
-
-    const s3Client = applicationContext.getStorageClient();
-
-    onUploadStart?.();
-
-    const passThrough = new stream.PassThrough();
-
-    s3Client.upload(
-      {
-        Body: passThrough,
-        Bucket: tempDocumentsBucketName,
-        Key: zipName,
-      },
-      () => resolve(undefined),
-    );
-
-    passThrough.on('error', reject);
-
-    zipS3Files({
-      additionalFileNames: extraFileNames,
-      additionalFiles: extraFiles,
-      archiver,
-      bucket: documentsBucketName,
-      onEntry,
-      onError,
-      onProgress,
-      s3Client,
-      s3FilesLib,
-      s3Keys: s3Ids,
-      s3KeysFileNames: fileNames,
-    }).pipe(passThrough);
-  });
+export type ProgressData = {
+  totalFiles: number;
+  filesCompleted: number;
 };
+
+export async function zipDocuments(
+  applicationContext: ServerApplicationContext,
+  {
+    documents,
+    onProgress,
+    outputZipName,
+  }: {
+    onProgress?: (params: ProgressData) => Promise<void> | void;
+    documents: {
+      key: string;
+      filePathInZip: string;
+      useTempBucket: boolean;
+    }[];
+    outputZipName: string;
+  },
+): Promise<void> {
+  const passThrough = new PassThrough({ highWaterMark: 1024 * 1024 * 100 });
+
+  const upload = new Upload({
+    client: applicationContext.getStorageClient(),
+    params: {
+      Body: passThrough,
+      Bucket: applicationContext.environment.tempDocumentsBucketName,
+      Key: outputZipName,
+    },
+  });
+
+  const writable = new Writable({
+    write(chunk, encoding, callback) {
+      callback();
+    },
+  });
+
+  passThrough.pipe(writable);
+
+  // Start the upload process
+  const uploadPromise = upload.done();
+
+  const zip = new Zip((err, data, final) => {
+    if (err) {
+      console.log('Error creating zip stream');
+      throw err;
+    }
+
+    passThrough.write(data);
+
+    if (final) {
+      passThrough.end();
+    }
+  });
+
+  for (let index = 0; index < documents.length; index++) {
+    const document = documents[index];
+
+    const response = await applicationContext.getStorageClient().getObject({
+      Bucket: document.useTempBucket
+        ? applicationContext.environment.tempDocumentsBucketName
+        : applicationContext.environment.documentsBucketName,
+      Key: document.key,
+    });
+    if (!response.Body) {
+      throw new Error(
+        `Unable to get document (${document.key}) from persistence.`,
+      );
+    }
+
+    // Transform s3 getobject into a stream of data that can be piped into the zip processor
+    const bodyStream: ReadableStream<Uint8Array> =
+      response.Body.transformToWebStream();
+    const reader = bodyStream.getReader();
+    const compressedPdfStream = new AsyncZipDeflate(document.filePathInZip);
+    zip.add(compressedPdfStream);
+
+    let continueReading = true;
+    while (continueReading) {
+      const unzippedChunk = await reader.read();
+      const nextChunk = unzippedChunk.value || new Uint8Array();
+      continueReading = !unzippedChunk.done;
+      compressedPdfStream.push(nextChunk, unzippedChunk.done);
+      while (passThrough.readableLength > 1024 * 1024 * 10) {
+        // Wait for the buffer to be drained, before downloading more files
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+    }
+    reader.releaseLock();
+
+    if (onProgress) {
+      await onProgress({
+        filesCompleted: index + 1,
+        totalFiles: documents.length,
+      });
+    }
+  }
+
+  zip.end();
+  await uploadPromise;
+}
