@@ -2,8 +2,8 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
 import { generatePetitionPdfAction } from '@web-client/presenter/actions/generatePetitionPdfAction';
 import { generatePetitionPreviewPdfUrlAction } from '@web-client/presenter/actions/generatePetitionPreviewPdfUrlAction';
-import { getFilePetitionPetitionInformationAction } from '@web-client/presenter/actions/getFilePetitionPetitionInformationAction';
-import { getFilePetitionPetitionerInformationAction } from '@web-client/presenter/actions/getFilePetitionPetitionerInformationAction';
+import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
+import { getStep2DataAction } from '@web-client/presenter/actions/getStep2DataAction';
 import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAction';
 import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
 import { getStep5DataAction } from '@web-client/presenter/actions/getStep5DataAction';
@@ -24,8 +24,8 @@ export const updatedFilePetitionCompleteStep5Sequence = [
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       stopShowValidationAction,
-      getFilePetitionPetitionInformationAction,
-      getFilePetitionPetitionerInformationAction,
+      getStep1DataAction,
+      getStep2DataAction,
       getStep3DataAction,
       getStep4DataAction,
       formatPetitionAction,

@@ -7,9 +7,9 @@ import {
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { validateFilePetitionPetitionerInformationAction } from '@web-client/presenter/actions/validateFilePetitionPetitionerInformationAction';
+import { validateUploadPetitionStep1Action } from '@web-client/presenter/actions/validateUploadPetitionStep1Action';
 
-describe('validateFilePetitionPetitionerInformationAction', () => {
+describe('validateUploadPetitionStep1Action', () => {
   const mockSuccessPath = jest.fn();
   const mockErrorPath = jest.fn();
 
@@ -23,12 +23,12 @@ describe('validateFilePetitionPetitionerInformationAction', () => {
   });
 
   it('should call the valid path when the data gathered step 2 passes validation', async () => {
-    runAction(validateFilePetitionPetitionerInformationAction, {
+    runAction(validateUploadPetitionStep1Action, {
       modules: {
         presenter,
       },
       props: {
-        petitionerInformation: {
+        step1Data: {
           countryType: COUNTRY_TYPES.DOMESTIC,
           filingType: FILING_TYPES[ROLES.petitioner][0],
           partyType: PARTY_TYPES.petitioner,
@@ -41,12 +41,12 @@ describe('validateFilePetitionPetitionerInformationAction', () => {
   });
 
   it('should call the invalid path the data gathered step 2 does not pass validation', async () => {
-    runAction(validateFilePetitionPetitionerInformationAction, {
+    runAction(validateUploadPetitionStep1Action, {
       modules: {
         presenter,
       },
       props: {
-        petitionerInformation: {},
+        step1Data: {},
       },
     });
 

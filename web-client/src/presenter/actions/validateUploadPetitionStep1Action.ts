@@ -1,13 +1,13 @@
-import { UploadPetitionStep2 } from '@shared/business/entities/startCase/UploadPetitionStep2';
+import { UploadPetitionStep1 } from '@shared/business/entities/startCase/UploadPetitionStep1';
 
-export const validateFilePetitionPetitionerInformationAction = ({
+export const validateUploadPetitionStep1Action = ({
   path,
   props,
-}: ActionProps<{ petitionerInformation: any }>) => {
-  const { petitionerInformation } = props;
+}: ActionProps<{ step1Data: any }>) => {
+  const { step1Data } = props;
 
-  const errors = new UploadPetitionStep2(
-    petitionerInformation,
+  const errors = new UploadPetitionStep1(
+    step1Data,
   ).getFormattedValidationErrors();
 
   if (!errors) {

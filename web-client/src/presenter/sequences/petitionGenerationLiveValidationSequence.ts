@@ -1,12 +1,12 @@
 import { determineStepPathAction } from '@web-client/presenter/actions/determineStepPathAction';
-import { getFilePetitionPetitionInformationAction } from '@web-client/presenter/actions/getFilePetitionPetitionInformationAction';
-import { getFilePetitionPetitionerInformationAction } from '@web-client/presenter/actions/getFilePetitionPetitionerInformationAction';
+import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
+import { getStep2DataAction } from '@web-client/presenter/actions/getStep2DataAction';
 import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAction';
 import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
 import { setSingleValidationErrorAction } from '@web-client/presenter/actions/setSingleValidationErrorAction';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
-import { validateFilePetitionPetitionInformationAction } from '@web-client/presenter/actions/validateFilePetitionPetitionInformationAction';
-import { validateFilePetitionPetitionerInformationAction } from '@web-client/presenter/actions/validateFilePetitionPetitionerInformationAction';
+import { validateUploadPetitionStep1Action } from '@web-client/presenter/actions/validateUploadPetitionStep1Action';
+import { validateUploadPetitionStep2Action } from '@web-client/presenter/actions/validateUploadPetitionStep2Action';
 import { validateUploadPetitionStep3Action } from '@web-client/presenter/actions/validateUploadPetitionStep3Action';
 import { validateUploadPetitionStep4Action } from '@web-client/presenter/actions/validateUploadPetitionStep4Action';
 
@@ -19,15 +19,14 @@ export const petitionGenerationLiveValidationSequence = [
   startShowValidationAction,
   determineStepPathAction,
   {
-    PetitionInformation: [
-      getFilePetitionPetitionInformationAction,
-      validateFilePetitionPetitionInformationAction,
+    step1: [
+      getStep1DataAction,
+      validateUploadPetitionStep1Action,
       handleValidationErrorsRoute,
     ],
-
-    PetitionerInformation: [
-      getFilePetitionPetitionerInformationAction,
-      validateFilePetitionPetitionerInformationAction,
+    step2: [
+      getStep2DataAction,
+      validateUploadPetitionStep2Action,
       handleValidationErrorsRoute,
     ],
     step3: [

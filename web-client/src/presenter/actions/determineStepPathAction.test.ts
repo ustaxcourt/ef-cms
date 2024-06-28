@@ -18,8 +18,8 @@ describe('determineStepPathAction', () => {
   });
 
   [
-    [1, 'PetitionerInformation'],
-    [2, 'PetitionInformation'],
+    [1, 'step1'],
+    [2, 'step2'],
     [3, 'step3'],
     [4, 'step4'],
     [5, 'step5'],

@@ -12,7 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const FilePetitionPetitionInformation = connect(
+export const UpdatedFilePetitionStep2 = connect(
   {
     constants: state.constants,
     form: state.form,
@@ -20,7 +20,7 @@ export const FilePetitionPetitionInformation = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function FilePetitionPetitionInformation({
+  function UpdatedFilePetitionStep2({
     constants,
     form,
     setPetitionTypeSequence,
@@ -132,7 +132,7 @@ export const FilePetitionPetitionInformation = connect(
                 id="petition-file"
                 name="petitionFile"
                 updateFormValueSequence="updateFormValueSequence"
-                validationSequence="validateUpdatedFilePetitionStep1Sequence"
+                validationSequence="validateUpdatedFilePetitionStep2Sequence"
               />
             </FormGroup>
             <div className="grid-row grid-gap">
