@@ -76,8 +76,6 @@ export const updateCourtIssuedOrder = async (
       richText: documentMetadata.draftOrderState.richText,
     };
 
-    console.log('contentToStore', contentToStore);
-
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
