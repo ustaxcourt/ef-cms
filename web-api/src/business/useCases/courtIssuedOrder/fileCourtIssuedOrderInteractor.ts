@@ -46,10 +46,6 @@ export const fileCourtIssuedOrder = async (
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
-  console.log(
-    '********************** documentMetadata.documentContents the first time',
-    documentMetadata.documentContents,
-  );
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
@@ -60,7 +56,6 @@ export const fileCourtIssuedOrder = async (
   }
 
   if (shouldScrapePDFContents) {
-    console.log('*********************** We are scraping');
     const { Body: pdfBuffer } = await applicationContext
       .getStorageClient()
       .getObject({
