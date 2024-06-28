@@ -4,6 +4,7 @@ import { CharactersRemainingHint } from '@web-client/ustc-ui/CharactersRemaining
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { ErrorNotification } from './ErrorNotification';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
+import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -19,6 +20,8 @@ export const OrderResponse = connect(
       sequences.formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     orderResponseHelper: state.orderResponseHelper,
+    statusReportOrderResponsePdfPreviewSequence:
+      sequences.statusReportOrderResponsePdfPreviewSequence,
     submitStatusReportOrderResponseSequence:
       sequences.submitStatusReportOrderResponseSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -31,6 +34,7 @@ export const OrderResponse = connect(
     formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence,
     orderResponseHelper,
+    statusReportOrderResponsePdfPreviewSequence,
     submitStatusReportOrderResponseSequence,
     updateFormValueSequence,
     validationErrors,
@@ -403,6 +407,18 @@ export const OrderResponse = connect(
                 </Button>
 
                 <Button
+                  secondary
+                  className="margin-right-0"
+                  data-testid="save-signature-button"
+                  id="save-signature-button"
+                  onClick={() => {
+                    statusReportOrderResponsePdfPreviewSequence();
+                  }}
+                >
+                  Preview PDF
+                </Button>
+
+                <Button
                   link
                   icon={['fa', 'arrow-alt-circle-left']}
                   onClick={() => navigateBackSequence()}
@@ -414,54 +430,7 @@ export const OrderResponse = connect(
             <div className="grid-col-7">
               <div className="grid-row">
                 <div className="grid-col-12">
-                  {/* <div className="sign-pdf-interface">
-                    <span id="stamp" ref={signatureRef}>
-                      <span className="text-normal" id="stamp-text">
-                        It is ORDERED as follows:
-                        <br />
-                        <span className="font-sans-2xs">
-                          This motion is{' '}
-                          <span className="text-ls-1 text-bold font-sans-lg">
-                            {form.disposition?.toUpperCase()}
-                          </span>{' '}
-                          {form.deniedAsMoot && 'as moot '}
-                          {form.deniedWithoutPrejudice && 'without prejudice'}
-                          <br />
-                        </span>
-                        {(form.strickenFromTrialSession ||
-                          form.jurisdictionalOption ||
-                          (form.dueDateMessage && form.date) ||
-                          form.customText) && <hr className="narrow-hr" />}
-                        {form.strickenFromTrialSession && (
-                          <>
-                            - {constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
-                            <br />
-                          </>
-                        )}
-                        {form.jurisdictionalOption && (
-                          <>
-                            - {form.jurisdictionalOption} -<br />
-                          </>
-                        )}
-                        <span>
-                          {form.date && (
-                            <>
-                              - {form.dueDateMessage} {form.date} -
-                              <br />
-                            </>
-                          )}
-                          {form.customText && <>- {form.customText} -</>}
-                        </span>
-                      </span>
-                      <hr className="narrow-hr" />
-                      <span id="stamp-signature">
-                        (Signed) {pdfForSigning.nameForSigning}
-                        <br />
-                        {pdfForSigning.nameForSigningLine2}
-                      </span>
-                    </span>
-                    <canvas id="sign-pdf-canvas" ref={canvasRef}></canvas>
-                  </div> */}
+                  <PdfPreview />
                 </div>
               </div>
             </div>
