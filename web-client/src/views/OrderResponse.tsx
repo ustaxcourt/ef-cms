@@ -55,7 +55,7 @@ export const OrderResponse = connect(
                 <div className="grid-header grid-row padding-left-205">
                   Select one or more options:
                 </div>
-                <div className="stamp-order-form">
+                <div className="stamp-order-form margin-top-2">
                   {orderResponseHelper.isLeadCase && (
                     <>
                       <FormGroup
@@ -208,10 +208,10 @@ export const OrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="grid-container stamp-form-group"
+                    className="grid-container padding-left-2"
                     errorText={validationErrors.strickenFromTrialSessions}
                   >
-                    <div className="display-inline-block grid-col-6">
+                    <div>
                       <input
                         checked={form.strickenFromTrialSessions || false}
                         className="usa-checkbox__input"
@@ -379,7 +379,6 @@ export const OrderResponse = connect(
               </div>
               <Button
                 link
-                className="margin-left-205"
                 data-testid="clear-optional-fields"
                 onClick={e => {
                   e.preventDefault();
@@ -389,9 +388,9 @@ export const OrderResponse = connect(
                 Clear All
               </Button>
 
-              <div className="margin-bottom-1 display-flex flex-justify-end">
+              <div className="margin-bottom-2 margin-top-2">
                 <Button
-                  className="margin-right-0"
+                  className="margin-right-1"
                   data-testid="save-signature-button"
                   id="save-signature-button"
                   onClick={() => submitStatusReportOrderResponseSequence()}
@@ -401,7 +400,7 @@ export const OrderResponse = connect(
 
                 <Button
                   secondary
-                  className="margin-right-0"
+                  className="margin-right-1"
                   data-testid="save-signature-button"
                   id="save-signature-button"
                   onClick={() => {
@@ -411,24 +410,18 @@ export const OrderResponse = connect(
                   Preview PDF
                 </Button>
 
-                <Button
-                  link
-                  icon={['fa', 'arrow-alt-circle-left']}
-                  onClick={() => navigateBackSequence()}
-                >
+                <Button link onClick={() => navigateBackSequence()}>
                   Cancel
                 </Button>
               </div>
             </div>
             <div className="grid-col-7">
-              <div className="grid-row">
-                <div className="grid-col-12">
-                  <div>
-                    <span className="text-bold">Docket entry preview:</span>{' '}
-                    {orderResponseHelper.docketEntryDescription}
-                  </div>
-                  <PdfPreview />
-                </div>
+              <div>
+                <span className="text-bold">Docket entry preview:</span>{' '}
+                {orderResponseHelper.docketEntryDescription}
+              </div>
+              <div className="statusReportOrderResponsePdfPreview">
+                <PdfPreview />
               </div>
             </div>
           </div>
