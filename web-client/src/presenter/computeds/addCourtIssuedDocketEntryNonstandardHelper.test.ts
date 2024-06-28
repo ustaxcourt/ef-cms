@@ -10,6 +10,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
 
   const addCourtIssuedDocketEntryNonstandardHelper = withAppContextDecorator(
     addCourtIssuedDocketEntryNonstandardHelperComputed,
+    applicationContext,
   );
 
   const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
@@ -66,7 +67,9 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
   });
 
-  it('returns showDateFirst = true and showFreeText = true when state.form.eventCode is OAP (scenario = Type D)', () => {
+  it('returns showDateFirst = true, showFreeText = true, and the minimun available date when state.form.eventCode is OAP (scenario = Type D)', () => {
+    const mockDate = '2088-01-01';
+    applicationContext.getUtilities().formatNow.mockReturnValue(mockDate);
     let testState = { ...state, form: { eventCode: 'OAP' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
@@ -74,6 +77,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
     expect(result).toMatchObject({
       dateLabel: 'Date',
+      minDate: mockDate,
       showDateFirst: true,
       showDateLast: false,
       showDocketNumbers: false,
