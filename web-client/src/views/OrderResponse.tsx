@@ -203,7 +203,7 @@ export const OrderResponse = connect(
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
                           key: 'dueDate',
-                          toFormat: constants.DATE_FORMATS.MMDDYY,
+                          toFormat: constants.DATE_FORMATS.MMDDYYYY,
                           value: e.target.value,
                         });
                       }}
@@ -430,6 +430,10 @@ export const OrderResponse = connect(
             <div className="grid-col-7">
               <div className="grid-row">
                 <div className="grid-col-12">
+                  <div>
+                    <span className="text-bold">Docket entry preview:</span>{' '}
+                    {orderResponseHelper.docketEntryDescription}
+                  </div>
                   <PdfPreview />
                 </div>
               </div>

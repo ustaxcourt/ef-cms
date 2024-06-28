@@ -23,13 +23,14 @@ only 140 or 160 characters long. Which is it?
 *Question*: What should the order title be? Same as docket entry description? 
 *Answer*: ??
 
+*Question*: If a case is stricken from the trial session, should "it is further" be displayed conditionally if there are additional fields? 
+*Answer*: ??
+
 ## Things to do
 
-- Finish submit Order as Draft (Note: Edit should reopen form, maybe special order type?)
+- Edit view must use the OrderResponse.tsx component
 
-- Figure out how to handle the Preview Pdf Functionality (UX committed to creating additional mock on 6/26/2024)
-
-- Update CSS to Match Mocks
+- Update CSS to Match Mocks (pretag should match existing formatting)
 
 - Determine if Additional order text should maintain formatting (line breaks + spacing, thought is yes?)
 
