@@ -143,22 +143,19 @@ export const ContactSecondaryUpdated = connect(
                   onChange={onChange}
                 />
               )}
-              <PlaceOfLegalResidenceDropdown
-                bind={bind}
-                registerRef={registerRef}
-                type="contactSecondary"
-                onBlurSequence={() => {
-                  onBlurSequence({
-                    validationKey: [
-                      'contactSecondary',
-                      'placeOfLegalResidence',
-                    ],
-                  });
-                }}
-                onChange={onChange}
-              />
             </>
           )}
+          <PlaceOfLegalResidenceDropdown
+            bind={bind}
+            registerRef={registerRef}
+            type="contactSecondary"
+            onBlurSequence={() => {
+              onBlurSequence({
+                validationKey: ['contactSecondary', 'placeOfLegalResidence'],
+              });
+            }}
+            onChange={onChange}
+          />
           <FormGroup
             className="phone-input"
             errorText={
@@ -248,7 +245,10 @@ function SameAddressCheckbox({
   useSameAsPrimary,
 }) {
   return (
-    <FormGroup>
+    <FormGroup
+      className="max-width-fit-content margin-bottom-4"
+      omitFormGroupClass={true}
+    >
       <input
         checked={useSameAsPrimary}
         className="usa-checkbox__input"

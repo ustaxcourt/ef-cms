@@ -40,6 +40,13 @@ export const Petition = ({
   contactSecondary?: { [key: string]: string };
 }) => {
   const BUSINESS_TYPE_VALUES: string[] = Object.values(BUSINESS_TYPES);
+
+  const noticesDontHaveDateAndCityAndStateIssuingOffice = irsNotices.every(
+    notice =>
+      !notice.noticeIssuedDateFormatted && !notice.cityAndStateIssuingOffice,
+  );
+
+  const noticesDontHaveTaxYear = irsNotices.every(notice => !notice.taxYear);
   return (
     <div id="petition-pdf">
       <PetitionPrimaryHeader />
@@ -64,42 +71,30 @@ export const Petition = ({
           )}
           <li className="list-bold">
             If applicable, provide the date(s) the IRS issued the NOTICE(S) for
-            the above:
+            the above and the city and state of the IRS office(s) issuing the
+            NOTICE(S):
           </li>
-          {irsNotices.length > 1 ? (
+          {noticesDontHaveDateAndCityAndStateIssuingOffice ? (
+            <span>N/A</span>
+          ) : irsNotices.length > 1 ? (
             <ol className="list-disc">
-              {irsNotices.map(irsNotice => {
-                if (
-                  !irsNotice.noticeIssuedDateFormatted &&
-                  !irsNotice.cityAndStateIssuingOffice
-                ) {
-                  return (
-                    <li key={irsNotice.key}>
-                      <span>N/A</span>
-                    </li>
-                  );
-                } else {
-                  return (
-                    <li key={irsNotice.key}>
-                      <span>
-                        {irsNotice.noticeIssuedDateFormatted || 'N/A'}
-                      </span>
-                      <span>
-                        {irsNotice.cityAndStateIssuingOffice || 'N/A'}
-                      </span>
-                    </li>
-                  );
-                }
-              })}
+              {irsNotices.map(irsNotice => (
+                <li key={irsNotice.key || 'single'}>
+                  {renderIrsNotice(irsNotice)}
+                </li>
+              ))}
             </ol>
           ) : (
-            <p>{noticeIssuedDate ? `${noticeIssuedDate}` : 'N/A'}</p>
+            <p>{renderIrsNotice(irsNotices[0])}</p>
           )}
+
           <li className="list-bold">
             Provide the year(s) or period(s) for which the NOTICE(S) was/were
             issued:
           </li>
-          {irsNotices.length > 1 ? (
+          {noticesDontHaveTaxYear ? (
+            <span>N/A</span>
+          ) : irsNotices.length > 1 ? (
             <ol className="list-disc">
               {irsNotices.map(irsNotice => (
                 <li key={irsNotice.taxYear}>
@@ -110,6 +105,7 @@ export const Petition = ({
           ) : (
             <p>{taxYear || 'N/A'}</p>
           )}
+
           <li className="list-bold">
             Which case procedure and trial location are you requesting?
           </li>
@@ -126,7 +122,7 @@ export const Petition = ({
             Explain why you disagree with the IRS action(s) in this case (please
             add each reason separately):
           </li>
-          <ol>
+          <ol className="petition-list-item">
             {petitionReasons.map(reason => {
               return <li key={reason}>{reason}</li>;
             })}
@@ -135,7 +131,7 @@ export const Petition = ({
             State the facts upon which you rely (please add each fact
             separately):
           </li>
-          <ol>
+          <ol className="petition-list-item">
             {petitionFacts.map(fact => {
               return <li key={fact}>{fact}</li>;
             })}
@@ -263,4 +259,19 @@ export const Petition = ({
       </div>
     </div>
   );
+};
+
+const renderIrsNotice = irsNotice => {
+  if (
+    !irsNotice.noticeIssuedDateFormatted &&
+    !irsNotice.cityAndStateIssuingOffice
+  ) {
+    return <span>N/A</span>;
+  } else {
+    return (
+      <span>
+        {`${irsNotice.noticeIssuedDateFormatted || 'N/A'} - ${irsNotice.cityAndStateIssuingOffice || 'N/A'}`}
+      </span>
+    );
+  }
 };

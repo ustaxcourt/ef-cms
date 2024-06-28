@@ -67,7 +67,6 @@ describe('getFilePetitionPetitionerInformationAction', () => {
         city: 'TEST_PRIMARY_city',
         country: 'TEST_PRIMARY_country',
         countryType: 'TEST_PRIMARY_countryType',
-        placeOfLegalResidence: 'TEST_PRIMARY_placeOfLegalResidence',
         postalCode: 'TEST_PRIMARY_postalCode',
         secondary: true,
         state: 'TEST_PRIMARY_state',
