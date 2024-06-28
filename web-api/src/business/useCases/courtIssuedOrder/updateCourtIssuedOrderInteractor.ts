@@ -43,7 +43,9 @@ export const updateCourtIssuedOrder = async (
       docketNumber,
     });
 
+  console.log('case to update', caseToUpdate.docketNumberSuffix);
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  console.log('new case entity', caseEntity.docketNumberWithSuffix);
 
   const currentDocument = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryIdToEdit,
@@ -73,6 +75,8 @@ export const updateCourtIssuedOrder = async (
       documentContents: documentMetadata.documentContents,
       richText: documentMetadata.draftOrderState.richText,
     };
+
+    console.log('contentToStore', contentToStore);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
