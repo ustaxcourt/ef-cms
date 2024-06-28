@@ -1,4 +1,4 @@
-import { CaseAdvancedSearchParamsRequestType } from '@shared/business/useCases/caseAdvancedSearchInteractor';
+import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { get } from './requests';
 
 export const caseAdvancedSearchInteractor = (

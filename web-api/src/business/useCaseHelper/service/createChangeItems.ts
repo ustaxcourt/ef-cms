@@ -7,7 +7,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { addCoverToPdf } from '../../../../../shared/src/business/useCases/addCoverToPdf';
+import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 /**
