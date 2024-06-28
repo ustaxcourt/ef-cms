@@ -13,7 +13,7 @@ import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
 import classNames from 'classnames';
 
-export const FilePetitionPetitionerInformation = connect(
+export const UpdatedFilePetitionStep1 = connect(
   {
     constants: state.constants,
     form: state.form,
@@ -23,7 +23,7 @@ export const FilePetitionPetitionerInformation = connect(
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
-  function FilePetitionPetitionerInformation({
+  function UpdatedFilePetitionStep1({
     constants,
     form,
     resetSecondaryAddressSequence,

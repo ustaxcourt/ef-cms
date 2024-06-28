@@ -6,10 +6,10 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('formatPetitionAction', () => {
   const PROPS = {
-    petitionInformation: {},
-    petitionerInformation: {
+    step1Data: {
       contactPrimary: {},
     },
+    step2Data: {},
     step3Data: {
       caseType: CASE_TYPES_MAP.cdp,
       irsNotices: [
