@@ -184,13 +184,13 @@ export const OrderResponse = connect(
                   </FormGroup>
 
                   <FormGroup
-                    className="grid-container stamp-form-group"
+                    className="grid-container margin-top-2 padding-left-2"
                     errorText={orderResponseHelper.dueDateErrorText}
                   >
                     <DateSelector
                       defaultValue=""
                       disabled={!form.orderType}
-                      formGroupClassNames="display-inline-block padding-0 margin-left-5"
+                      formGroupClassNames="display-inline-block padding-0"
                       id="status-report-due-date"
                       label="Due date"
                       minDate={orderResponseHelper.minDate}
@@ -366,9 +366,7 @@ export const OrderResponse = connect(
                             value: e.target.value,
                           });
                         }}
-                      >
-                        Order
-                      </textarea>
+                      ></textarea>
                       <CharactersRemainingHint
                         // TODO character counter doesn't work when setting the
                         // default value of the field within the textarea
