@@ -1,4 +1,4 @@
-import { createOrder } from '../../../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order';
+import { createOrderOnConsolidatedCase } from '../../../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import { loginAsDocketClerk1 } from '../../../../../../helpers/authentication/login-as-helpers';
 
@@ -23,7 +23,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
         draftsCount = Number(text) || draftsCount;
       });
 
-    createOrder();
+    createOrderOnConsolidatedCase();
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
@@ -46,7 +46,7 @@ describe('Docket clerk creates and edits draft order with selected docket number
 
     loginAsDocketClerk1();
     goToCase(leadCase);
-    createOrder();
+    createOrderOnConsolidatedCase();
 
     cy.get('[data-testid="icon-tab-unread-messages-count"]')
       .invoke('text')
