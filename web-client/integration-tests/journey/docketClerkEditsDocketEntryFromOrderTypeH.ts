@@ -96,7 +96,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: 'Enter a valid date',
+      date: 'Date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(
