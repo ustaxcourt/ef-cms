@@ -18,14 +18,14 @@ const applyMessageChanges = ({ items }) => {
     if (!item.completedAt) {
       const ttl = calculateTimeToLive({
         numDays: 8,
-        timestamp: item.createdAt!, // Zach: I think I am unfamiliar with this, why do we want to delete messages 8 days after they were created?
+        timestamp: item.createdAt!,
       });
 
       // add outbox records
       itemsAfter.push({
         ...item,
         gsi1pk: undefined,
-        pk: `message|outbox|user|${item.fromUserId}`, // Zach: This is outside of the scope of the migration but I wanted to ask about creating duplicate records for the same information, rather than the same record with multiple ways it can be searched for.
+        pk: `message|outbox|user|${item.fromUserId}`,
         sk: item.createdAt,
         ttl: ttl.expirationTimestamp,
       });

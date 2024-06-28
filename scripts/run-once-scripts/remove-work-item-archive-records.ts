@@ -8,7 +8,6 @@ import {
 
 const findWorkItemArchiveRecords = async ({ applicationContext }) => {
   const userOutboxResults = await scan({
-    // Zach - I think our version of a "scan" will put the entire DynamoDB into memory which will cause this to crash
     ExpressionAttributeValues: {
       ':prefix': 'user-outbox|',
     },
