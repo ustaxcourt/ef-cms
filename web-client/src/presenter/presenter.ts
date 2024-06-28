@@ -503,6 +503,7 @@ import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/upda
 import { updateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/updateDocketEntryWorksheetSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
+import { updateFilePetitionSequence } from './sequences/updateFilePetitionSequence';
 import { updateFilingTypeSequence } from './sequences/updateFilingTypeSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
@@ -511,7 +512,7 @@ import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateFormValueUpdatedSequence } from '@web-client/presenter/sequences/updateFormValueUpdatedSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
-import { updateIrsNoticeIndexPropertySequence } from '@web-client/presenter/sequences/updateIrsNoticeIndexPropertySequence';
+import { updateIrsNoticeIndexPropertySequence } from './sequences/updateIrsNoticeIndexPropertySequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -1439,6 +1440,7 @@ export const presenterSequences = {
     updateDocketNumberSearchFormSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
+  updateFilePetitionSequence: updateFilePetitionSequence as unknown as Function,
   updateFilingTypeSequence: updateFilingTypeSequence as unknown as Function,
   updateFormValueAndCaseCaptionSequence:
     updateFormValueAndCaseCaptionSequence as unknown as Function,
