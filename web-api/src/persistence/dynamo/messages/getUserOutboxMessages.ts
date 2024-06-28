@@ -18,7 +18,7 @@ export const getUserOutboxMessages = async ({
     units: 'days',
   });
 
-  const results = (await queryFull({
+  const results = await queryFull<RawMessage>({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -29,7 +29,7 @@ export const getUserOutboxMessages = async ({
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
-  })) as unknown as RawMessage[];
+  });
 
   return results;
 };
