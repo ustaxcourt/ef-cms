@@ -187,17 +187,12 @@ export const OrderResponse = connect(
                     className="grid-container stamp-form-group"
                     errorText={orderResponseHelper.dueDateErrorText}
                   >
-                    <label
-                      className="usa-label"
-                      htmlFor="status-report-due-date"
-                    >
-                      Due date
-                    </label>
                     <DateSelector
                       defaultValue=""
                       disabled={!form.orderType}
                       formGroupClassNames="display-inline-block padding-0 margin-left-5"
                       id="status-report-due-date"
+                      label="Due date"
                       minDate={orderResponseHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {

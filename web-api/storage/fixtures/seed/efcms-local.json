@@ -337,7 +337,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -364,7 +366,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|100-22",
     "docketNumber": "100-22"
   },
@@ -634,7 +638,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -671,7 +677,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -708,7 +716,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -886,7 +896,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -969,7 +981,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
@@ -1006,7 +1020,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -1465,7 +1481,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -1487,7 +1505,9 @@
     "createdAt": "2020-01-02T16:05:45.979Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "cb323daf-c541-4645-bb44-232255d03d40",
@@ -1911,7 +1931,9 @@
     "eventCode": "EVID",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -2122,7 +2144,9 @@
     "eventCode": "P",
     "createdAt": "2021-03-01T16:26:49.115Z",
     "processingStatus": "pending",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Mona Schultz",
     "docketEntryId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
@@ -2736,7 +2760,9 @@
     "eventCode": "STIN",
     "createdAt": "2021-03-01T16:26:49.119Z",
     "processingStatus": "pending",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Mona Schultz",
     "docketEntryId": "2efcd272-da92-4e31-bedc-28cdad2e08b0",
@@ -2926,7 +2952,9 @@
     "eventCode": "MOTR",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -3753,7 +3781,9 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"filersMap\":{\"7805d1ab-18d0-43ec-bafb-654e83405416\":true},\"filers\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"practitioner\":[],\"dateReceivedMonth\":1,\"dateReceivedDay\":1,\"dateReceivedYear\":2018,\"primaryDocumentFileSize\":100,\"eventCode\":\"A\",\"category\":\"Answer (filed by respondent only)\",\"documentType\":\"Answer\",\"documentTitle\":\"Answer\",\"scenario\":\"Standard\",\"pending\":true,\"certificateOfServiceDate\":null,\"dateReceived\":\"2018-01-01T05:00:00.000Z\",\"createdAt\":\"2018-01-01T05:00:00.000Z\",\"docketNumber\":\"101-21\",\"isFileAttached\":false,\"isPaper\":true,\"receivedAt\":\"2018-01-01T05:00:00.000Z\"}",
     "pk": "case|101-21",
@@ -9982,7 +10012,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10009,7 +10041,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|101-22",
     "docketNumber": "101-22"
   },
@@ -10246,7 +10280,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10274,7 +10310,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|101-23",
     "docketNumber": "101-23"
   },
@@ -10408,7 +10446,9 @@
     "userId": "b3e1941f-230a-47bb-80ec-6b561c1765cd",
     "eventCode": "NCA",
     "processingStatus": "complete",
-    "filers": ["b3e1941f-230a-47bb-80ec-6b561c1765cd"],
+    "filers": [
+      "b3e1941f-230a-47bb-80ec-6b561c1765cd"
+    ],
     "servedPartiesCode": "B",
     "pk": "case|101-24",
     "servedAt": "2024-06-04T22:37:28.345Z",
@@ -10445,7 +10485,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["94b49406-60cd-4dd5-a1dd-8664374fa201"],
+    "filers": [
+      "94b49406-60cd-4dd5-a1dd-8664374fa201"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-24",
     "servedAt": "2024-06-04T22:35:01.144Z",
@@ -10482,7 +10524,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["94b49406-60cd-4dd5-a1dd-8664374fa201"],
+    "filers": [
+      "94b49406-60cd-4dd5-a1dd-8664374fa201"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-24",
     "servedAt": "2024-06-04T22:35:01.148Z",
@@ -10519,7 +10563,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["94b49406-60cd-4dd5-a1dd-8664374fa201"],
+    "filers": [
+      "94b49406-60cd-4dd5-a1dd-8664374fa201"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-24",
     "servedAt": "2024-06-04T22:35:01.148Z",
@@ -11007,7 +11053,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -11072,7 +11120,9 @@
     "createdAt": "2020-01-21T16:41:39.481Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
@@ -11106,7 +11156,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -11276,7 +11328,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11304,7 +11358,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|102-22",
     "docketNumber": "102-22"
   },
@@ -11496,10 +11552,58 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
+    "filers": [
+      "5da54af1-1969-4011-8275-a949084b7928"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.426Z",
+    "docketNumber": "102-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.126Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.126Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 7,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|102-67",
+    "servedAt": "2024-06-28T19:55:09.127Z",
     "docketNumber": "102-67"
   },
   {
@@ -11534,7 +11638,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["5da54af1-1969-4011-8275-a949084b7928"],
+    "filers": [
+      "5da54af1-1969-4011-8275-a949084b7928"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|102-67",
     "servedAt": "2023-04-03T15:52:59.423Z",
@@ -11671,7 +11777,9 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": ["5da54af1-1969-4011-8275-a949084b7928"],
+    "representing": [
+      "5da54af1-1969-4011-8275-a949084b7928"
+    ],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -11764,6 +11872,38 @@
     "docketNumber": "102-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-08-08T17:32:21.433Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|fe6a80d6-39f6-4a71-b649-36ccdb6788d6",
+    "caseTitle": "Dacey Cox",
+    "section": "docket",
+    "workItemId": "fe6a80d6-39f6-4a71-b649-36ccdb6788d6",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.127Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|fe6a80d6-39f6-4a71-b649-36ccdb6788d6",
+    "docketNumberWithSuffix": "102-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.126Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|102-67",
+    "docketNumber": "102-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.127Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -11943,7 +12083,9 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
+    "filers": [
+      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -12171,7 +12313,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -12212,7 +12356,9 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
@@ -12285,7 +12431,9 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -12353,7 +12501,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|103-20",
     "servedAt": "2020-09-25T19:27:16.630Z",
@@ -12380,7 +12530,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -12431,7 +12583,9 @@
       "countryType": "domestic"
     },
     "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "firmName": "GW Law Offices",
     "pk": "case|103-20",
@@ -12770,10 +12924,61 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "DISC",
     "processingStatus": "complete",
-    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
+    "filers": [
+      "93dc623e-6ba3-487b-a336-c2fe18db8188"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.587Z",
+    "docketNumber": "103-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Brett Osborne",
+        "email": "petitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      },
+      {
+        "name": "Britanney Wiley"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.130Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.130Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 7,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|103-67",
+    "servedAt": "2024-06-28T19:55:09.130Z",
     "docketNumber": "103-67"
   },
   {
@@ -12808,7 +13013,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
+    "filers": [
+      "93dc623e-6ba3-487b-a336-c2fe18db8188"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.588Z",
@@ -12880,7 +13087,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["93dc623e-6ba3-487b-a336-c2fe18db8188"],
+    "filers": [
+      "93dc623e-6ba3-487b-a336-c2fe18db8188"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|103-67",
     "servedAt": "2023-04-03T15:53:18.589Z",
@@ -12980,6 +13189,38 @@
     "docketNumber": "103-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-08-08T17:32:21.452Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|ea8e7abc-ead9-42ad-98e5-ddc963837b1e",
+    "caseTitle": "Britanney Wiley",
+    "section": "docket",
+    "workItemId": "ea8e7abc-ead9-42ad-98e5-ddc963837b1e",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.130Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|ea8e7abc-ead9-42ad-98e5-ddc963837b1e",
+    "docketNumberWithSuffix": "103-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.130Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|103-67",
+    "docketNumber": "103-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.130Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -13103,7 +13344,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -13139,7 +13382,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13172,7 +13417,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13345,7 +13592,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -13381,7 +13630,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13414,7 +13665,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13832,7 +14085,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -13868,7 +14123,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -13901,7 +14158,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -14044,7 +14303,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
+    "filers": [
+      "40eb0890-aab3-4925-8769-e056b30c502d"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.813Z",
@@ -14110,7 +14371,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
+    "filers": [
+      "40eb0890-aab3-4925-8769-e056b30c502d"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|104-23",
     "servedAt": "2023-01-06T22:33:13.821Z",
@@ -14204,7 +14467,9 @@
       "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "P",
       "processingStatus": "complete",
-      "filers": ["40eb0890-aab3-4925-8769-e056b30c502d"],
+      "filers": [
+        "40eb0890-aab3-4925-8769-e056b30c502d"
+      ],
       "servedPartiesCode": "R",
       "pk": "case|104-23",
       "servedAt": "2023-01-06T22:33:13.813Z",
@@ -14222,7 +14487,7 @@
     "procedureType": "Regular",
     "isPaper": true,
     "automaticBlocked": true,
-    "automaticBlockedDate": "2023-08-08T17:32:21.475Z",
+    "automaticBlockedDate": "2024-06-28T19:55:09.128Z",
     "qcCompleteForTrial": {},
     "gsi1pk": "leadCase|102-67",
     "orderForFilingFee": false,
@@ -14471,6 +14736,54 @@
     "stampData": {},
     "servedParties": [
       {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      },
+      {
+        "name": "Cassidy Mejia"
+      },
+      {
+        "name": "juvek@mailinator.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.120Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.120Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 7,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|104-67",
+    "servedAt": "2024-06-28T19:55:09.122Z",
+    "docketNumber": "104-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
         "name": "IRS",
         "role": "irsSuperuser"
       }
@@ -14647,6 +14960,38 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|4e692ade-3910-4bce-b835-d665c740ab3a",
+    "caseTitle": "Cassidy Mejia & juvek@mailinator.com, Deceased, Cassidy Mejia, Surviving Spouse",
+    "section": "docket",
+    "workItemId": "4e692ade-3910-4bce-b835-d665c740ab3a",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.121Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|4e692ade-3910-4bce-b835-d665c740ab3a",
+    "docketNumberWithSuffix": "104-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.120Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|104-67",
+    "docketNumber": "104-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.121Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "irsNoticeDate": "1997-07-13T04:00:00.000Z",
     "orderForFilingFee": false,
@@ -14784,7 +15129,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
+    "representing": [
+      "28cae029-bae2-4eef-ac54-878fbbab65e3"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -15011,7 +15358,9 @@
     "eventCode": "M000",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "freeText": "For testing Stamp Data",
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
@@ -15048,7 +15397,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
@@ -15083,7 +15434,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
@@ -15151,7 +15504,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -15415,7 +15770,9 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["29425430-3b75-456d-9e25-6f906b8f11d1"],
+    "filers": [
+      "29425430-3b75-456d-9e25-6f906b8f11d1"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15454,7 +15811,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.684Z",
@@ -15608,7 +15967,9 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -15646,7 +16007,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIMB",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
     "docketNumber": "105-23"
@@ -15737,7 +16100,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -15926,7 +16291,9 @@
     "eventCode": "BRF",
     "processingStatus": "complete",
     "lodged": true,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16054,7 +16421,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "SIAB",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16092,7 +16461,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|105-23",
     "servedAt": "2023-07-26T17:04:05.693Z",
@@ -16140,7 +16511,9 @@
     "eventCode": "SEOB",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -16253,7 +16626,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16327,7 +16702,9 @@
         "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
         "eventCode": "AMAT",
         "processingStatus": "complete",
-        "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+        "filers": [
+          "7805d1ab-18d0-43ec-bafb-654e83405418"
+        ],
         "servedPartiesCode": "B",
         "certificateOfServiceDate": null,
         "servedAt": "2023-07-26T17:29:33.751Z",
@@ -16355,7 +16732,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "M014",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16408,7 +16787,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16462,7 +16843,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "AMAT",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16663,7 +17046,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REPL",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16883,7 +17268,9 @@
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "eventCode": "REDC",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|105-23",
@@ -16968,7 +17355,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405418"
+    ],
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "serviceIndicator": "Electronic",
@@ -17078,7 +17467,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -17213,7 +17604,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -17638,7 +18031,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -17908,7 +18303,9 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18424,7 +18821,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -18705,7 +19104,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -19170,6 +19571,52 @@
     "stampData": {},
     "servedParties": [
       {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.124Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.124Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 6,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|105-67",
+    "servedAt": "2024-06-28T19:55:09.125Z",
+    "docketNumber": "105-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
         "name": "Magee Schmidt"
       }
     ],
@@ -19257,7 +19704,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
+    "filers": [
+      "bc936c44-ff22-478b-a9e9-971f250d599c"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.489Z",
@@ -19295,7 +19744,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
+    "filers": [
+      "bc936c44-ff22-478b-a9e9-971f250d599c"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|105-67",
     "servedAt": "2023-04-03T15:52:36.482Z",
@@ -19327,7 +19778,9 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|102-67",
-    "representing": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
+    "representing": [
+      "bc936c44-ff22-478b-a9e9-971f250d599c"
+    ],
     "section": "privatePractitioner",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
@@ -19348,6 +19801,38 @@
     "firmName": "GW Law Offices",
     "pk": "case|105-67",
     "email": "privatePractitioner@example.com"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|1158ead3-f46d-4013-9a5d-c36f6290ab68",
+    "caseTitle": "Magee Schmidt, Deceased, Magee Schmidt, Surviving Spouse",
+    "section": "docket",
+    "workItemId": "1158ead3-f46d-4013-9a5d-c36f6290ab68",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.125Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|1158ead3-f46d-4013-9a5d-c36f6290ab68",
+    "docketNumberWithSuffix": "105-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.124Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|105-67",
+    "docketNumber": "105-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.125Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -19545,7 +20030,9 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19634,7 +20121,9 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
@@ -19875,7 +20364,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405417"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.112Z",
@@ -19970,7 +20461,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405417"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|106-23",
     "servedAt": "2023-01-06T22:34:39.108Z",
@@ -20008,7 +20501,9 @@
   {
     "role": "privatePractitioner",
     "gsi1pk": "leadCase|104-23",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405417"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -20074,13 +20569,20 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "isSealed": false,
     "procedureType": "Regular",
     "isPaper": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2024-06-28T19:54:22.477Z",
+    "qcCompleteForTrial": {},
     "irsNoticeDate": null,
     "orderForFilingFee": false,
+    "petitionPaymentStatus": "Not paid",
     "partyType": "Partnership (as a partnership representative under BBA)",
     "receivedAt": "2019-08-16T17:29:10.132Z",
     "caseType": "CDP (Lien/Levy)",
+    "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Due Date",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -20151,15 +20653,62 @@
     "caseStatusHistory": [],
     "sortableDocketNumber": 2019000107,
     "orderForCds": false,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Las Vegas, Nevada",
     "initialCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
+    "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|107-19",
     "docketNumber": "107-19",
+    "statistics": [],
     "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:54:22.466Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:54:22.466Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "178af2d2-fab1-445a-a729-d3da63517a0a",
+    "sk": "docket-entry|178af2d2-fab1-445a-a729-d3da63517a0a",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 5,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|107-19",
+    "servedAt": "2024-06-28T19:54:22.468Z",
+    "docketNumber": "107-19"
   },
   {
     "date": null,
@@ -20403,7 +20952,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -20462,6 +21013,37 @@
     "docketNumber": "107-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|da5fbd31-b1a4-4c40-a935-b9aa81bdfec1",
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "section": "docket",
+    "workItemId": "da5fbd31-b1a4-4c40-a935-b9aa81bdfec1",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:54:22.467Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|da5fbd31-b1a4-4c40-a935-b9aa81bdfec1",
+    "docketNumberWithSuffix": "107-19L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:54:22.466Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "178af2d2-fab1-445a-a729-d3da63517a0a",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|107-19",
+    "docketNumber": "107-19",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:54:22.467Z"
   },
   {
     "associatedJudge": "Colvin",
@@ -21091,7 +21673,9 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
+    "representing": [
+      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
+    ],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -21288,7 +21872,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.564Z",
@@ -21324,7 +21910,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|111-19",
     "servedAt": "2022-09-28T16:48:30.554Z",
@@ -21356,7 +21944,9 @@
     "eventCode": "A",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{}",
     "pk": "case|111-19",
@@ -21429,7 +22019,9 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Guy Fieri",
       "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -21530,7 +22122,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.670Z",
@@ -21566,7 +22160,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|112-19",
     "servedAt": "2022-09-28T16:48:49.667Z",
@@ -21667,7 +22263,9 @@
       "createdAt": "2019-12-11T15:25:09.285Z",
       "processingStatus": "pending",
       "numberOfPages": 1,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "entityName": "DocketEntry",
       "filedBy": "Petr. Brian Earl Spilner",
       "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -21793,7 +22391,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.643Z",
@@ -21829,7 +22429,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|113-19",
     "servedAt": "2022-09-28T19:47:03.636Z",
@@ -21988,7 +22590,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -22016,7 +22620,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -22193,7 +22799,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -22225,7 +22833,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -22334,7 +22944,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -22376,7 +22988,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -22420,7 +23034,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -22553,7 +23169,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -22604,7 +23222,9 @@
     "createdAt": "2020-09-25T19:27:00.208Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "953057bb-72d2-412d-8352-fb68c6b0fe2b",
@@ -22739,7 +23359,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -22782,7 +23404,9 @@
     "createdAt": "2020-09-30T20:22:10.388Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "7a9ae90c-348c-467a-8720-c3d1c195d76b",
@@ -22928,7 +23552,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
+    "filers": [
+      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
+    ],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -22964,7 +23590,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
+    "filers": [
+      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
+    ],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -23183,7 +23811,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23226,7 +23856,9 @@
     "createdAt": "2020-10-13T20:23:17.560Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
@@ -23360,7 +23992,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
+    "filers": [
+      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
+    ],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -23380,7 +24014,9 @@
     "createdAt": "2020-10-16T15:19:38.088Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
+    "filers": [
+      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "8439ca33-ac7a-4ae6-a228-7581e2114341",
@@ -23537,7 +24173,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23587,7 +24225,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -23715,7 +24355,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -23742,7 +24384,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -23943,7 +24587,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
+    "filers": [
+      "05b98fff-e4ca-4114-b8ec-7218effc982e"
+    ],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -23979,7 +24625,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
+    "filers": [
+      "05b98fff-e4ca-4114-b8ec-7218effc982e"
+    ],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -24759,7 +25407,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -24787,7 +25437,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -24952,7 +25604,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -24980,7 +25634,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25077,7 +25733,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25105,7 +25763,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -25327,7 +25987,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25355,7 +26017,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -25521,7 +26185,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25573,7 +26239,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -25739,7 +26407,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -25791,7 +26461,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -25981,7 +26653,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26008,7 +26682,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -26173,7 +26849,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26224,7 +26902,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -26413,7 +27093,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26440,7 +27122,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -26560,7 +27244,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -26632,7 +27318,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -26821,7 +27509,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -26872,7 +27562,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -27159,7 +27851,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27186,7 +27880,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -27448,7 +28144,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -27475,7 +28173,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -27770,7 +28470,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -27807,7 +28509,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -27844,7 +28548,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -28081,7 +28787,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28108,7 +28816,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -28370,7 +29080,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28421,7 +29133,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -28683,7 +29397,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -28734,7 +29450,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -28996,7 +29714,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29047,7 +29767,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -29333,7 +30055,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29360,7 +30084,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -29622,7 +30348,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -29649,7 +30377,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -29966,7 +30696,9 @@
     "eventCode": "AMAT",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "editState": "{}",
@@ -30005,7 +30737,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-08T15:19:17.214Z",
@@ -30045,7 +30779,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "A",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
@@ -30082,7 +30818,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-05T15:19:17.229Z",
@@ -30204,7 +30942,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -39584,7 +40324,9 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
@@ -39794,6 +40536,15 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "39fdf0fe-bf77-4731-a8bf-12c2c46f6c7e",
+    "sk": "connection|9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "connectionId": "9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "pk": "connection|9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "ttl": 1719690823,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "9d800c29-039a-4586-941b-ff57f18e7fe4",
     "sk": "connection|aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
     "connectionId": "aecbd45b-9ba7-44b3-9fac-e7dc375ae37d",
@@ -39970,18 +40721,6 @@
     "pk": "eligible-for-trial-case-catalog",
     "docketNumber": "102-67",
     "gsi1pk": "eligible-for-trial-case-catalog|102-67"
-  },
-  {
-    "sk": "LasVegasNevada-H-B-20190816132910-107-19",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "107-19",
-    "gsi1pk": "eligible-for-trial-case-catalog|107-19"
-  },
-  {
-    "sk": "LasVegasNevada-R-B-20190816132910-107-19",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "107-19",
-    "gsi1pk": "eligible-for-trial-case-catalog|107-19"
   },
   {
     "sk": "WashingtonDistrictofColumbia-H-D-20210216115509-150-12",
@@ -42757,7 +43496,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -43900,7 +44641,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -44005,7 +44748,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -44107,7 +44852,9 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44217,7 +44964,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -44324,7 +45073,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -44428,7 +45179,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -45923,7 +46676,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47054,7 +47809,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -47158,7 +47915,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -47260,7 +48019,9 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47369,7 +48130,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -47474,7 +48237,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -47577,7 +48342,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -52498,7 +53265,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -53916,7 +54685,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "SIAB",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:46.556Z",
@@ -54020,7 +54791,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:26:52.639Z",
@@ -54122,7 +54895,9 @@
       "eventCode": "SEOB",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -54231,7 +55006,9 @@
       "eventCode": "AMAT",
       "processingStatus": "complete",
       "lodged": false,
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "editState": "{}",
@@ -54336,7 +55113,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "AMAT",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:17.586Z",
@@ -54439,7 +55218,9 @@
       "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
       "eventCode": "REDC",
       "processingStatus": "complete",
-      "filers": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405418"
+      ],
       "servedPartiesCode": "B",
       "certificateOfServiceDate": null,
       "servedAt": "2023-07-26T17:27:24.651Z",
@@ -56669,6 +57450,52 @@
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "ttl": 1691602262,
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "39fdf0fe-bf77-4731-a8bf-12c2c46f6c7e",
+    "gsi1pk": "connection",
+    "sk": "connection|9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "connectionId": "9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719690823,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "0849ee89-b403-4d68-80d6-3284a06a69b0",
+    "sk": "request|0849ee89-b403-4d68-80d6-3284a06a69b0-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605467
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "70a6454e-1f10-451f-a46e-8b11112bce12",
+    "sk": "request|70a6454e-1f10-451f-a46e-8b11112bce12-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605424
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "b6c1e53e-4d92-42da-a19d-f83cf4e9e71c",
+    "sk": "request|b6c1e53e-4d92-42da-a19d-f83cf4e9e71c-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605420
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "b7dc846b-3582-44ac-a5ab-371bca0bc8ca",
+    "sk": "request|b7dc846b-3582-44ac-a5ab-371bca0bc8ca-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605470
   },
   {
     "admissionsStatus": "Active",
