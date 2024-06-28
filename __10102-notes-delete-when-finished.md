@@ -20,7 +20,7 @@ only 140 or 160 characters long. Which is it?
 *Question*: When should we enable/disable "Save as Draft" button?
 *Answer*: Always leave it enabled per Chris + UX. 
 
-*Question*: What should the order title be? Same as docket entry description? 
+*Question*: What should the order title be? Same as docket entry description? Apart from being displayed above the PDF preview, what is the purpose of the docket entry description field?
 *Answer*: ??
 
 *Question*: If a case is stricken from the trial session, should "it is further" be displayed conditionally if there are additional fields? 
@@ -30,9 +30,7 @@ only 140 or 160 characters long. Which is it?
 
 - Edit view must use the OrderResponse.tsx component
 
-- Update CSS to Match Mocks (pretag should match existing formatting)
-
-- Determine if Additional order text should maintain formatting (line breaks + spacing, thought is yes?)
+- Update CSS to Match Mocks (pre tag should match existing formatting)
 
 - Undraft Response Order to Docket Entry
 
