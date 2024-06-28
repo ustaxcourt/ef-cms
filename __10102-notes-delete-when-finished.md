@@ -24,7 +24,7 @@ only 140 or 160 characters long. Which is it?
 *Answer*: Checked with Chris, this is meant to function as the order title, which is used when serving the response.
 
 *Question*: If a case is stricken from the trial session, should "it is further" be displayed conditionally if there are additional fields? 
-*Answer*: Each line should display "it is further" if there's additional text below.
+*Answer*: Each line should display "it is further" if there's additional text below (Minus the first).
 
 ## Things to do
 
@@ -33,6 +33,8 @@ only 140 or 160 characters long. Which is it?
 - Update CSS to Match Mocks (pre tag should match existing formatting)
 
 - Format so each line after the first is indented, send copy of PDF for review Monday EoD with all options, also show example without indented. 
+
+- Default docket entry description to Order
 
 
 ## Notes
