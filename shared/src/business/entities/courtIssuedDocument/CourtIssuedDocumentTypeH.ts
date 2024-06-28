@@ -29,8 +29,7 @@ export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
     ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.max('now').required().messages({
       '*': 'Enter a date',
-      'date.max': 'Enter a valid date',
-      'date.min': 'Enter a valid date',
+      'date.max': 'Date cannot be in the future. Enter a valid date.',
     }),
     freeText: JoiValidationConstants.STRING.max(1000).required().messages({
       'any.required': 'Enter a description',
