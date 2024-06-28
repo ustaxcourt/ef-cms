@@ -31,6 +31,7 @@ export const DateSelector = ({
 }) => {
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
   const formGroupInputRef = useRef<HTMLInputElement>(null);
+  const defaultMinDate = '0000-01-01';
 
   useEffect(() => {
     if (formGroupInputRef.current) {
@@ -97,7 +98,7 @@ export const DateSelector = ({
       <div
         className="usa-date-picker"
         data-default-value={defaultValue}
-        data-min-date={minDate}
+        data-min-date={minDate ?? defaultMinDate}
       >
         <input
           aria-describedby={`date-picker-label ${id}-date-hint`}

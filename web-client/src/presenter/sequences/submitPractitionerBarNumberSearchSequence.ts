@@ -31,11 +31,11 @@ export const submitPractitionerBarNumberSearchSequence = [
       getPractitionerDetailAction,
       hasPractitionerDetailAction,
       {
-        noResults: [setAdvancedSearchResultsAction],
-        success: [
+        navigateToPractitionerDetails: [
           setPractitionerDetailAction,
           ...navigateToPractitionerDetailSequence,
         ],
+        setResultsInState: [setAdvancedSearchResultsAction],
       },
     ]),
   },
