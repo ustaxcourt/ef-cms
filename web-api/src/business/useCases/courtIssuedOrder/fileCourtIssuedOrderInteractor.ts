@@ -75,10 +75,6 @@ export const fileCourtIssuedOrder = async (
 
   if (documentMetadata.documentContents) {
     documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
-    console.log(
-      '********************** documentMetadata.documentContents',
-      documentMetadata.documentContents,
-    );
 
     const documentContentsId = applicationContext.getUniqueId();
 
@@ -97,10 +93,6 @@ export const fileCourtIssuedOrder = async (
       useTempBucket: false,
     });
 
-    console.log(
-      '************** documentMetadata.draftOrderState',
-      documentMetadata.draftOrderState,
-    );
     if (documentMetadata.draftOrderState) {
       delete documentMetadata.draftOrderState.documentContents;
       delete documentMetadata.draftOrderState.richText;
