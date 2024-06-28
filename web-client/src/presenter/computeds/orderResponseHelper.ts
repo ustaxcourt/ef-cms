@@ -29,7 +29,10 @@ export const orderResponseHelper = (
   const jurisdictionErrorText =
     validationErrors.jurisdiction && 'Select jurisdiction';
 
+  const docketEntryDescription = get(state.form.docketEntryDescription);
+
   return {
+    docketEntryDescription,
     dueDateErrorText,
     isLeadCase,
     jurisdictionErrorText,

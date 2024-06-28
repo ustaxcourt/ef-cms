@@ -25,31 +25,36 @@ export const prepareStatusReportOrderResponseAction = ({
   const hasJurisdiction = !!jurisdiction;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const filedLine = `On ${statusReportFilingDate}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is`;
+  const filedLine = `<p>On ${statusReportFilingDate}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType && orderType === 'statusReport'
-      ? `ORDERED that the parties shall file a further status report by ${dueDate}.`
+      ? `<p>ORDERED that the parties shall file a further status report by ${dueDate}.</p>`
       : hasOrderType
-        ? `ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDate}.`
+        ? `<p>ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDate}.</p>`
         : '';
 
   const strickenLine = hasStrickenFromTrialSessions
-    ? 'ORDERED that this case is stricken from the trial session. It is further'
+    ? '<p>ORDERED that this case is stricken from the trial session. It is further</p>'
     : '';
 
   const jurisdictionLine =
     hasJurisdiction && jurisdiction === 'retained'
-      ? 'ORDERED that this case is restored to the general docket'
+      ? '<p>ORDERED that this case is restored to the general docket</p>'
       : hasJurisdiction
-        ? 'ORDERED that jurisdiction is retained by the undersigned.'
+        ? '<p>ORDERED that jurisdiction is retained by the undersigned.</p>'
         : '';
 
   const additionalTextLine = hasAdditionalOrderText
-    ? `ORDERED that ${additionalOrderText}`
+    ? `<pre>ORDERED that ${additionalOrderText}</pre>`
     : '';
 
-  const richText = `<p>${filedLine}</p><p>${orderTypeLine}</p><p>${strickenLine}</p><p>${jurisdictionLine}</p><pre>${additionalTextLine}</pre>`;
+  const richText =
+    filedLine +
+    orderTypeLine +
+    strickenLine +
+    jurisdictionLine +
+    additionalTextLine;
 
   // TODO, maybe add documentType=Order ?
   store.set(state.form.documentTitle, 'Order');
