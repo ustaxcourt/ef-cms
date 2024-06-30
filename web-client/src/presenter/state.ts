@@ -90,7 +90,6 @@ import { internalPetitionPartiesHelper } from './computeds/internalPetitionParti
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loadingHelper } from './computeds/loadingHelper';
-import { loginHelper } from '@web-client/presenter/computeds/Login/loginHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
@@ -393,7 +392,6 @@ export const computeds = {
     typeof judgeActivityReportHelper
   >,
   loadingHelper: loadingHelper as unknown as ReturnType<typeof loadingHelper>,
-  loginHelper: loginHelper as unknown as ReturnType<typeof loginHelper>,
   menuHelper: menuHelper as unknown as ReturnType<typeof menuHelper>,
   messageDocumentHelper: messageDocumentHelper as unknown as ReturnType<
     typeof messageDocumentHelper
@@ -600,6 +598,9 @@ export const baseState = {
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
+  coldCaseReport: {
+    entries: [],
+  },
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
@@ -758,6 +759,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  todaysDate: '',
   token: '',
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
