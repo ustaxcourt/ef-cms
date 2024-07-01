@@ -9,10 +9,10 @@ let user = {
   role: USER_ROLES.petitioner,
 };
 
-const myAccountHelper = withAppContextDecorator(myAccountHelperComputed, {
-  ...applicationContext,
-  getCurrentUser: () => user,
-});
+const myAccountHelper = withAppContextDecorator(
+  myAccountHelperComputed,
+  applicationContext,
+);
 
 describe('myAccountHelper', () => {
   describe('showMyContactInformation', () => {
@@ -20,7 +20,9 @@ describe('myAccountHelper', () => {
       user.role = USER_ROLES.privatePractitioner;
 
       const { showMyContactInformation } = runCompute(myAccountHelper, {
-        state: { state: {} },
+        state: {
+          user,
+        },
       });
 
       expect(showMyContactInformation).toBeTruthy();
@@ -30,7 +32,7 @@ describe('myAccountHelper', () => {
       user.role = USER_ROLES.irsPractitioner;
 
       const { showMyContactInformation } = runCompute(myAccountHelper, {
-        state: {},
+        state: { user },
       });
 
       expect(showMyContactInformation).toBeTruthy();
@@ -40,7 +42,7 @@ describe('myAccountHelper', () => {
       user.role = USER_ROLES.petitioner;
 
       const { showMyContactInformation } = runCompute(myAccountHelper, {
-        state: {},
+        state: { user },
       });
 
       expect(showMyContactInformation).toBeFalsy();
@@ -51,7 +53,9 @@ describe('myAccountHelper', () => {
     it('should be true when the current user is a petitioner', () => {
       user.role = USER_ROLES.petitioner;
 
-      const { showPetitionerView } = runCompute(myAccountHelper, { state: {} });
+      const { showPetitionerView } = runCompute(myAccountHelper, {
+        state: { user },
+      });
 
       expect(showPetitionerView).toBeTruthy();
     });
@@ -59,7 +63,9 @@ describe('myAccountHelper', () => {
     it('should be true when the current user is NOT a petitioner', () => {
       user.role = USER_ROLES.irsPractitioner;
 
-      const { showPetitionerView } = runCompute(myAccountHelper, { state: {} });
+      const { showPetitionerView } = runCompute(myAccountHelper, {
+        state: { user },
+      });
 
       expect(showPetitionerView).toBeFalsy();
     });
