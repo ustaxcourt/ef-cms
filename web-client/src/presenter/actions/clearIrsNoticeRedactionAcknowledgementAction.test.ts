@@ -8,7 +8,7 @@ describe('clearIrsNoticeRedactionAcknowledgementAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should clear out irsNoticesRedactionAcknowledgement', async () => {
+  it('should clear out irsNoticesRedactionAcknowledgement when there are no IRS notice files uploaded', async () => {
     const result = await runAction(
       clearIrsNoticeRedactionAcknowledgementAction,
       {
@@ -16,7 +16,8 @@ describe('clearIrsNoticeRedactionAcknowledgementAction', () => {
           presenter,
         },
         state: {
-          irsNoticesRedactionAcknowledgement: true,
+          form: { irsNoticesRedactionAcknowledgement: true },
+          irsNoticeUploadFormInfo: [],
         },
       },
     );
@@ -24,5 +25,22 @@ describe('clearIrsNoticeRedactionAcknowledgementAction', () => {
     expect(
       result.state.form.irsNoticesRedactionAcknowledgement,
     ).toBeUndefined();
+  });
+
+  it('should not clear out irsNoticesRedactionAcknowledgement when there are IRS notice files uploaded', async () => {
+    const result = await runAction(
+      clearIrsNoticeRedactionAcknowledgementAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: { irsNoticesRedactionAcknowledgement: true },
+          irsNoticeUploadFormInfo: [{ file: 'file' }],
+        },
+      },
+    );
+
+    expect(result.state.form.irsNoticesRedactionAcknowledgement).toBeTruthy();
   });
 });
