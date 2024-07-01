@@ -14,19 +14,18 @@ describe('send notification to notification service', () => {
 
   it('should send notification with the supplied docketNumber', async () => {
     process.env.AWS_ACCOUNT_ID = '123456';
-
+    // @ts-ignore (malformed input intentional)
     await sendNotificationOfSealing(applicationContext, {
       docketNumber: '321-21',
     });
-
     expect(
-      applicationContext.getNotificationService().publish.mock.calls[0][0]
+      applicationContext.getNotificationService().send.mock.calls[0][0].input
         .Message,
     ).toBe(
       JSON.stringify({ docketEntryId: undefined, docketNumber: '321-21' }),
     );
     expect(
-      applicationContext.getNotificationService().publish.mock.calls[0][0]
+      applicationContext.getNotificationService().send.mock.calls[0][0].input
         .TopicArn,
     ).toBe('arn:aws:sns:us-east-1:123456:seal_notifier');
   });
