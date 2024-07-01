@@ -13,7 +13,7 @@ export const MyContactInformation = connect(
   },
   function MyContactInformation({ canEditContactInformationSequence, user }) {
     return (
-      <div className="card">
+      <div className="card" data-testid="my-contact-information-card">
         <div className="content-wrapper gray">
           <h3>My Contact Information</h3>
           <hr />
