@@ -1,6 +1,7 @@
 import {
   ALL_STATE_OPTIONS,
   BUSINESS_TYPES,
+  CASE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '@web-client/ustc-ui/Button/Button';
@@ -344,7 +345,9 @@ function IRSNoticeInformation({ petitionFormatted }) {
                 <div className="margin-bottom-1 semi-bold">
                   IRS notice {index + 1}
                 </div>
-                <div className="margin-bottom-2px">{irsNotice.caseType}</div>
+                <div className="margin-bottom-2px">
+                  {formatCaseType(irsNotice.caseType)}
+                </div>
                 {irsNotice.taxYear && (
                   <div className="margin-bottom-2px">{irsNotice.taxYear}</div>
                 )}
@@ -462,3 +465,10 @@ const CardHeader = connect(
     );
   },
 );
+
+function formatCaseType(caseType: string) {
+  if (caseType === 'Disclosure1' || caseType === 'Disclosure2') {
+    return CASE_TYPES_MAP.disclosure;
+  }
+  return caseType;
+}
