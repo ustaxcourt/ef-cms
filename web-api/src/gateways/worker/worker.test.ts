@@ -12,6 +12,11 @@ describe('worker', () => {
         abc: 'def',
       },
       type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
+      user: {
+        name: 'ignored',
+        role: 'ignored',
+        userId: 'ignored',
+      },
     };
     const mockQueueUrl = 'www.send_a_message.com';
     applicationContext.environment.workerQueueUrl = mockQueueUrl;
@@ -20,11 +25,13 @@ describe('worker', () => {
       message: mockMessage,
     });
 
-    expect(
-      applicationContext.getMessagingClient().sendMessage,
-    ).toHaveBeenCalledWith({
-      MessageBody: JSON.stringify(mockMessage),
-      QueueUrl: mockQueueUrl,
-    });
+    expect(applicationContext.getMessagingClient().send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        input: {
+          MessageBody: JSON.stringify(mockMessage),
+          QueueUrl: mockQueueUrl,
+        },
+      }),
+    );
   });
 });

@@ -598,6 +598,9 @@ export const baseState = {
   clientConnectionId: '',
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
+  coldCaseReport: {
+    entries: [],
+  },
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
@@ -756,6 +759,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  todaysDate: '',
   token: '',
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
