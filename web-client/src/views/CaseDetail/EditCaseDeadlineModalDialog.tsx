@@ -13,6 +13,7 @@ export const EditCaseDeadlineModalDialog = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    todaysDate: state.todaysDate,
     updateCaseDeadlineSequence: sequences.updateCaseDeadlineSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDeadlineSequence: sequences.validateCaseDeadlineSequence,
@@ -23,6 +24,7 @@ export const EditCaseDeadlineModalDialog = connect(
     dismissModalSequence,
     form,
     formatAndUpdateDateFromDatePickerSequence,
+    todaysDate,
     updateCaseDeadlineSequence,
     updateFormValueSequence,
     validateCaseDeadlineSequence,
@@ -42,6 +44,7 @@ export const EditCaseDeadlineModalDialog = connect(
             errorText={validationErrors.deadlineDate}
             id="deadline-date"
             label="Due date"
+            minDate={todaysDate}
             onChange={e => {
               formatAndUpdateDateFromDatePickerSequence({
                 key: 'deadlineDate',
