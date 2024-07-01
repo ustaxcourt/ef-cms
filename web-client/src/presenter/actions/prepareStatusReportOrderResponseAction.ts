@@ -11,11 +11,6 @@ export const prepareStatusReportOrderResponseAction = ({
     orderType,
     strickenFromTrialSessions,
   } = get(state.form);
-  console.log(
-    'statusReportOrderResponse',
-    get(state.statusReportOrderResponse),
-  );
-
   const { statusReportFilingDate, statusReportIndex } = get(
     state.statusReportOrderResponse,
   );
@@ -35,12 +30,12 @@ export const prepareStatusReportOrderResponseAction = ({
         : '';
 
   const strickenLine = hasStrickenFromTrialSessions
-    ? '<p>ORDERED that this case is stricken from the trial session. It is further</p>'
+    ? '<p>ORDERED that this case is stricken from the trial session.</p>'
     : '';
 
   const jurisdictionLine =
     hasJurisdiction && jurisdiction === 'retained'
-      ? '<p>ORDERED that this case is restored to the general docket</p>'
+      ? '<p>ORDERED that this case is restored to the general docket.</p>'
       : hasJurisdiction
         ? '<p>ORDERED that jurisdiction is retained by the undersigned.</p>'
         : '';
@@ -49,12 +44,21 @@ export const prepareStatusReportOrderResponseAction = ({
     ? `<pre>ORDERED that ${additionalOrderText}</pre>`
     : '';
 
+  const linesWithText = [
+    orderTypeLine,
+    strickenLine,
+    jurisdictionLine,
+    additionalTextLine,
+  ].filter(line => line);
+
   const richText =
     filedLine +
-    orderTypeLine +
-    strickenLine +
-    jurisdictionLine +
-    additionalTextLine;
+    linesWithText
+      .map((line, index) => {
+        const isLastLine = index === linesWithText.length - 1;
+        return isLastLine ? line : line.replace('</p>', ' It is further</p>');
+      })
+      .join('');
 
   // TODO, maybe add documentType=Order ?
   store.set(state.form.documentTitle, 'Order');
