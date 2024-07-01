@@ -1,3 +1,4 @@
+import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { createApplicationContext } from '../../applicationContext';
 
 export const handler = async event => {
@@ -29,13 +30,12 @@ export const handler = async event => {
       event,
     );
 
-    const sqs = await applicationContext.getMessagingClient();
-    await sqs
-      .deleteMessage({
-        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-        ReceiptHandle: receiptHandle,
-      })
-      .promise();
+    const sqs: SQSClient = await applicationContext.getMessagingClient();
+    const cmd = new DeleteMessageCommand({
+      QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+      ReceiptHandle: receiptHandle,
+    });
+    await sqs.send(cmd);
   } catch (err) {
     applicationContext.logger.error(err);
     throw err;
