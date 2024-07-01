@@ -20,28 +20,28 @@ export const prepareStatusReportOrderResponseAction = ({
   const hasJurisdiction = !!jurisdiction;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const filedLine = `<p>On ${statusReportFilingDate}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
+  const filedLine = `<p class="indent-paragraph">On ${statusReportFilingDate}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType && orderType === 'statusReport'
-      ? `<p>ORDERED that the parties shall file a further status report by ${dueDate}.</p>`
+      ? `<p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDate}.</p>`
       : hasOrderType
-        ? `<p>ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDate}.</p>`
+        ? `<p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDate}.</p>`
         : '';
 
   const strickenLine = hasStrickenFromTrialSessions
-    ? '<p>ORDERED that this case is stricken from the trial session.</p>'
+    ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session.</p>'
     : '';
 
   const jurisdictionLine =
     hasJurisdiction && jurisdiction === 'retained'
-      ? '<p>ORDERED that this case is restored to the general docket.</p>'
+      ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'
       : hasJurisdiction
-        ? '<p>ORDERED that jurisdiction is retained by the undersigned.</p>'
+        ? '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>'
         : '';
 
   const additionalTextLine = hasAdditionalOrderText
-    ? `<pre>ORDERED that ${additionalOrderText}</pre>`
+    ? `<p class="indent-paragraph">ORDERED that ${additionalOrderText}</p>`
     : '';
 
   const linesWithText = [
