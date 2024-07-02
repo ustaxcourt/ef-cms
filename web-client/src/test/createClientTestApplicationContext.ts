@@ -516,8 +516,8 @@ const createTestApplicationContext = () => {
   };
 
   const mockGetNotificationService = {
-    publish: jest.fn().mockReturnValue({
-      promise: () => Promise.resolve('ok'),
+    send: jest.fn().mockResolvedValue({
+      MessageId: 'mockMessageID',
     }),
   };
 

@@ -73,7 +73,7 @@ export class TrialSession extends JoiValidationEntity {
   public address1?: string;
   public address2?: string;
   public alternateTrialClerkName?: string;
-  public caseOrder?: TCaseOrder[];
+  public caseOrder: TCaseOrder[];
   public chambersPhoneNumber?: string;
   public city?: string;
   public courthouseName?: string;
