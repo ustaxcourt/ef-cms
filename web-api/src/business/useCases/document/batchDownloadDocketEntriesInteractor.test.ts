@@ -5,13 +5,14 @@ import {
   STANDING_PRETRIAL_ORDER_ENTRY,
 } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
+import {
+  mockDocketClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('batchDownloadDocketEntriesInteractor', () => {
-  let user;
-
   const MOCK_URL = 'document_url_containing_id';
   const mockClientConnectionId = '987654';
   const PETITION_DOCKET_ENTRY = MOCK_DOCUMENTS[0];
@@ -37,18 +38,11 @@ describe('batchDownloadDocketEntriesInteractor', () => {
   };
 
   beforeEach(() => {
-    user = {
-      role: ROLES.docketClerk,
-      userId: 'abc-123',
-    };
-
     requestParams = {
       clientConnectionId: mockClientConnectionId,
       docketNumber: MOCK_CASE.docketNumber,
       documentsSelectedForDownload: mockDocumentsSelectedForDownload,
     };
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -68,13 +62,10 @@ describe('batchDownloadDocketEntriesInteractor', () => {
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    user = {
-      role: ROLES.privatePractitioner,
-      userId: 'abc-456',
-    };
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
+      mockPrivatePractitionerUser,
     );
 
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
@@ -90,7 +81,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
-      userId: 'abc-456',
+      userId: mockPrivatePractitionerUser.userId,
     });
   });
 
@@ -104,6 +95,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
+      mockDocketClerkUser,
     );
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       'Error batch-downloading documents from case: 101-18 - unknown error',
@@ -118,7 +110,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
-      userId: 'abc-123',
+      userId: mockDocketClerkUser.userId,
     });
   });
 
@@ -130,6 +122,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
+      mockDocketClerkUser,
     );
 
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
@@ -145,7 +138,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
-      userId: 'abc-123',
+      userId: mockDocketClerkUser.userId,
     });
   });
 
@@ -153,6 +146,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -181,6 +175,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -207,6 +202,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -218,7 +214,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
         action: 'batch_download_ready',
         url: MOCK_URL,
       },
-      userId: user.userId,
+      userId: mockDocketClerkUser.userId,
     });
   });
 });

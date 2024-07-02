@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DownloadDocketEntryRequestType = {
@@ -23,10 +24,14 @@ const batchDownloadDocketEntriesHelper = async (
     documentsSelectedForDownload,
     printableDocketRecordFileId,
   }: DownloadDocketEntryRequestType,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS)) {
+  if (
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
+    )
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -100,7 +105,7 @@ const batchDownloadDocketEntriesHelper = async (
         numberOfDocketRecordsToGenerate: 0,
         numberOfFilesToBatch: s3Ids.length + extraFiles.length,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -113,7 +118,7 @@ const batchDownloadDocketEntriesHelper = async (
         action: 'batch_download_error',
         error,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -127,7 +132,7 @@ const batchDownloadDocketEntriesHelper = async (
         numberOfDocketRecordsToGenerate: 0,
         numberOfFilesToBatch: s3Ids.length + extraFiles.length,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -140,7 +145,7 @@ const batchDownloadDocketEntriesHelper = async (
         numberOfDocketRecordsToGenerate: 0,
         numberOfFilesToBatch: s3Ids.length + extraFiles.length,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -172,21 +177,23 @@ const batchDownloadDocketEntriesHelper = async (
       action: 'batch_download_ready',
       url,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
 
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
+  authorizedUser: UnknownAuthUser,
 ) => {
   try {
     await batchDownloadDocketEntriesHelper(
       applicationContext,
       downloadDocketEntryRequestInfo,
+      authorizedUser,
     );
   } catch (error) {
-    const { userId } = applicationContext.getCurrentUser();
+    const { userId } = authorizedUser;
     const { clientConnectionId, docketNumber } = downloadDocketEntryRequestInfo;
 
     const erMsg = error.message || 'unknown error';
