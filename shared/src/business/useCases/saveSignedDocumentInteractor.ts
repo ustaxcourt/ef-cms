@@ -103,7 +103,7 @@ export const saveSignedDocumentInteractor = async (
         isPaper: false,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext },
+      { authorizedUser: user },
     );
 
     signedDocketEntryEntity.setFiledBy(user);
@@ -155,7 +155,7 @@ export const saveSignedDocumentInteractor = async (
         isFileAttached: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext },
+      { authorizedUser: user },
     );
 
     signedDocketEntryEntity.setFiledBy(user);

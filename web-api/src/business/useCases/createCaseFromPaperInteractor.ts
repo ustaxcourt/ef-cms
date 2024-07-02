@@ -140,7 +140,7 @@ export const createCaseFromPaperInteractor = async (
       mailingDate: petitionEntity.mailingDate,
       receivedAt: caseToAdd.receivedAt,
     },
-    { applicationContext, petitioners: caseToAdd.petitioners },
+    { authorizedUser, petitioners: caseToAdd.petitioners },
   );
 
   petitionDocketEntryEntity.setFiledBy(user);
@@ -171,7 +171,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     applicationForWaiverOfFilingFeeDocketEntryEntity.setFiledBy(user);
@@ -204,7 +204,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     requestForPlaceOfTrialDocketEntryEntity.setFiledBy(user);
@@ -228,7 +228,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     stinDocketEntryEntity.setFiledBy(user);
@@ -251,7 +251,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     cdsDocketEntryEntity.setFiledBy(user);
@@ -275,7 +275,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     atpDocketEntryEntity.setFiledBy(user);

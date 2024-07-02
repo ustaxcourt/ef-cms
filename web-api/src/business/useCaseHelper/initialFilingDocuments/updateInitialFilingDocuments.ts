@@ -6,7 +6,6 @@ import {
 import { omit } from 'lodash';
 
 const addNewInitialFilingToCase = ({
-  applicationContext,
   authorizedUser,
   caseEntity,
   currentCaseDocument,
@@ -22,7 +21,7 @@ const addNewInitialFilingToCase = ({
         ...currentCaseDocument,
       },
       {
-        applicationContext,
+        authorizedUser,
         petitioners: caseEntity.petitioners,
       },
     );
@@ -52,7 +51,7 @@ const addNewInitialFilingToCase = ({
         receivedAt: caseEntity.receivedAt,
       },
       {
-        applicationContext,
+        authorizedUser,
         petitioners: caseEntity.petitioners,
       },
     );
@@ -120,9 +119,10 @@ export const updateInitialFilingDocuments = async ({
         originalCaseDocument.docketEntryId !== currentCaseDocument.docketEntryId
       ) {
         addNewInitialFilingToCase({
-          applicationContext,
+          authorizedUser,
           caseEntity,
           currentCaseDocument,
+          documentType,
           originalCaseDocument,
         });
         await deleteInitialFilingFromCase({
@@ -133,11 +133,11 @@ export const updateInitialFilingDocuments = async ({
       }
     } else if (!originalCaseDocument && currentCaseDocument) {
       addNewInitialFilingToCase({
-        applicationContext,
         authorizedUser,
         caseEntity,
         currentCaseDocument,
         documentType,
+        originalCaseDocument,
       });
     } else if (originalCaseDocument && !currentCaseDocument) {
       await deleteInitialFilingFromCase({

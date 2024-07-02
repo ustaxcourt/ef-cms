@@ -40,7 +40,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       isDraft: true,
       isFileAttached: true,
     },
-    { applicationContext },
+    { authorizedUser: user },
   );
 
   newDocketEntry.setFiledBy(user);

@@ -73,7 +73,7 @@ export const createAndServeNoticeDocketEntry = async (
         : getServedPartiesCode(servedParties.all),
       ...additionalDocketEntryInfo,
     },
-    { applicationContext },
+    { authorizedUser: applicationContext.getCurrentUser() },
   );
 
   noticeDocketEntry.setFiledBy(user);
