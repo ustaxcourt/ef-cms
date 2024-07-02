@@ -9,31 +9,16 @@ export const setEditStatusReportOrderResponseFormAction = ({
 
   const documentToEdit = get(state.documentToEdit);
 
-  store.set(state.form.orderType, documentToEdit.draftOrderState.orderType);
-
-  console.log(
-    'documentToEdit.draftOrderState.dueDate',
-    documentToEdit.draftOrderState.dueDate,
-    typeof documentToEdit.draftOrderState.dueDate,
-  );
-  store.set(state.form.dueDate, documentToEdit.draftOrderState.dueDate);
-
-  store.set(
-    state.form.strickenFromTrialSessions,
-    documentToEdit.draftOrderState.strickenFromTrialSessions,
-  );
-  store.set(
-    state.form.jurisdiction,
-    documentToEdit.draftOrderState.jurisdiction,
-  );
-  store.set(
-    state.form.additionalOrderText,
-    documentToEdit.draftOrderState.additionalOrderText,
-  );
-  store.set(
-    state.form.docketEntryDescription,
-    documentToEdit.draftOrderState.docketEntryDescription,
-  );
+  store.set(state.form, {
+    additionalOrderText: documentToEdit.draftOrderState.additionalOrderText,
+    docketEntryDescription:
+      documentToEdit.draftOrderState.docketEntryDescription,
+    dueDate: documentToEdit.draftOrderState.dueDate,
+    jurisdiction: documentToEdit.draftOrderState.jurisdiction,
+    orderType: documentToEdit.draftOrderState.orderType,
+    strickenFromTrialSessions:
+      documentToEdit.draftOrderState.strickenFromTrialSessions,
+  });
 
   return {
     url: `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response`,
