@@ -58,7 +58,7 @@ const getSealedCase = ({
     caseRecord = caseSealedFormatter(caseRecord);
 
     return new PublicCase(caseRecord, {
-      applicationContext,
+      authorizedUser,
     })
       .validate()
       .toRawObject();
@@ -67,6 +67,7 @@ const getSealedCase = ({
 
 const getCaseForExternalUser = ({
   applicationContext,
+  authorizedUser,
   caseRecord,
   isAssociatedWithCase,
   isAuthorizedToGetCase,
@@ -77,7 +78,7 @@ const getCaseForExternalUser = ({
       .toRawObject();
   } else {
     return new PublicCase(caseRecord, {
-      applicationContext,
+      authorizedUser,
     })
       .validate()
       .toRawObject();
@@ -193,6 +194,7 @@ export const getCaseInteractor = async (
     } else {
       caseDetailRaw = await getCaseForExternalUser({
         applicationContext,
+        authorizedUser,
         caseRecord,
         isAssociatedWithCase,
         isAuthorizedToGetCase,

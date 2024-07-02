@@ -62,3 +62,10 @@ export const mockAdcUser: AuthUser = {
   role: ROLES.adc,
   userId: '9f357f78-a8fa-40bf-83db-8144ddf14047',
 };
+
+export const mockIrsPractitionerUser: AuthUser = {
+  email: 'mockIrsPractitioner@example.com',
+  name: 'Ida Igloo',
+  role: ROLES.irsPractitioner,
+  userId: '4eb0a70d-ed4c-4715-a95f-261cb1441db9',
+};
