@@ -1,38 +1,27 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUsersPendingEmailInteractor } from './getUsersPendingEmailInteractor';
+import {
+  mockAdminUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getUsersPendingEmailInteractor', () => {
-  let currentLoggedInUser;
   const PENDING_EMAIL = 'pending@example.com';
   const USER_IDS = [
     'a8024d79-1cd0-4864-bdd9-60325bd6d6b9',
     'f8024d79-1cd0-4864-bdd9-60325bd6d6b1',
   ];
 
-  beforeEach(() => {
-    currentLoggedInUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(
-      () => currentLoggedInUser,
-    );
-  });
-
   it('should throw an error when not authorized', async () => {
-    currentLoggedInUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.admin,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     await expect(
-      getUsersPendingEmailInteractor(applicationContext, {
-        userIds: USER_IDS,
-      }),
+      getUsersPendingEmailInteractor(
+        applicationContext,
+        {
+          userIds: USER_IDS,
+        },
+        mockAdminUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -52,9 +41,13 @@ describe('getUsersPendingEmailInteractor', () => {
       },
     ]);
 
-    const result = await getUsersPendingEmailInteractor(applicationContext, {
-      userIds: USER_IDS,
-    });
+    const result = await getUsersPendingEmailInteractor(
+      applicationContext,
+      {
+        userIds: USER_IDS,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toEqual({
       [USER_IDS[0]]: PENDING_EMAIL,
@@ -76,9 +69,13 @@ describe('getUsersPendingEmailInteractor', () => {
       },
     ]);
 
-    const result = await getUsersPendingEmailInteractor(applicationContext, {
-      userIds: USER_IDS,
-    });
+    const result = await getUsersPendingEmailInteractor(
+      applicationContext,
+      {
+        userIds: USER_IDS,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toEqual({
       [USER_IDS[0]]: undefined,
@@ -91,9 +88,13 @@ describe('getUsersPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getUsersById.mockResolvedValue([]);
 
-    const result = await getUsersPendingEmailInteractor(applicationContext, {
-      userIds: USER_IDS,
-    });
+    const result = await getUsersPendingEmailInteractor(
+      applicationContext,
+      {
+        userIds: USER_IDS,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toBeUndefined();
   });
