@@ -21,7 +21,6 @@ import { setServiceIndicatorsForCase } from '../../../../shared/src/business/uti
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
 const addPetitionDocketEntryToCase = ({
-  applicationContext,
   caseToAdd,
   docketEntryEntity,
   user,
@@ -47,7 +46,6 @@ const addPetitionDocketEntryToCase = ({
       trialDate: caseToAdd.trialDate,
       trialLocation: caseToAdd.trialLocation,
     },
-    { applicationContext },
     caseToAdd,
   );
 
@@ -183,7 +181,6 @@ export const createCaseInteractor = async (
   petitionDocketEntryEntity.setFiledBy(user);
 
   const newWorkItem = addPetitionDocketEntryToCase({
-    applicationContext,
     caseToAdd,
     docketEntryEntity: petitionDocketEntryEntity,
     user,

@@ -3,6 +3,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
+import { getUniqueId } from '@shared/sharedAppContext';
 import { pick } from 'lodash';
 
 export class WorkItem extends JoiValidationEntity {
@@ -36,12 +37,8 @@ export class WorkItem extends JoiValidationEntity {
   public updatedAt: string;
   public workItemId: string;
 
-  constructor(rawWorkItem, { applicationContext }, caseEntity?: Case) {
+  constructor(rawWorkItem, caseEntity?: Case) {
     super('WorkItem');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
@@ -104,8 +101,7 @@ export class WorkItem extends JoiValidationEntity {
       ? caseEntity.trialLocation
       : rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
-    this.workItemId =
-      rawWorkItem.workItemId || applicationContext.getUniqueId();
+    this.workItemId = rawWorkItem.workItemId || getUniqueId();
   }
 
   assignToUser({

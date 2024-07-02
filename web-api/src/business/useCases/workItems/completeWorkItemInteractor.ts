@@ -40,9 +40,7 @@ export const completeWorkItem = async (
       applicationContext,
       workItemId,
     });
-  const originalWorkItemEntity = new WorkItem(originalWorkItem, {
-    applicationContext,
-  });
+  const originalWorkItemEntity = new WorkItem(originalWorkItem);
 
   const completedWorkItem = originalWorkItemEntity
     .setAsCompleted({
@@ -74,9 +72,7 @@ export const completeWorkItem = async (
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
 
-  const workItemEntity = new WorkItem(completedWorkItem, {
-    applicationContext,
-  });
+  const workItemEntity = new WorkItem(completedWorkItem);
 
   caseToUpdate.docketEntries.forEach(doc => {
     if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {

@@ -149,7 +149,6 @@ export const saveCaseDetailInternalEdit = async (
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
       },
-      { applicationContext },
       caseEntity,
     );
 

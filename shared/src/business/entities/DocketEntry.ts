@@ -179,9 +179,7 @@ export class DocketEntry extends JoiValidationEntity {
       !filtered ||
       User.isInternalUser(applicationContext.getCurrentUser().role)
     ) {
-      this.initForUnfilteredForInternalUsers(rawDocketEntry, {
-        applicationContext,
-      });
+      this.initForUnfilteredForInternalUsers(rawDocketEntry);
     }
 
     this.action = rawDocketEntry.action;
@@ -282,7 +280,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.generateFiledBy(petitioners);
   }
 
-  initForUnfilteredForInternalUsers(rawDocketEntry, { applicationContext }) {
+  private initForUnfilteredForInternalUsers(rawDocketEntry) {
     this.editState = rawDocketEntry.editState;
     this.draftOrderState = rawDocketEntry.draftOrderState;
     this.stampData = rawDocketEntry.stampData || {};
@@ -310,7 +308,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
     this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
+      ? new WorkItem(rawDocketEntry.workItem)
       : undefined;
   }
 

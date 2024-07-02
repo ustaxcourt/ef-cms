@@ -12,16 +12,15 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
-  applicationContext,
   caseToAdd,
   docketEntryEntity,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
@@ -51,7 +50,6 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       trialDate: caseToAdd.trialDate,
       trialLocation: caseToAdd.trialLocation,
     },
-    { applicationContext },
     caseToAdd,
   );
 
@@ -148,7 +146,6 @@ export const createCaseFromPaperInteractor = async (
   petitionDocketEntryEntity.setFiledBy(user);
 
   const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
-    applicationContext,
     caseToAdd,
     docketEntryEntity: petitionDocketEntryEntity,
     user,

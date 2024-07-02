@@ -175,7 +175,6 @@ export const updateContact = async (
           trialDate: caseEntity.trialDate,
           trialLocation: caseEntity.trialLocation,
         },
-        { applicationContext },
         caseEntity,
       );
 
