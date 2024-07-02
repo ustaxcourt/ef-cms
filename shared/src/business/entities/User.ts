@@ -176,7 +176,7 @@ export class User extends JoiValidationEntity {
     return externalRoles.includes(role);
   }
 
-  static isInternalUser(role: Role): boolean {
+  static isInternalUser(role?: Role): boolean {
     const internalRoles: Role[] = [
       ROLES.adc,
       ROLES.admissionsClerk,
