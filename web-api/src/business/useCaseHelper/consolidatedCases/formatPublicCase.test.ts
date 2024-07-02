@@ -1,6 +1,5 @@
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
@@ -36,7 +35,6 @@ describe('getPublicCaseInteractor', () => {
     };
 
     let result = await formatPublicCase({
-      applicationContext,
       rawCaseRecord: sealedCase,
     });
 
@@ -46,7 +44,6 @@ describe('getPublicCaseInteractor', () => {
     delete sealedCase.isSealed;
 
     result = await formatPublicCase({
-      applicationContext,
       rawCaseRecord: sealedCase,
     });
 
@@ -61,7 +58,6 @@ describe('getPublicCaseInteractor', () => {
     };
 
     let result = await formatPublicCase({
-      applicationContext,
       rawCaseRecord: {
         ...mockCase,
         docketEntries: sealedDocketEntries,
@@ -87,7 +83,6 @@ describe('getPublicCaseInteractor', () => {
     };
 
     let result = await formatPublicCase({
-      applicationContext,
       rawCaseRecord: { ...mockCase, petitioners: [sealedContactPrimary] },
     });
 
@@ -110,7 +105,6 @@ describe('getPublicCaseInteractor', () => {
     };
 
     let result = await formatPublicCase({
-      applicationContext,
       rawCaseRecord: mockCase,
     });
 

@@ -1,6 +1,5 @@
 import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
@@ -15,12 +14,9 @@ import { decorateForCaseStatus } from '@shared/business/useCases/getCaseInteract
  * @param {object} providers.rawCaseRecord the rawCaseRecord
  * @returns {object} the validated public case data
  */
-
 export const formatPublicCase = ({
-  applicationContext,
   rawCaseRecord,
 }: {
-  applicationContext: ServerApplicationContext;
   rawCaseRecord?: Case;
 }) => {
   if (isSealedCase(rawCaseRecord)) {
@@ -34,7 +30,7 @@ export const formatPublicCase = ({
   rawCaseRecord = decorateForCaseStatus(rawCaseRecord);
 
   const publicCaseDetail = new PublicCase(rawCaseRecord, {
-    applicationContext,
+    authorizedUser: undefined,
   });
 
   return publicCaseDetail.validate().toRawObject();

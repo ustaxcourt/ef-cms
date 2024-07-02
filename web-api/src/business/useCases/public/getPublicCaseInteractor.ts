@@ -28,5 +28,5 @@ export const getPublicCaseInteractor = async (
     throw error;
   }
 
-  return formatPublicCase({ applicationContext, rawCaseRecord });
+  return formatPublicCase({ rawCaseRecord });
 };
