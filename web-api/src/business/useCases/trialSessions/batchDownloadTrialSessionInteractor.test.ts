@@ -1,16 +1,13 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   batchDownloadTrialSessionInteractor,
   generateValidDocketEntryFilename,
 } from './batchDownloadTrialSessionInteractor';
+import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('batchDownloadTrialSessionInteractor', () => {
-  let user;
   let mockCase;
 
   beforeEach(() => {
@@ -48,11 +45,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
       },
     ];
 
-    user = {
-      role: ROLES.judge,
-      userId: 'abc-123',
-    };
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([
@@ -110,10 +102,15 @@ describe('batchDownloadTrialSessionInteractor', () => {
       expect(filename).toBe(expectedName);
     });
   });
+
   it('skips DocketEntry that are not in docketrecord or have documents in S3', async () => {
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
@@ -139,9 +136,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);
 
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockJudgeUser,
+    );
 
     const errorCall =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -154,14 +155,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    user = {
-      role: ROLES.petitioner,
-      userId: 'abc-123',
-    };
-
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockPetitionerUser,
+    );
 
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       'Error when batch downloading trial session with id 123 - Unauthorized',
@@ -175,7 +175,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
-      userId: 'abc-123',
+      userId: mockPetitionerUser.userId,
     });
   });
 
@@ -184,9 +184,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockRejectedValueOnce(new Error());
 
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockJudgeUser,
+    );
 
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       'Error when batch downloading trial session with id 123 - unknown error',
@@ -200,7 +204,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
-      userId: 'abc-123',
+      userId: mockJudgeUser.userId,
     });
   });
 
@@ -210,9 +214,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(false);
 
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: mockTrialSessionId,
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: mockTrialSessionId,
+      },
+      mockJudgeUser,
+    );
 
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       `Error when batch downloading trial session with id ${mockTrialSessionId} - Trial session ${mockTrialSessionId} was not found.`,
@@ -226,14 +234,18 @@ describe('batchDownloadTrialSessionInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
-      userId: 'abc-123',
+      userId: mockJudgeUser.userId,
     });
   });
 
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -257,9 +269,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
         },
       ]);
 
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -294,9 +310,13 @@ describe('batchDownloadTrialSessionInteractor', () => {
         },
       ]);
 
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-    });
+    await batchDownloadTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '123',
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,

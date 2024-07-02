@@ -13,6 +13,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 
@@ -27,10 +28,11 @@ import sanitize from 'sanitize-filename';
 const batchDownloadTrialSessionInteractorHelper = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -116,7 +118,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -156,7 +158,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -168,7 +170,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         action: 'batch_download_error',
         error,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -181,7 +183,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -193,7 +195,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -224,7 +226,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
       action: 'batch_download_ready',
       url,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
 
@@ -256,13 +258,18 @@ export const generateValidDocketEntryFilename = ({
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
   try {
-    await batchDownloadTrialSessionInteractorHelper(applicationContext, {
-      trialSessionId,
-    });
+    await batchDownloadTrialSessionInteractorHelper(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      authorizedUser,
+    );
   } catch (error) {
-    const { userId } = applicationContext.getCurrentUser();
+    const { userId } = authorizedUser;
 
     const erMsg = error.message || 'unknown error';
     applicationContext.logger.error(
