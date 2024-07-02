@@ -204,7 +204,7 @@ function PetitionerInformation({
                               petitionFormatted.contactPrimary
                                 .placeOfLegalResidence
                             ]
-                          : 'N / A'}
+                          : 'N/A'}
                       </span>
                     </div>
                   ) : null}
