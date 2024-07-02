@@ -38,7 +38,7 @@ describe('CourtIssuedDocumentTypeH', () => {
         scenario: 'Type H',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: 'Enter a valid date',
+        date: 'Date cannot be in the future. Enter a valid date.',
       });
     });
 
