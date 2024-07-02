@@ -4,7 +4,6 @@ import {
   PARTIES_CODES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('setAsServed', () => {
   it('sets the Document as served', () => {
@@ -15,7 +14,7 @@ describe('setAsServed', () => {
           documentContents: 'Yee to the haw',
         },
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
     docketEntry.setAsServed();
 
@@ -28,7 +27,7 @@ describe('setAsServed', () => {
       {
         ...A_VALID_DOCKET_ENTRY,
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     docketEntry.setAsServed([
@@ -47,7 +46,7 @@ describe('setAsServed', () => {
         ...A_VALID_DOCKET_ENTRY,
         eventCode: 'ATP',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     docketEntry.setAsServed([

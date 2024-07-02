@@ -140,7 +140,7 @@ export const fixRaceConditionServedInDrafts = async (
   // TODO: figure out index
 
   const docketEntry = new DocketEntry(rawDocketEntry, {
-    applicationContext,
+    authorizedUser: undefined,
   }).validate();
 
   docketEntry.setAsServed(servedParties.all);

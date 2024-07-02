@@ -11,7 +11,7 @@ describe('archiveDocketEntry', () => {
 
   beforeEach(() => {
     docketEntryToArchive = new DocketEntry(cloneDeep(PENDING_DOCKET_ENTRY), {
-      applicationContext,
+      authorizedUser: undefined,
     });
     docketEntryToArchive.servedAt = undefined;
 
