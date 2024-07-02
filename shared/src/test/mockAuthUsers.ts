@@ -34,3 +34,10 @@ export const mockPrivatePractitionerUser: AuthUser = {
   role: ROLES.privatePractitioner,
   userId: '73dedd03-e353-4703-bf6b-5b864b8c16ae',
 };
+
+export const mockAdmissionsClerkUser: AuthUser = {
+  email: 'mockAdmissionsClerk@example.com',
+  name: 'Nora Scott',
+  role: ROLES.admissionsClerk,
+  userId: 'e796d8cd-2e85-4d79-b4e1-281b59cacd5f',
+};
