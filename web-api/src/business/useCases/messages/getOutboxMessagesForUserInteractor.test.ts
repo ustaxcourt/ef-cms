@@ -1,24 +1,26 @@
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('getOutboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      getOutboxMessagesForUserInteractor(applicationContext, {
-        userId: 'bob',
-      }),
+      getOutboxMessagesForUserInteractor(
+        applicationContext,
+        {
+          userId: 'bob',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -47,10 +49,6 @@ describe('getOutboxMessagesForUserInteractor', () => {
       trialDate: '2028-03-01T21:40:46.415Z',
       trialLocation: 'El Paso, Texas',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
     applicationContext
       .getPersistenceGateway()
       .getUserOutboxMessages.mockReturnValue([messageData]);
@@ -60,6 +58,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
       {
         userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       },
+      mockPetitionsClerkUser,
     );
 
     expect(
