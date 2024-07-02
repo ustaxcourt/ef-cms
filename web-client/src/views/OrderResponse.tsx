@@ -188,7 +188,7 @@ export const OrderResponse = connect(
                     errorText={orderResponseHelper.dueDateErrorText}
                   >
                     <DateSelector
-                      defaultValue=""
+                      defaultValue={form.dueDate}
                       disabled={!form.orderType}
                       formGroupClassNames="display-inline-block padding-0"
                       id="status-report-due-date"
@@ -198,7 +198,7 @@ export const OrderResponse = connect(
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
                           key: 'dueDate',
-                          toFormat: constants.DATE_FORMATS.MMDDYYYY,
+                          toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
                       }}

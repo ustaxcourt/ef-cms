@@ -33,7 +33,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
 
   static TODAY = formatDateString(
     createISODateAtStartOfDayEST(),
-    FORMATS.MMDDYYYY,
+    FORMATS.YYYYMMDD,
   );
 
   static VALIDATION_RULES = {
@@ -50,7 +50,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
         then: joi
           .date()
           .iso()
-          .format(['MM/DD/YYYY'])
+          .format(['YYYY-MM-DD']) // expects format 'YYYY-MM-DD' != 'yyyy-MM-dd'
           .min(StatusReportOrderResponseForm.TODAY)
           .required()
           .description('When the status report or stipulated decision is due.'),
