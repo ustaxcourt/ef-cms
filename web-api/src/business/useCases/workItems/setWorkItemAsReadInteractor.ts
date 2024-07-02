@@ -5,6 +5,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * setWorkItemAsReadInteractor
@@ -17,10 +18,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 export const setWorkItemAsReadInteractor = async (
   applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
