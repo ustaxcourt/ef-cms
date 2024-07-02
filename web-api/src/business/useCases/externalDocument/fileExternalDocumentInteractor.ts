@@ -160,30 +160,27 @@ export const fileExternalDocument = async (
             const highPriorityWorkItem =
               caseEntity.status === CASE_STATUS_TYPES.calendared;
 
-            const workItem = new WorkItem(
-              {
-                assigneeId: null,
-                assigneeName: null,
-                associatedJudge: caseToUpdate.associatedJudge,
-                associatedJudgeId: caseToUpdate.associatedJudgeId,
-                caseStatus: caseToUpdate.status,
-                caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-                docketEntry: {
-                  ...docketEntryEntity.toRawObject(),
-                  createdAt: docketEntryEntity.createdAt,
-                },
-                docketNumber: caseToUpdate.docketNumber,
-                docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-                highPriority: highPriorityWorkItem,
-                leadDocketNumber: caseToUpdate.leadDocketNumber,
-                section: DOCKET_SECTION,
-                sentBy: user.name,
-                sentByUserId: user.userId,
-                trialDate: caseEntity.trialDate,
-                trialLocation: caseEntity.trialLocation,
+            const workItem = new WorkItem({
+              assigneeId: null,
+              assigneeName: null,
+              associatedJudge: caseToUpdate.associatedJudge,
+              associatedJudgeId: caseToUpdate.associatedJudgeId,
+              caseStatus: caseToUpdate.status,
+              caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+              docketEntry: {
+                ...docketEntryEntity.toRawObject(),
+                createdAt: docketEntryEntity.createdAt,
               },
-              { applicationContext },
-            ).validate();
+              docketNumber: caseToUpdate.docketNumber,
+              docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+              highPriority: highPriorityWorkItem,
+              leadDocketNumber: caseToUpdate.leadDocketNumber,
+              section: DOCKET_SECTION,
+              sentBy: user.name,
+              sentByUserId: user.userId,
+              trialDate: caseEntity.trialDate,
+              trialLocation: caseEntity.trialLocation,
+            }).validate();
 
             docketEntryEntity.setWorkItem(workItem);
 

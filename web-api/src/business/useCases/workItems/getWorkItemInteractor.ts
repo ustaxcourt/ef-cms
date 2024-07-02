@@ -41,7 +41,5 @@ export const getWorkItemInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return new WorkItem(workItem, { applicationContext })
-    .validate()
-    .toRawObject();
+  return new WorkItem(workItem).validate().toRawObject();
 };

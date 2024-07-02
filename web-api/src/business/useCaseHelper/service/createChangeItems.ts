@@ -147,7 +147,6 @@ const createWorkItemForChange = async ({
       trialDate: caseEntity.trialDate,
       trialLocation: caseEntity.trialLocation,
     },
-    { applicationContext },
     caseEntity,
   );
 

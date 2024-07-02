@@ -12,25 +12,22 @@ describe('setWorkItem', () => {
       },
       { applicationContext, petitioners: MOCK_PETITIONERS },
     );
-    const workItem = new WorkItem(
-      {
-        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-        assigneeName: 'bob',
-        caseStatus: CASE_STATUS_TYPES.new,
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: A_VALID_DOCKET_ENTRY,
-        docketNumber: '101-18',
-        section: PETITIONS_SECTION,
-        sentBy: 'bob',
-      },
-      { applicationContext },
-    );
+    const workItem = new WorkItem({
+      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+      assigneeName: 'bob',
+      caseStatus: CASE_STATUS_TYPES.new,
+      caseTitle: 'Johnny Joe Jacobson',
+      docketEntry: A_VALID_DOCKET_ENTRY,
+      docketNumber: '101-18',
+      section: PETITIONS_SECTION,
+      sentBy: 'bob',
+    });
 
     myDoc.setWorkItem(workItem);
 
     expect(myDoc.isValid()).toBeTruthy();
 
-    myDoc.setWorkItem(new WorkItem({}, { applicationContext }));
+    myDoc.setWorkItem(new WorkItem({}));
 
     expect(myDoc.isValid()).toBeFalsy();
   });

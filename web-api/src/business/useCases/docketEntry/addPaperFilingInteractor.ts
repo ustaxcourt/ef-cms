@@ -144,7 +144,6 @@ export const addPaperFiling = async (
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
       },
-      { applicationContext },
       caseEntity,
     );
 
