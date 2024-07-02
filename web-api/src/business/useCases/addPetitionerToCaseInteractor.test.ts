@@ -7,12 +7,13 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
-import {
-  ServiceUnavailableError,
-  UnauthorizedError,
-} from '@web-api/errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('addPetitionerToCaseInteractor', () => {
   let mockContact;
@@ -38,11 +39,6 @@ describe('addPetitionerToCaseInteractor', () => {
       state: 'CO',
     };
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -58,11 +54,15 @@ describe('addPetitionerToCaseInteractor', () => {
     });
 
     await expect(
-      addPetitionerToCaseInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contact: mockContact,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      addPetitionerToCaseInteractor(
+        applicationContext,
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          contact: mockContact,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized for adding petitioner to case');
   });
 
@@ -75,27 +75,35 @@ describe('addPetitionerToCaseInteractor', () => {
       });
 
     await expect(
-      addPetitionerToCaseInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contact: mockContact,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      addPetitionerToCaseInteractor(
+        applicationContext,
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          contact: mockContact,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       `Case with docketNumber ${MOCK_CASE.docketNumber} has not been served`,
     );
   });
 
   it('should add the petitioner to the case and send the updated case to persistence, and return the updated case', async () => {
-    await addPetitionerToCaseInteractor(applicationContext, {
-      caseCaption: MOCK_CASE.caseCaption,
+    await addPetitionerToCaseInteractor(
+      applicationContext,
+      {
+        caseCaption: MOCK_CASE.caseCaption,
 
-      contact: {
-        ...mockContact,
-        country: 'Georgia',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
+        contact: {
+          ...mockContact,
+          country: 'Georgia',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -114,6 +122,7 @@ describe('addPetitionerToCaseInteractor', () => {
         contact: mockContact,
         docketNumber: MOCK_CASE.docketNumber,
       },
+      mockDocketClerkUser,
     );
 
     expect(updatedCase.petitioners.length).toEqual(2);
@@ -130,11 +139,15 @@ describe('addPetitionerToCaseInteractor', () => {
 
     const mockUpdatedCaption = 'An updated caption';
 
-    await addPetitionerToCaseInteractor(applicationContext, {
-      caseCaption: mockUpdatedCaption,
-      contact: mockContact,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await addPetitionerToCaseInteractor(
+      applicationContext,
+      {
+        caseCaption: mockUpdatedCaption,
+        contact: mockContact,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -146,11 +159,15 @@ describe('addPetitionerToCaseInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      addPetitionerToCaseInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contact: mockContact,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      addPetitionerToCaseInteractor(
+        applicationContext,
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          contact: mockContact,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -159,11 +176,15 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await addPetitionerToCaseInteractor(applicationContext, {
-      caseCaption: MOCK_CASE.caseCaption,
-      contact: mockContact,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await addPetitionerToCaseInteractor(
+      applicationContext,
+      {
+        caseCaption: MOCK_CASE.caseCaption,
+        contact: mockContact,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -179,17 +200,5 @@ describe('addPetitionerToCaseInteractor', () => {
       applicationContext,
       identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
-  });
-
-  it('should throw an Unauthorized error if the user is not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
-    await expect(
-      addPetitionerToCaseInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contact: mockContact,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow(UnauthorizedError);
   });
 });
