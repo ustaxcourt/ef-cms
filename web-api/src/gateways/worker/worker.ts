@@ -1,3 +1,4 @@
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   WorkerHandler,
@@ -8,11 +9,10 @@ export const worker: WorkerHandler = async (
   applicationContext: ServerApplicationContext,
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
-  const sqs = await applicationContext.getMessagingClient();
-  await sqs
-    .sendMessage({
-      MessageBody: JSON.stringify(message),
-      QueueUrl: applicationContext.environment.workerQueueUrl,
-    })
-    .promise();
+  const sqs: SQSClient = await applicationContext.getMessagingClient();
+  const cmd = new SendMessageCommand({
+    MessageBody: JSON.stringify(message),
+    QueueUrl: applicationContext.environment.workerQueueUrl,
+  });
+  await sqs.send(cmd);
 };
