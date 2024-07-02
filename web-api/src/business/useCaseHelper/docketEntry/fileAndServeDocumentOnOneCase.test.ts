@@ -54,7 +54,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
             workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
           },
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       );
     });
 
@@ -97,7 +97,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedJudgeName: judgeUser.name,
         workItem: mockWorkItem,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
   });
 
@@ -116,7 +116,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedJudgeName: judgeUser.name,
         workItem: undefined,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await fileAndServeDocumentOnOneCase({
@@ -132,7 +132,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
 
   it('should not add a new docket entry when it already exists on the case', async () => {
     const docketEntryOnCase = new DocketEntry(mockCaseEntity.docketEntries[0], {
-      applicationContext,
+      authorizedUser: undefined,
     });
 
     await fileAndServeDocumentOnOneCase({
@@ -161,7 +161,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedJudgeName: judgeUser.name,
         workItem: undefined,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await fileAndServeDocumentOnOneCase({
@@ -202,7 +202,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedJudgeName: judgeUser.name,
         workItem: mockWorkItem,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await fileAndServeDocumentOnOneCase({
@@ -310,7 +310,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
           index: undefined,
           isOnDocketRecord: true,
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
       subjectCaseDocketNumber: mockCaseEntity.docketNumber,
       user: docketClerkUser,
@@ -403,7 +403,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedJudgeName: judgeUser.name,
         workItem: undefined,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await fileAndServeDocumentOnOneCase({
@@ -438,7 +438,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await fileAndServeDocumentOnOneCase({
@@ -491,7 +491,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         docketEntryId: mockDocketEntryId,
         pending: true,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     applicationContext

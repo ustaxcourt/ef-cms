@@ -64,6 +64,7 @@ import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
@@ -173,7 +174,12 @@ export class Case extends JoiValidationEntity {
       });
     }
 
-    const params = { applicationContext, filtered, rawCase };
+    const params = {
+      applicationContext,
+      authorizedUser: currentUser,
+      filtered,
+      rawCase,
+    };
 
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
@@ -318,7 +324,10 @@ export class Case extends JoiValidationEntity {
     this.orderForRatification = rawCase.orderForRatification || false;
     this.orderToShowCause = rawCase.orderToShowCause || false;
 
-    this.assignArchivedDocketEntries({ applicationContext, rawCase });
+    this.assignArchivedDocketEntries({
+      authorizedUser: applicationContext.getCurrentUser(),
+      rawCase,
+    });
     this.assignStatistics({ applicationContext, rawCase });
     this.assignCorrespondences({ rawCase });
   }
@@ -763,12 +772,18 @@ export class Case extends JoiValidationEntity {
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
   }
 
-  assignArchivedDocketEntries({ applicationContext, rawCase }) {
+  private assignArchivedDocketEntries({
+    authorizedUser,
+    rawCase,
+  }: {
+    authorizedUser: UnknownAuthUser;
+    rawCase: any;
+  }) {
     if (Array.isArray(rawCase.archivedDocketEntries)) {
       this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
         docketEntry =>
           new DocketEntry(docketEntry, {
-            applicationContext,
+            authorizedUser,
             petitioners: this.petitioners,
           }),
       );
@@ -777,13 +792,18 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  assignDocketEntries({ applicationContext, filtered, rawCase }) {
+  private assignDocketEntries({
+    applicationContext,
+    authorizedUser,
+    filtered,
+    rawCase,
+  }) {
     if (Array.isArray(rawCase.docketEntries)) {
       this.docketEntries = rawCase.docketEntries
         .map(
           docketEntry =>
             new DocketEntry(docketEntry, {
-              applicationContext,
+              authorizedUser,
               filtered,
               petitioners: this.petitioners,
             }),
@@ -1135,7 +1155,7 @@ export class Case extends JoiValidationEntity {
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { applicationContext, petitioners: this.petitioners },
+        { authorizedUser: user, petitioners: this.petitioners },
       );
 
       mincDocketEntry.setFiledBy(user);
@@ -1185,7 +1205,7 @@ export class Case extends JoiValidationEntity {
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { applicationContext, petitioners: this.petitioners },
+        { authorizedUser: user, petitioners: this.petitioners },
       );
 
       mindDocketEntry.setFiledBy(user);

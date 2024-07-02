@@ -79,7 +79,7 @@ const createDocketEntryForChange = async ({
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       ...docketMeta,
     },
-    { applicationContext },
+    { authorizedUser: applicationContext.getCurrentUser() },
   );
 
   changeOfAddressDocketEntry.setFiledBy(user);

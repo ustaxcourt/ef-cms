@@ -136,7 +136,7 @@ export const updateContact = async (
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext, petitioners: caseEntity.petitioners },
+      { authorizedUser: user, petitioners: caseEntity.petitioners },
     );
 
     changeOfAddressDocketEntry.setFiledBy(user);

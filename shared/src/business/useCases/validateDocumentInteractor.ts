@@ -13,7 +13,7 @@ export const validateDocumentInteractor = (
   { document }: { document: any },
 ) => {
   const errors = new DocketEntry(document, {
-    applicationContext,
+    authorizedUser: applicationContext.getCurrentser(),
   }).getFormattedValidationErrors();
 
   return errors || null;

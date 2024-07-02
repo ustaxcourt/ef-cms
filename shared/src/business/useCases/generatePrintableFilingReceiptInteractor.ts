@@ -12,7 +12,7 @@ const getDocumentInfo = ({
   petitioners?: any[];
 }) => {
   const doc = new DocketEntry(documentData, {
-    applicationContext,
+    authorizedUser: applicationContext.getCurrentUser(),
     petitioners,
   });
 

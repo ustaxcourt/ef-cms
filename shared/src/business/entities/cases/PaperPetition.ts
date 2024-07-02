@@ -123,7 +123,10 @@ export class PaperPetition extends JoiValidationEntity {
 
     this.archivedDocketEntries = Array.isArray(rawProps.archivedDocketEntries)
       ? rawProps.archivedDocketEntries.map(
-          doc => new DocketEntry(doc, { applicationContext }),
+          doc =>
+            new DocketEntry(doc, {
+              authorizedUser: applicationContext.getCurrentUser(),
+            }),
         )
       : [];
 

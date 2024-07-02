@@ -81,7 +81,7 @@ export const updateCaseDetails = async (
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { applicationContext },
+        { authorizedUser: user },
       );
 
       filingFeePaidEntry.setFiledBy(user);
@@ -98,7 +98,7 @@ export const updateCaseDetails = async (
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { applicationContext },
+        { authorizedUser: user },
       );
 
       filingFeeWaivedEntry.setFiledBy(user);

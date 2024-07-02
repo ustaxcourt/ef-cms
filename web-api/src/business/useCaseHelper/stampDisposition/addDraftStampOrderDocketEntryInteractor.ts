@@ -93,7 +93,7 @@ export const addDraftStampOrderDocketEntry = async (
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       stampData: validatedStampData,
     },
-    { applicationContext },
+    { authorizedUser: user },
   );
 
   stampedDocketEntryEntity.setFiledBy(user);
