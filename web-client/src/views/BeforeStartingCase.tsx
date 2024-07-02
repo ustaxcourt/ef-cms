@@ -34,6 +34,15 @@ export const BeforeStartingCase = connect(
         : '/file-a-petition/step-1';
     return (
       <>
+        <style>
+          {`
+          @media print {
+            #return-to-top-button {
+              display: none !important;
+            }
+          }
+        `}
+        </style>
         <div className="big-blue-header">
           <div className="grid-container">
             <div className="grid-row">
