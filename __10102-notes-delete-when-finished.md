@@ -27,7 +27,7 @@ only 140 or 160 characters long. Which is it?
 
 ## Things to do
 
-- Edit view must use the OrderResponse.tsx component for the correct permissions (group)
+- Edit view must use the OrderResponse.tsx component for the correct users, currently edit will always route to the new form, maybe this is OK? (group)
 
 - Update CSS to Match Mocks (solo)
 
