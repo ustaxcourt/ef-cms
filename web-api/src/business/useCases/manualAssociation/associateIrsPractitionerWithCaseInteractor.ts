@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 
 /**
@@ -23,11 +24,10 @@ export const associateIrsPractitionerWithCaseInteractor = async (
     serviceIndicator,
     userId,
   }: { docketNumber: string; serviceIndicator: string; userId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authenticatedUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }

@@ -55,3 +55,10 @@ export const mockAdminUser: AuthUser = {
   role: ROLES.admin,
   userId: 'f56424f2-e071-4b3c-97b9-708f660a0ea7',
 };
+
+export const mockAdcUser: AuthUser = {
+  email: 'mockAdc@example.com',
+  name: 'Antony Aardvark',
+  role: ROLES.adc,
+  userId: '9f357f78-a8fa-40bf-83db-8144ddf14047',
+};
