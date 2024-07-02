@@ -1,7 +1,11 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const clearPetitionRedactionAcknowledgementAction = ({
+  get,
   store,
 }: ActionProps) => {
-  store.unset(state.form.petitionRedactionAcknowledgement);
+  const file = get(state.form.petitionFile);
+  if (!file) {
+    store.unset(state.form.petitionRedactionAcknowledgement);
+  }
 };
