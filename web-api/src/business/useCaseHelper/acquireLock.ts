@@ -130,24 +130,24 @@ export const removeLock = ({
  */
 export function withLocking<InteractorInput, InteractorOutput>(
   interactor: (
-    applicationContext: ServerApplicationContext,
+    applicationContext: any,
     options: InteractorInput,
     authorizedUser: UnknownAuthUser,
   ) => Promise<InteractorOutput>,
   getLockInfo: (
-    applicationContext: ServerApplicationContext,
+    applicationContext: any,
     options: any,
   ) =>
     | Promise<{ identifiers: string[]; ttl?: number }>
     | { identifiers: string[]; ttl?: number },
   onLockError?: Error | Function,
 ): (
-  applicationContext: ServerApplicationContext,
+  applicationContext: any,
   options: InteractorInput,
   authorizedUser: UnknownAuthUser,
 ) => Promise<InteractorOutput> {
   return async function (
-    applicationContext: ServerApplicationContext,
+    applicationContext: any,
     options: InteractorInput,
     authorizedUser: UnknownAuthUser,
   ) {
