@@ -16,7 +16,6 @@ import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const UpdatedFilePetitionStep6 = connect(
   {
@@ -146,8 +145,8 @@ function PetitionerInformation({
     <div className="border-top-1px padding-top-2 padding-bottom-2 height-full margin-bottom-0">
       <div className="content-wrapper">
         <CardHeader step={1} title="Petitioner Information" />
-        <div className="grid-row grid-gap">
-          <div className="tablet:grid-col-3">
+        <div className="petition-review-petitioner-section">
+          <div>
             <span className="usa-label usa-label-display">Party type</span>
             <div className="margin-bottom-2">{petitionFormatted.partyType}</div>
             {petitionFormatted.corporateDisclosureFile && (
@@ -156,7 +155,7 @@ function PetitionerInformation({
                   Corporate Disclosure Statement
                 </span>
                 <div>
-                  <div className="grid-row">
+                  <div>
                     <div className="grid-col flex-auto">
                       <Button
                         link
@@ -174,8 +173,8 @@ function PetitionerInformation({
               </div>
             )}
           </div>
-          <div className={classNames('margin-bottom-1', 'tablet:grid-col-3')}>
-            <div className="grid-row">
+          <div className="margin-bottom-1">
+            <div>
               <span
                 className="usa-label usa-label-display"
                 id="filing-contact-primary"
@@ -218,9 +217,9 @@ function PetitionerInformation({
               )}
             </div>
           </div>
-          <div className={classNames('margin-bottom-1', 'tablet:grid-col-3')}>
+          <div className="margin-bottom-1">
             {petitionFormatted.contactSecondary && (
-              <div className="grid-row">
+              <div>
                 <span
                   className="usa-label usa-label-display"
                   id="filing-contact-secondary"
@@ -323,7 +322,7 @@ function IRSNoticeInformation({ petitionFormatted }) {
     <div className="border-top-1px padding-top-2 padding-bottom-2 height-full margin-bottom-0">
       <div className="content-wrapper">
         <CardHeader step={3} title="IRS Notice" />
-        <div className="grid-row grid-gap">
+        <div className="petition-review-irs-notice-section">
           {!petitionFormatted.hasIrsNotice && (
             <div>
               <div className="line-height-2">
@@ -336,10 +335,11 @@ function IRSNoticeInformation({ petitionFormatted }) {
               </div>
             </div>
           )}
+
           {petitionFormatted.hasIrsNotice &&
             petitionFormatted.irsNotices.map((irsNotice, index) => (
               <div
-                className="tablet:grid-col-2 line-height-2 margin-bottom-105"
+                className="line-height-2 margin-bottom-105"
                 key={`${irsNotice.caseType}`}
               >
                 <div className="margin-bottom-1 semi-bold">

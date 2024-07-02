@@ -2314,3 +2314,27 @@ button.change-scanner-button {
   font-family: $font-source-sans;
   text-wrap: balance;
 }
+
+.petition-review-petitioner-section {
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .petition-review-petitioner-section {
+    grid-template-columns: auto;
+  }
+}
+
+.petition-review-irs-notice-section {
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .petition-review-irs-notice-section {
+    grid-template-columns: auto;
+  }
+}
