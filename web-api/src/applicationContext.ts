@@ -36,6 +36,7 @@ import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseN
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
@@ -50,6 +51,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
@@ -78,7 +80,6 @@ import sass from 'sass';
 
 let sqsCache: SQSClient;
 let searchClientCache: Client;
-let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -220,8 +221,8 @@ export const createApplicationContext = (
           maxAttempts: 3,
           region: environment.region,
           requestHandler: new NodeHttpHandler({
-            connectionTimeout: 3_000,
-            requestTimeout: 5_000,
+            connectionTimeout: 3000,
+            requestTimeout: 5000,
           }),
         });
       }
@@ -247,28 +248,7 @@ export const createApplicationContext = (
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
-    getNotificationService: () => {
-      if (notificationServiceCache) {
-        return notificationServiceCache;
-      }
-
-      if (environment.stage === 'local') {
-        notificationServiceCache = {
-          publish: () => ({
-            promise: () => {},
-          }),
-        };
-      } else {
-        notificationServiceCache = new AWS.SNS({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-        });
-      }
-      return notificationServiceCache;
-    },
+    getNotificationService,
     getPdfJs: () => {
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
@@ -295,16 +275,10 @@ export const createApplicationContext = (
         } else {
           searchClientCache = new Client({
             ...AwsSigv4Signer({
-              getCredentials: () =>
-                new Promise((resolve, reject) => {
-                  AWS.config.getCredentials((err, credentials) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(credentials as any);
-                    }
-                  });
-                }),
+              getCredentials: () => {
+                const credentialsProvider = defaultProvider();
+                return credentialsProvider();
+              },
               region: 'us-east-1',
             }),
             node: `https://${environment.elasticsearchEndpoint}:443`,
