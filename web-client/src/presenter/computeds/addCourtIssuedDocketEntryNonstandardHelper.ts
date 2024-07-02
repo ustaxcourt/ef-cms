@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const addCourtIssuedDocketEntryNonstandardHelper = (
@@ -14,6 +15,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     entry => entry.eventCode === selectedEventCode,
   );
 
+  let minDate;
   let showDateFirst = false;
   let showDateLast = false;
   let showDocketNumbers = false;
@@ -35,6 +37,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
         showDocketNumbers = true;
         break;
       case 'Type D':
+        minDate = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
         showFreeText = true;
         showDateFirst = true;
         break;
@@ -76,6 +79,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   return {
     dateLabel,
     freeTextLabel,
+    minDate,
     showDateFirst,
     showDateLast,
     showDocketNumbers,
