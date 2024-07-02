@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { getEditUrl } from '@shared/business/utilities/getFormattedCaseDetail';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -12,6 +11,8 @@ export const DraftDocumentViewerDocument = connect(
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.caseDetail,
+    draftDocumentEditNotSignedSequence:
+      sequences.draftDocumentEditNotSignedSequence,
     draftDocumentViewerHelper: state.draftDocumentViewerHelper,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
@@ -24,6 +25,7 @@ export const DraftDocumentViewerDocument = connect(
   function DraftDocumentViewerDocument({
     archiveDraftDocumentModalSequence,
     caseDetail,
+    draftDocumentEditNotSignedSequence,
     draftDocumentViewerHelper,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
@@ -67,13 +69,16 @@ export const DraftDocumentViewerDocument = connect(
                 <Button
                   link
                   data-testid="draft-edit-button-not-signed"
-                  href={getEditUrl({
-                    docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
-                    docketNumber: caseDetail.docketNumber,
-                    documentType: viewerDraftDocumentToDisplay.documentType,
-                  })}
                   icon="edit"
                   id="draft-edit-button-not-signed"
+                  onClick={() =>
+                    draftDocumentEditNotSignedSequence({
+                      caseDetail,
+                      docketEntryIdToEdit:
+                        viewerDraftDocumentToDisplay.docketEntryId,
+                      documentType: viewerDraftDocumentToDisplay.documentType,
+                    })
+                  }
                 >
                   Edit
                 </Button>

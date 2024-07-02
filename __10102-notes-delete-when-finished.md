@@ -27,13 +27,29 @@ only 140 or 160 characters long. Which is it?
 
 ## Things to do
 
-- Edit view must use the OrderResponse.tsx component
+- Edit view must use the OrderResponse.tsx component for the correct permissions (group)
 
-- Update CSS to Match Mocks
+- Update CSS to Match Mocks (solo)
 
-- Default docket entry description to Order
+- Default docket entry description to Order (solo)
 
-- Type our newly added sequences
+- Type our newly added sequences (group)
+
+- clear form issue on edit (group)
+
+- finish accessibility test (solo / group)
+
+- add remaining units test (solo / group)
+
+- write integration (group)
+
+- fix missing local images for seed data (group)
+
+## Feedback from judges:
+
+1. Formatting of separate clauses should be: indent first line beginning with "ORDERED", following lines should return to left margin as in the example PDF you sent (so, normal paragraph formatting).
+
+2. Dates should have the following format in all cases where they've been generated/selected: "Month DD, YYYY" (essentially, spell out the month).
 
 ## Notes
 
