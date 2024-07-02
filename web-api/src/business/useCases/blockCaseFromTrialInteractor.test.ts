@@ -1,9 +1,12 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('blockCaseFromTrialInteractor', () => {
   let mockLock;
@@ -14,10 +17,6 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -30,10 +29,14 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
-    const result = await blockCaseFromTrialInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    const result = await blockCaseFromTrialInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toMatchObject({
       blocked: true,
@@ -53,10 +56,14 @@ describe('blockCaseFromTrialInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      blockCaseFromTrialInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        reason: 'just because',
-      }),
+      blockCaseFromTrialInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          reason: 'just because',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -65,10 +72,14 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await blockCaseFromTrialInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    await blockCaseFromTrialInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -87,15 +98,14 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to block cases', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'nope',
-      userId: 'nope',
-    });
-
     await expect(
-      blockCaseFromTrialInteractor(applicationContext, {
-        docketNumber: '123-45',
-      } as any),
+      blockCaseFromTrialInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-45',
+        } as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 });
