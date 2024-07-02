@@ -1,11 +1,13 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
+import {
+  mockPetitionerUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generatePrintableTrialSessionCopyReportInteractor', () => {
-  let mockUser;
   let mockTrialSession;
 
   const interactorProps = {
@@ -40,13 +42,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   });
 
   beforeEach(() => {
-    mockUser = {
-      role: ROLES.trialClerk,
-      userId: 'trialclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-
     mockTrialSession = MOCK_TRIAL_REGULAR;
   });
 
@@ -57,15 +52,11 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
-    mockUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
       generatePrintableTrialSessionCopyReportInteractor(
         applicationContext,
         interactorProps,
+        mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
@@ -74,6 +65,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       interactorProps,
+      mockTrialClerkUser,
     );
 
     expect(
@@ -89,6 +81,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       interactorProps,
+      mockTrialClerkUser,
     );
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
@@ -99,6 +92,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     const results = await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       interactorProps,
+      mockTrialClerkUser,
     );
 
     expect(
@@ -116,6 +110,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       generatePrintableTrialSessionCopyReportInteractor(
         applicationContext,
         interactorProps,
+        mockTrialClerkUser,
       ),
     ).rejects.toEqual('error');
     expect(applicationContext.logger.error).toHaveBeenCalled();
