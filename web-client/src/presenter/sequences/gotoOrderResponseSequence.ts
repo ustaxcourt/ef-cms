@@ -1,4 +1,4 @@
-import { clearFormAction } from '../actions/clearFormAction';
+//import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -14,7 +14,8 @@ export const gotoOrderResponseSequence =
     setCaseAction,
     setDocketEntryIdAction,
     setDocketEntrySelectedFromMessageAction,
-    clearFormAction,
+    // TODO 10102: Deal with clearing the form
+    //clearFormAction,
     // need to load the PDF into state?
     // see setPDFForStampAction for an example
     setupCurrentPageAction('OrderResponse'),
