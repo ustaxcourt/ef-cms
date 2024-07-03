@@ -353,12 +353,12 @@ export const OrderResponse = connect(
                         aria-label="docket entry description"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
+                        defaultValue={'Order'}
                         id="docket-entry-description"
                         // TODO find the character limit used in the ApplyStamp
                         // component and use that
                         maxLength={80}
                         name="docketEntryDescription"
-                        // TODO default value of this field should be just the string "Order"
                         value={form.docketEntryDescription}
                         onChange={e => {
                           updateFormValueSequence({
