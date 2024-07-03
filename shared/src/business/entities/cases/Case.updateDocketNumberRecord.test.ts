@@ -2,6 +2,7 @@ import { CASE_STATUS_TYPES, DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
 import { Case } from './Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateDocketNumberRecord records suffix changes', () => {
   it('should create a notice of docket number change document when the suffix updates for an electronically created case', () => {
@@ -19,7 +20,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
     expect(caseToVerify.initialDocketNumberSuffix).toEqual('S');
     caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
     caseToVerify.updateDocketNumberRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(1);
     expect(caseToVerify.docketEntries[0]).toMatchObject({
@@ -44,7 +45,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
     );
     expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
     caseToVerify.updateDocketNumberRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(0);
   });
@@ -58,7 +59,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
     );
     expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
     caseToVerify.updateDocketNumberRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(0);
   });
@@ -90,7 +91,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
     );
     caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
     caseToVerify.updateDocketNumberRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(3);
     expect(caseToVerify.docketEntries[2].documentTitle).toEqual(

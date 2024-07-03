@@ -21,6 +21,7 @@ import {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
+  Role,
   STIN_DOCKET_ENTRY_TYPE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -731,7 +732,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.numberOfPages = numberOfPages;
   }
 
-  setFiledBy(user: RawUser) {
+  setFiledBy(user: { userId: string; role: Role }): void {
     this.userId = user.userId;
     this.filedByRole = user.role;
   }
