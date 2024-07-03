@@ -4,6 +4,7 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { navigateToStatusReportOrderResponseAction } from '@web-client/presenter/actions/navigateToStatusReportOrderResponseAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/setEditStatusReportOrderResponseFormAction';
+import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/statusReportOrderResponsePdfPreviewSequence';
 
 export const draftDocumentEditNotSignedSequence = [
   checkDocumentTypeAction,
@@ -17,6 +18,7 @@ export const draftDocumentEditNotSignedSequence = [
         isStatusReportOrderResponse: [
           setEditStatusReportOrderResponseFormAction,
           navigateToStatusReportOrderResponseAction,
+          statusReportOrderResponsePdfPreviewSequence,
         ],
       },
     ],

@@ -1,3 +1,4 @@
+import { clearPdfPreviewUrlAction } from '@web-client/presenter/actions/clearPdfPreviewUrlAction';
 import { clearStatusOrderResponseFormAction } from '@web-client/presenter/actions/clearStatusOrderResponseFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -11,6 +12,7 @@ export const gotoOrderResponseSequence = [
   setCaseAction,
   setDocketEntryIdAction,
   setDocketEntrySelectedFromMessageAction,
+  clearPdfPreviewUrlAction,
   clearStatusOrderResponseFormAction,
   setupCurrentPageAction('OrderResponse'),
 ];
