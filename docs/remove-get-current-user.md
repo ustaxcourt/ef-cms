@@ -1,3 +1,7 @@
+# HeadSpace
+- DO NOT REFACTOR
+- If something seems questionable or gives a moment of pause mark with a comment: // TODO 10417
+
 # Web-Client 
 Steps to transition getCurrentUser() in web-client
 1. Find applicationContext.getCurrentUser() and replace with get(state.user);
@@ -7,6 +11,8 @@ Steps to transition getCurrentUser() in web-client
 For Interactors that are still in shared follow the steps in the `Web-Api` section
 
 For DocketEntry, Case, PublicCase
+
+TODO: Look for 'extends' Classname
 
 # Web-Api
 Steps To transition an interactor away from getCurrentUser()
