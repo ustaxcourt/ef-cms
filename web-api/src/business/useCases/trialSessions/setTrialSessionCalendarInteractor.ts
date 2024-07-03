@@ -35,9 +35,7 @@ export const setTrialSessionCalendarInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   trialSessionEntity.validate();
 
@@ -179,9 +177,7 @@ export const setTrialSessionCalendarInteractor = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  return new TrialSession(trialSessionEntity.toRawObject(), {
-    applicationContext,
-  })
+  return new TrialSession(trialSessionEntity.toRawObject())
     .validate()
     .toRawObject();
 };

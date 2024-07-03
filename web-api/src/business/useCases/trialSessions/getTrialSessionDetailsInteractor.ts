@@ -29,9 +29,7 @@ export const getTrialSessionDetailsInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = new TrialSession(trialSessionDetails, {
-    applicationContext,
-  }).validate();
+  const trialSessionEntity = new TrialSession(trialSessionDetails).validate();
 
   return trialSessionEntity.toRawObject();
 };

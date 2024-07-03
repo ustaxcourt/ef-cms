@@ -74,9 +74,7 @@ export const serveThirtyDayNoticeInteractor = async (
     return;
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();

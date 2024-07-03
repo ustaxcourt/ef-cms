@@ -70,9 +70,7 @@ export const getTrialSessionWorkingCopyInteractor = async (
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
     }
 
-    const trialSessionEntity = new TrialSession(trialSessionDetails, {
-      applicationContext,
-    });
+    const trialSessionEntity = new TrialSession(trialSessionDetails);
 
     const canCreateWorkingCopy =
       (trialSessionEntity.trialClerk &&

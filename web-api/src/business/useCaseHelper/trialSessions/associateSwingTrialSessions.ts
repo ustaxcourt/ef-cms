@@ -40,9 +40,7 @@ export const associateSwingTrialSessions = async (
     throw new NotFoundError(`Trial session ${swingSessionId} was not found.`);
   }
 
-  const swingSessionEntity = new TrialSession(swingTrialSession, {
-    applicationContext,
-  });
+  const swingSessionEntity = new TrialSession(swingTrialSession);
 
   trialSessionEntity.setAsSwingSession(swingSessionId);
   swingSessionEntity.setAsSwingSession(trialSessionEntity.trialSessionId);

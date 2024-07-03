@@ -22,9 +22,7 @@ export const getTrialSessionsInteractor = async (
       applicationContext,
     });
 
-  const validatedSessions = TrialSession.validateRawCollection(trialSessions, {
-    applicationContext,
-  });
+  const validatedSessions = TrialSession.validateRawCollection(trialSessions);
 
   return validatedSessions.map(
     trialSession => new TrialSessionInfoDTO(trialSession),

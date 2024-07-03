@@ -56,9 +56,7 @@ export const addCaseToTrialSession = async (
 
   const caseEntity = new Case(caseDetails, { applicationContext });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   if (caseEntity.isCalendared()) {
     throw new Error('The case is already calendared');

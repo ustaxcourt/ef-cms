@@ -34,12 +34,10 @@ export const dismissNOTTReminderForTrialInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const updatedTrialSessionEntity: TrialSession = new TrialSession(
-    { ...currentTrialSession, dismissedAlertForNOTT: true },
-    {
-      applicationContext,
-    },
-  );
+  const updatedTrialSessionEntity: TrialSession = new TrialSession({
+    ...currentTrialSession,
+    dismissedAlertForNOTT: true,
+  });
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

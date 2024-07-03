@@ -67,9 +67,7 @@ export const setNoticesForCalendaredTrialSession = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const trialSessionProcessingStatus = await applicationContext
     .getPersistenceGateway()

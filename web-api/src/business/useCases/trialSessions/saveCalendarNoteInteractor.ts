@@ -47,9 +47,7 @@ export const saveCalendarNoteInteractor = async (
     }
   });
 
-  const rawTrialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  })
+  const rawTrialSessionEntity = new TrialSession(trialSession)
     .validate()
     .toRawObject();
 

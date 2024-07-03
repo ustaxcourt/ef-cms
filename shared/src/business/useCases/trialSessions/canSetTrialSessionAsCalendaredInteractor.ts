@@ -26,9 +26,7 @@ export const canSetTrialSessionAsCalendaredInteractor = (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const canSetAsCalendared = trialSessionEntity.canSetAsCalendared();
   const emptyFields = trialSessionEntity.getEmptyFields();

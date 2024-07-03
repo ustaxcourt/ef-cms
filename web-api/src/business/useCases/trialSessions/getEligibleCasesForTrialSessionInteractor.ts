@@ -53,9 +53,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       });
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   trialSessionEntity.validate();
 

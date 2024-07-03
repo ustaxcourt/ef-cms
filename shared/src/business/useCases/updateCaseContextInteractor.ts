@@ -74,9 +74,7 @@ export const updateCaseContext = async (
         );
       }
 
-      const trialSessionEntity = new TrialSession(trialSession, {
-        applicationContext,
-      });
+      const trialSessionEntity = new TrialSession(trialSession);
 
       trialSessionEntity.removeCaseFromCalendar({
         disposition,

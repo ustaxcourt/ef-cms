@@ -37,9 +37,7 @@ describe('associateSwingTrialSessions', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_SESSION_FOR_ASSOCIATION);
 
-    mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION, {
-      applicationContext,
-    });
+    mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION);
   });
 
   it('throws an error if user is unauthorized to associate swing sessions', async () => {
