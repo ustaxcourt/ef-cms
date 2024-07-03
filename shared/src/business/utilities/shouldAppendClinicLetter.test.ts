@@ -3,6 +3,7 @@ import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../test/mockTrial';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getClinicLetterKey } from './getClinicLetterKey';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { shouldAppendClinicLetter } from './shouldAppendClinicLetter';
 
 jest.mock('./getClinicLetterKey');
@@ -15,7 +16,7 @@ describe('shouldAppendClinicLetter', () => {
       ...MOCK_CASE,
     },
     {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     },
   );
 
@@ -67,7 +68,7 @@ describe('shouldAppendClinicLetter', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

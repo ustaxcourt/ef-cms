@@ -1,15 +1,14 @@
 import { CaseQC } from './CaseQC';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('CaseQC entity', () => {
   describe('validation', () => {
-    it('throws an exception when not provided an application context', () => {
-      expect(() => new CaseQC({}, {} as any)).toThrow();
-    });
-
     it('returns the expected set of errors for an empty object', () => {
-      const caseQcEntity = new CaseQC({}, { applicationContext });
+      const caseQcEntity = new CaseQC(
+        {},
+        { authorizedUser: mockDocketClerkUser },
+      );
 
       expect(caseQcEntity.getFormattedValidationErrors()).toEqual({
         caseCaption: 'Enter a case caption',
@@ -28,7 +27,7 @@ describe('CaseQC entity', () => {
           ...MOCK_CASE,
           hasVerifiedIrsNotice: false,
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(caseQcEntity.getFormattedValidationErrors()).toEqual(null);

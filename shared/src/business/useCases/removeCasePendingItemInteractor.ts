@@ -34,7 +34,7 @@ export const removeCasePendingItem = async (
     }
   });
 
-  let updatedCaseEntity = new Case(caseToUpdate, { applicationContext });
+  let updatedCaseEntity = new Case(caseToUpdate, { authorizedUser: user });
 
   updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()

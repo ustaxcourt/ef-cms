@@ -21,6 +21,7 @@ import {
   judgeUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
@@ -67,7 +68,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
 
   beforeEach(() => {
     mockCaseEntity = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     applicationContext
@@ -230,7 +231,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       caseEntity: new Case(
         { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       ),
       docketEntryEntity: mockDocketEntry,
@@ -250,7 +251,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       caseEntity: new Case(
         { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       ),
       docketEntryEntity: mockDocketEntry,
@@ -274,7 +275,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       caseEntity: new Case(
         { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       ),
       docketEntryEntity: mockDocketEntry,
@@ -385,7 +386,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         trialLocation: 'Lubbock, Texas',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

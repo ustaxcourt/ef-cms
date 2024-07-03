@@ -10,6 +10,10 @@ import {
   petitionsClerkUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { removeCounselFromRemovedPetitioner } from './removeCounselFromRemovedPetitioner';
 
 describe('removeCounselFromRemovedPetitioner', () => {
@@ -30,7 +34,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
     await expect(
       removeCounselFromRemovedPetitioner({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        caseEntity: new Case(MOCK_CASE, { authorizedUser: mockPetitionerUser }),
         petitionerContactId: mockContactPrimaryId,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -56,7 +60,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
@@ -99,7 +103,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     const updatedCase = await removeCounselFromRemovedPetitioner({

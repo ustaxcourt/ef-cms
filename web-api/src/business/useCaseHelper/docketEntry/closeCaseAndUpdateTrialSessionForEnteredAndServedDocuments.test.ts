@@ -9,6 +9,7 @@ import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from './closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
@@ -21,7 +22,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
 
   beforeEach(() => {
     mockCaseEntity = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
   });
 
@@ -73,7 +74,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, trialSessionId: undefined },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       ),
       eventCode,
     });
@@ -98,7 +99,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       ),
       eventCode,
     });
@@ -121,7 +122,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       ),
       eventCode,
     });
@@ -144,7 +145,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
         applicationContext,
         caseEntity: new Case(
           { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
-          { applicationContext },
+          { authorizedUser: mockDocketClerkUser },
         ),
         eventCode,
       }),
@@ -167,7 +168,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       applicationContext,
       caseEntity: new Case(
         { ...MOCK_CASE, trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       ),
       eventCode,
     });

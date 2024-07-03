@@ -45,7 +45,7 @@ export const saveCaseDetailInternalEdit = async (
       docketNumber,
     });
 
-  const originalCaseEntity = new Case(caseRecord, { applicationContext });
+  const originalCaseEntity = new Case(caseRecord, { authorizedUser });
 
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
@@ -89,7 +89,7 @@ export const saveCaseDetailInternalEdit = async (
   };
 
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
-    applicationContext,
+    authorizedUser,
   });
 
   if (!isEmpty(caseToUpdate.contactPrimary)) {
@@ -125,7 +125,7 @@ export const saveCaseDetailInternalEdit = async (
   }
 
   const caseEntity = new Case(caseEntityWithFormEdits, {
-    applicationContext,
+    authorizedUser,
   });
 
   if (caseEntity.isPaper) {
@@ -165,7 +165,7 @@ export const saveCaseDetailInternalEdit = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).toRawObject();
+  return new Case(updatedCase, { authorizedUser }).toRawObject();
 };
 
 export const saveCaseDetailInternalEditInteractor = withLocking(

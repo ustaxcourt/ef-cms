@@ -32,7 +32,7 @@ export const prioritizeCase = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (caseEntity.isCalendared()) {
     throw new Error('Cannot set a calendared case as high priority');
@@ -60,7 +60,7 @@ export const prioritizeCase = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const prioritizeCaseInteractor = withLocking(

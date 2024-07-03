@@ -8,7 +8,7 @@ import { addDocketEntryForSystemGeneratedOrder } from './addDocketEntryForSystem
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
-  const caseEntity = new Case(MOCK_CASE, { applicationContext });
+  const caseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
 
   const {
     noticeOfAttachmentsInNatureOfEvidence,

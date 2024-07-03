@@ -66,7 +66,7 @@ export const updateCaseDetails = async (
         ? editableFields.petitionPaymentWaivedDate
         : null,
     },
-    { applicationContext },
+    { authorizedUser: user },
   );
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
@@ -108,7 +108,7 @@ export const updateCaseDetails = async (
   }
 
   if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(oldCase, { applicationContext });
+    const oldCaseEntity = new Case(oldCase, { authorizedUser: user });
     const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
       ? oldCaseEntity.generateTrialSortTags()
       : { nonHybrid: undefined };
@@ -135,7 +135,9 @@ export const updateCaseDetails = async (
       caseToUpdate: newCaseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const updateCaseDetailsInteractor = withLocking(

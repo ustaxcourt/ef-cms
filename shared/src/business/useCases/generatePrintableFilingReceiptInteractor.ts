@@ -58,7 +58,9 @@ export const generatePrintableFilingReceiptInteractor = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseRecord, { applicationContext }).validate();
+  let caseEntity = new Case(caseRecord, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  }).validate();
 
   if (fileAcrossConsolidatedGroup && !caseRecord.leadDocketNumber) {
     throw new Error(
@@ -79,7 +81,7 @@ export const generatePrintableFilingReceiptInteractor = async (
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
       .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
     caseEntity = new Case(leadCase, {
-      applicationContext,
+      authorizedUser: applicationContext.getCurrentUser(),
     }).validate();
   }
 

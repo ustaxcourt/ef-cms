@@ -375,7 +375,9 @@ export const formatCase = (applicationContext, caseDetail) => {
   }
   result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
 
-  const caseEntity = new Case(caseDetail, { applicationContext });
+  const caseEntity = new Case(caseDetail, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();

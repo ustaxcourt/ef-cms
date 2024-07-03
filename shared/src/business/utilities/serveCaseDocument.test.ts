@@ -1,13 +1,14 @@
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { serveCaseDocument } from './serveCaseDocument';
 
 describe('serveCaseDocument', () => {
   let mockCase;
 
   beforeEach(() => {
-    mockCase = new Case(MOCK_CASE, { applicationContext });
+    mockCase = new Case(MOCK_CASE, { authorizedUser: mockPetitionerUser });
   });
 
   it('should not set as served or send service email for RQT when a file is not attached', async () => {
@@ -29,7 +30,7 @@ describe('serveCaseDocument', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionerUser },
     );
 
     await serveCaseDocument({
@@ -63,7 +64,7 @@ describe('serveCaseDocument', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionerUser },
     );
 
     await serveCaseDocument({
@@ -93,7 +94,7 @@ describe('serveCaseDocument', () => {
         ...MOCK_CASE,
         docketEntries: [MOCK_CASE.docketEntries[1]],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionerUser },
     );
 
     await serveCaseDocument({

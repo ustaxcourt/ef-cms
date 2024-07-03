@@ -24,12 +24,10 @@ import {
 } from '../utilities/caseFilter';
 
 const getSealedCase = ({
-  applicationContext,
   authorizedUser,
   caseRecord,
   isAssociatedWithCase,
 }: {
-  applicationContext: IApplicationContext;
   caseRecord: RawCase;
   isAssociatedWithCase: boolean;
   authorizedUser: AuthUser;
@@ -51,9 +49,7 @@ const getSealedCase = ({
   }
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
-    return new Case(caseRecord, { applicationContext })
-      .validate()
-      .toRawObject();
+    return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
   } else {
     caseRecord = caseSealedFormatter(caseRecord);
 
@@ -66,16 +62,13 @@ const getSealedCase = ({
 };
 
 const getCaseForExternalUser = ({
-  applicationContext,
   authorizedUser,
   caseRecord,
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
-    return new Case(caseRecord, { applicationContext })
-      .validate()
-      .toRawObject();
+    return new Case(caseRecord, { authorizedUser }).validate().toRawObject();
   } else {
     return new PublicCase(caseRecord, {
       authorizedUser,
@@ -178,7 +171,6 @@ export const getCaseInteractor = async (
 
   if (isSealedCase) {
     caseDetailRaw = await getSealedCase({
-      applicationContext,
       authorizedUser,
       caseRecord,
       isAssociatedWithCase,
@@ -188,12 +180,11 @@ export const getCaseInteractor = async (
     const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
-      caseDetailRaw = new Case(caseRecord, { applicationContext })
+      caseDetailRaw = new Case(caseRecord, { authorizedUser })
         .validate()
         .toRawObject();
     } else {
       caseDetailRaw = await getCaseForExternalUser({
-        applicationContext,
         authorizedUser,
         caseRecord,
         isAssociatedWithCase,

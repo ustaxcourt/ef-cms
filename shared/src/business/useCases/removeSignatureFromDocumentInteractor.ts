@@ -19,7 +19,9 @@ export const removeSignatureFromDocumentInteractor = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
   const docketEntryToUnsign = caseEntity.getDocketEntryById({
     docketEntryId,
   });
