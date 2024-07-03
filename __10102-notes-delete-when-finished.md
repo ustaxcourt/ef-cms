@@ -35,8 +35,6 @@ only 140 or 160 characters long. Which is it?
 
 - clear form issue on edit (group)
 
-- finish accessibility test (solo / group)
-
 - add remaining units test (solo / group)
 
 - write integration (group)

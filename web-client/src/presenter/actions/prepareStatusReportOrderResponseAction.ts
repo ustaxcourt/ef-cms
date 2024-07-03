@@ -35,9 +35,9 @@ export const prepareStatusReportOrderResponseAction = ({
 
   const jurisdictionLine =
     hasJurisdiction && jurisdiction === 'retained'
-      ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'
+      ? '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>'
       : hasJurisdiction
-        ? '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>'
+        ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'
         : '';
 
   const additionalTextLine = hasAdditionalOrderText
@@ -61,7 +61,7 @@ export const prepareStatusReportOrderResponseAction = ({
       .join('');
 
   // TODO, maybe add documentType=Order ?
-  store.set(state.form.documentTitle, 'Order');
+  store.set(state.form.documentTitle, state.form.docketEntryDescription);
   store.set(state.form.eventCode, 'O');
   store.set(state.form.richText, richText);
 };
