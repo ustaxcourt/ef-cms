@@ -175,7 +175,7 @@ export const createCaseInteractor = async (
       isOnDocketRecord: true,
       privatePractitioners,
     },
-    { applicationContext, petitioners: caseToAdd.petitioners },
+    { authorizedUser, petitioners: caseToAdd.petitioners },
   );
 
   petitionDocketEntryEntity.setFiledBy(user);
@@ -197,7 +197,7 @@ export const createCaseInteractor = async (
       processingStatus: 'complete',
     },
     {
-      applicationContext,
+      authorizedUser,
       petitioners: caseToAdd.petitioners,
     },
   );
@@ -220,7 +220,7 @@ export const createCaseInteractor = async (
       isFileAttached: true,
       privatePractitioners,
     },
-    { applicationContext, petitioners: caseToAdd.petitioners },
+    { authorizedUser, petitioners: caseToAdd.petitioners },
   );
 
   stinDocketEntryEntity.setFiledBy(user);
@@ -242,7 +242,7 @@ export const createCaseInteractor = async (
         isOnDocketRecord: true,
         privatePractitioners,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     cdsDocketEntryEntity.setFiledBy(user);
@@ -265,7 +265,7 @@ export const createCaseInteractor = async (
         isOnDocketRecord: true,
         privatePractitioners,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     atpDocketEntryEntity.setFiledBy(user);
