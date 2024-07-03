@@ -512,8 +512,8 @@ export const serveCaseToIrs = async (
     });
 
     caseEntity
-      .updateCaseCaptionDocketRecord({ applicationContext })
-      .updateDocketNumberRecord({ applicationContext })
+      .updateCaseCaptionDocketRecord({ authorizedUser: user })
+      .updateDocketNumberRecord({ authorizedUser: user })
       .validate();
 
     const generatedDocuments: Promise<any>[] = [];
