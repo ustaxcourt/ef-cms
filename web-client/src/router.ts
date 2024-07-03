@@ -412,15 +412,18 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/order-response',
-      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
-        );
-        return app.getSequence('gotoOrderResponseSequence')({
-          docketEntryId,
-          docketNumber,
-        });
-      }),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
     );
 
     registerRoute(

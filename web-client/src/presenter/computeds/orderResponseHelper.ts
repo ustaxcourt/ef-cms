@@ -29,7 +29,8 @@ export const orderResponseHelper = (
   const jurisdictionErrorText =
     validationErrors.jurisdiction && 'Select jurisdiction';
 
-  const docketEntryDescription = get(state.form.docketEntryDescription);
+  const docketEntryDescription =
+    get(state.form.docketEntryDescription) ?? 'Order';
 
   return {
     docketEntryDescription,

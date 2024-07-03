@@ -1,6 +1,8 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareStatusReportOrderResponseAction = ({
+  applicationContext,
   get,
   store,
 }: ActionProps) => {
@@ -20,13 +22,21 @@ export const prepareStatusReportOrderResponseAction = ({
   const hasJurisdiction = !!jurisdiction;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const filedLine = `<p class="indent-paragraph">On ${statusReportFilingDate}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
+  const dueDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR);
+
+  const statusReportFilingDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
+
+  const filedLine = `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType && orderType === 'statusReport'
-      ? `<p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDate}.</p>`
+      ? `<p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}.</p>`
       : hasOrderType
-        ? `<p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDate}.</p>`
+        ? `<p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDateFormatted}.</p>`
         : '';
 
   const strickenLine = hasStrickenFromTrialSessions
@@ -61,7 +71,7 @@ export const prepareStatusReportOrderResponseAction = ({
       .join('');
 
   // TODO, maybe add documentType=Order ?
-  store.set(state.form.documentTitle, state.form.docketEntryDescription);
+  store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
   store.set(state.form.eventCode, 'O');
   store.set(state.form.richText, richText);
 };
