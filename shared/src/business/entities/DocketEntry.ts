@@ -21,6 +21,7 @@ import {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
+  Role,
   STIN_DOCKET_ENTRY_TYPE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -47,7 +48,7 @@ type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 const canDownloadSTIN = (
   entry: RawDocketEntry,
   petitionDocketEntry: RawDocketEntry,
-  user: RawUser,
+  user: { role: Role },
 ): boolean => {
   if (
     user.role === ROLES.petitionsClerk &&
@@ -635,6 +636,10 @@ export class DocketEntry extends JoiValidationEntity {
     return ORDER_EVENT_CODES.includes(eventCode);
   }
 
+  static isSearchable(eventCode: string): boolean {
+    return DocketEntry.isOpinion(eventCode) || DocketEntry.isOrder(eventCode);
+  }
+
   static isMotion(eventCode: string): boolean {
     return MOTION_EVENT_CODES.includes(eventCode);
   }
@@ -697,7 +702,7 @@ export class DocketEntry extends JoiValidationEntity {
       visibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
-      user: RawUser;
+      user: { userId: string; role: Role };
       isTerminalUser: boolean;
       visibilityChangeDate: string;
     },

@@ -25,11 +25,10 @@ export const processDocketEntries = async ({
     records.map(async record => {
       const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
-      const isSearchable =
-        DocketEntry.isOpinion(fullDocketEntry.eventCode) ||
-        DocketEntry.isOrder(fullDocketEntry.eventCode);
-
-      if (isSearchable && fullDocketEntry.documentContentsId) {
+      if (
+        DocketEntry.isSearchable(fullDocketEntry.eventCode) &&
+        fullDocketEntry.documentContentsId
+      ) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         try {
           const buffer = await applicationContext
@@ -39,8 +38,9 @@ export const processDocketEntries = async ({
               key: fullDocketEntry.documentContentsId,
               useTempBucket: false,
             });
-          // @ts-ignore
-          const { documentContents } = JSON.parse(buffer.toString());
+          const docketEntry = new TextDecoder('utf-8').decode(buffer);
+
+          const { documentContents } = JSON.parse(docketEntry);
 
           fullDocketEntry.documentContents = documentContents;
         } catch (err) {

@@ -10,7 +10,6 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addCoverToPdf } from './addCoverToPdf';
 import { addCoversheetInteractor } from './addCoversheetInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -77,12 +76,6 @@ describe('addCoversheetInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
   });
 
   it('adds a cover page to a pdf document', async () => {
@@ -153,20 +146,6 @@ describe('addCoversheetInteractor', () => {
       numberOfPages: 2,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
-  });
-
-  it('throws an error when unable to get the pdfData from s3', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => Promise.reject(new Error('error')),
-    });
-
-    await expect(
-      addCoversheetInteractor(applicationContext, {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: MOCK_CASE.docketNumber,
-        replaceCoversheet: true,
-      } as any),
-    ).rejects.toThrow('error');
   });
 
   it('should call getCaseByDocketNumber to retrieve case entity if it is not passed in', async () => {

@@ -2,25 +2,20 @@ import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
-/**
- *
- * Add docket entry for system generated order
- * generates the order and uploads to s3
- * saves documentContents and richText for editing the order
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Case} providers.caseEntity the caseEntity
- * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
- */
 export const addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
   caseEntity,
   systemGeneratedDocument,
-}) => {
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  systemGeneratedDocument: any;
+}): Promise<void> => {
   const user = applicationContext.getCurrentUser();
   const isNotice = systemGeneratedDocument.eventCode === 'NOT';
 
@@ -84,13 +79,12 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
         .eventCode
   ) {
-    const { Body: amendedPetitionFormData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: AMENDED_PETITION_FORM_NAME,
-      })
-      .promise();
+    const amendedPetitionFormData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: AMENDED_PETITION_FORM_NAME,
+      });
 
     const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
       applicationContext,
@@ -100,7 +94,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
     combinedPdf = Buffer.from(returnVal);
   }
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: combinedPdf,
     pdfName: newDocketEntry.docketEntryId,
