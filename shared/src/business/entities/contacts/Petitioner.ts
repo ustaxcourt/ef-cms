@@ -3,6 +3,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { User } from '@shared/business/entities/User';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 
 export class Petitioner extends JoiValidationEntity {
@@ -30,22 +31,15 @@ export class Petitioner extends JoiValidationEntity {
   public state?: string;
   public title?: string;
 
-  constructor(
-    rawProps,
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ) {
+  constructor(rawProps) {
     super('Petitioner');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.additionalName = rawProps.additionalName;
     this.address1 = rawProps.address1;
     this.address2 = rawProps.address2 || undefined;
     this.address3 = rawProps.address3 || undefined;
     this.city = rawProps.city;
-    this.contactId = rawProps.contactId || applicationContext.getUniqueId();
+    this.contactId = rawProps.contactId || getUniqueId();
     this.contactType = rawProps.contactType;
     this.country = rawProps.country;
     this.countryType = rawProps.countryType;

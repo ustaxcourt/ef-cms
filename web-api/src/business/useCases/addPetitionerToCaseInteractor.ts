@@ -48,9 +48,7 @@ export const addPetitionerToCase = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  const petitionerEntity = new Petitioner(contact, {
-    applicationContext,
-  });
+  const petitionerEntity = new Petitioner(contact);
 
   caseEntity.addPetitioner(petitionerEntity);
 

@@ -91,9 +91,7 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new ElectronicPetition(petitionMetadata, {
-    applicationContext,
-  }).validate();
+  const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({

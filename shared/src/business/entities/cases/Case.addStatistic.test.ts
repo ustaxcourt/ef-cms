@@ -7,17 +7,14 @@ describe('addStatistic', () => {
   it('should successfully add a statistic', () => {
     const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
-    const statisticToAdd = new Statistic(
-      {
-        determinationDeficiencyAmount: 567,
-        determinationTotalPenalties: 789,
-        irsDeficiencyAmount: 11.2,
-        irsTotalPenalties: 66.87,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToAdd = new Statistic({
+      determinationDeficiencyAmount: 567,
+      determinationTotalPenalties: 789,
+      irsDeficiencyAmount: 11.2,
+      irsTotalPenalties: 66.87,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     caseEntity.addStatistic(statisticToAdd);
 
@@ -34,17 +31,14 @@ describe('addStatistic', () => {
       { applicationContext },
     );
 
-    const statisticToAdd = new Statistic(
-      {
-        determinationDeficiencyAmount: 567,
-        determinationTotalPenalties: 789,
-        irsDeficiencyAmount: 11.2,
-        irsTotalPenalties: 66.87,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToAdd = new Statistic({
+      determinationDeficiencyAmount: 567,
+      determinationTotalPenalties: 789,
+      irsDeficiencyAmount: 11.2,
+      irsTotalPenalties: 66.87,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     let error;
     try {

@@ -65,20 +65,17 @@ export const updateDeficiencyStatistic = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const statisticEntity = new Statistic(
-    {
-      determinationDeficiencyAmount,
-      determinationTotalPenalties,
-      irsDeficiencyAmount,
-      irsTotalPenalties,
-      lastDateOfPeriod,
-      penalties,
-      statisticId,
-      year,
-      yearOrPeriod,
-    },
-    { applicationContext },
-  ).validate();
+  const statisticEntity = new Statistic({
+    determinationDeficiencyAmount,
+    determinationTotalPenalties,
+    irsDeficiencyAmount,
+    irsTotalPenalties,
+    lastDateOfPeriod,
+    penalties,
+    statisticId,
+    year,
+    yearOrPeriod,
+  }).validate();
 
   const newCase = new Case(oldCase, { applicationContext });
   newCase.updateStatistic(statisticEntity, statisticId);
