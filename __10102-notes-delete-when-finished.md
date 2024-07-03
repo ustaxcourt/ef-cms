@@ -31,8 +31,6 @@ only 140 or 160 characters long. Which is it?
 
 - Update CSS to Match Mocks (solo)
 
-- Default docket entry description to Order (solo)
-
 - Type our newly added sequences (group)
 
 - clear form issue on edit (group)
