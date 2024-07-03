@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('removeFromTrial', () => {
   it('removes the case from trial, unsetting trial details and setting status to general docket ready for trial', () => {
@@ -11,7 +11,7 @@ describe('removeFromTrial', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({
@@ -61,7 +61,7 @@ describe('removeFromTrial', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({
@@ -96,7 +96,7 @@ describe('removeFromTrial', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({

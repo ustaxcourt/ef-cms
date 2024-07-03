@@ -7,13 +7,13 @@ import {
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { Petitioner } from '../contacts/Petitioner';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addPetitioner', () => {
   it('should add the petitioner to the petitioners array and return the updated case', () => {
     const caseEntity = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.generalDocket },
-      { applicationContext },
+      { authorizedUser: mockAdmissionsClerkUser },
     );
 
     const petitionerEntity = new Petitioner({

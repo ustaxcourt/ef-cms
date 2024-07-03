@@ -68,7 +68,7 @@ export const fixRaceConditionServedInDrafts = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(subjectCase, { applicationContext });
+  const caseEntity = new Case(subjectCase, { authorizedUser: undefined });
 
   const servedParties = aggregatePartiesForService(caseEntity);
 

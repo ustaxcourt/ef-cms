@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateCaseCaptionDocketRecord', () => {
@@ -8,7 +7,7 @@ describe('updateCaseCaptionDocketRecord', () => {
     const caseToVerify = new Case(
       {},
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
       authorizedUser: mockDocketClerkUser,
@@ -22,7 +21,7 @@ describe('updateCaseCaptionDocketRecord', () => {
         caseCaption: 'Caption',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
       authorizedUser: mockDocketClerkUser,
@@ -37,7 +36,7 @@ describe('updateCaseCaptionDocketRecord', () => {
         initialCaption: 'Caption',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
       authorizedUser: mockDocketClerkUser,
@@ -53,7 +52,7 @@ describe('updateCaseCaptionDocketRecord', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
       authorizedUser: mockDocketClerkUser,
@@ -83,7 +82,7 @@ describe('updateCaseCaptionDocketRecord', () => {
         initialCaption: 'Caption',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
       authorizedUser: mockDocketClerkUser,
@@ -113,7 +112,7 @@ describe('updateCaseCaptionDocketRecord', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
       authorizedUser: mockDocketClerkUser,

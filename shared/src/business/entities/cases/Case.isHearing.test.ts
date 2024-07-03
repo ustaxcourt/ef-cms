@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('isHearing', () => {
   it('checks if the given trialSessionId is a hearing (true)', () => {
@@ -21,7 +21,7 @@ describe('isHearing', () => {
         hearings: [trialSessionHearing],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -46,7 +46,7 @@ describe('isHearing', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     caseToUpdate.setAsCalendared(trialSessionHearing);

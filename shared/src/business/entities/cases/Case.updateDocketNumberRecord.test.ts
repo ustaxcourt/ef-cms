@@ -1,7 +1,6 @@
 import { CASE_STATUS_TYPES, DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
 import { Case } from './Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateDocketNumberRecord records suffix changes', () => {
@@ -14,7 +13,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(caseToVerify.initialDocketNumberSuffix).toEqual('S');
@@ -40,7 +39,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
@@ -54,7 +53,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-19' },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
@@ -86,7 +85,7 @@ describe('updateDocketNumberRecord records suffix changes', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
