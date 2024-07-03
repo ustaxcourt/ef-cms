@@ -33,8 +33,6 @@ only 140 or 160 characters long. Which is it?
 
 - Type our newly added sequences (group)
 
-- clear form issue on edit (group)
-
 - add remaining units test (solo / group)
 
 - write integration (group)
