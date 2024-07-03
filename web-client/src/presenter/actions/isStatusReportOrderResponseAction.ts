@@ -5,7 +5,9 @@ export const isStatusReportOrderResponseAction = ({ get, path }) => {
   const isStatusReportOrderResponse =
     !!documentToEdit.draftOrderState.docketEntryDescription;
 
-  if (isStatusReportOrderResponse) {
+  const permissions = get(state.permissions);
+
+  if (isStatusReportOrderResponse && permissions.ORDER_RESPONSE) {
     return path.isStatusReportOrderResponse();
   }
 
