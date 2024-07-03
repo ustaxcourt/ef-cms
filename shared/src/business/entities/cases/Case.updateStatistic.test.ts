@@ -25,18 +25,15 @@ describe('updateStatistic', () => {
       { applicationContext },
     );
 
-    const statisticToUpdate = new Statistic(
-      {
-        determinationDeficiencyAmount: 1,
-        determinationTotalPenalties: 1,
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        statisticId,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToUpdate = new Statistic({
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 1,
+      irsDeficiencyAmount: 1,
+      irsTotalPenalties: 1,
+      statisticId,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     caseEntity.updateStatistic(statisticToUpdate, statisticId);
 
@@ -63,18 +60,15 @@ describe('updateStatistic', () => {
       { applicationContext },
     );
 
-    const statisticToUpdate = new Statistic(
-      {
-        determinationDeficiencyAmount: 1,
-        determinationTotalPenalties: 1,
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToUpdate = new Statistic({
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 1,
+      irsDeficiencyAmount: 1,
+      irsTotalPenalties: 1,
+      statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     caseEntity.updateStatistic(
       statisticToUpdate,

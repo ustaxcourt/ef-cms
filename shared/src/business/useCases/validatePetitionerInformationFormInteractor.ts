@@ -25,7 +25,6 @@ export const validatePetitionerInformationFormInteractor = (
   },
 ) => {
   const contacts = ContactFactory({
-    applicationContext,
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },
     partyType,
   });

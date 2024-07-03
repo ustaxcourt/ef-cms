@@ -2,13 +2,8 @@ import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 
 export class PartnershipOtherThanTaxMattersPrimaryContact extends Contact {
-  constructor(
-    rawContact,
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ) {
-    super(rawContact, 'PartnershipOtherThanTaxMattersPrimaryContact', {
-      applicationContext,
-    });
+  constructor(rawContact) {
+    super(rawContact, 'PartnershipOtherThanTaxMattersPrimaryContact');
   }
 
   getValidationRules() {

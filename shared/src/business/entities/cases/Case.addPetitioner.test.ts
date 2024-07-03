@@ -16,22 +16,17 @@ describe('addPetitioner', () => {
       { applicationContext },
     );
 
-    const petitionerEntity = new Petitioner(
-      {
-        address1: '123 Tomato Street',
-        city: 'Tomatotown',
-        contactType: CONTACT_TYPES.otherPetitioner,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Susie Tomato',
-        phone: '123456',
-        postalCode: '99999',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        state: 'KS',
-      },
-      {
-        applicationContext,
-      },
-    );
+    const petitionerEntity = new Petitioner({
+      address1: '123 Tomato Street',
+      city: 'Tomatotown',
+      contactType: CONTACT_TYPES.otherPetitioner,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Susie Tomato',
+      phone: '123456',
+      postalCode: '99999',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      state: 'KS',
+    });
 
     expect(caseEntity.petitioners.length).toEqual(1);
 

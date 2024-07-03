@@ -1,22 +1,13 @@
 import { Statistic } from './Statistic';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 describe('Statistic', () => {
-  it('throws an error if applicationContext is not provided on construction', () => {
-    expect(() => new Statistic({}, {} as any)).toThrow(
-      'applicationContext must be defined',
-    );
-  });
-
   describe('validation', () => {
     it("fails validation if a yearOrPeriod is not 'year' or 'period'", () => {
-      const statistic = new Statistic(
-        {
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
-          yearOrPeriod: 'something else',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+        yearOrPeriod: 'something else',
+      });
 
       expect(statistic.isValid()).toBeFalsy();
       expect(Object.keys(statistic.getFormattedValidationErrors()!)).toContain(
@@ -25,43 +16,37 @@ describe('Statistic', () => {
     });
 
     it('passes validation with minimal required information', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: '2001',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: 100.0,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: '2001',
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeTruthy();
     });
 
     it('fails validation if a irsDeficiencyAmount, irsTotalPenalties, or year are not numbers', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 'something else',
-          irsTotalPenalties: 'something else',
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 'something else',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 'something else',
+        irsTotalPenalties: 'something else',
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: 100.0,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: 'something else',
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeFalsy();
       expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
@@ -72,22 +57,19 @@ describe('Statistic', () => {
     });
 
     it('should be invalid when one of the penalties in the statistic is NOT valid', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: undefined, // This is a required field
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: '2001',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: undefined, // This is a required field
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: '2001',
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.getFormattedValidationErrors()!).toEqual({
         penalties: [
@@ -100,22 +82,19 @@ describe('Statistic', () => {
     });
 
     it('should be invalid when one of the penalties in the statistic is NOT valid', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: undefined, // This is a required field
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: '2001',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: undefined, // This is a required field
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: '2001',
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.getFormattedValidationErrors()!).toEqual({
         penalties: [
@@ -128,16 +107,13 @@ describe('Statistic', () => {
     });
 
     it('fails validation if a lastDateOfPeriod is a date in the future', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          lastDateOfPeriod: '2050-03-01T21:40:46.415Z',
-          penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
-          yearOrPeriod: 'Period',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        lastDateOfPeriod: '2050-03-01T21:40:46.415Z',
+        penalties: [{ irsPenaltyAmount: 100.0, name: 'Penalty1' }],
+        yearOrPeriod: 'Period',
+      });
 
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
@@ -146,22 +122,19 @@ describe('Statistic', () => {
     });
 
     it('fails validation if a year is in the future', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 2050,
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: 100.0,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: 2050,
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeFalsy();
       expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
@@ -170,69 +143,60 @@ describe('Statistic', () => {
     });
 
     it('passes validation with valid values', () => {
-      const statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 654.32,
-          irsTotalPenalties: 123.45,
-          lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 2015,
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        irsDeficiencyAmount: 654.32,
+        irsTotalPenalties: 123.45,
+        lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: 100.0,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: 2015,
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeTruthy();
     });
 
     it('passes validation if an irsDeficiencyAmount, irsTotalPenalties, determinationTotalPenalties, and/or determinationDeficiencyAmount include negative numbers', () => {
-      const statistic = new Statistic(
-        {
-          determinationDeficiencyAmount: -4352.32,
-          determinationTotalPenalties: 0,
-          irsDeficiencyAmount: -2.0,
-          irsTotalPenalties: -222.22,
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: -222.22,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 2015,
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        determinationDeficiencyAmount: -4352.32,
+        determinationTotalPenalties: 0,
+        irsDeficiencyAmount: -2.0,
+        irsTotalPenalties: -222.22,
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: -222.22,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: 2015,
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeTruthy();
     });
 
     it('requires determinationDeficiencyAmount be defined if determinationTotalPenalties is set', () => {
-      const statistic = new Statistic(
-        {
-          determinationTotalPenalties: 100.11,
-          irsDeficiencyAmount: 654.32,
-          irsTotalPenalties: 123.45,
-          lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 2015,
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        determinationTotalPenalties: 100.11,
+        irsDeficiencyAmount: 654.32,
+        irsTotalPenalties: 123.45,
+        lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: 100.0,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: 2015,
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeFalsy();
       expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
@@ -241,24 +205,21 @@ describe('Statistic', () => {
     });
 
     it('requires determinationTotalPenalties be defined if determinationDeficiencyAmount is set', () => {
-      const statistic = new Statistic(
-        {
-          determinationDeficiencyAmount: 100.11,
-          irsDeficiencyAmount: 654.32,
-          irsTotalPenalties: 123.45,
-          lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
-          penalties: [
-            {
-              name: 'Penalty 1(IRS)',
-              penaltyAmount: 100.0,
-              penaltyType: 'irsPenaltyAmount',
-            },
-          ],
-          year: 2015,
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const statistic = new Statistic({
+        determinationDeficiencyAmount: 100.11,
+        irsDeficiencyAmount: 654.32,
+        irsTotalPenalties: 123.45,
+        lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+        penalties: [
+          {
+            name: 'Penalty 1(IRS)',
+            penaltyAmount: 100.0,
+            penaltyType: 'irsPenaltyAmount',
+          },
+        ],
+        year: 2015,
+        yearOrPeriod: 'Year',
+      });
 
       expect(statistic.isValid()).toBeFalsy();
       expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
@@ -269,7 +230,7 @@ describe('Statistic', () => {
 
   describe('Penalties', () => {
     let statistic;
-    let statisticId = applicationContext.getUniqueId();
+    let statisticId = getUniqueId();
     let penaltyArrayLength;
     const MOCK_PENALTY_WITH_STATISTIC_ID = {
       entityName: 'Penalty',
@@ -296,30 +257,26 @@ describe('Statistic', () => {
     };
 
     beforeEach(() => {
-      statistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          penalties: [
-            {
-              irsPenaltyAmount: 100.0,
-              name: 'Penalty 1',
-              penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
-              statisticId,
-            },
-          ],
-          statisticId,
-          year: '2001',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      statistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        penalties: [
+          {
+            irsPenaltyAmount: 100.0,
+            name: 'Penalty 1',
+            penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
+            statisticId,
+          },
+        ],
+        statisticId,
+        year: '2001',
+        yearOrPeriod: 'Year',
+      });
       penaltyArrayLength = statistic.penalties.length;
     });
 
     it('should add a penalty with a statistics id to the penalties array', () => {
       statistic.addPenalty({
-        applicationContext,
         rawPenalty: MOCK_PENALTY_WITH_STATISTIC_ID,
       });
 
@@ -329,7 +286,6 @@ describe('Statistic', () => {
 
     it('should add a penalty without a statistics id to the penalties array and add the parent statisticId to the penalty', () => {
       statistic.addPenalty({
-        applicationContext,
         rawPenalty: MOCK_PENALTY_WITHOUT_STATISTIC_ID,
       });
 
@@ -350,17 +306,14 @@ describe('Statistic', () => {
     });
 
     it('should itemize both determinationTotalPenalties and irsTotalPenalties created prior to penalty itemization', () => {
-      const preItemizationStatistic = new Statistic(
-        {
-          determinationTotalPenalties: 3000,
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 2000,
-          statisticId,
-          year: '2001',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const preItemizationStatistic = new Statistic({
+        determinationTotalPenalties: 3000,
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 2000,
+        statisticId,
+        year: '2001',
+        yearOrPeriod: 'Year',
+      });
 
       const expectedPenalties = [
         {
@@ -386,16 +339,13 @@ describe('Statistic', () => {
     });
 
     it('should itemize only irsTotalPenalties created prior to penalty itemization, if determinationTotalPenalties does not exist', () => {
-      const preItemizationStatistic = new Statistic(
-        {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 2000,
-          statisticId,
-          year: '2001',
-          yearOrPeriod: 'Year',
-        },
-        { applicationContext },
-      );
+      const preItemizationStatistic = new Statistic({
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 2000,
+        statisticId,
+        year: '2001',
+        yearOrPeriod: 'Year',
+      });
 
       const expectedPenalties = [
         {

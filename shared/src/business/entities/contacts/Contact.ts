@@ -10,6 +10,7 @@ import {
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 
 export class Contact extends JoiValidationEntity {
@@ -37,17 +38,10 @@ export class Contact extends JoiValidationEntity {
   public additionalName?: string;
   public hasEAccess?: boolean;
 
-  constructor(
-    rawContact,
-    contactName: string,
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ) {
+  constructor(rawContact, contactName: string) {
     super(contactName);
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
-    this.contactId = rawContact.contactId || applicationContext.getUniqueId();
+    this.contactId = rawContact.contactId || getUniqueId();
     this.address1 = rawContact.address1;
     this.address2 = rawContact.address2 || undefined;
     this.address3 = rawContact.address3 || undefined;

@@ -116,9 +116,7 @@ export class PaperPetition extends JoiValidationEntity {
     this.docketEntries = rawProps.docketEntries || [];
 
     this.statistics = Array.isArray(rawProps.statistics)
-      ? rawProps.statistics.map(
-          statistic => new Statistic(statistic, { applicationContext }),
-        )
+      ? rawProps.statistics.map(statistic => new Statistic(statistic))
       : [];
 
     this.archivedDocketEntries = Array.isArray(rawProps.archivedDocketEntries)
@@ -139,7 +137,6 @@ export class PaperPetition extends JoiValidationEntity {
       : [];
 
     const contacts = ContactFactory({
-      applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawProps) || rawProps.contactPrimary,
         secondary: getContactSecondary(rawProps) || rawProps.contactSecondary,

@@ -4,7 +4,6 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../EntityConstants';
 import { Petitioner } from './Petitioner';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('Petitioner', () => {
@@ -20,21 +19,12 @@ describe('Petitioner', () => {
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   };
 
-  it('should throw an error when applicationContext is not provided to the importructor', () => {
-    expect(() => new Petitioner(mockValidPetitioner, {} as any)).toThrow(
-      'applicationContext must be defined',
-    );
-  });
-
   describe('validate', () => {
     it('should be false when serviceIndicator is undefined', () => {
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          serviceIndicator: undefined,
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        serviceIndicator: undefined,
+      });
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
@@ -43,13 +33,10 @@ describe('Petitioner', () => {
     });
 
     it('should be false when name field is too long', () => {
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          name: getTextByCount(101),
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        name: getTextByCount(101),
+      });
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
@@ -58,13 +45,10 @@ describe('Petitioner', () => {
     });
 
     it('should be false when additionalName field is too long', () => {
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          additionalName: getTextByCount(601),
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        additionalName: getTextByCount(601),
+      });
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
@@ -74,22 +58,17 @@ describe('Petitioner', () => {
     });
 
     it('should be true when all required fields have been provided', () => {
-      const entity = new Petitioner(mockValidPetitioner, {
-        applicationContext,
-      });
+      const entity = new Petitioner(mockValidPetitioner);
 
       expect(entity.isValid()).toBe(true);
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be false when title is longer than 100 chars', () => {
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          title: getTextByCount(101),
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        title: getTextByCount(101),
+      });
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
@@ -101,13 +80,10 @@ describe('Petitioner', () => {
 
   describe('phone number formatting', () => {
     it('should format phone number string', () => {
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          phone: '1234567890',
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        phone: '1234567890',
+      });
 
       expect(entity.phone).toEqual('123-456-7890');
     });
@@ -117,13 +93,10 @@ describe('Petitioner', () => {
     it('should populate paperPetitionEmail when one is provided', () => {
       const mockEmail = 'petitioner@example.com';
 
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          paperPetitionEmail: mockEmail,
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        paperPetitionEmail: mockEmail,
+      });
 
       expect(entity.paperPetitionEmail).toEqual(mockEmail);
     });
@@ -131,13 +104,10 @@ describe('Petitioner', () => {
     it('should populate hasConsentedToEService when one is provided', () => {
       const mockHasConsentedToEService = false;
 
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          hasConsentedToEService: mockHasConsentedToEService,
-        },
-        { applicationContext },
-      );
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        hasConsentedToEService: mockHasConsentedToEService,
+      });
 
       expect(entity.hasConsentedToEService).toEqual(mockHasConsentedToEService);
     });

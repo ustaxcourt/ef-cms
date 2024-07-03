@@ -12,8 +12,8 @@ export const validateStartCaseWizardInteractor = (
   applicationContext: IApplicationContext,
   { petition }: { petition: any },
 ) => {
-  const errors = new ElectronicPetitionInformationFactory(petition, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+  const errors = new ElectronicPetitionInformationFactory(
+    petition,
+  ).getFormattedValidationErrors();
   return errors || null;
 };
