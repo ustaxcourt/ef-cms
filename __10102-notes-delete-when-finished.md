@@ -29,8 +29,6 @@ only 140 or 160 characters long. Which is it?
 
 - Update CSS to Match Mocks (solo)
 
-- Upon editing an order response, generate pdf preview automatically
-
 - Type our newly added sequences (group)
 
 - add remaining units test (solo / group)

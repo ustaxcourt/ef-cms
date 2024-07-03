@@ -13,6 +13,7 @@ import { setEditStatusReportOrderResponseFormAction } from '@web-client/presente
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setupConfirmWithPropsAction } from '../actions/setupConfirmWithPropsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/statusReportOrderResponsePdfPreviewSequence';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
@@ -38,6 +39,7 @@ export const navigateToEditOrderSequence = [
     isStatusReportOrderResponse: [
       setEditStatusReportOrderResponseFormAction,
       navigateToStatusReportOrderResponseAction,
+      statusReportOrderResponsePdfPreviewSequence,
     ],
   },
 ];
