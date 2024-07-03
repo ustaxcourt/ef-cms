@@ -57,7 +57,9 @@ export const associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+    const caseEntity = new Case(caseToUpdate, {
+      authorizedUser: applicationContext.getCurrentUser(),
+    });
 
     const { petitioners } = caseEntity;
 

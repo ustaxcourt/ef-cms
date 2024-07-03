@@ -27,7 +27,7 @@ export const unsealCase = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(oldCase, { authorizedUser: user });
 
   newCase.setAsUnsealed();
 
@@ -38,7 +38,9 @@ export const unsealCase = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const unsealCaseInteractor = withLocking(

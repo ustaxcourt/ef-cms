@@ -56,7 +56,7 @@ export const updateContact = async (
     {
       ...caseToUpdate,
     },
-    { applicationContext },
+    { authorizedUser: user },
   );
 
   const oldCaseContact = cloneDeep(
@@ -75,7 +75,7 @@ export const updateContact = async (
   }
 
   const rawUpdatedCase = caseEntity.validate().toRawObject();
-  caseEntity = new Case(rawUpdatedCase, { applicationContext });
+  caseEntity = new Case(rawUpdatedCase, { authorizedUser: user });
 
   const updatedPetitioner = caseEntity.getPetitionerById(contactInfo.contactId);
 

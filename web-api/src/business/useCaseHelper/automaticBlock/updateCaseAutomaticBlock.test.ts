@@ -11,6 +11,7 @@ import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 
 describe('updateCaseAutomaticBlock', () => {
@@ -29,7 +30,9 @@ describe('updateCaseAutomaticBlock', () => {
       .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
     mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
-    const caseEntity = new Case(mockCase, { applicationContext });
+    const caseEntity = new Case(mockCase, {
+      authorizedUser: mockDocketClerkUser,
+    });
     const updatedCase = await updateCaseAutomaticBlock({
       applicationContext,
       caseEntity,
@@ -54,7 +57,7 @@ describe('updateCaseAutomaticBlock', () => {
       ]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     const updatedCase = await updateCaseAutomaticBlock({
       applicationContext,
@@ -86,7 +89,7 @@ describe('updateCaseAutomaticBlock', () => {
         trialDate: '2021-03-01T21:40:46.415Z',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const updatedCase = await updateCaseAutomaticBlock({
@@ -114,7 +117,7 @@ describe('updateCaseAutomaticBlock', () => {
         trialDate: undefined,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const updatedCase = await updateCaseAutomaticBlock({
@@ -135,7 +138,7 @@ describe('updateCaseAutomaticBlock', () => {
       .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     const updatedCase = await updateCaseAutomaticBlock({
       applicationContext,
@@ -164,7 +167,7 @@ describe('updateCaseAutomaticBlock', () => {
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const updatedCase = await updateCaseAutomaticBlock({
@@ -195,7 +198,7 @@ describe('updateCaseAutomaticBlock', () => {
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

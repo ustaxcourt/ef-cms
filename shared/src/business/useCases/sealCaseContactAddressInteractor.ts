@@ -37,7 +37,7 @@ export const sealCaseContactAddress = async (
     });
 
   const caseEntity = new Case(caseRecord, {
-    applicationContext,
+    authorizedUser,
   });
 
   const contactToSeal = caseEntity.getPetitionerById(contactId);
@@ -56,7 +56,7 @@ export const sealCaseContactAddress = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).toRawObject();
+  return new Case(updatedCase, { authorizedUser }).toRawObject();
 };
 
 export const sealCaseContactAddressInteractor = withLocking(

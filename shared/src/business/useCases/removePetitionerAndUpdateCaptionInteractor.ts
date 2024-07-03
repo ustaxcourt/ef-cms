@@ -37,7 +37,7 @@ export const removePetitionerAndUpdateCaption = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser: user });
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -76,7 +76,9 @@ export const removePetitionerAndUpdateCaption = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(

@@ -377,9 +377,7 @@ const updateCaseWorkItems = async ({
     trialLocation: caseToUpdate.trialLocation || null,
   }));
 
-  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems, {
-    applicationContext,
-  });
+  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems); // TODO: 10417, go look at validateRawCollection as a whole.
 
   return validWorkItems.map(
     validWorkItem =>
@@ -451,7 +449,9 @@ export const updateCaseAndAssociations = async ({
 }): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
-    : new Case(caseToUpdate, { applicationContext });
+    : new Case(caseToUpdate, {
+        authorizedUser: applicationContext.getCurrentUser(),
+      });
 
   const oldCaseEntity = await applicationContext
     .getPersistenceGateway()
@@ -462,7 +462,9 @@ export const updateCaseAndAssociations = async ({
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
-  const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
+  const validRawOldCaseEntity = new Case(oldCaseEntity, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  })
     .validate()
     .toRawObject();
 

@@ -83,7 +83,12 @@ const getCasesByDocketNumbers = async ({
     });
 
   return caseData
-    .map(caseRecord => new Case(caseRecord, { applicationContext }))
+    .map(
+      caseRecord =>
+        new Case(caseRecord, {
+          authorizedUser: applicationContext.getCurrentUser(),
+        }),
+    )
     .filter(caseEntity => {
       try {
         caseEntity.validate();

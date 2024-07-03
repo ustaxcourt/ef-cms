@@ -106,7 +106,9 @@ export const createCaseAndAssociations = async ({
 }) => {
   const caseEntity = caseToCreate.validate
     ? caseToCreate
-    : new Case(caseToCreate, { applicationContext });
+    : new Case(caseToCreate, {
+        authorizedUser: applicationContext.getCurrentUser(),
+      });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 

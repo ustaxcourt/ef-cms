@@ -10,6 +10,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { addExistingUserToCase } from './addExistingUserToCase';
 import { admissionsClerkUser, petitionerUser } from '@shared/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addExistingUserToCase', () => {
   const mockUserId = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -32,7 +33,9 @@ describe('addExistingUserToCase', () => {
     await expect(
       addExistingUserToCase({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockDocketClerkUser,
+        }),
         contactId: mockContactId,
         email: 'testing@example.com',
         name: 'Bob Ross',
@@ -47,7 +50,9 @@ describe('addExistingUserToCase', () => {
     await expect(
       addExistingUserToCase({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockDocketClerkUser,
+        }),
         contactId: mockContactId,
         email: 'testing@example.com',
         name: 'Bob Ross',
@@ -63,7 +68,7 @@ describe('addExistingUserToCase', () => {
     applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     const caseEntity = new Case(
       { ...MOCK_CASE, petitioners: [mockExistingUser] },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await expect(
@@ -92,7 +97,7 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
@@ -155,7 +160,7 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
@@ -209,7 +214,7 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
@@ -245,7 +250,7 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({

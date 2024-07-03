@@ -9,6 +9,7 @@ import {
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createAndServeNoticeDocketEntry } from './createAndServeNoticeDocketEntry';
 import { docketClerk1User } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('createAndServeDocketEntry', () => {
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
@@ -18,7 +19,7 @@ describe('createAndServeDocketEntry', () => {
     {
       ...MOCK_CASE,
     },
-    { applicationContext },
+    { authorizedUser: mockDocketClerkUser },
   );
 
   beforeEach(() => {
@@ -92,7 +93,7 @@ describe('createAndServeDocketEntry', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await createAndServeNoticeDocketEntry(applicationContext, {

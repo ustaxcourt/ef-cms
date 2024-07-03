@@ -16,6 +16,7 @@ import { Message } from '../../../../../shared/src/business/entities/Message';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -44,7 +45,7 @@ describe('updateCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     )
       .validate()
       .toRawObject();
@@ -352,7 +353,7 @@ describe('updateCaseAndAssociations', () => {
 
     it('the docket docketNumberWithSuffix is updated because the case type has changed', async () => {
       updatedCase.caseType = CASE_TYPES_MAP.whistleblower;
-      // updatedCase.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
+
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: updatedCase,
@@ -595,7 +596,7 @@ describe('updateCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     beforeAll(() => {
@@ -713,7 +714,7 @@ describe('updateCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     beforeAll(() => {

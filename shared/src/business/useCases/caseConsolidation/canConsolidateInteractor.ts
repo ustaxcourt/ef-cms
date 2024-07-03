@@ -15,7 +15,9 @@ export const canConsolidateInteractor = (
     currentCase,
   }: { caseToConsolidate: Case; currentCase: Case },
 ) => {
-  const caseEntity = new Case(currentCase, { applicationContext });
+  const caseEntity = new Case(currentCase, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
 
   const results = caseEntity.getConsolidationStatus({
     caseEntity: caseToConsolidate,

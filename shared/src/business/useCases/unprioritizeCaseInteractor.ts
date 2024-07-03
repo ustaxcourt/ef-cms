@@ -30,7 +30,7 @@ export const unprioritizeCase = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   caseEntity.unsetAsHighPriority();
 
@@ -62,7 +62,7 @@ export const unprioritizeCase = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const unprioritizeCaseInteractor = withLocking(

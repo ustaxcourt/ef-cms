@@ -32,7 +32,7 @@ export const removePdfFromDocketEntry = async (
     });
 
   const caseEntity = new Case(caseRecord, {
-    applicationContext,
+    authorizedUser,
   });
 
   const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
@@ -53,7 +53,7 @@ export const removePdfFromDocketEntry = async (
         caseToUpdate: caseEntity,
       });
 
-    return new Case(updatedCase, { applicationContext }).toRawObject();
+    return new Case(updatedCase, { authorizedUser }).toRawObject();
   }
 };
 

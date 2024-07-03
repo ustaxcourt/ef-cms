@@ -49,7 +49,9 @@ export const associateIrsPractitionerToCase = async ({
       userId: user.userId,
     });
 
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+    const caseEntity = new Case(caseToUpdate, {
+      authorizedUser: applicationContext.getCurrentUser(),
+    });
 
     caseEntity.attachIrsPractitioner(
       new IrsPractitioner({ ...user, serviceIndicator }),

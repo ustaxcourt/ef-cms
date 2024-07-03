@@ -90,7 +90,9 @@ export const fileAndServeDocumentOnOneCase = async ({
       caseToUpdate: caseEntity,
     });
 
-  return new Case(validRawCaseEntity, { applicationContext });
+  return new Case(validRawCaseEntity, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
 };
 
 const completeWorkItem = async ({

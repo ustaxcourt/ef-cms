@@ -39,7 +39,7 @@ export const updateQcCompleteForTrial = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(oldCase, { authorizedUser: user });
 
   newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
 
@@ -50,7 +50,9 @@ export const updateQcCompleteForTrial = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const updateQcCompleteForTrialInteractor = withLocking(

@@ -3,6 +3,7 @@ import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateCaseTrialSortTagsInteractor } from './updateCaseTrialSortTagsInteractor';
 
@@ -79,7 +80,8 @@ describe('Update case trial sort tags', () => {
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(
-        ({ caseToUpdate }) => new Case(caseToUpdate, { applicationContext }),
+        ({ caseToUpdate }) =>
+          new Case(caseToUpdate, { authorizedUser: mockDocketClerkUser }),
       );
 
     await expect(

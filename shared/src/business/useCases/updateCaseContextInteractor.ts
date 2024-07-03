@@ -36,7 +36,7 @@ export const updateCaseContext = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(oldCase, { authorizedUser: user });
 
   if (caseCaption) {
     newCase.setCaseCaption(caseCaption);
@@ -116,7 +116,7 @@ export const updateCaseContext = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).toRawObject();
+  return new Case(updatedCase, { authorizedUser: user }).toRawObject();
 };
 
 export const updateCaseContextInteractor = withLocking(

@@ -18,10 +18,10 @@ export const validateCaseDetailInteractor = (
 ): Record<string, any> | null => {
   if (useCaseEntity) {
     return new Case(caseDetail, {
-      applicationContext,
+      authorizedUser: applicationContext.getCurrentUser(),
     }).getFormattedValidationErrors();
   }
   return new CaseQC(caseDetail, {
-    applicationContext,
+    authorizedUser: applicationContext.getCurrentUser(),
   }).getFormattedValidationErrors();
 };

@@ -27,7 +27,7 @@ export const sealCase = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(oldCase, { authorizedUser: user });
 
   newCase.setAsSealed();
 
@@ -42,7 +42,9 @@ export const sealCase = async (
     .getDispatchers()
     .sendNotificationOfSealing(applicationContext, { docketNumber });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const sealCaseInteractor = withLocking(
