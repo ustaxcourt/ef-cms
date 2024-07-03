@@ -33,7 +33,7 @@ only 140 or 160 characters long. Which is it?
 
 - add remaining units test (solo / group)
 
-- write integration (group)
+- write integration tests (solo / group)
 
 - fix missing local images for seed data (group)
 
