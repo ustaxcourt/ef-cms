@@ -8,7 +8,7 @@ import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const OrderResponse = connect(
   {
@@ -39,6 +39,13 @@ export const OrderResponse = connect(
     updateFormValueSequence,
     validationErrors,
   }) {
+    useEffect(() => {
+      // default docketEntryDescription to Order on load
+      updateFormValueSequence({
+        key: 'docketEntryDescription',
+        value: 'Order',
+      });
+    }, []);
     return (
       <>
         <CaseDetailHeader />
@@ -138,7 +145,7 @@ export const OrderResponse = connect(
                         aria-label="status report"
                         checked={form.orderType === 'statusReport'}
                         className="usa-radio__input"
-                        id="status-report"
+                        id="order-type-status-report"
                         name="orderType"
                         type="radio"
                         value="statusReport"
@@ -151,7 +158,7 @@ export const OrderResponse = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor="status-report"
+                        htmlFor="order-type-status-report"
                       >
                         Status Report
                       </label>
@@ -186,6 +193,7 @@ export const OrderResponse = connect(
                   <FormGroup
                     className="grid-container margin-top-2 padding-left-2"
                     errorText={orderResponseHelper.dueDateErrorText}
+                    id="status-report-due-date-form-group"
                   >
                     <DateSelector
                       defaultValue={form.dueDate}
@@ -210,12 +218,13 @@ export const OrderResponse = connect(
                   <FormGroup
                     className="grid-container padding-left-2"
                     errorText={validationErrors.strickenFromTrialSessions}
+                    id="stricken-from-trial-sessions-form-group"
                   >
                     <div>
                       <input
                         checked={form.strickenFromTrialSessions || false}
                         className="usa-checkbox__input"
-                        id="striken-from-trial-sessions"
+                        id="stricken-from-trial-sessions"
                         name="strickenFromTrialSessions"
                         type="checkbox"
                         onChange={e => {
@@ -240,6 +249,7 @@ export const OrderResponse = connect(
                   <FormGroup
                     className="stamp-form-group"
                     errorText={orderResponseHelper.jurisdictionErrorText}
+                    id="jurisdiction-form-group"
                   >
                     <label className="usa-label" htmlFor="jurisdiction-radios">
                       Jurisdiction
@@ -339,6 +349,7 @@ export const OrderResponse = connect(
                   <FormGroup
                     className="stamp-form-group"
                     errorText={validationErrors.docketEntryDescription}
+                    id="docket-entry-description-form-group"
                   >
                     <div>
                       <label
@@ -358,7 +369,7 @@ export const OrderResponse = connect(
                         // component and use that
                         maxLength={80}
                         name="docketEntryDescription"
-                        value={orderResponseHelper.docketEntryDescription}
+                        value={form.docketEntryDescription}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -370,9 +381,7 @@ export const OrderResponse = connect(
                         // TODO character counter doesn't work when setting the
                         // default value of the field within the textarea
                         maxCharacters={80}
-                        stringToCount={
-                          orderResponseHelper.docketEntryDescription
-                        }
+                        stringToCount={form.docketEntryDescription}
                       />
                     </div>
                   </FormGroup>
@@ -392,8 +401,8 @@ export const OrderResponse = connect(
               <div className="margin-bottom-2 margin-top-2">
                 <Button
                   className="margin-right-1"
-                  data-testid="save-signature-button"
-                  id="save-signature-button"
+                  data-testid="save-draft-button"
+                  id="save-draft-button"
                   onClick={() => submitStatusReportOrderResponseSequence()}
                 >
                   Save as Draft
@@ -402,8 +411,8 @@ export const OrderResponse = connect(
                 <Button
                   secondary
                   className="margin-right-1"
-                  data-testid="save-signature-button"
-                  id="save-signature-button"
+                  data-testid="preview-pdf-button"
+                  id="preview-pdf-button"
                   onClick={() => {
                     statusReportOrderResponsePdfPreviewSequence();
                   }}
@@ -421,7 +430,10 @@ export const OrderResponse = connect(
                 <span className="text-bold">Docket entry preview:</span>{' '}
                 {orderResponseHelper.docketEntryDescription}
               </div>
-              <div className="statusReportOrderResponsePdfPreview">
+              <div
+                className="statusReportOrderResponsePdfPreview"
+                data-testid="status-report-order-response-pdf-preview"
+              >
                 <PdfPreview />
               </div>
             </div>

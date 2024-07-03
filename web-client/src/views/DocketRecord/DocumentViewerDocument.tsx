@@ -189,6 +189,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showOrderResponseButton && (
                 <Button
                   link
+                  data-testid="order-response-button"
                   icon="edit"
                   onClick={() => {
                     gotoStatusReportOrderResponseSequence({

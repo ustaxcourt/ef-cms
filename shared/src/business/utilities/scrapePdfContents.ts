@@ -39,6 +39,8 @@ export const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
         scrapedText += '\n\n' + pageText;
       }
     }
+    // TODO 10102: Remove this leaving as reminder how to tackle tests
+    console.log('**** scrapedText', scrapedText);
 
     return scrapedText;
   } catch (e) {
