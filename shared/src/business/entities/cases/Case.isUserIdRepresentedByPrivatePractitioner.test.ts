@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('isUserIdRepresentedByPrivatePractitioner', () => {
   let caseEntity;
@@ -21,7 +21,7 @@ describe('isUserIdRepresentedByPrivatePractitioner', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
   });
@@ -53,7 +53,7 @@ describe('isUserIdRepresentedByPrivatePractitioner', () => {
         privatePractitioners: undefined,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

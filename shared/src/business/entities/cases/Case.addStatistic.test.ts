@@ -1,11 +1,10 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { Statistic } from '../Statistic';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addStatistic', () => {
   it('should successfully add a statistic', () => {
-    const caseEntity = new Case(MOCK_CASE, { applicationContext });
+    const caseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
 
     const statisticToAdd = new Statistic({
       determinationDeficiencyAmount: 567,
@@ -28,7 +27,7 @@ describe('addStatistic', () => {
         ...MOCK_CASE,
         statistics: statisticsWithMaxLength,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     const statisticToAdd = new Statistic({

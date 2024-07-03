@@ -1,5 +1,5 @@
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getCaseConfirmationGeneratedPdfFileName', () => {
   it('generates the correct name for the case confirmation pdf', () => {
@@ -8,7 +8,7 @@ describe('getCaseConfirmationGeneratedPdfFileName', () => {
         docketNumber: '123-20',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(

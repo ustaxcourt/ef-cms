@@ -1,7 +1,7 @@
 import { CASE_TYPES_MAP } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('generateTrialSortTags', () => {
   it('should generate sort tags for a regular case', () => {
@@ -11,7 +11,7 @@ describe('generateTrialSortTags', () => {
         receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(myCase.generateTrialSortTags()).toEqual({
@@ -28,7 +28,7 @@ describe('generateTrialSortTags', () => {
         receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(myCase.generateTrialSortTags()).toEqual({
@@ -45,7 +45,7 @@ describe('generateTrialSortTags', () => {
         receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(myCase.generateTrialSortTags()).toEqual({
@@ -62,7 +62,7 @@ describe('generateTrialSortTags', () => {
         receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(myCase.generateTrialSortTags()).toEqual({
@@ -80,7 +80,7 @@ describe('generateTrialSortTags', () => {
         receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(myCase.generateTrialSortTags()).toEqual({

@@ -1,7 +1,7 @@
 import { AUTOMATIC_BLOCKED_REASONS } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateAutomaticBlocked', () => {
   it('sets the case as automaticBlocked with a valid blocked reason', () => {
@@ -10,7 +10,7 @@ describe('updateAutomaticBlocked', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -34,7 +34,7 @@ describe('updateAutomaticBlocked', () => {
         automaticBlockedReason: 'because reasons',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

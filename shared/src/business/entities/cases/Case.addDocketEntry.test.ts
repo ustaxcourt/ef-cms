@@ -1,12 +1,12 @@
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addDocketEntry', () => {
   it('should throw when docket entry to be added to the docket record is a STIN', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(() => {
@@ -24,7 +24,7 @@ describe('addDocketEntry', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     caseToVerify.addDocketEntry({
@@ -45,7 +45,7 @@ describe('addDocketEntry', () => {
     const caseToVerify = new Case(
       { docketNumber: '123-45' },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     caseToVerify.addDocketEntry({

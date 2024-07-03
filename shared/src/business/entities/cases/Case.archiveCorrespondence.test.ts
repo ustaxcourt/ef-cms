@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { Correspondence } from '../Correspondence';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('archiveCorrespondence', () => {
   let caseRecord;
@@ -19,14 +19,14 @@ describe('archiveCorrespondence', () => {
         correspondence: [correspondenceToArchive],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
   });
 
   it('marks the correspondence document as archived', () => {
     caseRecord.archiveCorrespondence(correspondenceToArchive, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     const archivedDocketEntry = caseRecord.archivedCorrespondences.find(
       d => d.correspondenceId === correspondenceToArchive.correspondenceId,
@@ -36,7 +36,7 @@ describe('archiveCorrespondence', () => {
 
   it('adds the provided document to the case archivedDocketEntries', () => {
     caseRecord.archiveCorrespondence(correspondenceToArchive, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     expect(

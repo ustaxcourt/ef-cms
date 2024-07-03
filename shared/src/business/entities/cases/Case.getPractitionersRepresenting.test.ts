@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getPractitionersRepresenting', () => {
   it('should return the practitioner associated with the contactId provided', () => {
@@ -9,7 +9,7 @@ describe('getPractitionersRepresenting', () => {
         ...MOCK_CASE,
         privatePractitioners: [{ representing: ['567'], userId: '567' }],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const practitioner = caseEntity.getPractitionersRepresenting('567');
@@ -28,7 +28,7 @@ describe('getPractitionersRepresenting', () => {
         ...MOCK_CASE,
         privatePractitioners: [{ representing: ['123'], userId: '567' }],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const practitioner = caseEntity.getPractitionersRepresenting('567');

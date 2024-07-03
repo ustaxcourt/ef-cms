@@ -1,8 +1,8 @@
 import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { calculateISODate } from '../../utilities/DateHandler';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('shouldGenerateNoticesForCase', () => {
   it('checks if the case is eligible for service (true)', () => {
@@ -12,7 +12,7 @@ describe('shouldGenerateNoticesForCase', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -26,7 +26,7 @@ describe('shouldGenerateNoticesForCase', () => {
         status: CASE_STATUS_TYPES.new,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -41,7 +41,7 @@ describe('shouldGenerateNoticesForCase', () => {
         status: CASE_STATUS_TYPES.closed,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -59,7 +59,7 @@ describe('shouldGenerateNoticesForCase', () => {
         status: CASE_STATUS_TYPES.closed,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

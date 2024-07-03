@@ -1,7 +1,7 @@
 import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updatePetitioner', () => {
   it('should throw an error when the petitioner to update is not found on the case', () => {
@@ -9,7 +9,7 @@ describe('updatePetitioner', () => {
       {
         ...MOCK_CASE,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(() => myCase.updatePetitioner({ contactId: 'badId' })).toThrow(
@@ -22,7 +22,7 @@ describe('updatePetitioner', () => {
       {
         ...MOCK_CASE,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     myCase.updatePetitioner({
@@ -35,7 +35,7 @@ describe('updatePetitioner', () => {
 
     // send back through the constructor so contacts are recreated as entities
     const updatedCaseEntity = new Case(updatedCaseRaw, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     expect(updatedCaseEntity.petitioners[0]).toMatchObject({
@@ -61,7 +61,7 @@ describe('updatePetitioner', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     myCase.updatePetitioner({
@@ -74,7 +74,7 @@ describe('updatePetitioner', () => {
 
     // send back through the constructor so contacts are recreated as entities
     const updatedCaseEntity = new Case(updatedCaseRaw, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     expect(updatedCaseEntity.isValid()).toBeFalsy();

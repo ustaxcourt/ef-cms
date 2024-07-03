@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteStatistic', () => {
   it('should successfully delete a statistic', () => {
@@ -32,7 +32,7 @@ describe('deleteStatistic', () => {
         ...MOCK_CASE,
         statistics: originalStatistics,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     caseEntity.deleteStatistic(statistic0Id);
@@ -70,7 +70,7 @@ describe('deleteStatistic', () => {
         ...MOCK_CASE,
         statistics: originalStatistics,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     caseEntity.deleteStatistic('16fc02bc-f00a-453c-a19c-e5597a8850ba');

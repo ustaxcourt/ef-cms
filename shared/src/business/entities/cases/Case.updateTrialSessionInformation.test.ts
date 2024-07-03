@@ -2,14 +2,14 @@ import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateTrialSessionInformation', () => {
   it('should not change the status of the case', () => {
     const myCase = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.closed },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     myCase.updateTrialSessionInformation({
@@ -24,7 +24,7 @@ describe('updateTrialSessionInformation', () => {
 
   it('should set only judge and trialSessionId if the trial session is calendared', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     myCase.updateTrialSessionInformation({
       isCalendared: false,
@@ -42,7 +42,7 @@ describe('updateTrialSessionInformation', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({
@@ -71,7 +71,7 @@ describe('updateTrialSessionInformation', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({

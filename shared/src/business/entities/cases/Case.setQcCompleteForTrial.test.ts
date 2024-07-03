@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('setQcCompleteForTrial', () => {
   it('should set qcCompleteForTrial on the given case for the given trial session id', () => {
@@ -9,7 +9,7 @@ describe('setQcCompleteForTrial', () => {
         ...MOCK_CASE,
         qcCompleteForTrial: { 'd6fdd6e7-8dfa-463a-8a17-ed4512d1a68d': false },
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
     const result = caseEntity.setQcCompleteForTrial({
       qcCompleteForTrial: true,
@@ -28,7 +28,7 @@ describe('setQcCompleteForTrial', () => {
       {
         ...MOCK_CASE,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(caseEntity.isValid()).toBeTruthy();
@@ -41,7 +41,7 @@ describe('setQcCompleteForTrial', () => {
         ...MOCK_CASE,
         qcCompleteForTrial: { '80950eee-7efd-4374-a642-65a8262135ab': true },
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(caseEntity.isValid()).toBeTruthy();

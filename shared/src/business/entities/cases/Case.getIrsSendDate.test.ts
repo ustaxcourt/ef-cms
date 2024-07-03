@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getIrsSendDate', () => {
   it('should get the IRS send date from the petition docket entry', () => {
@@ -12,7 +12,7 @@ describe('getIrsSendDate', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = myCase.getIrsSendDate();
@@ -26,7 +26,7 @@ describe('getIrsSendDate', () => {
         docketEntries: [{ documentType: 'Petition' }],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = myCase.getIrsSendDate();
@@ -42,7 +42,7 @@ describe('getIrsSendDate', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = myCase.getIrsSendDate();

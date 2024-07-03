@@ -5,7 +5,7 @@ import {
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('hasPartyWithServiceType', () => {
   it('should return true if contactPrimary service indicator is paper', () => {
@@ -19,7 +19,7 @@ describe('hasPartyWithServiceType', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
@@ -46,7 +46,7 @@ describe('hasPartyWithServiceType', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
@@ -68,7 +68,7 @@ describe('hasPartyWithServiceType', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
@@ -90,7 +90,7 @@ describe('hasPartyWithServiceType', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
@@ -111,7 +111,7 @@ describe('hasPartyWithServiceType', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const hasPartyWithPaperService = myCase.hasPartyWithServiceType(

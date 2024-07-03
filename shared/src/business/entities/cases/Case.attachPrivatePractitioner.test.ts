@@ -1,13 +1,13 @@
 import { Case } from './Case';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('attachPrivatePractitioner', () => {
   it('adds the user to the privatePractitioners', () => {
     const caseToVerify = new Case(
       {},
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     caseToVerify.attachPrivatePractitioner(

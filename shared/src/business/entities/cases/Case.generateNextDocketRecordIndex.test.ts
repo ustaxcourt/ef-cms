@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('generateNextDocketRecordIndex', () => {
   it('returns the next possible index based on the current docket record array', () => {
@@ -9,7 +9,7 @@ describe('generateNextDocketRecordIndex', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockPetitionsClerkUser,
       },
     );
 
@@ -24,7 +24,7 @@ describe('generateNextDocketRecordIndex', () => {
         docketEntries: [],
       },
       {
-        applicationContext,
+        authorizedUser: mockPetitionsClerkUser,
       },
     );
 

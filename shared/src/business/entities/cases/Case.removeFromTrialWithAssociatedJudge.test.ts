@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('removeFromTrialWithAssociatedJudge', () => {
   it('removes the case from trial, updating the associated judge if one is passed in', () => {
@@ -11,7 +11,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({
@@ -53,7 +53,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const trialSession = new TrialSession({

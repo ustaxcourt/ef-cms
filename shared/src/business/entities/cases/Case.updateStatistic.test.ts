@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { Statistic } from '../Statistic';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateStatistic', () => {
   it('should successfully update a statistic', () => {
@@ -22,7 +22,7 @@ describe('updateStatistic', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const statisticToUpdate = new Statistic({
@@ -57,7 +57,7 @@ describe('updateStatistic', () => {
         ...MOCK_CASE,
         statistics: [originalStatistic],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const statisticToUpdate = new Statistic({

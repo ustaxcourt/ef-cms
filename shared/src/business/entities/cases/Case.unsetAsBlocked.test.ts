@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('unsetAsBlocked', () => {
   it('unsets the case as blocked', () => {
@@ -11,7 +11,7 @@ describe('unsetAsBlocked', () => {
         blockedReason: 'because reasons',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

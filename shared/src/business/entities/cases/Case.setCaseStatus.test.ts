@@ -5,8 +5,8 @@ import {
 } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 jest.mock('../../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../../utilities/DateHandler');
@@ -27,7 +27,7 @@ describe('setCaseStatus', () => {
         associatedJudgeId: 'judge_user_id',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -49,7 +49,7 @@ describe('setCaseStatus', () => {
         associatedJudgeId: 'judge_user_id',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -73,7 +73,7 @@ describe('setCaseStatus', () => {
         associatedJudgeId: 'judge_user_id',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -95,7 +95,7 @@ describe('setCaseStatus', () => {
         associatedJudgeId: 'judge_user_id',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -117,7 +117,7 @@ describe('setCaseStatus', () => {
         status: CLOSED_CASE_STATUSES[0],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -139,7 +139,7 @@ describe('setCaseStatus', () => {
         status: CLOSED_CASE_STATUSES[0],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

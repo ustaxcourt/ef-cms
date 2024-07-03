@@ -1,12 +1,12 @@
 import { Case, getPetitionDocketEntry } from './Case';
 import { INITIAL_DOCUMENT_TYPES } from '../EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getPetitionDocketEntry', () => {
   it('should get the petition docket entry by documentType', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     const result = myCase.getPetitionDocketEntry();
     expect(result.documentType).toEqual(
