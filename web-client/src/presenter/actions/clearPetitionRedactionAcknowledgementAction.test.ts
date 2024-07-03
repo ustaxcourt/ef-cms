@@ -8,7 +8,7 @@ describe('clearPetitionRedactionAcknowledgementAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should clear out petitionRedactionAcknowledgement', async () => {
+  it('should clear out petitionRedactionAcknowledgement if petition file is not present', async () => {
     const result = await runAction(
       clearPetitionRedactionAcknowledgementAction,
       {
@@ -16,11 +16,33 @@ describe('clearPetitionRedactionAcknowledgementAction', () => {
           presenter,
         },
         state: {
-          petitionRedactionAcknowledgement: true,
+          form: {
+            petitionFile: undefined,
+            petitionRedactionAcknowledgement: true,
+          },
         },
       },
     );
 
     expect(result.state.form.petitionRedactionAcknowledgement).toBeUndefined();
+  });
+
+  it('should not clear out petitionRedactionAcknowledgement if petition file is present', async () => {
+    const result = await runAction(
+      clearPetitionRedactionAcknowledgementAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            petitionFile: {},
+            petitionRedactionAcknowledgement: true,
+          },
+        },
+      },
+    );
+
+    expect(result.state.form.petitionRedactionAcknowledgement).toEqual(true);
   });
 });
