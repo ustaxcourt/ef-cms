@@ -148,9 +148,9 @@ function PetitionerInformation({
         <div className="petition-review-petitioner-section">
           <div>
             <span className="usa-label usa-label-display">Party type</span>
-            <div className="margin-bottom-2">{petitionFormatted.partyType}</div>
+            <div>{petitionFormatted.partyType}</div>
             {petitionFormatted.corporateDisclosureFile && (
-              <div className="margin-top-3 margin-bottom-2">
+              <div className="margin-top-3">
                 <span className="usa-label usa-label-display">
                   Corporate Disclosure Statement
                 </span>
@@ -173,7 +173,7 @@ function PetitionerInformation({
               </div>
             )}
           </div>
-          <div className="margin-bottom-1">
+          <div className="petition-review-spacing">
             <div>
               <span
                 className="usa-label usa-label-display"
@@ -207,7 +207,7 @@ function PetitionerInformation({
                       </span>
                     </div>
                   ) : null}
-                  <div className="margin-top-3 margin-bottom-2">
+                  <div className="petition-review-spacing">
                     <span className="usa-label usa-label-display">
                       Service email
                     </span>
@@ -217,7 +217,7 @@ function PetitionerInformation({
               )}
             </div>
           </div>
-          <div className="margin-bottom-1">
+          <div className="petition-review-spacing">
             {petitionFormatted.contactSecondary && (
               <div>
                 <span
