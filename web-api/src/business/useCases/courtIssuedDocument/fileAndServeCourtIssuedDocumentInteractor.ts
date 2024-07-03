@@ -170,7 +170,7 @@ export const fileAndServeCourtIssuedDocument = async (
             serviceStamp: form.serviceStamp,
             trialLocation: form.trialLocation,
           },
-          { applicationContext },
+          { authorizedUser },
         );
 
         docketEntryEntity.setFiledBy(user);

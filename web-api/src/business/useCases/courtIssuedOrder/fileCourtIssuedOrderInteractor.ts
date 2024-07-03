@@ -113,7 +113,7 @@ export const fileCourtIssuedOrder = async (
       isFileAttached: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   docketEntryEntity.setFiledBy(user);

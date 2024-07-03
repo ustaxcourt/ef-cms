@@ -147,7 +147,7 @@ export const updateDocketEntryMeta = async (
       ...originalDocketEntry,
       ...editableFields,
     },
-    { applicationContext, petitioners: caseEntity.petitioners },
+    { authorizedUser: user, petitioners: caseEntity.petitioners },
   ).validate();
 
   caseEntity.updateDocketEntry(docketEntryEntity);

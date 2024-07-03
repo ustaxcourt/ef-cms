@@ -267,7 +267,7 @@ const serveDocketEntry = async ({
           applicationContext,
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
-            applicationContext,
+            authorizedUser: applicationContext.getCurrentUser(),
           }),
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
@@ -427,7 +427,10 @@ const updateDocketEntry = async ({
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId,
     },
-    { applicationContext, petitioners: caseEntity.petitioners },
+    {
+      authorizedUser: applicationContext.getCurrentUser(),
+      petitioners: caseEntity.petitioners,
+    },
   );
 
   if (editableFields.isFileAttached) {

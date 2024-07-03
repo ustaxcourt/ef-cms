@@ -147,7 +147,7 @@ const completeDocketEntryQC = async (
         trialLocation: caseEntity.trialLocation,
       },
     },
-    { applicationContext, petitioners: caseToUpdate.petitioners },
+    { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
 
@@ -314,7 +314,7 @@ const completeDocketEntryQC = async (
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext, petitioners: caseToUpdate.petitioners },
+      { authorizedUser, petitioners: caseToUpdate.petitioners },
     );
 
     noticeUpdatedDocketEntry.setFiledBy(user);

@@ -144,7 +144,7 @@ export const serveCourtIssuedDocument = async (
             isOnDocketRecord: true,
           },
           {
-            applicationContext,
+            authorizedUser,
           },
         );
 

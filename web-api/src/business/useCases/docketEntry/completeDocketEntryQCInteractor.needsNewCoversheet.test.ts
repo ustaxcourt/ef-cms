@@ -13,7 +13,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
         filedBy: 'petitioner.high',
         receivedAt: '2019-08-25T05:00:00.000Z',
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     updatedDocketEntry = new DocketEntry(
@@ -23,7 +23,7 @@ describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
         filedBy: 'petitioner.high',
         receivedAt: '2019-08-25T05:00:00.000Z',
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
   });
   it('should return true when receivedAt is updated', () => {

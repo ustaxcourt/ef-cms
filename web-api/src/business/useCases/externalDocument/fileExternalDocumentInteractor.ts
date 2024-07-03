@@ -148,7 +148,7 @@ export const fileExternalDocument = async (
                 relationship,
               },
               {
-                applicationContext,
+                authorizedUser,
                 petitioners: currentCaseEntity.petitioners,
               },
             );
