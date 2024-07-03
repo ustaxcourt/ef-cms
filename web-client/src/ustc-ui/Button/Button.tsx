@@ -36,7 +36,7 @@ export const Button = props => {
     overrideMargin,
     icon && !shouldWrapText && 'no-wrap',
     secondary && 'usa-button--outline',
-    link && 'usa-button--unstyled ustc-button--unstyled',
+    link && 'usa-button--unstyled',
   );
 
   const iconClasses = classNames(
