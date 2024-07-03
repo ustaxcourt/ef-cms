@@ -27,9 +27,7 @@ export const createTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessionToAdd = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionToAdd = new TrialSession(trialSession);
 
   if (
     ['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType) ||

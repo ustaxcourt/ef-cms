@@ -52,9 +52,7 @@ export const setForHearingInteractor = async (
 
   const caseEntity = new Case(caseDetails, { applicationContext });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const existingTrialSessionIds = [];
   if (caseEntity.trialSessionId) {

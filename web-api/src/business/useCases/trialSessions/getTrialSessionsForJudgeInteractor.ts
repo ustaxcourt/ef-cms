@@ -35,9 +35,6 @@ export const getTrialSessionsForJudgeInteractor = async (
 
   const validatedSessions = TrialSession.validateRawCollection(
     judgeSessions as any,
-    {
-      applicationContext,
-    },
   );
 
   return validatedSessions.map(

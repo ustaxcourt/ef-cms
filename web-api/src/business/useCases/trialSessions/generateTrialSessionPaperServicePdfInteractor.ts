@@ -92,9 +92,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   trialSessionEntity.addPaperServicePdf(fileId, 'Initial Calendaring');
 

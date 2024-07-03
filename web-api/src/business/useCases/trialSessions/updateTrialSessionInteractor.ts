@@ -81,12 +81,10 @@ export const updateTrialSession = async (
     trialLocation: trialSession.trialLocation,
   };
 
-  const updatedTrialSessionEntity = new TrialSession(
-    { ...currentTrialSession, ...editableFields },
-    {
-      applicationContext,
-    },
-  );
+  const updatedTrialSessionEntity = new TrialSession({
+    ...currentTrialSession,
+    ...editableFields,
+  });
 
   const shouldCreateWorkingCopyForNewJudge =
     (!get(currentTrialSession, 'judge.userId') &&

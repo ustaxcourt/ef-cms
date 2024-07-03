@@ -12,15 +12,10 @@ describe('TrialSession entity', () => {
     let trialSession: TrialSession;
 
     beforeEach(() => {
-      trialSession = new TrialSession(
-        {
-          ...MOCK_TRIAL_INPERSON,
-          caseOrder: [],
-        },
-        {
-          applicationContext,
-        },
-      );
+      trialSession = new TrialSession({
+        ...MOCK_TRIAL_INPERSON,
+        caseOrder: [],
+      });
     });
 
     it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {

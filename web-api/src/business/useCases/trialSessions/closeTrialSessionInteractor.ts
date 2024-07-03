@@ -62,9 +62,7 @@ export const closeTrialSessionInteractor = async (
     throw new Error('Trial session cannot be closed with open cases');
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   trialSessionEntity.setAsClosed();
 

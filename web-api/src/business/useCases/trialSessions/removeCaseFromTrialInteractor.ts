@@ -44,9 +44,7 @@ export const removeCaseFromTrial = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   if (trialSessionEntity.isCalendared) {
     trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });

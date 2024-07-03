@@ -45,19 +45,16 @@ describe('updateTrialSessionInformation', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'buch_id' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      { applicationContext },
-    );
+    const trialSession = new TrialSession({
+      isCalendared: true,
+      judge: { name: 'Judge Buch', userId: 'buch_id' },
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
     myCase.updateTrialSessionInformation(trialSession);
 
     expect(myCase.trialDate).toBeTruthy();
@@ -77,19 +74,16 @@ describe('updateTrialSessionInformation', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
-      {
-        isCalendared: false,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      { applicationContext },
-    );
+    const trialSession = new TrialSession({
+      isCalendared: false,
+      judge: { name: 'Judge Buch' },
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
     myCase.setAsCalendared(trialSession);
 
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);

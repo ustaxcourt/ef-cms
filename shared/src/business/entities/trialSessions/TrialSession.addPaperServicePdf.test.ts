@@ -1,6 +1,5 @@
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('addPaperServicePdf', () => {
@@ -9,15 +8,10 @@ describe('TrialSession entity', () => {
       const mockPaperServicePdfTitle =
         '30 Day Notice of Trial on 10/12/2023 at Seattle, WA';
 
-      const trialSession = new TrialSession(
-        {
-          ...MOCK_TRIAL_INPERSON,
-          paperServicePdfs: [],
-        },
-        {
-          applicationContext,
-        },
-      );
+      const trialSession = new TrialSession({
+        ...MOCK_TRIAL_INPERSON,
+        paperServicePdfs: [],
+      });
 
       trialSession.addPaperServicePdf(mockFileId, mockPaperServicePdfTitle);
 

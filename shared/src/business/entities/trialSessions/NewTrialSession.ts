@@ -5,8 +5,8 @@ import joi from 'joi';
 export class NewTrialSession extends TrialSession {
   public trialClerkId: string;
 
-  constructor(rawSession: RawNewTrialSession, { applicationContext }) {
-    super(rawSession, { applicationContext });
+  constructor(rawSession: RawNewTrialSession) {
+    super(rawSession);
 
     this.trialClerkId = rawSession.trialClerkId;
   }

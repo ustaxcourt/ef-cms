@@ -365,9 +365,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
       status: 'processing',
     });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()
