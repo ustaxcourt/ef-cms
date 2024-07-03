@@ -29,8 +29,18 @@ export const removeCounselFromRemovedPetitioner = async ({
   const practitioners =
     caseEntity.getPractitionersRepresenting(petitionerContactId);
 
+  caseEntity.removeRepresentingFromPractitioners(petitionerContactId, {
+    applicationContext,
+  });
+
+  // Assumed objective of the code that was here previously, need to confirm:
+  // If the petitioner we're removing was the ONLY petitioner on this case that a practitioner was representing,
+  // then remove them from the case.
+  //
+  // The new code calls the "remove representing" regardless of the number of representing there are,
+  // then cleans up any practitioners that are left with an empty representing array after that removal.
   for (const practitioner of practitioners) {
-    if (practitioner.representing.length === 1) {
+    if (practitioner.representing.length === 0) {
       caseEntity.removePrivatePractitioner(practitioner);
 
       await applicationContext.getPersistenceGateway().deleteUserFromCase({
@@ -38,8 +48,6 @@ export const removeCounselFromRemovedPetitioner = async ({
         docketNumber: caseEntity.docketNumber,
         userId: practitioner.userId,
       });
-    } else {
-      caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
     }
   }
 
