@@ -114,7 +114,7 @@ export const updateCourtIssuedOrder = async (
       numberOfPages,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   docketEntryEntity.setFiledBy(user);

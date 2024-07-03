@@ -91,7 +91,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           isOnDocketRecord: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
     await expect(
@@ -122,7 +122,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
     const result = await getPublicDownloadPolicyUrlInteractor(
@@ -148,7 +148,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
 
@@ -185,7 +185,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           eventCode: 'RQT',
           isFileAttached: false,
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
 
@@ -214,7 +214,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           isSealed: true,
           sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
 

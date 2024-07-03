@@ -646,7 +646,7 @@ describe('updatePetitionerInformationInteractor', () => {
               receivedAt: '2018-03-01T05:00:00.000Z',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
-            { applicationContext },
+            { authorizedUser: undefined },
           ),
         });
 

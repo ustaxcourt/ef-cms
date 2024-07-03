@@ -151,7 +151,7 @@ export const serveExternallyFiledDocument = async (
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
-          { applicationContext },
+          { authorizedUser },
         );
 
         return applicationContext

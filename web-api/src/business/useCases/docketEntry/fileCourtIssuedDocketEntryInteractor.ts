@@ -108,7 +108,7 @@ export const fileCourtIssuedDocketEntry = async (
           serviceStamp: documentMeta.serviceStamp,
           trialLocation: documentMeta.trialLocation,
         },
-        { applicationContext },
+        { authorizedUser },
       );
 
       docketEntryEntity.setFiledBy(user);

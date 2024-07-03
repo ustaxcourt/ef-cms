@@ -74,7 +74,7 @@ export const updateCourtIssuedDocketEntry = async (
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   docketEntryEntity.setFiledBy(user);

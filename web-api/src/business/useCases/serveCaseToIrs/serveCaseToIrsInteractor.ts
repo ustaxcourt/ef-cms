@@ -45,7 +45,7 @@ export const addDocketEntryForPaymentStatus = ({
         isOnDocketRecord: true,
         processingStatus: 'complete',
       },
-      { applicationContext },
+      { authorizedUser: applicationContext.getCurrentUser() },
     );
 
     paymentStatusDocketEntry.setFiledBy(user);
@@ -62,7 +62,7 @@ export const addDocketEntryForPaymentStatus = ({
         isOnDocketRecord: true,
         processingStatus: 'complete',
       },
-      { applicationContext },
+      { authorizedUser: applicationContext.getCurrentUser() },
     );
 
     petitionPaymentStatusDocketEntry.setFiledBy(user);
@@ -336,7 +336,10 @@ const generateNoticeOfReceipt = async ({
       isFileAttached: true,
       isOnDocketRecord: true,
     },
-    { applicationContext, petitioners: caseEntity.petitioners },
+    {
+      authorizedUser: applicationContext.getCurrentUser,
+      petitioners: caseEntity.petitioners,
+    },
   );
 
   notrDocketEntry.setFiledBy(userServingPetition);

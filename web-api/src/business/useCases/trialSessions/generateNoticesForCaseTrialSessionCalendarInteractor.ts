@@ -199,7 +199,7 @@ const setNoticeForCase = async ({
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
     },
-    { applicationContext },
+    { authorizedUser: applicationContext.getCurrentUser() },
   );
 
   noticeOfTrialDocketEntry.setFiledBy(user);
@@ -267,7 +267,7 @@ const setNoticeForCase = async ({
       judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },
-    { applicationContext },
+    { authorizedUser: applicationContext.getCurrentUser() },
   );
 
   standingPretrialDocketEntry.setFiledBy(user);

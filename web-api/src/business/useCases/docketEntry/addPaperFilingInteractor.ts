@@ -106,7 +106,7 @@ export const addPaperFiling = async (
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       },
-      { applicationContext, petitioners: caseEntity.petitioners },
+      { authorizedUser, petitioners: caseEntity.petitioners },
     );
 
     docketEntryEntity.setFiledBy(user);
