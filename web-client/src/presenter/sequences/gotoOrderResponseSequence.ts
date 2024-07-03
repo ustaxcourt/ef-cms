@@ -1,22 +1,16 @@
-//import { clearFormAction } from '../actions/clearFormAction';
+import { clearStatusOrderResponseFormAction } from '@web-client/presenter/actions/clearStatusOrderResponseFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../actions/setDocketEntrySelectedFromMessageAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
-// import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoOrderResponseSequence =
-  //startWebSocketConnectionSequenceDecorator(
-  [
-    setupCurrentPageAction('Interstitial'),
-    getCaseAction,
-    setCaseAction,
-    setDocketEntryIdAction,
-    setDocketEntrySelectedFromMessageAction,
-    // TODO 10102: Deal with clearing the form
-    //clearFormAction,
-    // need to load the PDF into state?
-    // see setPDFForStampAction for an example
-    setupCurrentPageAction('OrderResponse'),
-  ]; //);
+export const gotoOrderResponseSequence = [
+  setupCurrentPageAction('Interstitial'),
+  getCaseAction,
+  setCaseAction,
+  setDocketEntryIdAction,
+  setDocketEntrySelectedFromMessageAction,
+  clearStatusOrderResponseFormAction,
+  setupCurrentPageAction('OrderResponse'),
+];
