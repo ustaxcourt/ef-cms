@@ -13,7 +13,7 @@ export const validatePetitionFromPaperInteractor = (
   { petition }: { petition: any },
 ) => {
   const errors = new PaperPetition(petition, {
-    applicationContext,
+    authorizedUser: applicationContext.getCurrentUser(),
   }).getFormattedValidationErrors();
   return errors || null;
 };
