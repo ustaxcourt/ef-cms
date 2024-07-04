@@ -1,8 +1,11 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 /**
  * removeCounselFromRemovedPetitioner
  *
@@ -14,11 +17,15 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  */
 export const removeCounselFromRemovedPetitioner = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   petitionerContactId,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  petitionerContactId: string;
+  authorizedUser: UnknownAuthUser;
 }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.QC_PETITION) &&
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER)

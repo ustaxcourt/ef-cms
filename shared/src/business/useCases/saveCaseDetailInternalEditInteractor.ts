@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnauthorizedError,
   UnprocessableEntityError,
@@ -21,7 +22,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const saveCaseDetailInternalEdit = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { caseToUpdate, docketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -119,6 +120,7 @@ export const saveCaseDetailInternalEdit = async (
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
         applicationContext,
+        authorizedUser,
         caseEntity: caseEntityWithFormEdits,
         petitionerContactId: originalSecondaryContactId,
       });
