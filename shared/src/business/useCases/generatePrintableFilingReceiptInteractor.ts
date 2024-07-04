@@ -85,7 +85,7 @@ export const generatePrintableFilingReceiptInteractor = async (
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
       .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
     caseEntity = new Case(leadCase, {
-      authorizedUser: applicationContext.getCurrentUser(),
+      authorizedUser,
     }).validate();
   }
 

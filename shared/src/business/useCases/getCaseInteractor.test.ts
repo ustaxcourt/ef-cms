@@ -20,7 +20,6 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getCaseInteractor', () => {
-  const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
@@ -87,10 +86,6 @@ describe('getCaseInteractor', () => {
   });
 
   it('throws an error when the entity returned from persistence is invalid', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: petitionsclerkId,
-    });
     const mockInvalidCase = { ...testCase, caseCaption: undefined };
     applicationContext
       .getPersistenceGateway()
