@@ -1,18 +1,21 @@
 import { Case } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 const getDocumentInfo = ({
   applicationContext,
+  authorizedUser,
   documentData,
   petitioners,
 }: {
   applicationContext: IApplicationContext;
+  authorizedUser: UnknownAuthUser;
   documentData: any;
   petitioners?: any[];
 }) => {
   const doc = new DocketEntry(documentData, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser,
     petitioners,
   });
 
@@ -50,6 +53,7 @@ export const generatePrintableFilingReceiptInteractor = async (
     documentsFiled: any;
     fileAcrossConsolidatedGroup: boolean;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -59,7 +63,7 @@ export const generatePrintableFilingReceiptInteractor = async (
     });
 
   let caseEntity = new Case(caseRecord, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser,
   }).validate();
 
   if (fileAcrossConsolidatedGroup && !caseRecord.leadDocketNumber) {
@@ -87,6 +91,7 @@ export const generatePrintableFilingReceiptInteractor = async (
 
   const primaryDocument = getDocumentInfo({
     applicationContext,
+    authorizedUser,
     documentData: documentsFiled,
     petitioners: caseRecord.petitioners,
   });
@@ -102,21 +107,30 @@ export const generatePrintableFilingReceiptInteractor = async (
   if (documentsFiled.hasSupportingDocuments) {
     filingReceiptDocumentParams.supportingDocuments =
       documentsFiled.supportingDocuments.map(doc =>
-        getDocumentInfo({ applicationContext, documentData: doc }),
+        getDocumentInfo({
+          applicationContext,
+          authorizedUser,
+          documentData: doc,
+        }),
       );
   }
 
   if (documentsFiled.secondaryDocumentFile) {
     filingReceiptDocumentParams.secondaryDocument = getDocumentInfo({
       applicationContext,
+      authorizedUser,
       documentData: documentsFiled.secondaryDocument,
-    } as any);
+    });
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
     filingReceiptDocumentParams.secondarySupportingDocuments =
       documentsFiled.secondarySupportingDocuments.map(doc =>
-        getDocumentInfo({ applicationContext, documentData: doc }),
+        getDocumentInfo({
+          applicationContext,
+          authorizedUser,
+          documentData: doc,
+        }),
       );
   }
 

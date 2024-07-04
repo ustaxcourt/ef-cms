@@ -3,6 +3,8 @@ import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -766,7 +768,7 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
-  user: null as any,
+  user: null as unknown as RawUser | RawPractitioner | RawIrsPractitioner, // TODO 10417 initialize to the correct shape after verifying no where in the application is doing a null check for state.user.
   userContactEditProgress: {},
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
