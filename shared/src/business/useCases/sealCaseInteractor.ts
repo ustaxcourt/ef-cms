@@ -3,7 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -14,12 +16,11 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise<object>} the updated case data
  */
 export const sealCase = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SEAL_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEAL_CASE)) {
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
 
@@ -27,7 +28,7 @@ export const sealCase = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { authorizedUser: user });
+  const newCase = new Case(oldCase, { authorizedUser });
 
   newCase.setAsSealed();
 
@@ -42,9 +43,7 @@ export const sealCase = async (
     .getDispatchers()
     .sendNotificationOfSealing(applicationContext, { docketNumber });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const sealCaseInteractor = withLocking(
