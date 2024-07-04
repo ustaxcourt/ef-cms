@@ -1,5 +1,6 @@
 import { Case } from '../entities/cases/Case';
 import { CaseQC } from '../entities/cases/CaseQC';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * validateCaseDetailInteractor
@@ -10,18 +11,18 @@ import { CaseQC } from '../entities/cases/CaseQC';
  * @returns {object} errors (null if no errors)
  */
 export const validateCaseDetailInteractor = (
-  applicationContext: IApplicationContext,
   {
     caseDetail,
     useCaseEntity = false,
   }: { caseDetail: any; useCaseEntity?: boolean },
+  authorizedUser: UnknownAuthUser,
 ): Record<string, any> | null => {
   if (useCaseEntity) {
     return new Case(caseDetail, {
-      authorizedUser: applicationContext.getCurrentUser(),
+      authorizedUser,
     }).getFormattedValidationErrors();
   }
   return new CaseQC(caseDetail, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser,
   }).getFormattedValidationErrors();
 };
