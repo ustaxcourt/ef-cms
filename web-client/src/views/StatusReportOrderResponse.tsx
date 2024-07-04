@@ -310,8 +310,7 @@ export const StatusReportOrderResponse = connect(
                         htmlFor="additional-order-text"
                         id="additional-order-text-label"
                       >
-                        Additional order text{' '}
-                        <span className="usa-hint">(optional)</span>
+                        Additional order text
                       </label>
                       <textarea
                         aria-describedby="additional-order-text-label"
