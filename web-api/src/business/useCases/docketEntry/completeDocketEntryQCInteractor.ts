@@ -90,7 +90,7 @@ const completeDocketEntryQC = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
     record => record.docketEntryId === docketEntryId,
   );

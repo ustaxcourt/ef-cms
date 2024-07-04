@@ -109,7 +109,7 @@ export const createCaseFromPaperInteractor = async (
       userId: user.userId,
     },
     {
-      applicationContext,
+      authorizedUser,
       isNewCase: true,
     },
   );
@@ -294,5 +294,5 @@ export const createCaseFromPaperInteractor = async (
     }),
   ]);
 
-  return new Case(caseToAdd, { applicationContext }).toRawObject();
+  return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };

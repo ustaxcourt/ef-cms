@@ -30,7 +30,7 @@ export const deleteDeficiencyStatistic = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(oldCase, { authorizedUser: user });
   newCase.deleteStatistic(statisticId);
 
   const updatedCase = await applicationContext
@@ -40,7 +40,9 @@ export const deleteDeficiencyStatistic = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const deleteDeficiencyStatisticInteractor = withLocking(

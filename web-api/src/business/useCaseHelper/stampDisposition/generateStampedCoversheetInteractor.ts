@@ -66,7 +66,9 @@ export const generateStampedCoversheetInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
 
   const motionDocketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,

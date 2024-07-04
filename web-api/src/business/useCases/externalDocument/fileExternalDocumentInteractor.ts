@@ -47,7 +47,7 @@ export const fileExternalDocument = async (
       docketNumber,
     });
 
-  let currentCaseEntity = new Case(currentCase, { applicationContext });
+  let currentCaseEntity = new Case(currentCase, { authorizedUser });
 
   const {
     consolidatedCasesToFileAcross,
@@ -132,7 +132,7 @@ export const fileExternalDocument = async (
             docketNumber: individualDocumentMetadata.docketNumber,
           });
 
-        let caseEntity = new Case(caseToUpdate, { applicationContext });
+        let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
         const servedParties = aggregatePartiesForService(caseEntity);
 

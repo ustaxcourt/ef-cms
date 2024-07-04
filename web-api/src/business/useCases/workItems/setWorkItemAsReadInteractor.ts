@@ -38,7 +38,7 @@ export const setWorkItemAsReadInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { authorizedUser });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,

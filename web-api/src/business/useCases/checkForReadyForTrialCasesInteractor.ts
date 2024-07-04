@@ -80,7 +80,9 @@ export const checkForReadyForTrialCasesInteractor = async (
       });
 
     if (caseToCheck) {
-      const caseEntity = new Case(caseToCheck, { applicationContext });
+      const caseEntity = new Case(caseToCheck, {
+        authorizedUser: applicationContext.getCurrentUser(),
+      });
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
         if (

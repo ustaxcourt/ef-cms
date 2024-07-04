@@ -61,7 +61,7 @@ export const removeConsolidatedCases = async (
 
     for (let newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
-        applicationContext,
+        authorizedUser: user,
       });
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
@@ -75,7 +75,7 @@ export const removeConsolidatedCases = async (
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
-      applicationContext,
+      authorizedUser: user,
     });
     caseEntity.removeConsolidation();
 
@@ -101,7 +101,7 @@ export const removeConsolidatedCases = async (
       );
     }
 
-    const caseEntity = new Case(caseToRemove, { applicationContext });
+    const caseEntity = new Case(caseToRemove, { authorizedUser: user });
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(

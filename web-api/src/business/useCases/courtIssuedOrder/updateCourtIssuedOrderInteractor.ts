@@ -43,7 +43,7 @@ export const updateCourtIssuedOrder = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const currentDocument = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryIdToEdit,
@@ -133,7 +133,7 @@ export const updateCourtIssuedOrder = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateCourtIssuedOrderInteractor = withLocking(

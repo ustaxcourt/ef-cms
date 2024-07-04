@@ -44,7 +44,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await sendIrsSuperuserPetitionEmail({
@@ -103,7 +103,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         procedureType: 'Regular',
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await sendIrsSuperuserPetitionEmail({
@@ -155,7 +155,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await sendIrsSuperuserPetitionEmail({
@@ -197,7 +197,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         privatePractitioners: [],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await sendIrsSuperuserPetitionEmail({
@@ -235,7 +235,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await sendIrsSuperuserPetitionEmail({
@@ -273,7 +273,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: '',
         privatePractitioners: [],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await sendIrsSuperuserPetitionEmail({
@@ -310,7 +310,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: '',
         privatePractitioners: [],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await expect(

@@ -24,7 +24,7 @@ export const createCaseDeadline = async (
       applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });
-  let caseEntity = new Case(caseDetail, { applicationContext });
+  let caseEntity = new Case(caseDetail, { authorizedUser: user });
 
   const newCaseDeadline = new CaseDeadline(
     {

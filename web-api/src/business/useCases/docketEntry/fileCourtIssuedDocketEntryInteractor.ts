@@ -50,7 +50,7 @@ export const fileCourtIssuedDocketEntry = async (
     });
 
   let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
-    applicationContext,
+    authorizedUser,
   });
 
   const subjectDocketEntry = subjectCaseToUpdateEntity.getDocketEntryById({
@@ -84,7 +84,7 @@ export const fileCourtIssuedDocketEntry = async (
           docketNumber,
         });
 
-      let caseEntity = new Case(caseToUpdate, { applicationContext });
+      let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
         {
@@ -201,7 +201,7 @@ export const fileCourtIssuedDocketEntry = async (
     });
 
   const subjectCase = new Case(rawSubjectCase, {
-    applicationContext,
+    authorizedUser,
   }).validate();
   return subjectCase.toRawObject();
 };

@@ -54,7 +54,7 @@ export const addCaseToTrialSession = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseDetails, { applicationContext });
+  const caseEntity = new Case(caseDetails, { authorizedUser: user });
 
   const trialSessionEntity = new TrialSession(trialSession);
 
@@ -100,7 +100,9 @@ export const addCaseToTrialSession = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const addCaseToTrialSessionInteractor = withLocking(

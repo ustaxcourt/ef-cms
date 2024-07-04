@@ -102,7 +102,7 @@ export const setTrialSessionCalendarInteractor = async (
    * @returns {Promise} the promise of the updateCase call
    */
   const setManuallyAddedCaseAsCalendared = caseRecord => {
-    const caseEntity = new Case(caseRecord, { applicationContext });
+    const caseEntity = new Case(caseRecord, { authorizedUser: user });
 
     caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -126,7 +126,7 @@ export const setTrialSessionCalendarInteractor = async (
    * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
    */
   const setTrialSessionCalendarForEligibleCase = caseRecord => {
-    const caseEntity = new Case(caseRecord, { applicationContext });
+    const caseEntity = new Case(caseRecord, { authorizedUser: user });
 
     caseEntity.setAsCalendared(trialSessionEntity);
     trialSessionEntity.addCaseToCalendar(caseEntity);
@@ -195,7 +195,9 @@ const removeManuallyAddedCaseFromTrialSession = ({
     docketNumber: caseRecord.docketNumber,
   });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
 
   caseEntity.removeFromTrialWithAssociatedJudge();
 

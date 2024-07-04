@@ -64,7 +64,7 @@ export const generateDocketRecordPdfInteractor = async (
         isDirectlyAssociated ||
         isIndirectlyAssociated
       ) {
-        caseEntity = new Case(caseSource, { applicationContext });
+        caseEntity = new Case(caseSource, { authorizedUser: user });
       } else {
         // unassociated user viewing sealed case
         throw new UnauthorizedError('Unauthorized to view sealed case.');
@@ -74,7 +74,7 @@ export const generateDocketRecordPdfInteractor = async (
       throw new UnauthorizedError('Unauthorized to view sealed case.');
     }
   } else {
-    caseEntity = new Case(caseSource, { applicationContext });
+    caseEntity = new Case(caseSource, { authorizedUser: user });
   }
 
   const formattedCaseDetail = applicationContext

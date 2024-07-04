@@ -32,7 +32,7 @@ export const blockCaseFromTrial = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   caseEntity.setAsBlocked(reason);
 
@@ -50,7 +50,7 @@ export const blockCaseFromTrial = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const blockCaseFromTrialInteractor = withLocking(

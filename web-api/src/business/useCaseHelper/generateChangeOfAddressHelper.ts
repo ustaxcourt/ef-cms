@@ -52,7 +52,9 @@ export const generateChangeOfAddressHelper = async ({
         applicationContext,
         docketNumber,
       });
-    let caseEntity = new Case(userCase, { applicationContext });
+    let caseEntity = new Case(userCase, {
+      authorizedUser: applicationContext.getCurrentUser(),
+    });
 
     const practitionerName = updatedName || user.name;
     const practitionerObject = caseEntity.privatePractitioners

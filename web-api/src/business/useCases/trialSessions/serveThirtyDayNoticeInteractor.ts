@@ -104,7 +104,7 @@ export const serveThirtyDayNoticeInteractor = async (
           docketNumber: aCase.docketNumber,
         });
 
-      const caseEntity = new Case(rawCase, { applicationContext });
+      const caseEntity = new Case(rawCase, { authorizedUser: currentUser });
 
       let clinicLetter;
       const clinicLetterKey = getClinicLetterKey({

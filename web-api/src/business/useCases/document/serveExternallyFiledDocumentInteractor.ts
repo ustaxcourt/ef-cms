@@ -57,7 +57,7 @@ export const serveExternallyFiledDocument = async (
       docketNumber: subjectCaseDocketNumber,
     });
 
-  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
   const originalSubjectDocketEntry = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -128,7 +128,7 @@ export const serveExternallyFiledDocument = async (
           });
 
         const caseEntity = new Case(rawCaseToUpdate, {
-          applicationContext,
+          authorizedUser,
         });
 
         const isSubjectCase =

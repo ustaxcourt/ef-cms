@@ -73,7 +73,7 @@ export const addDeficiencyStatistic = async (
     yearOrPeriod,
   }).validate();
 
-  const newCase = new Case(oldCase, { applicationContext });
+  const newCase = new Case(oldCase, { authorizedUser });
   newCase.addStatistic(statisticEntity);
 
   const updatedCase = await applicationContext
@@ -83,7 +83,7 @@ export const addDeficiencyStatistic = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const addDeficiencyStatisticInteractor = withLocking(

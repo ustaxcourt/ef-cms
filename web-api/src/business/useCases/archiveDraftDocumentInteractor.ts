@@ -35,7 +35,7 @@ export const archiveDraftDocument = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryToArchive = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -59,7 +59,7 @@ export const archiveDraftDocument = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const archiveDraftDocumentInteractor = withLocking(

@@ -90,7 +90,9 @@ export const updatePractitionerCase = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
   const practitionerObject = [
     ...caseEntity.privatePractitioners,
     ...caseEntity.irsPractitioners,
@@ -109,7 +111,7 @@ export const updatePractitionerCase = async ({
 
   // we do this again so that it will convert '' to null
   const validatedCaseToUpdate = new Case(caseEntity, {
-    applicationContext,
+    authorizedUser: applicationContext.getCurrentUser(),
   }).validate();
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -128,7 +130,7 @@ const updateCaseEntityAndGenerateChange = async ({
   user: RawUser;
 }): Promise<RawCase | undefined> => {
   const caseEntity = new Case(rawCaseData, {
-    applicationContext,
+    authorizedUser: applicationContext.getCurrentUser(),
   });
 
   const petitionerObject = caseEntity.getPetitionerById(user.userId);

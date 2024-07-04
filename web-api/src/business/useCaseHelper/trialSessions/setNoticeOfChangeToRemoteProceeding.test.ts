@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
@@ -19,7 +20,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     },
-    { applicationContext },
+    { authorizedUser: mockDocketClerkUser },
   );
 
   beforeEach(() => {

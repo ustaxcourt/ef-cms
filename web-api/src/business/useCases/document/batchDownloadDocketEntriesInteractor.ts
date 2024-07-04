@@ -56,7 +56,7 @@ const batchDownloadDocketEntriesHelper = async (
   const caseFolder = `${docketNumber}, ${caseTitle}`;
   const zipName = `${caseFolder}.zip`;
 
-  const caseEntity = new Case(caseToBatch, { applicationContext });
+  const caseEntity = new Case(caseToBatch, { authorizedUser });
 
   const documentsToProcess = documentsSelectedForDownload.map(docketEntryId =>
     caseEntity.getDocketEntryById({

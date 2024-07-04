@@ -86,7 +86,7 @@ export const addConsolidatedCase = async (
 
   const updateCasePromises: Promise<RawCase>[] = [];
   casesToUpdate.forEach(caseInCasesToUpdate => {
-    const caseEntity = new Case(caseInCasesToUpdate, { applicationContext });
+    const caseEntity = new Case(caseInCasesToUpdate, { authorizedUser: user });
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(

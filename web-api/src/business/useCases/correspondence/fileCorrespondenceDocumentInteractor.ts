@@ -45,7 +45,7 @@ export const fileCorrespondenceDocumentInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const correspondenceEntity = new Correspondence({
     ...documentMetadata,

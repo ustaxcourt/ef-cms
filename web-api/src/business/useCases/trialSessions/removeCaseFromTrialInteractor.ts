@@ -64,7 +64,7 @@ export const removeCaseFromTrial = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(myCase, { applicationContext });
+  const caseEntity = new Case(myCase, { authorizedUser: user });
 
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
@@ -104,7 +104,9 @@ export const removeCaseFromTrial = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const removeCaseFromTrialInteractor = withLocking(

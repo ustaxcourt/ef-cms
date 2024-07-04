@@ -7,6 +7,7 @@ import {
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { sendServedPartiesEmails } from './sendServedPartiesEmails';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -40,7 +41,7 @@ describe('sendServedPartiesEmails', () => {
         petitioners: MOCK_CASE.petitioners,
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await sendServedPartiesEmails({
@@ -85,7 +86,7 @@ describe('sendServedPartiesEmails', () => {
         petitioners: MOCK_CASE.petitioners,
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await sendServedPartiesEmails({
@@ -126,7 +127,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.new,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await sendServedPartiesEmails({
@@ -166,7 +167,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await sendServedPartiesEmails({
@@ -204,7 +205,7 @@ describe('sendServedPartiesEmails', () => {
         procedureType: 'Regular',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await sendServedPartiesEmails({
@@ -236,7 +237,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await expect(
@@ -274,7 +275,7 @@ describe('sendServedPartiesEmails', () => {
         procedureType: 'Regular',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     const servedParties = {
@@ -328,7 +329,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.new,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     await sendServedPartiesEmails({

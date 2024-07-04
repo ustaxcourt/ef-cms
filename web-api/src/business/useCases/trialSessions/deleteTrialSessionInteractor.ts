@@ -67,7 +67,7 @@ export const deleteTrialSessionInteractor = async (
           docketNumber: order.docketNumber,
         });
 
-      const caseEntity = new Case(myCase, { applicationContext });
+      const caseEntity = new Case(myCase, { authorizedUser: user });
 
       caseEntity.removeFromTrial({});
 
