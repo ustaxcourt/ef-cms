@@ -8,7 +8,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -21,12 +23,11 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const updateCaseDetails = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_CASE_DETAILS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_CASE_DETAILS)) {
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
 
@@ -66,7 +67,7 @@ export const updateCaseDetails = async (
         ? editableFields.petitionPaymentWaivedDate
         : null,
     },
-    { authorizedUser: user },
+    { authorizedUser },
   );
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
@@ -81,10 +82,10 @@ export const updateCaseDetails = async (
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { authorizedUser: user },
+        { authorizedUser },
       );
 
-      filingFeePaidEntry.setFiledBy(user);
+      filingFeePaidEntry.setFiledBy(authorizedUser);
 
       newCaseEntity.addDocketEntry(filingFeePaidEntry);
     } else if (isWaived) {
@@ -98,17 +99,17 @@ export const updateCaseDetails = async (
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { authorizedUser: user },
+        { authorizedUser },
       );
 
-      filingFeeWaivedEntry.setFiledBy(user);
+      filingFeeWaivedEntry.setFiledBy(authorizedUser);
 
       newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
     }
   }
 
   if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(oldCase, { authorizedUser: user });
+    const oldCaseEntity = new Case(oldCase, { authorizedUser });
     const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
       ? oldCaseEntity.generateTrialSortTags()
       : { nonHybrid: undefined };
@@ -135,9 +136,7 @@ export const updateCaseDetails = async (
       caseToUpdate: newCaseEntity,
     });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateCaseDetailsInteractor = withLocking(
