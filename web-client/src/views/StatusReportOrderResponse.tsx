@@ -163,7 +163,7 @@ export const StatusReportOrderResponse = connect(
                         aria-label="status report or stipulated decision"
                         checked={form.orderType === 'orStipulatedDecision'}
                         className="usa-radio__input"
-                        id="or-stipulated-decision"
+                        id="order-type-or-stipulated-decision"
                         name="orderType"
                         type="radio"
                         value="orStipulatedDecision"
@@ -176,7 +176,7 @@ export const StatusReportOrderResponse = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor="or-stipulated-decision"
+                        htmlFor="order-type-or-stipulated-decision"
                       >
                         Status Report or Stipulated Decision
                       </label>
@@ -255,7 +255,7 @@ export const StatusReportOrderResponse = connect(
                         aria-label="retained"
                         checked={form.jurisdiction === 'retained'}
                         className="usa-radio__input"
-                        id="retained"
+                        id="jurisdiction-retained"
                         name="jurisdiction"
                         type="radio"
                         value="retained"
@@ -266,7 +266,10 @@ export const StatusReportOrderResponse = connect(
                           });
                         }}
                       />
-                      <label className="usa-radio__label" htmlFor="retained">
+                      <label
+                        className="usa-radio__label"
+                        htmlFor="jurisdiction-retained"
+                      >
                         Retained
                       </label>
                     </div>
@@ -278,7 +281,7 @@ export const StatusReportOrderResponse = connect(
                           form.jurisdiction === 'restoredToGeneralDocket'
                         }
                         className="usa-radio__input"
-                        id="restored-to-general-docket"
+                        id="jurisdiction-restored-to-general-docket"
                         name="jurisdiction"
                         type="radio"
                         value="restoredToGeneralDocket"
@@ -291,7 +294,7 @@ export const StatusReportOrderResponse = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'restored-to-general-docket'}
+                        htmlFor="jurisdiction-restored-to-general-docket"
                       >
                         Restored to the general docket
                       </label>
