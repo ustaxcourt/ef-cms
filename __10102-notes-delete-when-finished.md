@@ -29,8 +29,6 @@ only 140 or 160 characters long. Which is it?
 
 - Update CSS to Match Mocks (without stamp refs) (solo)
 
-- add remaining units test (solo / group)
-
 - write integration tests (solo / group)
     - scraping pdf functionality
 
