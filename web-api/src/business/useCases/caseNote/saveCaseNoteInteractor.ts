@@ -35,7 +35,7 @@ export const saveCaseNote = async (
   const caseToUpdate = new Case(
     { ...caseRecord, caseNote },
     {
-      applicationContext,
+      authorizedUser: user,
     },
   )
     .validate()
@@ -48,7 +48,7 @@ export const saveCaseNote = async (
       caseToUpdate,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { authorizedUser: user }).validate().toRawObject();
 };
 
 export const saveCaseNoteInteractor = withLocking(

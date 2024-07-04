@@ -33,7 +33,7 @@ export const deleteCaseDeadline = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  let updatedCase = new Case(caseToUpdate, { applicationContext });
+  let updatedCase = new Case(caseToUpdate, { authorizedUser: user });
 
   await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,

@@ -4,6 +4,7 @@ import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { setNoticeOfChangeToInPersonProceeding } from './setNoticeOfChangeToInPersonProceeding';
 
@@ -22,7 +23,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: mockTrialSessionId,
     },
-    { applicationContext },
+    { authorizedUser: mockDocketClerkUser },
   );
 
   beforeEach(() => {

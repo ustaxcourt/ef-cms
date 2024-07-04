@@ -164,7 +164,10 @@ const multiDocketServeStrategy = async ({
   );
 
   const consolidatedCaseEntities = consolidatedCaseRecords.map(
-    consolidatedCase => new Case(consolidatedCase, { applicationContext }),
+    consolidatedCase =>
+      new Case(consolidatedCase, {
+        authorizedUser: applicationContext.getCurrentUser(),
+      }),
   );
 
   validateMultiDocketPaperFilingRequest({
@@ -494,7 +497,9 @@ const getDocketEntryToEdit = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,

@@ -29,7 +29,9 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseToCheck, { applicationContext });
+  const caseEntity = new Case(caseToCheck, {
+    authorizedUser: applicationContext.getCurrentUser(),
+  });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId: key,

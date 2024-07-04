@@ -39,7 +39,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId,
     },
-    { applicationContext },
+    { authorizedUser: undefined },
   );
 
   beforeEach(() => {

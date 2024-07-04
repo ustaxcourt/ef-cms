@@ -54,7 +54,7 @@ const updateCounselOnCase = async (
       userId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser: user });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
@@ -90,7 +90,9 @@ const updateCounselOnCase = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const updateCounselOnCaseInteractor = withLocking(

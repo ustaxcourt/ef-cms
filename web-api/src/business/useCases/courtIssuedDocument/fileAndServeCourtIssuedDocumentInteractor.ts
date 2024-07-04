@@ -66,7 +66,7 @@ export const fileAndServeCourtIssuedDocument = async (
       docketNumber: subjectCaseDocketNumber,
     });
 
-  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -139,7 +139,7 @@ export const fileAndServeCourtIssuedDocument = async (
           docketNumber,
         });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
     caseEntities = await Promise.all(

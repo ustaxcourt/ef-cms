@@ -175,7 +175,7 @@ export const updatePetitionerInformation = async (
     {
       ...oldCase,
     },
-    { applicationContext },
+    { authorizedUser: user },
   );
 
   caseToUpdateContacts.updatePetitioner({
@@ -196,7 +196,7 @@ export const updatePetitionerInformation = async (
     {
       ...caseToUpdateContacts.toRawObject(),
     },
-    { applicationContext },
+    { authorizedUser: user },
   ).validate();
 
   const servedParties = aggregatePartiesForService(caseEntity);

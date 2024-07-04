@@ -136,7 +136,7 @@ export const createCaseInteractor = async (
       privatePractitioners,
     },
     {
-      applicationContext,
+      authorizedUser,
       isNewCase: true,
     },
   );
@@ -294,5 +294,5 @@ export const createCaseInteractor = async (
     docketNumber: caseToAdd.docketNumber,
   });
 
-  return new Case(caseToAdd, { applicationContext }).toRawObject();
+  return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };

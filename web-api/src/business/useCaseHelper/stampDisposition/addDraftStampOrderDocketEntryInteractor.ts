@@ -58,7 +58,7 @@ export const addDraftStampOrderDocketEntry = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { authorizedUser: user });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );

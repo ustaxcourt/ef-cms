@@ -489,7 +489,7 @@ export const serveCaseToIrs = async (
         docketNumber,
       });
 
-    let caseEntity = new Case(caseToBatch, { applicationContext });
+    let caseEntity = new Case(caseToBatch, { authorizedUser: user });
 
     caseEntity.markAsSentToIRS();
 

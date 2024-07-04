@@ -92,7 +92,7 @@ export const addPaperFiling = async (
         docketNumber,
       });
 
-    let caseEntity = new Case(rawCase, { applicationContext });
+    let caseEntity = new Case(rawCase, { authorizedUser });
 
     const docketEntryEntity = new DocketEntry(
       {

@@ -46,7 +46,7 @@ export const updateDocketEntryMeta = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser: user });
 
   const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
@@ -192,7 +192,7 @@ export const updateDocketEntryMeta = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { authorizedUser: user }).validate().toRawObject();
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({

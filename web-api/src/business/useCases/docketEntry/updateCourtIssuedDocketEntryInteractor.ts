@@ -38,7 +38,7 @@ export const updateCourtIssuedDocketEntry = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,

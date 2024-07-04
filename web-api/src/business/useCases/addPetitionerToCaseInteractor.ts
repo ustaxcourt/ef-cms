@@ -38,7 +38,7 @@ export const addPetitionerToCase = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (caseEntity.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -59,7 +59,7 @@ export const addPetitionerToCase = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const addPetitionerToCaseInteractor = withLocking(

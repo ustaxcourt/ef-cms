@@ -12,6 +12,7 @@ import {
   deleteCounselFromCaseInteractor,
   setupServiceIndicatorForUnrepresentedPetitioners,
 } from './deleteCounselFromCaseInteractor';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { petitionerUser } from '@shared/test/mockUsers';
 
 describe('deleteCounselFromCaseInteractor', () => {
@@ -374,7 +375,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       };
 
       const result = setupServiceIndicatorForUnrepresentedPetitioners(
-        new Case(mockCase, { applicationContext }),
+        new Case(mockCase, { authorizedUser: mockDocketClerkUser }),
       );
 
       expect(result.petitioners[0].serviceIndicator).toBeUndefined();
@@ -402,7 +403,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       };
 
       const result = setupServiceIndicatorForUnrepresentedPetitioners(
-        new Case(mockCase, { applicationContext }),
+        new Case(mockCase, { authorizedUser: mockDocketClerkUser }),
       );
 
       expect(result.petitioners[0].serviceIndicator).toEqual(

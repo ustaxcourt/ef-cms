@@ -43,7 +43,7 @@ export const fileCourtIssuedOrder = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
 

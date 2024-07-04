@@ -41,7 +41,7 @@ export const deleteCaseNote = async (
       caseToUpdate: caseRecord,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { authorizedUser: user }).validate().toRawObject();
 };
 
 export const deleteCaseNoteInteractor = withLocking(

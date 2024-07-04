@@ -40,7 +40,9 @@ export const addCoversheetInteractor = async (
         docketNumber,
       });
 
-    caseEntity = new Case(caseRecord, { applicationContext });
+    caseEntity = new Case(caseRecord, {
+      authorizedUser: applicationContext.getCurrentUser(),
+    });
   }
 
   let pdfData;
@@ -105,7 +107,7 @@ export const addCoversheetInteractor = async (
             docketNumber: caseDocketNumber,
           });
         consolidatedCaseEntity = new Case(caseRecord, {
-          applicationContext,
+          authorizedUser: applicationContext.getCurrentUser(),
         });
       }
 

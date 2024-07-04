@@ -33,7 +33,7 @@ export const deleteCounselFromCase = async (
       userId,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser: user });
 
   if (userToDelete.role === ROLES.privatePractitioner) {
     caseEntity.removePrivatePractitioner(userToDelete);

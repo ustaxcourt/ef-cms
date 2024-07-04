@@ -235,7 +235,7 @@ const updateCasesAndSetNoticeOfChange = async ({
             applicationContext,
             docketNumber: c.docketNumber,
           });
-        return new Case(aCase, { applicationContext });
+        return new Case(aCase, { authorizedUser: user });
       }),
   );
   const casesThatShouldReceiveNotices = calendaredCaseEntities

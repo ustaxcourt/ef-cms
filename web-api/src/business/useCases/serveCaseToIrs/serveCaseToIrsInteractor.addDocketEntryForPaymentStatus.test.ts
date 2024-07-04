@@ -3,6 +3,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { PAYMENT_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addDocketEntryForPaymentStatus } from './serveCaseToIrsInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addDocketEntryForPaymentStatus', () => {
   let user;
@@ -18,7 +19,7 @@ describe('addDocketEntryForPaymentStatus', () => {
         petitionPaymentDate: 'Today',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
     await addDocketEntryForPaymentStatus({
       applicationContext,
@@ -43,7 +44,7 @@ describe('addDocketEntryForPaymentStatus', () => {
         petitionPaymentWaivedDate: 'Today',
         petitioners: undefined,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
     await addDocketEntryForPaymentStatus({
       applicationContext,

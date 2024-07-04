@@ -58,7 +58,7 @@ export const serveCourtIssuedDocument = async (
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
   }
 
-  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -132,7 +132,7 @@ export const serveCourtIssuedDocument = async (
           docketNumber,
         });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
     caseEntities = await Promise.all(

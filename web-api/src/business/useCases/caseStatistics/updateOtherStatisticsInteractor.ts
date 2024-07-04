@@ -37,7 +37,7 @@ export const updateOtherStatistics = async (
 
   const newCase = new Case(
     { ...oldCase, damages, litigationCosts },
-    { applicationContext },
+    { authorizedUser: user },
   );
 
   const updatedCase = await applicationContext
@@ -47,7 +47,9 @@ export const updateOtherStatistics = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser: user })
+    .validate()
+    .toRawObject();
 };
 
 export const updateOtherStatisticsInteractor = withLocking(

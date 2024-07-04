@@ -10,6 +10,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addCoverToPdf } from './addCoverToPdf';
 import { addCoversheetInteractor } from './addCoversheetInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
 jest.mock('./addCoverToPdf', () => ({
@@ -183,7 +184,9 @@ describe('addCoversheetInteractor', () => {
 
   it('should not call getCaseByDocketNumber if case entity is passed in', async () => {
     await addCoversheetInteractor(applicationContext, {
-      caseEntity: new Case(testingCaseData, { applicationContext }),
+      caseEntity: new Case(testingCaseData, {
+        authorizedUser: mockDocketClerkUser,
+      }),
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
     } as any);
@@ -321,7 +324,7 @@ describe('addCoversheetInteractor', () => {
           ...testingCaseData,
           eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       ),
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
@@ -378,7 +381,7 @@ describe('addCoversheetInteractor', () => {
           ...testingCaseData,
           documentTitle: 'Super Duper Simultaneous but not really',
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       ),
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,

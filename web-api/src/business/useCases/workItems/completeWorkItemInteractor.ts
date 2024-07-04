@@ -70,7 +70,7 @@ export const completeWorkItem = async (
       docketNumber: completedWorkItem.docketNumber,
     });
 
-  const caseToUpdate = new Case(caseObject, { applicationContext });
+  const caseToUpdate = new Case(caseObject, { authorizedUser: user });
 
   const workItemEntity = new WorkItem(completedWorkItem);
 

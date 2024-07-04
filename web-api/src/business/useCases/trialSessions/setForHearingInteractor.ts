@@ -50,7 +50,7 @@ export const setForHearingInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseDetails, { applicationContext });
+  const caseEntity = new Case(caseDetails, { authorizedUser: user });
 
   const trialSessionEntity = new TrialSession(trialSession);
 

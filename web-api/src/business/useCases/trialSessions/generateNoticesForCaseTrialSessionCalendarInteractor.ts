@@ -128,7 +128,7 @@ const setNoticeForCase = async ({
   trialSessionEntity,
   user,
 }) => {
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { authorizedUser: user });
   const { procedureType } = caseRecord;
 
   let noticeOfTrialIssued = await applicationContext

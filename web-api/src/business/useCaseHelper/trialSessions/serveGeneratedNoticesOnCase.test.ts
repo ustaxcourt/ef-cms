@@ -10,7 +10,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
 
 describe('serveGeneratedNoticesOnCase', () => {
-  const mockOpenCaseEntity = new Case(MOCK_CASE, { applicationContext });
+  const mockOpenCaseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
 
   const mockNoticeDocketEntryEntity = new DocketEntry(
     {
