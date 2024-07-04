@@ -1,6 +1,6 @@
 import { formatStatusReportFilingDateAction } from '@web-client/presenter/actions/formatStatusReportFilingDateAction';
-import { navigateToStatusReportOrderResponseAction } from '../actions/navigateToStatusReportOrderResponseAction';
-import { setStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/setStatusReportOrderResponseFormAction';
+import { navigateToStatusReportOrderResponseAction } from '../../actions/StatusReportOrderResponse/navigateToStatusReportOrderResponseAction';
+import { setStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setStatusReportOrderResponseFormAction';
 
 export const gotoStatusReportOrderResponseSequence = [
   formatStatusReportFilingDateAction,

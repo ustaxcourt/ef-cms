@@ -1,10 +1,10 @@
 import { checkDocumentTypeAction } from '@web-client/presenter/actions/checkDocumentTypeAction';
-import { isStatusReportOrderResponseAction } from '@web-client/presenter/actions/isStatusReportOrderResponseAction';
+import { isStatusReportOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrderResponse/isStatusReportOrderResponseAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
-import { navigateToStatusReportOrderResponseAction } from '@web-client/presenter/actions/navigateToStatusReportOrderResponseAction';
+import { navigateToStatusReportOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrderResponse/navigateToStatusReportOrderResponseAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
-import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/setEditStatusReportOrderResponseFormAction';
-import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/statusReportOrderResponsePdfPreviewSequence';
+import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setEditStatusReportOrderResponseFormAction';
+import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrderResponse/statusReportOrderResponsePdfPreviewSequence';
 
 export const draftDocumentEditNotSignedSequence = [
   checkDocumentTypeAction,
