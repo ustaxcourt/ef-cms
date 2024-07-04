@@ -31,16 +31,18 @@ export const createCaseAction = async ({
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
-    } = await applicationContext
-      .getUseCases()
-      .generateDocumentIds(applicationContext, {
+    } = await applicationContext.getUseCases().generateDocumentIds(
+      applicationContext,
+      {
         attachmentToPetitionUploadProgress:
           fileUploadProgressMap.attachmentToPetition,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure,
         petitionUploadProgress: fileUploadProgressMap.petition,
         stinUploadProgress: fileUploadProgressMap.stin,
-      });
+      },
+      user,
+    );
 
     stinFile = stinFileId;
 
