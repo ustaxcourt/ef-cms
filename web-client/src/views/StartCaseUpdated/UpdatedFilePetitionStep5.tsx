@@ -54,6 +54,7 @@ export const UpdatedFilePetitionStep5 = connect(
 
           <div className="margin-top-3">
             <FormGroup
+              errorMessageId="stin-file-error-message"
               errorText={[
                 validationErrors.stinFile,
                 validationErrors.stinFileSize,
