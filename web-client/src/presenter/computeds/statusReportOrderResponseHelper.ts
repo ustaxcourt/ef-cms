@@ -2,7 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const orderResponseHelper = (
+export const statusReportOrderResponseHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {

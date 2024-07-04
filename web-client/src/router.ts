@@ -418,7 +418,7 @@ const router = {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
           );
-          return app.getSequence('gotoOrderResponseSequence')({
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
             docketNumber,
           });
@@ -1335,7 +1335,7 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
         );
-        return app.getSequence('gotoOrderResponseSequence')({
+        return app.getSequence('gotoStatusReportOrderResponseSequence')({
           docketEntryId,
           docketNumber,
           parentMessageId,

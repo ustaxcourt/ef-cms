@@ -8,9 +8,9 @@ import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React from 'react';
 
-export const OrderResponse = connect(
+export const StatusReportOrderResponse = connect(
   {
     clearStatusReportOrderResponseFormSequence:
       sequences.clearStatusReportOrderResponseFormSequence,
@@ -19,7 +19,7 @@ export const OrderResponse = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence: sequences.navigateBackSequence,
-    orderResponseHelper: state.orderResponseHelper,
+    statusReportOrderResponseHelper: state.statusReportOrderResponseHelper,
     statusReportOrderResponsePdfPreviewSequence:
       sequences.statusReportOrderResponsePdfPreviewSequence,
     submitStatusReportOrderResponseSequence:
@@ -27,25 +27,18 @@ export const OrderResponse = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function OrderResponse({
+  function StatusReportOrderResponse({
     clearStatusReportOrderResponseFormSequence,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence,
-    orderResponseHelper,
+    statusReportOrderResponseHelper,
     statusReportOrderResponsePdfPreviewSequence,
     submitStatusReportOrderResponseSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
-    useEffect(() => {
-      // default docketEntryDescription to Order on load
-      updateFormValueSequence({
-        key: 'docketEntryDescription',
-        value: 'Order',
-      });
-    }, []);
     return (
       <>
         <CaseDetailHeader />
@@ -63,7 +56,7 @@ export const OrderResponse = connect(
                   Select one or more options:
                 </div>
                 <div className="stamp-order-form margin-top-2">
-                  {orderResponseHelper.isLeadCase && (
+                  {statusReportOrderResponseHelper.isLeadCase && (
                     <>
                       <FormGroup
                         className="stamp-form-group"
@@ -192,7 +185,7 @@ export const OrderResponse = connect(
 
                   <FormGroup
                     className="grid-container margin-top-2 padding-left-2"
-                    errorText={orderResponseHelper.dueDateErrorText}
+                    errorText={statusReportOrderResponseHelper.dueDateErrorText}
                     id="status-report-due-date-form-group"
                   >
                     <DateSelector
@@ -201,7 +194,7 @@ export const OrderResponse = connect(
                       formGroupClassNames="display-inline-block padding-0"
                       id="status-report-due-date"
                       label="Due date"
-                      minDate={orderResponseHelper.minDate}
+                      minDate={statusReportOrderResponseHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
@@ -236,8 +229,8 @@ export const OrderResponse = connect(
                       />
                       <label
                         className="usa-checkbox__label"
-                        htmlFor="striken-from-trial-sessions"
-                        id="striken-from-trial-sessions-label"
+                        htmlFor="stricken-from-trial-sessions"
+                        id="stricken-from-trial-sessions-label"
                       >
                         Case is striken from the trial sessions
                       </label>
@@ -248,7 +241,9 @@ export const OrderResponse = connect(
 
                   <FormGroup
                     className="stamp-form-group"
-                    errorText={orderResponseHelper.jurisdictionErrorText}
+                    errorText={
+                      statusReportOrderResponseHelper.jurisdictionErrorText
+                    }
                     id="jurisdiction-form-group"
                   >
                     <label className="usa-label" htmlFor="jurisdiction-radios">
@@ -428,7 +423,7 @@ export const OrderResponse = connect(
             <div className="grid-col-7">
               <div>
                 <span className="text-bold">Docket entry preview:</span>{' '}
-                {orderResponseHelper.docketEntryDescription}
+                {form.docketEntryDescription}
               </div>
               <div
                 className="statusReportOrderResponsePdfPreview"

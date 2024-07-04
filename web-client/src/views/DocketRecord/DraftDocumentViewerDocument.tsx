@@ -11,9 +11,9 @@ export const DraftDocumentViewerDocument = connect(
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.caseDetail,
-    draftDocumentEditNotSignedSequence:
-      sequences.draftDocumentEditNotSignedSequence,
     draftDocumentViewerHelper: state.draftDocumentViewerHelper,
+    editUnsignedDraftDocumentSequence:
+      sequences.editUnsignedDraftDocumentSequence,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -25,8 +25,8 @@ export const DraftDocumentViewerDocument = connect(
   function DraftDocumentViewerDocument({
     archiveDraftDocumentModalSequence,
     caseDetail,
-    draftDocumentEditNotSignedSequence,
     draftDocumentViewerHelper,
+    editUnsignedDraftDocumentSequence,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
@@ -72,7 +72,7 @@ export const DraftDocumentViewerDocument = connect(
                   icon="edit"
                   id="draft-edit-button-not-signed"
                   onClick={() =>
-                    draftDocumentEditNotSignedSequence({
+                    editUnsignedDraftDocumentSequence({
                       caseDetail,
                       docketEntryIdToEdit:
                         viewerDraftDocumentToDisplay.docketEntryId,

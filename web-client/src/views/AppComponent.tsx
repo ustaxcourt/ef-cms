@@ -66,7 +66,6 @@ import { Login } from '@web-client/views/Login/Login';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
-import { OrderResponse } from './OrderResponse';
 import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -88,6 +87,7 @@ import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
+import { StatusReportOrderResponse } from './StatusReportOrderResponse';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
@@ -167,7 +167,6 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
-  OrderResponse,
   PaperFiling,
   PendingReport,
   PetitionQc,
@@ -188,6 +187,7 @@ const pages = {
   SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
+  StatusReportOrderResponse,
   StyleGuide,
   TrialSessionDetail,
   TrialSessionPlanningReport,
