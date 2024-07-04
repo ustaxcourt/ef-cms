@@ -1,4 +1,4 @@
-import { formatStatusReportFilingDateAction } from '@web-client/presenter/actions/formatStatusReportFilingDateAction';
+import { formatStatusReportFilingDateAction } from '@web-client/presenter/actions/StatusReportOrderResponse/formatStatusReportFilingDateAction';
 import { navigateToStatusReportOrderResponseAction } from '../../actions/StatusReportOrderResponse/navigateToStatusReportOrderResponseAction';
 import { setStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setStatusReportOrderResponseFormAction';
 
