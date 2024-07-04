@@ -5,6 +5,7 @@
 # TODO
 - Go back to all // TODO 10417
 - Look at validateRawCollection()
+- Look at all references of genericHandler to make sure authorizedUser is being passed in.
 
 # Web-Client 
 Steps to transition getCurrentUser() in web-client
