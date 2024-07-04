@@ -9,6 +9,7 @@ import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -24,9 +25,8 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 export const saveCaseDetailInternalEdit = async (
   applicationContext: ServerApplicationContext,
   { caseToUpdate, docketNumber },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
