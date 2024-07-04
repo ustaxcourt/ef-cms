@@ -22,7 +22,7 @@ const props = cerebralProps as unknown as {
   onChangeCountryType: string;
 };
 
-export const ContactSecondaryUpdated = connect(
+export const ContactSecondaryUpdated: React.FC<typeof props> = connect(
   {
     bind: props.bind,
     constants: state.constants,

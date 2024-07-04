@@ -362,6 +362,7 @@ function BusinessInfo({
             showInCareOfOptional={businessFieldNames.showInCareOfOptional}
             onBlur="petitionGenerationLiveValidationSequence"
             onChange="updateFormValueUpdatedSequence"
+            onChangeCountryType="updateFormValueCountryTypeSequence"
           />
           <CorporateDisclosureUpload
             hasCorporateDisclosureFile={hasCorporateDisclosureFile}
@@ -536,6 +537,7 @@ function OtherContactInformation({ otherContactNameLabel, registerRef }) {
       titleLabelNote={otherContactNameLabel.titleLabelNote}
       onBlur="petitionGenerationLiveValidationSequence"
       onChange="updateFormValueUpdatedSequence"
+      onChangeCountryType="updateFormValueCountryTypeSequence"
     />
   );
 }
