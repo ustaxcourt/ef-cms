@@ -4,7 +4,7 @@
 
 # TODO
 - Go back to all // TODO 10417
-- Look for 'extends' Classname
+- Look at validateRawCollection()
 
 # Web-Client 
 Steps to transition getCurrentUser() in web-client
