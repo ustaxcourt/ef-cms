@@ -4,4 +4,4 @@ import { updateFormValueSequence } from '@web-client/presenter/sequences/updateF
 export const updateFilePetitionSequence = [
   updateFormValueSequence,
   clearPetitionRedactionAcknowledgementAction,
-];
+] as unknown as (props: { key: string; value: any; index?: number }) => void;
