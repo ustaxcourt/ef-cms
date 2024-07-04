@@ -1,14 +1,10 @@
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import {
-  MOCK_PRACTITIONER,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
@@ -22,19 +18,14 @@ describe('removeCounselFromRemovedPetitioner', () => {
   const mockSecondPractitionerUserId = '5dde0389-6e09-4e2f-a7f4-34e4f2a534a8';
   const mockThirdPractitionerUserId = '0bd63272-781f-4cbd-8b7d-7cb649ca255d';
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-  });
-
   it('throws an unauthorized error if user does not have correct permissions', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
-
     await expect(
       removeCounselFromRemovedPetitioner({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { authorizedUser: mockPetitionerUser }),
+        authorizedUser: mockPetitionerUser,
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockPetitionerUser,
+        }),
         petitionerContactId: mockContactPrimaryId,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -65,6 +56,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
@@ -108,6 +100,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
