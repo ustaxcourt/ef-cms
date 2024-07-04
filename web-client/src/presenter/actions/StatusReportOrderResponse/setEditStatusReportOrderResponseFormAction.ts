@@ -4,7 +4,7 @@ export const setEditStatusReportOrderResponseFormAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps): { url: string } => {
   const { caseDetail, docketEntryIdToEdit } = props;
 
   const documentToEdit = get(state.documentToEdit);

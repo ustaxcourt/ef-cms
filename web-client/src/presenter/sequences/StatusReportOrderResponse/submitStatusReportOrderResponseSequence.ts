@@ -15,7 +15,6 @@ export const submitStatusReportOrderResponseSequence = [
     {
       error: [setValidationErrorsAction, setValidationAlertErrorsAction],
       success: [
-        // TODO: Recommend reusing submitCourtIssuedOrderSequence, therefore make sure we're setting the correct form fields here.
         prepareStatusReportOrderResponseAction,
         submitCourtIssuedOrderSequence,
         {

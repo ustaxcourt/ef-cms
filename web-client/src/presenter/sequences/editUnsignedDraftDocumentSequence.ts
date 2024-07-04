@@ -23,4 +23,8 @@ export const editUnsignedDraftDocumentSequence = [
       },
     ],
   },
-];
+] as unknown as (props: {
+  caseDetail: RawCase;
+  docketEntryIdToEdit: string;
+  documentType: string;
+}) => void;

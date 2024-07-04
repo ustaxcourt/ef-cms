@@ -6,4 +6,8 @@ export const navigateToStatusReportOrderResponseSequence = [
   formatStatusReportFilingDateAction,
   setStatusReportOrderResponseFormAction,
   navigateToStatusReportOrderResponseAction,
-];
+] as unknown as (props: {
+  statusReportFilingDate: string;
+  statusReportIndex: number;
+  url: string;
+}) => void;

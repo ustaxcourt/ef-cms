@@ -6,8 +6,6 @@ export const clearStatusReportOrderResponseFormAction = ({
 }: ActionProps) => {
   const documentToEdit = get(state.documentToEdit);
   if (!documentToEdit) {
-    console.log('reset form');
-    //store.set(state.form, {});
     store.unset(state.form.issueOrder);
     store.unset(state.form.orderType);
     store.unset(state.form.dueDate);

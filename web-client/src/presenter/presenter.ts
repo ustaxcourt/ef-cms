@@ -667,8 +667,7 @@ export const presenterSequences = {
     clearPreferredTrialCitySequence as unknown as Function,
   clearSelectedWorkItemsSequence:
     clearSelectedWorkItemsSequence as unknown as Function,
-  clearStatusReportOrderResponseFormSequence:
-    clearStatusReportOrderResponseFormSequence as unknown as Function,
+  clearStatusReportOrderResponseFormSequence,
   clearViewerDocumentToDisplaySequence:
     clearViewerDocumentToDisplaySequence as unknown as Function,
   closeModalAndNavigateBackSequence:
@@ -751,8 +750,7 @@ export const presenterSequences = {
   downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,
-  editUnsignedDraftDocumentSequence:
-    editUnsignedDraftDocumentSequence as unknown as Function,
+  editUnsignedDraftDocumentSequence,
   editUploadCourtIssuedDocumentSequence:
     editUploadCourtIssuedDocumentSequence as unknown as Function,
   exportCsvCustomCaseReportSequence:
@@ -921,9 +919,7 @@ export const presenterSequences = {
 
   gotoStartCaseWizardSequence:
     gotoStartCaseWizardSequence as unknown as Function,
-  // TODO 10102: fix typing
-  gotoStatusReportOrderResponseSequence:
-    gotoStatusReportOrderResponseSequence as unknown as Function,
+  gotoStatusReportOrderResponseSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence:
     gotoTrialSessionDetailSequence as unknown as Function,
@@ -965,8 +961,7 @@ export const presenterSequences = {
   navigateToCaseDetailWithDraftDocumentSequence:
     navigateToCaseDetailWithDraftDocumentSequence as unknown as Function,
   navigateToCreatePetitionerAccountSequence,
-  navigateToEditOrderSequence:
-    navigateToEditOrderSequence as unknown as Function,
+  navigateToEditOrderSequence,
   navigateToForgotPasswordSequence,
   navigateToLoginSequence,
   navigateToPathAndSetRedirectUrlSequence:
@@ -976,8 +971,7 @@ export const presenterSequences = {
     navigateToPrintPaperServiceSequence as unknown as Function,
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
-  navigateToStatusReportOrderResponseSequence:
-    navigateToStatusReportOrderResponseSequence as unknown as Function,
+  navigateToStatusReportOrderResponseSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
     noticeGenerationCompleteSequence as unknown as Function,
@@ -1275,8 +1269,7 @@ export const presenterSequences = {
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
-  statusReportOrderResponsePdfPreviewSequence:
-    statusReportOrderResponsePdfPreviewSequence as unknown as Function,
+  statusReportOrderResponsePdfPreviewSequence,
   strikeDocketEntrySequence: strikeDocketEntrySequence as unknown as Function,
   submitAddConsolidatedCaseSequence:
     submitAddConsolidatedCaseSequence as unknown as Function,
@@ -1352,9 +1345,7 @@ export const presenterSequences = {
   submitRemoveConsolidatedCasesSequence:
     submitRemoveConsolidatedCasesSequence as unknown as Function,
   submitStampMotionSequence: submitStampMotionSequence as unknown as Function,
-  // TODO 10102: fix typing
-  submitStatusReportOrderResponseSequence:
-    submitStatusReportOrderResponseSequence as unknown as Function,
+  submitStatusReportOrderResponseSequence,
   submitTrialSessionSequence: submitTrialSessionSequence as unknown as Function,
   submitUpdateAddDocketNumbersToOrderSequence:
     submitUpdateAddDocketNumbersToOrderSequence as unknown as Function,
