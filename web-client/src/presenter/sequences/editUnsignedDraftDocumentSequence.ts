@@ -6,7 +6,7 @@ import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setEditStatusReportOrderResponseFormAction';
 import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrderResponse/statusReportOrderResponsePdfPreviewSequence';
 
-export const draftDocumentEditNotSignedSequence = [
+export const editUnsignedDraftDocumentSequence = [
   checkDocumentTypeAction,
   {
     documentTypeMiscellaneous: [navigateToPathAction],

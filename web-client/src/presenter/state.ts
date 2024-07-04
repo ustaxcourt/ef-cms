@@ -96,7 +96,6 @@ import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
-import { orderResponseHelper } from './computeds/orderResponseHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { paperServiceStatusHelper } from './computeds/paperServiceStatusHelper';
@@ -128,6 +127,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { statusReportOrderResponseHelper } from './computeds/statusReportOrderResponseHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -409,9 +409,6 @@ export const computeds = {
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
-  orderResponseHelper: orderResponseHelper as unknown as ReturnType<
-    typeof orderResponseHelper
-  >,
   orderTypesHelper: orderTypesHelper as unknown as ReturnType<
     typeof orderTypesHelper
   >,
@@ -509,6 +506,10 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
+  statusReportOrderResponseHelper:
+    statusReportOrderResponseHelper as unknown as ReturnType<
+      typeof statusReportOrderResponseHelper
+    >,
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
   >,

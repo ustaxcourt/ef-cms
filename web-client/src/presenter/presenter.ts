@@ -108,8 +108,8 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloadCsvFileSequence';
-import { draftDocumentEditNotSignedSequence } from '@web-client/presenter/sequences/draftDocumentEditNotSignedSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
+import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequences/editUnsignedDraftDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
@@ -180,7 +180,6 @@ import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
-import { gotoOrderResponseSequence } from './sequences/gotoOrderResponseSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -235,6 +234,7 @@ import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToP
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
+import { navigateToStatusReportOrderResponseSequence } from './sequences/StatusReportOrderResponse/navigateToStatusReportOrderResponseSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
@@ -749,10 +749,10 @@ export const presenterSequences = {
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
   downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
-  draftDocumentEditNotSignedSequence:
-    draftDocumentEditNotSignedSequence as unknown as Function,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,
+  editUnsignedDraftDocumentSequence:
+    editUnsignedDraftDocumentSequence as unknown as Function,
   editUploadCourtIssuedDocumentSequence:
     editUploadCourtIssuedDocumentSequence as unknown as Function,
   exportCsvCustomCaseReportSequence:
@@ -866,43 +866,62 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
-  // TODO 10102: fix typing
-  gotoOrderResponseSequence: gotoOrderResponseSequence as unknown as Function,
+
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
+
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
+
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
+
   gotoPractitionerAddDocumentSequence:
     gotoPractitionerAddDocumentSequence as unknown as Function,
+
   gotoPractitionerDetailSequence:
     gotoPractitionerDetailSequence as unknown as Function,
+
   gotoPractitionerDocumentationSequence:
     gotoPractitionerDocumentationSequence as unknown as Function,
+
   gotoPractitionerEditDocumentSequence:
     gotoPractitionerEditDocumentSequence as unknown as Function,
+
   gotoPrintPaperServiceSequence:
     gotoPrintPaperServiceSequence as unknown as Function,
+
   gotoPrintPaperTrialNoticesSequence:
     gotoPrintPaperTrialNoticesSequence as unknown as Function,
+
   gotoPrintPractitionerCasesSequence:
     gotoPrintPractitionerCasesSequence as unknown as Function,
+
   gotoPrintableCaseConfirmationSequence:
     gotoPrintableCaseConfirmationSequence as unknown as Function,
+
   gotoPrintableCaseInventoryReportSequence:
     gotoPrintableCaseInventoryReportSequence as unknown as Function,
+
   gotoPrintableDocketRecordSequence:
     gotoPrintableDocketRecordSequence as unknown as Function,
+
   gotoPrintablePendingReportForCaseSequence:
     gotoPrintablePendingReportForCaseSequence as unknown as Function,
+
   gotoPrintablePendingReportSequence:
     gotoPrintablePendingReportSequence as unknown as Function,
+
   gotoPrintableTrialSessionWorkingCopySequence:
     gotoPrintableTrialSessionWorkingCopySequence as unknown as Function,
+
   gotoPrivacySequence: gotoPrivacySequence as unknown as Function,
+
   gotoReviewSavedPetitionSequence:
     gotoReviewSavedPetitionSequence as unknown as Function,
+
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,
+
   gotoStartCaseWizardSequence:
     gotoStartCaseWizardSequence as unknown as Function,
+  // TODO 10102: fix typing
   gotoStatusReportOrderResponseSequence:
     gotoStatusReportOrderResponseSequence as unknown as Function,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
@@ -957,6 +976,8 @@ export const presenterSequences = {
     navigateToPrintPaperServiceSequence as unknown as Function,
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
+  navigateToStatusReportOrderResponseSequence:
+    navigateToStatusReportOrderResponseSequence as unknown as Function,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
     noticeGenerationCompleteSequence as unknown as Function,
