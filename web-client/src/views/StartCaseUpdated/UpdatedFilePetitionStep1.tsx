@@ -432,6 +432,7 @@ function CorporateDisclosureUpload({
             id="corporate-disclosure-file"
             name="corporateDisclosureFile"
             updateFormValueSequence="updateFormValueUpdatedSequence"
+            validationSequence="petitionGenerationLiveValidationSequence"
           />
         </FormGroup>
       </div>
