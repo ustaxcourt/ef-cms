@@ -3,7 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -18,7 +20,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  */
 
 export const updateQcCompleteForTrial = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     qcCompleteForTrial,
@@ -28,10 +30,11 @@ export const updateQcCompleteForTrial = async (
     qcCompleteForTrial: boolean;
     trialSessionId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)
+  ) {
     throw new UnauthorizedError('Unauthorized for trial session QC complete');
   }
 
@@ -39,7 +42,7 @@ export const updateQcCompleteForTrial = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { authorizedUser: user });
+  const newCase = new Case(oldCase, { authorizedUser });
 
   newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
 
@@ -50,9 +53,7 @@ export const updateQcCompleteForTrial = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateQcCompleteForTrialInteractor = withLocking(
