@@ -1,5 +1,5 @@
 import { clearPdfPreviewUrlAction } from '@web-client/presenter/actions/clearPdfPreviewUrlAction';
-import { clearStatusOrderResponseFormAction } from '@web-client/presenter/actions/clearStatusOrderResponseFormAction';
+import { clearStatusOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/clearStatusOrderResponseFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
