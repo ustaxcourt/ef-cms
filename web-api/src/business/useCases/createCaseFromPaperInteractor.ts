@@ -91,7 +91,7 @@ export const createCaseFromPaperInteractor = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const petitionEntity = new PaperPetition(petitionMetadata, {
-    applicationContext,
+    authorizedUser,
   }).validate();
 
   const docketNumber =

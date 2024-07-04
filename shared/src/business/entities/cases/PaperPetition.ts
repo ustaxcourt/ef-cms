@@ -14,6 +14,7 @@ import { DocketEntry } from '../DocketEntry';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Statistic } from '../Statistic';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import joi from 'joi';
 
 /**
@@ -63,10 +64,10 @@ export class PaperPetition extends JoiValidationEntity {
   public archivedCorrespondences: any;
   public docketEntries: DocketEntry[];
 
-  constructor(rawProps, { applicationContext }) {
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
+  constructor(
+    rawProps,
+    { authorizedUser }: { authorizedUser: UnknownAuthUser },
+  ) {
     super('PaperPetition');
     this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile;
     this.attachmentToPetitionFileSize = rawProps.attachmentToPetitionFileSize;
@@ -123,7 +124,7 @@ export class PaperPetition extends JoiValidationEntity {
       ? rawProps.archivedDocketEntries.map(
           doc =>
             new DocketEntry(doc, {
-              authorizedUser: applicationContext.getCurrentUser(),
+              authorizedUser,
             }),
         )
       : [];
