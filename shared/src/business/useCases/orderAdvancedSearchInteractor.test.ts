@@ -5,13 +5,14 @@ import {
   ROLES,
 } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { orderAdvancedSearchInteractor } from './orderAdvancedSearchInteractor';
-import { petitionerUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('orderAdvancedSearchInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
@@ -43,19 +44,25 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      orderAdvancedSearchInteractor(applicationContext, {} as any),
+      orderAdvancedSearchInteractor(
+        applicationContext,
+        {} as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('logs raw search information and results size', async () => {
-    const result = await orderAdvancedSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword: 'candy',
-      startDate: '01/01/2001',
-    } as any);
+    const result = await orderAdvancedSearchInteractor(
+      applicationContext,
+      {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'candy',
+        startDate: '01/01/2001',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
@@ -79,10 +86,14 @@ describe('orderAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await orderAdvancedSearchInteractor(applicationContext, {
-      keyword: 'keyword',
-      petitionerName: 'test person',
-    } as any);
+    const results = await orderAdvancedSearchInteractor(
+      applicationContext,
+      {
+        keyword: 'keyword',
+        petitionerName: 'test person',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -90,11 +101,15 @@ describe('orderAdvancedSearchInteractor', () => {
   it('searches for documents that are of type orders', async () => {
     const keyword = 'keyword';
 
-    await orderAdvancedSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword,
-      startDate: '01/01/2001',
-    } as any);
+    await orderAdvancedSearchInteractor(
+      applicationContext,
+      {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword,
+        startDate: '01/01/2001',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
