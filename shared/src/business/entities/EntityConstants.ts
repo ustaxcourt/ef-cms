@@ -1140,12 +1140,6 @@ export const ALL_STATE_OPTIONS = {
   Other: 'Other',
 };
 
-const statesArray = [
-  ...Object.values(US_STATES),
-  ...Object.values(US_STATES_OTHER),
-];
-export type States = (typeof statesArray)[number];
-
 export type AbbrevatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
