@@ -1,9 +1,12 @@
-import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
-import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateCaseTrialSortTagsInteractor } from './updateCaseTrialSortTagsInteractor';
 
@@ -13,23 +16,19 @@ describe('Update case trial sort tags', () => {
   beforeEach(() => {
     mockCase = MOCK_CASE;
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(mockCase));
   });
 
   it('does not call persistence if case status is not ready for trial', async () => {
-    await updateCaseTrialSortTagsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-    });
+    await updateCaseTrialSortTagsInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCase.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -40,9 +39,13 @@ describe('Update case trial sort tags', () => {
   it('calls persistence if case status is ready for trial', async () => {
     mockCase.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
 
-    await updateCaseTrialSortTagsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-    });
+    await updateCaseTrialSortTagsInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCase.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -51,12 +54,14 @@ describe('Update case trial sort tags', () => {
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      updateCaseTrialSortTagsInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-      }),
+      updateCaseTrialSortTagsInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for update case');
   });
 
@@ -66,9 +71,13 @@ describe('Update case trial sort tags', () => {
       .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
-      updateCaseTrialSortTagsInteractor(applicationContext, {
-        docketNumber: '123-45',
-      }),
+      updateCaseTrialSortTagsInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-45',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Case 123-45');
   });
 
@@ -85,9 +94,13 @@ describe('Update case trial sort tags', () => {
       );
 
     await expect(
-      updateCaseTrialSortTagsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      updateCaseTrialSortTagsInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('The Case entity was invalid');
   });
 });
