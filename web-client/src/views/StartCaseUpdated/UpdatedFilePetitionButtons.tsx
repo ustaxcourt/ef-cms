@@ -6,12 +6,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const props = cerebralProps as unknown as {
-  isNextButtonDisabled: boolean;
-  primaryLabel: string;
-  resetFocus: () => void;
+  isNextButtonDisabled?: boolean;
+  primaryLabel?: string;
+  resetFocus?: () => void;
 };
 
-export const UpdatedFilePetitionButtons = connect(
+export const UpdatedFilePetitionButtons: React.FC<typeof props> = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isNextButtonDisabled: props.isNextButtonDisabled,
