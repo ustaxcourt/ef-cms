@@ -5,6 +5,7 @@ import {
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { orderBy } from 'lodash';
 
 const saveOriginalDocumentWithNewId = async ({
@@ -70,15 +71,15 @@ export const saveSignedDocumentInteractor = async (
     parentMessageId,
     signedDocketEntryId,
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { authorizedUser: user });
+  const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
@@ -103,12 +104,12 @@ export const saveSignedDocumentInteractor = async (
         isPaper: false,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { authorizedUser: user },
+      { authorizedUser },
     );
 
-    signedDocketEntryEntity.setFiledBy(user);
+    signedDocketEntryEntity.setFiledBy(authorizedUser);
 
-    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+    signedDocketEntryEntity.setSigned(authorizedUser?.userId, nameForSigning);
 
     caseEntity.addDocketEntry(signedDocketEntryEntity);
 
@@ -155,12 +156,12 @@ export const saveSignedDocumentInteractor = async (
         isFileAttached: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { authorizedUser: user },
+      { authorizedUser },
     );
 
-    signedDocketEntryEntity.setFiledBy(user);
+    signedDocketEntryEntity.setFiledBy(authorizedUser);
 
-    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+    signedDocketEntryEntity.setSigned(authorizedUser?.userId, nameForSigning);
 
     caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
