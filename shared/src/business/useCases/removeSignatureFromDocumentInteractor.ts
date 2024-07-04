@@ -1,4 +1,6 @@
 import { Case } from '../entities/cases/Case';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * Removes a signature from a document
@@ -10,8 +12,9 @@ import { Case } from '../entities/cases/Case';
  * @returns {object} the updated case
  */
 export const removeSignatureFromDocumentInteractor = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -20,7 +23,7 @@ export const removeSignatureFromDocumentInteractor = async (
       docketNumber,
     });
   const caseEntity = new Case(caseRecord, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser,
   });
   const docketEntryToUnsign = caseEntity.getDocketEntryById({
     docketEntryId,
