@@ -126,6 +126,7 @@ describe('Verify the activity report', () => {
         retry(() => {
           loginAsColvin();
           navigateToJudgeActivityReport('submitted-and-cav');
+          cy.get('tbody > tr').should('be.visible');
           return assertExists(`[data-testid="${docketNumber}"]`);
         });
 

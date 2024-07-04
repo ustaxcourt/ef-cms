@@ -30,6 +30,11 @@ export const petitionsClerkCreateOrder = cerebralTest => {
       value: '<p>This is a test order.</p>',
     });
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'This is a test order.',
+    });
+
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     //skip signing and go back to caseDetail

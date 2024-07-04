@@ -1,15 +1,12 @@
+import {
+  FORMATS,
+  formatNow,
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
-import { retry } from '../../../../helpers/retry';
 
 describe('Custom Case Report CSV export', () => {
   beforeEach(() => {
-    const downloadPath = Cypress.config('downloadsFolder');
-    cy.task('ensureFolderExists', downloadPath);
-  });
-
-  afterEach(() => {
-    const downloadPath = Cypress.config('downloadsFolder');
-    cy.task('deleteAllFilesInFolder', downloadPath);
+    cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
 
   it('should download the Custom Case Report data in CSV format', () => {
@@ -25,8 +22,6 @@ describe('Custom Case Report CSV export', () => {
       cy.get('[data-testid="export-custom-case-report"]').should('be.enabled');
       cy.get('[data-testid="export-custom-case-report"]').click();
 
-      const downloadPath = Cypress.config('downloadsFolder');
-
       let reportCount: number = -1;
       cy.get('[data-testid="custom-case-report-count"]')
         .invoke('text')
@@ -34,37 +29,16 @@ describe('Custom Case Report CSV export', () => {
           reportCount = +innerText;
         });
 
-      retry(() => waitUntilTheCsvFileIsInTheDownloadFolder(downloadPath));
-
-      cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
-        const latestFile = files
-          .sort()
-          .filter((fileName: string) =>
-            fileName.includes('Custom Case Report - '),
-          )
-          .filter((fileName: string) => fileName.endsWith('.csv'))
-          .pop();
-
-        const filePath = `${downloadPath}/${latestFile}`;
-        // eslint-disable-next-line promise/no-nesting
-        return cy.readFile(filePath, 'utf-8').then(fileContent => {
-          cy.wrap(
-            fileContent.split('\n').filter((str: string) => !!str).length,
-          ).should('equal', reportCount + 1);
+      const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+      const expectedFileName = `Custom Case Report - ${today}.csv`;
+      return cy
+        .readFile(`cypress/downloads/${expectedFileName}`, 'utf-8')
+        .then(fileContent => {
+          const totalCasesInReport = fileContent
+            .split('\n')
+            .filter((str: string) => !!str).length;
+          expect(totalCasesInReport).to.equal(reportCount + 1);
         });
-      });
     });
   });
 });
-
-const waitUntilTheCsvFileIsInTheDownloadFolder = (downloadPath: string) => {
-  return cy.listDownloadedFiles(downloadPath).then((files: string[]) => {
-    const latestFile = files
-      .sort()
-      .filter((fileName: string) => fileName.includes('Custom Case Report - '))
-      .filter((fileName: string) => fileName.endsWith('.csv'))
-      .pop();
-
-    return !!latestFile;
-  });
-};

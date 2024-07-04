@@ -14,17 +14,6 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { omit } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * fileAndServeCourtIssuedDocumentInteractor
- * @param {Object} applicationContext the application context
- * @param {Object} providers the providers object
- * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
- * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
- * @param {Object} providers.form the form from the front end that has last minute modifications to the docket entry
- * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- * @returns {Object} the URL of the document that was served
- */
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
   {
@@ -40,7 +29,7 @@ export const fileAndServeCourtIssuedDocument = async (
     form: any;
     subjectCaseDocketNumber: string;
   },
-) => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -94,20 +83,12 @@ export const fileAndServeCourtIssuedDocument = async (
     throw error;
   }
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryToServe.docketEntryId,
-    })
-    .promise();
-
   const stampedPdf = await applicationContext
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
+      docketEntryId: docketEntryToServe.docketEntryId,
       documentToStamp: form,
-      pdfData,
     });
 
   const numberOfPages = await applicationContext
@@ -115,7 +96,7 @@ export const fileAndServeCourtIssuedDocument = async (
     .countPagesInDocument({
       applicationContext,
       docketEntryId,
-      documentBytes: pdfData,
+      documentBytes: stampedPdf,
     });
 
   await applicationContext
@@ -129,6 +110,38 @@ export const fileAndServeCourtIssuedDocument = async (
 
   let caseEntities: Case[] = [];
   let serviceResults;
+  let documentContentsId;
+  try {
+    const shouldScrapePDFContents =
+      !docketEntryToServe.documentContents &&
+      DocketEntry.isSearchable(form.eventCode);
+
+    if (shouldScrapePDFContents) {
+      let documentContents: string = await applicationContext
+        .getUseCaseHelpers()
+        .parseAndScrapePdfContents({
+          applicationContext,
+          pdfBuffer: stampedPdf,
+        });
+
+      documentContents = `${documentContents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
+      documentContentsId = applicationContext.getUniqueId();
+
+      const contentToStore = {
+        documentContents,
+      };
+
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        contentType: 'application/json',
+        document: Buffer.from(JSON.stringify(contentToStore)),
+        key: documentContentsId,
+        useTempBucket: false,
+      });
+    }
+  } catch (e) {
+    applicationContext.logger.error(e);
+  }
 
   try {
     for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
@@ -150,6 +163,7 @@ export const fileAndServeCourtIssuedDocument = async (
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,
+            documentContentsId,
             documentTitle: form.generatedDocumentTitle,
             documentType: form.documentType,
             editState: JSON.stringify({
