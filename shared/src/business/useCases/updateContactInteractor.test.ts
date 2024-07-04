@@ -10,15 +10,14 @@ import {
 } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { fakeData } from '../test/getFakeFile';
 import { getContactPrimary } from '../entities/cases/Case';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { updateContactInteractor } from './updateContactInteractor';
 
 describe('updates the contact on a case', () => {
   let mockCase;
-  let mockUser;
   let mockCaseContactPrimary;
   let mockLock;
   beforeAll(() => {
@@ -35,12 +34,7 @@ describe('updates the contact on a case', () => {
     };
     mockCaseContactPrimary = mockCase.petitioners[0];
     mockCaseContactPrimary.contactType = 'petitioner';
-
-    mockUser = new User({
-      name: 'bob',
-      role: ROLES.petitioner,
-      userId: mockCaseContactPrimary.contactId,
-    });
+    mockCaseContactPrimary.contactId = mockPetitionerUser.userId;
 
     applicationContext
       .getPersistenceGateway()
@@ -53,8 +47,6 @@ describe('updates the contact on a case', () => {
     applicationContext
       .getDocumentGenerators()
       .changeOfAddress.mockReturnValue(fakeData);
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
     applicationContext
       .getChromiumBrowser()
@@ -82,19 +74,23 @@ describe('updates the contact on a case', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
 
-    const caseDetail = await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
-        city: 'Philadelphia',
-        email: 'petitioner',
-        name: 'Bill Burr',
-        phone: '1234567890',
-        postalCode: '99999',
-        state: 'PA',
+    const caseDetail = await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+          city: 'Philadelphia',
+          email: 'petitioner',
+          name: 'Bill Burr',
+          phone: '1234567890',
+          postalCode: '99999',
+          state: 'PA',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     const updatedCase =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -153,13 +149,17 @@ describe('updates the contact on a case', () => {
         ],
       });
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -189,13 +189,17 @@ describe('updates the contact on a case', () => {
         ],
       });
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -225,13 +229,17 @@ describe('updates the contact on a case', () => {
         ],
       });
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -244,24 +252,30 @@ describe('updates the contact on a case', () => {
       .getCaseByDocketNumber.mockResolvedValue(null);
 
     await expect(
-      updateContactInteractor(applicationContext, {
-        contactInfo: {},
-        docketNumber: mockCase.docketNumber,
-      }),
+      updateContactInteractor(
+        applicationContext,
+        {
+          contactInfo: {},
+          docketNumber: mockCase.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Case 101-18 was not found.');
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
-    mockUser = {
-      ...mockUser,
-      userId: 'de300c01-f6ff-4843-a72f-ee7cd2521237',
-    };
-
     await expect(
-      updateContactInteractor(applicationContext, {
-        contactInfo: mockCaseContactPrimary,
-        docketNumber: mockCase.docketNumber,
-      }),
+      updateContactInteractor(
+        applicationContext,
+        {
+          contactInfo: mockCaseContactPrimary,
+          docketNumber: mockCase.docketNumber,
+        },
+        {
+          ...mockPetitionerUser,
+          userId: '4885d93e-ab94-48b9-be87-4cda005568d4',
+        },
+      ),
     ).rejects.toThrow('Unauthorized for update case contact');
   });
 
@@ -269,10 +283,14 @@ describe('updates the contact on a case', () => {
     mockCase = { ...MOCK_CASE_WITH_SECONDARY_OTHERS, petitioners: [] };
 
     await expect(
-      updateContactInteractor(applicationContext, {
-        contactInfo: mockCaseContactPrimary,
-        docketNumber: mockCase.docketNumber,
-      }),
+      updateContactInteractor(
+        applicationContext,
+        {
+          contactInfo: mockCaseContactPrimary,
+          docketNumber: mockCase.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Error: Petitioner was not found on case 109-19.');
   });
 
@@ -281,10 +299,14 @@ describe('updates the contact on a case', () => {
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: mockCaseContactPrimary,
-      docketNumber: mockCase.docketNumber,
-    });
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: mockCaseContactPrimary,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -302,16 +324,20 @@ describe('updates the contact on a case', () => {
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
-    const caseDetail = await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: 'nothing',
-        city: 'Somewhere',
-        email: 'hello123@example.com',
-        name: 'Secondary Party Name Changed',
+    const caseDetail = await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: 'nothing',
+          city: 'Somewhere',
+          email: 'hello123@example.com',
+          name: 'Secondary Party Name Changed',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     const contactPrimary = getContactPrimary(caseDetail);
 
@@ -338,13 +364,17 @@ describe('updates the contact on a case', () => {
         () => mockCaseWithSealedAddress,
       );
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: 'nothing 1',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: 'nothing 1',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -361,13 +391,17 @@ describe('updates the contact on a case', () => {
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
@@ -388,13 +422,17 @@ describe('updates the contact on a case', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockClosedCase);
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -408,12 +446,16 @@ describe('updates the contact on a case', () => {
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(null);
 
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -424,13 +466,17 @@ describe('updates the contact on a case', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      updateContactInteractor(applicationContext, {
-        contactInfo: {
-          ...mockCaseContactPrimary,
-          address1: '453 Electric Ave',
+      updateContactInteractor(
+        applicationContext,
+        {
+          contactInfo: {
+            ...mockCaseContactPrimary,
+            address1: '453 Electric Ave',
+          },
+          docketNumber: mockCase.docketNumber,
         },
-        docketNumber: mockCase.docketNumber,
-      }),
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -439,13 +485,17 @@ describe('updates the contact on a case', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await updateContactInteractor(applicationContext, {
-      contactInfo: {
-        ...mockCaseContactPrimary,
-        address1: '453 Electric Ave',
+    await updateContactInteractor(
+      applicationContext,
+      {
+        contactInfo: {
+          ...mockCaseContactPrimary,
+          address1: '453 Electric Ave',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
