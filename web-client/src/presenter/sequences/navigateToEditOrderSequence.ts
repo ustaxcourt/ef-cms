@@ -42,4 +42,4 @@ export const navigateToEditOrderSequence = [
       statusReportOrderResponsePdfPreviewSequence,
     ],
   },
-];
+] as unknown as () => void;

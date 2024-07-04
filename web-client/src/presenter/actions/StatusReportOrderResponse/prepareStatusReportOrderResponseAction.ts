@@ -70,7 +70,6 @@ export const prepareStatusReportOrderResponseAction = ({
       })
       .join('');
 
-  // TODO, maybe add documentType=Order ?
   store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
   store.set(state.form.eventCode, 'O');
   store.set(state.form.richText, richText);

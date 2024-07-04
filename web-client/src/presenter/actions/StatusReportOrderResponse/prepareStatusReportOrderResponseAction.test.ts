@@ -1,6 +1,6 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { prepareStatusReportOrderResponseAction } from '@web-client/presenter/actions/prepareStatusReportOrderResponseAction';
+import { prepareStatusReportOrderResponseAction } from './prepareStatusReportOrderResponseAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 

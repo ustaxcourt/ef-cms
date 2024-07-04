@@ -18,4 +18,4 @@ export const statusReportOrderResponsePdfPreviewSequence =
     setPdfFileAction,
     setPdfPreviewUrlAction,
     setMetadataAsPristineAction,
-  ]);
+  ]) as unknown as () => void;

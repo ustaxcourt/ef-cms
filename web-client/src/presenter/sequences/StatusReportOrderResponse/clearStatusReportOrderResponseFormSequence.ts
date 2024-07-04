@@ -8,4 +8,4 @@ export const clearStatusReportOrderResponseFormSequence = [
   clearAlertsAction,
   clearErrorAlertsAction,
   clearStatusReportOrderResponseFormAction,
-];
+] as unknown as () => void;

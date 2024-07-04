@@ -1,5 +1,5 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/setStatusReportOrderResponseFormAction';
+import { setStatusReportOrderResponseFormAction } from './setStatusReportOrderResponseFormAction';
 
 describe('setStatusReportOrderResponseFormAction,', () => {
   it('sets the statusReportOrderResponse state from props', async () => {

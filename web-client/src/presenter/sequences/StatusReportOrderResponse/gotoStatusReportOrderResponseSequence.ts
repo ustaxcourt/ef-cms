@@ -15,4 +15,8 @@ export const gotoStatusReportOrderResponseSequence = [
   clearPdfPreviewUrlAction,
   clearStatusReportOrderResponseFormAction,
   setupCurrentPageAction('StatusReportOrderResponse'),
-];
+] as unknown as (props: {
+  docketEntryId: string;
+  docketNumber: string;
+  parentMessageId?: string;
+}) => void;

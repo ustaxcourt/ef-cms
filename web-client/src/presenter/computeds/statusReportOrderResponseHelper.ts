@@ -5,7 +5,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const statusReportOrderResponseHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  dueDateErrorText: string;
+  isLeadCase: boolean;
+  jurisdictionErrorText: string;
+  minDate: string;
+} => {
   const caseDetail = get(state.caseDetail);
 
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
