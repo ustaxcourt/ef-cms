@@ -1,18 +1,20 @@
-import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 
 describe('unprioritizeCaseInteractor', () => {
-  let mockUser;
   let mockLock;
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
     applicationContext
       .getUseCaseHelpers()
@@ -23,19 +25,17 @@ describe('unprioritizeCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    };
   });
 
   it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
-    mockUser = {};
-
     await expect(
-      unprioritizeCaseInteractor(applicationContext, {
-        docketNumber: '123-20',
-      }),
+      unprioritizeCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -44,9 +44,13 @@ describe('unprioritizeCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
 
-    await unprioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await unprioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
@@ -65,9 +69,13 @@ describe('unprioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await unprioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await unprioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toMatchObject({
       highPriority: false,
@@ -99,9 +107,13 @@ describe('unprioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await unprioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await unprioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toMatchObject({
       highPriority: false,
@@ -125,9 +137,13 @@ describe('unprioritizeCaseInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      unprioritizeCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      unprioritizeCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -138,9 +154,13 @@ describe('unprioritizeCaseInteractor', () => {
   it('should acquire and remove the lock on the case', async () => {
     mockLock = undefined;
 
-    await unprioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await unprioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
