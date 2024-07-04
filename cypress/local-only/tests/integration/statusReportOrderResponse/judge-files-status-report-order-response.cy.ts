@@ -1,7 +1,7 @@
-// import {
-//   FORMATS,
-//   formatNow,
-// } from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatNow,
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 
 // judge/chambers/acdc
@@ -123,17 +123,9 @@ describe('Judge files status order response', function () {
     });
   });
 
-  // click on status report
-  // file a new one
-  // to enter correct date use = const today = formatNow(FORMATS.MMDDYYYY);
-  // options
-  // All
-  // Order type branch
-  // Jurisdiction branch
-  // None
-  // isLeadCase or not
   describe('happy paths', () => {
     it('should save draft when no options are selected', () => {
+      loginAsColvin();
       cy.visit('/case-detail/107-19');
       cy.get('#tab-document-view').click();
       cy.contains('Status Report').click();
@@ -142,5 +134,75 @@ describe('Judge files status order response', function () {
 
       cy.contains('Apply Signature').should('exist');
     });
+
+    it('should save draft when all options are selected', () => {
+      loginAsColvin();
+      const today = formatNow(FORMATS.MMDDYYYY);
+      // navigate to status report order response
+      cy.visit('/case-detail/107-19');
+      cy.get('#tab-document-view').click();
+      cy.contains('Status Report').click();
+      cy.get('[data-testid="order-response-button"]').click();
+
+      // selecting our options
+      cy.get('#order-type-status-report').check({ force: true });
+      cy.get('#status-report-due-date-picker').type(today);
+      cy.get('#stricken-from-trial-sessions').check({ force: true });
+      cy.get('#jurisdiction-retained').check({ force: true });
+      cy.get('#additional-order-text').type(
+        'Here is my additional order text.',
+      );
+      cy.get('#docket-entry-description').clear();
+      cy.get('#docket-entry-description').type('Important Order');
+
+      // save as draft
+      cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.contains('Apply Signature').should('exist');
+    });
+
+    it('should save draft when order type is "Status Report or Stipulated Decision"', () => {
+      loginAsColvin();
+      const today = formatNow(FORMATS.MMDDYYYY);
+      // navigate to status report order response
+      cy.visit('/case-detail/107-19');
+      cy.get('#tab-document-view').click();
+      cy.contains('Status Report').click();
+      cy.get('[data-testid="order-response-button"]').click();
+
+      // selecting our options
+      cy.get('#order-type-or-stipulated-decision').check({ force: true });
+      cy.get('#status-report-due-date-picker').type(today);
+
+      // save as draft
+      cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.contains('Apply Signature').should('exist');
+    });
+
+    it('should save draft when jurisdiction is "Restored to the general docket"', () => {
+      loginAsColvin();
+      // navigate to status report order response
+      cy.visit('/case-detail/107-19');
+      cy.get('#tab-document-view').click();
+      cy.contains('Status Report').click();
+      cy.get('[data-testid="order-response-button"]').click();
+
+      // selecting our options
+      cy.get('#jurisdiction-restored-to-general-docket').check({ force: true });
+
+      // save as draft
+      cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.contains('Apply Signature').should('exist');
+    });
+
+    it.skip(
+      'should save draft with all case docket numbers on PDF when issue order is "All cases in this group"',
+    );
+
+    it.skip(
+      'should save draft with just lead case docket number on PDF when issue order is "Just this case"',
+    );
   });
 });
