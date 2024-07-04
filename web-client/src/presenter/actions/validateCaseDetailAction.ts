@@ -11,6 +11,7 @@ export const validateCaseDetailAction = ({
   store,
 }: ActionProps) => {
   const form = get(state.form);
+  const user = get(state.user);
 
   let errors;
   if (form.isPaper) {
@@ -20,11 +21,12 @@ export const validateCaseDetailAction = ({
         petition: form,
       });
   } else {
-    errors = applicationContext
-      .getUseCases()
-      .validateCaseDetailInteractor(applicationContext, {
+    errors = applicationContext.getUseCases().validateCaseDetailInteractor(
+      {
         caseDetail: form,
-      });
+      },
+      user,
+    );
   }
 
   errors = aggregatePetitionerErrors({ errors });

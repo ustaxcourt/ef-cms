@@ -41,7 +41,7 @@ describe('validateCaseDetail', () => {
     });
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       docketNumber: '123-45',
       irsNoticeDate: '2009-10-13',

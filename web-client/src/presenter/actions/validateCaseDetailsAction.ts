@@ -9,18 +9,22 @@ export const validateCaseDetailsAction = async ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const user = get(state.user);
 
   let errors = await applicationContext
     .getUseCases()
-    .validateCaseDetailInteractor(applicationContext, {
-      caseDetail: {
-        ...caseDetail,
-        ...form,
-        preferredTrialCity: form.preferredTrialCity
-          ? form.preferredTrialCity
-          : null,
+    .validateCaseDetailInteractor(
+      {
+        caseDetail: {
+          ...caseDetail,
+          ...form,
+          preferredTrialCity: form.preferredTrialCity
+            ? form.preferredTrialCity
+            : null,
+        },
       },
-    });
+      user,
+    );
 
   if (!errors) {
     return path.success();
