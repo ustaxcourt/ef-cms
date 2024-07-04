@@ -1,3 +1,7 @@
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../entities/cases/Case';
 import { CaseDeadline } from '../entities/CaseDeadline';
 import {
@@ -5,7 +9,6 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { pick } from 'lodash';
 
 export const getCaseDeadlinesInteractor = async (
@@ -49,6 +52,7 @@ export const getCaseDeadlinesInteractor = async (
 
   const caseMap = await getCasesByDocketNumbers({
     applicationContext,
+    authorizedUser,
     docketNumbers: validatedCaseDeadlines.map(item => item.docketNumber),
   });
 
@@ -70,10 +74,12 @@ export const getCaseDeadlinesInteractor = async (
 
 const getCasesByDocketNumbers = async ({
   applicationContext,
+  authorizedUser,
   docketNumbers,
 }: {
   applicationContext: IApplicationContext;
   docketNumbers: string[];
+  authorizedUser: AuthUser;
 }) => {
   const caseData = await applicationContext
     .getPersistenceGateway()
@@ -86,7 +92,7 @@ const getCasesByDocketNumbers = async ({
     .map(
       caseRecord =>
         new Case(caseRecord, {
-          authorizedUser: applicationContext.getCurrentUser(),
+          authorizedUser,
         }),
     )
     .filter(caseEntity => {
