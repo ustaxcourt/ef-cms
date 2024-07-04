@@ -1,8 +1,12 @@
-import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
 
 describe('unblockCaseFromTrialInteractor', () => {
@@ -15,10 +19,6 @@ describe('unblockCaseFromTrialInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -29,9 +29,13 @@ describe('unblockCaseFromTrialInteractor', () => {
       );
   });
   it('should set the blocked flag to false and remove the blockedReason', async () => {
-    const result = await unblockCaseFromTrialInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await unblockCaseFromTrialInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toMatchObject({
       blocked: false,
@@ -48,12 +52,14 @@ describe('unblockCaseFromTrialInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to unblock the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      unblockCaseFromTrialInteractor(applicationContext, {
-        docketNumber: '123-45',
-      }),
+      unblockCaseFromTrialInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-45',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -68,9 +74,13 @@ describe('unblockCaseFromTrialInteractor', () => {
         }),
       );
 
-    await unblockCaseFromTrialInteractor(applicationContext, {
-      docketNumber: '123-45',
-    });
+    await unblockCaseFromTrialInteractor(
+      applicationContext,
+      {
+        docketNumber: '123-45',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -82,9 +92,13 @@ describe('unblockCaseFromTrialInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      unblockCaseFromTrialInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      unblockCaseFromTrialInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -93,9 +107,13 @@ describe('unblockCaseFromTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await unblockCaseFromTrialInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await unblockCaseFromTrialInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
