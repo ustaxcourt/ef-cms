@@ -1440,7 +1440,7 @@ export const presenterSequences = {
     updateDocketNumberSearchFormSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
-  updateFilePetitionSequence: updateFilePetitionSequence as unknown as Function,
+  updateFilePetitionSequence,
   updateFilingTypeSequence: updateFilingTypeSequence as unknown as Function,
   updateFormValueAndCaseCaptionSequence:
     updateFormValueAndCaseCaptionSequence as unknown as Function,
