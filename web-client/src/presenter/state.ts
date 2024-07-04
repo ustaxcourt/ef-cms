@@ -641,6 +641,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {

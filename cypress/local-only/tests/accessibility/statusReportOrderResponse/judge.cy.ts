@@ -11,7 +11,7 @@ describe('Status Report Order Response - Judge Accessibility', () => {
     cy.visit(
       '/case-detail/102-67/documents/7be2dea1-4428-4917-a66d-0d474e57ee02/order-response',
     );
-    cy.get('[data-testid="save-signature-button"]').should('exist');
+    cy.get('[data-testid="save-draft-button"]').should('exist');
 
     checkA11y();
   });

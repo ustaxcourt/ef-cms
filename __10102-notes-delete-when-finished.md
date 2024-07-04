@@ -29,11 +29,11 @@ only 140 or 160 characters long. Which is it?
 
 - Update CSS to Match Mocks (solo)
 
-- Type our newly added sequences (group)
-
 - add remaining units test (solo / group)
 
 - write integration tests (solo / group)
+
+- wire up isLeadCase so that it lists all associated cases on the order PDF if checked (group)
 
 ## Feedback from judges:
 
