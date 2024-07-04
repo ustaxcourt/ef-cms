@@ -5,12 +5,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateCaseContext = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseCaption,
     caseStatus,
@@ -25,10 +27,9 @@ export const updateCaseContext = async (
     caseStatus?: string;
     docketNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
@@ -36,7 +37,7 @@ export const updateCaseContext = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(oldCase, { authorizedUser: user });
+  const newCase = new Case(oldCase, { authorizedUser });
 
   if (caseCaption) {
     newCase.setCaseCaption(caseCaption);
@@ -53,7 +54,7 @@ export const updateCaseContext = async (
   if (caseStatus && caseStatus !== oldCase.status) {
     const date = applicationContext.getUtilities().createISODateString();
     newCase.setCaseStatus({
-      changedBy: user.name,
+      changedBy: authorizedUser.name,
       date,
       updatedCaseStatus: caseStatus,
     });
@@ -116,7 +117,9 @@ export const updateCaseContext = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { authorizedUser: user }).toRawObject();
+  return new Case(updatedCase, {
+    authorizedUser,
+  }).toRawObject();
 };
 
 export const updateCaseContextInteractor = withLocking(
