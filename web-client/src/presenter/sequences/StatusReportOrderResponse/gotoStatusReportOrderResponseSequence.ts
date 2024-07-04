@@ -5,6 +5,7 @@ import { setCaseAction } from '../../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../../actions/setDocketEntrySelectedFromMessageAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
+import { unsetDocumentToEditAction } from '@web-client/presenter/actions/unsetDocumentToEditAction';
 
 export const gotoStatusReportOrderResponseSequence = [
   setupCurrentPageAction('Interstitial'),
@@ -14,6 +15,7 @@ export const gotoStatusReportOrderResponseSequence = [
   setDocketEntrySelectedFromMessageAction,
   clearPdfPreviewUrlAction,
   clearStatusReportOrderResponseFormAction,
+  unsetDocumentToEditAction,
   setupCurrentPageAction('StatusReportOrderResponse'),
 ] as unknown as (props: {
   docketEntryId: string;

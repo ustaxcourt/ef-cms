@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const clearStatusReportOrderResponseFormAction = ({
@@ -5,7 +6,7 @@ export const clearStatusReportOrderResponseFormAction = ({
   store,
 }: ActionProps) => {
   const documentToEdit = get(state.documentToEdit);
-  if (!documentToEdit) {
+  if (isEmpty(documentToEdit)) {
     store.unset(state.form.issueOrder);
     store.unset(state.form.orderType);
     store.unset(state.form.dueDate);

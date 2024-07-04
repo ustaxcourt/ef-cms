@@ -34,6 +34,11 @@ only 140 or 160 characters long. Which is it?
 - write integration tests (solo / group)
 
 - wire up isLeadCase so that it lists all associated cases on the order PDF if checked (group)
+   - current state:
+       - When lead case not hooked up to anything
+       - judge or chambers different? confirm whether order has all cases or just lead case by default for one user type versus another
+   - desired
+       - show either show all the docket numbers or single docket number
 
 ## Feedback from judges:
 
