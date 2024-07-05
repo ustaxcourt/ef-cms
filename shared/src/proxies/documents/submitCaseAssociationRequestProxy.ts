@@ -14,18 +14,19 @@ export const submitCaseAssociationRequestInteractor = (
   {
     docketNumber,
     filers,
+    userId,
   }: {
     docketNumber: string;
+    userId: string;
     filers?: string[];
   },
 ) => {
-  const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
     body: {
       docketNumber,
       filers,
     },
-    endpoint: `/users/${user.userId}/case/${docketNumber}`,
+    endpoint: `/users/${userId}/case/${docketNumber}`,
   });
 };
