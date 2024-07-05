@@ -34,8 +34,6 @@ only 140 or 160 characters long. Which is it?
 
 - Test same process of creating order response from messages (group / solo)
 
-- Add unit test for statusReportOrderResponsePdfUrlAction and for getStatusReportOrderResponseDocketNumbersToDisplayAction.ts
-
 - Run through all tests case + DoD checklist (group / solo)
 
 ## Feedback from judges:
