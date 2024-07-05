@@ -68,6 +68,7 @@ export const getCaseAssociationAction = async ({
       .getUseCases()
       .verifyPendingCaseForUserInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
+        userId: user.userId,
       });
   }
 
