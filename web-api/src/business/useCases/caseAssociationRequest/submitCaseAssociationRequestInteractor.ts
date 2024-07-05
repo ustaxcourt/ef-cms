@@ -47,6 +47,7 @@ const submitCaseAssociationRequest = async (
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
         applicationContext,
+        authorizedUser,
         docketNumber,
         representing: filers,
         user,
