@@ -12,13 +12,18 @@ export const uploadOrderFileAction = async ({
   path,
 }: ActionProps) => {
   const { primaryDocumentFile } = get(state.form);
+  const user = get(state.user);
 
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadOrderDocumentInteractor(applicationContext, {
-        documentFile: primaryDocumentFile,
-      });
+      .uploadOrderDocumentInteractor(
+        applicationContext,
+        {
+          documentFile: primaryDocumentFile,
+        },
+        user,
+      );
 
     return path.success({
       primaryDocumentFileId,

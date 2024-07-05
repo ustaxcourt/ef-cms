@@ -15,17 +15,20 @@ export const editPractitionerDocumentAction = async ({
     state.form,
   );
   const { barNumber } = get(state.practitionerDetail);
+  const user = get(state.user);
 
   let fileName;
   let uploadDate;
 
   if (practitionerDocumentFile) {
-    await applicationContext
-      .getUseCases()
-      .uploadOrderDocumentInteractor(applicationContext, {
+    await applicationContext.getUseCases().uploadOrderDocumentInteractor(
+      applicationContext,
+      {
         documentFile: practitionerDocumentFile,
         fileIdToOverwrite: practitionerDocumentFileId,
-      });
+      },
+      user,
+    );
 
     fileName = practitionerDocumentFile.name;
     uploadDate = applicationContext.getUtilities().createISODateString();
