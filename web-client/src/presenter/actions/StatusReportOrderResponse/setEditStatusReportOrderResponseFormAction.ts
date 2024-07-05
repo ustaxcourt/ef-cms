@@ -4,7 +4,7 @@ export const setEditStatusReportOrderResponseFormAction = ({
   get,
   props,
   store,
-}: ActionProps): { url: string } => {
+}: ActionProps): { path: string } => {
   const { caseDetail, docketEntryIdToEdit } = props;
 
   const documentToEdit = get(state.documentToEdit);
@@ -22,6 +22,6 @@ export const setEditStatusReportOrderResponseFormAction = ({
   });
 
   return {
-    url: `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response-edit`,
+    path: `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response-edit`,
   };
 };

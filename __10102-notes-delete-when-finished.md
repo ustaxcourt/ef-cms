@@ -38,11 +38,6 @@ only 140 or 160 characters long. Which is it?
 
 - Run through all tests case + DoD checklist (group / solo)
 
-- How to deal with clearing the docket to edit properly?
-    - Simpilify routing?
-
-- Refactor so that navigateToStatusReportOrderResponseAction can be removed
-
 ## Feedback from judges:
 
 1. Formatting of separate clauses should be: indent first line beginning with "ORDERED", following lines should return to left margin as in the example PDF you sent (so, normal paragraph formatting).
