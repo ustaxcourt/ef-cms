@@ -55,6 +55,7 @@ export const submitCaseAssociationRequestAction = async ({
       .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
         filers: documentMetadata.filers,
+        userId: user.userId,
       });
   } else if (isDocumentWithPendingAssociation) {
     await applicationContext
