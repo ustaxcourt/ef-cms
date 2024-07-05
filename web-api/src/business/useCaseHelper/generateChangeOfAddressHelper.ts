@@ -1,5 +1,9 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
-import { Practitioner } from '../../../../shared/src/business/entities/Practitioner';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '../../../../shared/src/business/entities/Practitioner';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -20,6 +24,7 @@ import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/ser
  */
 export const generateChangeOfAddressHelper = async ({
   applicationContext,
+  authorizedUser,
   bypassDocketEntry,
   contactInfo,
   docketNumber,
@@ -32,6 +37,7 @@ export const generateChangeOfAddressHelper = async ({
   websocketMessagePrefix,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
@@ -53,7 +59,7 @@ export const generateChangeOfAddressHelper = async ({
         docketNumber,
       });
     let caseEntity = new Case(userCase, {
-      authorizedUser: applicationContext.getCurrentUser(),
+      authorizedUser,
     });
 
     const practitionerName = updatedName || user.name;
