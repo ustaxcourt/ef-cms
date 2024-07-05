@@ -6,6 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
@@ -17,7 +18,7 @@ import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/ge
  * @returns {Uint8Array} docket record pdf
  */
 export const generateDocketRecordPdfInteractor = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketRecordSort,
@@ -81,6 +82,7 @@ export const generateDocketRecordPdfInteractor = async (
     .getUtilities()
     .getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: user,
       caseDetail: caseEntity,
       docketRecordSort,
     });

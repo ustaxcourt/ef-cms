@@ -7,7 +7,6 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
@@ -486,20 +485,23 @@ export const sortDocketEntries = (
   return docketEntries.sort(sortUndefined);
 };
 
+// Used by both front and backend
 export const getFormattedCaseDetail = ({
   applicationContext,
+  authorizedUser,
   caseDetail,
   docketRecordSort,
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: IApplicationContext;
   caseDetail: RawCase;
   docketRecordSort?: string;
+  authorizedUser: UnknownAuthUser;
 }) => {
   const result = {
     ...applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase(caseDetail),
-    ...formatCase(applicationContext, caseDetail), // TODO 10417 Needd to get an authorizedUser here
+    ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
   result.formattedDocketEntries = sortDocketEntries(
     result.formattedDocketEntries,
