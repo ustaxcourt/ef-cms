@@ -1,5 +1,3 @@
-import { ROLES } from '../entities/EntityConstants';
-import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { testPdfDoc } from '../test/getFakeFile';
 import { uploadToS3 } from './uploadToS3';
@@ -15,14 +13,6 @@ describe('uploadToS3', () => {
   };
 
   it('fails and logs if the s3 upload fails', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
     let mockPdfName = 'pdf name';
 
     applicationContext.getStorageClient.mockReturnValue({
@@ -47,14 +37,6 @@ describe('uploadToS3', () => {
   });
 
   it('should not log if the s3 upload completes', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
     let mockPdfName = 'pdf name';
 
     applicationContext.getStorageClient.mockReturnValue({
