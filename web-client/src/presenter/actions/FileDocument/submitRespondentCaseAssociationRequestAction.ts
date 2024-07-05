@@ -22,6 +22,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
+        userId: user.userId,
       });
   }
 };
