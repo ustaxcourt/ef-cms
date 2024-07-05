@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { getCurrentUserToken } from '@shared/proxies/requests';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTokenAction } from './setTokenAction';
@@ -24,7 +25,7 @@ describe('setTokenAction,', () => {
     expect(state.token).toEqual(mockToken);
   });
 
-  it('should call applicationContext.setCurrentUserToken with props.token', async () => {
+  it('should setCurrentUserToken with props.token', async () => {
     await runAction(setTokenAction, {
       modules: {
         presenter,
@@ -35,8 +36,6 @@ describe('setTokenAction,', () => {
       state: {},
     });
 
-    expect(applicationContext.setCurrentUserToken.mock.calls[0][0]).toEqual(
-      mockToken,
-    );
+    expect(getCurrentUserToken()).toEqual(mockToken);
   });
 });

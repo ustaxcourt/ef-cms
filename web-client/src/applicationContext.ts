@@ -380,14 +380,6 @@ const setCurrentUser = (
   user = newUser;
 };
 
-let token;
-const getCurrentUserToken = () => {
-  return token;
-};
-const setCurrentUserToken = newToken => {
-  token = newToken;
-};
-
 let forceRefreshCallback: () => {};
 
 const allUseCases = {
@@ -657,7 +649,6 @@ const applicationContext = {
     const currentUser = getCurrentUser();
     return getUserPermissions(currentUser);
   },
-  getCurrentUserToken,
   getEnvironment,
   getFileReaderInstance: () => new FileReader(),
   getForceRefreshCallback() {
@@ -821,7 +812,6 @@ const applicationContext = {
   },
   isPublicUser: () => false,
   setCurrentUser,
-  setCurrentUserToken,
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },

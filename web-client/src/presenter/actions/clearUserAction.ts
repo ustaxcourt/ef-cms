@@ -1,3 +1,4 @@
+import { setCurrentUserToken } from '@shared/proxies/requests';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const clearUserAction = async ({
@@ -20,5 +21,5 @@ export const clearUserAction = async ({
     });
 
   applicationContext.setCurrentUser(null);
-  applicationContext.setCurrentUserToken(null);
+  setCurrentUserToken('');
 };
