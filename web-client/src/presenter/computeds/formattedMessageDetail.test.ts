@@ -348,8 +348,6 @@ describe('formattedMessageDetail', () => {
 
   describe('showActionButtons', () => {
     it('should be true when message is NOT completed and user role is NOT general', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
@@ -371,6 +369,7 @@ describe('formattedMessageDetail', () => {
               messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
             },
           ],
+          user: petitionsClerkUser,
         },
       });
 
@@ -378,8 +377,6 @@ describe('formattedMessageDetail', () => {
     });
 
     it('should be false when message is NOT completed and user role is general', () => {
-      applicationContext.getCurrentUser.mockReturnValue(generalUser);
-
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
@@ -401,6 +398,7 @@ describe('formattedMessageDetail', () => {
               messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
             },
           ],
+          user: generalUser,
         },
       });
 
@@ -408,8 +406,6 @@ describe('formattedMessageDetail', () => {
     });
 
     it('should be false when message is completed and user role is NOT general', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
@@ -431,6 +427,7 @@ describe('formattedMessageDetail', () => {
               messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
             },
           ],
+          user: petitionsClerkUser,
         },
       });
 
@@ -438,8 +435,6 @@ describe('formattedMessageDetail', () => {
     });
 
     it('should be false when message is completed and user role is general', () => {
-      applicationContext.getCurrentUser.mockReturnValue(generalUser);
-
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
@@ -461,6 +456,7 @@ describe('formattedMessageDetail', () => {
               messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
             },
           ],
+          user: generalUser,
         },
       });
 
