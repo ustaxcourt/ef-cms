@@ -27,6 +27,7 @@ export const generateDraftDocument = async ({
     .getUseCaseHelpers()
     .addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: applicationContext.getCurrentUser(),
       caseEntity,
       systemGeneratedDocument: {
         ...document,
