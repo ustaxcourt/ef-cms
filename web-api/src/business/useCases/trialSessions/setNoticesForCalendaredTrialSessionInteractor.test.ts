@@ -1,26 +1,13 @@
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import {
-  PARTY_TYPES,
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCalendaredTrialSessionInteractor';
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
-  const unAuthorizedUser = new User({
-    name: PARTY_TYPES.petitioner,
-    role: ROLES.petitioner,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
-
-  const user = new User({
-    name: PARTY_TYPES.petitioner,
-    role: ROLES.petitionsClerk,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
-
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
 
   beforeEach(() => {
@@ -37,7 +24,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           docketNumber: '103-20',
         },
       ]);
-    applicationContext.getCurrentUser.mockReturnValue(user);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
@@ -73,13 +59,16 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(unAuthorizedUser);
     let error;
 
     try {
-      await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-        trialSessionId,
-      });
+      await setNoticesForCalendaredTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId,
+        },
+        mockPetitionerUser,
+      );
     } catch (e) {
       error = e;
     }
@@ -92,9 +81,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);
 
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
@@ -109,9 +102,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionProcessingStatus.mockResolvedValueOnce('processing');
 
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
     expect(
       applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
     ).not.toHaveBeenCalled();
@@ -123,9 +120,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionProcessingStatus.mockResolvedValueOnce('complete');
 
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
     expect(
       applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
     ).not.toHaveBeenCalled();
@@ -135,9 +136,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should set trialSessionStatus to processing if this is the first trial session calendering event', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -156,9 +161,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         unfinishedCases: 0,
       });
 
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -175,9 +184,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockResolvedValue([]);
 
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId,
-    });
+    await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
 
     const result =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -189,7 +202,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         hasPaper: false,
         trialNoticePdfsKeys: [],
       },
-      userId: user.userId,
+      userId: mockPetitionsClerkUser.userId,
     });
   });
 });
