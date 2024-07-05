@@ -517,6 +517,7 @@ describe('getFormattedCaseDetail', () => {
     it('should call formatCase and add additional details on the given case', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: undefined,
         caseDetail: { ...MOCK_CASE },
         docketRecordSort: 'byDate',
       });
@@ -529,6 +530,7 @@ describe('getFormattedCaseDetail', () => {
     it('should format draft documents', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: undefined,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
@@ -580,6 +582,7 @@ describe('getFormattedCaseDetail', () => {
     it('should sort draft documents by their receivedAt', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: undefined,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
@@ -616,6 +619,7 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for a paid petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: undefined,
       caseDetail: {
         ...MOCK_CASE,
         petitionPaymentDate: '2019-03-01T21:40:46.415Z',
@@ -630,6 +634,7 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for a waived petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: undefined,
       caseDetail: {
         ...MOCK_CASE,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -643,6 +648,7 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for an unpaid petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: undefined,
       caseDetail: {
         ...MOCK_CASE,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
