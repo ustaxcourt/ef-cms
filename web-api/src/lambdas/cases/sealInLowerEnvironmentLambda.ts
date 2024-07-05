@@ -1,4 +1,5 @@
 import { createApplicationContext } from '../../applicationContext';
+import { sealInLowerEnvironment } from '@web-api/business/useCaseHelper/sealInLowerEnvironment';
 
 /**
  * used for retroactively sealing a case in a lower environment after it is sealed in the Production environment
@@ -14,7 +15,5 @@ export const sealInLowerEnvironmentLambda = async event => {
     ...JSON.parse(record.Sns.Message),
   }));
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .sealInLowerEnvironment(applicationContext, records);
+  return await sealInLowerEnvironment(applicationContext, records, user);
 };
