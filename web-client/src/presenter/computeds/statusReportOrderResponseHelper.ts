@@ -6,8 +6,10 @@ export const statusReportOrderResponseHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
+  dueDateErrorClass: string;
   dueDateErrorText: string;
   isLeadCase: boolean;
+  jurisdictionErrorClass: string;
   jurisdictionErrorText: string;
   minDate: string;
 } => {
@@ -34,9 +36,19 @@ export const statusReportOrderResponseHelper = (
   const jurisdictionErrorText =
     validationErrors.jurisdiction && 'Select jurisdiction';
 
+  const dueDateErrorClass = !validationErrors.dueDate
+    ? 'status-report-order-response-form-group'
+    : 'status-report-order-response-form-group-error';
+
+  const jurisdictionErrorClass = !validationErrors.jurisdiction
+    ? 'status-report-order-response-form-group'
+    : 'status-report-order-response-form-group-error';
+
   return {
+    dueDateErrorClass,
     dueDateErrorText,
     isLeadCase,
+    jurisdictionErrorClass,
     jurisdictionErrorText,
     minDate,
   };

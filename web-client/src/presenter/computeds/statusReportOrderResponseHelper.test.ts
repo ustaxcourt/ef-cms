@@ -25,8 +25,10 @@ describe('status report order response helper', () => {
       },
     });
     expect(result).toEqual({
+      dueDateErrorClass: 'status-report-order-response-form-group',
       dueDateErrorText: undefined,
       isLeadCase: true,
+      jurisdictionErrorClass: 'status-report-order-response-form-group',
       jurisdictionErrorText: undefined,
       minDate: today,
     });
@@ -43,8 +45,10 @@ describe('status report order response helper', () => {
       },
     });
     expect(result).toEqual({
+      dueDateErrorClass: 'status-report-order-response-form-group',
       dueDateErrorText: undefined,
       isLeadCase,
+      jurisdictionErrorClass: 'status-report-order-response-form-group',
       jurisdictionErrorText: undefined,
       minDate: today,
     });
@@ -64,8 +68,10 @@ describe('status report order response helper', () => {
       },
     });
     expect(result).toEqual({
+      dueDateErrorClass: 'status-report-order-response-form-group-error',
       dueDateErrorText: 'Select due date',
       isLeadCase,
+      jurisdictionErrorClass: 'status-report-order-response-form-group-error',
       jurisdictionErrorText: 'Select jurisdiction',
       minDate: today,
     });
@@ -84,8 +90,10 @@ describe('status report order response helper', () => {
       },
     });
     expect(result).toEqual({
+      dueDateErrorClass: 'status-report-order-response-form-group-error',
       dueDateErrorText: 'an error occurred',
       isLeadCase,
+      jurisdictionErrorClass: 'status-report-order-response-form-group',
       jurisdictionErrorText: undefined,
       minDate: today,
     });
