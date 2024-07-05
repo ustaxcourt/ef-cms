@@ -1,10 +1,7 @@
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -16,36 +13,18 @@ const MOCK_TRIAL = {
   trialLocation: 'Birmingham, Alabama',
 };
 
-let user;
-
 describe('canSetTrialSessionAsCalendaredInteractor', () => {
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-  });
-
   it('throws an error if a user is unauthorized', () => {
-    user = {
-      role: 'unauthorizedRole',
-      userId: 'unauthorizedUser',
-    };
-
     expect(() =>
-      canSetTrialSessionAsCalendaredInteractor(applicationContext, {
+      canSetTrialSessionAsCalendaredInteractor(undefined, {
         trialSession: MOCK_TRIAL as RawTrialSession,
       }),
     ).toThrow('Unauthorized');
   });
 
   it('gets the result back from the interactor with empty fields and an in-person trial proceeding', () => {
-    user = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
-
-    applicationContext.getUniqueId.mockReturnValue('easy-as-abc-123');
-
     const result = canSetTrialSessionAsCalendaredInteractor(
-      applicationContext,
+      mockPetitionsClerkUser,
       {
         trialSession: MOCK_TRIAL as RawTrialSession,
       },
@@ -66,15 +45,8 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
   });
 
   it('gets the result back from the interactor with no empty fields and a remote trial proceeding', () => {
-    user = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
-
-    applicationContext.getUniqueId.mockReturnValue('easy-as-abc-123');
-
     const result = canSetTrialSessionAsCalendaredInteractor(
-      applicationContext,
+      mockPetitionsClerkUser,
       {
         trialSession: {
           ...MOCK_TRIAL,

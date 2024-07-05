@@ -7,6 +7,7 @@ import {
   TrialSession,
 } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * canSetTrialSessionAsCalendaredInteractor
@@ -17,12 +18,10 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  * @returns {boolean} result of the entity method call depicting trial session calendaring eligibility
  */
 export const canSetTrialSessionAsCalendaredInteractor = (
-  applicationContext: IApplicationContext,
+  authorizedUser: UnknownAuthUser,
   { trialSession }: { trialSession: RawTrialSession },
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
