@@ -45,6 +45,7 @@ export const associatePrivatePractitionerWithCase = async (
 
   return await associatePrivatePractitionerToCase({
     applicationContext,
+    authorizedUser: authenticatedUser,
     docketNumber,
     representing,
     serviceIndicator,

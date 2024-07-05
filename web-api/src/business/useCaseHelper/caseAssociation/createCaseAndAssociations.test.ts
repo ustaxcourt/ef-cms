@@ -41,6 +41,7 @@ describe('createCaseAndAssociations', () => {
   it('always sends valid entities to the createCase persistence method', async () => {
     await createCaseAndAssociations({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseToCreate: validMockCase,
     });
     expect(createCaseMock).toHaveBeenCalled();
@@ -56,7 +57,11 @@ describe('createCaseAndAssociations', () => {
         docketEntries: [{ docketNumber: 'peaches' }],
       };
       await expect(
-        createCaseAndAssociations({ applicationContext, caseToCreate }),
+        createCaseAndAssociations({
+          applicationContext,
+          authorizedUser: mockDocketClerkUser,
+          caseToCreate,
+        }),
       ).rejects.toThrow('entity was invalid');
     });
 
@@ -69,6 +74,7 @@ describe('createCaseAndAssociations', () => {
 
       await createCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToCreate,
       });
 
@@ -114,13 +120,18 @@ describe('createCaseAndAssociations', () => {
         irsPractitioners: [{ barNumber: 0, role: 'spring', userId: 'yoohoo' }],
       };
       await expect(
-        createCaseAndAssociations({ applicationContext, caseToCreate }),
+        createCaseAndAssociations({
+          applicationContext,
+          authorizedUser: mockDocketClerkUser,
+          caseToCreate,
+        }),
       ).rejects.toThrow('entity was invalid');
     });
 
     it('calls updateIrsPractitionerOnCase once for each IRS practitioner on the case', async () => {
       await createCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToCreate: mockCaseWithIrsPractitioners,
       });
 
@@ -163,13 +174,18 @@ describe('createCaseAndAssociations', () => {
         ],
       };
       await expect(
-        createCaseAndAssociations({ applicationContext, caseToCreate }),
+        createCaseAndAssociations({
+          applicationContext,
+          authorizedUser: mockDocketClerkUser,
+          caseToCreate,
+        }),
       ).rejects.toThrow('entity was invalid');
     });
 
     it('calls updateprivatePractitionerOnCase once for each private practitioner on the case', async () => {
       await createCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToCreate: mockCaseWithPrivatePractitioners,
       });
 

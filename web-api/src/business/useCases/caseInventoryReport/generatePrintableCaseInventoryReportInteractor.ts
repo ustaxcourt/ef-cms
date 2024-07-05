@@ -37,6 +37,7 @@ export const generatePrintableCaseInventoryReportInteractor = async (
     .getUseCaseHelpers()
     .generateCaseInventoryReportPdf({
       applicationContext,
+      authorizedUser,
       cases: foundCases,
       filters: { associatedJudge, status },
     });
