@@ -635,9 +635,6 @@ export const createTestApplicationContext = ({
       );
     }),
     getCurrentUserPermissions: jest.fn(),
-    getCurrentUserToken: () => {
-      return '';
-    },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
@@ -699,7 +696,6 @@ export const createTestApplicationContext = ({
       warn: jest.fn(),
     },
     setCurrentUser: jest.fn(),
-    setCurrentUserToken: jest.fn(),
     setTimeout: jest.fn().mockImplementation(callback => callback()),
   };
   return applicationContext;

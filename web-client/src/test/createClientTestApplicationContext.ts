@@ -556,9 +556,6 @@ const createTestApplicationContext = () => {
       });
     }),
     getCurrentUserPermissions: jest.fn(),
-    getCurrentUserToken: () => {
-      return '';
-    },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
@@ -610,7 +607,6 @@ const createTestApplicationContext = () => {
     isFeatureEnabled: jest.fn(),
     isPublicUser: jest.fn().mockImplementation(() => false),
     setCurrentUser: jest.fn(),
-    setCurrentUserToken: jest.fn(),
   };
   return applicationContext;
 };
