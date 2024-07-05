@@ -40,7 +40,6 @@ export const navigateToEditOrderSequence = [
       setEditStatusReportOrderResponseFormAction,
       navigateToStatusReportOrderResponseAction,
       statusReportOrderResponsePdfPreviewSequence,
-      unsetDocumentToEditAction,
     ],
   },
 ] as unknown as () => void;

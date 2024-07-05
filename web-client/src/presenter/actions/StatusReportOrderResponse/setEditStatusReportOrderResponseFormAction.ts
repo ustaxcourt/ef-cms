@@ -14,6 +14,7 @@ export const setEditStatusReportOrderResponseFormAction = ({
     docketEntryDescription:
       documentToEdit.draftOrderState.docketEntryDescription,
     dueDate: documentToEdit.draftOrderState.dueDate,
+    issueOrder: documentToEdit.draftOrderState.issueOrder,
     jurisdiction: documentToEdit.draftOrderState.jurisdiction,
     orderType: documentToEdit.draftOrderState.orderType,
     strickenFromTrialSessions:
@@ -21,6 +22,6 @@ export const setEditStatusReportOrderResponseFormAction = ({
   });
 
   return {
-    url: `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response`,
+    url: `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response-edit`,
   };
 };
