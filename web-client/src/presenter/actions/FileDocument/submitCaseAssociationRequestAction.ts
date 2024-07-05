@@ -62,6 +62,7 @@ export const submitCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
+        userId: user.userId,
       });
   }
 
