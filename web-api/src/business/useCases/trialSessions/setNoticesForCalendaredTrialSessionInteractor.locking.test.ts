@@ -9,7 +9,7 @@ import {
   handleLockError,
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -53,20 +53,17 @@ describe('determineEntitiesToLock', () => {
 });
 
 describe('handleLockError', () => {
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-  });
-
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
     const mockOriginalRequest = {
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockDocketClerkUser,
+    );
+
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -97,7 +94,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -127,6 +123,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         setNoticesForCalendaredTrialSessionInteractor(
           applicationContext,
           mockRequest,
+          mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
@@ -140,6 +137,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         setNoticesForCalendaredTrialSessionInteractor(
           applicationContext,
           mockRequest,
+          mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
@@ -152,7 +150,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'set_notices_for_calendared_trial_session',
         },
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       });
 
       expect(
@@ -170,6 +168,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
+        mockDocketClerkUser,
       );
 
       expect(
@@ -185,6 +184,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
+        mockDocketClerkUser,
       );
 
       const expectedIdentifiers = mockCases.map(
