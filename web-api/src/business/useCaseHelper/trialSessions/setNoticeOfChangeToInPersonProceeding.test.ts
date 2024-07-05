@@ -5,7 +5,6 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/busin
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { setNoticeOfChangeToInPersonProceeding } from './setNoticeOfChangeToInPersonProceeding';
 
 describe('setNoticeOfChangeToInPersonProceeding', () => {
@@ -37,7 +36,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       caseEntity: mockOpenCase,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      user: petitionsClerkUser,
     });
 
     expect(
@@ -67,7 +65,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       caseEntity: mockOpenCase,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      user: petitionsClerkUser,
     });
 
     expect(
@@ -84,7 +81,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding,
       newPdfDoc: getFakeFile,
       noticePdf: getFakeFile,
-      user: petitionsClerkUser,
     });
   });
 });

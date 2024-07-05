@@ -275,7 +275,6 @@ const updateCasesAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user,
         });
     }
 

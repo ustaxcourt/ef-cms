@@ -7,7 +7,6 @@ import {
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {
@@ -36,7 +35,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       caseEntity: mockOpenCase,
       newPdfDoc: mockNewPdf,
       newTrialSessionEntity: MOCK_TRIAL_REMOTE,
-      user: petitionsClerkUser,
     });
 
     expect(
@@ -64,7 +62,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
       newPdfDoc: mockNewPdf,
       noticePdf: mockNoticePdf,
-      user: petitionsClerkUser,
     });
   });
 });

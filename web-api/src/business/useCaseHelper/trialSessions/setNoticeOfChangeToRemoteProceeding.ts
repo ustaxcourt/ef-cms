@@ -1,4 +1,6 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type TrialSessionInformationType = {
   chambersPhoneNumber: string;
@@ -22,8 +24,12 @@ export type TrialSessionInformationType = {
  * @param {object} providers.userId the user ID
  */
 export const setNoticeOfChangeToRemoteProceeding = async (
-  applicationContext,
-  { caseEntity, newPdfDoc, newTrialSessionEntity, user },
+  applicationContext: ServerApplicationContext,
+  {
+    caseEntity,
+    newPdfDoc,
+    newTrialSessionEntity,
+  }: { caseEntity: Case; newPdfDoc: any; newTrialSessionEntity: any },
 ): Promise<void> => {
   const trialSessionInformation: TrialSessionInformationType = {
     chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
@@ -43,14 +49,15 @@ export const setNoticeOfChangeToRemoteProceeding = async (
       trialSessionInformation,
     });
 
-  await applicationContext
-    .getUseCaseHelpers()
-    .createAndServeNoticeDocketEntry(applicationContext, {
+  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+    applicationContext,
+    {
       caseEntity,
       documentInfo:
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
       newPdfDoc,
       noticePdf,
-      user,
-    });
+    },
+    applicationContext.getCurrentUser(),
+  );
 };

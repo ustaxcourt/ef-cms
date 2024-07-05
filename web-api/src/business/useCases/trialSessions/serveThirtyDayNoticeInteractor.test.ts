@@ -146,25 +146,28 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
-      ).toHaveBeenCalledWith(expect.anything(), {
-        additionalDocketEntryInfo: {
-          date: expect.anything(),
-          trialLocation: expect.anything(),
+      ).toHaveBeenCalledWith(
+        expect.anything(),
+        {
+          additionalDocketEntryInfo: {
+            date: expect.anything(),
+            trialLocation: expect.anything(),
+          },
+          caseEntity: expect.anything(),
+          documentInfo: {
+            documentTitle: `30 Day Notice of Trial on ${formatDateString(
+              trialSession.startDate,
+              FORMATS.MMDDYYYY_DASHED,
+            )} at ${trialSession.trialLocation}`,
+            documentType: '30-Day Notice of Trial',
+            eventCode: 'NOTT',
+          },
+          newPdfDoc: expect.anything(),
+          noticePdf: expect.anything(),
+          onlyProSePetitioners: true,
         },
-        caseEntity: expect.anything(),
-        documentInfo: {
-          documentTitle: `30 Day Notice of Trial on ${formatDateString(
-            trialSession.startDate,
-            FORMATS.MMDDYYYY_DASHED,
-          )} at ${trialSession.trialLocation}`,
-          documentType: '30-Day Notice of Trial',
-          eventCode: 'NOTT',
-        },
-        newPdfDoc: expect.anything(),
-        noticePdf: expect.anything(),
-        onlyProSePetitioners: true,
-        user: petitionsClerkUser,
-      });
+        petitionsClerkUser,
+      );
     });
 
     it('should notify the user after processing each case in the trial session', async () => {

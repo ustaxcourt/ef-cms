@@ -1,5 +1,3 @@
-import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
-
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import {
@@ -8,7 +6,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createAndServeNoticeDocketEntry } from './createAndServeNoticeDocketEntry';
-import { docketClerk1User } from '../../../../../shared/src/test/mockUsers';
+import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('createAndServeDocketEntry', () => {
@@ -37,13 +35,17 @@ describe('createAndServeDocketEntry', () => {
   });
 
   it('should save the generated notice to s3', async () => {
-    await createAndServeNoticeDocketEntry(applicationContext, {
-      caseEntity: mockCaseEntity,
-      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-      newPdfDoc: getFakeFile,
-      noticePdf: mockNotice,
-      user: docketClerk1User,
-    });
+    await createAndServeNoticeDocketEntry(
+      applicationContext,
+      {
+        caseEntity: mockCaseEntity,
+        documentInfo:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+        newPdfDoc: getFakeFile,
+        noticePdf: mockNotice,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -55,13 +57,17 @@ describe('createAndServeDocketEntry', () => {
   });
 
   it('should create and serve a docket entry and add it to the docket record', async () => {
-    await createAndServeNoticeDocketEntry(applicationContext, {
-      caseEntity: mockCaseEntity,
-      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-      newPdfDoc: getFakeFile,
-      noticePdf: mockNotice,
-      user: docketClerk1User,
-    });
+    await createAndServeNoticeDocketEntry(
+      applicationContext,
+      {
+        caseEntity: mockCaseEntity,
+        documentInfo:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+        newPdfDoc: getFakeFile,
+        noticePdf: mockNotice,
+      },
+      mockDocketClerkUser,
+    );
 
     const expectedNotice = mockCaseEntity.docketEntries.find(
       doc =>
@@ -96,13 +102,17 @@ describe('createAndServeDocketEntry', () => {
       { authorizedUser: mockDocketClerkUser },
     );
 
-    await createAndServeNoticeDocketEntry(applicationContext, {
-      caseEntity: mockCaseWithPaperService,
-      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-      newPdfDoc: getFakeFile,
-      noticePdf: mockNotice,
-      user: docketClerk1User,
-    });
+    await createAndServeNoticeDocketEntry(
+      applicationContext,
+      {
+        caseEntity: mockCaseWithPaperService,
+        documentInfo:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+        newPdfDoc: getFakeFile,
+        noticePdf: mockNotice,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase,
