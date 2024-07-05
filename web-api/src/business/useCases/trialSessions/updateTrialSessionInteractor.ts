@@ -179,12 +179,14 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .associateSwingTrialSessions(applicationContext, {
+    await applicationContext.getUseCaseHelpers().associateSwingTrialSessions(
+      applicationContext,
+      {
         swingSessionId: trialSession.swingSessionId,
         trialSessionEntity: updatedTrialSessionEntity,
-      });
+      },
+      user,
+    );
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -275,7 +277,6 @@ const updateCasesAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user,
         });
     }
 
