@@ -1,29 +1,23 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
-/**
- * associateIrsPractitionerToCase
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.serviceIndicator the type of service the irsPractitioner should receive
- * @param {object} providers.user the user object for the logged in user
- * @returns {Promise<*>} the updated case entity
- */
 export const associateIrsPractitionerToCase = async ({
   applicationContext,
+  authorizedUser,
   docketNumber,
   serviceIndicator,
   user,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
   user: RawUser;
-}) => {
+}): Promise<void> => {
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
@@ -50,7 +44,7 @@ export const associateIrsPractitionerToCase = async ({
     });
 
     const caseEntity = new Case(caseToUpdate, {
-      authorizedUser: applicationContext.getCurrentUser(),
+      authorizedUser,
     });
 
     caseEntity.attachIrsPractitioner(

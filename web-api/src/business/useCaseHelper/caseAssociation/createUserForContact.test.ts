@@ -13,6 +13,7 @@ import { createUserForContact } from './createUserForContact';
 import {
   mockAdmissionsClerkUser,
   mockDocketClerkUser,
+  mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('createUserForContact', () => {
@@ -23,11 +24,10 @@ describe('createUserForContact', () => {
   });
 
   it('should throw an unauthorized error for non admissionsclerk users', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
       createUserForContact({
         applicationContext,
+        authorizedUser: mockPetitionerUser,
         caseEntity: new Case(MOCK_CASE, {
           authorizedUser: mockDocketClerkUser,
         }),
@@ -40,7 +40,6 @@ describe('createUserForContact', () => {
 
   it('should call createNewPetitionerUser with the new user entity', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
-
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -60,6 +59,7 @@ describe('createUserForContact', () => {
 
     await createUserForContact({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
       email: UPDATED_EMAIL,
@@ -80,7 +80,6 @@ describe('createUserForContact', () => {
 
   it('should return the caseEntity', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
-
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -99,6 +98,7 @@ describe('createUserForContact', () => {
 
     const updatedCase = await createUserForContact({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
       email: UPDATED_EMAIL,
@@ -110,7 +110,6 @@ describe('createUserForContact', () => {
 
   it('should call associateUserWithCase', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
-
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -129,6 +128,7 @@ describe('createUserForContact', () => {
 
     await createUserForContact({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
       email: UPDATED_EMAIL,

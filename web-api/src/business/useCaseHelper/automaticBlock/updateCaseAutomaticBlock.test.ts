@@ -7,7 +7,6 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } from '../../../../../shared/src/test/mockCase';
-import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { PENDING_DOCKET_ENTRY } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -16,11 +15,9 @@ import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
 
 describe('updateCaseAutomaticBlock', () => {
   let mockCase;
+
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
     applicationContext.getUniqueId.mockReturnValue('unique-id-1');
   });
 
