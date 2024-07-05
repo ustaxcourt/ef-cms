@@ -13,6 +13,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -105,7 +106,7 @@ const updateCaseEntityAndGenerateChange = async ({
  * @returns {object} the updated case data
  */
 export const updatePetitionerInformation = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, updatedPetitionerData },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -262,6 +263,7 @@ export const updatePetitionerInformation = async (
         .getUseCaseHelpers()
         .addExistingUserToCase({
           applicationContext,
+          authorizedUser: user,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
