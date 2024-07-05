@@ -56,7 +56,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
     clientConnectionId,
     message: {
       action: 'batch_download_csv_data',
-      numberOfRecordsDownloaded: 0,
+      filesCompleted: 0,
       totalFiles: totalCount,
     },
     userId: authorizedUser.userId,
@@ -93,7 +93,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
       clientConnectionId,
       message: {
         action: 'batch_download_csv_data',
-        numberOfRecordsDownloaded: cases.length,
+        filesCompleted: cases.length,
         totalFiles: totalCount,
       },
       userId: authorizedUser.userId,
@@ -112,7 +112,9 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const csvString = getCsvString(formattedCases);
   const csvBuffer = Buffer.from(csvString);
 
-  const today = applicationContext.getUtilities().formatNow(FORMATS.MMDDYYYY);
+  const today = applicationContext
+    .getUtilities()
+    .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = 'Custom Case Report - ' + today;
 
   const fileInfo = await applicationContext

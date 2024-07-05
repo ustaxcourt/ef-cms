@@ -21,6 +21,7 @@ import {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
+  Role,
   STIN_DOCKET_ENTRY_TYPE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -41,11 +42,13 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
+type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
+
 /* eslint-disable max-lines */
 const canDownloadSTIN = (
   entry: RawDocketEntry,
   petitionDocketEntry: RawDocketEntry,
-  user: RawUser,
+  user: { role: Role },
 ): boolean => {
   if (
     user.role === ROLES.petitionsClerk &&
@@ -76,6 +79,9 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
+  public caseType?: string;
+  public taxYear?: string;
+  public noticeIssuedDate?: string;
   public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
@@ -190,6 +196,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
     this.archived = rawDocketEntry.archived;
     this.attachments = rawDocketEntry.attachments;
+    this.caseType = rawDocketEntry.caseType;
+    this.taxYear = rawDocketEntry.taxYear;
+    this.noticeIssuedDate = rawDocketEntry.noticeIssuedDate;
     this.certificateOfService = rawDocketEntry.certificateOfService;
     this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
     this.createdAt = rawDocketEntry.createdAt || createISODateString();
@@ -613,7 +622,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
       !!filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        filedByRole as PractitionerRole,
+      )
     );
   }
 
@@ -623,6 +634,10 @@ export class DocketEntry extends JoiValidationEntity {
 
   static isOrder(eventCode: string): boolean {
     return ORDER_EVENT_CODES.includes(eventCode);
+  }
+
+  static isSearchable(eventCode: string): boolean {
+    return DocketEntry.isOpinion(eventCode) || DocketEntry.isOrder(eventCode);
   }
 
   static isMotion(eventCode: string): boolean {
@@ -687,7 +702,7 @@ export class DocketEntry extends JoiValidationEntity {
       visibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
-      user: RawUser;
+      user: { userId: string; role: Role };
       isTerminalUser: boolean;
       visibilityChangeDate: string;
     },

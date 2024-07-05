@@ -5,8 +5,10 @@ export const FormGroup = ({
   children,
   className,
   confirmationText,
+  errorMessageId,
   errorText,
   formGroupRef,
+  grow,
   id,
   omitFormGroupClass,
 }: {
@@ -14,8 +16,10 @@ export const FormGroup = ({
   className?: string;
   confirmationText?: string;
   errorText?: string | string[];
+  errorMessageId?: string;
   formGroupRef?: React.RefObject<HTMLInputElement>;
   id?: string;
+  grow?: boolean;
   omitFormGroupClass?: boolean;
 }) => {
   let hasError = false;
@@ -28,10 +32,14 @@ export const FormGroup = ({
   }
 
   const renderMultipleErrors = (errorTextArr: string[]) => {
-    return errorTextArr.map(text => {
+    return errorTextArr.map((text: string, index: number) => {
       return (
         text && (
-          <span className="usa-error-message" key={text}>
+          <span
+            className="usa-error-message"
+            data-testid={`${errorMessageId}-${index}`}
+            key={text}
+          >
             {text}
           </span>
         )
@@ -40,7 +48,13 @@ export const FormGroup = ({
   };
 
   const renderSingleError = () => {
-    return errorText && <span className="usa-error-message">{errorText}</span>;
+    return (
+      errorText && (
+        <span className="usa-error-message" data-testid={errorMessageId}>
+          {errorText}
+        </span>
+      )
+    );
   };
   const renderSingleConfirmation = () => {
     return (
@@ -56,6 +70,7 @@ export const FormGroup = ({
         !omitFormGroupClass && 'usa-form-group',
         hasConfirmation && 'ustc-form-group--confirmation',
         hasError && 'usa-form-group--error',
+        grow && 'maxw-none',
         className,
       )}
       id={id}
