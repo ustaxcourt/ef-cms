@@ -18,15 +18,10 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('messageDocumentHelper', () => {
-  let globalUser;
-
   const messageDocumentHelper = withAppContextDecorator(
     messageDocumentHeperComputed,
     {
       ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
     },
   );
 
@@ -61,7 +56,6 @@ describe('messageDocumentHelper', () => {
   };
 
   const getBaseState = user => {
-    globalUser = user;
     return {
       caseDetail: {
         ...baseCaseDetail,
@@ -72,6 +66,7 @@ describe('messageDocumentHelper', () => {
       },
       parentMessageId: mockParentMessageId,
       permissions: getUserPermissions(user),
+      user,
     };
   };
 

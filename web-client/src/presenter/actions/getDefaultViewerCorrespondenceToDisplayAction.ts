@@ -16,12 +16,13 @@ export const getDefaultViewerCorrespondenceToDisplayAction = ({
 }: ActionProps) => {
   const { correspondenceId } = props;
   let viewerCorrespondenceToDisplay = null;
+  const user = get(state.user);
 
   const caseDetail = get(state.caseDetail);
 
   const { correspondence } = applicationContext
     .getUtilities()
-    .formatCase(applicationContext, cloneDeep(caseDetail));
+    .formatCase(applicationContext, cloneDeep(caseDetail), user);
 
   if (correspondenceId) {
     viewerCorrespondenceToDisplay = correspondence.find(

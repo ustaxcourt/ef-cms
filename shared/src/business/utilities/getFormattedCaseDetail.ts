@@ -15,6 +15,7 @@ import {
   combineISOandEasternTime,
   formatDateString,
 } from './DateHandler';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 
 const computeIsInProgress = ({ formattedEntry }) => {
@@ -262,7 +263,11 @@ export const getEditUrl = ({
     : `/case-detail/${docketNumber}/edit-order/${docketEntryId}`;
 };
 
-export const formatCase = (applicationContext, caseDetail) => {
+export const formatCase = (
+  applicationContext,
+  caseDetail,
+  authorizedUser: UnknownAuthUser,
+) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
@@ -376,7 +381,7 @@ export const formatCase = (applicationContext, caseDetail) => {
   result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
 
   const caseEntity = new Case(caseDetail, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser,
   });
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
@@ -387,7 +392,7 @@ export const formatCase = (applicationContext, caseDetail) => {
   if (result.consolidatedCases) {
     result.consolidatedCases = result.consolidatedCases.map(
       consolidatedCase => {
-        return formatCase(applicationContext, consolidatedCase);
+        return formatCase(applicationContext, consolidatedCase, authorizedUser);
       },
     );
   }
@@ -494,7 +499,7 @@ export const getFormattedCaseDetail = ({
     ...applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase(caseDetail),
-    ...formatCase(applicationContext, caseDetail),
+    ...formatCase(applicationContext, caseDetail), // TODO 10417 Needd to get an authorizedUser here
   };
   result.formattedDocketEntries = sortDocketEntries(
     result.formattedDocketEntries,

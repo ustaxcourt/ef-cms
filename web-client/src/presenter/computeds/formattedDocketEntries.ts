@@ -203,7 +203,7 @@ export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const permissions = get(state.permissions);
   const { docketRecordFilter } = get(state.sessionMetadata);
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
@@ -225,7 +225,7 @@ export const formattedDocketEntries = (
     .getUtilities()
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
-  const result = formatCase(applicationContext, caseDetail);
+  const result = formatCase(applicationContext, caseDetail, user);
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
 
   result.formattedDocketEntries = applicationContext
