@@ -1,13 +1,13 @@
 import { formatStatusReportFilingDateAction } from '@web-client/presenter/actions/StatusReportOrderResponse/formatStatusReportFilingDateAction';
-import { navigateToStatusReportOrderResponseAction } from '../../actions/StatusReportOrderResponse/navigateToStatusReportOrderResponseAction';
+import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
 import { setStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setStatusReportOrderResponseFormAction';
 
 export const navigateToStatusReportOrderResponseSequence = [
   formatStatusReportFilingDateAction,
   setStatusReportOrderResponseFormAction,
-  navigateToStatusReportOrderResponseAction,
+  navigateToPathAction,
 ] as unknown as (props: {
   statusReportFilingDate: string;
   statusReportIndex: number;
-  url: string;
+  path: string;
 }) => void;

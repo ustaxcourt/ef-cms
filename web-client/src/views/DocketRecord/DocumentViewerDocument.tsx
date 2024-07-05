@@ -193,10 +193,10 @@ export const DocumentViewerDocument = connect(
                   icon="edit"
                   onClick={() => {
                     navigateToStatusReportOrderResponseSequence({
+                      path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
                       statusReportFilingDate:
                         viewerDocumentToDisplay.filingDate,
                       statusReportIndex: viewerDocumentToDisplay.index,
-                      url: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
                     });
                   }}
                 >

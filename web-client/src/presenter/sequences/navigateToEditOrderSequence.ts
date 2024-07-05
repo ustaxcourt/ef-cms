@@ -5,7 +5,6 @@ import { getDocumentContentsAction } from '../actions/getDocumentContentsAction'
 import { getDocumentEditUrlAsPathAction } from '../actions/getDocumentEditUrlAsPathAction';
 import { isStatusReportOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrderResponse/isStatusReportOrderResponseAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
-import { navigateToStatusReportOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrderResponse/navigateToStatusReportOrderResponseAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
@@ -38,7 +37,7 @@ export const navigateToEditOrderSequence = [
     ],
     isStatusReportOrderResponse: [
       setEditStatusReportOrderResponseFormAction,
-      navigateToStatusReportOrderResponseAction,
+      navigateToPathAction,
       statusReportOrderResponsePdfPreviewSequence,
     ],
   },
