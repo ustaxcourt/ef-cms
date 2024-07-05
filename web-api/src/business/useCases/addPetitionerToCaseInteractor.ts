@@ -10,14 +10,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * used to add a petitioner to a case
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.contact the contact data to add to the case
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the case data
- */
 export const addPetitionerToCase = async (
   applicationContext: ServerApplicationContext,
   {
@@ -26,7 +18,7 @@ export const addPetitionerToCase = async (
     docketNumber,
   }: { caseCaption: string; contact: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized for adding petitioner to case');
   }
