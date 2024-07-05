@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../entities/cases/Case';
 
 /**
@@ -9,14 +10,14 @@ import { Case } from '../../entities/cases/Case';
  * @returns {object} whether or not the cases can be consolidated with the reason
  */
 export const canConsolidateInteractor = (
-  applicationContext: IApplicationContext,
+  authorizedUser: AuthUser,
   {
     caseToConsolidate,
     currentCase,
   }: { caseToConsolidate: Case; currentCase: Case },
 ) => {
   const caseEntity = new Case(currentCase, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser,
   });
 
   const results = caseEntity.getConsolidationStatus({

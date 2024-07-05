@@ -1,3 +1,5 @@
+import { state } from '@web-client/presenter/app.cerebral';
+
 /**
  * check to see if we can consolidate cases
  *
@@ -9,10 +11,12 @@
  */
 export const canConsolidateAction = ({
   applicationContext,
+  get,
   path,
   props,
 }: ActionProps) => {
   const { caseDetail, caseToConsolidate, confirmSelection } = props;
+  const user = get(state.user);
 
   if (!confirmSelection) {
     return path.error({
@@ -22,7 +26,7 @@ export const canConsolidateAction = ({
 
   const results = applicationContext
     .getUseCases()
-    .canConsolidateInteractor(applicationContext, {
+    .canConsolidateInteractor(user, {
       caseToConsolidate,
       currentCase: caseDetail,
     });
