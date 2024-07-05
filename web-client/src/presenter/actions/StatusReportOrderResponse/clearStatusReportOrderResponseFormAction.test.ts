@@ -9,7 +9,7 @@ describe('clearStatusReportOrderResponseFormAction,', () => {
           additionalOrderText: 'Test',
           docketEntryDescription: 'Order Test',
           dueDate: '07/04/2024',
-          issueOrder: 'justThisCase',
+          issueOrder: 'allCasesInGroup',
           jurisdiction: 'retained',
           orderType: 'status-report',
           strickenFromTrialSessions: 'true',
@@ -20,6 +20,7 @@ describe('clearStatusReportOrderResponseFormAction,', () => {
     expect(result.state.form).toEqual({
       additionalOrderText: '',
       docketEntryDescription: 'Order',
+      issueOrder: 'allCasesInGroup',
     });
   });
 
@@ -31,7 +32,7 @@ describe('clearStatusReportOrderResponseFormAction,', () => {
           additionalOrderText: 'Test',
           docketEntryDescription: 'Order Test',
           dueDate: '07/04/2024',
-          issueOrder: 'justThisCase',
+          issueOrder: 'allCasesInGroup',
           jurisdiction: 'retained',
           orderType: 'status-report',
           strickenFromTrialSessions: 'true',
@@ -43,7 +44,7 @@ describe('clearStatusReportOrderResponseFormAction,', () => {
       additionalOrderText: 'Test',
       docketEntryDescription: 'Order Test',
       dueDate: '07/04/2024',
-      issueOrder: 'justThisCase',
+      issueOrder: 'allCasesInGroup',
       jurisdiction: 'retained',
       orderType: 'status-report',
       strickenFromTrialSessions: 'true',

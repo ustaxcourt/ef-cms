@@ -33,7 +33,7 @@ describe('setEditStatusReportOrderResponseFormAction,', () => {
       strickenFromTrialSessions: 'true',
     });
     expect(result.output).toEqual({
-      url: '/case-detail/1/documents/107-19/order-response',
+      path: '/case-detail/1/documents/107-19/order-response-edit',
     });
   });
 });
