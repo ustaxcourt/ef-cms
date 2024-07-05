@@ -44,13 +44,18 @@ note: we have 2 package.json files, be sure to update both
 
 regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
-	- ./web-api/workflow-terraform/glue-cron/main/main.tf
-	- ./web-api/workflow-terraform/migration/main/main.tf
-	- ./web-api/workflow-terraform/migration-cron/main/main.tf
-	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
-	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
-	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
-	- ./web-client/terraform/main/main.tf
+ - ./shared/admin-tools/glue/glue_migrations/main.tf
+ - ./shared/admin-tools/glue/remote_role/main.tf
+ - ./web-api/terraform/applyables/account-specific/account-specific.tf
+ - ./web-api/terraform/applyables/allColors/allColors.tf
+ - ./web-api/terraform/applyables/blue/blue.tf
+ - ./web-api/terraform/applyables/glue-cron/glue-cron-applyable.tf
+ - ./web-api/terraform/applyables/green/green.tf
+ - ./web-api/terraform/applyables/migration/migration-applyable.tf
+ - ./web-api/terraform/applyables/migration-cron/migration-cron-applyable.tf
+ - ./web-api/terraform/applyables/reindex-cron/reindex-cron-applyable.tf
+ - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
+ - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
 
 	> aws = "<LATEST_VERSION>"
 
