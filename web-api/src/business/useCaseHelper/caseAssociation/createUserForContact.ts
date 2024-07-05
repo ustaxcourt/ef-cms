@@ -1,30 +1,30 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
-/**
- * createUserForContact
- *
- * @param {object} options.contactId the id of the contact to create user for
- * @param {object} options.caseEntity the case entity to modify and return
- * @param {string} options.email the email address for the user we are attaching to the case
- * @param {string} options.name the name of the user to update the case with
- * @returns {Case} the updated case entity
- */
 export const createUserForContact = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   contactId,
   email,
   name,
-}) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: UnknownAuthUser;
+  caseEntity: Case;
+  contactId: string;
+  email: string;
+  name: string;
+}): Promise<Case> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_USER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
