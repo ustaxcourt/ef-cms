@@ -71,7 +71,7 @@ export const genericHandler = (
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const deprecatedUser = getUserFromAuthHeader(awsEvent); // TODO: zach remove getting user here. Should be passed in.
+    const deprecatedUser = getUserFromAuthHeader(awsEvent); // TODO 10417: remove getting user here. Should be passed in.
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext = createApplicationContext(
       deprecatedUser,
