@@ -5,13 +5,15 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const checkLock = async ({
   applicationContext,
+  authorizedUser,
   identifier,
   onLockError,
   options = {},
 }: {
+  authorizedUser: UnknownAuthUser;
   applicationContext: ServerApplicationContext;
   identifier: string;
-  onLockError?: Error | Function;
+  onLockError?: TOnLockError;
   options?: any;
 }): Promise<void> => {
   const featureFlags = await applicationContext
@@ -43,7 +45,7 @@ export const checkLock = async ({
   if (onLockError instanceof Error) {
     throw onLockError;
   } else if (typeof onLockError === 'function') {
-    await onLockError(applicationContext, options);
+    await onLockError(applicationContext, options, authorizedUser);
   }
   throw new ServiceUnavailableError(
     'One of the items you are trying to update is being updated by someone else',
@@ -52,6 +54,7 @@ export const checkLock = async ({
 
 export const acquireLock = async ({
   applicationContext,
+  authorizedUser,
   identifiers = [],
   onLockError,
   options = {},
@@ -61,11 +64,12 @@ export const acquireLock = async ({
 }: {
   applicationContext: ServerApplicationContext;
   identifiers?: string[];
-  onLockError?: Error | Function;
+  onLockError?: TOnLockError;
   options?: any;
   retries?: number;
   ttl?: number;
   waitTime?: number;
+  authorizedUser: UnknownAuthUser;
 }): Promise<void> => {
   if (!identifiers) {
     return;
@@ -81,6 +85,7 @@ export const acquireLock = async ({
         identifiers.map(entityIdentifier =>
           checkLock({
             applicationContext,
+            authorizedUser,
             identifier: entityIdentifier,
             onLockError,
             options,
@@ -140,7 +145,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
   ) =>
     | Promise<{ identifiers: string[]; ttl?: number }>
     | { identifiers: string[]; ttl?: number },
-  onLockError?: Error | Function,
+  onLockError?: TOnLockError,
 ): (
   applicationContext: any,
   options: InteractorInput,
@@ -155,6 +160,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
 
     await acquireLock({
       applicationContext,
+      authorizedUser,
       identifiers,
       onLockError,
       options,
@@ -180,3 +186,11 @@ export function withLocking<InteractorInput, InteractorOutput>(
     return results!;
   };
 }
+
+export type TOnLockError =
+  | Error
+  | ((
+      applicationContext: any,
+      originalRequest: any,
+      authorizedUser: UnknownAuthUser,
+    ) => void);
