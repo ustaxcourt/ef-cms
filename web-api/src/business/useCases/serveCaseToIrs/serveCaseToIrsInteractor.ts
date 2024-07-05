@@ -474,8 +474,11 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
 export const serveCaseToIrs = async (
-  applicationContext,
-  { clientConnectionId, docketNumber },
+  applicationContext: ServerApplicationContext,
+  {
+    clientConnectionId,
+    docketNumber,
+  }: { clientConnectionId: string; docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   try {
@@ -526,6 +529,7 @@ export const serveCaseToIrs = async (
           .getUseCaseHelpers()
           .addDocketEntryForSystemGeneratedOrder({
             applicationContext,
+            authorizedUser: applicationContext.getCurrentUser(),
             caseEntity,
             systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
           }),
