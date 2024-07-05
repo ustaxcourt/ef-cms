@@ -9,18 +9,10 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-/**
- * createTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
- * @returns {object} the created trial session
- */
 export const createTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: RawTrialSession },
-) => {
+): Promise<RawTrialSession> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
@@ -37,12 +29,14 @@ export const createTrialSessionInteractor = async (
   }
 
   if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .associateSwingTrialSessions(applicationContext, {
+    await applicationContext.getUseCaseHelpers().associateSwingTrialSessions(
+      applicationContext,
+      {
         swingSessionId: trialSessionToAdd.swingSessionId,
         trialSessionEntity: trialSessionToAdd,
-      });
+      },
+      user,
+    );
   }
 
   return await applicationContext
