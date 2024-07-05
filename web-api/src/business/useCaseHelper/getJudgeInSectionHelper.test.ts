@@ -2,13 +2,7 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgeInSectionHelper } from './getJudgeInSectionHelper';
 
-let currentUser;
-
 describe('getJudgeInSectionHelper', () => {
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => currentUser);
-  });
-
   it('Fetches the judge associated with a given section', async () => {
     const expectedJudgeUser = {
       isSeniorJudge: false,
