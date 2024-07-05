@@ -759,6 +759,7 @@ export const baseState = {
   showPassword: false,
   showValidation: false,
   statusReportOrderResponse: {
+    docketNumbersToDisplay: [],
     statusReportFilingDate: '',
     statusReportIndex: 1,
   },

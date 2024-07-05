@@ -1,7 +1,7 @@
 import { clearPdfPreviewUrlAction } from '../../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { createOrderAction } from '../../actions/CourtIssuedOrder/createOrderAction';
 import { getPdfFromUrlAction } from '../../actions/CourtIssuedOrder/getPdfFromUrlAction';
-import { getPdfUrlAction } from '../../actions/CourtIssuedOrder/getPdfUrlAction';
+import { getStatusReportOrderResponsePdfUrlAction } from '../../actions/StatusReportOrderResponse/getStatusReportOrderResponsePdfUrlAction';
 import { prepareStatusReportOrderResponseAction } from '../../actions/StatusReportOrderResponse/prepareStatusReportOrderResponseAction';
 import { setMetadataAsPristineAction } from '../../actions/setMetadataAsPristineAction';
 import { setPdfFileAction } from '../../actions/CourtIssuedOrder/setPdfFileAction';
@@ -13,7 +13,7 @@ export const statusReportOrderResponsePdfPreviewSequence =
     prepareStatusReportOrderResponseAction,
     createOrderAction,
     clearPdfPreviewUrlAction,
-    getPdfUrlAction,
+    getStatusReportOrderResponsePdfUrlAction,
     getPdfFromUrlAction,
     setPdfFileAction,
     setPdfPreviewUrlAction,

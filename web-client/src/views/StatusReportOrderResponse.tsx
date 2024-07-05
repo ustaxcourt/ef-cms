@@ -73,10 +73,7 @@ export const StatusReportOrderResponse = connect(
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="all cases in group"
-                            checked={
-                              !form.issueOrder ||
-                              form.issueOrder === 'allCasesInGroup'
-                            }
+                            checked={form.issueOrder === 'allCasesInGroup'}
                             className="usa-radio__input"
                             id="all-cases-in-group"
                             name="issueOrder"

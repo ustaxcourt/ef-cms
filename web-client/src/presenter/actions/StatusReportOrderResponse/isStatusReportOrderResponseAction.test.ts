@@ -60,9 +60,6 @@ describe('isStatusReportOrderResponseAction,', () => {
         presenter,
       },
       state: {
-        documentToEdit: {
-          draftOrderState: {},
-        },
         permissions: {
           ORDER_RESPONSE: true,
         },

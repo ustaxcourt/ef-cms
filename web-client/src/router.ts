@@ -411,7 +411,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/order-response',
+      '/case-detail/*/documents/*/order-response-create',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
         (docketNumber, docketEntryId) => {
@@ -421,6 +421,23 @@ const router = {
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
             docketNumber,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
           });
         },
       ),
@@ -1329,19 +1346,19 @@ const router = {
       }),
     );
 
-    registerRoute(
-      '/messages/*/message-detail/*/*/order-response',
-      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
-        );
-        return app.getSequence('gotoStatusReportOrderResponseSequence')({
-          docketEntryId,
-          docketNumber,
-          parentMessageId,
-        });
-      }),
-    );
+    // registerRoute(
+    //   '/messages/*/message-detail/*/*/order-response',
+    //   ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
+    //     setPageTitle(
+    //       `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+    //     );
+    //     return app.getSequence('gotoStatusReportOrderResponseSequence')({
+    //       docketEntryId,
+    //       docketNumber,
+    //       parentMessageId,
+    //     });
+    //   }),
+    // );
 
     registerRoute(
       '/pdf-preview',

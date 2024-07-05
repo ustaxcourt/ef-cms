@@ -5,6 +5,8 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const unsetDocumentToEditAction = ({ store }: ActionProps) => {
-  store.unset(state.documentToEdit);
+export const unsetDocumentToEditAction = ({ props, store }: ActionProps) => {
+  if (!props.isEditing) {
+    store.unset(state.documentToEdit);
+  }
 };

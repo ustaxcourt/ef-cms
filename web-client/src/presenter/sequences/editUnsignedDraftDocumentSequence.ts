@@ -5,7 +5,6 @@ import { navigateToStatusReportOrderResponseAction } from '@web-client/presenter
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setEditStatusReportOrderResponseFormAction';
 import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrderResponse/statusReportOrderResponsePdfPreviewSequence';
-import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
 export const editUnsignedDraftDocumentSequence = [
   checkDocumentTypeAction,
@@ -20,7 +19,6 @@ export const editUnsignedDraftDocumentSequence = [
           setEditStatusReportOrderResponseFormAction,
           navigateToStatusReportOrderResponseAction,
           statusReportOrderResponsePdfPreviewSequence,
-          unsetDocumentToEditAction,
         ],
       },
     ],
