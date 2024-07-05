@@ -1,7 +1,9 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 /**
  * removeCounselFromRemovedPetitioner
@@ -16,6 +18,10 @@ export const removeCounselFromRemovedPetitioner = async ({
   applicationContext,
   caseEntity,
   petitionerContactId,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  petitionerContactId: string;
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -27,18 +33,10 @@ export const removeCounselFromRemovedPetitioner = async ({
   }
 
   const practitioners =
-    caseEntity.getPractitionersRepresenting(petitionerContactId);
+    caseEntity.getPractitionersRepresenting(petitionerContactId) || [];
 
-  caseEntity.removeRepresentingFromPractitioners(petitionerContactId, {
-    applicationContext,
-  });
+  caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
 
-  // Assumed objective of the code that was here previously, need to confirm:
-  // If the petitioner we're removing was the ONLY petitioner on this case that a practitioner was representing,
-  // then remove them from the case.
-  //
-  // The new code calls the "remove representing" regardless of the number of representing there are,
-  // then cleans up any practitioners that are left with an empty representing array after that removal.
   for (const practitioner of practitioners) {
     if (practitioner.representing.length === 0) {
       caseEntity.removePrivatePractitioner(practitioner);
