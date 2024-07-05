@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
@@ -99,15 +100,17 @@ const connectPrivatePractitioners = ({
  */
 export const createCaseAndAssociations = async ({
   applicationContext,
+  authorizedUser,
   caseToCreate,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
   caseToCreate: any;
 }) => {
   const caseEntity = caseToCreate.validate
     ? caseToCreate
     : new Case(caseToCreate, {
-        authorizedUser: applicationContext.getCurrentUser(),
+        authorizedUser,
       });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
