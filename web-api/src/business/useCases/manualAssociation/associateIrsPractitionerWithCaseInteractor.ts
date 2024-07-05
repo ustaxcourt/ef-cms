@@ -38,6 +38,7 @@ export const associateIrsPractitionerWithCaseInteractor = async (
 
   return await associateIrsPractitionerToCase({
     applicationContext,
+    authorizedUser,
     docketNumber,
     serviceIndicator,
     user,
