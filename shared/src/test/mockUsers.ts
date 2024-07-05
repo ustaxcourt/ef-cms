@@ -40,6 +40,8 @@ export const colvinsChambersUser = {
 };
 
 export const clerkOfCourtUser = {
+  email: 'theClerkUser@example.com',
+  name: 'Caster Clerk',
   role: ROLES.clerkOfCourt,
   userId: 'b6e4a5ac-c006-4b47-a5f0-67028372cd63',
 };
@@ -140,6 +142,7 @@ export const caseServicesSupervisorUser = {
 };
 
 export const docketClerkUser = {
+  email: 'theDocketMocket@example.com',
   name: 'Docketclerk',
   role: ROLES.docketClerk,
   section: DOCKET_SECTION,

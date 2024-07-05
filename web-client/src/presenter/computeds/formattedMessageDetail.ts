@@ -34,12 +34,12 @@ export const formattedMessageDetail = (
   const messageDetail = get(state.messageDetail);
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 
   const { draftDocuments } = applicationContext
     .getUtilities()
-    .formatCase(applicationContext, caseDetail);
+    .formatCase(applicationContext, caseDetail, user);
 
   const formattedMessages = orderBy(
     messageDetail.map(message =>

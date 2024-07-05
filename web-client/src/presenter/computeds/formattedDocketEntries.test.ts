@@ -44,14 +44,10 @@ describe('formattedDocketEntries', () => {
     formattedDocketEntriesComputed,
     {
       ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
     },
   );
 
   const getBaseState = user => {
-    globalUser = user;
     return {
       documentsSelectedForDownload: [],
       featureFlags: {
@@ -62,10 +58,9 @@ describe('formattedDocketEntries', () => {
       sessionMetadata: {
         docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
       },
+      user,
     };
   };
-
-  let globalUser;
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedDocketEntries, {
