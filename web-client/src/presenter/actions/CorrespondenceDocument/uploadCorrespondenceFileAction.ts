@@ -14,13 +14,18 @@ export const uploadCorrespondenceFileAction = async ({
   path,
 }: ActionProps) => {
   const { primaryDocumentFile } = get(state.form);
+  const user = get(state.user);
 
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadCorrespondenceDocumentInteractor(applicationContext, {
-        documentFile: primaryDocumentFile,
-      });
+      .uploadCorrespondenceDocumentInteractor(
+        applicationContext,
+        {
+          documentFile: primaryDocumentFile,
+        },
+        user,
+      );
 
     return path.success({
       primaryDocumentFileId,

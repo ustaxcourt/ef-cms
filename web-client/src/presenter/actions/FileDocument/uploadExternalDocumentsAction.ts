@@ -22,15 +22,20 @@ export const uploadExternalDocumentsAction = async ({
 }>) => {
   const { documentMetadata, files, fileUploadProgressMap } = props;
   const { docketNumber } = get(state.caseDetail);
+  const user = get(state.user);
 
   try {
     const { caseDetail, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor(applicationContext, {
-        documentFiles: files,
-        documentMetadata,
-        fileUploadProgressMap,
-      });
+      .uploadExternalDocumentsInteractor(
+        applicationContext,
+        {
+          documentFiles: files,
+          documentMetadata,
+          fileUploadProgressMap,
+        },
+        user,
+      );
 
     for (let docketEntryId of docketEntryIdsAdded) {
       await addCoversheet({

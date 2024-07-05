@@ -15,14 +15,19 @@ export const overwriteCorrespondenceFileAction = async ({
 }: ActionProps) => {
   const { primaryDocumentFile } = get(state.form);
   const docketEntryId = get(state.docketEntryId);
+  const user = get(state.user);
 
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadCorrespondenceDocumentInteractor(applicationContext, {
-        documentFile: primaryDocumentFile,
-        keyToOverwrite: docketEntryId,
-      });
+      .uploadCorrespondenceDocumentInteractor(
+        applicationContext,
+        {
+          documentFile: primaryDocumentFile,
+          keyToOverwrite: docketEntryId,
+        },
+        user,
+      );
 
     return path.success({
       primaryDocumentFileId,
