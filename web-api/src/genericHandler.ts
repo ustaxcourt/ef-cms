@@ -9,7 +9,16 @@ import {
   handle,
 } from './middleware/apiGatewayHelper';
 
-export const dataSecurityFilter = (data, { applicationContext }) => {
+export const dataSecurityFilter = (
+  data,
+  {
+    applicationContext,
+    authorizedUser,
+  }: {
+    applicationContext: ServerApplicationContext;
+    authorizedUser: UnknownAuthUser;
+  },
+) => {
   let returnData = data;
   if (data && Array.isArray(data) && data.length && data[0].entityName) {
     const entityConstructor = applicationContext.getEntityByName(
@@ -20,6 +29,7 @@ export const dataSecurityFilter = (data, { applicationContext }) => {
         result =>
           new entityConstructor(result, {
             applicationContext,
+            authorizedUser,
             filtered: true,
           }),
       );
@@ -31,6 +41,7 @@ export const dataSecurityFilter = (data, { applicationContext }) => {
     if (entityConstructor) {
       returnData = new entityConstructor(data, {
         applicationContext,
+        authorizedUser,
         filtered: true,
       });
     }
@@ -99,6 +110,7 @@ export const genericHandler = (
 
       const returnResults = dataSecurityFilter(results, {
         applicationContext,
+        authorizedUser: user,
       });
 
       if (options.logResults !== false) {
