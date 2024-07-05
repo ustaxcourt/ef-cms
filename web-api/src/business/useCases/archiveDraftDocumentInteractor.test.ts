@@ -20,10 +20,6 @@ describe('archiveDraftDocumentInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-    });
   });
 
   it('returns an unauthorized error on non petitionsclerk users', async () => {
