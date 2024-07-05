@@ -2,7 +2,6 @@ import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
@@ -48,11 +47,6 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user is not authorized to add petitioner to case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
-
     await expect(
       addPetitionerToCaseInteractor(
         applicationContext,

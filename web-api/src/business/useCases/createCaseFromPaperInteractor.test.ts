@@ -63,8 +63,6 @@ describe('createCaseFromPaperInteractor', () => {
       name: 'john doe',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerkUser);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
