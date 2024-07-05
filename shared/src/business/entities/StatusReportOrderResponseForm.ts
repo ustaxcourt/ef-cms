@@ -72,7 +72,7 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
       'restoredToGeneralDocket',
     )
       .when('strickenFromTrialSessions', {
-        is: joi.exist().not(null),
+        is: joi.exist().not(null, false),
         otherwise: joi.optional().allow(null),
         then: joi.required().messages({
           'any.required':
