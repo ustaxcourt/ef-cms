@@ -240,8 +240,7 @@
     "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
     "semver": "7.5.4",
-    "ejs": "3.1.10",
-    "ws": "8.18.0"
+    "ejs": "3.1.10"
   },
   "devDependencies": {
     "@aws-sdk/client-iam": "3.609.0",
