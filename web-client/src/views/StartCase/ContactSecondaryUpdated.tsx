@@ -13,32 +13,37 @@ import React from 'react';
 
 const props = cerebralProps as unknown as {
   bind: string;
+  displayInCareOf?: boolean;
+  nameLabel: string;
   onBlur: string;
   onChange: string;
-  nameLabel: string;
-  registerRef?: Function;
-  displayInCareOf?: boolean;
-  showSameAsPrimaryCheckbox?: boolean;
   onChangeCountryType: string;
+  registerRef?: Function;
+  showSameAsPrimaryCheckbox?: boolean;
 };
 
-export const ContactSecondaryUpdated: React.FC<typeof props> = connect(
-  {
-    bind: props.bind,
-    constants: state.constants,
-    data: state[props.bind],
-    displayInCareOf: props.displayInCareOf,
-    nameLabel: props.nameLabel,
-    onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
-    onChange: props.onChange,
-    onChangeCountryType: props.onChangeCountryType,
-    onChangeSequence: sequences[props.onChange],
-    registerRef: props.registerRef,
-    resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
-    showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
-    validationErrors: state.validationErrors,
-  },
+const ContactSecondaryDeps = {
+  bind: props.bind,
+  constants: state.constants,
+  data: state[props.bind],
+  displayInCareOf: props.displayInCareOf,
+  nameLabel: props.nameLabel,
+  onBlur: props.onBlur,
+  onBlurSequence: sequences[props.onBlur],
+  onChange: props.onChange,
+  onChangeCountryType: props.onChangeCountryType,
+  onChangeSequence: sequences[props.onChange],
+  registerRef: props.registerRef,
+  resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
+  showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
+  validationErrors: state.validationErrors,
+};
+
+export const ContactSecondaryUpdated = connect<
+  typeof props,
+  typeof ContactSecondaryDeps
+>(
+  ContactSecondaryDeps,
   function ContactSecondaryUpdated({
     bind,
     constants,
