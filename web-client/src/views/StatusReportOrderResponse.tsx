@@ -55,11 +55,11 @@ export const StatusReportOrderResponse = connect(
                 <div className="grid-header grid-row padding-left-205">
                   Select one or more options:
                 </div>
-                <div className="stamp-order-form margin-top-2">
+                <div className="status-report-order-response-form margin-top-2">
                   {statusReportOrderResponseHelper.isLeadCase && (
                     <>
                       <FormGroup
-                        className="stamp-form-group"
+                        className="status-report-order-response-form-group"
                         errorText={validationErrors.issueOrder}
                       >
                         <label
@@ -126,7 +126,7 @@ export const StatusReportOrderResponse = connect(
                   )}
 
                   <FormGroup
-                    className="stamp-form-group"
+                    className="status-report-order-response-form-group"
                     errorText={validationErrors.orderType}
                   >
                     <label className="usa-label" htmlFor="order-type-radios">
@@ -184,7 +184,9 @@ export const StatusReportOrderResponse = connect(
                   </FormGroup>
 
                   <FormGroup
-                    className="grid-container margin-top-2 padding-left-2"
+                    className={
+                      statusReportOrderResponseHelper.dueDateErrorClass
+                    }
                     errorText={statusReportOrderResponseHelper.dueDateErrorText}
                     id="status-report-due-date-form-group"
                   >
@@ -240,7 +242,9 @@ export const StatusReportOrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="stamp-form-group"
+                    className={
+                      statusReportOrderResponseHelper.jurisdictionErrorClass
+                    }
                     errorText={
                       statusReportOrderResponseHelper.jurisdictionErrorText
                     }
@@ -304,7 +308,7 @@ export const StatusReportOrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="stamp-form-group"
+                    className="status-report-order-response-form-group"
                     errorText={validationErrors.additionalOrderText}
                   >
                     <div>
@@ -344,7 +348,7 @@ export const StatusReportOrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
-                    className="stamp-form-group"
+                    className="status-report-order-response-form-group"
                     errorText={validationErrors.docketEntryDescription}
                     id="docket-entry-description-form-group"
                   >
