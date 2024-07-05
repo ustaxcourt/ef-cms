@@ -11,17 +11,19 @@ export type AuthUser = {
 export type UnknownAuthUser = AuthUser | undefined;
 
 export function isAuthUser(user): user is AuthUser {
-  const authUserSchema = joi.object().keys({
-    email: joi.string().min(1).max(100).email({ tlds: false }).required(),
-    name: joi.string().min(1).required(),
-    role: joi
-      .string()
-      .min(1)
-      .valid(...Object.values(ROLES))
-      .required(),
-    userId: joi.string().min(1).uuid().required(),
-  });
-
+  const authUserSchema = joi
+    .object()
+    .required()
+    .keys({
+      email: joi.string().min(1).max(100).email({ tlds: false }).required(),
+      name: joi.string().min(1).required(),
+      role: joi
+        .string()
+        .min(1)
+        .valid(...Object.values(ROLES))
+        .required(),
+      userId: joi.string().min(1).uuid().required(),
+    });
   const { error } = authUserSchema.validate(user, {
     abortEarly: false,
     allowUnknown: true,
