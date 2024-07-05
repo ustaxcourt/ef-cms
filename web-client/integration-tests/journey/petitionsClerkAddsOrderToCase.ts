@@ -39,6 +39,7 @@ export const petitionsClerkAddsOrderToCase = cerebralTest => {
       .getUtilities()
       .getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: cerebralTest.getState('user'),
         caseDetail: cerebralTest.getState('caseDetail'),
       });
 

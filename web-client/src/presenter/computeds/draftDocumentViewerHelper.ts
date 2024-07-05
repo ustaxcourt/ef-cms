@@ -12,7 +12,7 @@ export const draftDocumentViewerHelper = (
     NOTICE_EVENT_CODES,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
 
@@ -20,6 +20,7 @@ export const draftDocumentViewerHelper = (
     .getUtilities()
     .getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: user,
       caseDetail,
     });
 

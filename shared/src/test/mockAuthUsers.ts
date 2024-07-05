@@ -77,3 +77,10 @@ export const mockIrsSuperuser: AuthUser = {
   role: ROLES.irsSuperuser,
   userId: '192b629a-aa9c-4a7d-9379-b2a1331a6848',
 };
+
+export const mockChambersUser: AuthUser = {
+  email: 'mockChambersUser@example.com',
+  name: 'Chitty Chambers',
+  role: ROLES.chambers,
+  userId: 'e28c2f91-6925-48ac-8441-22b522b0c044',
+};
