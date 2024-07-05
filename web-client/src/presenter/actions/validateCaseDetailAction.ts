@@ -17,7 +17,7 @@ export const validateCaseDetailAction = ({
   if (form.isPaper) {
     errors = applicationContext
       .getUseCases()
-      .validatePetitionFromPaperInteractor(applicationContext, {
+      .validatePetitionFromPaperInteractor(user, {
         petition: form,
       });
   } else {
