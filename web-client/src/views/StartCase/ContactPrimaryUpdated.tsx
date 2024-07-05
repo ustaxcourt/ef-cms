@@ -13,41 +13,33 @@ import React from 'react';
 
 const props = cerebralProps as unknown as {
   bind: string;
+  nameLabel: string;
   onBlur: string;
   onChange: string;
-  nameLabel: string;
-  secondaryLabelNote?: string;
-  secondaryLabel?: string;
-  registerRef?: Function;
-  titleLabel?: string;
-  titleLabelNote?: string;
+  onChangeCountryType: string;
   placeOfLegalResidenceTitle?: string;
+  registerRef?: Function;
+  secondaryLabel?: string;
+  secondaryLabelNote?: string;
   showInCareOf?: boolean;
   showInCareOfOptional?: boolean;
-  onChangeCountryType: string;
+  titleLabel?: string;
+  titleLabelNote?: string;
 };
 
-export const ContactPrimaryUpdated: React.FC<typeof props> = connect(
-  {
-    bind: props.bind,
-    constants: state.constants,
-    data: state[props.bind],
-    nameLabel: props.nameLabel,
-    onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
-    onChange: props.onChange,
-    onChangeCountryType: props.onChangeCountryType,
-    onChangeSequence: sequences[props.onChange],
-    placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
-    registerRef: props.registerRef,
-    secondaryLabel: props.secondaryLabel,
-    secondaryLabelNote: props.secondaryLabelNote,
-    showInCareOf: props.showInCareOf,
-    showInCareOfOptional: props.showInCareOfOptional,
-    titleLabel: props.titleLabel,
-    titleLabelNote: props.titleLabelNote,
-    validationErrors: state.validationErrors,
-  },
+const contactPrimaryDependencies = {
+  constants: state.constants,
+  data: state[props.bind],
+  onBlurSequence: sequences[props.onBlur],
+  onChangeSequence: sequences[props.onChange],
+  validationErrors: state.validationErrors,
+};
+
+export const ContactPrimaryUpdated = connect<
+  typeof props,
+  typeof contactPrimaryDependencies
+>(
+  contactPrimaryDependencies,
   function ContactPrimaryUpdated({
     bind,
     constants,
@@ -66,14 +58,7 @@ export const ContactPrimaryUpdated: React.FC<typeof props> = connect(
     showInCareOfOptional,
     titleLabel,
     titleLabelNote,
-    validationErrors = {} as {
-      contactPrimary?: {
-        secondaryName: string;
-        inCareOf: string;
-        name: string;
-        phone: string;
-      };
-    },
+    validationErrors,
   }) {
     return (
       <>
