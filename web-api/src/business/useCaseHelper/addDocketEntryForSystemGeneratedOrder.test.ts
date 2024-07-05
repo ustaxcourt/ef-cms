@@ -6,6 +6,7 @@ import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addDocketEntryForSystemGeneratedOrder } from './addDocketEntryForSystemGeneratedOrder';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
@@ -32,6 +33,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
     });
@@ -55,6 +57,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   it('should only add freeText to notices', async () => {
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
     });
@@ -69,6 +72,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   it('should set the title and the name of clerk for notices', async () => {
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
     });
@@ -84,6 +88,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   it('should not set a title or the name of clerk for orders', async () => {
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: orderForFilingFee,
     });
@@ -99,6 +104,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   it('should upload a generated pdf for the provided document', async () => {
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
     });
@@ -119,6 +125,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: mockClonedSystemDocument,
     });
@@ -149,6 +156,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: orderForAmendedPetition,
     });
@@ -179,6 +187,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
 
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseEntity,
       systemGeneratedDocument: orderForAmendedPetitionAndFilingFee,
     });
