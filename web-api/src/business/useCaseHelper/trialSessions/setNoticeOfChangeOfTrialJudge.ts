@@ -1,9 +1,10 @@
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
 
 export const setNoticeOfChangeOfTrialJudge = async (
-  applicationContext,
-  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, user },
+  applicationContext: ServerApplicationContext,
+  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity },
 ) => {
   const priorJudgeTitleWithFullName = await getJudgeWithTitle({
     applicationContext,
@@ -35,13 +36,14 @@ export const setNoticeOfChangeOfTrialJudge = async (
       trialSessionInformation,
     });
 
-  await applicationContext
-    .getUseCaseHelpers()
-    .createAndServeNoticeDocketEntry(applicationContext, {
+  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+    applicationContext,
+    {
       caseEntity,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc,
       noticePdf,
-      user,
-    });
+    },
+    applicationContext.getCurrentUser(),
+  );
 };

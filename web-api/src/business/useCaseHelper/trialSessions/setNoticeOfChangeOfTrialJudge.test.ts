@@ -13,7 +13,6 @@ jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
 
 describe('setNoticeOfChangeOfTrialJudge', () => {
   const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-  const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
   const currentTrialSession = {
     ...MOCK_TRIAL_INPERSON,
@@ -59,7 +58,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       currentTrialSession,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: updatedTrialSession,
-      userId,
     });
 
     expect(getJudgeWithTitle.mock.calls[0][0]).toMatchObject({
@@ -78,7 +76,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       currentTrialSession,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: updatedTrialSession,
-      userId,
     });
 
     expect(

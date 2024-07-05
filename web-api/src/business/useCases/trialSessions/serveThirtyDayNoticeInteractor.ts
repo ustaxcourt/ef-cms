@@ -175,29 +175,32 @@ export const serveThirtyDayNoticeInteractor = async (
 
         await applicationContext
           .getUseCaseHelpers()
-          .createAndServeNoticeDocketEntry(applicationContext, {
-            additionalDocketEntryInfo: {
-              date: trialSession.startDate,
-              trialLocation: trialSession.trialLocation,
-            },
-            caseEntity,
-            documentInfo: {
-              documentTitle: replaceBracketed(
-                thirtyDayNoticeDocumentInfo!.documentTitle,
-                formatDateString(
-                  trialSession.startDate,
-                  FORMATS.MMDDYYYY_DASHED,
+          .createAndServeNoticeDocketEntry(
+            applicationContext,
+            {
+              additionalDocketEntryInfo: {
+                date: trialSession.startDate,
+                trialLocation: trialSession.trialLocation,
+              },
+              caseEntity,
+              documentInfo: {
+                documentTitle: replaceBracketed(
+                  thirtyDayNoticeDocumentInfo!.documentTitle,
+                  formatDateString(
+                    trialSession.startDate,
+                    FORMATS.MMDDYYYY_DASHED,
+                  ),
+                  trialSession.trialLocation!,
                 ),
-                trialSession.trialLocation!,
-              ),
-              documentType: thirtyDayNoticeDocumentInfo!.documentType,
-              eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+                documentType: thirtyDayNoticeDocumentInfo!.documentType,
+                eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+              },
+              newPdfDoc: paperServicePdf,
+              noticePdf,
+              onlyProSePetitioners: true,
             },
-            newPdfDoc: paperServicePdf,
-            noticePdf,
-            onlyProSePetitioners: true,
-            user: currentUser,
-          });
+            currentUser,
+          );
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
