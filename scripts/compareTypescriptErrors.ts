@@ -28,8 +28,15 @@ function countTypescriptErrors(text: string): number {
 // ************************************ Your Branch Errors ***********************************
 console.log('Typechecking your branch...');
 const branchToBeComparedTypescriptOutput = spawnSync(
-  'npx',
-  ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+  // 'npx',
+  // ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+  //
+  'node',
+  [
+    '--node-options="--max-old-space-size=8192 --stack-size=8192"',
+    './node_modules/typescript/bin/tsc',
+    '--noEmit',
+  ],
   {
     encoding: 'utf-8',
     maxBuffer: 1024 * 5000,
@@ -42,8 +49,14 @@ const branchToBeComparedErrorCount = countTypescriptErrors(
 // ************************************ Staging Errors ***********************************
 console.log('Typechecking staging...');
 const stagingTypescriptOutput = spawnSync(
-  'npx',
-  ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+  // 'npx',
+  // ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+  'node',
+  [
+    '--node-options="--max-old-space-size=8192 --stack-size=8192"',
+    './node_modules/typescript/bin/tsc',
+    '--noEmit',
+  ],
   {
     cwd: '../stagingBranch',
     encoding: 'utf-8',

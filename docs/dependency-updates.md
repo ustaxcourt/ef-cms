@@ -95,7 +95,7 @@ See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
 - Keep eslint-plugin-security at 2.1.1 since upgrading makes it only compatible with v9.0.0
 
 ### ws, 3rd party dependency of Cerebral
-- When running npm audit, you'll a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 4.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
+- When running npm audit, you'll a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
 ## Incrementing the Node Cache Key Version
 
