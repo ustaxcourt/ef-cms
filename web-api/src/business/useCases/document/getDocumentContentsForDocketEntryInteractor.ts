@@ -32,7 +32,9 @@ export const getDocumentContentsForDocketEntryInteractor = async (
         useTempBucket: false,
       });
 
-    const documentContentsData = JSON.parse(documentContentsFile.toString());
+    const documentContentsData = JSON.parse(
+      new TextDecoder('utf-8').decode(documentContentsFile),
+    );
 
     return documentContentsData;
   } catch (e) {
