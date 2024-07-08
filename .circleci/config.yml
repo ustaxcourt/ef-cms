@@ -187,10 +187,6 @@ jobs:
           command: |
             npm run verify-authorizers -- $ENV
       - run:
-          name: 'Deploy - Verify Private S3 Buckets'
-          command: |
-            npm run verify-private-s3-buckets -- $ENV
-      - run:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV

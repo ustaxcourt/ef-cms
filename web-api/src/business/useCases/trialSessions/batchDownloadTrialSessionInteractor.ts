@@ -7,6 +7,7 @@ import {
   formatDateString,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { NotFoundError } from '../../../errors/errors';
+import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -16,18 +17,37 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 
-/**
- * batchDownloadTrialSessionInteractorHelper
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session
- * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
- */
+export const batchDownloadTrialSessionInteractor = async (
+  applicationContext: ServerApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
+): Promise<void> => {
+  try {
+    await batchDownloadTrialSessionInteractorHelper(applicationContext, {
+      trialSessionId,
+    });
+  } catch (error: any) {
+    const { userId } = applicationContext.getCurrentUser();
+
+    const erMsg = error.message || 'unknown error';
+    applicationContext.logger.error(
+      `Error when batch downloading trial session with id ${trialSessionId} - ${erMsg}`,
+      { error },
+    );
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+      userId,
+    });
+  }
+};
+
 const batchDownloadTrialSessionInteractorHelper = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
-) => {
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
@@ -52,20 +72,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
       trialSessionId,
     });
 
-  let s3Ids: string[] = [];
-  let fileNames: string[] = [];
-  let extraFiles = [];
-  let extraFileNames: string[] = [];
-
-  const trialDate = formatDateString(
-    trialSessionDetails.startDate,
-    FORMATS.FILENAME_DATE,
-  );
-  const { trialLocation } = trialSessionDetails;
-  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
-    .replace(/\s/g, '_')
-    .replace(/,/g, '');
-
   const batchableSessionCases = allSessionCases
     .filter(
       caseToFilter => !isClosed(caseToFilter) && !caseToFilter.removedFromTrial,
@@ -81,6 +87,12 @@ const batchDownloadTrialSessionInteractorHelper = async (
       };
     });
 
+  const documentsToZip: {
+    key: string;
+    filePathInZip: string;
+    useTempBucket: boolean;
+  }[] = [];
+
   for (const caseToBatch of batchableSessionCases) {
     const docketEntriesWithFileAttached = caseToBatch.docketEntries.filter(
       d => d.isOnDocketRecord && d.isFileAttached,
@@ -88,16 +100,19 @@ const batchDownloadTrialSessionInteractorHelper = async (
 
     for (const docketEntry of docketEntriesWithFileAttached) {
       if (!docketEntry.docketEntryId) continue;
+
       const filename = generateValidDocketEntryFilename(docketEntry);
       const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
-      s3Ids.push(docketEntry.docketEntryId);
-      fileNames.push(pdfTitle);
+      documentsToZip.push({
+        filePathInZip: pdfTitle,
+        key: docketEntry.docketEntryId,
+        useTempBucket: false,
+      });
     }
   }
 
   let numberOfDocketRecordsGenerated = 0;
   const numberOfDocketRecordsToGenerate = batchableSessionCases.length;
-  const numberOfFilesToBatch = numberOfDocketRecordsToGenerate + s3Ids.length;
 
   const onDocketRecordCreation = async ({
     docketNumber,
@@ -111,10 +126,8 @@ const batchDownloadTrialSessionInteractorHelper = async (
       applicationContext,
       message: {
         action: 'batch_download_docket_generated',
-        docketNumber,
-        numberOfDocketRecordsGenerated,
-        numberOfDocketRecordsToGenerate,
-        numberOfFilesToBatch,
+        filesCompleted: numberOfDocketRecordsGenerated,
+        totalFiles: numberOfDocketRecordsToGenerate,
       },
       userId: user.userId,
     });
@@ -122,7 +135,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
 
   await onDocketRecordCreation({ docketNumber: undefined });
 
-  const generateDocumentAndDocketRecordForCase = async sessionCase => {
+  for (const sessionCase of batchableSessionCases) {
     const result = await applicationContext
       .getUseCases()
       .generateDocketRecordPdfInteractor(applicationContext, {
@@ -130,85 +143,54 @@ const batchDownloadTrialSessionInteractorHelper = async (
         includePartyDetail: true,
       });
 
-    const doc = await applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
+    await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
+
+    documentsToZip.push({
+      filePathInZip: `${sessionCase.caseFolder}/0_Docket Record.pdf`,
       key: result.fileId,
       useTempBucket: true,
     });
-
-    await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
-
-    extraFiles.push(doc);
-
-    extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
-  };
-
-  for (const sessionCase of batchableSessionCases) {
-    await generateDocumentAndDocketRecordForCase(sessionCase);
   }
 
-  const onEntry = async entryData => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'batch_download_entry',
-        ...entryData,
-        numberOfDocketRecordsToGenerate,
-        numberOfFilesToBatch,
-      },
-      userId: user.userId,
-    });
-  };
-
-  const onError = async error => {
-    applicationContext.logger.error('Archive Error', { error });
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId: user.userId,
-    });
-  };
-
-  const onProgress = async progressData => {
+  const onProgress = async (progressData: ProgressData): Promise<void> => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_progress',
-        ...progressData,
-        numberOfDocketRecordsToGenerate,
-        numberOfFilesToBatch,
+        filesCompleted: progressData.filesCompleted,
+        totalFiles: progressData.totalFiles,
       },
       userId: user.userId,
     });
   };
 
-  const onUploadStart = async () => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'batch_download_upload_start',
-        numberOfDocketRecordsToGenerate,
-        numberOfFilesToBatch,
-      },
-      userId: user.userId,
-    });
-  };
-
-  await applicationContext.getPersistenceGateway().zipDocuments({
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
-    extraFileNames,
-    extraFiles,
-    fileNames,
-    onEntry,
-    onError,
-    onProgress,
-    onUploadStart,
-    s3Ids,
-    zipName,
+    message: {
+      action: 'batch_download_progress',
+      filesCompleted: 0,
+      totalFiles: documentsToZip.length,
+    },
+    userId: user.userId,
   });
+
+  const trialDate = formatDateString(
+    trialSessionDetails.startDate,
+    FORMATS.FILENAME_DATE,
+  );
+  const zipName = sanitize(
+    `${trialDate}-${trialSessionDetails.trialLocation}.zip`,
+  )
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
+
+  await applicationContext
+    .getPersistenceGateway()
+    .zipDocuments(applicationContext, {
+      documents: documentsToZip,
+      onProgress,
+      outputZipName: zipName,
+    });
 
   const { url } = await applicationContext
     .getPersistenceGateway()
@@ -232,7 +214,11 @@ export const generateValidDocketEntryFilename = ({
   documentTitle,
   filingDate,
   index,
-}) => {
+}: {
+  documentTitle: string;
+  filingDate: string;
+  index: string;
+}): string => {
   const MAX_OVERALL_FILE_LENGTH = 64;
   const EXTENSION = '.pdf';
   const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;
@@ -244,38 +230,4 @@ export const generateValidDocketEntryFilename = ({
     fileName = fileName.substring(0, VALID_FILE_NAME_MAX_LENGTH);
   }
   return `${fileName}${EXTENSION}`;
-};
-
-/**
- * batchDownloadTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session
- */
-export const batchDownloadTrialSessionInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { trialSessionId }: { trialSessionId: string },
-) => {
-  try {
-    await batchDownloadTrialSessionInteractorHelper(applicationContext, {
-      trialSessionId,
-    });
-  } catch (error) {
-    const { userId } = applicationContext.getCurrentUser();
-
-    const erMsg = error.message || 'unknown error';
-    applicationContext.logger.error(
-      `Error when batch downloading trial session with id ${trialSessionId} - ${erMsg}`,
-      { error },
-    );
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId,
-    });
-  }
 };
