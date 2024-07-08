@@ -8,7 +8,7 @@ import {
   determineEntitiesToLock,
   handleLockError,
   serveExternallyFiledDocumentInteractor,
-} from './serveExternallyFiledDocumentInteractor';
+} from '../../../../../web-api/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 

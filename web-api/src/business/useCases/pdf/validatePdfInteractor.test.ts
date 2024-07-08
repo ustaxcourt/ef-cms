@@ -1,9 +1,6 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { removePdf, validatePdfInteractor } from './validatePdfInteractor';
-import {
-  testInvalidPdfDoc,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
+import { testInvalidPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('validatePdfInteractor', () => {
   const getPagesMock = jest.fn();
@@ -16,12 +13,6 @@ describe('validatePdfInteractor', () => {
           isEncrypted: false,
         }),
       },
-    });
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
     });
 
     applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
@@ -67,11 +58,9 @@ describe('validatePdfInteractor', () => {
   });
 
   it('throws an error and deletes the document from S3 when the PDF is actually a png', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testInvalidPdfDoc,
-      }),
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValueOnce(testInvalidPdfDoc);
 
     await expect(
       validatePdfInteractor(applicationContext, {

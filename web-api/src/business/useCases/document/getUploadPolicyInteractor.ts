@@ -1,20 +1,16 @@
+import { PresignedPost } from '@aws-sdk/s3-presigned-post';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../entities/User';
+import { User } from '../../../../../shared/src/business/entities/User';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @returns {Array<string>} the filing type options based on user role
- */
 export const getUploadPolicyInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { key }: { key: string },
-) => {
+): Promise<PresignedPost> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
