@@ -1,38 +1,71 @@
+import {
+  AddressType,
+  OnBlurHandler,
+  OnChangeHandler,
+} from '@web-client/views/StartCase/AddressUpdated';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  bind: string;
-  onBlur: string;
+type InternationAddressTypes = {
+  addressInfo: AddressType;
+  handleBlur: OnBlurHandler;
+  handleChange: OnChangeHandler;
+  registerRef?: Function;
   type: string;
-  onChange: string;
-  registerRef: (param: string) => void;
 };
 
-export const InternationalAddress = connect(
-  {
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueSequence: sequences[props.onChange],
-    validationErrors: state.validationErrors,
-  },
+const internationalAddressDeps = {
+  validationErrors: state.validationErrors,
+};
+
+export const InternationalAddressUpdated = connect<
+  InternationAddressTypes,
+  typeof internationalAddressDeps
+>(
+  internationalAddressDeps,
   function InternationalAddress({
-    data,
-    onBlurSequence,
+    addressInfo,
+    handleBlur,
+    handleChange,
     registerRef,
     type,
-    updateFormValueSequence,
     validationErrors,
   }) {
     return (
       <>
+        <FormGroup
+          errorMessageId="country-error-message"
+          errorText={validationErrors?.[type]?.country}
+        >
+          <label className="usa-label" htmlFor={`${type}.country`}>
+            Country name
+          </label>
+          <input
+            autoCapitalize="none"
+            className={`${type}-country usa-input`}
+            data-testid="international-country-input"
+            id={`${type}.country`}
+            name={`${type}.country`}
+            ref={registerRef && registerRef(`${type}.country`)}
+            type="text"
+            value={addressInfo.country || ''}
+            onBlur={() => {
+              if (handleBlur) {
+                handleBlur({
+                  validationKey: [type, 'country'],
+                });
+              }
+            }}
+            onChange={e => {
+              handleChange({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+        </FormGroup>
         <FormGroup
           errorMessageId="address-1-error-message"
           errorText={validationErrors?.[type]?.address1}
@@ -48,14 +81,14 @@ export const InternationalAddress = connect(
             name={`${type}.address1`}
             ref={registerRef && registerRef(`${type}.address1`)}
             type="text"
-            value={data[type].address1 || ''}
+            value={addressInfo.address1 || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'address1'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -73,14 +106,14 @@ export const InternationalAddress = connect(
             id={`${type}.address2`}
             name={`${type}.address2`}
             type="text"
-            value={data[type].address2 || ''}
+            value={addressInfo.address2 || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'address2'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -98,14 +131,14 @@ export const InternationalAddress = connect(
             id={`${type}.address3`}
             name={`${type}.address3`}
             type="text"
-            value={data[type].address3 || ''}
+            value={addressInfo.address3 || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'address3'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -127,14 +160,14 @@ export const InternationalAddress = connect(
             name={`${type}.state`}
             ref={registerRef && registerRef(`${type}.state`)}
             type="text"
-            value={data[type].state || ''}
+            value={addressInfo.state || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'state'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -156,14 +189,14 @@ export const InternationalAddress = connect(
             name={`${type}.city`}
             ref={registerRef && registerRef(`${type}.city`)}
             type="text"
-            value={data[type].city || ''}
+            value={addressInfo.city || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'city'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -185,14 +218,14 @@ export const InternationalAddress = connect(
             name={`${type}.postalCode`}
             ref={registerRef && registerRef(`${type}.postalCode`)}
             type="text"
-            value={data[type].postalCode || ''}
+            value={addressInfo.postalCode || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'postalCode'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -203,5 +236,3 @@ export const InternationalAddress = connect(
     );
   },
 );
-
-InternationalAddress.displayName = 'InternationalAddress';

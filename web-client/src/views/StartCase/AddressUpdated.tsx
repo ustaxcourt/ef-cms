@@ -2,29 +2,61 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const Address = connect(
-  {
-    data: state[props.bind],
-    onBlurSequence: sequences[props.onBlur],
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
-    updateFormValueSequence: sequences[props.onChange],
-    validationErrors: state.validationErrors,
-  },
+// TODO: update name;
+export interface AddressType {
+  country?: string;
+  name?: string;
+  secondaryName?: string;
+  inCareOf?: string;
+  title?: string;
+  address1?: string;
+  address2?: string;
+  address3?: string;
+  countryType?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  email?: string;
+  phone?: string;
+  hasConsentedToEService?: string;
+}
+
+export type OnBlurHandler = (params: { validationKey: string[] }) => void;
+export type OnChangeHandler = (params: { key: string; value: any }) => void;
+export type OnChangeCountryTypeHandler = (params: {
+  key: string;
+  value: any;
+  type: string;
+  index?: number;
+}) => void;
+
+type AddressUpdatedType = {
+  addressInfo: AddressType;
+  handleBlur: OnBlurHandler;
+  handleChange: OnChangeHandler;
+  registerRef?: Function;
+  type: string;
+};
+
+const addressUpdatedDeps = {
+  validationErrors: state.validationErrors,
+};
+
+export const AddressUpdated = connect<
+  AddressUpdatedType,
+  typeof addressUpdatedDeps
+>(
+  addressUpdatedDeps,
   function Address({
-    data,
-    onBlurSequence,
+    addressInfo,
+    handleBlur,
+    handleChange,
     registerRef,
     type,
-    updateFormValueAndSecondaryContactInfoSequence,
-    updateFormValueSequence,
     validationErrors,
   }) {
     function MobileCityAndState() {
@@ -36,17 +68,17 @@ export const Address = connect(
             </label>
             <StateSelect
               useFullStateName
-              data={data}
+              data={addressInfo}
               handleBlur={() =>
-                onBlurSequence({
+                handleBlur({
                   validationKey: [type, 'state'],
                 })
               }
-              handleChange={updateFormValueSequence}
+              handleChange={handleChange}
               refProp={registerRef && registerRef(`${type}.state`)}
               type={type}
               onChangeValidationSequence={() =>
-                onBlurSequence({
+                handleBlur({
                   validationKey: [type, 'state'],
                 })
               }
@@ -68,14 +100,14 @@ export const Address = connect(
               id={`${type}.postalCode`}
               name={`${type}.postalCode`}
               type="text"
-              value={data[type].postalCode || ''}
+              value={addressInfo.postalCode || ''}
               onBlur={() => {
-                onBlurSequence({
+                handleBlur({
                   validationKey: [type, 'postalCode'],
                 });
               }}
               onChange={e => {
-                updateFormValueSequence({
+                handleChange({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -107,17 +139,17 @@ export const Address = connect(
                 <StateSelect
                   useFullStateName
                   className="max-width-180"
-                  data={data}
+                  data={addressInfo}
                   handleBlur={() =>
-                    onBlurSequence({
+                    handleBlur({
                       validationKey: [type, 'state'],
                     })
                   }
-                  handleChange={updateFormValueSequence}
+                  handleChange={handleChange}
                   refProp={registerRef && registerRef(`${type}.state`)}
                   type={type}
                   onChangeValidationSequence={() =>
-                    onBlurSequence({
+                    handleBlur({
                       validationKey: [type, 'state'],
                     })
                   }
@@ -150,14 +182,14 @@ export const Address = connect(
                   name={`${type}.postalCode`}
                   ref={registerRef && registerRef(`${type}.postalCode`)}
                   type="text"
-                  value={data[type].postalCode || ''}
+                  value={addressInfo.postalCode || ''}
                   onBlur={() => {
-                    onBlurSequence({
+                    handleBlur({
                       validationKey: [type, 'postalCode'],
                     });
                   }}
                   onChange={e => {
-                    updateFormValueSequence({
+                    handleChange({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -196,14 +228,14 @@ export const Address = connect(
             name={`${type}.address1`}
             ref={registerRef && registerRef(`${type}.address1`)}
             type="text"
-            value={data[type].address1 || ''}
+            value={addressInfo.address1 || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'address1'],
               });
             }}
             onChange={e => {
-              updateFormValueAndSecondaryContactInfoSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -220,14 +252,14 @@ export const Address = connect(
             id={`${type}.address2`}
             name={`${type}.address2`}
             type="text"
-            value={data[type].address2 || ''}
+            value={addressInfo.address2 || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'address2'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -244,14 +276,14 @@ export const Address = connect(
             id={`${type}.address3`}
             name={`${type}.address3`}
             type="text"
-            value={data[type].address3 || ''}
+            value={addressInfo.address3 || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'address3'],
               });
             }}
             onChange={e => {
-              updateFormValueSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -273,14 +305,14 @@ export const Address = connect(
             name={`${type}.city`}
             ref={registerRef && registerRef(`${type}.city`)}
             type="text"
-            value={data[type].city || ''}
+            value={addressInfo.city || ''}
             onBlur={() => {
-              onBlurSequence({
+              handleBlur({
                 validationKey: [type, 'city'],
               });
             }}
             onChange={e => {
-              updateFormValueAndSecondaryContactInfoSequence({
+              handleChange({
                 key: e.target.name,
                 value: e.target.value,
               });
