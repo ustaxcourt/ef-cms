@@ -3,15 +3,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
-/**
- * serveDocumentAndGetPaperServicePdf
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {array} providers.caseEntities the list of case entities containing the docket entry to serve
- * @param {string} providers.docketEntryId the id of the docket entry to serve
- * @returns {Promise<*>} the updated case entity
- */
 export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntities,
@@ -24,7 +15,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   docketEntryId: string;
   stampedPdf?: any;
   electronicParties?: { email: string; name: string }[];
-}) => {
+}): Promise<{ pdfUrl: string } | undefined> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   let originalPdfDoc;
@@ -44,18 +35,15 @@ export const serveDocumentAndGetPaperServicePdf = async ({
 
     if (servedParties.paper.length > 0) {
       if (!originalPdfDoc) {
-        let pdfData;
         if (stampedPdf) {
           originalPdfDoc = await PDFDocument.load(stampedPdf);
         } else {
-          pdfData = await applicationContext
-            .getStorageClient()
-            .getObject({
-              Bucket: applicationContext.environment.documentsBucketName,
-              Key: docketEntryId,
-            })
-            .promise();
-          pdfData = pdfData.Body;
+          const pdfData = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              key: docketEntryId,
+            });
           originalPdfDoc = await PDFDocument.load(pdfData);
         }
       }

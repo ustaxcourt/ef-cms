@@ -56,28 +56,10 @@ export const generateNoticeOfDocketChangePdf = async ({
 
   const docketEntryId = applicationContext.getUniqueId();
 
-  await new Promise<void>((resolve, reject) => {
-    const documentsBucket = applicationContext.environment.documentsBucketName;
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
-      Body: noticePdf,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: docketEntryId,
-    };
-
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error(
-          'An error occurred while attempting to upload to S3',
-          err,
-        );
-        reject(err);
-      }
-
-      resolve();
-    });
+  await applicationContext.getPersistenceGateway().uploadDocument({
+    applicationContext,
+    pdfData: noticePdf,
+    pdfName: docketEntryId,
   });
 
   return docketEntryId;

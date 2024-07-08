@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { addEditDocketEntryWorksheetModalHelper as addEditDocketEntryWorksheetModalHelperComputed } from './addEditDocketEntryWorksheetModalHelper';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
@@ -38,6 +38,7 @@ describe('addEditDocketEntryWorksheetModalHelper', () => {
         },
       },
     });
+
     expect(title).toBe(
       `Docket ${MOCK_CASE.docketNumber}: ${applicationContext.getCaseTitle(
         MOCK_CASE.caseCaption,

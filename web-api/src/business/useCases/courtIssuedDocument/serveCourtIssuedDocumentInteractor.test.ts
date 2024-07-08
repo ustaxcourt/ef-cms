@@ -8,7 +8,6 @@ import {
   judgeUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
@@ -24,12 +23,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
 
     applicationContext
       .getUseCaseHelpers()
