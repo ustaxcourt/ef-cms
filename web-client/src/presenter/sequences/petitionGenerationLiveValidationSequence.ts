@@ -10,6 +10,11 @@ import { validateUploadPetitionStep2Action } from '@web-client/presenter/actions
 import { validateUploadPetitionStep3Action } from '@web-client/presenter/actions/validateUploadPetitionStep3Action';
 import { validateUploadPetitionStep4Action } from '@web-client/presenter/actions/validateUploadPetitionStep4Action';
 
+type ValidationKey = string | { property: string; value: number };
+interface Params {
+  validationKey: ValidationKey[];
+}
+
 const handleValidationErrorsRoute = {
   error: [setSingleValidationErrorAction],
   success: [],
@@ -40,4 +45,4 @@ export const petitionGenerationLiveValidationSequence = [
       handleValidationErrorsRoute,
     ],
   },
-] as unknown as (params: { validationKey: string[] }) => void;
+] as unknown as (params: Params) => void;
