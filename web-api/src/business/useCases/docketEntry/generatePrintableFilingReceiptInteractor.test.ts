@@ -1,8 +1,11 @@
-import { MOCK_CASE, MOCK_CONSOLIDATED_CASE_SUMMARY } from '../../test/mockCase';
+import {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_CASE_SUMMARY,
+} from '@shared/test/mockCase';
 import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
-import { getContactPrimary } from '../entities/cases/Case';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('generatePrintableFilingReceiptInteractor', () => {

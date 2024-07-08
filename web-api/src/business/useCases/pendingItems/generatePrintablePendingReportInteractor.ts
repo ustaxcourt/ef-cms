@@ -53,25 +53,11 @@ export const generatePrintablePendingReportInteractor = async (
 
   const key = `pending-report-${applicationContext.getUniqueId()}.pdf`;
 
-  await new Promise((resolve, reject) => {
-    const documentsBucket =
-      applicationContext.environment.tempDocumentsBucketName;
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
-      Body: pdf,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: key,
-    };
-
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error('error uploading to s3', err);
-        reject(err);
-      }
-      resolve(undefined);
-    });
+  await applicationContext.getPersistenceGateway().uploadDocument({
+    applicationContext,
+    pdfData: pdf,
+    pdfName: key,
+    useTempBucket: true,
   });
 
   const { url } = await applicationContext

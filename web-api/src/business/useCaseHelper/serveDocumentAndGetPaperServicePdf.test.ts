@@ -10,7 +10,6 @@ import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entitie
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
-import { testPdfDoc } from '../../../../shared/src/business/test/getFakeFile';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;
@@ -20,12 +19,6 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
   beforeEach(() => {
     caseEntity = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
 
     applicationContext
       .getPersistenceGateway()
@@ -61,7 +54,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     });
 
     expect(
-      applicationContext.getStorageClient().getObject,
+      applicationContext.getPersistenceGateway().getDocument,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
@@ -96,7 +89,9 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       docketEntryId: mockDocketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toHaveBeenCalled();
@@ -142,7 +137,9 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       docketEntryId: caseEntity.docketEntries[0].docketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toHaveBeenCalledTimes(2);
@@ -194,7 +191,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getStorageClient().getObject,
+      applicationContext.getPersistenceGateway().getDocument,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,

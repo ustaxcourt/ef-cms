@@ -66,7 +66,9 @@ describe('batchDownloadTrialSessionInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .generateDocketRecordPdfInteractor.mockResolvedValue({});
+      .generateDocketRecordPdfInteractor.mockResolvedValue({
+        fileId: '69db2094-b50f-4fe5-9891-1c0b463792f3',
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -88,6 +90,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       expect(filename.length).toBe(64);
       expect(filename).toBe(expectedName);
     });
+
     it('generates a filename without any truncation when overall length is 64 characters or less', () => {
       const docketEntry = {
         documentTitle: 'Harrell met the downcrashing blow',
@@ -114,20 +117,27 @@ describe('batchDownloadTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      extraFileNames: expect.anything(),
-      extraFiles: expect.anything(),
-      fileNames: expect.anything(),
-      onEntry: expect.anything(),
-      onError: expect.anything(),
-      onProgress: expect.anything(),
-      onUploadStart: expect.anything(),
-      s3Ids: [
-        '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-        '25ae8e71-9dc4-40c6-bece-89acb974a82e',
+    ).toHaveBeenCalledWith(expect.anything(), {
+      documents: [
+        {
+          filePathInZip: '101-18, Test Petitioner/2018-03-01_0001_Petition.pdf',
+          key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+          useTempBucket: false,
+        },
+        {
+          filePathInZip:
+            '101-18, Test Petitioner/2018-02-28_0004_fourth record.pdf',
+          key: '25ae8e71-9dc4-40c6-bece-89acb974a82e',
+          useTempBucket: false,
+        },
+        {
+          filePathInZip: '101-18, Test Petitioner/0_Docket Record.pdf',
+          key: '69db2094-b50f-4fe5-9891-1c0b463792f3',
+          useTempBucket: true,
+        },
       ],
-      zipName: 'September_26_2019-Birmingham.zip',
+      onProgress: expect.anything(),
+      outputZipName: 'September_26_2019-Birmingham.zip',
     });
   });
 
@@ -147,7 +157,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
     const errorCall =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0];
-
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
     ).not.toHaveBeenCalled();
@@ -286,17 +295,10 @@ describe('batchDownloadTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      extraFileNames: [],
-      extraFiles: [],
-      fileNames: [],
-      onEntry: expect.anything(),
-      onError: expect.anything(),
+    ).toHaveBeenCalledWith(expect.anything(), {
+      documents: [],
       onProgress: expect.anything(),
-      onUploadStart: expect.anything(),
-      s3Ids: [],
-      zipName: 'September_26_2019-Birmingham.zip',
+      outputZipName: 'September_26_2019-Birmingham.zip',
     });
   });
 
@@ -327,17 +329,10 @@ describe('batchDownloadTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      extraFileNames: [],
-      extraFiles: [],
-      fileNames: [],
-      onEntry: expect.anything(),
-      onError: expect.anything(),
+    ).toHaveBeenCalledWith(expect.anything(), {
+      documents: [],
       onProgress: expect.anything(),
-      onUploadStart: expect.anything(),
-      s3Ids: [],
-      zipName: 'September_26_2019-Birmingham.zip',
+      outputZipName: 'September_26_2019-Birmingham.zip',
     });
   });
 });

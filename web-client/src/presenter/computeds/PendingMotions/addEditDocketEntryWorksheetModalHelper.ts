@@ -8,7 +8,7 @@ export const addEditDocketEntryWorksheetModalHelper = (
 ): { title: string } => {
   const { docketEntryId, docketNumber } = get(state.form);
 
-  const { docketEntries = [] } = get(state.pendingMotions);
+  const docketEntries = get(state.pendingMotions.docketEntries);
 
   const currentDocketEntry = docketEntries.find(
     aCase => aCase.docketEntryId === docketEntryId,

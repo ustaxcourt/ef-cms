@@ -1,16 +1,17 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 
 export const getDownloadPolicyUrlInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, key }: { docketNumber: string; key: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {

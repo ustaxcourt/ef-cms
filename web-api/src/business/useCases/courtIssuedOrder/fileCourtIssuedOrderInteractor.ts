@@ -11,21 +11,13 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the document metadata
- * @param {string} providers.primaryDocumentFileId the id of the primary document
- * @returns {Promise<*>} the updated case entity after the document is added
- */
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
   {
     documentMetadata,
     primaryDocumentFileId,
   }: { documentMetadata: any; primaryDocumentFileId: string },
-) => {
+): Promise<RawCase> => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
@@ -56,13 +48,9 @@ export const fileCourtIssuedOrder = async (
   }
 
   if (shouldScrapePDFContents) {
-    const { Body: pdfBuffer } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: primaryDocumentFileId,
-      })
-      .promise();
+    const pdfBuffer = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({ applicationContext, key: primaryDocumentFileId });
 
     const contents = await applicationContext
       .getUseCaseHelpers()

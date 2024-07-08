@@ -1,5 +1,6 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
+import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -16,171 +17,6 @@ export type DownloadDocketEntryRequestType = {
   printableDocketRecordFileId?: string;
 };
 
-const batchDownloadDocketEntriesHelper = async (
-  applicationContext: ServerApplicationContext,
-  {
-    clientConnectionId,
-    docketNumber,
-    documentsSelectedForDownload,
-    printableDocketRecordFileId,
-  }: DownloadDocketEntryRequestType,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (
-    !isAuthorized(
-      authorizedUser,
-      ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
-    )
-  ) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const caseToBatch = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  if (!caseToBatch) {
-    throw new NotFoundError(`Case: ${docketNumber} was not found.`);
-  }
-
-  const s3Ids: string[] = [];
-  const fileNames: string[] = [];
-  const extraFileNames: string[] = [];
-  const extraFiles: string[] = [];
-
-  const { caseCaption, isSealed: isCaseSealed } = caseToBatch;
-  const caseTitle = Case.getCaseTitle(caseCaption);
-  const caseFolder = `${docketNumber}, ${caseTitle}`;
-  const zipName = `${caseFolder}.zip`;
-
-  const caseEntity = new Case(caseToBatch, { authorizedUser });
-
-  const documentsToProcess = documentsSelectedForDownload.map(docketEntryId =>
-    caseEntity.getDocketEntryById({
-      docketEntryId,
-    }),
-  );
-
-  documentsToProcess.forEach(docInfo => {
-    const { docketEntryId, documentTitle, filingDate, index } = docInfo;
-    const filename = generateValidDocketEntryFilename({
-      documentTitle,
-      filingDate,
-      index,
-    });
-
-    const fileDirectory =
-      isCaseSealed || docInfo.isSealed ? `${caseFolder}/sealed` : caseFolder;
-
-    const pdfTitle = docInfo.isStricken ? `STRICKEN_${filename}` : filename;
-
-    s3Ids.push(docketEntryId);
-    fileNames.push(`${fileDirectory}/${pdfTitle}`);
-  });
-
-  if (printableDocketRecordFileId) {
-    const pdfTitle = `${caseFolder}/${'0_Docket_Record.pdf'}`;
-
-    const printableDocketRecordPdf: any = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        key: printableDocketRecordFileId,
-        useTempBucket: true,
-      });
-    extraFiles.push(printableDocketRecordPdf);
-    extraFileNames.push(pdfTitle);
-  }
-
-  const onEntry = async entryData => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_entry',
-        ...entryData,
-        numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch: s3Ids.length + extraFiles.length,
-      },
-      userId: authorizedUser.userId,
-    });
-  };
-
-  const onError = async error => {
-    applicationContext.logger.error('Archive Error', { error });
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId: authorizedUser.userId,
-    });
-  };
-
-  const onProgress = async progressData => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_progress',
-        ...progressData,
-        numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch: s3Ids.length + extraFiles.length,
-      },
-      userId: authorizedUser.userId,
-    });
-  };
-
-  const onUploadStart = async () => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_upload_start',
-        numberOfDocketRecordsToGenerate: 0,
-        numberOfFilesToBatch: s3Ids.length + extraFiles.length,
-      },
-      userId: authorizedUser.userId,
-    });
-  };
-
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    extraFileNames,
-    extraFiles,
-    fileNames,
-    onEntry,
-    onError,
-    onProgress,
-    onUploadStart,
-    s3Ids,
-    zipName,
-  });
-
-  const { url } = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      key: zipName,
-      useTempBucket: true,
-    });
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId,
-    message: {
-      action: 'batch_download_ready',
-      url,
-    },
-    userId: authorizedUser.userId,
-  });
-};
-
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
@@ -192,7 +28,7 @@ export const batchDownloadDocketEntriesInteractor = async (
       downloadDocketEntryRequestInfo,
       authorizedUser,
     );
-  } catch (error) {
+  } catch (error: any) {
     const { userId } = authorizedUser;
     const { clientConnectionId, docketNumber } = downloadDocketEntryRequestInfo;
 
@@ -211,4 +47,131 @@ export const batchDownloadDocketEntriesInteractor = async (
       userId,
     });
   }
+};
+
+const batchDownloadDocketEntriesHelper = async (
+  applicationContext: ServerApplicationContext,
+  {
+    clientConnectionId,
+    docketNumber,
+    documentsSelectedForDownload,
+    printableDocketRecordFileId,
+  }: DownloadDocketEntryRequestType,
+  authorizedUser: UnknownAuthUser,
+): Promise<void> => {
+  if (
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
+    )
+  ) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'batch_download_progress',
+      filesCompleted: 0,
+      totalFiles: documentsSelectedForDownload.length,
+    },
+    userId: authorizedUser.userId,
+  });
+
+  const caseToBatch = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  if (!caseToBatch) {
+    throw new NotFoundError(`Case: ${docketNumber} was not found.`);
+  }
+
+  const { caseCaption, isSealed: isCaseSealed } = caseToBatch;
+  const caseTitle = Case.getCaseTitle(caseCaption);
+  const caseFolder = `${docketNumber}, ${caseTitle}`;
+  const zipName = `${caseFolder}.zip`;
+  const documentsToZip: {
+    key: string;
+    filePathInZip: string;
+    useTempBucket: boolean;
+  }[] = [];
+
+  const caseEntity = new Case(caseToBatch, { applicationContext });
+
+  documentsSelectedForDownload.forEach(docketEntryId => {
+    const docInfo = caseEntity.getDocketEntryById({
+      docketEntryId,
+    });
+
+    const { documentTitle, filingDate, index } = docInfo;
+    const filename = generateValidDocketEntryFilename({
+      documentTitle,
+      filingDate,
+      index,
+    });
+
+    const fileDirectory =
+      isCaseSealed || docInfo.isSealed ? `${caseFolder}/sealed` : caseFolder;
+
+    const pdfTitle = docInfo.isStricken ? `STRICKEN_${filename}` : filename;
+
+    documentsToZip.push({
+      filePathInZip: `${fileDirectory}/${pdfTitle}`,
+      key: docketEntryId,
+      useTempBucket: false,
+    });
+  });
+
+  if (printableDocketRecordFileId) {
+    const pdfTitle = `${caseFolder}/${'0_Docket_Record.pdf'}`;
+
+    documentsToZip.push({
+      filePathInZip: pdfTitle,
+      key: printableDocketRecordFileId,
+      useTempBucket: true,
+    });
+  }
+
+  const onProgress = async (progressData: ProgressData) => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_progress',
+        filesCompleted: progressData.filesCompleted,
+        totalFiles: progressData.totalFiles,
+      },
+      userId: authorizedUser.userId,
+    });
+  };
+
+  await applicationContext
+    .getPersistenceGateway()
+    .zipDocuments(applicationContext, {
+      documents: documentsToZip,
+      onProgress,
+      outputZipName: zipName,
+    });
+
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: zipName,
+      useTempBucket: true,
+    });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'batch_download_ready',
+      url,
+    },
+    userId: authorizedUser.userId,
+  });
 };

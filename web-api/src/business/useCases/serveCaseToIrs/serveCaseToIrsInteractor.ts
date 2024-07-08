@@ -309,14 +309,14 @@ const generateNoticeOfReceipt = async ({
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
     pdfName: caseConfirmationPdfName,
   });
 
   const notrDocketEntryId = applicationContext.getUniqueId();
-  await applicationContext.getUtilities().uploadToS3({
+  await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
     pdfName: notrDocketEntryId,
@@ -466,20 +466,13 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
   );
 };
 
-/**
- * serveCaseToIrs
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {Buffer} paper service pdf if the case is a paper case
- */
 export const serveCaseToIrs = async (
   applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     docketNumber,
   }: { clientConnectionId: string; docketNumber: string },
-) => {
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
   try {
     if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
