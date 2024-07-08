@@ -1,9 +1,12 @@
-import { MOCK_CASE, MOCK_CONSOLIDATED_CASE_SUMMARY } from '../../test/mockCase';
-import { MOCK_USERS } from '../../test/mockUsers';
+import {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_CASE_SUMMARY,
+} from '../../../../../shared/src/test/mockCase';
+import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
-import { getContactPrimary } from '../entities/cases/Case';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
