@@ -32,7 +32,7 @@ only 140 or 160 characters long. Which is it?
 
 - when refreshing the page that has the StatusReportOrderResponse component, some issues occur (should we address?)
 
-- Test same process of creating order response from messages (group / solo)
+- Add unit tests for unsetParentMessageIdAction, shouldUnsetParentMessageIdAction (solo / group)
 
 - Run through all tests case + DoD checklist (group / solo)
 
