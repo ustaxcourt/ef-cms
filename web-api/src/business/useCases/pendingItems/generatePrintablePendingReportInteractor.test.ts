@@ -75,10 +75,6 @@ describe('generatePrintablePendingReportInteractor', () => {
   ];
 
   beforeAll(() => {
-    applicationContext.getStorageClient.mockReturnValue({
-      upload: jest.fn((params, callback) => callback()),
-    });
-
     applicationContext
       .getPersistenceGateway()
       .fetchPendingItems.mockResolvedValue({
@@ -288,8 +284,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       {} as any,
     );
 
-    expect(applicationContext.getStorageClient).toHaveBeenCalled();
-    expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should return the document url', async () => {
@@ -302,19 +299,5 @@ describe('generatePrintablePendingReportInteractor', () => {
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
     ).toHaveBeenCalled();
     expect(results).toEqual('https://example.com');
-  });
-
-  it('fails and logs if the s3 upload fails', async () => {
-    applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback('error'),
-    });
-
-    await expect(
-      generatePrintablePendingReportInteractor(applicationContext, {} as any),
-    ).rejects.toEqual('error');
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'error uploading to s3',
-    );
   });
 });

@@ -4,13 +4,11 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { appendAmendedPetitionFormInteractor } from './appendAmendedPetitionFormInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-
-const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
+import { testPdfDoc } from '@shared/business/test/getFakeFile';
 
 describe('appendAmendedPetitionFormInteractor', () => {
-  const fakeFile1 = 'docket tre';
-  const fakeFile2 = 'snoop docket';
   const returnedCombinedPdf = 'ever';
+  const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -19,18 +17,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
     });
 
     applicationContext
-      .getPersistenceGateway()
-      .getDocument.mockReturnValue(fakeFile1);
-
-    applicationContext
       .getUtilities()
       .combineTwoPdfs.mockReturnValue(returnedCombinedPdf);
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: fakeFile2,
-      }),
-    });
   });
 
   it('should throw an error when the user is not authorized to modify docket entries', async () => {
@@ -42,18 +30,6 @@ describe('appendAmendedPetitionFormInteractor', () => {
     await expect(
       appendAmendedPetitionFormInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
-  });
-
-  it('should throw an error when there is no file in s3 that corresponds to the docketEntryId', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocument.mockRejectedValueOnce('Not Found');
-
-    await expect(
-      appendAmendedPetitionFormInteractor(applicationContext, {
-        docketEntryId: mockDocketEntryId,
-      }),
-    ).rejects.toThrow(`Docket entry ${mockDocketEntryId} was not found`);
   });
 
   it('should use the provided docketEntryId to retrieve the file from s3', async () => {
@@ -73,7 +49,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
     });
 
     expect(
-      applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[1][0]
+        .key,
     ).toEqual(AMENDED_PETITION_FORM_NAME);
   });
 
@@ -85,8 +62,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
     expect(
       applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0],
     ).toMatchObject({
-      firstPdf: fakeFile1,
-      secondPdf: fakeFile2,
+      firstPdf: testPdfDoc,
+      secondPdf: testPdfDoc,
     });
   });
 
@@ -96,7 +73,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
     });
 
     expect(
-      applicationContext.getUtilities().uploadToS3.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().uploadDocument.mock
+        .calls[0][0],
     ).toMatchObject({
       pdfData: Buffer.from(returnedCombinedPdf),
       pdfName: mockDocketEntryId,

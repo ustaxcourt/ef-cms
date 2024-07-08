@@ -1,23 +1,17 @@
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { environment } from '@web-api/environment';
 import { getDownloadPolicyUrl } from './getDownloadPolicyUrl';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+jest.mock('@aws-sdk/s3-request-presigner', () => ({
+  getSignedUrl: jest.fn().mockResolvedValue('http://localhost'),
+}));
 
 describe('getDownloadPolicyUrl', () => {
-  const getSignedUrlErrorMock = jest.fn((method, options, cb) =>
-    cb('error', 'http://localhost'),
-  );
-  const getSignedUrlMock = jest.fn((method, options, cb) =>
-    cb(null, 'http://localhost'),
-  );
   const defaultBucketName = 'aBucket';
   const tempBucketName = 'aTempBucket';
 
-  beforeAll(() => {
-    applicationContext.getStorageClient.mockReturnValue({
-      getSignedUrl: getSignedUrlMock,
-    });
-    applicationContext.environment.documentsBucketName = defaultBucketName;
-    applicationContext.environment.tempDocumentsBucketName = tempBucketName;
-  });
+  environment.documentsBucketName = defaultBucketName;
+  environment.tempDocumentsBucketName = tempBucketName;
 
   it('returns a signed URL from the storage client (s3)', async () => {
     const result = await getDownloadPolicyUrl({
@@ -27,7 +21,9 @@ describe('getDownloadPolicyUrl', () => {
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
-    expect(getSignedUrlMock.mock.calls[0][1].Bucket).toEqual(defaultBucketName);
+    expect((getSignedUrl as jest.Mock).mock.calls[0][1].input.Bucket).toEqual(
+      defaultBucketName,
+    );
   });
 
   it('returns a signed URL from the storage client using the temp bucket when the useTempBucket param is true', async () => {
@@ -39,7 +35,9 @@ describe('getDownloadPolicyUrl', () => {
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
-    expect(getSignedUrlMock.mock.calls[0][1].Bucket).toEqual(tempBucketName);
+    expect((getSignedUrl as jest.Mock).mock.calls[0][1].input.Bucket).toEqual(
+      tempBucketName,
+    );
   });
 
   it('should return a URL intended for viewing inline in a web browser when filename has NOT been provided', async () => {
@@ -51,20 +49,5 @@ describe('getDownloadPolicyUrl', () => {
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
-  });
-
-  it('rejects if an error is thrown', async () => {
-    applicationContext.getStorageClient.mockReturnValue({
-      getSignedUrl: getSignedUrlErrorMock,
-    });
-
-    await expect(
-      getDownloadPolicyUrl({
-        applicationContext,
-        filename: 'test.pdf',
-        key: '123',
-        useTempBucket: false,
-      }),
-    ).rejects.toThrow('error');
   });
 });
