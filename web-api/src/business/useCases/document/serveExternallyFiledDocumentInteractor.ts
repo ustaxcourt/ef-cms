@@ -154,13 +154,15 @@ export const serveExternallyFiledDocument = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
+    await applicationContext.getUseCases().addCoversheetInteractor(
+      applicationContext,
+      {
         caseEntity: updatedSubjectCaseEntity,
         docketEntryId: updatedSubjectDocketEntry.docketEntryId,
         docketNumber: updatedSubjectCaseEntity!.docketNumber,
-      });
+      },
+      authorizedUser,
+    );
 
     paperServiceResult = await applicationContext
       .getUseCaseHelpers()

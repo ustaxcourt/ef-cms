@@ -29,9 +29,9 @@ export const updateDocketEntryMeta = async (
     docketNumber,
   }: { docketEntryMeta: any; docketNumber: string },
 ) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
@@ -46,7 +46,7 @@ export const updateDocketEntryMeta = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  let caseEntity = new Case(caseToUpdate, { authorizedUser: user });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
@@ -147,7 +147,7 @@ export const updateDocketEntryMeta = async (
       ...originalDocketEntry,
       ...editableFields,
     },
-    { authorizedUser: user, petitioners: caseEntity.petitioners },
+    { authorizedUser, petitioners: caseEntity.petitioners },
   ).validate();
 
   caseEntity.updateDocketEntry(docketEntryEntity);
@@ -166,11 +166,15 @@ export const updateDocketEntryMeta = async (
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId: originalDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        filingDateUpdated,
-      });
+      .addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: originalDocketEntry.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          filingDateUpdated,
+        },
+        authorizedUser,
+      );
 
     caseEntity.updateDocketEntry(updatedDocketEntry);
   } else if (shouldRemoveExistingCoverSheet) {
@@ -192,7 +196,7 @@ export const updateDocketEntryMeta = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(result, { authorizedUser: user }).validate().toRawObject();
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({

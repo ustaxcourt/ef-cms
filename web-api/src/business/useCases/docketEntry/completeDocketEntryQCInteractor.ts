@@ -340,12 +340,14 @@ const completeDocketEntryQC = async (
   });
 
   if (isNewCoverSheetNeeded) {
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
+    await applicationContext.getUseCases().addCoversheetInteractor(
+      applicationContext,
+      {
         docketEntryId,
         docketNumber: caseEntity.docketNumber,
-      });
+      },
+      authorizedUser,
+    );
   }
 
   return {
