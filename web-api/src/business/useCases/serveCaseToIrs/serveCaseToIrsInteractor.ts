@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
@@ -415,20 +416,29 @@ const shouldIncludeClinicLetter = (
 
 const createCoversheetsForServedEntries = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  authorizedUser: AuthUser;
 }) => {
   return await Promise.all(
     caseEntity.docketEntries.map(async doc => {
       if (doc.isFileAttached && !doc.isDraft) {
         const updatedDocketEntry = await applicationContext
           .getUseCases()
-          .addCoversheetInteractor(applicationContext, {
-            caseEntity,
-            docketEntryId: doc.docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            replaceCoversheet: !caseEntity.isPaper,
-            useInitialData: !caseEntity.isPaper,
-          });
+          .addCoversheetInteractor(
+            applicationContext,
+            {
+              caseEntity,
+              docketEntryId: doc.docketEntryId,
+              docketNumber: caseEntity.docketNumber,
+              replaceCoversheet: !caseEntity.isPaper,
+              useInitialData: !caseEntity.isPaper,
+            },
+            authorizedUser,
+          );
 
         caseEntity.updateDocketEntry(updatedDocketEntry);
       }
@@ -473,9 +483,9 @@ export const serveCaseToIrs = async (
     docketNumber,
   }: { clientConnectionId: string; docketNumber: string },
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
   try {
-    if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
+    if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_PETITION)) {
       throw new UnauthorizedError('Unauthorized');
     }
     const caseToBatch = await applicationContext
@@ -485,7 +495,7 @@ export const serveCaseToIrs = async (
         docketNumber,
       });
 
-    let caseEntity = new Case(caseToBatch, { authorizedUser: user });
+    let caseEntity = new Case(caseToBatch, { authorizedUser });
 
     caseEntity.markAsSentToIRS();
 
@@ -504,12 +514,12 @@ export const serveCaseToIrs = async (
     addDocketEntryForPaymentStatus({
       applicationContext,
       caseEntity,
-      user,
+      user: authorizedUser,
     });
 
     caseEntity
-      .updateCaseCaptionDocketRecord({ authorizedUser: user })
-      .updateDocketNumberRecord({ authorizedUser: user })
+      .updateCaseCaptionDocketRecord({ authorizedUser })
+      .updateDocketNumberRecord({ authorizedUser })
       .validate();
 
     const generatedDocuments: Promise<any>[] = [];
@@ -623,18 +633,19 @@ export const serveCaseToIrs = async (
     await createPetitionWorkItems({
       applicationContext,
       caseEntity,
-      user,
+      user: authorizedUser,
     });
 
     await createCoversheetsForServedEntries({
       applicationContext,
+      authorizedUser,
       caseEntity,
     });
 
     const urlToReturn = await generateNoticeOfReceipt({
       applicationContext,
       caseEntity,
-      userServingPetition: user,
+      userServingPetition: authorizedUser,
     });
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -649,7 +660,7 @@ export const serveCaseToIrs = async (
         action: 'serve_to_irs_complete',
         pdfUrl: urlToReturn,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   } catch (err) {
     applicationContext.logger.error('Error serving case to IRS', {
@@ -662,7 +673,7 @@ export const serveCaseToIrs = async (
       message: {
         action: 'serve_to_irs_error',
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   }
 };

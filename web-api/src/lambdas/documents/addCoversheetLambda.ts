@@ -1,3 +1,5 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { addCoversheetInteractor } from '@web-api/business/useCases/addCoversheetInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -6,13 +8,16 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const addCoversheetLambda = event =>
+export const addCoversheetLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, event.pathParameters);
+      await addCoversheetInteractor(
+        applicationContext,
+        event.pathParameters,
+        authorizedUser,
+      );
     },
+    authorizedUser,
     { logResults: false },
   );
