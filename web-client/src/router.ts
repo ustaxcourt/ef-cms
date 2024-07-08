@@ -1346,19 +1346,19 @@ const router = {
       }),
     );
 
-    // registerRoute(
-    //   '/messages/*/message-detail/*/*/order-response',
-    //   ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-    //     setPageTitle(
-    //       `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
-    //     );
-    //     return app.getSequence('gotoStatusReportOrderResponseSequence')({
-    //       docketEntryId,
-    //       docketNumber,
-    //       parentMessageId,
-    //     });
-    //   }),
-    // );
+    registerRoute(
+      '/messages/*/message-detail/*/*/order-response',
+      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+        );
+        return app.getSequence('gotoStatusReportOrderResponseSequence')({
+          docketEntryId,
+          docketNumber,
+          parentMessageId,
+        });
+      }),
+    );
 
     registerRoute(
       '/pdf-preview',

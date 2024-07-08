@@ -6,7 +6,9 @@ import { setCaseAction } from '../../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../../actions/setDocketEntrySelectedFromMessageAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
+import { shouldUnsetParentMessageIdAction } from '@web-client/presenter/actions/shouldUnsetParentMessageIdAction';
 import { unsetDocumentToEditAction } from '@web-client/presenter/actions/unsetDocumentToEditAction';
+import { unsetParentMessageIdAction } from '@web-client/presenter/actions/unsetParentMessageIdAction';
 
 export const gotoStatusReportOrderResponseSequence = [
   setupCurrentPageAction('Interstitial'),
@@ -16,6 +18,11 @@ export const gotoStatusReportOrderResponseSequence = [
   setDocketEntrySelectedFromMessageAction,
   clearPdfPreviewUrlAction,
   unsetDocumentToEditAction,
+  shouldUnsetParentMessageIdAction,
+  {
+    no: [],
+    yes: [unsetParentMessageIdAction],
+  },
   clearStatusReportOrderResponseFormAction,
   getStatusReportOrderResponseDocketNumbersToDisplayAction,
   setupCurrentPageAction('StatusReportOrderResponse'),
