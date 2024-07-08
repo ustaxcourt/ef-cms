@@ -18,18 +18,13 @@ describe('formattedWorkQueue', () => {
     TRIAL_SESSION_SCOPE_TYPES,
   } = applicationContext.getConstants();
 
-  let globalUser;
   let screenMetadata = {};
 
-  applicationContext.getCurrentUser = () => {
-    return globalUser;
-  };
-
   const getBaseState = user => {
-    globalUser = user;
     return {
       permissions: getUserPermissions(user),
       screenMetadata,
+      user,
       users: [docketClerkUser, validUser],
     };
   };

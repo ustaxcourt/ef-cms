@@ -16,16 +16,10 @@ describe('getWorkItemDocumentLink', () => {
     STATUS_TYPES,
   } = applicationContext.getConstants();
 
-  let globalUser;
-
-  applicationContext.getCurrentUser = () => {
-    return globalUser;
-  };
-
   const getBaseState = user => {
-    globalUser = user;
     return {
       permissions: getUserPermissions(user),
+      user,
     };
   };
 
@@ -65,10 +59,12 @@ describe('getWorkItemDocumentLink', () => {
   const documentViewLink = `/case-detail/${baseWorkItem.docketNumber}/document-view?docketEntryId=6db35185-2445-4952-9449-5479a5cadab0`;
 
   it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box', () => {
-    const { permissions } = getBaseState(petitionsClerkUser);
+    const { permissions, user: authorizedUser } =
+      getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -92,10 +88,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return /edit-court-issued if document is court-issued and not served and user is docketclerk', () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -119,10 +116,12 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box', () => {
-    const { permissions } = getBaseState(petitionsClerkUser);
+    const { permissions, user: authorizedUser } =
+      getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -145,10 +144,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return /complete if work item is in progress and user is docketclerk', () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -177,10 +177,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return /complete when the eventCode MISC and the isPaper is false', () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -202,10 +203,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return case detail link if document is processed and user is docketclerk', () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -237,10 +239,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return docket entry edit link if document is in progress and user is docketclerk', () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -272,10 +275,11 @@ describe('getWorkItemDocumentLink', () => {
 
   it('should return default document view link when the document has been processed, is unservable, and the user is docketClerk', () => {
     const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -304,10 +308,12 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return default document view link if document is in progress and user is petitionsClerk', () => {
-    const { permissions } = getBaseState(petitionsClerkUser);
+    const { permissions, user: authorizedUser } =
+      getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -333,10 +339,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -362,10 +369,11 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return editLink as /edit if the box is my inbox and user is docketClerk', () => {
-    const { permissions } = getBaseState(docketClerkUser);
+    const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -388,10 +396,12 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return editLink as /review if the box is my inProgress and user is petitionsClerk', () => {
-    const { permissions } = getBaseState(petitionsClerkUser);
+    const { permissions, user: authorizedUser } =
+      getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -418,10 +428,13 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return editLink as /review if the box is my inProgress and user is caseServicesSupervisor', () => {
-    const { permissions } = getBaseState(caseServicesSupervisorUser);
+    const { permissions, user: authorizedUser } = getBaseState(
+      caseServicesSupervisorUser,
+    );
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
@@ -448,10 +461,13 @@ describe('getWorkItemDocumentLink', () => {
   });
 
   it('should return editLink as petition qc page if document is petition, case is not in progress, and user is caseServicesSupervisor viewing a QC box', () => {
-    const { permissions } = getBaseState(caseServicesSupervisorUser);
+    const { permissions, user: authorizedUser } = getBaseState(
+      caseServicesSupervisorUser,
+    );
 
     const result = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,

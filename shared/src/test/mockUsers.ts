@@ -135,6 +135,7 @@ export const trialClerkUser: RawUser = {
 };
 
 export const caseServicesSupervisorUser = {
+  email: 'caseservicessupervisor@example.com',
   name: 'Test Case Services Supervisor',
   role: ROLES.caseServicesSupervisor,
   section: CASE_SERVICES_SUPERVISOR_SECTION,
