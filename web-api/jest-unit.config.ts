@@ -23,6 +23,7 @@ const config: Config = {
     '!src/app-public-local.{js,ts}',
     '!src/getDocumentGenerators.ts',
     '!src/persistence/cognito/getCognito.ts',
+    '!src/persistence/s3/zipDocuments.ts',
     '!src/persistence/sqs/deleteMessage.ts',
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/messages/*.ts',

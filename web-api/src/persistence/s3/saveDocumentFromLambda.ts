@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const saveDocumentFromLambda = async ({
   applicationContext,
   contentType: ContentType = 'application/pdf',
@@ -5,12 +7,12 @@ export const saveDocumentFromLambda = async ({
   key,
   useTempBucket = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   contentType?: string;
   document: any;
   key: string;
   useTempBucket?: boolean;
-}) => {
+}): Promise<void> => {
   let Bucket = applicationContext.environment.documentsBucketName;
   if (useTempBucket) {
     Bucket = applicationContext.environment.tempDocumentsBucketName;
@@ -18,19 +20,14 @@ export const saveDocumentFromLambda = async ({
 
   const maxRetries = 1;
 
-  let response;
-
   for (let i = 0; i <= maxRetries; i++) {
     try {
-      response = await applicationContext
-        .getStorageClient()
-        .putObject({
-          Body: Buffer.from(body),
-          Bucket,
-          ContentType,
-          Key: key,
-        })
-        .promise();
+      await applicationContext.getStorageClient().putObject({
+        Body: Buffer.from(body),
+        Bucket,
+        ContentType,
+        Key: key,
+      });
       break;
     } catch (err) {
       if (i >= maxRetries) {
@@ -42,6 +39,4 @@ export const saveDocumentFromLambda = async ({
       }
     }
   }
-
-  return response;
 };

@@ -72,13 +72,13 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
 
     expect(sendNotificationCalls[0][0].message).toEqual({
       action: 'batch_download_csv_data',
-      numberOfRecordsDownloaded: 0,
+      filesCompleted: 0,
       totalFiles: 1,
     });
 
     expect(sendNotificationCalls[1][0].message).toEqual({
       action: 'batch_download_csv_data',
-      numberOfRecordsDownloaded: 1,
+      filesCompleted: 1,
       totalFiles: 1,
     });
 
