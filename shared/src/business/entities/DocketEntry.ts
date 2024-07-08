@@ -34,8 +34,8 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { RawUser, User } from './User';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
@@ -48,7 +48,7 @@ import { getUniqueId } from '@shared/sharedAppContext';
 const canDownloadSTIN = (
   entry: RawDocketEntry,
   petitionDocketEntry: RawDocketEntry,
-  user: RawUser,
+  user: { role: Role },
 ): boolean => {
   if (
     user.role === ROLES.petitionsClerk &&
@@ -681,7 +681,7 @@ export class DocketEntry extends JoiValidationEntity {
       visibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
-      user: RawUser;
+      user: { userId: string; role: Role };
       isTerminalUser: boolean;
       visibilityChangeDate: string;
     },

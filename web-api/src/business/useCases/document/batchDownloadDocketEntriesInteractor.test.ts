@@ -90,13 +90,14 @@ describe('batchDownloadDocketEntriesInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockRejectedValueOnce(new Error());
+      .getCaseByDocketNumber.mockRejectedValueOnce(new Error());
 
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
       requestParams,
       mockDocketClerkUser,
     );
+
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       'Error batch-downloading documents from case: 101-18 - unknown error',
       expect.anything(),
@@ -151,25 +152,32 @@ describe('batchDownloadDocketEntriesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      extraFileNames: [],
-      extraFiles: [],
-      fileNames: expect.anything(),
-      onEntry: expect.anything(),
-      onError: expect.anything(),
-      onProgress: expect.anything(),
-      onUploadStart: expect.anything(),
-      s3Ids: [
-        PETITION_DOCKET_ENTRY.docketEntryId,
-        ATP_DOCKET_ENTRY.docketEntryId,
-        STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      documents: [
+        {
+          filePathInZip: '101-18, Test Petitioner/2018-03-01_0001_Petition.pdf',
+          key: PETITION_DOCKET_ENTRY.docketEntryId,
+          useTempBucket: false,
+        },
+        {
+          filePathInZip:
+            '101-18, Test Petitioner/2017-03-01_0004_Attachment to Petition.pdf',
+          key: ATP_DOCKET_ENTRY.docketEntryId,
+          useTempBucket: false,
+        },
+        {
+          filePathInZip:
+            '101-18, Test Petitioner/2023-08-15_0006_Standing Pretrial Order.pdf',
+          key: STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
+          useTempBucket: false,
+        },
       ],
-      zipName: '101-18, Test Petitioner.zip',
+      onProgress: expect.anything(),
+      outputZipName: '101-18, Test Petitioner.zip',
     });
   });
 
-  it('should a add the printable docket record with the list of case documents from persistence', async () => {
+  it('should add the printable docket record with the list of case documents from persistence', async () => {
     requestParams.printableDocketRecordFileId = '1234567';
 
     await batchDownloadDocketEntriesInteractor(
@@ -180,21 +188,33 @@ describe('batchDownloadDocketEntriesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      extraFileNames: ['101-18, Test Petitioner/0_Docket_Record.pdf'],
-      extraFiles: ['pdf data'],
-      fileNames: expect.anything(),
-      onEntry: expect.anything(),
-      onError: expect.anything(),
-      onProgress: expect.anything(),
-      onUploadStart: expect.anything(),
-      s3Ids: [
-        PETITION_DOCKET_ENTRY.docketEntryId,
-        ATP_DOCKET_ENTRY.docketEntryId,
-        STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      documents: [
+        {
+          filePathInZip: '101-18, Test Petitioner/2018-03-01_0001_Petition.pdf',
+          key: PETITION_DOCKET_ENTRY.docketEntryId,
+          useTempBucket: false,
+        },
+        {
+          filePathInZip:
+            '101-18, Test Petitioner/2017-03-01_0004_Attachment to Petition.pdf',
+          key: ATP_DOCKET_ENTRY.docketEntryId,
+          useTempBucket: false,
+        },
+        {
+          filePathInZip:
+            '101-18, Test Petitioner/2023-08-15_0006_Standing Pretrial Order.pdf',
+          key: STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
+          useTempBucket: false,
+        },
+        {
+          filePathInZip: '101-18, Test Petitioner/0_Docket_Record.pdf',
+          key: requestParams.printableDocketRecordFileId,
+          useTempBucket: true,
+        },
       ],
-      zipName: '101-18, Test Petitioner.zip',
+      onProgress: expect.anything(),
+      outputZipName: '101-18, Test Petitioner.zip',
     });
   });
 

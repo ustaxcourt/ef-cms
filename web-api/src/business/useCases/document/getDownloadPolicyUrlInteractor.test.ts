@@ -7,24 +7,24 @@ import {
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} from '../entities/EntityConstants';
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import {
   UNAUTHORIZED_DOCUMENT_MESSAGE,
   getDownloadPolicyUrlInteractor,
 } from './getDownloadPolicyUrlInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   calculateISODate,
   createISODateString,
-} from '../utilities/DateHandler';
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import {
   casePetitioner,
   irsPractitionerUser,
   privatePractitionerUser,
-} from '../../test/mockUsers';
+} from '../../../../../shared/src/test/mockUsers';
 import { cloneDeep } from 'lodash';
 import {
   mockAdminUser,

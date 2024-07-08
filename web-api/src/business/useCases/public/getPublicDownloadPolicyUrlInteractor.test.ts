@@ -20,7 +20,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getPublicDownloadPolicyUrl.mockReturnValue('localhost');
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost' });
   });
 
   it('should throw an error for a document that is not publicly accessible', async () => {
@@ -46,17 +46,12 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getPublicDownloadPolicyUrl,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getPersistenceGateway().getPublicDownloadPolicyUrl.mock
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
         .calls[0][0],
     ).toMatchObject({
       key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
     });
-
-    expect(result).toEqual('localhost');
+    expect(result).toEqual({ url: 'localhost' });
   });
 
   it('should throw an error for a case that is not found', async () => {
@@ -132,7 +127,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         key: '83813a24-7687-418e-a186-c416b4bb0ad4',
       } as any,
     );
-    expect(result).toEqual('localhost');
+    expect(result).toEqual({ url: 'localhost' });
   });
 
   it('should return a url for a document that is publicly accessible', async () => {
@@ -159,7 +154,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         key: '8008b288-8b6b-48e3-8239-599266b13b8b',
       } as any,
     );
-    expect(result).toEqual('localhost');
+    expect(result).toEqual({ url: 'localhost' });
   });
 
   it('should throw a not found error for a document that is not found on the case', async () => {

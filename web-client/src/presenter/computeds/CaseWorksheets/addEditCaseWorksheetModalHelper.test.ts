@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { addEditCaseWorksheetModalHelper as addEditCaseWorksheetModalHelperComputed } from './addEditCaseWorksheetModalHelper';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
@@ -26,5 +26,20 @@ describe('addEditCaseWorksheetModalHelper', () => {
         MOCK_CASE.caseCaption,
       )}`,
     );
+  });
+
+  it('should throw an error when the case worksheet to edit cannot be found', () => {
+    expect(() =>
+      runCompute(addEditCaseWorksheetModalHelper, {
+        state: {
+          form: {
+            docketNumber: '3028-20',
+          },
+          submittedAndCavCases: {
+            submittedAndCavCasesByJudge: [MOCK_CASE],
+          },
+        },
+      }),
+    ).toThrow('Could not find case worksheet to edit');
   });
 });
