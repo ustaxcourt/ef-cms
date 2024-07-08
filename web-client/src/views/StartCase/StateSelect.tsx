@@ -1,17 +1,19 @@
+import {
+  US_STATES,
+  US_STATES_OTHER,
+} from '@shared/business/entities/EntityConstants';
 import React from 'react';
 import classNames from 'classnames';
 
 export const StateSelect = ({
   className = '',
   data,
-  onBlurSequence,
+  handleBlur,
+  handleChange,
   onChangeValidationSequence,
   refProp,
   type,
-  updateFormValueSequence,
   useFullStateName,
-  usStates,
-  usStatesOther,
 }) => {
   return (
     <select
@@ -20,10 +22,10 @@ export const StateSelect = ({
       id={`${type}.state`}
       name={`${type}.state`}
       ref={refProp || undefined}
-      value={data[type].state || ''}
-      onBlur={() => onBlurSequence && onBlurSequence()}
+      value={data.state || (data[type] && data[type].state) || ''}
+      onBlur={() => handleBlur && handleBlur()}
       onChange={e => {
-        updateFormValueSequence({
+        handleChange({
           key: e.target.name,
           value: e.target.value,
         });
@@ -32,8 +34,8 @@ export const StateSelect = ({
     >
       <option value="">- Select -</option>
       <optgroup label="State">
-        {Object.keys(usStates).map(abbrev => {
-          const label = useFullStateName ? usStates[abbrev] : abbrev;
+        {Object.keys(US_STATES).map(abbrev => {
+          const label = useFullStateName ? US_STATES[abbrev] : abbrev;
           return (
             <option key={abbrev} value={abbrev}>
               {label}
@@ -42,8 +44,8 @@ export const StateSelect = ({
         })}
       </optgroup>
       <optgroup label="Other">
-        {Object.keys(usStatesOther).map(abbrev => {
-          const label = useFullStateName ? usStatesOther[abbrev] : abbrev;
+        {Object.keys(US_STATES_OTHER).map(abbrev => {
+          const label = useFullStateName ? US_STATES_OTHER[abbrev] : abbrev;
           return (
             <option key={abbrev} value={abbrev}>
               {label}

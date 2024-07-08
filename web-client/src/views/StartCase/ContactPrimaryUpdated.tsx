@@ -1,22 +1,26 @@
 /* eslint-disable complexity */
-import { Address } from './Address';
-import { Country } from './Country';
+import {
+  AddressType,
+  AddressUpdated,
+  OnBlurHandler,
+  OnChangeCountryTypeHandler,
+  OnChangeHandler,
+} from '@web-client/views/StartCase/AddressUpdated';
+import { CountryUpdated } from '@web-client/views/StartCase/CountryUpdated';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InCareOf } from '@web-client/views/StartCase/ContactSecondaryUpdated';
-import { InternationalAddress } from './InternationalAddress';
+import { InternationalAddressUpdated } from '@web-client/views/StartCase/InternationalAddressUpdated';
 import { PlaceOfLegalResidenceDropdown } from '@web-client/views/StartCase/PlaceOfLegalResidenceDropdown';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  bind: string;
+type ContactPrimaryUpdate = {
+  addressInfo: AddressType;
   nameLabel: string;
-  onBlur: string;
-  onChange: string;
-  onChangeCountryType: string;
+  handleBlur: OnBlurHandler;
+  handleChange: OnChangeHandler;
+  handleChangeCountryType: OnChangeCountryTypeHandler;
   placeOfLegalResidenceTitle?: string;
   registerRef?: Function;
   secondaryLabel?: string;
@@ -29,27 +33,21 @@ const props = cerebralProps as unknown as {
 
 const contactPrimaryDependencies = {
   constants: state.constants,
-  data: state[props.bind],
-  onBlurSequence: sequences[props.onBlur],
-  onChangeSequence: sequences[props.onChange],
   validationErrors: state.validationErrors,
 };
 
 export const ContactPrimaryUpdated = connect<
-  typeof props,
+  ContactPrimaryUpdate,
   typeof contactPrimaryDependencies
 >(
   contactPrimaryDependencies,
   function ContactPrimaryUpdated({
-    bind,
+    addressInfo,
     constants,
-    data,
+    handleBlur,
+    handleChange,
+    handleChangeCountryType,
     nameLabel,
-    onBlur,
-    onBlurSequence,
-    onChange,
-    onChangeCountryType,
-    onChangeSequence,
     placeOfLegalResidenceTitle,
     registerRef,
     secondaryLabel,
@@ -81,14 +79,14 @@ export const ContactPrimaryUpdated = connect<
               name="contactPrimary.name"
               ref={registerRef && registerRef('contactPrimary.name')}
               type="text"
-              value={data.contactPrimary.name || ''}
+              value={addressInfo.name || ''}
               onBlur={() => {
-                onBlurSequence({
+                handleBlur({
                   validationKey: ['contactPrimary', 'name'],
                 });
               }}
               onChange={e => {
-                onChangeSequence({
+                handleChange({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -120,14 +118,14 @@ export const ContactPrimaryUpdated = connect<
                 name="contactPrimary.secondaryName"
                 ref={registerRef && registerRef('contactPrimary.secondaryName')}
                 type="text"
-                value={data.contactPrimary.secondaryName || ''}
+                value={addressInfo.secondaryName || ''}
                 onBlur={() => {
-                  onBlurSequence({
+                  handleBlur({
                     validationKey: ['contactPrimary', 'secondaryName'],
                   });
                 }}
                 onChange={e => {
-                  onChangeSequence({
+                  handleChange({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -138,13 +136,13 @@ export const ContactPrimaryUpdated = connect<
 
           {showInCareOf && (
             <InCareOf
-              inCareOf={data.contactPrimary.inCareOf}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              inCareOf={addressInfo.inCareOf}
               isOptional={showInCareOfOptional}
               registerRef={registerRef}
               type="contactPrimary"
               validationErrors={validationErrors}
-              onBlurSequence={onBlurSequence}
-              onChangeSequence={onChangeSequence}
             />
           )}
 
@@ -173,14 +171,14 @@ export const ContactPrimaryUpdated = connect<
                 name="contactPrimary.title"
                 ref={registerRef && registerRef('contactPrimary.title')}
                 type="text"
-                value={data.contactPrimary.title || ''}
+                value={addressInfo.title || ''}
                 onBlur={() => {
-                  onBlurSequence({
+                  handleBlur({
                     validationKey: ['contactPrimary', 'title'],
                   });
                 }}
                 onChange={e => {
-                  onChangeSequence({
+                  handleChange({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -189,48 +187,45 @@ export const ContactPrimaryUpdated = connect<
             </FormGroup>
           )}
 
-          <Country
-            bind={bind}
+          <CountryUpdated
+            addressInfo={addressInfo}
+            handleBlur={handleBlur}
+            handleChange={handleChangeCountryType}
             registerRef={registerRef}
             type="contactPrimary"
-            onBlur={onBlur}
-            onChange={onChange}
-            onChangeCountryType={onChangeCountryType}
           />
 
-          {data.contactPrimary.countryType ===
-            constants.COUNTRY_TYPES.DOMESTIC && (
-            <Address
-              bind={bind}
+          {addressInfo.countryType === constants.COUNTRY_TYPES.DOMESTIC && (
+            <AddressUpdated
+              addressInfo={addressInfo}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
               registerRef={registerRef}
               type="contactPrimary"
-              onBlur={onBlur}
-              onChange={onChange}
             />
           )}
 
-          {data.contactPrimary.countryType ===
+          {addressInfo.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
-            <InternationalAddress
-              bind={bind}
+            <InternationalAddressUpdated
+              addressInfo={addressInfo}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
               registerRef={registerRef}
               type="contactPrimary"
-              onBlur={onBlur}
-              onChange={onChange}
             />
           )}
           <PlaceOfLegalResidenceDropdown
-            bind={bind}
-            placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
-            registerRef={registerRef}
-            type="contactPrimary"
-            // change - move to on change
-            onBlurSequence={() => {
-              onBlurSequence({
+            addressInfo={addressInfo}
+            handleBlur={() => {
+              handleBlur({
                 validationKey: ['contactPrimary', 'placeOfLegalResidence'],
               });
             }}
-            onChange={onChange}
+            handleChange={handleChange}
+            placeOfLegalResidenceTitle={placeOfLegalResidenceTitle}
+            registerRef={registerRef}
+            type="contactPrimary"
           />
 
           <FormGroup
@@ -255,14 +250,14 @@ export const ContactPrimaryUpdated = connect<
               name="contactPrimary.phone"
               ref={registerRef && registerRef('contactPrimary.phone')}
               type="tel"
-              value={data.contactPrimary.phone || ''}
+              value={addressInfo.phone || ''}
               onBlur={() => {
-                onBlurSequence({
+                handleBlur({
                   validationKey: ['contactPrimary', 'phone'],
                 });
               }}
               onChange={e => {
-                onChangeSequence({
+                handleChange({
                   key: e.target.name,
                   value: e.target.value,
                 });

@@ -1,3 +1,9 @@
+import {
+  BUSINESS_TYPES,
+  ESTATE_TYPES,
+  MAX_FILE_SIZE_MB,
+  OTHER_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ContactPrimaryUpdated } from '@web-client/views/StartCase/ContactPrimaryUpdated';
 import { ContactSecondaryUpdated } from '@web-client/views/StartCase/ContactSecondaryUpdated';
@@ -7,29 +13,35 @@ import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDriven
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
 import classNames from 'classnames';
 
+/* eslint-disable max-lines */
 export const UpdatedFilePetitionStep1 = connect(
   {
-    constants: state.constants,
     form: state.form,
+    petitionGenerationLiveValidationSequence:
+      sequences.petitionGenerationLiveValidationSequence,
     resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
     updateFilingTypeSequence: sequences.updateFilingTypeSequence,
+    updateFormValueCountryTypeSequence:
+      sequences.updateFormValueCountryTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFormValueUpdatedSequence: sequences.updateFormValueUpdatedSequence,
     updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep1({
-    constants,
     form,
+    petitionGenerationLiveValidationSequence,
     resetSecondaryAddressSequence,
     updatedFilePetitionHelper,
     updateFilingTypeSequence,
+    updateFormValueCountryTypeSequence,
     updateFormValueSequence,
+    updateFormValueUpdatedSequence,
     validationErrors,
   }) {
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
@@ -84,31 +96,37 @@ export const UpdatedFilePetitionStep1 = connect(
 
         {form.filingType === 'Myself' && (
           <ContactPrimaryUpdated
-            bind="form"
+            addressInfo={form.contactPrimary}
+            handleBlur={petitionGenerationLiveValidationSequence}
+            handleChange={updateFormValueUpdatedSequence}
+            handleChangeCountryType={updateFormValueCountryTypeSequence}
             nameLabel="Full Name"
             registerRef={registerRef}
-            onBlur="petitionGenerationLiveValidationSequence"
-            onChange="updateFormValueUpdatedSequence"
-            onChangeCountryType="updateFormValueCountryTypeSequence"
           />
         )}
         {form.filingType === 'Myself and my spouse' && (
           <>
             <ContactPrimaryUpdated
-              bind="form"
+              addressInfo={form.contactPrimary}
+              handleBlur={petitionGenerationLiveValidationSequence}
+              handleChange={updateFormValueUpdatedSequence}
+              handleChangeCountryType={updateFormValueCountryTypeSequence}
               nameLabel="Full Name"
               registerRef={registerRef}
-              onBlur="petitionGenerationLiveValidationSequence"
-              onChange="updateFormValueUpdatedSequence"
-              onChangeCountryType="updateFormValueCountryTypeSequence"
             />
             <PetitionerAndSpouseInfo
-              hasSpouseConsent={form.hasSpouseConsent}
-              isSpouseDeceasedSelected={form.isSpouseDeceased}
+              form={form}
+              petitionGenerationLiveValidationSequence={
+                petitionGenerationLiveValidationSequence
+              }
               registerRef={registerRef}
               resetSecondaryAddressSequence={resetSecondaryAddressSequence}
               updateFilingTypeSequence={updateFilingTypeSequence}
+              updateFormValueCountryTypeSequence={
+                updateFormValueCountryTypeSequence
+              }
               updateFormValueSequence={updateFormValueSequence}
+              updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
               validationErrors={validationErrors}
             />
           </>
@@ -116,30 +134,37 @@ export const UpdatedFilePetitionStep1 = connect(
         {form.filingType === 'A business' && (
           <BusinessInfo
             businessFieldNames={updatedFilePetitionHelper.businessFieldNames}
-            businessTypes={constants.BUSINESS_TYPES}
-            hasCorporateDisclosureFile={form.corporateDisclosureFile}
-            maxFileSize={constants.MAX_FILE_SIZE_MB}
+            form={form}
+            petitionGenerationLiveValidationSequence={
+              petitionGenerationLiveValidationSequence
+            }
             registerRef={registerRef}
-            selectedBusinessType={form.businessType}
             updateFilingTypeSequence={updateFilingTypeSequence}
+            updateFormValueCountryTypeSequence={
+              updateFormValueCountryTypeSequence
+            }
+            updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
             validationErrors={validationErrors}
           />
         )}
         {form.filingType === 'Other' && (
           <OtherInfo
-            estateTypes={constants.ESTATE_TYPES}
-            minorIncompetentTypes={constants.OTHER_TYPES}
+            form={form}
             otherContactNameLabel={
               updatedFilePetitionHelper.otherContactNameLabel
             }
+            petitionGenerationLiveValidationSequence={
+              petitionGenerationLiveValidationSequence
+            }
             registerRef={registerRef}
-            selectedEstateType={form.estateType}
-            selectedMinorIncompetentType={form.minorIncompetentType}
-            selectedOtherType={form.otherType}
             showContactInformationForOtherPartyType={
               updatedFilePetitionHelper.showContactInformationForOtherPartyType
             }
             updateFilingTypeSequence={updateFilingTypeSequence}
+            updateFormValueCountryTypeSequence={
+              updateFormValueCountryTypeSequence
+            }
+            updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
             validationErrors={validationErrors}
           />
         )}
@@ -151,14 +176,23 @@ export const UpdatedFilePetitionStep1 = connect(
 );
 
 function PetitionerAndSpouseInfo({
-  hasSpouseConsent,
-  isSpouseDeceasedSelected,
+  form,
+  petitionGenerationLiveValidationSequence,
   registerRef,
   resetSecondaryAddressSequence,
   updateFilingTypeSequence,
+  updateFormValueCountryTypeSequence,
   updateFormValueSequence,
+  updateFormValueUpdatedSequence,
   validationErrors,
 }) {
+  const {
+    contactSecondary,
+    hasSpouseConsent,
+    isSpouseDeceased: isSpouseDeceasedSelected,
+    useSameAsPrimary,
+  } = form;
+
   return (
     <div
       className={classNames(
@@ -208,22 +242,32 @@ function PetitionerAndSpouseInfo({
       </fieldset>
       {isSpouseDeceasedSelected === 'Yes' && (
         <ContactSecondaryUpdated
-          bind="form"
-          displayInCareOf={true}
+          displayInCareOf
+          showSameAsPrimaryCheckbox
+          addressInfo={contactSecondary}
+          handleBlur={petitionGenerationLiveValidationSequence}
+          handleChange={updateFormValueUpdatedSequence}
+          handleChangeCountryType={updateFormValueCountryTypeSequence}
           nameLabel="Full name of deceased spouse"
           registerRef={registerRef}
-          showSameAsPrimaryCheckbox={true}
-          onBlur="petitionGenerationLiveValidationSequence"
-          onChange="updateFormValueUpdatedSequence"
-          onChangeCountryType="updateFormValueCountryTypeSequence"
+          useSameAsPrimary={useSameAsPrimary}
         />
       )}
       {isSpouseDeceasedSelected === 'No' && (
         <Spouse
+          contactSecondary={contactSecondary}
           hasSpouseConsent={hasSpouseConsent}
+          petitionGenerationLiveValidationSequence={
+            petitionGenerationLiveValidationSequence
+          }
           registerRef={registerRef}
           resetSecondaryAddressSequence={resetSecondaryAddressSequence}
+          updateFormValueCountryTypeSequence={
+            updateFormValueCountryTypeSequence
+          }
           updateFormValueSequence={updateFormValueSequence}
+          updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
+          useSameAsPrimary={useSameAsPrimary}
           validationErrors={validationErrors}
         />
       )}
@@ -232,10 +276,15 @@ function PetitionerAndSpouseInfo({
 }
 
 function Spouse({
+  contactSecondary,
   hasSpouseConsent,
+  petitionGenerationLiveValidationSequence,
   registerRef,
   resetSecondaryAddressSequence,
+  updateFormValueCountryTypeSequence,
   updateFormValueSequence,
+  updateFormValueUpdatedSequence,
+  useSameAsPrimary,
   validationErrors,
 }) {
   return (
@@ -283,13 +332,14 @@ function Spouse({
       </FormGroup>
       {hasSpouseConsent && (
         <ContactSecondaryUpdated
-          bind="form"
+          addressInfo={contactSecondary}
+          handleBlur={petitionGenerationLiveValidationSequence}
+          handleChange={updateFormValueUpdatedSequence}
+          handleChangeCountryType={updateFormValueCountryTypeSequence}
           nameLabel="Full name of spouse"
           registerRef={registerRef}
           showSameAsPrimaryCheckbox={true}
-          onBlur="petitionGenerationLiveValidationSequence"
-          onChange="updateFormValueUpdatedSequence"
-          onChangeCountryType="updateFormValueCountryTypeSequence"
+          useSameAsPrimary={useSameAsPrimary}
         />
       )}
     </>
@@ -298,14 +348,15 @@ function Spouse({
 
 function BusinessInfo({
   businessFieldNames,
-  businessTypes,
-  hasCorporateDisclosureFile,
-  maxFileSize,
+  form,
+  petitionGenerationLiveValidationSequence,
   registerRef,
-  selectedBusinessType,
   updateFilingTypeSequence,
+  updateFormValueCountryTypeSequence,
+  updateFormValueUpdatedSequence,
   validationErrors,
 }) {
+  const selectedBusinessType = form.businessType;
   return (
     <div className="ustc-secondary-question">
       <FormGroup
@@ -317,10 +368,10 @@ function BusinessInfo({
             What type of business are you filing for?
           </legend>
           {[
-            businessTypes.corporation,
-            businessTypes.partnershipAsTaxMattersPartner,
-            businessTypes.partnershipOtherThanTaxMatters,
-            businessTypes.partnershipBBA,
+            BUSINESS_TYPES.corporation,
+            BUSINESS_TYPES.partnershipAsTaxMattersPartner,
+            BUSINESS_TYPES.partnershipOtherThanTaxMatters,
+            BUSINESS_TYPES.partnershipBBA,
           ].map((businessType, idx) => (
             <div className="usa-radio max-width-fit-content" key={businessType}>
               <input
@@ -353,20 +404,19 @@ function BusinessInfo({
       {selectedBusinessType && (
         <div>
           <ContactPrimaryUpdated
-            bind="form"
+            addressInfo={form.contactPrimary}
+            handleBlur={petitionGenerationLiveValidationSequence}
+            handleChange={updateFormValueUpdatedSequence}
+            handleChangeCountryType={updateFormValueCountryTypeSequence}
             nameLabel={businessFieldNames.primary}
             placeOfLegalResidenceTitle="Place of business"
             registerRef={registerRef}
             secondaryLabel={businessFieldNames.secondary}
             showInCareOf={businessFieldNames.showInCareOf}
             showInCareOfOptional={businessFieldNames.showInCareOfOptional}
-            onBlur="petitionGenerationLiveValidationSequence"
-            onChange="updateFormValueUpdatedSequence"
-            onChangeCountryType="updateFormValueCountryTypeSequence"
           />
           <CorporateDisclosureUpload
-            hasCorporateDisclosureFile={hasCorporateDisclosureFile}
-            maxFileSize={maxFileSize}
+            hasCorporateDisclosureFile={form.corporateDisclosureFile}
             validationErrors={validationErrors}
           />
         </div>
@@ -377,7 +427,6 @@ function BusinessInfo({
 
 function CorporateDisclosureUpload({
   hasCorporateDisclosureFile,
-  maxFileSize,
   validationErrors,
 }) {
   return (
@@ -426,7 +475,7 @@ function CorporateDisclosureUpload({
           </label>
           <span className="usa-hint">
             Make sure file is not encrypted or password protected. Max file size{' '}
-            {maxFileSize}MB.
+            {MAX_FILE_SIZE_MB}MB.
           </span>
           <StateDrivenFileInput
             aria-describedby="corporate-disclosure-file-label"
@@ -442,17 +491,20 @@ function CorporateDisclosureUpload({
 }
 
 function OtherInfo({
-  estateTypes,
-  minorIncompetentTypes,
+  form,
   otherContactNameLabel,
+  petitionGenerationLiveValidationSequence,
   registerRef,
-  selectedEstateType,
-  selectedMinorIncompetentType,
-  selectedOtherType,
   showContactInformationForOtherPartyType,
   updateFilingTypeSequence,
+  updateFormValueCountryTypeSequence,
+  updateFormValueUpdatedSequence,
   validationErrors,
 }) {
+  const selectedEstateType = form.estateType;
+  const selectedMinorIncompetentType = form.minorIncompetentType;
+  const selectedOtherType = form.otherType;
+
   return (
     <div className="ustc-secondary-question">
       <FormGroup
@@ -500,7 +552,6 @@ function OtherInfo({
       </FormGroup>
       {selectedOtherType === 'An estate or trust' && (
         <SecondaryEstateOptions
-          estateTypes={estateTypes}
           selectedEstateType={selectedEstateType}
           updateFilingTypeSequence={updateFilingTypeSequence}
           validationErrors={validationErrors}
@@ -508,7 +559,6 @@ function OtherInfo({
       )}
       {selectedOtherType === 'A minor or legally incompetent person' && (
         <SecondaryMinorIncompetentOptions
-          minorIncompetentTypes={minorIncompetentTypes}
           selectedMinorIncompetentType={selectedMinorIncompetentType}
           updateFilingTypeSequence={updateFilingTypeSequence}
           validationErrors={validationErrors}
@@ -516,18 +566,36 @@ function OtherInfo({
       )}
       {showContactInformationForOtherPartyType && (
         <OtherContactInformation
+          form={form}
           otherContactNameLabel={otherContactNameLabel}
+          petitionGenerationLiveValidationSequence={
+            petitionGenerationLiveValidationSequence
+          }
           registerRef={registerRef}
+          updateFormValueCountryTypeSequence={
+            updateFormValueCountryTypeSequence
+          }
+          updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
         />
       )}
     </div>
   );
 }
 
-function OtherContactInformation({ otherContactNameLabel, registerRef }) {
+function OtherContactInformation({
+  form,
+  otherContactNameLabel,
+  petitionGenerationLiveValidationSequence,
+  registerRef,
+  updateFormValueCountryTypeSequence,
+  updateFormValueUpdatedSequence,
+}) {
   return (
     <ContactPrimaryUpdated
-      bind="form"
+      addressInfo={form.contactPrimary}
+      handleBlur={petitionGenerationLiveValidationSequence}
+      handleChange={updateFormValueUpdatedSequence}
+      handleChangeCountryType={updateFormValueCountryTypeSequence}
       nameLabel={otherContactNameLabel.primaryLabel}
       registerRef={registerRef}
       secondaryLabel={otherContactNameLabel.secondaryLabel}
@@ -535,15 +603,11 @@ function OtherContactInformation({ otherContactNameLabel, registerRef }) {
       showInCareOfOptional={otherContactNameLabel.showInCareOfOptional}
       titleLabel={otherContactNameLabel.titleLabel}
       titleLabelNote={otherContactNameLabel.titleLabelNote}
-      onBlur="petitionGenerationLiveValidationSequence"
-      onChange="updateFormValueUpdatedSequence"
-      onChangeCountryType="updateFormValueCountryTypeSequence"
     />
   );
 }
 
 function SecondaryEstateOptions({
-  estateTypes,
   selectedEstateType,
   updateFilingTypeSequence,
   validationErrors,
@@ -559,9 +623,9 @@ function SecondaryEstateOptions({
             What type of estate or trust are you filing for?
           </legend>
           {[
-            estateTypes.estate,
-            estateTypes.estateWithoutExecutor,
-            estateTypes.trust,
+            ESTATE_TYPES.estate,
+            ESTATE_TYPES.estateWithoutExecutor,
+            ESTATE_TYPES.trust,
           ].map((estateType, idx) => (
             <div className="usa-radio max-width-fit-content" key={estateType}>
               <input
@@ -596,7 +660,6 @@ function SecondaryEstateOptions({
 }
 
 function SecondaryMinorIncompetentOptions({
-  minorIncompetentTypes,
   selectedMinorIncompetentType,
   updateFilingTypeSequence,
   validationErrors,
@@ -613,11 +676,11 @@ function SecondaryMinorIncompetentOptions({
             person?
           </legend>
           {[
-            minorIncompetentTypes.conservator,
-            minorIncompetentTypes.guardian,
-            minorIncompetentTypes.custodian,
-            minorIncompetentTypes.nextFriendForMinor,
-            minorIncompetentTypes.nextFriendForIncompetentPerson,
+            OTHER_TYPES.conservator,
+            OTHER_TYPES.guardian,
+            OTHER_TYPES.custodian,
+            OTHER_TYPES.nextFriendForMinor,
+            OTHER_TYPES.nextFriendForIncompetentPerson,
           ].map((minorIncompetentType, idx) => (
             <div
               className="usa-radio max-width-fit-content"

@@ -1,15 +1,17 @@
+import {
+  US_STATES,
+  US_STATES_OTHER,
+} from '@shared/business/entities/EntityConstants';
 import React from 'react';
 import classNames from 'classnames';
 
 export const PlaceOfLegalResidenceSelect = ({
   className = '',
   data,
-  onBlur,
+  handleBlur,
+  handleChange,
   refProp,
   type,
-  updateFormValueSequence,
-  usStates,
-  usStatesOther,
 }) => {
   return (
     <select
@@ -18,10 +20,10 @@ export const PlaceOfLegalResidenceSelect = ({
       id={`${type}.placeOfLegalResidence`}
       name={`${type}.placeOfLegalResidence`}
       ref={refProp || undefined}
-      value={data[type].placeOfLegalResidence || ''}
-      onBlur={onBlur}
+      value={data.placeOfLegalResidence || ''}
+      onBlur={handleBlur}
       onChange={e => {
-        updateFormValueSequence({
+        handleChange({
           key: e.target.name,
           value: e.target.value,
         });
@@ -29,8 +31,8 @@ export const PlaceOfLegalResidenceSelect = ({
     >
       <option value="">- Select -</option>
       <optgroup label="States">
-        {Object.keys(usStates).map(abbrev => {
-          const label = usStates[abbrev];
+        {Object.keys(US_STATES).map(abbrev => {
+          const label = US_STATES[abbrev];
           return (
             <option key={abbrev} value={abbrev}>
               {label}
@@ -40,8 +42,8 @@ export const PlaceOfLegalResidenceSelect = ({
       </optgroup>
 
       <optgroup label="Other">
-        {Object.keys(usStatesOther).map(abbrev => {
-          const label = usStatesOther[abbrev];
+        {Object.keys(US_STATES_OTHER).map(abbrev => {
+          const label = US_STATES_OTHER[abbrev];
           return (
             <option key={abbrev} value={abbrev}>
               {label}
