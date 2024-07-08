@@ -1134,8 +1134,7 @@ export const presenterSequences = {
     openUpdateCaseModalSequence as unknown as Function,
   paperServiceCompleteSequence:
     paperServiceCompleteSequence as unknown as Function,
-  petitionGenerationLiveValidationSequence:
-    petitionGenerationLiveValidationSequence as unknown as Function,
+  petitionGenerationLiveValidationSequence,
   printPaperServiceForTrialCompleteSequence:
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
@@ -1446,11 +1445,9 @@ export const presenterSequences = {
     updateFormValueAndCaseCaptionSequence as unknown as Function,
   updateFormValueAndSecondaryContactInfoSequence:
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
-  updateFormValueCountryTypeSequence:
-    updateFormValueCountryTypeSequence as unknown as Function,
+  updateFormValueCountryTypeSequence,
   updateFormValueSequence: updateFormValueSequence as unknown as Function,
-  updateFormValueUpdatedSequence:
-    updateFormValueUpdatedSequence as unknown as Function,
+  updateFormValueUpdatedSequence,
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
