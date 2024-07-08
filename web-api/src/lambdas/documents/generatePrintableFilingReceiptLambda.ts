@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { generatePrintableFilingReceiptInteractor } from '@shared/business/useCases/generatePrintableFilingReceiptInteractor';
+import { generatePrintableFilingReceiptInteractor } from '@web-api/business/useCases/docketEntry/generatePrintableFilingReceiptInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**

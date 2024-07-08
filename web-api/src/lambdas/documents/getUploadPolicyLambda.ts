@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getUploadPolicyInteractor } from '@shared/business/useCases/getUploadPolicyInteractor';
+import { getUploadPolicyInteractor } from '@web-api/business/useCases/document/getUploadPolicyInteractor';
 
 /**
  * used for getting the upload policy which is needed for users to upload directly to S3 via the UI
