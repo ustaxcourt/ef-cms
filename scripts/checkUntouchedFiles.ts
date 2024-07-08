@@ -2,8 +2,14 @@ import { execSync, spawnSync } from 'child_process';
 
 function runTypescriptCommand(cwd: string): { stdout: string } {
   return spawnSync(
-    'npx',
-    ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+    // 'npx',
+    // ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+    'node',
+    [
+      '--node-options="--max-old-space-size=8192 --stack-size=8192"',
+      './node_modules/typescript/bin/tsc',
+      '--noEmit',
+    ],
     {
       cwd,
       encoding: 'utf-8',
