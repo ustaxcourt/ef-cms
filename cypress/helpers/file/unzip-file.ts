@@ -1,17 +1,12 @@
-import decompress from 'decompress';
+import { unzipSync } from 'fflate';
+import fs from 'fs';
 
-export async function unzipFile({
-  destinationPath,
-  filePath,
-}: {
-  destinationPath: string;
-  filePath: string;
-}): Promise<string[] | void> {
-  try {
-    const files = await decompress(filePath, destinationPath);
-    return files.map(file => file.path);
-  } catch (error) {
-    console.error('Error in decompressing the zip:', filePath, error);
-    return;
-  }
+export function unzipFile({ fileName }: { fileName: string }): string[] {
+  const downloadsFolder = 'cypress/downloads';
+  const fileLocation = `${downloadsFolder}/${fileName}`;
+  const zipContent = fs.readFileSync(fileLocation);
+  const files = unzipSync(zipContent);
+  const fileNames = Object.keys(files);
+
+  return fileNames;
 }
