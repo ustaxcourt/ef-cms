@@ -1,24 +1,24 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const getDocument = async ({
   applicationContext,
   key,
   useTempBucket = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   key: string;
   useTempBucket?: boolean;
-}): Promise<Buffer> => {
-  const document = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: useTempBucket
-        ? applicationContext.environment.tempDocumentsBucketName
-        : applicationContext.environment.documentsBucketName,
-      Key: key,
-    })
-    .promise();
+}): Promise<Uint8Array> => {
+  const response = await applicationContext.getStorageClient().getObject({
+    Bucket: useTempBucket
+      ? applicationContext.environment.tempDocumentsBucketName
+      : applicationContext.environment.documentsBucketName,
+    Key: key,
+  });
 
-  if (!document.Body) {
-    throw new Error(`Document is empty. Document id is: ${key}`);
+  if (!response.Body) {
+    throw new Error(`Unable to get document (${key}) from persistence.`);
   }
-  return document.Body as Buffer;
+
+  return await response.Body.transformToByteArray();
 };
