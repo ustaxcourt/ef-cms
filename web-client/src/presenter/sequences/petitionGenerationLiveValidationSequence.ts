@@ -40,4 +40,4 @@ export const petitionGenerationLiveValidationSequence = [
       handleValidationErrorsRoute,
     ],
   },
-];
+] as unknown as (params: { validationKey: string[] }) => void;
