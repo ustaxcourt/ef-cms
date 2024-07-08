@@ -1,38 +1,23 @@
 import { MAX_FILE_SIZE_BYTES } from '../../../../shared/src/business/entities/EntityConstants';
+import { PresignedPost, createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * getUploadPolicy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @returns {Promise} the promise of the call to the storage client
- */
-export const getUploadPolicy = ({
+export const getUploadPolicy = async ({
   applicationContext,
   key,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   key: string;
-}) =>
-  new Promise((resolve, reject) => {
-    applicationContext.getStorageClient().createPresignedPost(
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Conditions: [
-          ['starts-with', '$key', key],
-          ['starts-with', '$Content-Type', ''],
-          ['content-length-range', 0, MAX_FILE_SIZE_BYTES],
-        ],
-      },
-      (err, data) => {
-        if (err) {
-          applicationContext.logger.error(
-            'unable to create the upload policy url',
-            err,
-          );
-          return reject(err);
-        }
-        resolve(data);
-      },
-    );
+}): Promise<PresignedPost> => {
+  const s3 = applicationContext.getStorageClient();
+
+  return await createPresignedPost(s3, {
+    Bucket: applicationContext.environment.documentsBucketName,
+    Conditions: [
+      ['starts-with', '$key', key],
+      ['starts-with', '$Content-Type', ''],
+      ['content-length-range', 0, MAX_FILE_SIZE_BYTES],
+    ],
+    Key: key,
   });
+};

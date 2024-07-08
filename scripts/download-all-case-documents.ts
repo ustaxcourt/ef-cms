@@ -27,14 +27,10 @@ const downloadPdf = async ({
   console.log(`BEGIN --- ${filename}`);
 
   // download pdf from S3
-  const data = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
-
+  const data = await applicationContext.getStorageClient().getObject({
+    Bucket: applicationContext.environment.documentsBucketName,
+    Key: docketEntryId,
+  });
   if (data && 'Body' in data && data.Body) {
     // @ts-ignore
     await fs.promises.writeFile(`${path}/${filename}`, data.Body);

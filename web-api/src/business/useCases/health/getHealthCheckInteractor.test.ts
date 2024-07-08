@@ -1,4 +1,9 @@
+import { S3 } from '@aws-sdk/client-s3';
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
+
+const mockListObjectsV2 = jest
+  .spyOn(S3.prototype, 'listObjectsV2')
+  .mockResolvedValue({} as never);
 
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statuses for all services', async () => {
@@ -29,13 +34,6 @@ describe('getHealthCheckInteractor', () => {
         };
       },
       getScannerResourceUri: () => '',
-      getStorageClient: () => {
-        return {
-          listObjectsV2: () => ({
-            promise: () => Promise.resolve(true),
-          }),
-        };
-      },
       logger: {
         error: () => {},
       },
@@ -64,6 +62,7 @@ describe('getHealthCheckInteractor', () => {
   });
 
   it('should return false for all services when services are down', async () => {
+    mockListObjectsV2.mockRejectedValue(new Error('S3 is down') as never);
     const status = await getHealthCheckInteractor({
       environment: {
         stage: 'dev',
@@ -98,13 +97,6 @@ describe('getHealthCheckInteractor', () => {
         };
       },
       getScannerResourceUri: () => '',
-      getStorageClient: () => {
-        return {
-          listObjectsV2: () => ({
-            promise: () => Promise.reject(true),
-          }),
-        };
-      },
       logger: {
         error: () => {},
       },
@@ -142,7 +134,7 @@ describe('getHealthCheckInteractor', () => {
     it('should get the status of the buckets when the current color is green', async () => {
       process.env.CURRENT_COLOR = 'pink';
       process.env.EFCMS_DOMAIN = 'example';
-      const listObjectsMock = jest.fn().mockReturnValue(Promise.resolve(true));
+      mockListObjectsV2.mockResolvedValue(true as never);
 
       await getHealthCheckInteractor({
         environment: {
@@ -167,31 +159,25 @@ describe('getHealthCheckInteractor', () => {
             getTableStatus: () => 'ACTIVE',
           };
         },
-        getStorageClient: () => {
-          return {
-            listObjectsV2: listObjectsMock,
-          };
-        },
-
         logger: {
           error: () => {},
         },
       } as any);
 
       // app bucket
-      expect(listObjectsMock.mock.calls[0][0].Bucket).toBe(
+      expect(mockListObjectsV2.mock.calls[0][0].Bucket).toBe(
         `app-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
       // app fail-over bucket
-      expect(listObjectsMock.mock.calls[1][0].Bucket).toBe(
+      expect(mockListObjectsV2.mock.calls[1][0].Bucket).toBe(
         `app-failover-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
       // public bucket
-      expect(listObjectsMock.mock.calls[4][0].Bucket).toBe(
+      expect(mockListObjectsV2.mock.calls[4][0].Bucket).toBe(
         `${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
       // public fail-over bucket
-      expect(listObjectsMock.mock.calls[5][0].Bucket).toBe(
+      expect(mockListObjectsV2.mock.calls[5][0].Bucket).toBe(
         `failover-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
       );
     });

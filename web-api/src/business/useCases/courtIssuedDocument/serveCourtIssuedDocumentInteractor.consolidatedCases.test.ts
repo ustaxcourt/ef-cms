@@ -12,7 +12,6 @@ import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
@@ -43,12 +42,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   let leadCaseDocketEntries;
   let consolidatedCase1DocketEntries;
 
-  beforeAll(() => {
-    applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser.mockReturnValue(null);
-  });
-
   beforeEach(() => {
     applicationContext
       .getUseCaseHelpers()
@@ -65,12 +58,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
