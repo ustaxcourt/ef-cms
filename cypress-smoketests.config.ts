@@ -17,6 +17,7 @@ import {
   getNewAccountVerificationCode,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
@@ -93,6 +94,9 @@ export default defineConfig({
         },
         toggleFeatureFlag(args) {
           return toggleFeatureFlag(args);
+        },
+        unzipFile({ fileName }) {
+          return unzipFile({ fileName });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });

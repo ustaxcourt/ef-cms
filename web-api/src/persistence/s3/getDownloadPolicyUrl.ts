@@ -1,6 +1,9 @@
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { environment } from '@web-api/environment';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
-export const getDownloadPolicyUrl = ({
+export const getDownloadPolicyUrl = async ({
   applicationContext,
   filename,
   key,
@@ -14,36 +17,20 @@ export const getDownloadPolicyUrl = ({
   useTempBucket?: boolean;
 }): Promise<{ url: string }> => {
   const bucketName = useTempBucket
-    ? applicationContext.environment.tempDocumentsBucketName
-    : applicationContext.environment.documentsBucketName;
+    ? environment.tempDocumentsBucketName
+    : environment.documentsBucketName;
 
-  return new Promise((resolve, reject) => {
-    applicationContext.getStorageClient().getSignedUrl(
-      'getObject',
-      {
-        Bucket: bucketName,
-        Expires: urlTtl,
-        Key: key,
-        ResponseContentDisposition: filename
-          ? `inline;filename="${filename}"`
-          : undefined,
-      },
-      (err, data) => {
-        if (err) {
-          applicationContext.logger.error(
-            'could not create a download policy url',
-            err,
-          );
-          return reject(new Error(err));
-        }
-        resolve({
-          url: applicationContext.getUtilities().documentUrlTranslator({
-            applicationContext,
-            documentUrl: data,
-            useTempBucket,
-          }),
-        });
-      },
-    );
+  const ResponseContentDisposition = filename
+    ? `inline;filename="${filename}"`
+    : undefined;
+
+  const client = applicationContext.getStorageClient();
+  const command = new GetObjectCommand({
+    Bucket: bucketName,
+    Key: key,
+    ResponseContentDisposition,
   });
+  const url = await getSignedUrl(client, command, { expiresIn: urlTtl });
+
+  return { url };
 };

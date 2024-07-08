@@ -13,15 +13,6 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * serveExternallyFiledDocumentInteractor
- * @param {Object} applicationContext the application context
- * @param {Object} providers the providers object
- * @param {object} providers.clientConnectionId the client connection Id
- * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
- * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
- * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
- */
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
   {
@@ -35,7 +26,7 @@ export const serveExternallyFiledDocument = async (
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
   },
-) => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -73,20 +64,11 @@ export const serveExternallyFiledDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
-
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
       docketEntryId,
-      documentBytes: pdfData,
     });
 
   await applicationContext

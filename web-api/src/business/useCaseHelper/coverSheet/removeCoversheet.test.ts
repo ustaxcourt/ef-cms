@@ -1,14 +1,11 @@
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { removeCoversheet } from './removeCoversheet';
-import { testPdfDoc } from '@shared/business/test/getFakeFile';
 
 describe('removeCoversheet', () => {
   it('should throw an exception when the requested document cannot be found in S3', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => {
-        throw new Error('oh no');
-      },
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockRejectedValueOnce(new Error('oh no'));
 
     await expect(
       removeCoversheet(applicationContext, {
@@ -20,12 +17,6 @@ describe('removeCoversheet', () => {
   it('should remove the coversheet from the provided docket entry`s pdf', async () => {
     const mockDocketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
     const numberOfPagesBeforeCoversheetRemoval = 2;
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
 
     const result = await removeCoversheet(applicationContext, {
       docketEntryId: mockDocketEntryId,
