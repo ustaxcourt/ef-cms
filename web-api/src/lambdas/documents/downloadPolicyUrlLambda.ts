@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getDownloadPolicyUrlInteractor } from '@shared/business/useCases/getDownloadPolicyUrlInteractor';
+import { getDownloadPolicyUrlInteractor } from '@web-api/business/useCases/document/getDownloadPolicyUrlInteractor';
 
 /**
  * used for getting the download policy which is needed for users to download files directly from S3 via the UI
