@@ -6,4 +6,9 @@ export const updateFormValueCountryTypeSequence = [
   clearValidationMessageAction,
   clearAddressFieldsAction,
   setFormValueAction,
-];
+] as unknown as (params: {
+  key: string;
+  value: any;
+  type: string;
+  index?: number;
+}) => void;

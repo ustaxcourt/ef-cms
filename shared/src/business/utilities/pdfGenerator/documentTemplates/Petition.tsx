@@ -200,14 +200,16 @@ export const Petition = ({
               <div>{contactPrimary.country}</div>
             )}
             <div>{contactPrimary.phone}</div>
-            <div>
-              {BUSINESS_TYPE_VALUES.includes(partyType) ? (
-                <b>Place of business: </b>
-              ) : (
-                <b>Place of legal residence: </b>
-              )}
-              {ALL_STATE_OPTIONS[contactPrimary.placeOfLegalResidence]}
-            </div>
+            {contactPrimary.placeOfLegalResidence && (
+              <div>
+                {BUSINESS_TYPE_VALUES.includes(partyType) ? (
+                  <b>Place of business: </b>
+                ) : (
+                  <b>Place of legal residence: </b>
+                )}
+                {ALL_STATE_OPTIONS[contactPrimary.placeOfLegalResidence]}
+              </div>
+            )}
             <div>
               <b>Service email: </b>
               {contactPrimary.email}
@@ -248,12 +250,12 @@ export const Petition = ({
               <b>Register for electronic filing and service: </b>
               {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}
             </div>
-            <div>
-              <b>Place of legal residence: </b>
-              {contactSecondary.placeOfLegalResidence
-                ? ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]
-                : 'N/A'}
-            </div>
+            {contactSecondary.placeOfLegalResidence && (
+              <div>
+                <b>Place of legal residence: </b>
+                {ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]}
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -1,42 +1,40 @@
+import {
+  AddressType,
+  OnBlurHandler,
+  OnChangeHandler,
+} from '@web-client/views/StartCase/AddressUpdated';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { PlaceOfLegalResidenceSelect } from '@web-client/views/StartCase/PlaceOfLegalResidenceSelect';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  type: string;
-  bind: string;
-  onChange: string;
-  registerRef: Function;
+type PlaceOfLegalResidenceProps = {
+  addressInfo: AddressType;
+  handleBlur: OnBlurHandler;
+  handleChange: OnChangeHandler;
   placeOfLegalResidenceTitle?: string;
-  onBlurSequence: Function;
+  registerRef?: Function;
+  type: string;
 };
 
-export const PlaceOfLegalResidenceDropdown = connect(
-  {
-    data: state[props.bind],
-    onBlurSequence: props.onBlurSequence,
-    placeOfLegalResidenceTitle: props.placeOfLegalResidenceTitle,
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueSequence: sequences[props.onChange],
-    usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
-    validationErrors: state.validationErrors,
-  },
+const placeOfLegalResidenceDeps = {
+  validationErrors: state.validationErrors,
+};
+
+export const PlaceOfLegalResidenceDropdown = connect<
+  PlaceOfLegalResidenceProps,
+  typeof placeOfLegalResidenceDeps
+>(
+  placeOfLegalResidenceDeps,
   function PlaceOfLegalResidenceDropdown({
-    data,
-    onBlurSequence,
+    addressInfo,
+    handleBlur,
+    handleChange,
     placeOfLegalResidenceTitle,
     registerRef,
     type,
-    updateFormValueSequence,
-    usStates,
-    usStatesOther,
     validationErrors,
   }) {
     return (
@@ -57,14 +55,13 @@ export const PlaceOfLegalResidenceDropdown = connect(
               </span>
             </label>
             <PlaceOfLegalResidenceSelect
-              data={data}
+              data={addressInfo}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
               refProp={
                 registerRef && registerRef(`${type}.placeOfLegalResidence`)
               }
               type={type}
-              updateFormValueSequence={updateFormValueSequence}
-              usStates={usStates}
-              usStatesOther={usStatesOther}
             />
           </FormGroup>
         </Mobile>
@@ -85,15 +82,13 @@ export const PlaceOfLegalResidenceDropdown = connect(
             </label>
             <PlaceOfLegalResidenceSelect
               className="max-width-180"
-              data={data}
+              data={addressInfo}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
               refProp={
                 registerRef && registerRef(`${type}.placeOfLegalResidence`)
               }
               type={type}
-              updateFormValueSequence={updateFormValueSequence}
-              usStates={usStates}
-              usStatesOther={usStatesOther}
-              onBlur={onBlurSequence}
             />
           </FormGroup>
         </NonMobile>

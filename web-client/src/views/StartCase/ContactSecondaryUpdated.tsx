@@ -1,58 +1,55 @@
-import { Address } from './Address';
-import { Country } from './Country';
+import {
+  AddressType,
+  AddressUpdated,
+  OnBlurHandler,
+  OnChangeCountryTypeHandler,
+  OnChangeHandler,
+} from '@web-client/views/StartCase/AddressUpdated';
+import { CountryUpdated } from '@web-client/views/StartCase/CountryUpdated';
 import { ElectronicServiceConsentCheckbox } from '@web-client/views/StartCaseInternal/ElectronicServiceCheckbox';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { InternationalAddress } from './InternationalAddress';
+import { InternationalAddressUpdated } from '@web-client/views/StartCase/InternationalAddressUpdated';
 import { PlaceOfLegalResidenceDropdown } from '@web-client/views/StartCase/PlaceOfLegalResidenceDropdown';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  bind: string;
-  onBlur: string;
-  onChange: string;
-  nameLabel: string;
-  registerRef?: Function;
+type ContactSecondary = {
+  addressInfo: AddressType;
   displayInCareOf?: boolean;
-  showSameAsPrimaryCheckbox?: boolean;
-  onChangeCountryType: string;
+  nameLabel: string;
+  handleBlur: OnBlurHandler;
+  handleChange: OnChangeHandler;
+  handleChangeCountryType: OnChangeCountryTypeHandler;
+  registerRef?: Function;
+  showSameAsPrimaryCheckbox: boolean;
+  useSameAsPrimary: boolean;
 };
 
-export const ContactSecondaryUpdated = connect(
-  {
-    bind: props.bind,
-    constants: state.constants,
-    data: state[props.bind],
-    displayInCareOf: props.displayInCareOf,
-    nameLabel: props.nameLabel,
-    onBlur: props.onBlur,
-    onBlurSequence: sequences[props.onBlur],
-    onChange: props.onChange,
-    onChangeCountryType: props.onChangeCountryType,
-    onChangeSequence: sequences[props.onChange],
-    registerRef: props.registerRef,
-    resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
-    showSameAsPrimaryCheckbox: props.showSameAsPrimaryCheckbox,
-    validationErrors: state.validationErrors,
-  },
+const contactSecondaryDeps = {
+  constants: state.constants,
+  resetSecondaryAddressSequence: sequences.resetSecondaryAddressSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const ContactSecondaryUpdated = connect<
+  ContactSecondary,
+  typeof contactSecondaryDeps
+>(
+  contactSecondaryDeps,
   function ContactSecondaryUpdated({
-    bind,
+    addressInfo,
     constants,
-    data,
     displayInCareOf,
+    handleBlur,
+    handleChange,
+    handleChangeCountryType,
     nameLabel,
-    onBlur,
-    onBlurSequence,
-    onChange,
-    onChangeCountryType,
-    onChangeSequence,
     registerRef,
     resetSecondaryAddressSequence,
     showSameAsPrimaryCheckbox,
+    useSameAsPrimary,
     validationErrors = {} as {
       contactSecondary?: {
         secondaryName: string;
@@ -83,14 +80,14 @@ export const ContactSecondaryUpdated = connect(
               name="contactSecondary.name"
               ref={registerRef && registerRef('contactSecondary.name')}
               type="text"
-              value={data.contactSecondary.name || ''}
+              value={addressInfo.name || ''}
               onBlur={() => {
-                onBlurSequence({
+                handleBlur({
                   validationKey: ['contactSecondary', 'name'],
                 });
               }}
               onChange={e => {
-                onChangeSequence({
+                handleChange({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -99,62 +96,60 @@ export const ContactSecondaryUpdated = connect(
           </FormGroup>
           {displayInCareOf && (
             <InCareOf
-              inCareOf={data.contactSecondary.inCareOf}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              inCareOf={addressInfo.inCareOf}
               registerRef={registerRef}
               type="contactSecondary"
               validationErrors={validationErrors}
-              onBlurSequence={onBlurSequence}
-              onChangeSequence={onChangeSequence}
             />
           )}
           {showSameAsPrimaryCheckbox && (
             <SameAddressCheckbox
               resetSecondaryAddressSequence={resetSecondaryAddressSequence}
-              useSameAsPrimary={data.useSameAsPrimary}
+              useSameAsPrimary={useSameAsPrimary}
             />
           )}
-          {!data.useSameAsPrimary && (
+          {!useSameAsPrimary && (
             <>
-              <Country
-                bind={bind}
+              <CountryUpdated
+                addressInfo={addressInfo}
+                handleBlur={handleBlur}
+                handleChange={handleChangeCountryType}
                 registerRef={registerRef}
                 type="contactSecondary"
-                onBlur={onBlurSequence}
-                onChange={onChange}
-                onChangeCountryType={onChangeCountryType}
               />
-              {data.contactSecondary.countryType ===
-                constants.COUNTRY_TYPES.DOMESTIC && (
-                <Address
-                  bind={bind}
+              {addressInfo.countryType === constants.COUNTRY_TYPES.DOMESTIC && (
+                <AddressUpdated
+                  addressInfo={addressInfo}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                   registerRef={registerRef}
                   type="contactSecondary"
-                  onBlur={onBlur}
-                  onChange={onChange}
                 />
               )}
-              {data.contactSecondary.countryType ===
+              {addressInfo.countryType ===
                 constants.COUNTRY_TYPES.INTERNATIONAL && (
-                <InternationalAddress
-                  bind={bind}
+                <InternationalAddressUpdated
+                  addressInfo={addressInfo}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                   registerRef={registerRef}
                   type="contactSecondary"
-                  onBlur={onBlur}
-                  onChange={onChange}
                 />
               )}
             </>
           )}
           <PlaceOfLegalResidenceDropdown
-            bind={bind}
-            registerRef={registerRef}
-            type="contactSecondary"
-            onBlurSequence={() => {
-              onBlurSequence({
+            addressInfo={addressInfo}
+            handleBlur={() => {
+              handleBlur({
                 validationKey: ['contactSecondary', 'placeOfLegalResidence'],
               });
             }}
-            onChange={onChange}
+            handleChange={handleChange}
+            registerRef={registerRef}
+            type="contactSecondary"
           />
           <FormGroup
             className="phone-input"
@@ -174,14 +169,14 @@ export const ContactSecondaryUpdated = connect(
               name="contactSecondary.phone"
               ref={registerRef && registerRef('contactSecondary.phone')}
               type="tel"
-              value={data.contactSecondary.phone || ''}
+              value={addressInfo.phone || ''}
               onBlur={() => {
-                onBlurSequence({
+                handleBlur({
                   validationKey: ['contactSecondary', 'phone'],
                 });
               }}
               onChange={e => {
-                onChangeSequence({
+                handleChange({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -206,14 +201,14 @@ export const ContactSecondaryUpdated = connect(
               name="contactSecondary.email"
               ref={registerRef && registerRef('contactSecondary.email')}
               type="text"
-              value={data.contactSecondary.email || ''}
+              value={addressInfo.email || ''}
               onBlur={() => {
-                onBlurSequence({
+                handleBlur({
                   validationKey: ['contactSecondary', 'email'],
                 });
               }}
               onChange={e => {
-                onChangeSequence({
+                handleChange({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -224,7 +219,7 @@ export const ContactSecondaryUpdated = connect(
             bind="form"
             contactType="contactSecondary"
           />
-          {data.contactSecondary.hasConsentedToEService && (
+          {addressInfo.hasConsentedToEService && (
             <WarningNotificationComponent
               alertWarning={{
                 message:
@@ -275,10 +270,10 @@ function SameAddressCheckbox({
 }
 
 export function InCareOf({
+  handleBlur,
+  handleChange,
   inCareOf,
   isOptional = false,
-  onBlurSequence,
-  onChangeSequence,
   registerRef,
   type,
   validationErrors,
@@ -307,12 +302,12 @@ export function InCareOf({
         type="text"
         value={inCareOf || ''}
         onBlur={() => {
-          onBlurSequence({
+          handleBlur({
             validationKey: [type, 'inCareOf'],
           });
         }}
         onChange={e => {
-          onChangeSequence({
+          handleChange({
             key: e.target.name,
             value: e.target.value,
           });

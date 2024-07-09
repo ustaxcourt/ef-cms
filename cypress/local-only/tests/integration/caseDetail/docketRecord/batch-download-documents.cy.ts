@@ -72,6 +72,11 @@ describe('Batch Download Documents', () => {
     });
   });
 
+  beforeEach(() => {
+    const downloadPath = Cypress.config('downloadsFolder');
+    cy.task('ensureFolderExists', downloadPath);
+  });
+
   afterEach(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
