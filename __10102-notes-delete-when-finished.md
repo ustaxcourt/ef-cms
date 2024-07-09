@@ -28,11 +28,12 @@ only 140 or 160 characters long. Which is it?
 ## Things to do
 
 - write integration tests (solo / group)
-    - scraping pdf functionality
 
 - when refreshing the page that has the StatusReportOrderResponse component, some issues occur (should we address?)
 
 - Run through all tests case + DoD checklist (group / solo)
+
+- css issues, make sure due date lines up with order type + make all radio buttons column (solo)
 
 ## Feedback from judges:
 
