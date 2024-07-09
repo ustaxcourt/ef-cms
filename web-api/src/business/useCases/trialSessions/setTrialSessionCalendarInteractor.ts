@@ -14,6 +14,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
 
+const CHUNK_SIZE = 50;
+
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
@@ -184,7 +186,7 @@ export const setTrialSessionCalendarInteractor = async (
     ),
   ];
 
-  const chunkyFunctions = chunk(funcs, 10);
+  const chunkyFunctions = chunk(funcs, CHUNK_SIZE);
   for (let singleChunk of chunkyFunctions) {
     await Promise.all(singleChunk.map(func => func()));
   }
