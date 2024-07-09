@@ -18,6 +18,17 @@ import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpe
 // serve it (docketclerk)!
 // title comes through
 // Saved to docket
+// test message flow
+
+const today = formatNow(FORMATS.MMDDYYYY);
+const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
+const expectedPdfLines = [
+  'On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is',
+  `ORDERED that the parties shall file a further status report by ${formattedToday}. It is further`,
+  'ORDERED that this case is stricken from the trial session. It is further',
+  'ORDERED that jurisdiction is retained by the undersigned. It is further',
+  'ORDERED that Here is my additional order text.',
+];
 
 describe('Judge files status order response', function () {
   // pdf preview (does it exist)
@@ -130,14 +141,26 @@ describe('Judge files status order response', function () {
       cy.get('#tab-document-view').click();
       cy.contains('Status Report').click();
       cy.get('[data-testid="order-response-button"]').click();
+
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+
+      // save as draft
       cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+        expect(req.body.contentHtml).to.include(expectedPdfLines[0]);
+        expectedPdfLines.forEach((pdfLine, i) => {
+          if (i > 0) {
+            expect(req.body.contentHtml).to.not.include(pdfLine);
+          }
+        });
+      });
 
       cy.contains('Apply Signature').should('exist');
     });
 
     it('should save draft when all options are selected', () => {
       loginAsColvin();
-      const today = formatNow(FORMATS.MMDDYYYY);
       // navigate to status report order response
       cy.visit('/case-detail/107-19');
       cy.get('#tab-document-view').click();
@@ -155,15 +178,24 @@ describe('Judge files status order response', function () {
       cy.get('#docket-entry-description').clear();
       cy.get('#docket-entry-description').type('Important Order');
 
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+
       // save as draft
       cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+        expectedPdfLines.forEach(pdfLine => {
+          expect(req.body.contentHtml).to.include(pdfLine);
+        });
+      });
 
       cy.contains('Apply Signature').should('exist');
     });
 
     it('should save draft when order type is "Status Report or Stipulated Decision"', () => {
+      const secondPdfLine = `ORDERED that the parties shall file a status report or proposed stipulated decision by ${formattedToday}`;
       loginAsColvin();
-      const today = formatNow(FORMATS.MMDDYYYY);
+
       // navigate to status report order response
       cy.visit('/case-detail/107-19');
       cy.get('#tab-document-view').click();
@@ -174,13 +206,24 @@ describe('Judge files status order response', function () {
       cy.get('#order-type-or-stipulated-decision').check({ force: true });
       cy.get('#status-report-due-date-picker').type(today);
 
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+
       // save as draft
       cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+        expect(req.body.contentHtml).to.include(expectedPdfLines[0]);
+        expect(req.body.contentHtml).to.include(secondPdfLine);
+        expect(req.body.contentHtml).to.not.include(expectedPdfLines[1]);
+      });
 
       cy.contains('Apply Signature').should('exist');
     });
 
     it('should save draft when jurisdiction is "Restored to the general docket"', () => {
+      const secondPdfLine =
+        'ORDERED that this case is restored to the general docket.';
+
       loginAsColvin();
       // navigate to status report order response
       cy.visit('/case-detail/107-19');
@@ -191,8 +234,17 @@ describe('Judge files status order response', function () {
       // selecting our options
       cy.get('#jurisdiction-restored-to-general-docket').check({ force: true });
 
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+
       // save as draft
       cy.get('[data-testid="save-draft-button"]').click();
+
+      cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+        console.log(req.body.contentHtml);
+        expect(req.body.contentHtml).to.include(expectedPdfLines[0]);
+        expect(req.body.contentHtml).to.include(secondPdfLine);
+        expect(req.body.contentHtml).to.not.include(expectedPdfLines[3]);
+      });
 
       cy.contains('Apply Signature').should('exist');
     });
