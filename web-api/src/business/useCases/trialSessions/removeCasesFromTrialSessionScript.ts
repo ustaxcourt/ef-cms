@@ -1,7 +1,6 @@
 import { createApplicationContext } from '@web-api/applicationContext';
+import { get, put } from '@web-api/persistence/dynamodbClientService';
 import { removeCaseFromTrial } from '@web-api/business/useCases/trialSessions/removeCaseFromTrialInteractor';
-import { setTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/setTrialSessionCalendarInteractor';
-import { updateQcCompleteForTrial } from '@shared/business/useCases/updateQcCompleteForTrialInteractor';
 const eligibleDocketNumbers = [
   '17815-23',
   '17461-23',
@@ -227,10 +226,24 @@ async function main() {
       });
     }),
   );
+
+  const trialSession = await get({
+    Key: {
+      pk: `trial-session|${trialSessionId}`,
+      sk: `trial-session|${trialSessionId}`,
+    },
+    applicationContext,
+  });
+  trialSession.caseOrder = [];
+  trialSession.sessionStatus = 'New';
+  trialSession.isCalendared = false;
+
+  await put({ Item: trialSession, applicationContext });
   // console.time('Calling interactor');
 
   // console.timeEnd('Calling interactor');
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 main();
 // trial sessionIdd that failed 38b8285d-9256-44fc-8979-e6b85e484195/
