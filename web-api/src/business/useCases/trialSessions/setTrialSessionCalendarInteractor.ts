@@ -20,9 +20,9 @@ export const setTrialSessionCalendarInteractor = async (
 ): Promise<RawTrialSession> => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+  // if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
+  //   throw new UnauthorizedError('Unauthorized');
+  // }
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
@@ -65,6 +65,7 @@ export const setTrialSessionCalendarInteractor = async (
 
   eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
+  console.time('getEligibleCasesForTrialSession');
   const eligibleCases = (
     await applicationContext
       .getPersistenceGateway()
@@ -83,6 +84,9 @@ export const setTrialSessionCalendarInteractor = async (
       0,
       trialSessionEntity.maxCases - manuallyAddedQcCompleteCases.length,
     );
+  console.timeEnd('getEligibleCasesForTrialSession');
+
+  console.log('Eligible Case Count: ', eligibleCases.length);
 
   const allDocketNumbers = uniq(
     flatten([
@@ -91,12 +95,15 @@ export const setTrialSessionCalendarInteractor = async (
       manuallyAddedQcIncompleteCases.map(({ docketNumber }) => docketNumber),
     ]),
   );
+  console.log('docket Numbers', allDocketNumbers);
 
+  console.time('acquireLock');
   await acquireLock({
     applicationContext,
     identifiers: allDocketNumbers.map(item => `case|${item}`),
     ttl: 900,
   });
+  console.timeEnd('acquireLock');
 
   /**
    * sets a manually added case as calendared with the trial session details
@@ -153,6 +160,7 @@ export const setTrialSessionCalendarInteractor = async (
     ]);
   };
 
+  console.time('Promise.all cases');
   await Promise.all([
     ...manuallyAddedQcIncompleteCases.map(caseRecord =>
       removeManuallyAddedCaseFromTrialSession({
@@ -164,7 +172,9 @@ export const setTrialSessionCalendarInteractor = async (
     ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
     ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
   ]);
+  console.timeEnd('Promise.all cases');
 
+  console.time('Promise.all removeLock');
   await Promise.all(
     allDocketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().removeLock({
@@ -173,11 +183,14 @@ export const setTrialSessionCalendarInteractor = async (
       }),
     ),
   );
+  console.timeEnd('Promise.all removeLock');
 
+  console.time('updateTrialSession');
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
+  console.timeEnd('updateTrialSession');
 
   return new TrialSession(trialSessionEntity.toRawObject(), {
     applicationContext,
