@@ -129,7 +129,7 @@ export const StatusReportOrderResponse = connect(
                     <label className="usa-label" htmlFor="order-type-radios">
                       Order type
                     </label>
-                    <div className="usa-radio usa-radio__block">
+                    <div className="usa-radio">
                       <input
                         aria-describedby="order-type-radios"
                         aria-label="status report"
@@ -154,7 +154,7 @@ export const StatusReportOrderResponse = connect(
                       </label>
                     </div>
 
-                    <div className="usa-radio usa-radio__block">
+                    <div className="usa-radio">
                       <input
                         aria-describedby="order-type-radios"
                         aria-label="status report or stipulated decision"

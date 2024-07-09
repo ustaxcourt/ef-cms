@@ -190,8 +190,9 @@ select.case-status {
   width: 379px;
 }
 
-div.usa-radio.usa-radio__inline,
-div.usa-radio.usa-radio__block {
+div.usa-radio.usa-radio__inline {
+  display: inline;
+
   .usa-radio__label {
     padding-right: 2rem;
 
@@ -199,14 +200,6 @@ div.usa-radio.usa-radio__block {
       padding-right: 1rem;
     }
   }
-}
-
-div.usa-radio.usa-radio__inline {
-  display: inline;
-}
-
-div.usa-radio.usa-radio__block {
-  display: block;
 }
 
 input[type='number']::-webkit-inner-spin-button,
