@@ -1,13 +1,12 @@
-import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { formatDateIfToday } from '../computeds/formattedWorkQueue';
-import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const batchCompleteMessageAction = async ({
   applicationContext,
   get,
-  store,
-}: ActionProps): Promise<{ batchCompleteResult: BatchCompleteResultType }> => {
+  path,
+}: ActionProps) => {
   const messages = get(state.messagesPage.selectedMessages);
 
   const batchCompleteResult: BatchCompleteResultType = {
@@ -20,9 +19,11 @@ export const batchCompleteMessageAction = async ({
     parentMessageId,
   }));
 
+  let completedMessages;
+
   try {
     // what if some of these fail?
-  const { user } = await applicationContext
+    completedMessages = await applicationContext
       .getUseCases()
       .completeMessageInteractor(applicationContext, {
         messages: messagesToComplete,
@@ -41,15 +42,15 @@ export const batchCompleteMessageAction = async ({
       'Something happened while trying to complete messages from the inbox',
       error,
     );
+    return path.error({
+      alertError: {
+        message: 'Please try again',
+        title: 'Messages could not be completed',
+      },
+    });
   }
-  store.set(state.messagesPage.messagesCompletedBy, user);
-  store.set(state.messagesPage.messagesCompletedAt, createISODateString());
-  store.set(
-    state.messagesPage.completedMessagesList,
-    Array.from(messages.keys()),
-  );
-  
-  return { batchCompleteResult };
+
+  return path.success({ completedMessages });
 };
 
 export type BatchCompleteResultType = {
