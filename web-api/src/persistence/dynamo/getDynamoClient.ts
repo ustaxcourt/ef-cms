@@ -21,7 +21,7 @@ export const getDynamoClient = (
         applicationContext.environment.stage === 'local'
           ? 'http://localhost:8000'
           : undefined,
-      maxAttempts: 5,
+      maxAttempts: 1,
       region: useMainRegion
         ? applicationContext.environment.masterRegion
         : applicationContext.environment.region,
