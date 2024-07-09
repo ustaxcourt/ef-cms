@@ -250,7 +250,7 @@ export const StatusReportOrderResponse = connect(
                     <label className="usa-label" htmlFor="jurisdiction-radios">
                       Jurisdiction
                     </label>
-                    <div className="usa-radio usa-radio__inline">
+                    <div className="usa-radio usa-radio">
                       <input
                         aria-describedby="jurisdiction-radios"
                         aria-label="retained"
@@ -274,7 +274,7 @@ export const StatusReportOrderResponse = connect(
                         Retained
                       </label>
                     </div>
-                    <div className="usa-radio usa-radio__inline">
+                    <div className="usa-radio usa-radio">
                       <input
                         aria-describedby="jurisdiction-radios"
                         aria-label="restored to general docket"
