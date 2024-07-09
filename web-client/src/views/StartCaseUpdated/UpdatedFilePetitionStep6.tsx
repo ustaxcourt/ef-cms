@@ -253,7 +253,7 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                           petitionFormatted.contactSecondary
                             .placeOfLegalResidence
                         ]
-                      : 'N / A'}
+                      : 'N/A'}
                   </span>
                 </div>
               </div>
