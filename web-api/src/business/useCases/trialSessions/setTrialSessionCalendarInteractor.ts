@@ -12,7 +12,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { flatten, partition, uniq } from 'lodash';
+import { chunk, flatten, partition, uniq } from 'lodash';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -161,17 +161,34 @@ export const setTrialSessionCalendarInteractor = async (
   };
 
   console.time('Promise.all cases');
-  await Promise.all([
-    ...manuallyAddedQcIncompleteCases.map(caseRecord =>
-      removeManuallyAddedCaseFromTrialSession({
-        applicationContext,
-        caseRecord,
-        trialSessionEntity,
-      }),
+
+  // ideas
+  // Do them in batches
+  // Semaphore with some number of open slots.
+  // Could combine them!
+
+  const funcs = [
+    ...manuallyAddedQcIncompleteCases.map(
+      caseRecord => () =>
+        removeManuallyAddedCaseFromTrialSession({
+          applicationContext,
+          caseRecord,
+          trialSessionEntity,
+        }),
     ),
-    ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
-    ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
-  ]);
+    ...manuallyAddedQcCompleteCases.map(
+      aCase => () => setManuallyAddedCaseAsCalendared(aCase),
+    ),
+    ...eligibleCases.map(
+      aCase => () => setTrialSessionCalendarForEligibleCase(aCase),
+    ),
+  ];
+
+  const chunkyFunctions = chunk(funcs, 10);
+  for (let singleChunk of chunkyFunctions) {
+    await Promise.all(singleChunk.map(func => func()));
+  }
+
   console.timeEnd('Promise.all cases');
 
   console.time('Promise.all removeLock');
