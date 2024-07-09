@@ -178,7 +178,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
       filesCompleted: 0,
       totalFiles: documentsToZip.length,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 
   const trialDate = formatDateString(
