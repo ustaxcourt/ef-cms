@@ -191,7 +191,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
   });
 
   describe('Myself and Spouse', () => {
-    it('should display petitioner information', () => {
+    beforeEach(() => {
       cy.get('[data-testid="filing-type-1"]').click();
       cy.get('[data-testid="contact-primary-name"]').type(contactInfo.name);
       cy.get('[data-testid="contactPrimary.address1"]').type(
@@ -206,6 +206,9 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         contactInfo.placeOfLegalResidence,
       );
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
+    });
+
+    it('should display petitioner information correctly for deceased spouse', () => {
       cy.get('[data-testid="is-spouse-deceased-0"]').click();
 
       cy.get('[data-testid="contact-secondary-name"]').type(
@@ -303,6 +306,247 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       cy.get('[data-testid="secondary-place-of-legal-residence"]').should(
         'have.text',
         secondaryContactInfo.placeOfLegalResidenceLabel,
+      );
+
+      cy.get('[data-testid="contact-info-phone-number"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.phone);
+
+      cy.get('[data-testid="contact-info-email"]').should(
+        'have.text',
+        secondaryContactInfo.email,
+      );
+    });
+
+    it('should display petitioner information correctly when user does not select use same address', () => {
+      cy.get('[data-testid="is-spouse-deceased-0"]').click();
+
+      cy.get('[data-testid="contact-secondary-name"]').type(
+        secondaryContactInfo.name,
+      );
+
+      cy.get('[data-testid="contactSecondary-in-care-of"]').type(
+        secondaryContactInfo.inCareOf,
+      );
+
+      cy.get('[data-testid="use-same-address-above-label"]').click();
+      cy.get('[data-testid="contactSecondary.address1"]').type(
+        secondaryContactInfo.address1,
+      );
+      cy.get('[data-testid="contactSecondary.city"]').type(
+        secondaryContactInfo.city,
+      );
+      cy.get('[data-testid="contactSecondary.state"]').select(
+        secondaryContactInfo.state,
+      );
+
+      cy.get('[data-testid="contactSecondary.postalCode"]').type(
+        secondaryContactInfo.postalCode,
+      );
+      cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select(
+        secondaryContactInfo.placeOfLegalResidence,
+      );
+      cy.get('[data-testid="contact-secondary-email"]').type(
+        secondaryContactInfo.email,
+      );
+
+      cy.get('[data-testid="contact-secondary-phone"]').type(
+        secondaryContactInfo.phone,
+      );
+
+      cy.get(
+        '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
+      ).click();
+      cy.get('[data-testid="step-1-next-button"]').click();
+
+      fillPetitionFileInformation(VALID_FILE);
+      fillIrsNoticeInformation(VALID_FILE);
+      fillCaseProcedureInformation();
+      fillStinInformation(VALID_FILE);
+
+      cy.get('[data-testid="contact-name"]')
+        .eq(1)
+        .invoke('text')
+        .then(value => value.trim())
+        .should('equal', secondaryContactInfo.name);
+
+      cy.get('[data-testid="contact-in-care-of"]').should(
+        'contain.text',
+        secondaryContactInfo.inCareOf,
+      );
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.address1);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.city);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.state);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.postalCode);
+
+      cy.get('[data-testid="secondary-place-of-legal-residence"]').should(
+        'have.text',
+        secondaryContactInfo.placeOfLegalResidenceLabel,
+      );
+
+      cy.get('[data-testid="contact-info-phone-number"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.phone);
+
+      cy.get('[data-testid="contact-info-email"]').should(
+        'have.text',
+        secondaryContactInfo.email,
+      );
+    });
+
+    it('should display petitioner information correctly for spouse', () => {
+      cy.get('[data-testid="is-spouse-deceased-1"]').click();
+      cy.get('[data-testid="have-spouse-consent-label"]').click();
+
+      cy.get('[data-testid="contact-secondary-name"]').type(
+        secondaryContactInfo.name,
+      );
+      cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select(
+        secondaryContactInfo.placeOfLegalResidence,
+      );
+
+      cy.get('[data-testid="contact-secondary-phone"]').type(
+        secondaryContactInfo.phone,
+      );
+      cy.get('[data-testid="contact-secondary-email"]').type(
+        secondaryContactInfo.email,
+      );
+      cy.get(
+        '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
+      ).click();
+      cy.get('[data-testid="step-1-next-button"]').click();
+
+      fillPetitionFileInformation(VALID_FILE);
+      fillIrsNoticeInformation(VALID_FILE);
+      fillCaseProcedureInformation();
+      fillStinInformation(VALID_FILE);
+
+      cy.get('[data-testid="contact-name"]')
+        .eq(1)
+        .invoke('text')
+        .then(value => value.trim())
+        .should('equal', secondaryContactInfo.name);
+
+      cy.get('[data-testid="contact-in-care-of"]').should('not.exist');
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', contactInfo.address1);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', contactInfo.city);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', contactInfo.state);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', contactInfo.postalCode);
+
+      cy.get('[data-testid="secondary-place-of-legal-residence"]').should(
+        'have.text',
+        secondaryContactInfo.placeOfLegalResidenceLabel,
+      );
+
+      cy.get('[data-testid="contact-info-phone-number"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.phone);
+
+      cy.get('[data-testid="contact-info-email"]').should(
+        'have.text',
+        secondaryContactInfo.email,
+      );
+    });
+
+    it('should display petitioner information correctly for spouse with an international address', () => {
+      cy.get('[data-testid="is-spouse-deceased-1"]').click();
+      cy.get('[data-testid="have-spouse-consent-label"]').click();
+
+      cy.get('[data-testid="contact-secondary-name"]').type(
+        secondaryContactInfo.name,
+      );
+
+      cy.get('[data-testid="use-same-address-above-label"]').click();
+
+      cy.get('[data-testid="international-country-btn"]').eq(1).click();
+      cy.get('[data-testid="international-country-input"]').type(
+        secondaryContactInfo.country,
+      );
+      cy.get('[data-testid="contactSecondary.address1"]').type(
+        secondaryContactInfo.address1,
+      );
+      cy.get('[data-testid="contactSecondary.state"]').type(
+        secondaryContactInfo.internationalState,
+      );
+      cy.get('[data-testid="contactSecondary.city"]').type(
+        secondaryContactInfo.city,
+      );
+      cy.get('[data-testid="contactSecondary.postalCode"]').type(
+        secondaryContactInfo.internationalPostalCode,
+      );
+
+      cy.get('[data-testid="contact-secondary-phone"]').type(
+        secondaryContactInfo.phone,
+      );
+      cy.get('[data-testid="contact-secondary-email"]').type(
+        secondaryContactInfo.email,
+      );
+      cy.get(
+        '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
+      ).click();
+
+      cy.get('[data-testid="step-1-next-button"]').click();
+
+      fillPetitionFileInformation(VALID_FILE);
+      fillIrsNoticeInformation(VALID_FILE);
+      fillCaseProcedureInformation();
+      fillStinInformation(VALID_FILE);
+
+      cy.get('[data-testid="contact-name"]')
+        .eq(1)
+        .invoke('text')
+        .then(value => value.trim())
+        .should('equal', secondaryContactInfo.name);
+
+      cy.get('[data-testid="contact-in-care-of"]').should('not.exist');
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.address1);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.city);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.internationalState);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.internationalPostalCode);
+
+      cy.get('[data-testid="contact-address-information"]')
+        .eq(1)
+        .should('contain.text', secondaryContactInfo.country);
+
+      cy.get('[data-testid="secondary-place-of-legal-residence"]').should(
+        'have.text',
+        'N/A',
       );
 
       cy.get('[data-testid="contact-info-phone-number"]')
