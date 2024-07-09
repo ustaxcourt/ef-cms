@@ -232,5 +232,6 @@ async function main() {
   console.timeEnd('Calling interactor');
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 main();
 // trial sessionIdd that failed 38b8285d-9256-44fc-8979-e6b85e484195/
