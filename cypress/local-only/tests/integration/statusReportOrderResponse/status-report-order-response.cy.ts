@@ -306,9 +306,9 @@ describe('Status Report Order Response', () => {
     describe('save status report order response to drafts', () => {
       // Shows in drafts list
 
-      it('with signature').skip();
+      it.skip('with signature');
 
-      it('without signature').skip();
+      it.skip('without signature');
     });
 
     describe('edit an existing status report order response', () => {
@@ -317,9 +317,9 @@ describe('Status Report Order Response', () => {
       });
 
       // check req that generated lines match expected
-      it(
+      it.skip(
         'should save modifications made to an existing status report order response',
-      ).skip();
+      );
     });
   });
 
@@ -328,10 +328,10 @@ describe('Status Report Order Response', () => {
     // assert: title comes through
     // assert: Saved to docket
 
-    it('should serve status report order response').skip();
-    it(
+    it.skip('should serve status report order response');
+    it.skip(
       'should not be able to edit using status report order response form',
-    ).skip();
+    );
   });
 
   describe('chambers', () => {
