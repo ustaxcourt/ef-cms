@@ -1,6 +1,6 @@
 import { LambdaClient } from '@aws-sdk/client-lambda';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { generatePdfFromHtmlInteractor } from '@shared/business/useCases/generatePdfFromHtmlInteractor';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { generatePdfFromHtmlInteractor } from '@web-api/business/useCases/pdf/generatePdfFromHtmlInteractor';
 
 const documentKey = 'a2bf0e93-74e2-496c-832f-ec5e77900509';
 const lambdaClientMock = jest

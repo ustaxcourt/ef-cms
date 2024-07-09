@@ -2,7 +2,7 @@ import { batchDownloadHelper } from './batchDownloadHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('batchDownloadHelper', () => {
-  it('returns expected data when state.batchDownloads contains fileCount and totalFiles', () => {
+  it('should compute the percentage complete to display on the progress indicator', () => {
     const result = runCompute(batchDownloadHelper, {
       state: {
         batchDownloads: {
@@ -11,23 +11,23 @@ describe('batchDownloadHelper', () => {
         },
       },
     });
-    expect(result).toMatchObject({
-      addedFiles: 5,
-      percentComplete: 50,
-      totalFiles: 10,
-    });
+
+    expect(result.percentComplete).toEqual(50);
   });
 
-  it('returns expected data when state.batchDownloads does not contain fileCount and totalFiles', () => {
+  it('should return the progress indicator description', () => {
+    const mockTitle = 'Downloading some cool stuff!';
+
     const result = runCompute(batchDownloadHelper, {
       state: {
-        batchDownloads: {},
+        batchDownloads: {
+          fileCount: 5,
+          title: mockTitle,
+          totalFiles: 10,
+        },
       },
     });
-    expect(result).toMatchObject({
-      addedFiles: 0,
-      percentComplete: 0,
-      totalFiles: 0,
-    });
+
+    expect(result.progressDescription).toEqual(mockTitle);
   });
 });

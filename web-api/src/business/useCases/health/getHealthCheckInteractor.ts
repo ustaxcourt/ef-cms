@@ -1,3 +1,4 @@
+import { S3 } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 const regionEast = 'us-east-1';
@@ -115,19 +116,21 @@ const getDynamsoftStatus = async ({
 
 const checkS3BucketsStatus = async ({
   applicationContext,
-  bucketName,
+  bucketInfo,
 }: {
   applicationContext: ServerApplicationContext;
-  bucketName: string;
+  bucketInfo: { bucketName: string; region: string };
 }): Promise<boolean> => {
   try {
-    await applicationContext
-      .getStorageClient()
-      .listObjectsV2({
-        Bucket: bucketName,
-        MaxKeys: 1,
-      })
-      .promise();
+    const client = new S3({
+      maxAttempts: 3,
+      region: bucketInfo.region,
+    });
+
+    await client.listObjectsV2({
+      Bucket: bucketInfo.bucketName,
+      MaxKeys: 1,
+    });
 
     return true;
   } catch (e) {
@@ -143,14 +146,38 @@ const getS3BucketStatus = async ({
 }): Promise<S3BucketsStatus> => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
   const currentColor = process.env.CURRENT_COLOR;
-  const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`;
-  const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionWest}`;
-  const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionEast}`;
-  const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionWest}`;
-  const appS3Bucket = `app-${currentColor}.${efcmsDomain}`;
-  const publicS3Bucket = `${currentColor}.${efcmsDomain}`;
-  const publicFailoverS3Bucket = `failover-${currentColor}.${efcmsDomain}`;
-  const appFailoverS3Bucket = `app-failover-${currentColor}.${efcmsDomain}`;
+  const eastS3BucketName = {
+    bucketName: `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`,
+    region: regionEast,
+  };
+  const westS3BucketName = {
+    bucketName: `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionWest}`,
+    region: regionWest,
+  };
+  const eastS3TempBucketName = {
+    bucketName: `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionEast}`,
+    region: regionEast,
+  };
+  const westS3TempBucketName = {
+    bucketName: `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionWest}`,
+    region: regionWest,
+  };
+  const appS3Bucket = {
+    bucketName: `app-${currentColor}.${efcmsDomain}`,
+    region: regionEast,
+  };
+  const publicS3Bucket = {
+    bucketName: `${currentColor}.${efcmsDomain}`,
+    region: regionEast,
+  };
+  const publicFailoverS3Bucket = {
+    bucketName: `failover-${currentColor}.${efcmsDomain}`,
+    region: regionWest,
+  };
+  const appFailoverS3Bucket = {
+    bucketName: `app-failover-${currentColor}.${efcmsDomain}`,
+    region: regionWest,
+  };
 
   const s3Buckets = {
     app: appS3Bucket,
@@ -177,7 +204,7 @@ const getS3BucketStatus = async ({
   for (const [key, value] of Object.entries(s3Buckets)) {
     bucketStatus[key] = await checkS3BucketsStatus({
       applicationContext,
-      bucketName: value,
+      bucketInfo: value,
     });
   }
 
