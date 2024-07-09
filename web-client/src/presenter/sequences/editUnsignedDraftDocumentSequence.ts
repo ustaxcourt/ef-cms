@@ -26,4 +26,5 @@ export const editUnsignedDraftDocumentSequence = [
   caseDetail: RawCase;
   docketEntryIdToEdit: string;
   documentType: string;
+  parentMessageId?: string;
 }) => void;

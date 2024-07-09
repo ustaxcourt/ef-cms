@@ -266,6 +266,34 @@ describe('Status Report Order Response', () => {
 
     describe('filing a status report order response from message view', () => {
       // make sure redirect back to message flow
+      // clean up left
+      it.skip('should be able to create order response from messages', () => {
+        loginAsColvin();
+        cy.visit('/case-detail/102-67');
+
+        // Send a docket message that adds the Status Report document
+        cy.get('#case-detail-menu-button').click();
+        cy.contains('button', 'Message').click();
+        cy.get('[data-testid="message-to-section"]').select('chambers');
+        cy.get('#chambers').select('buchsChambers');
+        cy.get('[data-testid="message-to-user-id"]').select('Judge Buch');
+        cy.get('[data-testid="message-subject"]').type('Test Message Header');
+        cy.get('[data-testid="message-body"]').type('Test Message Body');
+        cy.get('#document').select('06/28/24 - Status Report');
+        cy.get('#confirm').click();
+
+        // Go to the sent message and create an Order Response
+        cy.get('#tab-case-messages').click();
+        cy.contains('a', 'Status Report').click();
+        cy.get('[data-testid="order-response-button"]').click();
+        cy.get('[data-testid="save-draft-button"]').click();
+        cy.contains('Apply Signature').should('exist');
+        cy.get('[data-testid="skip-signature-button"]').click();
+
+        // Check we have been redirected to the messages page
+        cy.contains('Order updated.').should('exist');
+        cy.url().should('include', 'messages/107-19/message-detail/');
+      });
     });
 
     describe('save status report order response to drafts', () => {
