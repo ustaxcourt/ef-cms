@@ -10,6 +10,8 @@ import {
 
 // TODO 10102-story: cleanup test and reduce redundancy (not necessarily creating helpers but before each and consts)
 
+const docketNumber = '107-19';
+const leadCaseDocketNumber = '102-67';
 const today = formatNow(FORMATS.MMDDYYYY);
 const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
 const expectedPdfLines = [
@@ -19,22 +21,24 @@ const expectedPdfLines = [
   'ORDERED that jurisdiction is retained by the undersigned. It is further',
   'ORDERED that Here is my additional order text.',
 ];
-// const leadCaseDocketNumber = '';
-// const docketNumber = '107-19';
+
+const navigateToStatusReportOrderResponseForm = (docketNum: string) => {
+  cy.visit(`/case-detail/${docketNum}`);
+  cy.get('#tab-document-view').click();
+  cy.contains('Status Report').click();
+  cy.get('[data-testid="order-response-button"]').click();
+};
 
 describe('Status Report Order Response', () => {
   describe('judge', () => {
     beforeEach(() => {
-      //loginAsColvin();
+      loginAsColvin();
     });
 
     describe('pdf preview', () => {
       it('should show a pdf preview when clicking preview pdf', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
+
         cy.get('[data-testid="preview-pdf-button"]').click();
 
         cy.get(
@@ -45,11 +49,8 @@ describe('Status Report Order Response', () => {
 
     describe('form validation', () => {
       it('should have a docket entry description', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
+
         cy.get('#docket-entry-description').clear();
         cy.get('[data-testid="save-draft-button"]').click();
 
@@ -64,13 +65,9 @@ describe('Status Report Order Response', () => {
       });
 
       it('should have a valid due date', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
-        cy.get('#order-type-status-report').check({ force: true });
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
+        cy.get('#order-type-status-report').check({ force: true });
         cy.get('#status-report-due-date-picker').type('bb-bb-bbbb');
         cy.get('[data-testid="save-draft-button"]').click();
 
@@ -85,11 +82,8 @@ describe('Status Report Order Response', () => {
       });
 
       it('should have a due date prior to today', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
+
         cy.get('#order-type-status-report').check({ force: true });
 
         cy.get('#status-report-due-date-picker').type('07/04/2023');
@@ -106,11 +100,8 @@ describe('Status Report Order Response', () => {
       });
 
       it('should have a jurisdiction when case is stricken from trial session', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
+
         cy.get('#stricken-from-trial-sessions').check({ force: true });
         cy.get('[data-testid="save-draft-button"]').click();
 
@@ -127,11 +118,7 @@ describe('Status Report Order Response', () => {
 
     describe('filing a status report order response from document view', () => {
       it('should save draft when no options are selected', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
@@ -153,12 +140,7 @@ describe('Status Report Order Response', () => {
       });
 
       it('should save draft when all options are selected', () => {
-        loginAsColvin();
-        // navigate to status report order response
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
         cy.get('#order-type-status-report').check({ force: true });
@@ -189,13 +171,8 @@ describe('Status Report Order Response', () => {
 
       it('should save draft when order type is "Status Report or Stipulated Decision"', () => {
         const secondPdfLine = `ORDERED that the parties shall file a status report or proposed stipulated decision by ${formattedToday}`;
-        loginAsColvin();
 
-        // navigate to status report order response
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
         cy.get('#order-type-or-stipulated-decision').check({ force: true });
@@ -221,12 +198,7 @@ describe('Status Report Order Response', () => {
         const secondPdfLine =
           'ORDERED that this case is restored to the general docket.';
 
-        loginAsColvin();
-        // navigate to status report order response
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
         cy.get('#jurisdiction-restored-to-general-docket').check({
@@ -251,11 +223,7 @@ describe('Status Report Order Response', () => {
       });
 
       it('should save draft with all case docket numbers on PDF when issue order is "All cases in this group"', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/102-67');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(leadCaseDocketNumber);
 
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
@@ -277,11 +245,8 @@ describe('Status Report Order Response', () => {
       });
 
       it('should save draft with just lead case docket number on PDF when issue order is "Just this case"', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/102-67');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(leadCaseDocketNumber);
+
         cy.get('#just-this-case').click({ force: true });
 
         cy.intercept('POST', '**/api/court-issued-order').as(
@@ -338,11 +303,7 @@ describe('Status Report Order Response', () => {
     describe('filing a status report order response from document view', () => {
       it('should save draft when all options are selected', () => {
         loginAsColvinChambers();
-        // navigate to status report order response
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
         cy.get('#order-type-status-report').check({ force: true });
@@ -377,11 +338,7 @@ describe('Status Report Order Response', () => {
     describe('filing a status report order response from document view', () => {
       it('should save draft when all options are selected', () => {
         loginAsAdc();
-        // navigate to status report order response
-        cy.visit('/case-detail/107-19');
-        cy.get('#tab-document-view').click();
-        cy.contains('Status Report').click();
-        cy.get('[data-testid="order-response-button"]').click();
+        navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
         cy.get('#order-type-status-report').check({ force: true });
