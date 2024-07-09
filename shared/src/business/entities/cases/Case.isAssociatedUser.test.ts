@@ -36,7 +36,10 @@ describe('isAssociatedUser', () => {
   it('returns true if the user is an irsPractitioner on the case', () => {
     const isAssociated = isAssociatedUser({
       caseRaw: caseEntity.toRawObject(),
-      user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
+      user: {
+        role: ROLES.irsPractitioner,
+        userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
+      },
     });
 
     expect(isAssociated).toBeTruthy();
@@ -45,7 +48,10 @@ describe('isAssociatedUser', () => {
   it('returns true if the user is a privatePractitioner on the case', () => {
     const isAssociated = isAssociatedUser({
       caseRaw: caseEntity.toRawObject(),
-      user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
+      user: {
+        role: ROLES.privatePractitioner,
+        userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
+      },
     });
 
     expect(isAssociated).toBeTruthy();
@@ -96,10 +102,13 @@ describe('isAssociatedUser', () => {
     expect(isAssociated).toBeFalsy();
   });
 
-  it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
+  it('returns false if the user is not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
     const isAssociated = isAssociatedUser({
       caseRaw: caseEntity.toRawObject(),
-      user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
+      user: {
+        role: ROLES.docketClerk,
+        userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',
+      },
     });
 
     expect(isAssociated).toBeFalsy();
@@ -108,7 +117,7 @@ describe('isAssociatedUser', () => {
   it('returns true if the user is the contact on the case', () => {
     const isAssociated = isAssociatedUser({
       caseRaw: caseEntity.toRawObject(),
-      user: { userId: CONTACT_ID },
+      user: { role: ROLES.petitioner, userId: CONTACT_ID },
     });
 
     expect(isAssociated).toBeTruthy();
@@ -129,7 +138,10 @@ describe('isAssociatedUser', () => {
           },
         ],
       },
-      user: { role: ROLES.irsSuperuser },
+      user: {
+        role: ROLES.irsSuperuser,
+        userId: 'c28ba201-3039-4612-884b-065255154c38',
+      },
     });
 
     expect(isAssociated).toBeTruthy();
