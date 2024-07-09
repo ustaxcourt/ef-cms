@@ -40,6 +40,7 @@ export const AddressDisplay = connect<
           'no-margin',
           contact.isAddressSealed && 'sealed-address',
         )}
+        data-testid="contact-address-information"
       >
         <span className="address-line" data-testid="address1-line">
           {contact.address1}
@@ -68,7 +69,7 @@ export const AddressDisplay = connect<
         )}
         {contact.email && showEmail && (
           <span className="address-line">
-            {contact.email}
+            <span data-testid="contact-info-email">{contact.email}</span>
             {contact.showEAccessFlag && (
               <FontAwesomeIcon
                 aria-label="has e-access"
@@ -113,26 +114,29 @@ export const AddressDisplay = connect<
               />
             </span>
           )}
-          <span className={boldName && 'text-bold'}>
+          <span
+            className={boldName ? 'text-bold' : undefined}
+            data-testid="contact-name"
+          >
             {nameOverride || contact.name}{' '}
           </span>
           {contact.barNumber && (
-            <span className={boldName && 'text-bold'}>
+            <span className={boldName ? 'text-bold' : ''}>
               ({contact.barNumber})
               <br />
             </span>
           )}
           {contact.firmName && (
-            <>
+            <span data-testid="firm-name">
               {contact.firmName}
               <br />
-            </>
+            </span>
           )}
           {contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
               contactName && (
-                <span key={contactName}>
+                <span data-testid="contact-in-care-of" key={contactName}>
                   c/o {contactName}
                   {contact.title && <span>, {contact.title}</span>}
                 </span>
