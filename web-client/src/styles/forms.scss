@@ -190,9 +190,8 @@ select.case-status {
   width: 379px;
 }
 
-div.usa-radio.usa-radio__inline {
-  display: inline;
-
+div.usa-radio.usa-radio__inline,
+div.usa-radio.usa-radio__block {
   .usa-radio__label {
     padding-right: 2rem;
 
@@ -200,6 +199,14 @@ div.usa-radio.usa-radio__inline {
       padding-right: 1rem;
     }
   }
+}
+
+div.usa-radio.usa-radio__inline {
+  display: inline;
+}
+
+div.usa-radio.usa-radio__block {
+  display: block;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -562,7 +569,7 @@ label.ustc-upload {
     margin-bottom: 0;
 
     &.status-report-order-response-form-group {
-      margin: 0 1rem;
+      margin: 1rem;
     }
 
     &.status-report-order-response-form-group-error {
