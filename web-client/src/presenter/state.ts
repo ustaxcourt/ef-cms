@@ -3,6 +3,7 @@ import { FormattedPendingMotionWithWorksheet } from '@shared/business/useCases/p
 import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -676,12 +677,13 @@ export const baseState = {
   legacyAndCurrentJudges: [],
   login: {} as any,
   maintenanceMode: false,
+  messages: [] as RawMessage[],
   messagesInboxCount: 0,
   messagesPage: {
     completedAtFormatted: '',
     completedBy: '',
-    completionSuccess: false,
     completedMessagesList: [] as string[],
+    completionSuccess: false,
     messagesCompletedAt: '',
     messagesCompletedBy: '',
     selectedMessages: new Map() as Map<string, string>,

@@ -2,6 +2,33 @@ import { formatDateIfToday } from '../computeds/formattedWorkQueue';
 import { getConstants } from '../../getConstants';
 import { map, uniq } from 'lodash';
 
+// class MessageCache<T extends { messageId: string }> {
+//   private cache: T[] = [];
+
+//   set(item: T) {
+//     const existingIndex = this.cache.findIndex(
+//       entry => entry.messageId === item.messageId,
+//     );
+//     if (existingIndex !== -1) {
+//       this.cache[existingIndex] = item;
+//     } else {
+//       this.cache.push(item);
+//     }
+//   }
+
+//   get(messageId: string): T | undefined {
+//     return this.cache.find(entry => entry.messageId === messageId);
+//   }
+
+//   remove(messageId: string) {
+//     this.cache = this.cache.filter(entry => entry.messageId !== messageId);
+//   }
+
+//   clear() {
+//     this.cache = [];
+//   }
+// }
+
 const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
 type TableSort = { sortField: string; sortOrder?: string };
@@ -60,6 +87,7 @@ export const sortCompletedMessages = (
 
 // useful for users that have a large amount of messages (ADC Users) since
 // recalculating the formatted date fields is expensive.
+// export const messageCache = new MessageCache<RawMessage>();
 let messageCache = null;
 let lastCacheKey = null;
 
