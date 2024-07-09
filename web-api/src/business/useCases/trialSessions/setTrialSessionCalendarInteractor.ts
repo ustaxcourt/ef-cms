@@ -22,9 +22,9 @@ export const setTrialSessionCalendarInteractor = async (
 ): Promise<RawTrialSession> => {
   const user = applicationContext.getCurrentUser();
 
-  // if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
