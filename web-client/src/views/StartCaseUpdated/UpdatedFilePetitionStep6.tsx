@@ -192,7 +192,10 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                         : 'Place of legal residence:'}
                     </span>
 
-                    <span className="margin-left-05">
+                    <span
+                      className="margin-left-05"
+                      data-testid="primary-place-of-legal-residence"
+                    >
                       {petitionFormatted.contactPrimary.placeOfLegalResidence
                         ? ALL_STATE_OPTIONS[
                             petitionFormatted.contactPrimary
@@ -205,7 +208,7 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                     <span className="usa-label usa-label-display">
                       Service email
                     </span>
-                    {userEmail}
+                    <span data-testid="contact-primary-email">{userEmail}</span>
                   </div>
                 </address>
               )}
@@ -241,7 +244,10 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                   <span className="text-semibold">
                     Place of legal residence:
                   </span>
-                  <span className="margin-left-05">
+                  <span
+                    className="margin-left-05"
+                    data-testid="secondary-place-of-legal-residence"
+                  >
                     {petitionFormatted.contactSecondary.placeOfLegalResidence
                       ? ALL_STATE_OPTIONS[
                           petitionFormatted.contactSecondary
@@ -450,6 +456,7 @@ const CardHeader = connect(
           <Button
             link
             className="margin-left-2 padding-0"
+            data-testid={`edit-petition-section-button-${step}`}
             icon="edit"
             onClick={() => {
               updateStepIndicatorSequence({ step });
