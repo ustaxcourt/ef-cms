@@ -185,8 +185,9 @@ export const messageDocumentHelper = (
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
+    formattedDocument,
     messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
-    orderResponseFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/order-response`,
+    orderResponseFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/order-response-create`,
     servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
     showAddDocketEntryButton,
     showApplySignatureButton:
@@ -199,6 +200,7 @@ export const messageDocumentHelper = (
       showEditButtonForDocument &&
       (!documentIsSigned || isNotice),
     showEditButtonSigned,
+
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     // export the constant defined above

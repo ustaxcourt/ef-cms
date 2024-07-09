@@ -10,6 +10,8 @@ import classNames from 'classnames';
 export const MessageDocument = connect(
   {
     caseDetail: state.caseDetail,
+    editUnsignedDraftDocumentSequence:
+      sequences.editUnsignedDraftDocumentSequence,
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
@@ -31,6 +33,7 @@ export const MessageDocument = connect(
   },
   function MessageDocument({
     caseDetail,
+    editUnsignedDraftDocumentSequence,
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
@@ -48,7 +51,19 @@ export const MessageDocument = connect(
     const messageDocumentActions = () => (
       <div className="message-document-actions">
         {messageDocumentHelper.showEditButtonNotSigned && (
-          <Button link href={messageDocumentHelper.editUrl} icon="edit">
+          <Button
+            icon="edit"
+            onClick={() =>
+              editUnsignedDraftDocumentSequence({
+                caseDetail,
+                docketEntryIdToEdit:
+                  messageDocumentHelper.formattedDocument.docketEntryId,
+                documentType:
+                  messageDocumentHelper.formattedDocument.documentType,
+                parentMessageId,
+              })
+            }
+          >
             Edit
           </Button>
         )}

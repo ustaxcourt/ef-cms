@@ -8,6 +8,9 @@ export const setEditStatusReportOrderResponseFormAction = ({
   const { caseDetail, docketEntryIdToEdit } = props;
 
   const documentToEdit = get(state.documentToEdit);
+  const pathUrl = props.parentMessageId
+    ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/order-response-edit`
+    : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response-edit`;
 
   store.set(state.form, {
     additionalOrderText: documentToEdit.draftOrderState.additionalOrderText,
@@ -22,6 +25,6 @@ export const setEditStatusReportOrderResponseFormAction = ({
   });
 
   return {
-    path: `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/order-response-edit`,
+    path: pathUrl,
   };
 };
