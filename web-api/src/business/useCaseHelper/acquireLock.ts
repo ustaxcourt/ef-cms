@@ -13,13 +13,6 @@ export const checkLock = async ({
   onLockError?: Error | Function;
   options?: any;
 }): Promise<void> => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const isCaseLockingEnabled =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];
-
   const currentLock = await applicationContext
     .getPersistenceGateway()
     .getLock({ applicationContext, identifier });
@@ -34,10 +27,6 @@ export const checkLock = async ({
   applicationContext.logger.warn('Entity is currently locked', {
     currentLock,
   });
-
-  if (!isCaseLockingEnabled) {
-    return;
-  }
 
   if (onLockError instanceof Error) {
     throw onLockError;
@@ -55,6 +44,7 @@ export const acquireLock = async ({
   onLockError,
   options = {},
   retries = 0,
+  skipFeatureFlagCheck = false,
   ttl = 30,
   waitTime = 3000,
 }: {
@@ -65,10 +55,25 @@ export const acquireLock = async ({
   retries?: number;
   ttl?: number;
   waitTime?: number;
+  skipFeatureFlagCheck?: boolean;
 }): Promise<void> => {
   if (!identifiers) {
     return;
   }
+
+  if (!skipFeatureFlagCheck) {
+    const featureFlags = await applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor(applicationContext);
+
+    const isCaseLockingEnabled =
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];
+
+    if (!isCaseLockingEnabled) {
+      return;
+    }
+  }
+
   let isLockAcquired = false;
   let attempts = 0;
 
@@ -147,6 +152,17 @@ export function withLocking<InteractorInput, InteractorOutput>(
     applicationContext: ServerApplicationContext,
     options: InteractorInput,
   ) {
+    const featureFlags = await applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor(applicationContext);
+
+    const isCaseLockingEnabled =
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];
+
+    if (!isCaseLockingEnabled) {
+      return await interactor(applicationContext, options);
+    }
+
     const { identifiers, ttl } = await getLockInfo(applicationContext, options);
 
     await acquireLock({
@@ -154,6 +170,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
       identifiers,
       onLockError,
       options,
+      skipFeatureFlagCheck: true,
       ttl,
     });
 

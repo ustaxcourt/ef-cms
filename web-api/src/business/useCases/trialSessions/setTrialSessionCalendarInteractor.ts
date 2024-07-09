@@ -169,6 +169,16 @@ export const setTrialSessionCalendarInteractor = async (
   // Semaphore with some number of open slots.
   // Could combine them!
 
+  console.log(
+    'manuallyAddedQcIncompleteCases',
+    manuallyAddedQcIncompleteCases.length,
+  );
+  console.log(
+    'manuallyAddedQcCompleteCases',
+    manuallyAddedQcCompleteCases.length,
+  );
+  console.log('eligibleCases', eligibleCases.length);
+
   const funcs = [
     ...manuallyAddedQcIncompleteCases.map(
       caseRecord => () =>
