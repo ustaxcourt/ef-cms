@@ -51,7 +51,7 @@ export const MessagesIndividualInbox = connect(
       <>
         <SuccessNotification />
         <ErrorNotification />
-        {messagesIndividualInboxHelper.completedMessages.length || messagesIndividualInboxHelper.completionSuccess && (
+        {messagesIndividualInboxHelper.completionSuccess && (
           <div
             aria-live="polite"
             className="usa-alert usa-alert--success"
@@ -62,20 +62,6 @@ export const MessagesIndividualInbox = connect(
               Message(s) completed on{' '}
               {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
               {messagesIndividualInboxHelper.messagesCompletedBy}
-            </div>
-          </div>
-        )}
-        {messagesIndividualInboxHelper.completionSuccess && (
-          <div
-            aria-live="polite"
-            className="usa-alert usa-alert--success"
-            data-testid="message-detail-success-alert"
-            role="alert"
-          >
-            <div className="usa-alert__body">
-              Message(s) completed on{' '}
-              {messagesIndividualInboxHelper.completedAtFormatted} by{' '}
-              {messagesIndividualInboxHelper.completedBy}
             </div>
           </div>
         )}

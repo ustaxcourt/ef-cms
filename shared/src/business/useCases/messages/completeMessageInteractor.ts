@@ -4,7 +4,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserRecord } from '../../../../../web-api/src/persistence/dynamo/dynamoTypes';
 import { orderBy } from 'lodash';
 
 export const completeMessageInteractor = async (
@@ -12,7 +11,7 @@ export const completeMessageInteractor = async (
   {
     messages,
   }: { messages: { messageBody: string; parentMessageId: string }[] },
-): Promise<{ user: UserRecord }> => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -23,35 +22,60 @@ export const completeMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  for (const message of messages) {
-    await applicationContext
-      .getPersistenceGateway()
-      .markMessageThreadRepliedTo({
+  let completedMessageIds: string[] = [];
+
+  try {
+    for (const message of messages) {
+      await applicationContext
+        .getPersistenceGateway()
+        .markMessageThreadRepliedTo({
+          applicationContext,
+          parentMessageId: message.parentMessageId,
+        });
+
+      const messageThread = await applicationContext
+        .getPersistenceGateway()
+        .getMessageThreadByParentId({
+          applicationContext,
+          parentMessageId: message.parentMessageId,
+        });
+
+      const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
+
+      const updatedMessage = new Message(mostRecentMessage, {
         applicationContext,
-        parentMessageId: message.parentMessageId,
+      }).validate();
+
+      updatedMessage.markAsCompleted({ message: message.messageBody, user });
+
+      const validatedRawMessage = updatedMessage.validate().toRawObject();
+
+      await applicationContext.getPersistenceGateway().updateMessage({
+        applicationContext,
+        message: validatedRawMessage,
       });
 
-    const messageThread = await applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId({
-        applicationContext,
-        parentMessageId: message.parentMessageId,
-      });
-
-    const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
-
-    const updatedMessage = new Message(mostRecentMessage, {
+      completedMessageIds.push(validatedRawMessage.messageId);
+    }
+  } catch (error) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
-    }).validate();
-
-    updatedMessage.markAsCompleted({ message: message.messageBody, user });
-
-    const validatedRawMessage = updatedMessage.validate().toRawObject();
-
-    await applicationContext.getPersistenceGateway().updateMessage({
-      applicationContext,
-      message: validatedRawMessage,
+      message: {
+        action: 'message_completion_error',
+        alertError: {
+          message: 'Please try again',
+          title: 'Message(s) could not be completed',
+        },
+      },
+      userId: user.userId,
     });
   }
-  return { user };
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'message_completion_success',
+      completedMessageIds,
+    },
+    userId: user.userId,
+  });
 };

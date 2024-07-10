@@ -22,7 +22,11 @@ import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkI
 import { associateIrsPractitionerWithCaseSequence } from './sequences/CaseAssociation/associateIrsPractitionerWithCaseSequence';
 import { associatePrivatePractitionerWithCaseSequence } from './sequences/CaseAssociation/associatePrivatePractitionerWithCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
-import { batchCompleteMessageSequence } from './sequences/batchCompleteMessageSequence';
+import {
+  batchCompleteMessageSequence,
+  completeMessageErrorSequence,
+  completeMessageSuccessSequence,
+} from './sequences/batchCompleteMessageSequence';
 import { batchDownloadDocketEntriesSequence } from '@web-client/presenter/sequences/batchDownloadDocketEntriesSequence';
 import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
@@ -694,7 +698,9 @@ export const presenterSequences = {
     completeDocketEntryQCSequence as unknown as Function,
   completeDocumentSelectSequence:
     completeDocumentSelectSequence as unknown as Function,
+  completeMessageErrorSequence,
   completeMessageSequence: completeMessageSequence as unknown as Function,
+  completeMessageSuccessSequence,
   completePrintPaperPetitionReceiptSequence:
     completePrintPaperPetitionReceiptSequence as unknown as Function,
   completeStartCaseWizardStepSequence:
