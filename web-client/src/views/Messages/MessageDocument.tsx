@@ -16,6 +16,8 @@ export const MessageDocument = connect(
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    navigateToStatusReportOrderResponseSequence:
+      sequences.navigateToStatusReportOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -38,6 +40,7 @@ export const MessageDocument = connect(
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
     navigateToPathSequence,
+    navigateToStatusReportOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -193,8 +196,10 @@ export const MessageDocument = connect(
             data-testid="order-response-button"
             icon="edit"
             onClick={() => {
-              navigateToPathSequence({
+              navigateToStatusReportOrderResponseSequence({
                 path: messageDocumentHelper.orderResponseFromMessagesLink,
+                statusReportFilingDate: messageDocumentHelper.filingDate,
+                statusReportIndex: messageDocumentHelper.index,
               });
             }}
           >

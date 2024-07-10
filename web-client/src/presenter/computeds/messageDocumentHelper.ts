@@ -179,13 +179,17 @@ export const messageDocumentHelper = (
         formattedDocument?.eventCode,
       ));
 
+  const { filingDate, index } = caseDocument;
+
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
     applyStampFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`,
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
+    filingDate,
     formattedDocument,
+    index,
     messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
     orderResponseFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/order-response-create`,
     servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
