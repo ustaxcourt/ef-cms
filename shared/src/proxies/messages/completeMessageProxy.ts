@@ -6,7 +6,7 @@ export const completeMessageInteractor = (
   {
     messages,
   }: { messages: { messageBody: string; parentMessageId: string }[] },
-) => {
+): Promise<void> => {
   const { parentMessageId } = messages[0];
   return post({
     applicationContext,
