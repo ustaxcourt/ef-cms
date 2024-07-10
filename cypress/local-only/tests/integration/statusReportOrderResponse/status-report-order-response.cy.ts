@@ -265,18 +265,14 @@ describe('Status Report Order Response', () => {
     });
 
     describe('filing a status report order response from message view', () => {
-      // make sure redirect back to message flow
-      // clean up left
-      it.skip('should be able to create order response from messages', () => {
-        loginAsColvin();
-        cy.visit('/case-detail/102-67');
-
-        // Send a docket message that adds the Status Report document
+      it('should be able to create order response from messages', () => {
+        // Send a docket message that attaches the Status Report document
+        cy.visit(`/case-detail/${docketNumber}`);
         cy.get('#case-detail-menu-button').click();
         cy.contains('button', 'Message').click();
         cy.get('[data-testid="message-to-section"]').select('chambers');
-        cy.get('#chambers').select('buchsChambers');
-        cy.get('[data-testid="message-to-user-id"]').select('Judge Buch');
+        cy.get('#chambers').select('colvinsChambers');
+        cy.get('[data-testid="message-to-user-id"]').select('Judge Colvin');
         cy.get('[data-testid="message-subject"]').type('Test Message Header');
         cy.get('[data-testid="message-body"]').type('Test Message Body');
         cy.get('#document').select('06/28/24 - Status Report');
@@ -292,7 +288,44 @@ describe('Status Report Order Response', () => {
 
         // Check we have been redirected to the messages page
         cy.contains('Order updated.').should('exist');
-        cy.url().should('include', 'messages/107-19/message-detail/');
+        cy.url().should('include', `messages/${docketNumber}/message-detail/`);
+      });
+
+      it('should be able to edit order response from messages', () => {
+        // Create an order response
+        const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+        const testOrderName = `Test Order ${timestamp}`;
+        navigateToStatusReportOrderResponseForm(docketNumber);
+        cy.get('#docket-entry-description').clear();
+        cy.get('#docket-entry-description').type(testOrderName);
+        cy.get('[data-testid="save-draft-button"]').click();
+        cy.contains('Apply Signature').should('exist');
+        cy.get('[data-testid="skip-signature-button"]').click();
+
+        // Send a docket message that attaches the order response
+        cy.get('#case-detail-menu-button').click();
+        cy.contains('button', 'Message').click();
+        cy.get('[data-testid="message-to-section"]').select('chambers');
+        cy.get('#chambers').select('colvinsChambers');
+        cy.get('[data-testid="message-to-user-id"]').select('Judge Colvin');
+        cy.get('[data-testid="message-subject"]').type('Test Message Header');
+        cy.get('[data-testid="message-body"]').type('Test Message Body');
+        cy.get('#document').select(
+          `${formatNow(FORMATS.MMDDYY)} - ${testOrderName}`,
+        );
+        cy.get('#confirm').click();
+
+        // Go to the sent message and edit the Order Response
+        cy.get('#tab-case-messages').click();
+        cy.contains('a', testOrderName).click();
+        cy.get('[data-testid="edit-document-button"]').click();
+        cy.get('[data-testid="save-draft-button"]').click();
+        cy.contains('Apply Signature').should('exist');
+        cy.get('[data-testid="skip-signature-button"]').click();
+
+        // Check we have been redirected to the messages page
+        cy.contains(`${testOrderName} updated.`).should('exist');
+        cy.url().should('include', `messages/${docketNumber}/message-detail/`);
       });
     });
 
