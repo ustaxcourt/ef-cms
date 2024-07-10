@@ -1,10 +1,10 @@
 import { formatStatusReportFilingDateAction } from '@web-client/presenter/actions/StatusReportOrderResponse/formatStatusReportFilingDateAction';
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
-import { setStatusReportOrderResponsePath } from '@web-client/presenter/actions/StatusReportOrderResponse/setStatusReportOrderResponsePath';
+import { setStatusReportOrderResponsePathAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setStatusReportOrderResponsePathAction';
 
 export const navigateToStatusReportOrderResponseSequence = [
   formatStatusReportFilingDateAction,
-  setStatusReportOrderResponsePath,
+  setStatusReportOrderResponsePathAction,
   navigateToPathAction,
 ] as unknown as (props: {
   statusReportFilingDate: string;

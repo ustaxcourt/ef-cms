@@ -28,10 +28,10 @@ only 140 or 160 characters long. Which is it?
 ## Things to do
 
 - write integration tests (solo / group)
+    - save message with status report to local dataset
+    - save message with status report order response to local dataset
 
 - Run through all tests case + DoD checklist (group / solo)
-
-- add missing unit tests
 
 - fix edit signed document from MessageDocument.tsx when refreshing
 
