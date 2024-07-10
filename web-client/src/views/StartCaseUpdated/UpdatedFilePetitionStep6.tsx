@@ -197,7 +197,6 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                         ? 'Place of business:'
                         : 'Place of legal residence:'}
                     </span>
-
                     <span
                       className="margin-left-05"
                       data-testid="primary-place-of-legal-residence"
@@ -236,7 +235,7 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                     contact={petitionFormatted.contactSecondary}
                   />
                 </address>
-                <div className="display-flex flex-align-center margin-top-1">
+                <div className="margin-top-1">
                   <span className="text-semibold">
                     Register for eService/filing:
                   </span>
