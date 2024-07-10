@@ -13,7 +13,7 @@ describe('completeMessageAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call completeMessageInteractor with the expected parameters', async () => {
+  it('should call completeMessageInteractor with the expected messages', async () => {
     await runAction(completeMessageAction, {
       modules: {
         presenter,
