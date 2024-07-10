@@ -18,10 +18,7 @@ export const HeaderDashboardInternal = connect(
       <div className="big-blue-header">
         <div className="grid-container">
           <h1 tabIndex={-1}>{workQueueHelper.workQueueTitle}</h1>
-          <span
-            aria-label="unread work item count"
-            className="unread margin-right-2"
-          ></span>
+          <span className="unread margin-right-2"></span>
           {workQueueHelper.showIndividualWorkQueue &&
             !workQueueHelper.isCaseServicesSupervisor && (
               <Button

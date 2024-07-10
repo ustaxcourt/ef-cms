@@ -6,11 +6,11 @@ export const practitionerRequestsPendingAccessToCase = (
   fakeFile,
 ) => {
   return it('Practitioner requests access to pending case', async () => {
-    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+    await cerebralTest.runSequence('gotoCaseAssociationRequestSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       documentTitleTemplate: 'Select a document',
@@ -74,14 +74,16 @@ export const practitionerRequestsPendingAccessToCase = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+    await cerebralTest.runSequence('reviewCaseAssociationRequestSequence');
 
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Motion to Substitute Parties and Change Caption',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(cerebralTest.getState('wizardStep')).toBe('RequestAccessReview');
+    expect(cerebralTest.getState('wizardStep')).toBe(
+      'CaseAssociationRequestReview',
+    );
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
 

@@ -11,6 +11,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export type CustomCaseReportFilters = {
@@ -57,7 +58,7 @@ export type CustomCaseReportSearchAfter = {
 };
 
 export const getCustomCaseReportInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   params: GetCustomCaseReportRequest,
 ): Promise<GetCustomCaseReportResponse> => {
   const authorizedUser = applicationContext.getCurrentUser();

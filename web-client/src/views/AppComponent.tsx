@@ -12,6 +12,7 @@ import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadPr
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
+import { CaseAssociationRequestWizard } from '@web-client/views/CaseAssociationRequest/CaseAssociationRequestWizard';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
@@ -20,6 +21,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { ChangePassword } from '@web-client/views/Login/ChangePassword';
+import { ColdCaseReport } from '@web-client/views/ColdCaseReport/ColdCaseReport';
 import { Contact } from './Contact';
 import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
@@ -48,6 +50,7 @@ import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
+import { ErrorView500 } from './ErrorView500';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -63,7 +66,6 @@ import { Login } from '@web-client/views/Login/Login';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
-import { OldLogin } from './OldLogin';
 import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -78,7 +80,6 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
-import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -117,6 +118,7 @@ const pages = {
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
+  CaseAssociationRequestWizard,
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
@@ -124,6 +126,7 @@ const pages = {
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
   ChangePassword,
+  ColdCaseReport,
   Contact,
   ContactEdit,
   CourtIssuedDocketEntry,
@@ -151,6 +154,7 @@ const pages = {
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
+  ErrorView500,
   FileDocumentWizard,
   FilePetitionSuccess,
   ForgotPassword,
@@ -162,7 +166,6 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
-  OldLogin,
   PaperFiling,
   PendingReport,
   PetitionQc,
@@ -176,7 +179,6 @@ const pages = {
   PrintableTrialCalendar,
   PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
-  RequestAccessWizard,
   ReviewSavedPetition,
   SealedCaseDetail,
   SelectDocumentType,

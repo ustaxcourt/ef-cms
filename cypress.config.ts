@@ -46,8 +46,13 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
-        unzipFile({ destinationPath, filePath }) {
-          return unzipFile({ destinationPath, filePath });
+        table(message) {
+          console.table(message);
+
+          return null;
+        },
+        unzipFile({ fileName }) {
+          return unzipFile({ fileName });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
@@ -66,7 +71,7 @@ export default defineConfig({
         },
       });
     },
-    specPattern: 'cypress/local-only/integration/**/*.cy.ts',
+    specPattern: 'cypress/local-only/tests/**/*.cy.ts',
     supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },

@@ -99,7 +99,10 @@ export const MessageDetail = connect(
         <CaseDetailHeader className="margin-bottom-0" />
         <CaseDetailSubnavTabs />
 
-        <section className="usa-section grid-container message-detail">
+        <section
+          className="usa-section grid-container message-detail"
+          data-testid="message-detail-container"
+        >
           <SuccessNotification />
           <ErrorNotification />
           {formattedMessageDetail.isCompleted && (

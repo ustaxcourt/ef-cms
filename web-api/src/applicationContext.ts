@@ -12,6 +12,7 @@ import {
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   ORDER_TYPES,
+  Role,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -23,8 +24,10 @@ import { Correspondence } from '../../shared/src/business/entities/Correspondenc
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
+import { SQSClient } from '@aws-sdk/client-sqs';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -33,6 +36,7 @@ import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseN
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { createLogger } from './createLogger';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { environment } from '@web-api/environment';
 import {
   getChromiumBrowser,
@@ -45,36 +49,37 @@ import {
 import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
+import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
 import { getUserGateway } from '@web-api/getUserGateway';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
-import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
+import { retrySendNotificationToConnections } from './notifications/retrySendNotificationToConnections';
 import { saveRequestResponse } from '@web-api/persistence/dynamo/polling/saveRequestResponse';
 import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendEmailToUser } from '@web-api/persistence/messages/sendEmailToUser';
 import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
-import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
-import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
+import { sendNotificationToConnection } from './notifications/sendNotificationToConnection';
+import { sendNotificationToUser } from './notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS, { S3, SES, SQS } from 'aws-sdk';
+import AWS from 'aws-sdk';
+
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
 
-let s3Cache: AWS.S3 | undefined;
-let sesCache;
-let sqsCache;
+let sqsCache: SQSClient;
 let searchClientCache: Client;
-let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -104,7 +109,7 @@ export const createApplicationContext = (
   }
 
   const getCurrentUser = (): {
-    role: string;
+    role: Role;
     userId: string;
     email: string;
     name: string;
@@ -177,50 +182,7 @@ export const createApplicationContext = (
     getDocumentClient,
     getDocumentGenerators,
     getDynamoClient,
-    getEmailClient: () => {
-      if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
-        return {
-          getSendStatistics: () => {
-            // mock this out so the health checks pass on smoke tests
-            return {
-              promise: () => ({
-                SendDataPoints: [
-                  {
-                    Rejects: 0,
-                  },
-                ],
-              }),
-            };
-          },
-          sendBulkTemplatedEmail: () => {
-            return {
-              promise: () => {
-                return { Status: [] };
-              },
-            };
-          },
-          sendEmail: () => {
-            return {
-              promise: (): SES.SendEmailResponse => {
-                return { MessageId: '' };
-              },
-            };
-          },
-        };
-      } else {
-        if (!sesCache) {
-          sesCache = new SES({
-            httpOptions: {
-              connectTimeout: 3000,
-              timeout: 5000,
-            },
-            maxRetries: 3,
-            region: 'us-east-1',
-          });
-        }
-        return sesCache;
-      }
-    },
+    getEmailClient,
     getEntityByName: name => {
       return entitiesByName[name];
     },
@@ -255,13 +217,13 @@ export const createApplicationContext = (
     }),
     getMessagingClient: () => {
       if (!sqsCache) {
-        sqsCache = new SQS({
-          apiVersion: '2012-11-05',
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
+        sqsCache = new SQSClient({
+          maxAttempts: 3,
+          region: environment.region,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            requestTimeout: 5000,
+          }),
         });
       }
       return sqsCache;
@@ -286,28 +248,7 @@ export const createApplicationContext = (
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
-    getNotificationService: () => {
-      if (notificationServiceCache) {
-        return notificationServiceCache;
-      }
-
-      if (environment.stage === 'local') {
-        notificationServiceCache = {
-          publish: () => ({
-            promise: () => {},
-          }),
-        };
-      } else {
-        notificationServiceCache = new AWS.SNS({
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-        });
-      }
-      return notificationServiceCache;
-    },
+    getNotificationService,
     getPdfJs: () => {
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
@@ -334,16 +275,10 @@ export const createApplicationContext = (
         } else {
           searchClientCache = new Client({
             ...AwsSigv4Signer({
-              getCredentials: () =>
-                new Promise((resolve, reject) => {
-                  AWS.config.getCredentials((err, credentials) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(credentials as any);
-                    }
-                  });
-                }),
+              getCredentials: () => {
+                const credentialsProvider = defaultProvider();
+                return credentialsProvider();
+              },
               region: 'us-east-1',
             }),
             node: `https://${environment.elasticsearchEndpoint}:443`,
@@ -353,21 +288,7 @@ export const createApplicationContext = (
       return searchClientCache;
     },
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
-    getStorageClient: () => {
-      if (!s3Cache) {
-        s3Cache = new S3({
-          endpoint: environment.s3Endpoint,
-          httpOptions: {
-            connectTimeout: 3000,
-            timeout: 5000,
-          },
-          maxRetries: 3,
-          region: 'us-east-1',
-          s3ForcePathStyle: true,
-        });
-      }
-      return s3Cache;
-    },
+    getStorageClient,
     getUniqueId,
     getUseCaseHelpers,
     getUseCases,

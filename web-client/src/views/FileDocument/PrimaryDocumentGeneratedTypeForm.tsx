@@ -2,7 +2,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
+import { PIIRedactedWarning } from '@web-client/views/CaseAssociationRequest/PIIRedactedWarning';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { WhatCanIIncludeModalOverlay } from '@web-client/views/FileDocument/WhatCanIIncludeModalOverlay';
 import { connect } from '@web-client/presenter/shared.cerebral';
