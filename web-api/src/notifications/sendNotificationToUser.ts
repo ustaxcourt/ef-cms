@@ -1,14 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * sendNotificationToUser
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.message the message
- * @param {string} providers.userId the id of the user
- * @returns {Promise} upon completion of notification delivery
- */
 export const sendNotificationToUser = async ({
   applicationContext,
   clientConnectionId,

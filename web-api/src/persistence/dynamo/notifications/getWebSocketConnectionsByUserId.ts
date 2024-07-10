@@ -1,21 +1,14 @@
-import { query } from '../../dynamodbClientService';
+import { Connection } from '@web-api/notifications/sendNotificationToConnection';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 
-/**
- * getWebSocketConnectionsByUserId
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.userId the user id
- * @returns {Promise} the promise of the call to persistence
- */
 export const getWebSocketConnectionsByUserId = ({
   applicationContext,
   userId,
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) =>
-  query({
+}): Promise<Connection[]> =>
+  queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',

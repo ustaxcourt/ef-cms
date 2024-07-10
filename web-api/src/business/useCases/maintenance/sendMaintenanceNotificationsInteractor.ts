@@ -1,12 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * sendMaintenanceNotificationsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.maintenanceMode true or false depending on whether we are turning maintenance mode on or off
- */
 export const sendMaintenanceNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,
   { maintenanceMode }: { maintenanceMode: boolean },

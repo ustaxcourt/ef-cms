@@ -5,10 +5,12 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type Connection = {
+  clientConnectionId: string;
   connectionId: string;
   endpoint: string;
   pk: string;
   sk: string;
+  userId: string;
 };
 
 export const sendNotificationToConnection = async ({
