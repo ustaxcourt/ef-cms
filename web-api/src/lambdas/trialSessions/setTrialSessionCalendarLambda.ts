@@ -13,6 +13,7 @@ export const setTrialSessionCalendarLambda = event =>
     return await applicationContext
       .getUseCases()
       .setTrialSessionCalendarInteractor(applicationContext, {
+        ...JSON.parse(event.body),
         trialSessionId,
       });
   });
