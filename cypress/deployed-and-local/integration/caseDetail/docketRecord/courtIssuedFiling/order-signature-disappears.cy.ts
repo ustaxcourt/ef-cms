@@ -33,6 +33,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
         cy.get('[data-testid="modal-button-confirm"]').click();
         cy.get('[data-testid="create-order-page-title"]');
         cy.get('.ql-editor').click();
+        cy.get('.ql-editor').type('this is a test order');
         cy.get('[data-testid="save-order-button"]').click();
         cy.get('[data-testid="sign-pdf-canvas"]').click();
         cy.get('[data-testid="save-signature-button"]').click();

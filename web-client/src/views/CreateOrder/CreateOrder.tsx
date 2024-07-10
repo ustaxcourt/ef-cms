@@ -4,6 +4,7 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { EditOrderTitleModal } from './EditOrderTitleModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -27,6 +28,8 @@ export const CreateOrder = connect(
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+    validateCourtOrderSequence: sequences.validateCourtOrderSequence,
+    validationErrors: state.validationErrors,
   },
   function CreateOrder({
     createOrderHelper,
@@ -40,16 +43,18 @@ export const CreateOrder = connect(
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
     updateScreenMetadataSequence,
+    validateCourtOrderSequence,
+    validationErrors,
   }) {
     const { pageTitle } = createOrderHelper;
 
     return (
       <>
         <CaseDetailHeader />
-        <SuccessNotification />
-        <ErrorNotification />
 
         <section className="usa-section grid-container DocumentDetail">
+          <SuccessNotification />
+          <ErrorNotification />
           <div className="grid-container padding-x-0">
             <h1
               className="heading-1"
@@ -89,12 +94,25 @@ export const CreateOrder = connect(
                     {createOrderHelper.addDocketNumbersButtonText}
                   </Button>
                 )}
-                <TextEditor
-                  defaultValue={richText}
-                  editorDelta={editorDelta}
-                  updateFormValueSequence={updateFormValueSequence}
-                  updateScreenMetadataSequence={updateScreenMetadataSequence}
-                />
+
+                <FormGroup
+                  grow
+                  omitFormGroupClass
+                  errorText={validationErrors.documentContents}
+                >
+                  <TextEditor
+                    defaultValue={richText}
+                    editorDelta={editorDelta}
+                    updateFormValueSequence={v => {
+                      if (v.key === 'documentContents') {
+                        v.value = v.value.trim();
+                      }
+                      updateFormValueSequence(v);
+                      validateCourtOrderSequence();
+                    }}
+                    updateScreenMetadataSequence={updateScreenMetadataSequence}
+                  />
+                </FormGroup>
               </Tab>
               <Tab id="tab-preview" tabName="preview" title="Preview">
                 <PdfPreview />
