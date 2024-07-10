@@ -110,6 +110,38 @@ export const fileAndServeCourtIssuedDocument = async (
 
   let caseEntities: Case[] = [];
   let serviceResults;
+  let documentContentsId;
+  try {
+    const shouldScrapePDFContents =
+      !docketEntryToServe.documentContents &&
+      DocketEntry.isSearchable(form.eventCode);
+
+    if (shouldScrapePDFContents) {
+      let documentContents: string = await applicationContext
+        .getUseCaseHelpers()
+        .parseAndScrapePdfContents({
+          applicationContext,
+          pdfBuffer: stampedPdf,
+        });
+
+      documentContents = `${documentContents} ${subjectCase.docketNumberWithSuffix} ${subjectCase.caseCaption}`;
+      documentContentsId = applicationContext.getUniqueId();
+
+      const contentToStore = {
+        documentContents,
+      };
+
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        contentType: 'application/json',
+        document: Buffer.from(JSON.stringify(contentToStore)),
+        key: documentContentsId,
+        useTempBucket: false,
+      });
+    }
+  } catch (e) {
+    applicationContext.logger.error(e);
+  }
 
   try {
     for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
@@ -131,6 +163,7 @@ export const fileAndServeCourtIssuedDocument = async (
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,
+            documentContentsId,
             documentTitle: form.generatedDocumentTitle,
             documentType: form.documentType,
             editState: JSON.stringify({
