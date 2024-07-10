@@ -20,7 +20,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     // '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`, //this is to ignore imported html files
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: ['/node_modules/(?!uuid|pixelmatch)'],
   verbose: false,
   workerIdleMemoryLimit: '5%', // After a jest runner uses X% of total system memory, recreate the runner.
 };
