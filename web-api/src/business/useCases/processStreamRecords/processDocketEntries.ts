@@ -25,11 +25,10 @@ export const processDocketEntries = async ({
     records.map(async record => {
       const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
-      const isSearchable =
-        DocketEntry.isOpinion(fullDocketEntry.eventCode) ||
-        DocketEntry.isOrder(fullDocketEntry.eventCode);
-
-      if (isSearchable && fullDocketEntry.documentContentsId) {
+      if (
+        DocketEntry.isSearchable(fullDocketEntry.eventCode) &&
+        fullDocketEntry.documentContentsId
+      ) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         try {
           const buffer = await applicationContext

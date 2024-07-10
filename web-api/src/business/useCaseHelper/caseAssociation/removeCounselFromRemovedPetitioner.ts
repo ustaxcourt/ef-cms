@@ -34,10 +34,12 @@ export const removeCounselFromRemovedPetitioner = async ({
   }
 
   const practitioners =
-    caseEntity.getPractitionersRepresenting(petitionerContactId);
+    caseEntity.getPractitionersRepresenting(petitionerContactId) || [];
+
+  caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
 
   for (const practitioner of practitioners) {
-    if (practitioner.representing.length === 1) {
+    if (practitioner.representing.length === 0) {
       caseEntity.removePrivatePractitioner(practitioner);
 
       await applicationContext.getPersistenceGateway().deleteUserFromCase({
@@ -45,8 +47,6 @@ export const removeCounselFromRemovedPetitioner = async ({
         docketNumber: caseEntity.docketNumber,
         userId: practitioner.userId,
       });
-    } else {
-      caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
     }
   }
 

@@ -61,7 +61,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
       petitionerContactId: mockContactSecondaryId,
     });
 
-    expect(updatedCase.privatePractitioners[0].representing).toEqual([
+    expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,
     ]);
     expect(
@@ -90,7 +90,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
           },
           {
             ...MOCK_PRACTITIONER,
-            representing: [mockContactPrimaryId],
+            representing: [mockContactPrimaryId, mockContactSecondaryId],
             userId: mockThirdPractitionerUserId,
           },
         ],
@@ -109,8 +109,52 @@ describe('removeCounselFromRemovedPetitioner', () => {
       applicationContext.getPersistenceGateway().deleteUserFromCase.mock
         .calls[0][0].userId,
     ).toEqual(mockSecondPractitionerUserId);
-    expect(updatedCase.privatePractitioners.length).toEqual(1);
-    expect(updatedCase.privatePractitioners[0].representing).toEqual([
+    expect(updatedCase.privatePractitioners?.length).toEqual(1);
+    expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
+      mockContactPrimaryId,
+    ]);
+  });
+
+  it('should not remove the privatePracitioner if they represent both the petitioner being removed and a remaining petitioner', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: [
+          MOCK_CASE.petitioners[0],
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: mockContactSecondaryId,
+            contactType: CONTACT_TYPES.secondary,
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_PRACTITIONER,
+            representing: [mockContactPrimaryId, mockContactSecondaryId],
+            userId: mockSecondPractitionerUserId,
+          },
+          {
+            ...MOCK_PRACTITIONER,
+            representing: [mockContactPrimaryId, mockContactSecondaryId],
+            userId: mockThirdPractitionerUserId,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    const updatedCase = await removeCounselFromRemovedPetitioner({
+      applicationContext,
+      caseEntity,
+      petitionerContactId: mockContactSecondaryId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteUserFromCase,
+    ).not.toHaveBeenCalled();
+    expect(updatedCase.privatePractitioners?.length).toEqual(2);
+    expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,
     ]);
   });

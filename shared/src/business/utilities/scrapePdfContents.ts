@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { isEmpty } from 'lodash';
 
 /**
@@ -6,7 +7,13 @@ import { isEmpty } from 'lodash';
  * @param {string} pdfBuffer the buffer for the pdf content
  * @returns {Promise} the template with the brackets replaced with replacement values
  */
-export const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
+export const scrapePdfContents = async ({
+  applicationContext,
+  pdfBuffer,
+}: {
+  applicationContext: ServerApplicationContext;
+  pdfBuffer: Buffer;
+}) => {
   let pdfjsLib;
 
   try {

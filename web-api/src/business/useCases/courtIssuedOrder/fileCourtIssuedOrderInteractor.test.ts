@@ -289,15 +289,11 @@ describe('fileCourtIssuedOrderInteractor', () => {
     expect(savedDocumentContents).toContain(caseRecord.caseCaption);
   });
 
-  it('should set documentMetadata documentContents if parseAndScrapePdfContents returns content', async () => {
-    const mockDocumentContents = 'bloop ee doop brnabowbow';
-    applicationContext
-      .getUseCaseHelpers()
-      .parseAndScrapePdfContents.mockReturnValue(mockDocumentContents);
-
+  it('should append the docket number and case caption to the document contents if document contents was defined', async () => {
     await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
+        documentContents: 'hello',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -313,24 +309,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         .saveDocumentFromLambda.mock.calls[0][0].document.toString(),
     ).documentContents;
 
-    expect(savedDocumentContents).toContain(mockDocumentContents);
-  });
-
-  it('should parse and scrape pdf contents', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'TC Opinion',
-        documentType: 'T.C. Opinion',
-        eventCode: 'TCOP',
-        judge: 'Dredd',
-      },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
-    ).toHaveBeenCalled();
+    expect(savedDocumentContents).toEqual('hello 45678-18W Caption');
   });
 
   it('should add order document to most recent message if a parentMessageId is passed in', async () => {
@@ -432,26 +411,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
     expect(newlyFiledDocument).toMatchObject({
       isDraft: true,
     });
-  });
-
-  it('should throw an error if fails to parse pdf', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .parseAndScrapePdfContents.mockImplementation(() => {
-        throw new Error('error parsing pdf');
-      });
-
-    await expect(
-      fileCourtIssuedOrderInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'TC Opinion',
-          documentType: 'T.C. Opinion',
-          eventCode: 'TCOP',
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).rejects.toThrow('error parsing pdf');
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
