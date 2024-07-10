@@ -5,6 +5,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -22,10 +23,9 @@ export const addConsolidatedCase = async (
     docketNumber,
     docketNumberToConsolidateWith,
   }: { docketNumber: string; docketNumberToConsolidateWith: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
@@ -86,7 +86,9 @@ export const addConsolidatedCase = async (
 
   const updateCasePromises: Promise<RawCase>[] = [];
   casesToUpdate.forEach(caseInCasesToUpdate => {
-    const caseEntity = new Case(caseInCasesToUpdate, { authorizedUser: user });
+    const caseEntity = new Case(caseInCasesToUpdate, {
+      authorizedUser,
+    });
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(
