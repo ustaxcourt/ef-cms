@@ -63,7 +63,7 @@ export const setTrialSessionCalendarInteractor = async (
       );
 
     let eligibleCasesLimit =
-      trialSessionEntity.maxCases + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
+      (trialSessionEntity?.maxCases || 0) + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
 
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
@@ -83,7 +83,8 @@ export const setTrialSessionCalendarInteractor = async (
       )
       .splice(
         0,
-        trialSessionEntity.maxCases - manuallyAddedQcCompleteCases.length,
+        (trialSessionEntity?.maxCases || 0) -
+          manuallyAddedQcCompleteCases.length,
       );
 
     const allDocketNumbers = uniq(
