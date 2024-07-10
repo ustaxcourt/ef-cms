@@ -16,4 +16,4 @@ export const validateCourtOrderSequence = [
       },
     ],
   },
-];
+] as unknown as () => void;

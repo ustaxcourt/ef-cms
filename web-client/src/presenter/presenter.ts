@@ -1567,7 +1567,7 @@ export const presenterSequences = {
     validateChangeLoginAndServiceEmailSequence as unknown as Function,
   validateCourtIssuedDocketEntrySequence:
     validateCourtIssuedDocketEntrySequence as unknown as Function,
-  validateCourtOrderSequence: validateCourtOrderSequence as unknown as Function,
+  validateCourtOrderSequence,
   validateCreateMessageInModalSequence:
     validateCreateMessageInModalSequence as unknown as Function,
   validateDocketEntrySequence:
