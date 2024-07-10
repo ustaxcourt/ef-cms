@@ -51,8 +51,8 @@ export default defineConfig({
 
           return null;
         },
-        unzipFile({ destinationPath, filePath }) {
-          return unzipFile({ destinationPath, filePath });
+        unzipFile({ fileName }) {
+          return unzipFile({ fileName });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });

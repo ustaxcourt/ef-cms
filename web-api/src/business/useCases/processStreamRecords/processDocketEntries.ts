@@ -38,8 +38,9 @@ export const processDocketEntries = async ({
               key: fullDocketEntry.documentContentsId,
               useTempBucket: false,
             });
-          // @ts-ignore
-          const { documentContents } = JSON.parse(buffer.toString());
+          const docketEntry = new TextDecoder('utf-8').decode(buffer);
+
+          const { documentContents } = JSON.parse(docketEntry);
 
           fullDocketEntry.documentContents = documentContents;
         } catch (err) {
