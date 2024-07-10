@@ -101,61 +101,6 @@ export const setTrialSessionCalendarInteractor = async (
       ttl: 900,
     });
 
-    /**
-     * sets a manually added case as calendared with the trial session details
-     * @param {object} caseRecord the providers object
-     * @returns {Promise} the promise of the updateCase call
-     */
-    const setManuallyAddedCaseAsCalendared = caseRecord => {
-      const caseEntity = new Case(caseRecord, { applicationContext });
-
-      caseEntity.setAsCalendared(trialSessionEntity);
-
-      return Promise.all([
-        applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-          applicationContext,
-          docketNumber: caseEntity.docketNumber,
-          highPriority: true,
-          trialDate: caseEntity.trialDate,
-        }),
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        }),
-      ]);
-    };
-
-    /**
-     * sets an eligible case as calendared and adds it to the trial session calendar
-     * @param {object} caseRecord the providers object
-     * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
-     */
-    const setTrialSessionCalendarForEligibleCase = caseRecord => {
-      const caseEntity = new Case(caseRecord, { applicationContext });
-
-      caseEntity.setAsCalendared(trialSessionEntity);
-      trialSessionEntity.addCaseToCalendar(caseEntity);
-
-      return Promise.all([
-        applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-          applicationContext,
-          docketNumber: caseEntity.docketNumber,
-          highPriority: true,
-          trialDate: caseEntity.trialDate,
-        }),
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        }),
-        applicationContext
-          .getPersistenceGateway()
-          .deleteCaseTrialSortMappingRecords({
-            applicationContext,
-            docketNumber: caseEntity.docketNumber,
-          }),
-      ]);
-    };
-
     const funcs = [
       ...manuallyAddedQcIncompleteCases.map(
         caseRecord => () =>
@@ -166,15 +111,28 @@ export const setTrialSessionCalendarInteractor = async (
           }),
       ),
       ...manuallyAddedQcCompleteCases.map(
-        aCase => () => setManuallyAddedCaseAsCalendared(aCase),
+        aCase => () =>
+          setManuallyAddedCaseAsCalendared({
+            applicationContext,
+            caseRecord: aCase,
+            trialSessionEntity,
+          }),
       ),
       ...eligibleCases.map(
-        aCase => () => setTrialSessionCalendarForEligibleCase(aCase),
+        aCase => () =>
+          setTrialSessionCalendarForEligibleCase({
+            applicationContext,
+            caseRecord: aCase,
+            trialSessionEntity,
+          }),
       ),
     ];
 
-    const chunkyFunctions = chunk(funcs, CHUNK_SIZE);
-    for (let singleChunk of chunkyFunctions) {
+    // Story: 10422
+    // We chunk this array of functions so that we don't fire all of them at once.
+    // If firing all at once, we exhaust the available connections and will run into connection timeouts.
+    const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
+    for (let singleChunk of chunkedFunctions) {
       await Promise.all(singleChunk.map(func => func()));
     }
 
@@ -239,4 +197,65 @@ const removeManuallyAddedCaseFromTrialSession = ({
     applicationContext,
     caseToUpdate: caseEntity,
   });
+};
+
+const setManuallyAddedCaseAsCalendared = async ({
+  applicationContext,
+  caseRecord,
+  trialSessionEntity,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseRecord: RawCase;
+  trialSessionEntity: TrialSession;
+}): Promise<void> => {
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
+  caseEntity.setAsCalendared(trialSessionEntity);
+
+  await Promise.all([
+    applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+      highPriority: true,
+      trialDate: caseEntity.trialDate,
+    }),
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    }),
+  ]);
+};
+
+const setTrialSessionCalendarForEligibleCase = async ({
+  applicationContext,
+  caseRecord,
+  trialSessionEntity,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseRecord: RawCase;
+  trialSessionEntity: TrialSession;
+}): Promise<void> => {
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
+  caseEntity.setAsCalendared(trialSessionEntity);
+  trialSessionEntity.addCaseToCalendar(caseEntity);
+
+  await Promise.all([
+    applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+      highPriority: true,
+      trialDate: caseEntity.trialDate,
+    }),
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    }),
+    applicationContext
+      .getPersistenceGateway()
+      .deleteCaseTrialSortMappingRecords({
+        applicationContext,
+        docketNumber: caseEntity.docketNumber,
+      }),
+  ]);
 };
