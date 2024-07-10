@@ -16,7 +16,7 @@ export const getDocumentContentsAction = async ({
       d => d.docketEntryId === docketEntryIdToEdit,
     );
 
-    if (docketEntry) {
+    if (docketEntry && docketEntry.documentContentsId) {
       const { documentContents, richText } = await applicationContext
         .getUseCases()
         .getDocumentContentsForDocketEntryInteractor(applicationContext, {
@@ -25,5 +25,7 @@ export const getDocumentContentsAction = async ({
 
       return { documentContents, richText };
     }
+
+    return { documentContents: '', richText: '' };
   }
 };

@@ -545,6 +545,7 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCaseWorksheetSequence } from '@web-client/presenter/sequences/validateCaseWorksheetSequence';
 import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
+import { validateCourtOrderSequence } from './sequences/validateCourtOrderSequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
@@ -1493,6 +1494,7 @@ export const presenterSequences = {
     validateChangeLoginAndServiceEmailSequence as unknown as Function,
   validateCourtIssuedDocketEntrySequence:
     validateCourtIssuedDocketEntrySequence as unknown as Function,
+  validateCourtOrderSequence,
   validateCreateMessageInModalSequence:
     validateCreateMessageInModalSequence as unknown as Function,
   validateDocketEntrySequence:
