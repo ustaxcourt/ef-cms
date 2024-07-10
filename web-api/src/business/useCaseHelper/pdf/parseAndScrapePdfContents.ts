@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 /**
  * Parse and Scrape PDF Contents
  *
@@ -9,6 +11,9 @@
 export const parseAndScrapePdfContents = async ({
   applicationContext,
   pdfBuffer,
+}: {
+  applicationContext: ServerApplicationContext;
+  pdfBuffer: any;
 }) => {
   const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
   const view = new Uint8Array(arrayBuffer);
