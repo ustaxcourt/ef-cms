@@ -73,4 +73,6 @@ export const prepareStatusReportOrderResponseAction = ({
   store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
   store.set(state.form.eventCode, 'O');
   store.set(state.form.richText, richText);
+  store.set(state.form.statusReportFilingDate, statusReportFilingDate);
+  store.set(state.form.statusReportIndex, statusReportIndex);
 };

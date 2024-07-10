@@ -411,16 +411,19 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/order-response-create',
+      '/case-detail/*/documents/*/order-response-create..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
         (docketNumber, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
             docketNumber,
+            statusReportFilingDate,
+            statusReportIndex,
           });
         },
       ),
@@ -436,6 +439,7 @@ const router = {
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
+            docketEntryIdToEdit: docketEntryId,
             docketNumber,
             isEditing: true,
           });
@@ -1347,8 +1351,9 @@ const router = {
     );
 
     registerRoute(
-      '/messages/*/message-detail/*/*/order-response-create',
+      '/messages/*/message-detail/*/*/order-response-create..',
       ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
+        const { statusReportFilingDate, statusReportIndex } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
         );
@@ -1356,6 +1361,8 @@ const router = {
           docketEntryId,
           docketNumber,
           parentMessageId,
+          statusReportFilingDate,
+          statusReportIndex,
         });
       }),
     );
@@ -1370,6 +1377,7 @@ const router = {
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
+            docketEntryIdToEdit: docketEntryId,
             docketNumber,
             isEditing: true,
             parentMessageId,

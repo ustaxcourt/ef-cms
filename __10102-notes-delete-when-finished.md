@@ -29,11 +29,11 @@ only 140 or 160 characters long. Which is it?
 
 - write integration tests (solo / group)
 
-- when refreshing the page that has the StatusReportOrderResponse component, some issues occur (should we address?)
-
 - Run through all tests case + DoD checklist (group / solo)
 
-- css issues, make sure due date lines up with order type + make all radio buttons column (solo)
+- add missing unit tests
+
+- fix edit signed document from MessageDocument.tsx when refreshing
 
 ## Feedback from judges:
 
@@ -42,6 +42,14 @@ only 140 or 160 characters long. Which is it?
 2. Dates should have the following format in all cases where they've been generated/selected: "Month DD, YYYY" (essentially, spell out the month).
 
 ## Notes
+
+## DOD
+
+- Upon refreshing from the messages tab, we lose redirectUrl
+- edit routes redundent with:
+  docketEntryId,
+  docketEntryIdToEdit: docketEntryId,
+- reduce number of routes
 
 The following fields on the form are optional:
 - order type

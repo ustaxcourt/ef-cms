@@ -1,9 +1,9 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setStatusReportOrderResponseFormAction } from './setStatusReportOrderResponseFormAction';
+import { setStatusReportOrderResponsePath } from './setStatusReportOrderResponsePath';
 
 describe('setStatusReportOrderResponseFormAction,', () => {
   it('sets the statusReportOrderResponse state from props', async () => {
-    const result = await runAction(setStatusReportOrderResponseFormAction, {
+    const result = await runAction(setStatusReportOrderResponsePath, {
       props: {
         statusReportFilingDate: '2024-07-04',
         statusReportIndex: 4,
