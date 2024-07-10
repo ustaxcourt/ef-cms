@@ -8,7 +8,7 @@ describe('setMessageAsReadAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should set message as read', async () => {
+  it('should set message as read and update unreadMessageCount in state', async () => {
     const result = await runAction(setMessageAsReadAction, {
       modules: { presenter },
       props: {
@@ -32,5 +32,22 @@ describe('setMessageAsReadAction', () => {
       messageId: '123',
     });
     expect(result.state.notifications.unreadMessageCount).toBe(0);
+  });
+
+  it('should set unreadMessageCount to undefined if it was not previously defined', async () => {
+    const result = await runAction(setMessageAsReadAction, {
+      modules: { presenter },
+      props: {
+        messageToMarkRead: {
+          docketNumber: '123-45',
+          messageId: '123',
+        },
+      },
+      state: {
+        notifications: {},
+      },
+    });
+
+    expect(result.state.notifications.unreadMessageCount).toBeUndefined();
   });
 });
