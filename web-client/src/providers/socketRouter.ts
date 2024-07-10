@@ -30,6 +30,9 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'notice_generation_complete':
         await app.getSequence('noticeGenerationCompleteSequence')(message);
         break;
+      case 'set_trial_session_calendar_complete':
+        await app.getSequence('completeTrialSessionCalendarSequence')(message);
+        break;
       case 'serve_to_irs_complete':
         await app.getSequence('serveToIrsCompleteSequence')(message);
         break;
