@@ -86,6 +86,10 @@ localStreamsApp.get('/isDone', (req, res) => {
 
 const processChunks = async () => {
   for (const chunk of chunks) {
+    // uncomment this if you want to try and fix
+    // flaky cypress tests due to low latency
+    // ES index.
+    // await new Promise(resolve => setTimeout(resolve, 2000));
     await processStreamRecordsLambda({
       Records: chunk,
     }).catch(err => {
