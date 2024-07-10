@@ -13,6 +13,11 @@ import {
   docketClerkUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import {
+  mockCaseServicesSupervisorUser,
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -72,8 +77,6 @@ describe('completeDocketEntryQCInteractor', () => {
       ],
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -104,26 +107,32 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should throw an error if not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          leadDocketNumber: caseRecord.docketNumber,
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
         },
-      }),
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('adds documents and workitems', async () => {
     await expect(
-      completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          leadDocketNumber: caseRecord.docketNumber,
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
         },
-      }),
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
 
     expect(
@@ -144,9 +153,13 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
-    const result = await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: caseRecord.docketEntries[0],
-    });
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: caseRecord.docketEntries[0],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -163,15 +176,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are added and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: true,
-        additionalInfo: '123',
-        additionalInfo2: 'abc',
-        certificateOfService: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: '123',
+          additionalInfo2: 'abc',
+          certificateOfService: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -186,15 +203,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with the name and title of the clerk of the court', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: true,
-        additionalInfo: '123',
-        additionalInfo2: 'abc',
-        certificateOfService: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: '123',
+          additionalInfo2: 'abc',
+          certificateOfService: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
@@ -206,15 +227,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should save the notice of docket change on the case', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: true,
-        additionalInfo: '123',
-        additionalInfo2: 'abc',
-        certificateOfService: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: '123',
+          additionalInfo2: 'abc',
+          certificateOfService: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     const updatedCaseDocketEntries =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -231,13 +256,17 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        certificateOfService: true,
-        certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          certificateOfService: true,
+          certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -252,12 +281,16 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        attachments: true,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          attachments: true,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -273,15 +306,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: true,
-        additionalInfo: undefined,
-        additionalInfo2: undefined,
-        certificateOfService: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: undefined,
+          additionalInfo2: undefined,
+          certificateOfService: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -296,16 +333,20 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with a new coversheet when documentTitle has changed and addToCoversheeet is false', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: false,
-        additionalInfo: undefined,
-        additionalInfo2: undefined,
-        certificateOfService: false,
-        documentTitle: 'Something Different',
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: false,
+          additionalInfo: undefined,
+          additionalInfo2: undefined,
+          certificateOfService: false,
+          documentTitle: 'Something Different',
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -320,12 +361,16 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should not generate a new coversheet when the documentTitle has not changed and addToCoversheet is false', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -336,15 +381,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: true,
-        additionalInfo: 'additional info',
-        additionalInfo2: 'additional info 221',
-        certificateOfService: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'additional info',
+          additionalInfo2: 'additional info 221',
+          certificateOfService: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -359,15 +408,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a new coversheet when additionalInfo is NOT changed and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        addToCoversheet: true,
-        additionalInfo: 'additional info',
-        additionalInfo2: 'additional info',
-        certificateOfService: false,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'additional info',
+          additionalInfo2: 'additional info',
+          certificateOfService: false,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -403,13 +456,17 @@ describe('completeDocketEntryQCInteractor', () => {
         return mockNumberOfPages;
       });
 
-    const result = await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        documentTitle: 'Something Else',
-        documentType: 'Memorandum in Support',
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          documentTitle: 'Something Else',
+          documentType: 'Memorandum in Support',
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     const noticeOfDocketChange = result.caseDetail.docketEntries.find(
       docketEntry => docketEntry.eventCode === 'NODC',
@@ -454,13 +511,17 @@ describe('completeDocketEntryQCInteractor', () => {
         ],
       });
 
-    const result = await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        documentTitle: 'Notice of Change of Address',
-        documentType: 'Notice of Change of Address',
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          documentTitle: 'Notice of Change of Address',
+          documentType: 'Notice of Change of Address',
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -477,13 +538,17 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('does not generate a document for paper service if the document is a Notice of Change of Address and the case has no paper service parties', async () => {
-    const result = await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        documentTitle: 'Notice of Change of Address',
-        documentType: 'Notice of Change of Address',
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          documentTitle: 'Notice of Change of Address',
+          documentType: 'Notice of Change of Address',
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -500,25 +565,29 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should update only allowed editable fields on a docket entry document', async () => {
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        documentTitle: 'My Edited Document',
-        documentType: 'Notice of Change of Address',
-        eventCode: 'NCA',
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
-        freeText: 'Some text about this document',
-        hasOtherFilingParty: true,
-        isPaper: true,
-        otherFilingParty: 'Bert Brooks',
-        scenario: 'Nonstandard H',
-        secondaryDocument: {
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          documentTitle: 'My Edited Document',
           documentType: 'Notice of Change of Address',
-          eventCode: 'A',
+          eventCode: 'NCA',
+          filedBy: 'Resp.',
+          filers: [mockPrimaryId],
+          freeText: 'Some text about this document',
+          hasOtherFilingParty: true,
+          isPaper: true,
+          otherFilingParty: 'Bert Brooks',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            documentType: 'Notice of Change of Address',
+            eventCode: 'A',
+          },
         },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -548,6 +617,7 @@ describe('completeDocketEntryQCInteractor', () => {
           pending: true,
         },
       },
+      mockDocketClerkUser,
     );
 
     expect(
@@ -569,6 +639,7 @@ describe('completeDocketEntryQCInteractor', () => {
           receivedAt: '2021-01-01', // date only
         },
       },
+      mockDocketClerkUser,
     );
 
     expect(caseDetail.docketEntries[0].receivedAt).toEqual(
@@ -577,20 +648,20 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('sets the assigned users section from the selected section when it is defined and the user is a case services user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      caseServicesSupervisorUser,
-    );
-
     await applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(caseServicesSupervisorUser);
 
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        selectedSection: DOCKET_SECTION,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          selectedSection: DOCKET_SECTION,
+        },
       },
-    });
+      mockCaseServicesSupervisorUser,
+    );
 
     const assignedWorkItem =
       applicationContext.getPersistenceGateway()
@@ -601,20 +672,20 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('sets the section as Case Services when selected section is NOT defined and the user is a case services user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      caseServicesSupervisorUser,
-    );
-
     await applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(caseServicesSupervisorUser);
 
-    await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        ...caseRecord.docketEntries[0],
-        selectedSection: undefined,
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          selectedSection: undefined,
+        },
       },
-    });
+      mockCaseServicesSupervisorUser,
+    );
 
     const assignedWorkItem =
       applicationContext.getPersistenceGateway()
@@ -625,19 +696,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      caseServicesSupervisorUser,
-    );
-
     mockLock = MOCK_ACTIVE_LOCK;
 
     await expect(() =>
-      completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          selectedSection: undefined,
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            selectedSection: undefined,
+          },
         },
-      }),
+        mockCaseServicesSupervisorUser,
+      ),
     ).rejects.toThrow('The document is currently being updated');
   });
 });

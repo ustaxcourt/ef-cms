@@ -84,3 +84,10 @@ export const mockChambersUser: AuthUser = {
   role: ROLES.chambers,
   userId: 'e28c2f91-6925-48ac-8441-22b522b0c044',
 };
+
+export const mockCaseServicesSupervisorUser: AuthUser = {
+  email: 'mockCaseServicesSupervisorUser@example.com',
+  name: 'Candy Case',
+  role: ROLES.caseServicesSupervisor,
+  userId: '97451b05-ae9c-46d5-9074-1ac6ef12cfc6',
+};
