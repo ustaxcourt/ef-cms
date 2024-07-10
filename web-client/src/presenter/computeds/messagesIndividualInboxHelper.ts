@@ -10,12 +10,10 @@ export const messagesIndividualInboxHelper = (
   messagesCompletedAt: string;
   messagesCompletedBy: string;
   allMessagesCheckboxEnabled: boolean;
-  completedAtFormatted: string;
   completionSuccess: boolean;
 } => {
   const messagesInboxCount = get(state.messagesInboxCount);
   const messagesSelectedCount = get(state.messagesPage.selectedMessages).size;
-  const completedAtFormatted = get(state.messagesPage.completedAtFormatted);
   const completionSuccess = get(state.messagesPage.completionSuccess);
   const messagesCompletedAt = get(state.messagesPage.messagesCompletedAt);
   const messagesCompletedBy = get(state.messagesPage.messagesCompletedBy);
@@ -27,7 +25,6 @@ export const messagesIndividualInboxHelper = (
   return {
     allMessagesCheckboxEnabled: !!messagesInboxCount,
     allMessagesSelected,
-    completedAtFormatted,
     completionSuccess,
     isCompletionButtonEnabled,
     messagesCompletedAt,
