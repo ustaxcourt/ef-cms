@@ -48,6 +48,7 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
       key: 'richText',
       value: 'Some order content',
     });
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'documentContents',
       value: data.documentContents || 'Some order content',
