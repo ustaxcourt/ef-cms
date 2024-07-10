@@ -5,50 +5,73 @@ data "aws_acm_certificate" "private_certificate" {
 resource "aws_s3_bucket" "frontend" {
   bucket = "app-${var.current_color}.${var.dns_domain}"
 
-  policy = data.aws_iam_policy_document.allow_public.json
-
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
-  }
-
   tags = {
     environment = var.environment
   }
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_policy" "frontend_s3_policy" {
+  bucket = aws_s3_bucket.frontend.id
+  policy = data.aws_iam_policy_document.allow_public.json
+}
+
+resource "aws_s3_bucket_website_configuration" "frontend_s3_website" {
+  bucket = aws_s3_bucket.frontend.id
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_sse" {
+  bucket = aws_s3_bucket.frontend.id
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
 
 resource "aws_s3_bucket" "failover" {
   bucket = "app-failover-${var.current_color}.${var.dns_domain}"
-
-  policy = data.aws_iam_policy_document.allow_public_failover.json
-
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
-  }
-
   tags = {
     environment = var.environment
   }
 
-  server_side_encryption_configuration {
-    rule {
-      bucket_key_enabled = false
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+  provider = aws.us-west-1
+}
+
+resource "aws_s3_bucket_policy" "failover_policy" {
+  bucket   = aws_s3_bucket.failover.id
+  policy   = data.aws_iam_policy_document.allow_public_failover.json
+  provider = aws.us-west-1
+}
+
+resource "aws_s3_bucket_website_configuration" "failover_s3_website" {
+  bucket   = aws_s3_bucket.failover.id
+  provider = aws.us-west-1
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "failover_sse" {
+  bucket   = aws_s3_bucket.failover.id
+  provider = aws.us-west-1
+
+  rule {
+    bucket_key_enabled = false
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
-
-  provider = aws.us-west-1
 }
 
 data "aws_iam_policy_document" "allow_public" {
@@ -109,7 +132,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = aws_s3_bucket.frontend.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.frontend_s3_website.website_endpoint
     origin_id   = "primary-app-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
@@ -127,7 +150,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
 
   origin {
-    domain_name = aws_s3_bucket.failover.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.failover_s3_website.website_endpoint
     origin_id   = "failover-app-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
@@ -141,58 +164,6 @@ resource "aws_cloudfront_distribution" "distribution" {
       name  = "x-allowed-domain"
       value = var.zone_name
     }
-  }
-
-  origin_group {
-    origin_id = "group-documents.${var.dns_domain}"
-
-    failover_criteria {
-      status_codes = [403, 404, 500, 502, 503, 504]
-    }
-
-    member {
-      origin_id = "primary-documents.${var.dns_domain}"
-    }
-
-    member {
-      origin_id = "failover-documents.${var.dns_domain}"
-    }
-  }
-
-  origin_group {
-    origin_id = "group-temp-documents.${var.dns_domain}"
-
-    failover_criteria {
-      status_codes = [403, 404, 500, 502, 503, 504]
-    }
-
-    member {
-      origin_id = "primary-temp-documents.${var.dns_domain}"
-    }
-
-    member {
-      origin_id = "failover-temp-documents.${var.dns_domain}"
-    }
-  }
-
-  origin {
-    domain_name = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
-    origin_id   = "primary-documents.${var.dns_domain}"
-  }
-
-  origin {
-    domain_name = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
-    origin_id   = "failover-documents.${var.dns_domain}"
-  }
-
-  origin {
-    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
-    origin_id   = "primary-temp-documents.${var.dns_domain}"
-  }
-
-  origin {
-    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
-    origin_id   = "failover-temp-documents.${var.dns_domain}"
   }
 
   custom_error_response {
@@ -255,58 +226,6 @@ resource "aws_cloudfront_distribution" "distribution" {
     max_ttl                = 0
     compress               = true
     viewer_protocol_policy = var.viewer_protocol_policy
-  }
-
-  ordered_cache_behavior {
-    path_pattern           = "/documents/*"
-    viewer_protocol_policy = var.viewer_protocol_policy
-    compress               = true
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "group-documents.${var.dns_domain}"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-
-    lambda_function_association {
-      event_type   = "origin-request"
-      lambda_arn   = module.strip_basepath_lambda.qualified_arn
-      include_body = false
-    }
-
-    forwarded_values {
-      query_string = true
-
-      cookies {
-        forward = "none"
-      }
-    }
-  }
-
-  ordered_cache_behavior {
-    path_pattern           = "/temp-documents/*"
-    viewer_protocol_policy = var.viewer_protocol_policy
-    compress               = true
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "group-temp-documents.${var.dns_domain}"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-
-    lambda_function_association {
-      event_type   = "origin-request"
-      lambda_arn   = module.strip_basepath_lambda.qualified_arn
-      include_body = false
-    }
-
-    forwarded_values {
-      query_string = true
-
-      cookies {
-        forward = "none"
-      }
-    }
   }
 
   lifecycle {

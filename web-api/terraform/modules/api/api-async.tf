@@ -83,7 +83,8 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
   "headers" : {
     "Authorization": "$input.params('Authorization')",
     "asyncsyncid": "$input.params('Asyncsyncid')",
-    "content-type": "$input.params('Content-Type')"
+    "content-type": "$input.params('Content-Type')",
+    "x-test-user": "$input.params('x-test-user')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -137,7 +138,8 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
   "headers" : {
     "Authorization": "$input.params('Authorization')",
     "asyncsyncid": "$input.params('Asyncsyncid')",
-    "content-type": "$input.params('Content-Type')"
+    "content-type": "$input.params('Content-Type')",
+    "x-test-user": "$input.params('x-test-user')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -191,7 +193,8 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   "headers" : {
     "Authorization": "$input.params('Authorization')",
     "asyncsyncid": "$input.params('Asyncsyncid')",
-    "content-type": "$input.params('Content-Type')"
+    "content-type": "$input.params('Content-Type')",
+    "x-test-user": "$input.params('x-test-user')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -257,7 +260,7 @@ resource "aws_api_gateway_integration_response" "async_response_post" {
   status_code = aws_api_gateway_method_response.async_method_response_post.status_code
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin"  = "'*'",
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With'",
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With,X-Force-Refresh'",
     "method.response.header.Access-Control-Allow-Methods" = "'POST'"
   }
 }
@@ -286,7 +289,7 @@ resource "aws_api_gateway_integration_response" "async_response_put" {
   status_code = aws_api_gateway_method_response.async_method_response_put.status_code
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin"  = "'*'",
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With'",
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With,X-Force-Refresh'",
     "method.response.header.Access-Control-Allow-Methods" = "'PUT'"
   }
 }
@@ -315,7 +318,7 @@ resource "aws_api_gateway_integration_response" "async_response_get" {
   status_code = aws_api_gateway_method_response.async_method_response_get.status_code
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin"  = "'*'",
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With'",
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With,X-Force-Refresh'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET'"
   }
 }

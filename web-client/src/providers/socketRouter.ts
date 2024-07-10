@@ -46,7 +46,6 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
         await app.getSequence('batchDownloadReadySequence')(message);
         break;
       case 'batch_download_docket_generated':
-      case 'batch_download_upload_start':
       case 'batch_download_csv_data':
       case 'batch_download_progress':
         await app.getSequence('updateBatchDownloadProgressSequence')(message);

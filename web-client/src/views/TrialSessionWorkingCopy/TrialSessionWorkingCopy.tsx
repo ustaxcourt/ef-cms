@@ -84,6 +84,7 @@ export const TrialSessionWorkingCopy = connect(
                 <Button
                   link
                   aria-label="Download batch of documents in a trial session"
+                  data-testid="download-all-trial-session-cases-button"
                   onClick={() =>
                     batchDownloadTrialSessionSequence({
                       allowRetry: true,
@@ -116,7 +117,6 @@ export const TrialSessionWorkingCopy = connect(
               noCloseBtn
               cancelLabel="No, Cancel"
               confirmLabel="Yes, Delete"
-              preventCancelOnBlur={true}
               title="Are You Sure You Want to Delete This Note?"
               onCancelSequence={clearModalSequence}
               onConfirmSequence={deleteUserCaseNoteFromWorkingCopySequence}
@@ -129,7 +129,6 @@ export const TrialSessionWorkingCopy = connect(
               noCloseBtn
               cancelLabel="No, Cancel"
               confirmLabel="Yes, Delete"
-              preventCancelOnBlur={true}
               title="Are You Sure You Want to Delete This Note?"
               onCancelSequence={clearModalSequence}
               onConfirmSequence={deleteWorkingCopySessionNoteSequence}

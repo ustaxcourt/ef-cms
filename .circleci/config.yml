@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.1.0
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.0
 
 parameters:
   run_build_and_deploy:
@@ -186,10 +186,6 @@ jobs:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV
-      - run:
-          name: 'Deploy - Verify Private S3 Buckets'
-          command: |
-            npm run verify-private-s3-buckets -- $ENV
       - run:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
@@ -494,25 +490,6 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run backup:dynamo-table -- $SOURCE_TABLE
             fi
-
-  delete-api-mappings:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Delete Source API Gateway Mappings
-          command: |
-            npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
 
   cleanup:
     docker:
@@ -945,10 +922,6 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
-      - delete-api-mappings:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -1010,15 +983,10 @@ workflows:
           <<: *only-prod
           requires:
             - switch-colors
-      - delete-api-mappings:
-          <<: *only-prod
-          requires:
-            - switch-colors
       - cleanup:
           <<: *only-prod
           requires:
             - backup-source-dynamo-table
-            - delete-api-mappings
 
   build-and-deploy-empty:
     when: << pipeline.parameters.run_build_and_deploy_empty >>
@@ -1029,10 +997,6 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
-      - delete-api-mappings:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:

@@ -70,7 +70,7 @@ export const CaseDeadlines = connect(
                   }}
                 />
                 <Button
-                  id="update-date-range-deadlines-button"
+                  data-testid="submit-case-deadlines-report-button"
                   onClick={() => {
                     updateDateRangeForDeadlinesSequence();
                   }}

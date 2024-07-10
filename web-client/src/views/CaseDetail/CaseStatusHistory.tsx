@@ -8,7 +8,10 @@ export const CaseStatusHistory = connect(
   },
   function CaseStatusHistory({ caseStatusHistoryHelper }) {
     return (
-      <div className="grid-row grid-gap flex-justify">
+      <div
+        className="grid-row grid-gap flex-justify"
+        data-testid="case-status-history-container"
+      >
         <div className="grid-col-12">
           <div className="grid-row">
             <div className="grid-col-6">

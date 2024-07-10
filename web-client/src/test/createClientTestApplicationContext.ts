@@ -28,7 +28,6 @@ import {
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
-import { addDocketEntryForSystemGeneratedOrder } from '@shared/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
@@ -46,11 +45,9 @@ import {
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
-import { createCaseAndAssociations } from '@shared/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '@web-api/persistence/dynamo/workitems/deleteWorkItem';
-import { fileAndServeDocumentOnOneCase } from '@shared/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -65,8 +62,7 @@ import {
   getJudgeLastName,
 } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
-import { generateAndServeDocketEntry } from '@shared/business/useCaseHelper/service/createChangeItems';
-import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@shared/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
+import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -99,11 +95,9 @@ import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCo
 import { getTextByCount } from '@shared/business/utilities/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
-import { getUserIdForNote } from '@shared/business/useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '@web-api/persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '@web-api/persistence/dynamo/workitems/putWorkItemInOutbox';
-import { removeCounselFromRemovedPetitioner } from '@shared/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '@web-api/persistence/dynamo/workitems/saveWorkItem';
@@ -113,13 +107,10 @@ import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument'
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setPdfFormFields } from '@shared/business/useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '@shared/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateCaseAutomaticBlock } from '@shared/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseCorrespondence } from '@web-api/persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPractitionerUser';
@@ -342,7 +333,6 @@ const createTestApplicationContext = () => {
       .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
-    uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
       .fn()
       .mockImplementation(DateHandler.validateDateAndCreateISO),
@@ -381,31 +371,8 @@ const createTestApplicationContext = () => {
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
-    addDocketEntryForSystemGeneratedOrder: jest
-      .fn()
-      .mockImplementation(addDocketEntryForSystemGeneratedOrder),
-    createCaseAndAssociations: jest
-      .fn()
-      .mockImplementation(createCaseAndAssociations),
-    fileAndServeDocumentOnOneCase: jest
-      .fn()
-      .mockImplementation(fileAndServeDocumentOnOneCase),
-    generateAndServeDocketEntry: jest
-      .fn()
-      .mockImplementation(generateAndServeDocketEntry),
     getJudgeInSectionHelper: jest.fn(),
-    getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
-    removeCounselFromRemovedPetitioner: jest
-      .fn()
-      .mockImplementation(removeCounselFromRemovedPetitioner),
     sendServedPartiesEmails: jest.fn(),
-    setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
-    updateCaseAndAssociations: jest
-      .fn()
-      .mockImplementation(updateCaseAndAssociations),
-    updateCaseAutomaticBlock: jest
-      .fn()
-      .mockImplementation(updateCaseAutomaticBlock),
     updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
@@ -549,8 +516,8 @@ const createTestApplicationContext = () => {
   };
 
   const mockGetNotificationService = {
-    publish: jest.fn().mockReturnValue({
-      promise: () => Promise.resolve('ok'),
+    send: jest.fn().mockResolvedValue({
+      MessageId: 'mockMessageID',
     }),
   };
 
@@ -640,6 +607,7 @@ const createTestApplicationContext = () => {
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
+    isPublicUser: jest.fn().mockImplementation(() => false),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };
