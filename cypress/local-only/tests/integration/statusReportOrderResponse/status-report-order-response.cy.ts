@@ -62,6 +62,17 @@ const createBlankTestOrder = (
   finishOrderDraft(sign);
 };
 
+const selectAllOptionsInForm = (orderName: string = 'Important Order') => {
+  // Assumes you are looking at the form
+  cy.get('#order-type-status-report').check({ force: true });
+  cy.get('#status-report-due-date-picker').type(today);
+  cy.get('#stricken-from-trial-sessions').check({ force: true });
+  cy.get('#jurisdiction-retained').check({ force: true });
+  cy.get('#additional-order-text').type('Here is my additional order text.');
+  cy.get('#docket-entry-description').clear();
+  cy.get('#docket-entry-description').type(orderName);
+};
+
 const createOrderFromMessage = (sign: boolean) => {
   // This assumes you are looking at the relevant docket number
   cy.get('#tab-case-messages').click();
@@ -204,15 +215,7 @@ describe('Status Report Order Response', () => {
         navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
-        cy.get('#order-type-status-report').check({ force: true });
-        cy.get('#status-report-due-date-picker').type(today);
-        cy.get('#stricken-from-trial-sessions').check({ force: true });
-        cy.get('#jurisdiction-retained').check({ force: true });
-        cy.get('#additional-order-text').type(
-          'Here is my additional order text.',
-        );
-        cy.get('#docket-entry-description').clear();
-        cy.get('#docket-entry-description').type('Important Order');
+        selectAllOptionsInForm();
 
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
@@ -406,8 +409,6 @@ describe('Status Report Order Response', () => {
     });
 
     describe('save status report order response to drafts', () => {
-      // Shows in drafts list
-
       it('with signature', () => {
         const testOrderName = getFakeTestOrderName();
         createBlankTestOrder(docketNumber, testOrderName, true);
@@ -430,8 +431,32 @@ describe('Status Report Order Response', () => {
         createBlankTestOrder(docketNumber, testOrderName, false);
       });
 
-      // check req that generated lines match expected
-      it.skip('should save modifications made to an existing status report order response', () => {});
+      it('should save modifications made to an existing status report order response', () => {
+        // We create a revised order name to ensure it replaces the old order name.
+        // We reverse the string rather than, e.g., testOrderName + Revised make it easier to find one and not the other
+        const revisedOrderName = testOrderName.split('').reverse().join('');
+        cy.get('#tab-drafts').click();
+        cy.contains('button', testOrderName).click();
+        cy.get('[data-testid="draft-edit-button-not-signed"]').click();
+        selectAllOptionsInForm(revisedOrderName);
+
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
+
+        cy.get('[data-testid="save-draft-button"]').click();
+
+        cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+          expectedPdfLines.forEach(pdfLine => {
+            expect(req.body.contentHtml).to.include(pdfLine);
+          });
+        });
+
+        finishOrderDraft(false);
+        cy.get('#tab-drafts').click();
+        cy.contains('button', revisedOrderName).should('exist');
+        cy.contains('button', testOrderName).should('not.exist'); // Make sure old order name no longer exists
+      });
     });
   });
 
@@ -453,15 +478,7 @@ describe('Status Report Order Response', () => {
         navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
-        cy.get('#order-type-status-report').check({ force: true });
-        cy.get('#status-report-due-date-picker').type(today);
-        cy.get('#stricken-from-trial-sessions').check({ force: true });
-        cy.get('#jurisdiction-retained').check({ force: true });
-        cy.get('#additional-order-text').type(
-          'Here is my additional order text.',
-        );
-        cy.get('#docket-entry-description').clear();
-        cy.get('#docket-entry-description').type('Important Order');
+        selectAllOptionsInForm();
 
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
@@ -488,19 +505,7 @@ describe('Status Report Order Response', () => {
         navigateToStatusReportOrderResponseForm(docketNumber);
 
         // selecting our options
-        cy.get('#order-type-status-report').check({ force: true });
-        cy.get('#status-report-due-date-picker').type(today);
-        cy.get('#stricken-from-trial-sessions').check({ force: true });
-        cy.get('#jurisdiction-retained').check({ force: true });
-        cy.get('#additional-order-text').type(
-          'Here is my additional order text.',
-        );
-        cy.get('#docket-entry-description').clear();
-        cy.get('#docket-entry-description').type('Important Order');
-
-        cy.intercept('POST', '**/api/court-issued-order').as(
-          'courtIssuedOrder',
-        );
+        selectAllOptionsInForm();
 
         // save as draft
         cy.get('[data-testid="save-draft-button"]').click();
