@@ -6,7 +6,9 @@ import {
   loginAsAdc,
   loginAsColvin,
   loginAsColvinChambers,
+  loginAsDocketClerk1,
 } from '../../../../helpers/authentication/login-as-helpers';
+import { logout } from '../../../../helpers/authentication/logout';
 
 // TODO 10102-story: cleanup test and reduce redundancy (not necessarily creating helpers but before each and consts)
 
@@ -461,14 +463,36 @@ describe('Status Report Order Response', () => {
   });
 
   describe('docket clerk', () => {
-    // act: serve it (docketclerk)!
-    // assert: title comes through
-    // assert: Saved to docket
+    it('should serve status report order response', () => {
+      // Create a Status Report Order Response as a judge
+      loginAsColvin();
+      const orderName = getFakeTestOrderName();
+      createBlankTestOrder(docketNumber, orderName, true);
+      logout();
 
-    it.skip('should serve status report order response');
-    it.skip(
-      'should not be able to edit using status report order response form',
-    );
+      // Go to the Status Report Order Response and serve it as a docket clerk
+      loginAsDocketClerk1();
+      cy.visit(`/case-detail/${docketNumber}`);
+      cy.get('#tab-drafts').click();
+      cy.contains('button', orderName).click();
+      cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+      cy.get('[data-testid="service-stamp-Served"]').click({ force: true });
+      cy.get('[data-testid="serve-to-parties-btn"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.contains('Document served.').should('exist');
+      cy.contains('button', orderName).should('exist');
+    });
+
+    it('should not be able to edit using status report order response form', () => {
+      loginAsDocketClerk1();
+      cy.visit(`/case-detail/${docketNumber}`);
+      cy.get('#tab-document-view').click();
+      cy.contains('Status Report').click();
+      // Make sure Order Response button is not available
+      cy.get('[data-testid="order-response-button"]').should('not.exist');
+      // TODO: Make sure route is unavailable?
+      // cy.contains('Error 404').should('exist');
+    });
   });
 
   describe('chambers', () => {
