@@ -18,6 +18,6 @@ export const setTrialSessionCalendarInteractor = (
   return post({
     applicationContext,
     body: { clientConnectionId },
-    endpoint: `/trial-sessions/${trialSessionId}/set-calendar`,
+    endpoint: `/async/trial-sessions/${trialSessionId}/set-calendar`,
   });
 };

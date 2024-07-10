@@ -384,6 +384,7 @@ import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPe
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
+import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
@@ -1204,7 +1205,7 @@ export const presenterSequences = {
   setPDFSignatureDataSequence:
     setPDFSignatureDataSequence as unknown as Function,
   setPDFStampDataSequence: setPDFStampDataSequence as unknown as Function,
-  setPdfPreviewUrlSequence: setPdfPreviewUrlSequence as unknown as Function,
+  setPdfPreviewUrlSequence,
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
   setSelectedAddressOnFormSequence:
@@ -1212,6 +1213,7 @@ export const presenterSequences = {
   setSelectedBatchIndexSequence:
     setSelectedBatchIndexSequence as unknown as Function,
   setSelectedDocumentsForDownloadSequence,
+  setTrialSessionCalendarErrorSequence,
   setTrialSessionCalendarSequence,
   setViewerCorrespondenceToDisplaySequence:
     setViewerCorrespondenceToDisplaySequence as unknown as Function,

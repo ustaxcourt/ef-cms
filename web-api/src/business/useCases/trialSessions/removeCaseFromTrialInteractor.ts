@@ -29,9 +29,9 @@ export const removeCaseFromTrial = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  // if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
