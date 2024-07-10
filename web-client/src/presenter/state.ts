@@ -680,9 +680,6 @@ export const baseState = {
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
   messagesPage: {
-    completedAtFormatted: '',
-    completedBy: '',
-    completedMessagesList: [] as string[],
     completionSuccess: false,
     messagesCompletedAt: '',
     messagesCompletedBy: '',
