@@ -22,6 +22,12 @@ const expectedPdfLines = [
   'ORDERED that Here is my additional order text.',
 ];
 
+const getFakeTestOrderName = () => {
+  // Use a timestamp for easier local testing (no need to refresh api between tests)
+  const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+  return `Test Order ${timestamp}`;
+};
+
 const navigateToStatusReportOrderResponseForm = (docketNum: string) => {
   cy.visit(`/case-detail/${docketNum}`);
   cy.get('#tab-document-view').click();
@@ -43,6 +49,45 @@ const sendMessageToColvin = (
   cy.get('[data-testid="message-body"]').type('Test Message Body');
   cy.get('#document').select(documentName);
   cy.get('#confirm').click();
+};
+
+const createBlankTestOrder = (
+  whichDocketNumber: string,
+  orderName: string,
+  sign: boolean,
+) => {
+  navigateToStatusReportOrderResponseForm(whichDocketNumber);
+  cy.get('#docket-entry-description').clear();
+  cy.get('#docket-entry-description').type(orderName);
+  finishOrderDraft(sign);
+};
+
+const createOrderFromMessage = (sign: boolean) => {
+  // This assumes you are looking at the relevant docket number
+  cy.get('#tab-case-messages').click();
+  cy.contains('a', 'Status Report').click();
+  cy.get('[data-testid="order-response-button"]').click();
+  finishOrderDraft(sign);
+};
+
+const editOrderFromMessage = (orderName: string, sign: boolean) => {
+  // This assumes you are looking at the relevant docket number
+  cy.get('#tab-case-messages').click();
+  cy.contains('a', orderName).click();
+  cy.get('[data-testid="edit-document-button"]').click();
+  cy.get('[data-testid="modal-button-confirm"]').click();
+  finishOrderDraft(sign);
+};
+
+const finishOrderDraft = (sign: boolean) => {
+  cy.get('[data-testid="save-draft-button"]').click();
+  cy.contains('Apply Signature').should('exist');
+  if (sign) {
+    cy.get('[data-testid="sign-pdf-canvas"]').click();
+    cy.get('[data-testid="save-signature-button"]').click();
+  } else {
+    cy.get('[data-testid="skip-signature-button"]').click();
+  }
 };
 
 describe('Status Report Order Response', () => {
@@ -287,13 +332,7 @@ describe('Status Report Order Response', () => {
           sendMessageToColvin(docketNumber, '06/28/24 - Status Report');
 
           // Go to the sent message and create an Order Response
-          cy.get('#tab-case-messages').click();
-          cy.contains('a', 'Status Report').click();
-          cy.get('[data-testid="order-response-button"]').click();
-          cy.get('[data-testid="save-draft-button"]').click();
-          cy.contains('Apply Signature').should('exist');
-          cy.get('[data-testid="sign-pdf-canvas"]').click();
-          cy.get('[data-testid="save-signature-button"]').click();
+          createOrderFromMessage(true);
 
           // Check we have been redirected to the messages page
           cy.contains('Order updated.').should('exist');
@@ -305,15 +344,8 @@ describe('Status Report Order Response', () => {
 
         it('should be able to edit order response from messages', () => {
           // Create an order response
-          const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-          const testOrderName = `Test Order ${timestamp}`;
-          navigateToStatusReportOrderResponseForm(docketNumber);
-          cy.get('#docket-entry-description').clear();
-          cy.get('#docket-entry-description').type(testOrderName);
-          cy.get('[data-testid="save-draft-button"]').click();
-          cy.contains('Apply Signature').should('exist');
-          cy.get('[data-testid="sign-pdf-canvas"]').click();
-          cy.get('[data-testid="save-signature-button"]').click();
+          const testOrderName = getFakeTestOrderName();
+          createBlankTestOrder(docketNumber, testOrderName, true);
 
           // Send a docket message that attaches the order response
           sendMessageToColvin(
@@ -322,14 +354,7 @@ describe('Status Report Order Response', () => {
           );
 
           // Go to the sent message and edit the Order Response
-          cy.get('#tab-case-messages').click();
-          cy.contains('a', testOrderName).click();
-          cy.get('[data-testid="edit-document-button"]').click();
-          cy.get('[data-testid="modal-button-confirm"]').click();
-          cy.get('[data-testid="save-draft-button"]').click();
-          cy.contains('Apply Signature').should('exist');
-          cy.get('[data-testid="sign-pdf-canvas"]').click();
-          cy.get('[data-testid="save-signature-button"]').click();
+          editOrderFromMessage(testOrderName, true);
 
           // Check we have been redirected to the messages page
           cy.contains(`${testOrderName} updated.`).should('exist');
@@ -346,12 +371,7 @@ describe('Status Report Order Response', () => {
           sendMessageToColvin(docketNumber, '06/28/24 - Status Report');
 
           // Go to the sent message and create an Order Response
-          cy.get('#tab-case-messages').click();
-          cy.contains('a', 'Status Report').click();
-          cy.get('[data-testid="order-response-button"]').click();
-          cy.get('[data-testid="save-draft-button"]').click();
-          cy.contains('Apply Signature').should('exist');
-          cy.get('[data-testid="skip-signature-button"]').click();
+          createOrderFromMessage(false);
 
           // Check we have been redirected to the messages page
           cy.contains('Order updated.').should('exist');
@@ -363,14 +383,8 @@ describe('Status Report Order Response', () => {
 
         it('should be able to edit order response from messages', () => {
           // Create an order response
-          const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-          const testOrderName = `Test Order ${timestamp}`;
-          navigateToStatusReportOrderResponseForm(docketNumber);
-          cy.get('#docket-entry-description').clear();
-          cy.get('#docket-entry-description').type(testOrderName);
-          cy.get('[data-testid="save-draft-button"]').click();
-          cy.contains('Apply Signature').should('exist');
-          cy.get('[data-testid="skip-signature-button"]').click();
+          const testOrderName = getFakeTestOrderName();
+          createBlankTestOrder(docketNumber, testOrderName, true);
 
           // Send a docket message that attaches the order response
           sendMessageToColvin(
@@ -379,12 +393,7 @@ describe('Status Report Order Response', () => {
           );
 
           // Go to the sent message and edit the Order Response
-          cy.get('#tab-case-messages').click();
-          cy.contains('a', testOrderName).click();
-          cy.get('[data-testid="edit-document-button"]').click();
-          cy.get('[data-testid="save-draft-button"]').click();
-          cy.contains('Apply Signature').should('exist');
-          cy.get('[data-testid="skip-signature-button"]').click();
+          editOrderFromMessage(testOrderName, false);
 
           // Check we have been redirected to the messages page
           cy.contains(`${testOrderName} updated.`).should('exist');
@@ -399,20 +408,30 @@ describe('Status Report Order Response', () => {
     describe('save status report order response to drafts', () => {
       // Shows in drafts list
 
-      it.skip('with signature');
+      it('with signature', () => {
+        const testOrderName = getFakeTestOrderName();
+        createBlankTestOrder(docketNumber, testOrderName, true);
+        cy.get('#tab-drafts').click();
+        cy.contains('button', testOrderName).should('exist');
+      });
 
-      it.skip('without signature');
+      it('without signature', () => {
+        const testOrderName = getFakeTestOrderName();
+        createBlankTestOrder(docketNumber, testOrderName, false);
+        cy.get('#tab-drafts').click();
+        cy.contains('button', testOrderName).should('exist');
+      });
     });
 
     describe('edit an existing status report order response', () => {
+      let testOrderName = '';
       beforeEach(() => {
-        // For test setup, create beforeEach block that creates status report order response
+        testOrderName = getFakeTestOrderName();
+        createBlankTestOrder(docketNumber, testOrderName, false);
       });
 
       // check req that generated lines match expected
-      it.skip(
-        'should save modifications made to an existing status report order response',
-      );
+      it.skip('should save modifications made to an existing status report order response', () => {});
     });
   });
 
