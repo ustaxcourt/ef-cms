@@ -86,4 +86,28 @@ describe('replyToMessageAction', () => {
       },
     });
   });
+
+  it('should return undefined for messageViewerDocumentToDisplay if there are no attachments', async () => {
+    const result = await runAction(replyToMessageAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+        },
+        modal: {
+          form: {
+            attachments: [],
+            draftAttachments: [],
+            message: 'You here?',
+            parentMessageId: '499d51ae-f118-4eb6-bd0e-f2c351df8f06',
+            subject: 'Hey!!',
+          },
+        },
+      },
+    });
+
+    expect(result.output.messageViewerDocumentToDisplay).toBeUndefined();
+  });
 });
