@@ -1,1 +1,0 @@
-- ensure new cognito records are always created with custom:userid

@@ -1,7 +1,12 @@
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const batchDownloadHelper = (get: Get): any => {
+export const batchDownloadHelper = (
+  get: Get,
+): {
+  percentComplete: number;
+  progressDescription: string;
+} => {
   const fileCount = get(state.batchDownloads.fileCount) || 0;
   const totalFiles = get(state.batchDownloads.totalFiles) || 0;
   const progressDescription =
@@ -9,11 +14,8 @@ export const batchDownloadHelper = (get: Get): any => {
 
   const percentComplete = Math.floor((fileCount * 100) / totalFiles) || 0;
 
-  const result = {
-    addedFiles: fileCount,
+  return {
     percentComplete,
     progressDescription,
-    totalFiles,
   };
-  return result;
 };

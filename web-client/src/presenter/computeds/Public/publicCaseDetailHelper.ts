@@ -3,6 +3,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
@@ -64,9 +65,7 @@ export const formatDocketEntryOnDocketRecord = (
     isTerminalUser,
     rawCase,
     user: {
-      entityName: 'User',
-      name: '',
-      role: 'petitioner',
+      role: ROLES.petitioner,
       userId: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
