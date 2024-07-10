@@ -44,7 +44,6 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       props: {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockDocketNumber,
-        isForIFrame: false,
         useSameTab: true,
       },
     });
