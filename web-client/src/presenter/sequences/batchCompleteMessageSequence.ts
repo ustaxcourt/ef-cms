@@ -38,7 +38,7 @@ export const completeMessageSuccessSequence = [
       setCompleteMessageAlertAction,
       removeCompletedMessagesFromDisplayAction,
       resetCacheKeyAction,
-      fetchUserNotificationsSequence, //do we need to do all the stuff in here?
+      fetchUserNotificationsSequence,
       setMessageCountsAction,
       resetSelectedMessageAction,
     ],
