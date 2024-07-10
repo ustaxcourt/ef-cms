@@ -5,6 +5,7 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
@@ -68,7 +69,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       },
     ],
     preferredTrialCity: 'Fresno, California',
-    procedureType: 'Regular',
+    procedureType: 'Small',
     role: ROLES.petitioner,
     userId: '3433e36f-3b50-4c92-aa55-6efb4e432883',
   };
@@ -356,6 +357,48 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries[2].draftOrderState,
     ).toBeUndefined();
+  });
+
+  it('should still contain the case caption in documentContents when edited', async () => {
+    let mockContents = 'the contents!';
+
+    await updateCourtIssuedOrderInteractor(applicationContext, {
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: mockContents,
+        documentType: 'Order to Show Cause',
+        draftOrderState: {
+          documentContents: mockContents,
+          richText: '<b>the contents!</b>',
+        },
+        eventCode: 'OSC',
+        richText: '<b>the contents!</b>',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+    });
+
+    const newCaseEntity = new Case(caseRecord, { applicationContext });
+
+    const expectedDocumentContents =
+      mockContents +
+      ` ${newCaseEntity.docketNumberWithSuffix} ${newCaseEntity.caseCaption}`;
+
+    console.log('expectedDocumentContents', expectedDocumentContents);
+
+    const expectedContentsToStore = {
+      documentContents: expectedDocumentContents,
+      richText: `<b>${mockContents}</b>`,
+    };
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: Buffer.from(JSON.stringify(expectedContentsToStore)),
+    });
   });
 
   it('does not update non-editable fields on document', async () => {
