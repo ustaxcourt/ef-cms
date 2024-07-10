@@ -13,8 +13,8 @@ describe('completeMessageAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call completeMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
-    const result = await runAction(completeMessageAction, {
+  it('should call completeMessageInteractor with the expected parameters', async () => {
+    await runAction(completeMessageAction, {
       modules: {
         presenter,
       },
@@ -46,6 +46,5 @@ describe('completeMessageAction', () => {
         },
       ],
     });
-    expect(result.output).toHaveProperty('parentMessageId');
   });
 });

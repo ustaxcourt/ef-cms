@@ -9,7 +9,7 @@ export const setSelectedMessagesAction = ({
 }>) => {
   let selectedMap = get(state.messagesPage.selectedMessages);
   if (props.messages.length === 0) {
-    selectedMap = new Map<string, string>(); // why a map tho
+    selectedMap = new Map<string, string>();
   }
   props.messages.forEach(message => {
     if (!selectedMap.has(message.messageId)) {
