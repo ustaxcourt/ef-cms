@@ -12,7 +12,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { flatten, partition, uniq } from 'lodash';
+import { chunk, flatten, partition, uniq } from 'lodash';
+
+const CHUNK_SIZE = 50;
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -65,6 +67,7 @@ export const setTrialSessionCalendarInteractor = async (
 
   eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
+  console.time('getEligibleCasesForTrialSession');
   const eligibleCases = (
     await applicationContext
       .getPersistenceGateway()
@@ -83,6 +86,9 @@ export const setTrialSessionCalendarInteractor = async (
       0,
       trialSessionEntity.maxCases - manuallyAddedQcCompleteCases.length,
     );
+  console.timeEnd('getEligibleCasesForTrialSession');
+
+  console.log('Eligible Case Count: ', eligibleCases.length);
 
   const allDocketNumbers = uniq(
     flatten([
@@ -91,12 +97,15 @@ export const setTrialSessionCalendarInteractor = async (
       manuallyAddedQcIncompleteCases.map(({ docketNumber }) => docketNumber),
     ]),
   );
+  console.log('docket Numbers', allDocketNumbers);
 
+  console.time('acquireLock');
   await acquireLock({
     applicationContext,
     identifiers: allDocketNumbers.map(item => `case|${item}`),
     ttl: 900,
   });
+  console.timeEnd('acquireLock');
 
   /**
    * sets a manually added case as calendared with the trial session details
@@ -153,18 +162,48 @@ export const setTrialSessionCalendarInteractor = async (
     ]);
   };
 
-  await Promise.all([
-    ...manuallyAddedQcIncompleteCases.map(caseRecord =>
-      removeManuallyAddedCaseFromTrialSession({
-        applicationContext,
-        caseRecord,
-        trialSessionEntity,
-      }),
-    ),
-    ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
-    ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
-  ]);
+  console.time('Promise.all cases');
 
+  // ideas
+  // Do them in batches
+  // Semaphore with some number of open slots.
+  // Could combine them!
+
+  console.log(
+    'manuallyAddedQcIncompleteCases',
+    manuallyAddedQcIncompleteCases.length,
+  );
+  console.log(
+    'manuallyAddedQcCompleteCases',
+    manuallyAddedQcCompleteCases.length,
+  );
+  console.log('eligibleCases', eligibleCases.length);
+
+  const funcs = [
+    ...manuallyAddedQcIncompleteCases.map(
+      caseRecord => () =>
+        removeManuallyAddedCaseFromTrialSession({
+          applicationContext,
+          caseRecord,
+          trialSessionEntity,
+        }),
+    ),
+    ...manuallyAddedQcCompleteCases.map(
+      aCase => () => setManuallyAddedCaseAsCalendared(aCase),
+    ),
+    ...eligibleCases.map(
+      aCase => () => setTrialSessionCalendarForEligibleCase(aCase),
+    ),
+  ];
+
+  const chunkyFunctions = chunk(funcs, CHUNK_SIZE);
+  for (let singleChunk of chunkyFunctions) {
+    await Promise.all(singleChunk.map(func => func()));
+  }
+
+  console.timeEnd('Promise.all cases');
+
+  console.time('Promise.all removeLock');
   await Promise.all(
     allDocketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().removeLock({
@@ -173,11 +212,14 @@ export const setTrialSessionCalendarInteractor = async (
       }),
     ),
   );
+  console.timeEnd('Promise.all removeLock');
 
+  console.time('updateTrialSession');
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
+  console.timeEnd('updateTrialSession');
 
   return new TrialSession(trialSessionEntity.toRawObject(), {
     applicationContext,

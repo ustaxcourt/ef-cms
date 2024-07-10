@@ -117,34 +117,41 @@ EOF
 
   echo "${caseJson}"
 
-  case=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases" \
+  case=$(curl "https://api-green.${EFCMS_DOMAIN}/cases" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionerToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
     --compressed \
     -d "${caseJson}")
 
-  docketNumber=$(echo "${case}" | jq -r ".docketNumber")
-  echo "${docketNumber}" >> cases.txt
+  echo 1
+  echo $case
+  # docketNumber=$(echo "${case}" | jq -r ".docketNumber")
+  # echo "${docketNumber}" >> cases.txt
 
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${petitionFileId}"
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
+  echo 2
 
   if [ -n "$petitionerCounsel" ] ; then
     if [ "$petitionerCounsel" == 'privatePractitioner1' ] ; then
+  echo 3
       barNumber="PT1234"
     fi
     if [ "$petitionerCounsel" == 'privatePractitioner2' ] ; then
       barNumber="PT5432"
     fi
+  echo 4
 
-    searchResults=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://api-green.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
     )
+  echo 5
 
     practitionerId=$(echo "${searchResults}" | jq -r ".[0].userId")
+  echo 6
 
     associateBodyJson=$(cat <<EOF
 {
@@ -154,13 +161,15 @@ EOF
 }
 EOF
 )
+  echo 7
 
-    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${docketNumber}/associate-private-practitioner" \
+    curl "https://api-green.${EFCMS_DOMAIN}/case-parties/${docketNumber}/associate-private-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
       --data-binary "${associateBodyJson}" \
       --compressed
+  echo 8
   fi
 
   if [ -n "$respondentCounsel" ] ; then
@@ -171,7 +180,7 @@ EOF
       barNumber="RT0987"
     fi
 
-    searchResults=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/users/irsPractitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://api-green.${EFCMS_DOMAIN}/users/irsPractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
@@ -187,7 +196,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${docketNumber}/associate-irs-practitioner" \
+    curl "https://api-green.${EFCMS_DOMAIN}/case-parties/${docketNumber}/associate-irs-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -195,7 +204,7 @@ EOF
       --compressed
   fi
 
-  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/${docketNumber}/serve-to-irs" \
+  curl "https://api-green.${EFCMS_DOMAIN}/cases/${docketNumber}/serve-to-irs" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
@@ -209,7 +218,7 @@ EOF
 EOF
 )
 
-  curl -X PUT "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-meta/${docketNumber}/case-context" \
+  curl -X PUT "https://api-green.${EFCMS_DOMAIN}/case-meta/${docketNumber}/case-context" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${docketclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
