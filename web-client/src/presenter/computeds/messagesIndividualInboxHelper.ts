@@ -18,7 +18,8 @@ export const messagesIndividualInboxHelper = (
   const messagesCompletedAt = get(state.messagesPage.messagesCompletedAt);
   const messagesCompletedBy = get(state.messagesPage.messagesCompletedBy);
 
-  const allMessagesSelected = messagesInboxCount === messagesSelectedCount;
+  const allMessagesSelected =
+    messagesInboxCount > 0 && messagesInboxCount === messagesSelectedCount;
   const someMessagesSelected = messagesSelectedCount > 0;
   const isCompletionButtonEnabled = someMessagesSelected;
 
