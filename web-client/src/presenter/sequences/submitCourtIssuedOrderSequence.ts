@@ -1,4 +1,5 @@
 import { appendFormAndOverwriteOrderFileAction } from '../actions/CourtIssuedOrder/appendFormAndOverwriteOrderFileAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getCreateOrderSelectedCases } from '@web-client/presenter/actions/getCreateOrderSelectedCases';
@@ -15,11 +16,15 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { unsetCreateOrderAddedDocketNumbers } from '@web-client/presenter/actions/unsetCreateOrderAddedDocketNumbers';
 import { unsetCreateOrderSelectedCases } from '@web-client/presenter/actions/unsetCreateOrderSelectedCases';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
+import { validateCourtOrderAction } from '../actions/CourtIssuedOrder/validateCourtOrderAction';
 
 const onFileUploadedSuccess = [
   getCreateOrderSelectedCases,
@@ -47,29 +52,37 @@ const onFileUploadedSuccess = [
 ];
 
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
-  convertHtml2PdfSequence,
-  isEditingOrderAction,
+  clearAlertsAction,
+  startShowValidationAction,
+  validateCourtOrderAction,
   {
-    no: [
-      uploadOrderFileAction,
+    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    success: showProgressSequenceDecorator([
+      convertHtml2PdfSequence,
+      isEditingOrderAction,
       {
-        error: [openFileUploadErrorModal],
-        success: [onFileUploadedSuccess],
-      },
-    ],
-    yes: [
-      overwriteOrderFileAction,
-      {
-        error: [openFileUploadErrorModal],
-        success: [
-          isDocumentRequiringAppendedFormAction,
+        no: [
+          uploadOrderFileAction,
           {
-            no: [],
-            yes: [appendFormAndOverwriteOrderFileAction],
+            error: [openFileUploadErrorModal],
+            success: [onFileUploadedSuccess],
           },
-          onFileUploadedSuccess,
+        ],
+        yes: [
+          overwriteOrderFileAction,
+          {
+            error: [openFileUploadErrorModal],
+            success: [
+              isDocumentRequiringAppendedFormAction,
+              {
+                no: [],
+                yes: [appendFormAndOverwriteOrderFileAction],
+              },
+              onFileUploadedSuccess,
+            ],
+          },
         ],
       },
-    ],
+    ]),
   },
 ]);

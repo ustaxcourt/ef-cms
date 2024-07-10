@@ -105,7 +105,7 @@ export const DocumentSearchResults = connect(
                       <td>{result.caseTitle}</td>
                       <td>{result.formattedJudgeName}</td>
                       <td>{result.numberOfPagesFormatted}</td>
-                      <td>
+                      <td data-testid={`docket-number-${result.docketNumber}`}>
                         <CaseLink
                           formattedCase={result}
                           rel="noreferrer"
