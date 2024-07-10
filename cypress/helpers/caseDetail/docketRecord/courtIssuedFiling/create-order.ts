@@ -1,4 +1,6 @@
-export const createOrder = () => {
+export const createOrderOnConsolidatedCase = (
+  orderContents = 'this is a test order',
+) => {
   const orderTitle = 'Order first title';
   const orderEventCode = 'O';
   cy.get('[data-testid="case-detail-menu-button"]').click();
@@ -30,6 +32,7 @@ export const createOrder = () => {
     'fa-edit',
   );
   cy.get('.ql-editor').click();
+  cy.get('.ql-editor').type(orderContents);
   cy.get('[data-testid="save-order-button"]').click();
   cy.get('[data-testid="skip-signature-button"]').click();
   cy.get('.usa-alert__text').should('have.text', `${orderTitle} updated.`);

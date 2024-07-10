@@ -410,6 +410,7 @@ export const createTestApplicationContext = ({
     getJudgeForUserHelper: jest.fn(),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
+    parseAndScrapePdfContents: jest.fn(),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
