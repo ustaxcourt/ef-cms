@@ -4,6 +4,7 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -95,6 +96,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
+import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
@@ -404,6 +406,10 @@ export const computeds = {
   messagesHelper: messagesHelper as unknown as ReturnType<
     typeof messagesHelper
   >,
+  messagesIndividualInboxHelper:
+    messagesIndividualInboxHelper as unknown as ReturnType<
+      typeof messagesIndividualInboxHelper
+    >,
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
@@ -681,7 +687,14 @@ export const baseState = {
   legacyAndCurrentJudges: [],
   login: {} as any,
   maintenanceMode: false,
+  messages: [] as RawMessage[],
   messagesInboxCount: 0,
+  messagesPage: {
+    completionSuccess: false,
+    messagesCompletedAt: '',
+    messagesCompletedBy: '',
+    selectedMessages: new Map() as Map<string, string>,
+  },
   messagesSectionCount: 0,
   modal: {
     docketEntry: undefined,

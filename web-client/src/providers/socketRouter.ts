@@ -78,6 +78,12 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'admin_contact_update_progress':
         await app.getSequence('adminContactUpdateProgressSequence')(message);
         break;
+      case 'message_completion_success':
+        await app.getSequence('completeMessageSuccessSequence')(message);
+        break;
+      case 'message_completion_error':
+        await app.getSequence('completeMessageErrorSequence')(message);
+        break;
       case 'maintenance_mode_engaged':
         await app.getSequence('openAppMaintenanceModalSequence')({
           ...message,
