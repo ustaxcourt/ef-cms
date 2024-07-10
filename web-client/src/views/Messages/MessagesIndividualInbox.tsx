@@ -59,7 +59,7 @@ export const MessagesIndividualInbox = connect(
             role="alert"
           >
             <div className="usa-alert__body">
-              Message(s) completed on{' '}
+              Message(s) completed at{' '}
               {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
               {messagesIndividualInboxHelper.messagesCompletedBy}
             </div>
