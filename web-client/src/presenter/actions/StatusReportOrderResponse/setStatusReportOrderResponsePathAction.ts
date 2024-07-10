@@ -1,6 +1,8 @@
 import qs from 'qs';
 
-export const setStatusReportOrderResponsePath = ({ props }: ActionProps) => {
+export const setStatusReportOrderResponsePathAction = ({
+  props,
+}: ActionProps) => {
   const { statusReportFilingDate, statusReportIndex } = props;
 
   const queryString = qs.stringify({
