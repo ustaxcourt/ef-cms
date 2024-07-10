@@ -34,7 +34,7 @@ describe('setMessageAsReadAction', () => {
     expect(result.state.notifications.unreadMessageCount).toBe(0);
   });
 
-  it('should set unreadMessageCount to undefined if it was not previously defined', async () => {
+  it('should not update unreadMessageCount if there are no unread messages', async () => {
     const result = await runAction(setMessageAsReadAction, {
       modules: { presenter },
       props: {
@@ -48,6 +48,13 @@ describe('setMessageAsReadAction', () => {
       },
     });
 
-    expect(result.state.notifications.unreadMessageCount).toBeUndefined();
+    expect(
+      applicationContext.getUseCases().setMessageAsReadInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-45',
+      messageId: '123',
+    });
+    expect(result.state.notifications.unreadMessageCount).toBe(undefined);
   });
 });
