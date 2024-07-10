@@ -636,6 +636,10 @@ export class DocketEntry extends JoiValidationEntity {
     return ORDER_EVENT_CODES.includes(eventCode);
   }
 
+  static isSearchable(eventCode: string): boolean {
+    return DocketEntry.isOpinion(eventCode) || DocketEntry.isOrder(eventCode);
+  }
+
   static isMotion(eventCode: string): boolean {
     return MOTION_EVENT_CODES.includes(eventCode);
   }

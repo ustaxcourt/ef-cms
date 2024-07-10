@@ -80,7 +80,7 @@ describe('scrapePdfContents', () => {
   it('scrapes the pdf contents', async () => {
     const contents = await scrapePdfContents({
       applicationContext,
-      pdfBuffer: [],
+      pdfBuffer: Buffer.from([]),
     });
 
     expect(contents.trim()).toEqual(
@@ -101,7 +101,7 @@ this is some more content`,
 
     const contents = await scrapePdfContents({
       applicationContext,
-      pdfBuffer: [],
+      pdfBuffer: Buffer.from([]),
     });
 
     expect(contents.trim()).toEqual('106-21');
@@ -121,7 +121,7 @@ this is some more content`,
 
     const contents = await scrapePdfContents({
       applicationContext,
-      pdfBuffer: [],
+      pdfBuffer: Buffer.from([]),
     });
 
     expect(contents).toEqual('');
@@ -134,7 +134,7 @@ this is some more content`,
     await expect(
       scrapePdfContents({
         applicationContext,
-        pdfBuffer: [],
+        pdfBuffer: Buffer.from([]),
       }),
     ).rejects.toThrow('Error scraping PDF with PDF.JS v1');
   });

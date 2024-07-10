@@ -8,6 +8,7 @@ export const FormGroup = ({
   errorMessageId,
   errorText,
   formGroupRef,
+  grow,
   id,
   omitFormGroupClass,
 }: {
@@ -18,6 +19,7 @@ export const FormGroup = ({
   errorMessageId?: string;
   formGroupRef?: React.RefObject<HTMLInputElement>;
   id?: string;
+  grow?: boolean;
   omitFormGroupClass?: boolean;
 }) => {
   let hasError = false;
@@ -68,6 +70,7 @@ export const FormGroup = ({
         !omitFormGroupClass && 'usa-form-group',
         hasConfirmation && 'ustc-form-group--confirmation',
         hasError && 'usa-form-group--error',
+        grow && 'maxw-none',
         className,
       )}
       id={id}
