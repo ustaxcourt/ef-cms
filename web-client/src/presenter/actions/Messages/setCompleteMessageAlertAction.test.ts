@@ -9,6 +9,7 @@ import { formatDateIfToday } from '@web-client/presenter/computeds/formattedWork
 
 describe('setCompleteMessageAlertAction', () => {
   const mockDateTime = '1:02 PM ET';
+  const mockName = 'Jim Buck';
   presenter.providers.applicationContext = applicationContext;
 
   beforeAll(() => {
@@ -20,15 +21,17 @@ describe('setCompleteMessageAlertAction', () => {
       modules: { presenter },
       state: {
         messagesPage: {
-          completionSuccess: false,
           messagesCompletedAt: null,
           messagesCompletedBy: null,
         },
-        user: { name: 'John Doe' },
+        screenMetadata: {
+          completionSuccess: false,
+        },
+        user: { name: mockName },
       },
     });
 
-    expect(result.state.messagesPage.messagesCompletedBy).toBe('John Doe');
+    expect(result.state.messagesPage.messagesCompletedBy).toBe(mockName);
   });
 
   it('should set messagesCompletedAt to formatted current date', async () => {
@@ -36,11 +39,13 @@ describe('setCompleteMessageAlertAction', () => {
       modules: { presenter },
       state: {
         messagesPage: {
-          completionSuccess: false,
           messagesCompletedAt: null,
           messagesCompletedBy: null,
         },
-        user: { name: 'John Doe' },
+        screenMetadata: {
+          completionSuccess: false,
+        },
+        user: { name: mockName },
       },
     });
 
@@ -52,14 +57,16 @@ describe('setCompleteMessageAlertAction', () => {
       modules: { presenter },
       state: {
         messagesPage: {
-          completionSuccess: false,
           messagesCompletedAt: null,
           messagesCompletedBy: null,
+        },
+        screenMetadata: {
+          completionSuccess: false,
         },
         user: { name: 'John Doe' },
       },
     });
 
-    expect(result.state.messagesPage.completionSuccess).toBe(true);
+    expect(result.state.screenMetadata.completionSuccess).toBe(true);
   });
 });
