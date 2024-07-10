@@ -4,12 +4,14 @@
 # shellcheck disable=SC2086
 
 
-trialSessionId="1cd56c95-c683-4e14-bff8-86594963a73b"
-token="eyJraWQiOiJSYlpsdWg3MG9rRnVINTE2RWR4N0d6Y0F1QVAzOEpGKzA2ZVBsWHNPK21jPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI3ZTQzNGMwMy02MDZjLTRhNjMtOWYyMC05Y2FhYTk4ZGY1YzYiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfRko2ajUyUUdqIiwiY29nbml0bzp1c2VybmFtZSI6IjdlNDM0YzAzLTYwNmMtNGE2My05ZjIwLTljYWFhOThkZjVjNiIsImN1c3RvbTp1c2VySWQiOiI3ZTQzNGMwMy02MDZjLTRhNjMtOWYyMC05Y2FhYTk4ZGY1YzYiLCJhdWQiOiI3NXVwODU3N2plYWNjbjBzbTMwaGtlbjJpNCIsImV2ZW50X2lkIjoiM2Y1MzhkZjItMmM3OS00MjZjLTk1ZjUtNmNiOWIyN2VkYzlhIiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE3MjA1NDEwMTUsIm5hbWUiOiJwZXRpdGlvbnNjbGVyayAxIiwiZXhwIjoxNzIwNTQ1NzIyLCJjdXN0b206cm9sZSI6InBldGl0aW9uc2NsZXJrIiwiaWF0IjoxNzIwNTQyMTIyLCJlbWFpbCI6InBldGl0aW9uc2NsZXJrMUBleGFtcGxlLmNvbSJ9.WzV1EpFzSbUN_n-KbzqkH65SQPyu8_t8Nmxkgj7PS39kcPBD9o5T38-IsFFkQs0JpAbIJjFxAJjkaC2XrhsdqYveYmxS-IBPa6xfooVT7Xsem4b978G-giBreJpfHNuf6-w2CvAk30zTnRKRkYpRZHxcJCvXwueDtsq-1CF0IVkAcp8DW85OjRL8V-DSt1rIF0D3b4fCdGRcQBigaOpxehZQyfgaPvUwj7WJEeCUOnWlF5QJ7CF87rqa4qwWBoiam2Vp0ETlcyJ0AOKoZ8dWWY2WeCxKR4uGYZPoH6x8bVy_dk2RtsfxI0JIUgcD6gaMUm06D4LhYNENrrSCmwkG8g"
-hostName="api-green.test.ef-cms.ustaxcourt.gov"
+trialSessionId="[INSERT ID HERE]"
+token="[INSERT TOKEN HERE]"
+targetExperimentalEnvironment="[INSERT ENV HERE]"
+currentColor="[INSERT COLOR HERE]"
+hostName="api-${currentColor}.${targetExperimentalEnvironment}.ustc-case-mgmt.flexion.us"
 baseUrl="https://${hostName}"
-petitionFileId="3ceee0ff-44c9-42b8-b42d-b17fe4fc5b39"
-numberOfCasesToCreate=180
+petitionFileId="[INSERT ID HERE]"
+numberOfCasesToCreate=5
 
 createCaseAndAddToTrialSession(){
   local docketNumber
@@ -32,7 +34,7 @@ createCaseAndAddToTrialSession(){
 
   echo "created case $docketNumber"
 
-  curl -s "${baseUrl}/async/cases/$docketNumber/serve-to-irs" \
+  curl -s "${baseUrl}/cases/$docketNumber/serve-to-irs" \
     -X 'POST' \
     -H "authority: ${hostName}" \
     -H 'accept: application/json, text/plain, */*' \
