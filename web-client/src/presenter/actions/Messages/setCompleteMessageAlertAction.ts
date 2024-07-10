@@ -12,5 +12,5 @@ export const setCompleteMessageAlertAction = ({
     state.messagesPage.messagesCompletedAt,
     formatDateIfToday(createISODateString(), applicationContext),
   );
-  store.set(state.messagesPage.completionSuccess, true);
+  store.set(state.screenMetadata.completionSuccess, true);
 };
