@@ -104,7 +104,6 @@ export const CreateOrder = connect(
                     defaultValue={richText}
                     editorDelta={editorDelta}
                     updateFormValueSequence={v => {
-                      console.log(v);
                       if (v.key === 'documentContents') {
                         v.value = v.value.trim();
                       }

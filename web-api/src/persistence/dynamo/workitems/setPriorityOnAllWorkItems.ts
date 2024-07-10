@@ -35,7 +35,6 @@ export const setPriorityOnAllWorkItems = async ({
   });
 
   const requests = [];
-  console.log('workItemMappings', workItemMappings.length);
   for (let mapping of workItemMappings) {
     const workItems = await query({
       ExpressionAttributeNames: {
@@ -49,8 +48,6 @@ export const setPriorityOnAllWorkItems = async ({
       applicationContext,
     });
 
-    console.log('workItems', workItems.length);
-    // TODO: look into doing batch writes here instead of one by one
     for (let workItem of workItems) {
       requests.push(
         update({

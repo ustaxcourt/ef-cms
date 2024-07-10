@@ -30,6 +30,23 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'notice_generation_complete':
         await app.getSequence('noticeGenerationCompleteSequence')(message);
         break;
+      case 'set_trial_session_calendar_complete':
+        await app.getSequence('completeTrialSessionCalendarSequence')(message);
+        break;
+      case 'set_trial_session_calendar_error':
+        console.error(
+          'error setting trial session calendar: ',
+          message.message,
+        );
+        await app.getSequence('setTrialSessionCalendarErrorSequence')({
+          ...message,
+          alertError: {
+            message:
+              'We could not set the trial session calendar. Please contact support.',
+            title: 'Error setting trial session calendar.',
+          },
+        });
+        break;
       case 'serve_to_irs_complete':
         await app.getSequence('serveToIrsCompleteSequence')(message);
         break;
