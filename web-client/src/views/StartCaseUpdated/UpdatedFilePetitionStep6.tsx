@@ -144,10 +144,13 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
         <div className="petition-review-petitioner-section">
           <div>
             <span className="usa-label usa-label-display">Party type</span>
-            <div>{petitionFormatted.partyType}</div>
+            <div data-testid="party-type">{petitionFormatted.partyType}</div>
             {petitionFormatted.corporateDisclosureFile && (
               <div className="margin-top-3">
-                <span className="usa-label usa-label-display">
+                <span
+                  className="usa-label usa-label-display"
+                  data-testid="corporate-disclosure-file-title"
+                >
                   Corporate Disclosure Statement
                 </span>
                 <div>
@@ -184,7 +187,10 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                     contact={petitionFormatted.contactPrimary}
                   />
                   <div className="margin-top-1">
-                    <span className="text-semibold">
+                    <span
+                      className="text-semibold"
+                      data-testid="place-of-legal-residence-label"
+                    >
                       {Object.values(BUSINESS_TYPES).includes(
                         petitionFormatted.partyType,
                       )

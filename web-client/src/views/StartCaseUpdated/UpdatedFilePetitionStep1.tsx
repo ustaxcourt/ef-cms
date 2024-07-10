@@ -391,6 +391,7 @@ function BusinessInfo({
               />
               <label
                 className="usa-radio__label business-type-radio-option"
+                data-testid={`business-type-${idx}`}
                 htmlFor={`businessType-${businessType}`}
                 id={`is-business-type-${idx}`}
               >
@@ -540,7 +541,7 @@ function OtherInfo({
               />
               <label
                 className="usa-radio__label"
-                data-testid="other-radio-option"
+                data-testid={`other-type-${idx}`}
                 htmlFor={`otherType-${otherType}`}
                 id={`is-other-type-${idx}`}
               >
@@ -645,7 +646,7 @@ function SecondaryEstateOptions({
               />
               <label
                 className="usa-radio__label"
-                data-testid="estate-type-radio-option"
+                data-testid={`estate-type-radio-option-${idx}`}
                 htmlFor={`estateType-${estateType}`}
                 id={`is-estate-type-${idx}`}
               >
@@ -703,7 +704,7 @@ function SecondaryMinorIncompetentOptions({
               />
               <label
                 className="usa-radio__label"
-                data-testid="minor-incompetent-type-radio-option"
+                data-testid={`minor-incompetent-type-radio-option-${idx}`}
                 htmlFor={`minorIncompetentType-${minorIncompetentType}`}
                 id={`is-minorIncompetent-type-${idx}`}
               >

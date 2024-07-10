@@ -136,7 +136,10 @@ export const AddressDisplay = connect<
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
               contactName && (
-                <span data-testid="contact-in-care-of" key={contactName}>
+                <span
+                  data-testid="contact-in-care-of-secondary-name"
+                  key={contactName}
+                >
                   c/o {contactName}
                   {contact.title && <span>, {contact.title}</span>}
                 </span>
