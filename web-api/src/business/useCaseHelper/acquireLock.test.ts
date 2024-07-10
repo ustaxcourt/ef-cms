@@ -168,7 +168,7 @@ describe('acquireLock', () => {
 
         expect(
           applicationContext.getPersistenceGateway().createLock,
-        ).toHaveBeenCalled();
+        ).not.toHaveBeenCalled();
       });
 
       it('does not call the onLockError function provided', async () => {
@@ -178,7 +178,7 @@ describe('acquireLock', () => {
         expect(mockCallbackFunction).not.toHaveBeenCalled();
         expect(
           applicationContext.getPersistenceGateway().createLock,
-        ).toHaveBeenCalled();
+        ).not.toHaveBeenCalled();
       });
     });
   });
@@ -249,24 +249,17 @@ describe('withLocking', () => {
         });
       });
 
-      it('creates a lock for the specified entity', async () => {
+      it('does not create a lock for the specified entity', async () => {
         await func(applicationContext, { docketNumber: '123-45' });
 
         expect(
           applicationContext.getPersistenceGateway().createLock,
-        ).toHaveBeenCalledWith({
-          applicationContext,
-          identifier: 'case|123-45',
-          ttl: 60,
-        });
+        ).not.toHaveBeenCalled();
       });
 
-      it('logs a warning that the entity was locked', async () => {
+      it('does not log a warning that the entity was locked', async () => {
         await func(applicationContext, { docketNumber: '123-45' });
-        expect(applicationContext.logger.warn).toHaveBeenCalledWith(
-          'Entity is currently locked',
-          { currentLock: MOCK_LOCK },
-        );
+        expect(applicationContext.logger.warn).not.toHaveBeenCalled();
       });
     });
 
@@ -476,15 +469,6 @@ describe('checkLock', () => {
           applicationContext,
           mockCall.options,
         );
-      });
-    });
-
-    describe('feature flag disabled', () => {
-      beforeEach(() => {
-        mockFeatureFlagValue = false; // disabled
-      });
-      it('does not throw an error', async () => {
-        await expect(checkLock(mockCall)).resolves.not.toThrow();
       });
     });
   });
