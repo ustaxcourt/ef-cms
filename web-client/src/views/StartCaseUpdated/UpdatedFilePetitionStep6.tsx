@@ -86,7 +86,7 @@ export const UpdatedFilePetitionStep6 = connect(
                     A Few Reminders Before You Submit
                   </div>
                   <div className="content-wrapper line-height-2">
-                    <ol className="numbered-list">
+                    <ol className="petitioner-review-list">
                       <li>
                         <b>
                           In most cases, the Court must receive your
