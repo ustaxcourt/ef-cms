@@ -9,14 +9,13 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should not call submitCaseAssociationRequestInteractor when the logged in user is not an IRS practitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     await runAction(submitRespondentCaseAssociationRequestAction, {
       modules: { presenter },
       state: {
         caseDetail: {
           docketNumber: MOCK_CASE.docketNumber,
         },
+        user: docketClerkUser,
       },
     });
 
@@ -34,6 +33,7 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
         caseDetail: {
           docketNumber: MOCK_CASE.docketNumber,
         },
+        user: irsPractitionerUser,
       },
     });
 
@@ -59,6 +59,7 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
           caseDetail: {
             docketNumber: MOCK_CASE.docketNumber,
           },
+          user: irsPractitionerUser,
         },
       },
     );
