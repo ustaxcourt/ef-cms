@@ -1,4 +1,5 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { onConnectInteractor } from './onConnectInteractor';
 
 describe('onConnectInteractor', () => {
@@ -7,11 +8,15 @@ describe('onConnectInteractor', () => {
   const mockEndpoint = 'www.example.com';
 
   it('should save the user connection', async () => {
-    await onConnectInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      connectionId: mockConnectionId,
-      endpoint: mockEndpoint,
-    });
+    await onConnectInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        connectionId: mockConnectionId,
+        endpoint: mockEndpoint,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
@@ -19,13 +24,15 @@ describe('onConnectInteractor', () => {
   });
 
   it('should NOT save the user connection when the current user is undefined', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(undefined);
-
-    await onConnectInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      connectionId: mockConnectionId,
-      endpoint: mockEndpoint,
-    });
+    await onConnectInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        connectionId: mockConnectionId,
+        endpoint: mockEndpoint,
+      },
+      undefined,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,

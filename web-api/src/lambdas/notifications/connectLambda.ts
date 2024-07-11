@@ -1,4 +1,6 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { onConnectInteractor } from '@web-api/business/useCases/notifications/onConnectInteractor';
 
 /**
  * save the information about a new websocket connection
@@ -6,19 +8,21 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const connectLambda = event =>
+export const connectLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(
     event,
     async ({ applicationContext, clientConnectionId }) => {
       const endpoint = event.requestContext.domainName;
 
-      await applicationContext
-        .getUseCases()
-        .onConnectInteractor(applicationContext, {
+      await onConnectInteractor(
+        applicationContext,
+        {
           clientConnectionId,
           connectionId: event.requestContext.connectionId,
           endpoint,
-        });
+        },
+        authorizedUser,
+      );
 
       applicationContext.logger.debug('Websocket connected', {
         requestId: {
@@ -26,5 +30,6 @@ export const connectLambda = event =>
         },
       });
     },
+    authorizedUser,
     { bypassMaintenanceCheck: true },
   );
