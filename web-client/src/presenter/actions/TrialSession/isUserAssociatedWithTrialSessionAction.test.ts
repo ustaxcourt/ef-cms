@@ -21,10 +21,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the judge is associated with the trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.judge,
-      userId: '123',
-    });
     await runAction(isUserAssociatedWithTrialSessionAction, {
       modules: {
         presenter,
@@ -33,6 +29,10 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           judge: { userId: '123' },
         },
+        user: {
+          role: USER_ROLES.judge,
+          userId: '123',
+        },
       },
     });
 
@@ -40,10 +40,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the judge is not associated with the trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.judge,
-      userId: '234',
-    });
     await runAction(isUserAssociatedWithTrialSessionAction, {
       modules: {
         presenter,
@@ -51,6 +47,10 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
       state: {
         trialSession: {
           judge: { userId: '123' },
+        },
+        user: {
+          role: USER_ROLES.judge,
+          userId: '234',
         },
       },
     });
@@ -71,6 +71,10 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           judge: { userId: '123' },
         },
+        user: {
+          role: USER_ROLES.chambers,
+          userId: '234',
+        },
         users: [{ role: USER_ROLES.judge, userId: '456' }],
       },
     });
@@ -79,10 +83,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the user is in the chambers section and their judge is associated with the trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.chambers,
-      userId: '234',
-    });
     await runAction(isUserAssociatedWithTrialSessionAction, {
       modules: {
         presenter,
@@ -90,6 +90,11 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
       state: {
         trialSession: {
           judge: { userId: '123' },
+        },
+
+        user: {
+          role: USER_ROLES.chambers,
+          userId: '234',
         },
         users: [{ role: USER_ROLES.judge, userId: '123' }],
       },
@@ -111,6 +116,10 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           trialClerk: { userId: '123' },
         },
+        user: {
+          role: USER_ROLES.trialClerk,
+          userId: '123',
+        },
       },
     });
 
@@ -118,10 +127,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the current user is a trial clerk but is NOT the trial clerk for this trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.trialClerk,
-      userId: '234',
-    });
     await runAction(isUserAssociatedWithTrialSessionAction, {
       modules: {
         presenter,
@@ -129,6 +134,10 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
       state: {
         trialSession: {
           trialClerk: { userId: '123' },
+        },
+        user: {
+          role: USER_ROLES.trialClerk,
+          userId: '234',
         },
       },
     });

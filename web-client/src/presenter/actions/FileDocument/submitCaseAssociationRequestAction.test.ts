@@ -8,8 +8,6 @@ import { submitCaseAssociationRequestAction } from './submitCaseAssociationReque
 describe('submitCaseAssociationRequestAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-
   it("should call submitCaseAssociationRequestInteractor when the document's event code allows for the user to be immediately associated with the case", async () => {
     const eventCodeAllowingImmediateAssociation =
       PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
@@ -29,6 +27,7 @@ describe('submitCaseAssociationRequestAction', () => {
           eventCode: eventCodeAllowingImmediateAssociation,
           primaryDocumentFile: {},
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -56,6 +55,7 @@ describe('submitCaseAssociationRequestAction', () => {
           eventCode: eventCodeNotAllowingImmediateAssociation,
           primaryDocumentFile: {},
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -78,6 +78,7 @@ describe('submitCaseAssociationRequestAction', () => {
         form: {
           primaryDocumentFile: {},
         },
+        user: privatePractitionerUser,
       },
     });
 
