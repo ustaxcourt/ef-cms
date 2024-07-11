@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
@@ -10,6 +7,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
@@ -31,11 +29,12 @@ describe('verify old sent work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
-    const applicationContext = applicationContextFactory({
-      role: ROLES.petitionsClerk,
-      section: 'petitions',
+    const mockUser = {
+      ...mockPetitionsClerkUser,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    };
+
+    const applicationContext = applicationContextFactory(mockUser);
     applicationContext.environment.dynamoDbTableName = 'efcms-local';
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
@@ -62,12 +61,12 @@ describe('verify old sent work items do not show up in the outbox', () => {
     workItemIdNPlus1 = applicationContext.getUniqueId();
 
     workItemNPlus1Days = {
-      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: CREATED_N_PLUS_1_DAYS_AGO,
       completedBy: 'Test Petitionsclerk',
-      completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      completedByUserId: mockUser.userId,
       createdAt: CREATED_N_PLUS_1_DAYS_AGO,
       docketEntry: {
         createdAt: '2019-06-25T15:14:11.924Z',
@@ -80,7 +79,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       section: 'petitions',
       sentBy: 'Test petitionsclerk1',
       sentBySection: 'petitions',
-      sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      sentByUserId: mockUser.userId,
       updatedAt: '2019-06-26T16:31:17.643Z',
       workItemId: `${workItemIdNPlus1}`,
     };
@@ -101,23 +100,26 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
+      authorizedUser: mockUser,
       workItem: workItemNPlus1Days,
     });
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
+      authorizedUser: mockUser,
       workItem: workItemNDays,
     });
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
+      authorizedUser: mockUser,
       workItem: workItemNMinus1Days,
     });
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
+  it('the petitionsclerk user should have the expected work items equal to or newer than 7 days', async () => {
     const myOutbox = (
       await getFormattedDocumentQCMyOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);

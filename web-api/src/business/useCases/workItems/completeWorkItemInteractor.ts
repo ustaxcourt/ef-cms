@@ -52,6 +52,7 @@ export const completeWorkItem = async (
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
+    authorizedUser: user,
     workItem: {
       ...completedWorkItem,
       createdAt: createISODateString(),
