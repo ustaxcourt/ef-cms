@@ -60,7 +60,7 @@ describe('createOrderHelper', () => {
     const result = runCompute(createOrderHelper, {
       state: {
         caseDetail,
-        documentToEdit: {},
+        documentToEdit: { docketEntryId: '1' },
         form: {
           documentTitle: 'Order',
         },
