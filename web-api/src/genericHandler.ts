@@ -74,7 +74,10 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
 
 export const genericHandler = (
   awsEvent,
-  cb: (appContext: { applicationContext: ServerApplicationContext }) => any,
+  cb: (params: {
+    applicationContext: ServerApplicationContext;
+    clientConnectionId?: string;
+  }) => any,
   user: UnknownAuthUser,
   options: {
     bypassMaintenanceCheck?: boolean;
