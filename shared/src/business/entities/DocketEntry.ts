@@ -42,6 +42,8 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
+type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
+
 /* eslint-disable max-lines */
 const canDownloadSTIN = (
   entry: RawDocketEntry,
@@ -77,6 +79,9 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
+  public caseType?: string;
+  public taxYear?: string;
+  public noticeIssuedDate?: string;
   public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
@@ -191,6 +196,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
     this.archived = rawDocketEntry.archived;
     this.attachments = rawDocketEntry.attachments;
+    this.caseType = rawDocketEntry.caseType;
+    this.taxYear = rawDocketEntry.taxYear;
+    this.noticeIssuedDate = rawDocketEntry.noticeIssuedDate;
     this.certificateOfService = rawDocketEntry.certificateOfService;
     this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
     this.createdAt = rawDocketEntry.createdAt || createISODateString();
@@ -614,7 +622,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
       !!filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        filedByRole as PractitionerRole,
+      )
     );
   }
 
@@ -624,6 +634,10 @@ export class DocketEntry extends JoiValidationEntity {
 
   static isOrder(eventCode: string): boolean {
     return ORDER_EVENT_CODES.includes(eventCode);
+  }
+
+  static isSearchable(eventCode: string): boolean {
+    return DocketEntry.isOpinion(eventCode) || DocketEntry.isOrder(eventCode);
   }
 
   static isMotion(eventCode: string): boolean {

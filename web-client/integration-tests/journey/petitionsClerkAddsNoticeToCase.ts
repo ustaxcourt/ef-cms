@@ -33,6 +33,11 @@ export const petitionsClerkAddsNoticeToCase = cerebralTest => {
       value: '<p>This is a test notice.</p>',
     });
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'This is a test notice.',
+    });
+
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');

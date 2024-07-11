@@ -82,6 +82,7 @@ export const sortCompletedMessages = (
 
 // useful for users that have a large amount of messages (ADC Users) since
 // recalculating the formatted date fields is expensive.
+
 let messageCache = null;
 let lastCacheKey = null;
 

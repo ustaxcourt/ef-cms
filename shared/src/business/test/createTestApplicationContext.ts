@@ -410,6 +410,7 @@ export const createTestApplicationContext = ({
     getJudgeForUserHelper: jest.fn(),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
+    parseAndScrapePdfContents: jest.fn(),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
@@ -442,6 +443,7 @@ export const createTestApplicationContext = ({
     noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    petition: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     printableWorkingCopySessionList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),

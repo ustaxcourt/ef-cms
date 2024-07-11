@@ -1,3 +1,4 @@
+import { petitionerCreatesElectronicCaseUpdated } from './petitioner-creates-electronic-case-updated';
 import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
@@ -39,6 +40,18 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
 }
 
 export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseUpdated(primaryFilerName);
+      } else {
+        return petitionerCreatesElectronicCaseOld(primaryFilerName);
+      }
+    });
+}
+
+function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   uploadFile('stin-file');
