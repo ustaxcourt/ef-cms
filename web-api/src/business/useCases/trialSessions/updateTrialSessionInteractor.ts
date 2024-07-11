@@ -148,13 +148,13 @@ export const updateTrialSession = async (
 
     await updateCasesAndSetNoticeOfChange({
       applicationContext,
+      authorizedUser: user,
       currentTrialSession,
       paperServicePdfsCombined,
       shouldIssueNoticeOfChangeOfTrialJudge,
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
       updatedTrialSessionEntity,
-      user,
     });
 
     hasPaper = !!paperServicePdfsCombined.getPageCount();
@@ -210,19 +210,19 @@ export const updateTrialSession = async (
 
 const updateCasesAndSetNoticeOfChange = async ({
   applicationContext,
+  authorizedUser,
   currentTrialSession,
   paperServicePdfsCombined,
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   updatedTrialSessionEntity,
-  user,
 }: {
   applicationContext: ServerApplicationContext;
   currentTrialSession: RawTrialSession;
   paperServicePdfsCombined: any;
   updatedTrialSessionEntity: TrialSession;
-  user: any;
+  authorizedUser: any;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
@@ -237,7 +237,7 @@ const updateCasesAndSetNoticeOfChange = async ({
             applicationContext,
             docketNumber: c.docketNumber,
           });
-        return new Case(aCase, { authorizedUser: user });
+        return new Case(aCase, { authorizedUser });
       }),
   );
   const casesThatShouldReceiveNotices = calendaredCaseEntities
@@ -261,12 +261,15 @@ const updateCasesAndSetNoticeOfChange = async ({
     if (shouldSetNoticeOfChangeToInPersonProceeding) {
       await applicationContext
         .getUseCaseHelpers()
-        .setNoticeOfChangeToInPersonProceeding(applicationContext, {
-          caseEntity,
-          newPdfDoc: paperServicePdfsCombined,
-          newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
-        });
+        .setNoticeOfChangeToInPersonProceeding(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
