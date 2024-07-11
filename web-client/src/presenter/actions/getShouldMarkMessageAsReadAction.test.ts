@@ -17,9 +17,7 @@ describe('getShouldMarkMessageAsReadAction', () => {
   });
 
   it('should return the markRead path if the message is unread and belongs to the current user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: '123',
-    });
+    const userId = '123';
 
     await runAction(getShouldMarkMessageAsReadAction, {
       modules: {
@@ -31,21 +29,22 @@ describe('getShouldMarkMessageAsReadAction', () => {
           toUserId: '123',
         },
       },
+      state: {
+        user: { userId },
+      },
     });
 
     expect(markReadStub.mock.calls.length).toEqual(1);
     expect(markReadStub).toHaveBeenCalledWith({
       messageToMarkRead: {
         isRead: false,
-        toUserId: '123',
+        toUserId: userId,
       },
     });
   });
 
   it('should return the noAction path the message is already read', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: '123',
-    });
+    const userId = '123';
 
     await runAction(getShouldMarkMessageAsReadAction, {
       modules: {
@@ -57,15 +56,18 @@ describe('getShouldMarkMessageAsReadAction', () => {
           toUserId: '123',
         },
       },
+      state: {
+        user: {
+          userId,
+        },
+      },
     });
 
     expect(noActionStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the noAction path the message is not assigned to the current user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: '123',
-    });
+    const userId = '123';
 
     await runAction(getShouldMarkMessageAsReadAction, {
       modules: {
@@ -75,6 +77,11 @@ describe('getShouldMarkMessageAsReadAction', () => {
         mostRecentMessage: {
           isRead: false,
           toUserId: '321',
+        },
+      },
+      state: {
+        user: {
+          userId,
         },
       },
     });

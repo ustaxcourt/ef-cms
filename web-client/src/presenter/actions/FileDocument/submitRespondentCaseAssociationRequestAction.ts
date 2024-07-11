@@ -13,7 +13,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
 }: ActionProps) => {
   const { docketNumber } = get(state.caseDetail);
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const { USER_ROLES } = applicationContext.getConstants();
 

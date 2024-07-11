@@ -16,12 +16,14 @@ export const getNotificationsAction = async ({
     get(state.messageBoxToDisplay.section) ||
     get(state.workQueueToDisplay.section);
 
+  const user = get(state.user);
+
   let caseServicesSupervisorData;
 
   if (sectionToDisplay) {
     caseServicesSupervisorData = {
       section: sectionToDisplay,
-      userId: applicationContext.getCurrentUser().userId,
+      userId: user.userId,
     };
   }
 

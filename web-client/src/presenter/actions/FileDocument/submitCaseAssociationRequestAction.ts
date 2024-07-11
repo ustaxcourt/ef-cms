@@ -16,7 +16,7 @@ export const submitCaseAssociationRequestAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const { primaryDocumentId } = props.documentsFiled;
 

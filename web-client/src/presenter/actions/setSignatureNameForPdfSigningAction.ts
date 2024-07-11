@@ -8,9 +8,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const setSignatureNameForPdfSigningAction = async ({
   applicationContext,
+  get,
   store,
 }: ActionProps) => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
     applicationContext.getConstants();
 

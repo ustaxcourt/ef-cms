@@ -1,16 +1,21 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getJudgeInSectionInteractor } from '@web-api/business/useCases/user/getJudgeInSectionInteractor';
 
-/**
- * returns the judge associated with a chambers section
- *
- * @param {object} event the AWS event object
- * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
- */
-export const getJudgeInSectionLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getJudgeInSectionInteractor(applicationContext, {
-        section: event.pathParameters.section,
-      });
-  });
+export const getJudgeInSectionLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await getJudgeInSectionInteractor(
+        applicationContext,
+        {
+          section: event.pathParameters.section,
+        },
+        authorizedUser,
+      );
+    },
+    authorizedUser,
+  );

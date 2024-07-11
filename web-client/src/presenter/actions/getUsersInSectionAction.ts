@@ -1,10 +1,12 @@
 import { RawUser } from '@shared/business/entities/User';
 import { sortBy } from 'lodash';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const getUsersInSectionAction =
   ({ section }: { section?: string }) =>
   async ({
     applicationContext,
+    get,
     props,
   }: ActionProps<{
     section: string;
@@ -23,7 +25,7 @@ export const getUsersInSectionAction =
     }
 
     if (!sectionToGet) {
-      const user = applicationContext.getCurrentUser();
+      const user = get(state.user);
       sectionToGet = user.section;
     }
 

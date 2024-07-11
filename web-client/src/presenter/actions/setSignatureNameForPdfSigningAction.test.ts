@@ -10,10 +10,6 @@ describe('setSignatureNameForPdfSigningAction', () => {
   const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
     applicationContext.getConstants();
 
-  let user = {
-    section: 'colvinChambers',
-  };
-
   let judgeUser: RawUser;
 
   beforeAll(() => {
@@ -28,17 +24,18 @@ describe('setSignatureNameForPdfSigningAction', () => {
         [ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key]: 'Oscar the Grouch',
       });
 
-    applicationContext.getCurrentUser.mockReturnValue(user);
-
     presenter.providers.applicationContext = applicationContext;
   });
 
   it('sets the Chief Judge for non chamber users', async () => {
-    user.section = 'docketclerk';
-
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          section: 'docketclerk',
+        },
       },
     });
     expect(result.state.pdfForSigning.nameForSigning).toEqual(
@@ -50,10 +47,14 @@ describe('setSignatureNameForPdfSigningAction', () => {
   it('sets the chamber judge for chamber users', async () => {
     judgeUser.judgeFullName = 'John O. Colvin';
     judgeUser.judgeTitle = 'Judge';
-    user.section = 'colvinChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          section: 'colvinChambers',
+        },
       },
     });
     expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
@@ -63,10 +64,14 @@ describe('setSignatureNameForPdfSigningAction', () => {
   it('sets special trial for special trial judge', async () => {
     judgeUser.judgeFullName = 'John O. Colvin';
     judgeUser.judgeTitle = 'Special Trial Judge';
-    user.section = 'colvinChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          section: 'colvinChambers',
+        },
       },
     });
     expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');

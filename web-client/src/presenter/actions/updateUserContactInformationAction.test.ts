@@ -18,12 +18,14 @@ describe('updateUserContactInformationAction', () => {
           contact: { address1: '999 Jump St' },
           firmName: 'testing',
         },
+        user: {},
       },
     });
     expect(result.state.userContactEditProgress.inProgress).toBe(true);
   });
 
   it('should call the use case to update the user contact', async () => {
+    const userId = 'a805d1ab-18d0-43ec-bafb-654e83405416';
     await runAction(updateUserContactInformationAction, {
       modules: {
         presenter,
@@ -33,6 +35,7 @@ describe('updateUserContactInformationAction', () => {
           contact: { address1: '999 Jump St' },
           firmName: 'testing',
         },
+        user: { userId },
       },
     });
     expect(
@@ -46,7 +49,7 @@ describe('updateUserContactInformationAction', () => {
         address1: '999 Jump St',
       },
       firmName: 'testing',
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId,
     });
   });
 });

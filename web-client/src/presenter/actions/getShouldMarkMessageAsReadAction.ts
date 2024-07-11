@@ -1,3 +1,5 @@
+import { state } from '@web-client/presenter/app.cerebral';
+
 /**
  * returns the path based on whether the message should be marked as read
  * @param {object} providers the providers object
@@ -7,11 +9,11 @@
  * @returns {object} continue path for the sequence
  */
 export const getShouldMarkMessageAsReadAction = ({
-  applicationContext,
+  get,
   path,
   props,
 }: ActionProps) => {
-  const { userId } = applicationContext.getCurrentUser();
+  const { userId } = get(state.user);
   const { mostRecentMessage } = props;
 
   if (mostRecentMessage.toUserId === userId && !mostRecentMessage.isRead) {
