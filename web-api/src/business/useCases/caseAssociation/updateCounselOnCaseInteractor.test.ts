@@ -12,6 +12,10 @@ import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 
 describe('updateCounselOnCaseInteractor', () => {
@@ -75,11 +79,6 @@ describe('updateCounselOnCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Saul Goodman',
-      role: ROLES.docketClerk,
-      userId: '001',
-    });
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(({ userId }) => {
@@ -133,16 +132,18 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('returns an unauthorized error for a petitioner user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      updateCounselOnCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        userData: {
-          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+      updateCounselOnCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userData: {
+            representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+          },
+          userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
         },
-        userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
-      }),
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -150,15 +151,19 @@ describe('updateCounselOnCaseInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      updateCounselOnCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        userData: {
-          name: 'Saul Goodman',
-          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      updateCounselOnCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userData: {
+            name: 'Saul Goodman',
+            representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+          userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
         },
-        userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
-      }),
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -167,15 +172,19 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        name: 'Saul Goodman',
-        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          name: 'Saul Goodman',
+          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
       },
-      userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -194,15 +203,19 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates a practitioner with the given userId on the associated case', async () => {
-    await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        name: 'Saul Goodman',
-        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          name: 'Saul Goodman',
+          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
       },
-      userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -210,15 +223,19 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates an irsPractitioner with the given userId on the associated case', async () => {
-    await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        name: 'Saul Goodman',
-        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          name: 'Saul Goodman',
+          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       },
-      userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -226,16 +243,20 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates only editable practitioner fields on the case', async () => {
-    await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        email: 'not.editable@example.com',
-        name: 'Saul Goodman',
-        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          email: 'not.editable@example.com',
+          name: 'Saul Goodman',
+          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       },
-      userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
-    });
+      mockDocketClerkUser,
+    );
 
     const updatedPractitioner = applicationContext
       .getPersistenceGateway()
@@ -250,16 +271,20 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates the service indicator on the contacts when they are being represented', async () => {
-    const results = await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        email: 'not.editable@example.com',
-        name: 'Saul Goodman',
-        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    const results = await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          email: 'not.editable@example.com',
+          name: 'Saul Goodman',
+          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
       },
-      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -270,16 +295,20 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('reverts the service indicator on the contacts when they are no longer being represented', async () => {
-    const results = await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        email: 'not.editable@example.com',
-        name: 'Saul Goodman',
-        representing: ['b7315e1b-b804-4e09-84c5-e0f3b4f229c5'],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    const results = await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          email: 'not.editable@example.com',
+          name: 'Saul Goodman',
+          representing: ['b7315e1b-b804-4e09-84c5-e0f3b4f229c5'],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
       },
-      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -297,13 +326,17 @@ describe('updateCounselOnCaseInteractor', () => {
         privatePractitioners: [mockPrivatePractitioners[1]],
       }));
 
-    const results = await updateCounselOnCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userData: {
-        representing: ['9905d1ab-18d0-43ec-bafb-654e83405416'],
+    const results = await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userData: {
+          representing: ['9905d1ab-18d0-43ec-bafb-654e83405416'],
+        },
+        userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
       },
-      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(results.petitioners[0].serviceIndicator).toBe(
       MOCK_CASE.petitioners[0].serviceIndicator,
@@ -312,13 +345,17 @@ describe('updateCounselOnCaseInteractor', () => {
 
   it('throws an error if the userId is not a privatePractitioner or irsPractitioner role', async () => {
     await expect(
-      updateCounselOnCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        userData: {
-          email: 'petitioner@example.com',
+      updateCounselOnCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userData: {
+            email: 'petitioner@example.com',
+          },
+          userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
         },
-        userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
-      }),
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('User is not a practitioner');
   });
 });

@@ -9,6 +9,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -28,15 +29,16 @@ const updateCounselOnCase = async (
     userData,
     userId,
   }: { docketNumber: string; userData: any; userId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
   const editableFields = {
     representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,
   };
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -54,7 +56,7 @@ const updateCounselOnCase = async (
       userId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { authorizedUser: user });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
@@ -90,9 +92,7 @@ const updateCounselOnCase = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateCounselOnCaseInteractor = withLocking(
