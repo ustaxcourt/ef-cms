@@ -8,6 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { orderBy } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -17,8 +18,8 @@ export const fileCourtIssuedOrder = async (
     documentMetadata,
     primaryDocumentFileId,
   }: { documentMetadata: any; primaryDocumentFileId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
-  const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
