@@ -32,11 +32,15 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   });
 
   it('should make a call to generate the NOIP pdf', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      caseEntity: mockOpenCase,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-    });
+    await setNoticeOfChangeToInPersonProceeding(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers()
@@ -61,11 +65,15 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   });
 
   it('should make a call to create and serve the NOIP docket entry on the case', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      caseEntity: mockOpenCase,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-    });
+    await setNoticeOfChangeToInPersonProceeding(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry
