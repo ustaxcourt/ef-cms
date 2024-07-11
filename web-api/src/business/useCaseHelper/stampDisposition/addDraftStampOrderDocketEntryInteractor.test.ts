@@ -10,12 +10,10 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDocketEntryInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  clerkOfCourtUser,
-  judgeUser,
-} from '../../../../../shared/src/test/mockUsers';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   let mockLock;
@@ -42,17 +40,18 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
 
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
   });
 
   it('should add a draft order docket entry to the case', async () => {
-    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
+    await addDraftStampOrderDocketEntryInteractor(
+      applicationContext,
+      args,
+      mockJudgeUser,
+    );
 
     const { caseToUpdate } =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -76,20 +75,20 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       docketEntryId: mockStampedDocketEntryId,
       docketNumber: caseToUpdate.docketNumber,
       documentType: ORDER_TYPES[0].documentType,
-      filedBy: judgeUser.judgeFullName,
+      filedBy: mockJudgeUser.name,
       freeText: `${motionDocumentType} some title with disposition and custom text`,
       isDraft: true,
       signedJudgeName: mockSigningName,
     });
   });
 
+  //TODO 10417: authorizedUser never has judgeFullName property - is this test still relevant?
   it("should set the filedBy to the current user's name if there is no judge full name on the user", async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      ...judgeUser,
-      judgeFullName: undefined,
-    });
-
-    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
+    await addDraftStampOrderDocketEntryInteractor(
+      applicationContext,
+      args,
+      mockJudgeUser,
+    );
 
     const { caseToUpdate } =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -102,7 +101,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     );
 
     expect(draftDocketEntryEntity).toMatchObject({
-      filedBy: judgeUser.name,
+      filedBy: mockJudgeUser.name,
     });
   });
 
@@ -129,10 +128,14 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       .getPersistenceGateway()
       .getMessageThreadByParentId.mockReturnValue([mockMessage]);
 
-    await addDraftStampOrderDocketEntryInteractor(applicationContext, {
-      ...args,
-      parentMessageId: mockParentMessageId,
-    });
+    await addDraftStampOrderDocketEntryInteractor(
+      applicationContext,
+      {
+        ...args,
+        parentMessageId: mockParentMessageId,
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateMessage,
@@ -153,7 +156,11 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      addDraftStampOrderDocketEntryInteractor(applicationContext, args),
+      addDraftStampOrderDocketEntryInteractor(
+        applicationContext,
+        args,
+        mockJudgeUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -162,7 +169,11 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
+    await addDraftStampOrderDocketEntryInteractor(
+      applicationContext,
+      args,
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -181,10 +192,12 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      addDraftStampOrderDocketEntryInteractor(applicationContext, args),
+      addDraftStampOrderDocketEntryInteractor(
+        applicationContext,
+        args,
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 });
