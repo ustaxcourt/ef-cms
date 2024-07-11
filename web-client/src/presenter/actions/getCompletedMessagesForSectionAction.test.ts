@@ -2,6 +2,7 @@ import {
   ADC_SECTION,
   DOCKET_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { adcUser } from '@shared/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCompletedMessagesForSectionAction } from './getCompletedMessagesForSectionAction';
 import { presenter } from '../presenter-mock';
@@ -24,7 +25,9 @@ describe('getCompletedMessagesForSectionAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {},
+      },
     });
     expect(results.output.messages).toEqual([message]);
   });
@@ -50,7 +53,6 @@ describe('getCompletedMessagesForSectionAction', () => {
 
   it("retrieves completed messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
     const currentUserSection = { section: ADC_SECTION };
-    applicationContext.getCurrentUser.mockReturnValue(currentUserSection);
 
     await runAction(getCompletedMessagesForSectionAction, {
       modules: {
@@ -58,6 +60,7 @@ describe('getCompletedMessagesForSectionAction', () => {
       },
       state: {
         messageBoxToDisplay: {},
+        user: adcUser,
       },
     });
 
@@ -65,6 +68,5 @@ describe('getCompletedMessagesForSectionAction', () => {
       applicationContext.getUseCases().getCompletedMessagesForSectionInteractor
         .mock.calls[0][1],
     ).toEqual(currentUserSection);
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });
 });

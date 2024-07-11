@@ -10,11 +10,12 @@ export const getCompletedMessagesForSectionAction = async ({
   get,
 }: ActionProps) => {
   const selectedSection = get(state.messageBoxToDisplay.section);
+  const user = get(state.user);
 
   const messages = await applicationContext
     .getUseCases()
     .getCompletedMessagesForSectionInteractor(applicationContext, {
-      section: selectedSection || applicationContext.getCurrentUser().section,
+      section: selectedSection || user.section,
     });
 
   return { messages };
