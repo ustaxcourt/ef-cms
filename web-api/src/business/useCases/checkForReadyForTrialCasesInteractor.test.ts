@@ -1,18 +1,14 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { checkForReadyForTrialCasesInteractor } from './checkForReadyForTrialCasesInteractor';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('checkForReadyForTrialCasesInteractor', () => {
   let mockCasesReadyForTrial;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
-
     applicationContext
       .getPersistenceGateway()
       .getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);
@@ -33,7 +29,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
+      checkForReadyForTrialCasesInteractor(
+        applicationContext,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
 
     expect(
@@ -51,7 +50,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
+      checkForReadyForTrialCasesInteractor(
+        applicationContext,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
 
     expect(
@@ -69,7 +71,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
+      checkForReadyForTrialCasesInteractor(
+        applicationContext,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
 
     expect(
@@ -99,7 +104,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
+      checkForReadyForTrialCasesInteractor(
+        applicationContext,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
 
     expect(
@@ -137,7 +145,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       ]);
 
     await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
+      checkForReadyForTrialCasesInteractor(
+        applicationContext,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
 
     expect(
@@ -161,7 +172,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getPersistenceGateway()
       .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
 
-    await checkForReadyForTrialCasesInteractor(applicationContext);
+    await checkForReadyForTrialCasesInteractor(
+      applicationContext,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -194,7 +208,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       ]);
 
     await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
+      checkForReadyForTrialCasesInteractor(
+        applicationContext,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
     expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(1);
     expect(
