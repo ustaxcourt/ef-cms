@@ -1352,19 +1352,22 @@ const router = {
 
     registerRoute(
       '/messages/*/message-detail/*/*/order-response-create..',
-      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-        const { statusReportFilingDate, statusReportIndex } = route.query();
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
-        );
-        return app.getSequence('gotoStatusReportOrderResponseSequence')({
-          docketEntryId,
-          docketNumber,
-          parentMessageId,
-          statusReportFilingDate,
-          statusReportIndex,
-        });
-      }),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
     );
 
     registerRoute(
