@@ -541,7 +541,7 @@ function OtherInfo({
               />
               <label
                 className="usa-radio__label"
-                data-testid={`other-type-${idx}`}
+                data-testid={`other-type-radio-option-${idx}`}
                 htmlFor={`otherType-${otherType}`}
                 id={`is-other-type-${idx}`}
               >
