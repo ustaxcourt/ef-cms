@@ -51,7 +51,7 @@ export const MessagesIndividualInbox = connect(
       <>
         <SuccessNotification />
         <ErrorNotification />
-        {messagesIndividualInboxHelper.completionSuccess && (
+        {screenMetadata.completionSuccess && (
           <div
             aria-live="polite"
             className="usa-alert usa-alert--success"
