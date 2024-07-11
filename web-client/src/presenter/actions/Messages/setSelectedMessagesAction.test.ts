@@ -20,6 +20,9 @@ describe('setSelectedMessagesAction', () => {
         messages: [],
       },
       state: {
+        messagesIndividualInboxHelper: {
+          allMessagesSelected: false,
+        },
         messagesPage: {
           selectedMessages: new Map([
             [mockId1, mockParentId1],
@@ -39,6 +42,9 @@ describe('setSelectedMessagesAction', () => {
         messages: [{ messageId: mockId2, parentMessageId: mockParentId2 }],
       },
       state: {
+        messagesIndividualInboxHelper: {
+          allMessagesSelected: false,
+        },
         messagesPage: {
           selectedMessages: new Map([[mockId1, mockParentId1]]),
         },
@@ -58,6 +64,9 @@ describe('setSelectedMessagesAction', () => {
         messages: [{ messageId: mockId2, parentMessageId: mockParentId2 }],
       },
       state: {
+        messagesIndividualInboxHelper: {
+          allMessagesSelected: false,
+        },
         messagesPage: {
           selectedMessages: new Map([
             [mockId1, mockParentId1],
@@ -71,24 +80,28 @@ describe('setSelectedMessagesAction', () => {
     expect(state.messagesPage.selectedMessages.has(mockId2)).toBeFalsy();
   });
 
-  it('should add and remove messages appropriately based on the existing map state', async () => {
+  it('should clear selected messages map if all messages are selected and selectAllBoxChecked is true', async () => {
     const { state } = await runAction(setSelectedMessagesAction, {
       modules: { presenter },
       props: {
         messages: [
-          { messageId: mockId1, parentMessageId: mockParentId1 }, // Should be removed
-          { messageId: 'id3', parentMessageId: 'parentId3' }, // Should be added
+          { messageId: mockId1, parentMessageId: mockParentId1 },
+          { messageId: mockId2, parentMessageId: mockParentId2 },
         ],
       },
       state: {
+        messagesIndividualInboxHelper: {
+          allMessagesSelected: true,
+        },
         messagesPage: {
-          selectedMessages: new Map([[mockId1, mockParentId1]]),
+          selectedMessages: new Map([
+            [mockId1, mockParentId1],
+            [mockId2, mockParentId2],
+          ]),
         },
       },
     });
 
-    expect(state.messagesPage.selectedMessages.size).toEqual(1);
-    expect(state.messagesPage.selectedMessages.has(mockId1)).toBeFalsy();
-    expect(state.messagesPage.selectedMessages.get('id3')).toBe('parentId3');
+    expect(state.messagesPage.selectedMessages.size).toEqual(0);
   });
 });

@@ -126,11 +126,6 @@ export const MessagesIndividualInbox = connect(
                   ref={selectAllCheckboxRef}
                   type="checkbox"
                   onChange={() => {
-                    if (messagesIndividualInboxHelper.allMessagesSelected) {
-                      const selectNone = [];
-                      setSelectedMessagesSequence({ messages: selectNone });
-                      return;
-                    }
                     const selectAll = formattedMessages.messages.map(
                       message => ({
                         messageId: message.messageId,
