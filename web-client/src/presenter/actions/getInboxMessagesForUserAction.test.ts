@@ -20,7 +20,7 @@ describe('getInboxMessagesForUserAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: { user: {} },
     });
     expect(results.output.messages).toEqual([message]);
   });
