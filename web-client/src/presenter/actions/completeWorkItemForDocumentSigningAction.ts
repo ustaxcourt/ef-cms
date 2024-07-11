@@ -22,8 +22,8 @@ export const completeWorkItemForDocumentSigningAction = async ({
 
     await applicationContext
       .getUseCases()
+      // TODO 10417 I removed userId from what was passed in here because it doesn't appear to be used, but want to confirm.
       .completeWorkItemInteractor(applicationContext, {
-        userId: applicationContext.getCurrentUser().userId,
         workItemId: workItemIdToClose,
       });
   }

@@ -1,10 +1,13 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
-import { irsSuperuserUser } from '@shared/test/mockUsers';
+import {
+  irsPractitionerUser,
+  irsSuperuserUser,
+  petitionerUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -19,8 +22,6 @@ describe('getCaseAssociation', () => {
 
   describe('IRS SuperUser', () => {
     it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and service is not allowed on the case', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
-
       const results = await runAction(getCaseAssociationAction, {
         modules: {
           presenter,
@@ -31,6 +32,7 @@ describe('getCaseAssociation', () => {
             docketEntries: [{ documentType: 'Petition' }],
             status: CASE_STATUS_TYPES.new,
           },
+          user: irsSuperuserUser,
         },
       });
 
@@ -42,8 +44,6 @@ describe('getCaseAssociation', () => {
     });
 
     it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and service is allowed for the case', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
-
       const results = await runAction(getCaseAssociationAction, {
         modules: {
           presenter,
@@ -59,6 +59,7 @@ describe('getCaseAssociation', () => {
             ],
             status: CASE_STATUS_TYPES.generalDocket,
           },
+          user: irsSuperuserUser,
         },
       });
 
@@ -72,11 +73,6 @@ describe('getCaseAssociation', () => {
 
   describe('Internal user', () => {
     it('should return true for isAssociated and false for pendingAssociation if the user is an internal user', async () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.petitionsClerk,
-        userId: '123',
-      });
-
       const results = await runAction(getCaseAssociationAction, {
         modules: {
           presenter,
@@ -86,6 +82,7 @@ describe('getCaseAssociation', () => {
           caseDetail: {
             privatePractitioners: [{ userId: '123' }],
           },
+          user: petitionsClerkUser,
         },
       });
 
@@ -98,12 +95,6 @@ describe('getCaseAssociation', () => {
   });
 
   describe('Private Practitioner, Petitioner, IRS Practitioner', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.privatePractitioner,
-        userId: '123',
-      });
-    });
     describe('consolidatedCases', () => {});
     describe('nonConsolidatedCases', () => {
       it('should return that practitioner is associated', async () => {
@@ -114,8 +105,11 @@ describe('getCaseAssociation', () => {
           props: {},
           state: {
             caseDetail: {
-              privatePractitioners: [{ userId: '123' }],
+              privatePractitioners: [
+                { userId: privatePractitionerUser.userId },
+              ],
             },
+            user: privatePractitionerUser,
           },
         });
 
@@ -140,6 +134,7 @@ describe('getCaseAssociation', () => {
             caseDetail: {
               privatePractitioners: [{ userId: 'nothing' }],
             },
+            user: privatePractitionerUser,
           },
         });
 
@@ -166,6 +161,7 @@ describe('getCaseAssociation', () => {
                 { userId: 'I am very different and not associated' },
               ],
             },
+            user: privatePractitionerUser,
           },
         });
 
@@ -194,6 +190,7 @@ describe('getCaseAssociation', () => {
                 },
               ],
             },
+            user: privatePractitionerUser,
           },
         });
 
@@ -208,10 +205,6 @@ describe('getCaseAssociation', () => {
         applicationContext
           .getUseCases()
           .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.irsPractitioner,
-          userId: '789',
-        });
 
         const results = await runAction(getCaseAssociationAction, {
           modules: {
@@ -220,8 +213,9 @@ describe('getCaseAssociation', () => {
           props: {},
           state: {
             caseDetail: {
-              irsPractitioners: [{ userId: '789' }],
+              irsPractitioners: [{ userId: irsPractitionerUser.userId }],
             },
+            user: irsPractitionerUser,
           },
         });
 
@@ -235,10 +229,6 @@ describe('getCaseAssociation', () => {
         applicationContext
           .getUseCases()
           .verifyPendingCaseForUserInteractor.mockReturnValue(true);
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.irsPractitioner,
-          userId: '789',
-        });
 
         const results = await runAction(getCaseAssociationAction, {
           modules: {
@@ -249,6 +239,7 @@ describe('getCaseAssociation', () => {
             caseDetail: {
               irsPractitioners: [{ userId: '123' }],
             },
+            user: irsPractitionerUser,
           },
         });
 
@@ -262,10 +253,6 @@ describe('getCaseAssociation', () => {
         applicationContext
           .getUseCases()
           .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.petitioner,
-          userId: '123',
-        });
 
         const results = await runAction(getCaseAssociationAction, {
           modules: {
@@ -276,10 +263,11 @@ describe('getCaseAssociation', () => {
             caseDetail: {
               petitioners: [
                 {
-                  contactId: '123',
+                  contactId: petitionerUser.userId,
                 },
               ],
             },
+            user: petitionerUser,
           },
         });
 
@@ -293,10 +281,6 @@ describe('getCaseAssociation', () => {
         applicationContext
           .getUseCases()
           .verifyPendingCaseForUserInteractor.mockReturnValue(true);
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.petitioner,
-          userId: '789',
-        });
         const results = await runAction(getCaseAssociationAction, {
           modules: {
             presenter,
@@ -311,6 +295,7 @@ describe('getCaseAssociation', () => {
               ],
               userId: '123',
             },
+            user: petitionerUser,
           },
         });
 
@@ -326,12 +311,7 @@ describe('getCaseAssociation', () => {
   describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag', () => {
     describe('Feature Flag On', () => {
       it('isAssociated should be true when the petitioners userId exists in the consolidated group list', async () => {
-        const petitionerContactId = '123';
-
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.petitioner,
-          userId: petitionerContactId,
-        });
+        const petitionerContactId = petitionerUser.userId;
 
         const results = await runAction(getCaseAssociationAction, {
           modules: {
@@ -356,6 +336,7 @@ describe('getCaseAssociation', () => {
                 },
               ],
             },
+            user: petitionerUser,
           },
         });
 
@@ -364,12 +345,7 @@ describe('getCaseAssociation', () => {
       });
 
       it('should return true for isAssociated when and the case is not consolidated', async () => {
-        const petitionerContactId = '123';
-
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.petitioner,
-          userId: petitionerContactId,
-        });
+        const petitionerContactId = petitionerUser.userId;
 
         const results = await runAction(getCaseAssociationAction, {
           modules: {
@@ -384,6 +360,7 @@ describe('getCaseAssociation', () => {
                 },
               ],
             },
+            user: petitionerUser,
           },
         });
 
@@ -392,12 +369,7 @@ describe('getCaseAssociation', () => {
       });
 
       it('isDirectlyAssociated should be true when the id of the caseDetail petitioner matches the users id', async () => {
-        const petitionerContactId = '123';
-
-        applicationContext.getCurrentUser.mockReturnValue({
-          role: ROLES.petitioner,
-          userId: petitionerContactId,
-        });
+        const petitionerContactId = petitionerUser.userId;
 
         const results = await runAction(getCaseAssociationAction, {
           modules: {
@@ -414,6 +386,7 @@ describe('getCaseAssociation', () => {
                 },
               ],
             },
+            user: petitionerUser,
           },
         });
 
