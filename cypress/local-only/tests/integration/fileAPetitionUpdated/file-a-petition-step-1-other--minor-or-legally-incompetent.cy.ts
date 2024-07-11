@@ -111,7 +111,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
     describe('A minor or legally incompetent person', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-type-1"]').click();
+        cy.get('[data-testid="other-radio-option-type-1"]').click();
       });
 
       it('should display all minor or legally incompetent person role options', () => {

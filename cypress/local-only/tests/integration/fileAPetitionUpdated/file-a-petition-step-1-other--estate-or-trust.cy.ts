@@ -23,7 +23,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       ];
 
       EXPECTED_FILING_TYPES.forEach((filingType, index) => {
-        cy.get(`[data-testid="other-type-${index}"]`).should(
+        cy.get(`[data-testid="other-type-radio-option-${index}"]`).should(
           'have.text',
           filingType,
         );
@@ -31,16 +31,20 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
     });
 
     it('should display a validation error message when no other type is selected', () => {
-      cy.get('[data-testid="other-type-error-message"]').should('not.exist');
+      cy.get('[data-testid="other-type-radio-option-error-message"]').should(
+        'not.exist',
+      );
 
       cy.get('[data-testid="step-1-next-button"]').click();
 
-      cy.get('[data-testid="other-type-error-message"]').should('exist');
+      cy.get('[data-testid="other-type-radio-option-error-message"]').should(
+        'exist',
+      );
     });
 
     describe('An estate or trust', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-type-0"]').click();
+        cy.get('[data-testid="other-type-radio-option-0"]').click();
       });
 
       it('should display all estate type options', () => {

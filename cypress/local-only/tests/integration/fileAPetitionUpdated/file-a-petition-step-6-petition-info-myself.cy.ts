@@ -82,7 +82,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       );
     });
 
-    it('should display petitioner information correctly for international address', () => {
+    it('should display petitioner information correctly for international address and should not show legal place of residence if user did not select one', () => {
       cy.get('[data-testid="filing-type-0"]').click();
       cy.get('[data-testid="contact-primary-name"]').type(contactInfo.name);
       fillPrimaryContactInternational();
@@ -129,13 +129,11 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       );
 
       cy.get('[data-testid=place-of-legal-residence-label]').should(
-        'have.text',
-        'Place of legal residence:',
+        'not.exist',
       );
 
       cy.get('[data-testid="primary-place-of-legal-residence"]').should(
-        'have.text',
-        'N/A',
+        'not.exist',
       );
 
       cy.get('[data-testid="contact-primary-email"]').should(

@@ -186,29 +186,32 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                     noMargin
                     contact={petitionFormatted.contactPrimary}
                   />
-                  <div className="margin-top-1">
-                    <span
-                      className="text-semibold"
-                      data-testid="place-of-legal-residence-label"
-                    >
-                      {Object.values(BUSINESS_TYPES).includes(
-                        petitionFormatted.partyType,
-                      )
-                        ? 'Place of business:'
-                        : 'Place of legal residence:'}
-                    </span>
-                    <span
-                      className="margin-left-05"
-                      data-testid="primary-place-of-legal-residence"
-                    >
-                      {petitionFormatted.contactPrimary.placeOfLegalResidence
-                        ? ALL_STATE_OPTIONS[
+                  {petitionFormatted.contactPrimary.placeOfLegalResidence && (
+                    <div className="margin-top-1">
+                      <span
+                        className="text-semibold"
+                        data-testid="place-of-legal-residence-label"
+                      >
+                        {Object.values(BUSINESS_TYPES).includes(
+                          petitionFormatted.partyType,
+                        )
+                          ? 'Place of business:'
+                          : 'Place of legal residence:'}
+                      </span>
+                      <span
+                        className="margin-left-05"
+                        data-testid="primary-place-of-legal-residence"
+                      >
+                        {
+                          ALL_STATE_OPTIONS[
                             petitionFormatted.contactPrimary
                               .placeOfLegalResidence
                           ]
-                        : 'N/A'}
-                    </span>
-                  </div>
+                        }
+                      </span>
+                    </div>
+                  )}
+
                   <div className="margin-top-3">
                     <span className="usa-label usa-label-display">
                       Service email
@@ -245,22 +248,24 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                       : 'No'}
                   </span>
                 </div>
-                <div className="margin-top-1">
-                  <span className="text-semibold">
-                    Place of legal residence:
-                  </span>
-                  <span
-                    className="margin-left-05"
-                    data-testid="secondary-place-of-legal-residence"
-                  >
-                    {petitionFormatted.contactSecondary.placeOfLegalResidence
-                      ? ALL_STATE_OPTIONS[
+                {petitionFormatted.contactSecondary.placeOfLegalResidence && (
+                  <div className="margin-top-1">
+                    <span className="text-semibold">
+                      Place of legal residence:
+                    </span>
+                    <span
+                      className="margin-left-05"
+                      data-testid="secondary-place-of-legal-residence"
+                    >
+                      {
+                        ALL_STATE_OPTIONS[
                           petitionFormatted.contactSecondary
                             .placeOfLegalResidence
                         ]
-                      : 'N/A'}
-                  </span>
-                </div>
+                      }
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           )}

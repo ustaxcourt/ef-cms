@@ -22,7 +22,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
     describe('An estate or trust', () => {
       it('should display petitioner information correctly for party type "Estate with an executor/personal representative/fiduciary/etc."', () => {
         cy.get('[data-testid="filing-type-3"]').click();
-        cy.get('[data-testid="other-type-0"]').click();
+        cy.get('[data-testid="other-type-radio-option-0"]').click();
         cy.get('[data-testid="estate-type-radio-option-0"]').click();
         fillBusinessandOtherContact({
           fillSecondaryName: true,
@@ -65,7 +65,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
 
       it('should display petitioner information correctly for party type "Estate without an executor/personal representative/fiduciary/etc."', () => {
         cy.get('[data-testid="filing-type-3"]').click();
-        cy.get('[data-testid="other-type-0"]').click();
+        cy.get('[data-testid="other-type-radio-option-0"]').click();
         cy.get('[data-testid="estate-type-radio-option-1"]').click();
         fillBusinessandOtherContact({
           fillInCareOf: true,
@@ -107,7 +107,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
 
       it('should display petitioner information correctly for party type "Trust"', () => {
         cy.get('[data-testid="filing-type-3"]').click();
-        cy.get('[data-testid="other-type-0"]').click();
+        cy.get('[data-testid="other-type-radio-option-0"]').click();
         cy.get('[data-testid="estate-type-radio-option-2"]').click();
         fillBusinessandOtherContact({
           fillSecondaryName: true,
@@ -166,7 +166,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         describe(`${partyType}`, () => {
           beforeEach(() => {
             cy.get('[data-testid="filing-type-3"]').click();
-            cy.get('[data-testid="other-type-1"]').click();
+            cy.get('[data-testid="other-type-radio-option-1"]').click();
             cy.get(
               `[data-testid="minor-incompetent-type-radio-option-${option}"]`,
             ).click();
@@ -215,7 +215,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
     describe('Donor', () => {
       it('should display petitioner information correctly for party type "Donor"', () => {
         cy.get('[data-testid="filing-type-3"]').click();
-        cy.get('[data-testid="other-type-2"]').click();
+        cy.get('[data-testid="other-type-radio-option-2"]').click();
         fillPrimaryContact();
         cy.get('[data-testid="step-1-next-button"]').click();
 
@@ -241,7 +241,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
     describe('Transferee', () => {
       it('should display petitioner information correctly for party type "Transferee"', () => {
         cy.get('[data-testid="filing-type-3"]').click();
-        cy.get('[data-testid="other-type-3"]').click();
+        cy.get('[data-testid="other-type-radio-option-3"]').click();
         fillPrimaryContact();
         cy.get('[data-testid="step-1-next-button"]').click();
 
@@ -267,7 +267,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
     describe('Deceased Spouse', () => {
       it('should display petitioner information correctly for party type "Deceased Spouse"', () => {
         cy.get('[data-testid="filing-type-3"]').click();
-        cy.get('[data-testid="other-type-4"]').click();
+        cy.get('[data-testid="other-type-radio-option-4"]').click();
         fillBusinessandOtherContact({ fillSecondaryName: true });
         cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
           contactInfo.placeOfLegalResidence,

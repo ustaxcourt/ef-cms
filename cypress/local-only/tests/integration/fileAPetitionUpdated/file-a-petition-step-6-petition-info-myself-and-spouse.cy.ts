@@ -259,7 +259,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       );
     });
 
-    it('should display petitioner information correctly for spouse with an international address', () => {
+    it('should display petitioner information correctly for spouse with an international address and not display legal place of residence if user does not select one', () => {
       cy.get('[data-testid="is-spouse-deceased-1"]').click();
       cy.get('[data-testid="have-spouse-consent-label"]').click();
 
@@ -322,8 +322,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         .should('contain.text', secondaryContactInfo.country);
 
       cy.get('[data-testid="secondary-place-of-legal-residence"]').should(
-        'have.text',
-        'N/A',
+        'not.exist',
       );
 
       cy.get('[data-testid="contact-info-phone-number"]')
