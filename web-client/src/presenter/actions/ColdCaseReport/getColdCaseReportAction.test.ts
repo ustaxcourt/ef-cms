@@ -16,7 +16,7 @@ describe('getColdCaseReportAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should test', async () => {
+  it('should save cold case report entries in state', async () => {
     const { state } = await runAction(getColdCaseReportAction, {
       modules: {
         presenter,
