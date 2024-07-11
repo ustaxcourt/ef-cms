@@ -64,6 +64,9 @@ describe('getUsersInSectionAction', () => {
       modules: {
         presenter,
       },
+      state: {
+        user: { section: mockSection },
+      },
     });
 
     expect(
