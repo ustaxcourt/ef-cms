@@ -12,7 +12,7 @@ export const updateUserContactInformationAction = async ({
   store,
 }: ActionProps) => {
   const formUser = get(state.form);
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
 
   store.set(state.userContactEditProgress.inProgress, true);
 
