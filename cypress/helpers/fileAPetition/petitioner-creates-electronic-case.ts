@@ -191,18 +191,6 @@ export function petitionerCreatesElectronicCaseForBusinessUpdated() {
 }
 
 export function privatePractitionerCreatesElectronicCaseForBusiness() {
-  return cy
-    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
-    .then(updatedFlow => {
-      if (updatedFlow) {
-        return petitionerCreatesElectronicCaseForBusinessUpdated();
-      } else {
-        return petitionerCreatesElectronicCaseForBusinessOld();
-      }
-    });
-}
-
-export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="file-a-petition"]').click();
   uploadFile('stin-file');
   cy.get('[data-testid="complete-step-1"]').click();

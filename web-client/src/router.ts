@@ -411,6 +411,43 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/order-response-create..',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketEntryIdToEdit: docketEntryId,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/case-detail/*/docket-entry/*/edit-meta',
       ifHasAccess({ app }, (docketNumber, docketRecordIndex) => {
         setPageTitle(
@@ -1319,6 +1356,45 @@ const router = {
           parentMessageId,
         });
       }),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/order-response-create..',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketEntryIdToEdit: docketEntryId,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+          });
+        },
+      ),
     );
 
     registerRoute(

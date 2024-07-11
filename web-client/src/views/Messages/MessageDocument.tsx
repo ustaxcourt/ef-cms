@@ -10,10 +10,14 @@ import classNames from 'classnames';
 export const MessageDocument = connect(
   {
     caseDetail: state.caseDetail,
+    editUnsignedDraftDocumentSequence:
+      sequences.editUnsignedDraftDocumentSequence,
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    navigateToStatusReportOrderResponseSequence:
+      sequences.navigateToStatusReportOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -31,10 +35,12 @@ export const MessageDocument = connect(
   },
   function MessageDocument({
     caseDetail,
+    editUnsignedDraftDocumentSequence,
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
     navigateToPathSequence,
+    navigateToStatusReportOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -48,14 +54,27 @@ export const MessageDocument = connect(
     const messageDocumentActions = () => (
       <div className="message-document-actions">
         {messageDocumentHelper.showEditButtonNotSigned && (
-          <Button link href={messageDocumentHelper.editUrl} icon="edit">
+          <Button
+            data-testid="edit-document-button"
+            icon="edit"
+            onClick={() =>
+              editUnsignedDraftDocumentSequence({
+                caseDetail,
+                docketEntryIdToEdit:
+                  messageDocumentHelper.formattedDocument.docketEntryId,
+                documentType:
+                  messageDocumentHelper.formattedDocument.documentType,
+                parentMessageId,
+              })
+            }
+          >
             Edit
           </Button>
         )}
-
         {messageDocumentHelper.showEditButtonSigned && (
           <Button
             link
+            data-testid="edit-document-button"
             icon="edit"
             onClick={() =>
               openConfirmEditModalSequence({
@@ -69,7 +88,6 @@ export const MessageDocument = connect(
             Edit
           </Button>
         )}
-
         {messageDocumentHelper.showEditCorrespondenceButton && (
           <Button
             link
@@ -79,7 +97,6 @@ export const MessageDocument = connect(
             Edit
           </Button>
         )}
-
         {messageDocumentHelper.showApplySignatureButton && (
           <Button
             link
@@ -89,7 +106,6 @@ export const MessageDocument = connect(
             Apply Signature
           </Button>
         )}
-
         {messageDocumentHelper.showRemoveSignatureButton && (
           <Button
             link
@@ -103,7 +119,6 @@ export const MessageDocument = connect(
             Remove Signature
           </Button>
         )}
-
         {messageDocumentHelper.showAddDocketEntryButton && (
           <Button
             link
@@ -113,7 +128,6 @@ export const MessageDocument = connect(
             Add Docket Entry
           </Button>
         )}
-
         {messageDocumentHelper.showServeCourtIssuedDocumentButton && (
           <Button
             link
@@ -129,7 +143,6 @@ export const MessageDocument = connect(
             Serve
           </Button>
         )}
-
         {messageDocumentHelper.showServePaperFiledDocumentButton && (
           <Button
             link
@@ -145,7 +158,6 @@ export const MessageDocument = connect(
             Serve
           </Button>
         )}
-
         {messageDocumentHelper.showServePetitionButton && (
           <Button
             link
@@ -156,7 +168,6 @@ export const MessageDocument = connect(
             Review and Serve Petition
           </Button>
         )}
-
         {messageDocumentHelper.showSignStipulatedDecisionButton && (
           <Button
             link
@@ -166,7 +177,6 @@ export const MessageDocument = connect(
             Sign Stipulated Decision
           </Button>
         )}
-
         {messageDocumentHelper.showApplyStampButton && (
           <Button
             link
@@ -178,6 +188,22 @@ export const MessageDocument = connect(
             }}
           >
             Apply Stamp
+          </Button>
+        )}
+        {messageDocumentHelper.showOrderResponseButton && (
+          <Button
+            link
+            data-testid="order-response-button"
+            icon="edit"
+            onClick={() => {
+              navigateToStatusReportOrderResponseSequence({
+                path: messageDocumentHelper.orderResponseFromMessagesLink,
+                statusReportFilingDate: messageDocumentHelper.filingDate,
+                statusReportIndex: messageDocumentHelper.index,
+              });
+            }}
+          >
+            Order Response
           </Button>
         )}
 
