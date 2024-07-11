@@ -2,6 +2,7 @@ import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/Enti
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
 import { uniqBy } from 'lodash';
@@ -11,6 +12,7 @@ import { uniqBy } from 'lodash';
  */
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
+  authorizedUser: UnknownAuthUser,
 ) => {
   applicationContext.logger.debug('Time', createISODateString());
 
@@ -81,7 +83,7 @@ export const checkForReadyForTrialCasesInteractor = async (
 
     if (caseToCheck) {
       const caseEntity = new Case(caseToCheck, {
-        authorizedUser: applicationContext.getCurrentUser(),
+        authorizedUser,
       });
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
