@@ -59,7 +59,7 @@ describe('Logged In User Can See Un-Served Petition Document', () => {
     cy.get('[data-testid="document-download-link-DISC"]').should('exist');
     cy.get('[data-testid="document-download-link-ATP"]').should('exist');
 
-    cy.login('petitioner2');
+    cy.login('privatePractitioner2');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       externalUserSearchesDocketNumber(docketNumber);
     });
