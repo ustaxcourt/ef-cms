@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -19,9 +20,9 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 export const saveCaseNote = async (
   applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -35,7 +36,7 @@ export const saveCaseNote = async (
   const caseToUpdate = new Case(
     { ...caseRecord, caseNote },
     {
-      authorizedUser: user,
+      authorizedUser,
     },
   )
     .validate()
@@ -48,7 +49,7 @@ export const saveCaseNote = async (
       caseToUpdate,
     });
 
-  return new Case(result, { authorizedUser: user }).validate().toRawObject();
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const saveCaseNoteInteractor = withLocking(
