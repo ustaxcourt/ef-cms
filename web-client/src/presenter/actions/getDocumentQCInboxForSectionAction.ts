@@ -13,7 +13,7 @@ export const getDocumentQCInboxForSectionAction = async ({
   const selectedSection = get(state.workQueueToDisplay.section);
 
   const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   let judgeUser = get(state.judgeUser);
 
   if (!judgeUser && user.role === USER_ROLES.adc) {
