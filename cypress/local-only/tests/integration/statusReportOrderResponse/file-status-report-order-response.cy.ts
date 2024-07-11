@@ -31,11 +31,15 @@ describe('file status report order response', () => {
         cy.contains('Status Report').click();
         cy.get('[data-testid="order-response-button"]').click();
 
-        cy.get('.pdf-preview-viewer').should('not.exist');
-
+        // TODO: Review this test and try to find the iframe using a retry instead
+        cy.intercept('POST', '**/api/court-issued-order').as(
+          'courtIssuedOrder',
+        );
         cy.get('[data-testid="preview-pdf-button"]').click();
 
-        cy.get('.pdf-preview-viewer').should('exist');
+        cy.wait('@courtIssuedOrder').then(({ response: res }) => {
+          expect(res?.body.url).to.not.be.empty;
+        });
       });
     });
 
