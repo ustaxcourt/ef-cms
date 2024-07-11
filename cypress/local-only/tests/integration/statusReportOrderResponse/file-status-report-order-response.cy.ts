@@ -30,15 +30,12 @@ describe('file status report order response', () => {
         cy.get('#tab-document-view').click();
         cy.contains('Status Report').click();
         cy.get('[data-testid="order-response-button"]').click();
-        cy.get(
-          '[data-testid="status-report-order-response-pdf-preview"]',
-        ).should('be.empty');
+
+        cy.get('.pdf-preview-viewer').should('not.exist');
 
         cy.get('[data-testid="preview-pdf-button"]').click();
 
-        cy.get(
-          '[data-testid="status-report-order-response-pdf-preview"]',
-        ).should('not.be.empty');
+        cy.get('.pdf-preview-viewer').should('exist');
       });
     });
 
