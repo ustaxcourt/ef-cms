@@ -41,14 +41,18 @@ export const generateDraftStampOrderInteractor = async (
 
   await applicationContext
     .getUseCaseHelpers()
-    .addDraftStampOrderDocketEntryInteractor(applicationContext, {
-      docketNumber,
-      formattedDraftDocumentTitle,
-      originalDocketEntryId: motionDocketEntryId,
-      parentMessageId,
-      stampData,
-      stampedDocketEntryId,
-    });
+    .addDraftStampOrderDocketEntryInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        formattedDraftDocumentTitle,
+        originalDocketEntryId: motionDocketEntryId,
+        parentMessageId,
+        stampData,
+        stampedDocketEntryId,
+      },
+      authorizedUser,
+    );
 
   await applicationContext
     .getUseCaseHelpers()
