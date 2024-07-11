@@ -27,13 +27,7 @@ only 140 or 160 characters long. Which is it?
 
 ## Things to do
 
-- write integration tests (solo / group)
-    - save message with status report to local dataset
-    - save message with status report order response to local dataset
-
 - Run through all tests case + DoD checklist (group / solo)
-
-- fix edit signed document from MessageDocument.tsx when refreshing
 
 ## Feedback from judges:
 
@@ -41,15 +35,15 @@ only 140 or 160 characters long. Which is it?
 
 2. Dates should have the following format in all cases where they've been generated/selected: "Month DD, YYYY" (essentially, spell out the month).
 
-## Notes
-
 ## DOD
 
 - Upon refreshing from the messages tab, we lose redirectUrl
 - edit routes redundent with:
   docketEntryId,
   docketEntryIdToEdit: docketEntryId,
-- reduce number of routes
+- reduce number of routes?
+
+## Notes
 
 The following fields on the form are optional:
 - order type
