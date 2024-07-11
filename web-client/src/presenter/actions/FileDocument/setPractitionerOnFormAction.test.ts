@@ -15,18 +15,20 @@ describe('setPractitionerOnFormAction', () => {
 
     const { state } = await runAction(setPractitionerOnFormAction, {
       modules: { presenter },
+      state: {
+        user: { role: USER_ROLES.docketClerk },
+      },
     });
 
     expect(state.form).toBeUndefined();
   });
 
   it('should set state.form.practitioner to the logged in user when the user is a privatePractitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.privatePractitioner,
-    });
-
     const { state } = await runAction(setPractitionerOnFormAction, {
       modules: { presenter },
+      state: {
+        user: { role: USER_ROLES.privatePractitioner },
+      },
     });
 
     expect(state.form.practitioner).toEqual([
