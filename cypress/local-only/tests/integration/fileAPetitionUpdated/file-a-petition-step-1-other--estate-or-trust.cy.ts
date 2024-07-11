@@ -21,9 +21,12 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         'Transferee',
         'Deceased Spouse',
       ];
-      cy.get('[data-testid="other-radio-option"]').should('have.length', 5);
-      cy.get('[data-testid="other-radio-option"]').each((element, index) => {
-        cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
+
+      EXPECTED_FILING_TYPES.forEach((filingType, index) => {
+        cy.get(`[data-testid="other-type-${index}"]`).should(
+          'have.text',
+          filingType,
+        );
       });
     });
 
@@ -37,7 +40,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
     describe('An estate or trust', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-radio-option"]').eq(0).click();
+        cy.get('[data-testid="other-type-0"]').click();
       });
 
       it('should display all estate type options', () => {
@@ -46,15 +49,12 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           'Estate without an executor/personal representative/fiduciary/etc.',
           'Trust',
         ];
-        cy.get('[data-testid="estate-type-radio-option"]').should(
-          'have.length',
-          3,
-        );
-        cy.get('[data-testid="estate-type-radio-option"]').each(
-          (element, index) => {
-            cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
-          },
-        );
+        EXPECTED_FILING_TYPES.forEach((filingType, index) => {
+          cy.get(`[data-testid="estate-type-radio-option-${index}"]`).should(
+            'have.text',
+            filingType,
+          );
+        });
       });
 
       it('should display a validation error message when no estate type is selected', () => {
@@ -67,7 +67,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Estate with an executor/personal representative/fiduciary/etc.', () => {
         beforeEach(() => {
-          cy.get('[data-testid="estate-type-radio-option"]').eq(0).click();
+          cy.get('[data-testid="estate-type-radio-option-0"]').click();
         });
 
         describe('Domestic', () => {
@@ -272,7 +272,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Estate without an executor/personal representative/fiduciary/etc.', () => {
         beforeEach(() => {
-          cy.get('[data-testid="estate-type-radio-option"]').eq(1).click();
+          cy.get('[data-testid="estate-type-radio-option-1"]').click();
         });
         describe('Domestic', () => {
           beforeEach(() => {
@@ -320,7 +320,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             'phone-error-message',
           ];
           beforeEach(() => {
-            cy.get('[data-testid="estate-type-radio-option"]').eq(1).click();
+            cy.get('[data-testid="estate-type-radio-option-1"]').click();
           });
           it('should display a validation error message when form is empty', () => {
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
@@ -410,7 +410,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             'phone-error-message',
           ];
           beforeEach(() => {
-            cy.get('[data-testid="estate-type-radio-option"]').eq(1).click();
+            cy.get('[data-testid="estate-type-radio-option-1"]').click();
           });
           it('should display a validation error message when form is empty', () => {
             ERROR_MESSAGES_DATA_TEST_ID.forEach((selector: string) => {
@@ -457,7 +457,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Trust', () => {
         beforeEach(() => {
-          cy.get('[data-testid="estate-type-radio-option"]').eq(2).click();
+          cy.get('[data-testid="estate-type-radio-option-2"]').click();
         });
 
         describe('Domestic', () => {
