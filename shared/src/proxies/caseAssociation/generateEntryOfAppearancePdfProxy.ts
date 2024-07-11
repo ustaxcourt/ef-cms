@@ -1,8 +1,9 @@
-import { EntryOfAppearanceProps } from '@shared/business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { EntryOfAppearanceProps } from '@web-api/business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { post } from '../requests';
 
 export const generateEntryOfAppearancePdfInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   {
     caseCaptionExtension,
     caseTitle,

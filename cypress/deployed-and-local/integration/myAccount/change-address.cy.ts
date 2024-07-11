@@ -46,7 +46,7 @@ describe('change of address', () => {
       cy.get(
         '[data-testid="petitioner-card-John"] [data-testid="edit-private-practitioner-counsel"]',
       ).click();
-      cy.get('[data-testid="remove-petitioner-btn"]').click();
+      cy.get('[data-testid="remove-petitioner-counsel-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').should('be.visible');
     });
@@ -96,7 +96,7 @@ describe('change of address', () => {
       cy.get(
         '[data-testid="petitioner-card-John"] [data-testid="edit-private-practitioner-counsel"]',
       ).click();
-      cy.get('[data-testid="remove-petitioner-btn"]').click();
+      cy.get('[data-testid="remove-petitioner-counsel-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="success-alert"]').should('be.visible');
     });

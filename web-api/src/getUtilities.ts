@@ -22,6 +22,7 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
+import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import {
@@ -49,7 +50,6 @@ import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utili
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { sleep } from '@shared/tools/helpers';
-import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
   abbreviateState,
@@ -65,6 +65,7 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  documentUrlTranslator,
   formatDateString,
   formatJudgeName,
   formatNow,
@@ -91,7 +92,6 @@ const utilities = {
   setServiceIndicatorsForCase,
   setupPdfDocument,
   sleep,
-  uploadToS3,
 };
 
 export const getUtilities = () => utilities;

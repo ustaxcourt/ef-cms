@@ -21,6 +21,7 @@ const config: Config = {
     '!src/**/shared.cerebral.ts',
     '!src/ustc-ui/Utils/types.ts',
     '!src/persistence/localStorage/*.ts',
+    '!src/test/createClientTestApplicationContext.ts',
   ],
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',

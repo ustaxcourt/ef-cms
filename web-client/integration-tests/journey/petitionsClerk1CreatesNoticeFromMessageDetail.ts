@@ -33,6 +33,11 @@ export const petitionsClerk1CreatesNoticeFromMessageDetail = cerebralTest => {
 
     expect(cerebralTest.getState('currentPage')).toBe('CreateOrder');
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'This is a test notice.',
+    });
+
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');

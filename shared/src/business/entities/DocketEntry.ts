@@ -21,6 +21,7 @@ import {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
+  Role,
   STIN_DOCKET_ENTRY_TYPE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -40,6 +41,34 @@ import {
   createISODateAtStartOfDayEST,
   createISODateString,
 } from '../utilities/DateHandler';
+
+/* eslint-disable max-lines */
+const canDownloadSTIN = (
+  entry: RawDocketEntry,
+  petitionDocketEntry: RawDocketEntry,
+  user: { role: Role },
+): boolean => {
+  if (
+    user.role === ROLES.petitionsClerk &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  } else if (
+    user.role === ROLES.caseServicesSupervisor &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  } else if (
+    user.role === ROLES.irsSuperuser &&
+    DocketEntry.isServed(entry) &&
+    DocketEntry.isServed(petitionDocketEntry)
+  ) {
+    return true;
+  }
+  return false;
+};
 
 export class DocketEntry extends JoiValidationEntity {
   public action?: string;
@@ -597,6 +626,10 @@ export class DocketEntry extends JoiValidationEntity {
     return ORDER_EVENT_CODES.includes(eventCode);
   }
 
+  static isSearchable(eventCode: string): boolean {
+    return DocketEntry.isOpinion(eventCode) || DocketEntry.isOrder(eventCode);
+  }
+
   static isMotion(eventCode: string): boolean {
     return MOTION_EVENT_CODES.includes(eventCode);
   }
@@ -659,7 +692,7 @@ export class DocketEntry extends JoiValidationEntity {
       visibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
-      user: RawUser;
+      user: { userId: string; role: Role };
       isTerminalUser: boolean;
       visibilityChangeDate: string;
     },
@@ -670,22 +703,10 @@ export class DocketEntry extends JoiValidationEntity {
 
     //Only allow STIN download if:
     //  - role Petition Clerk & entry not served, or
+    //  - role Case Services Supervisor & entry not served, or
     //  - role IRS Superuser and entry served.
     if (entry.eventCode == STIN_DOCKET_ENTRY_TYPE.eventCode) {
-      if (
-        user.role === ROLES.petitionsClerk &&
-        !DocketEntry.isServed(entry) &&
-        !DocketEntry.isServed(petitionDocketEntry)
-      ) {
-        return true;
-      } else if (
-        user.role === ROLES.irsSuperuser &&
-        DocketEntry.isServed(entry) &&
-        DocketEntry.isServed(petitionDocketEntry)
-      ) {
-        return true;
-      }
-      return false;
+      return canDownloadSTIN(entry, petitionDocketEntry, user);
     }
 
     if (User.isInternalUser(user.role)) return true;

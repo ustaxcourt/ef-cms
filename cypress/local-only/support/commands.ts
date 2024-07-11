@@ -18,13 +18,6 @@ Cypress.Commands.add('showsSpinner', (shows = true) => {
   }
 });
 
-Cypress.Commands.add('listDownloadedFiles', directory => {
-  return cy
-    .exec(`ls ${directory}`)
-    .its('stdout')
-    .then(stdout => stdout.split('\n').filter(Boolean));
-});
-
 Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   if (shows) {
     cy.get('.usa-alert--success').should('exist');
@@ -55,12 +48,6 @@ Cypress.Commands.add('goToRoute', (...args) => {
   return cy.window().then(w => {
     // eslint-disable-next-line no-underscore-dangle
     w.__cy_route(...args);
-  });
-});
-
-Cypress.Commands.add('unzipFile', downloadPath => {
-  cy.task('unzipFile', downloadPath).then(unzippedFiles => {
-    return cy.wrap(unzippedFiles);
   });
 });
 
@@ -124,11 +111,6 @@ declare global {
       waitUntilSettled: (maxTries?: number) => void;
       showsErrorMessage: (shows?: boolean) => void;
       showsSuccessMessage: (shows?: boolean) => void;
-      listDownloadedFiles: (directory: string) => Chainable<string[]>;
-      unzipFile: (pathInfo: {
-        destinationPath: string;
-        filePath: string;
-      }) => Chainable<string[]>;
       showsSpinner: (shows?: boolean) => void;
       waitAndSee: (iteration: number) => void;
       goToRoute: (args: any) => void;

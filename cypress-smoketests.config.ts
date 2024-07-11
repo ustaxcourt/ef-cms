@@ -1,6 +1,9 @@
 import {
   confirmUser,
+  createAccount,
   deleteAllCypressTestAccounts,
+  deleteAllIrsCypressTestAccounts,
+  getIrsBearerToken,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
@@ -12,6 +15,7 @@ import {
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
@@ -26,8 +30,29 @@ export default defineConfig({
         confirmUser({ email }) {
           return confirmUser({ email });
         },
+        createAccount({
+          irsEnv,
+          password,
+          role,
+          userName,
+        }: {
+          irsEnv: boolean;
+          password: string;
+          role: string;
+          userName: string;
+        }) {
+          return createAccount({
+            isIrsEnv: irsEnv,
+            password,
+            role,
+            userName,
+          });
+        },
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
+        },
+        deleteAllIrsCypressTestAccounts() {
+          return deleteAllIrsCypressTestAccounts();
         },
         deleteAllItemsInEmailBucket({
           bucketName,
@@ -44,6 +69,12 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
+        getIrsBearerToken({ password, userName }) {
+          return getIrsBearerToken({
+            password,
+            userName,
+          });
+        },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
@@ -55,6 +86,9 @@ export default defineConfig({
           retries: number;
         }) {
           return readAllItemsInBucket({ bucketName, retries });
+        },
+        unzipFile({ fileName }) {
+          return unzipFile({ fileName });
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });

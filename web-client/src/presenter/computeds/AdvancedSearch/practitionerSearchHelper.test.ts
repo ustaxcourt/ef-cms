@@ -43,6 +43,19 @@ describe('practitionerSearchHelper', () => {
     state: 'TX',
   };
 
+  const defaultResult = {
+    activePage: 0,
+    formattedSearchResults: [],
+    isPublicUser: false,
+    numberOfResults: '0',
+    pageCount: 0,
+    pageSize: 0,
+    showNoMatches: false,
+    showPaginator: false,
+    showSearchResults: false,
+    stateHeaderText: 'State',
+  };
+
   beforeEach(() => {
     globalUser = {
       role: USER_ROLES.docketClerk,
@@ -50,53 +63,50 @@ describe('practitionerSearchHelper', () => {
     };
   });
 
-  it('returns appropriate defaults if permissions are not defined in state', () => {
-    const result = runCompute(practitionerSearchHelper, {
-      state: {
-        advancedSearchForm: {},
-        advancedSearchTab: 'case',
-      },
-    });
-    expect(result).toEqual({
-      showPractitionerSearch: undefined,
-      showStateSelect: false,
-    });
-  });
-
-  it('does not return search results when searchResults is undefined', () => {
+  it('should return default search results when searchResults is undefined and isPublicUser is false (when the search has never been run)', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {},
-        advancedSearchTab: 'case',
+        advancedSearchTab: 'practitioner',
       },
     });
-    expect(result).toEqual({
-      showPractitionerSearch: true,
-      showStateSelect: false,
-    });
+    expect(result).toEqual(defaultResult);
   });
 
-  it('returns showPractitionerSearch false when user is an external user', () => {
-    globalUser = {
-      advancedSearchTab: 'case',
-      role: USER_ROLES.privatePractitioner,
-      userId: 'practitioner',
-    };
+  it('should return default search results when searchResults is undefined and isPublicUser is true (when the search has never been run)', () => {
+    const test_practitionerSearchHelper = withAppContextDecorator(
+      practitionerSearchHelperComputed,
+      {
+        ...applicationContext,
+        getConstants: () => {
+          return {
+            ...applicationContext.getConstants(),
+            PRACTITIONER_SEARCH_PAGE_SIZE: pageSizeOverride,
+          };
+        },
+        getCurrentUser: () => {
+          return globalUser;
+        },
+        isPublicUser: () => true,
+      },
+    );
 
-    const result = runCompute(practitionerSearchHelper, {
+    const result = runCompute(test_practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {},
-        advancedSearchTab: 'case',
+        advancedSearchTab: 'practitioner',
       },
     });
-    expect(result).toMatchObject({
-      showPractitionerSearch: false,
+    expect(result).toEqual({
+      ...defaultResult,
+      isPublicUser: true,
+      stateHeaderText: 'Original Bar State',
     });
   });
 
-  it('returns showNoMatches true and showSearchResults false if searchResults is an empty array', () => {
+  it('returns showNoMatches true and showSearchResults false if searchResults comes up empty', () => {
     const result = runCompute(practitionerSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -106,8 +116,27 @@ describe('practitionerSearchHelper', () => {
       },
     });
     expect(result).toMatchObject({
+      ...defaultResult,
       showNoMatches: true,
       showSearchResults: false,
+    });
+  });
+
+  it('should format the count if total is over 999', () => {
+    const result = runCompute(practitionerSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { practitionerSearchByName: { pageNum: 1 } },
+        advancedSearchTab: 'practitioner',
+        searchResults: {
+          practitioner: { practitioners: [], total: 1234 },
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      activePage: 1,
+      numberOfResults: '1,234',
+      showPaginator: true,
     });
   });
 
@@ -130,12 +159,11 @@ describe('practitionerSearchHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      numberOfResults: 1,
+      numberOfResults: '1',
       pageCount: 1,
       showNoMatches: false,
-      showPractitionerSearch: true,
+      showPaginator: false,
       showSearchResults: true,
-      showStateSelect: false,
     });
   });
 
