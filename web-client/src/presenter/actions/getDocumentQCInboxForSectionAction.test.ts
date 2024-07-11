@@ -1,3 +1,5 @@
+import { ADC_SECTION } from '@shared/business/entities/EntityConstants';
+import { adcUser } from '@shared/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocumentQCInboxForSectionAction } from './getDocumentQCInboxForSectionAction';
 import { presenter } from '../presenter-mock';
@@ -5,7 +7,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocumentQCInboxForSectionAction', () => {
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];
-  const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
+  const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -17,21 +19,6 @@ describe('getDocumentQCInboxForSectionAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should retrieve the current user', async () => {
-    await runAction(getDocumentQCInboxForSectionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        judgeUser: {
-          name: 'A judgy person',
-        },
-      },
-    });
-
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should call getDocumentQCInboxForSectionInteractor with the judge user from state', async () => {
     await runAction(getDocumentQCInboxForSectionAction, {
       modules: {
@@ -40,6 +27,9 @@ describe('getDocumentQCInboxForSectionAction', () => {
       state: {
         judgeUser: {
           name: 'A judgy person',
+        },
+        user: {
+          section: 'judgy section',
         },
       },
     });
@@ -63,6 +53,7 @@ describe('getDocumentQCInboxForSectionAction', () => {
         presenter,
       },
       state: {
+        user: {},
         workQueueToDisplay: {
           section: mockSection,
         },
@@ -78,15 +69,11 @@ describe('getDocumentQCInboxForSectionAction', () => {
   });
 
   it('should call getDocumentQCInboxForSectionInteractor with the CHIEF_JUDGE if judgeUser is not found in state and user role is adc', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: USER_ROLES.adc,
-      section: 'judgy section',
-    });
     await runAction(getDocumentQCInboxForSectionAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: { user: adcUser },
     });
 
     expect(
@@ -96,7 +83,7 @@ describe('getDocumentQCInboxForSectionAction', () => {
       judgeUser: {
         name: CHIEF_JUDGE,
       },
-      section: 'judgy section',
+      section: ADC_SECTION,
     });
   });
 });
