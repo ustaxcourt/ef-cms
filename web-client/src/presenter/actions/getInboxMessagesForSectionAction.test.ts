@@ -24,7 +24,7 @@ describe('getInboxMessagesForSectionAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: { user: {} },
     });
     expect(results.output.messages).toEqual([message]);
   });
@@ -38,6 +38,7 @@ describe('getInboxMessagesForSectionAction', () => {
         messageBoxToDisplay: {
           section: DOCKET_SECTION,
         },
+        user: {},
       },
     });
 
@@ -45,12 +46,10 @@ describe('getInboxMessagesForSectionAction', () => {
       applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
         .calls[0][1],
     ).toEqual({ section: DOCKET_SECTION });
-    expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 
   it("retrieves inbox messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
     const currentUserSection = { section: ADC_SECTION };
-    applicationContext.getCurrentUser.mockReturnValue(currentUserSection);
 
     await runAction(getInboxMessagesForSectionAction, {
       modules: {
@@ -58,6 +57,7 @@ describe('getInboxMessagesForSectionAction', () => {
       },
       state: {
         messageBoxToDisplay: {},
+        user: currentUserSection,
       },
     });
 
@@ -65,6 +65,5 @@ describe('getInboxMessagesForSectionAction', () => {
       applicationContext.getUseCases().getInboxMessagesForSectionInteractor.mock
         .calls[0][1],
     ).toEqual(currentUserSection);
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });
 });
