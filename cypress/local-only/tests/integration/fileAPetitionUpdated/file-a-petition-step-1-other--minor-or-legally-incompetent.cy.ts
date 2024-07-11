@@ -111,7 +111,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
     describe('A minor or legally incompetent person', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-radio-option"]').eq(1).click();
+        cy.get('[data-testid="other-type-1"]').click();
       });
 
       it('should display all minor or legally incompetent person role options', () => {
@@ -122,15 +122,12 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
           'Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)',
         ];
-        cy.get('[data-testid="minor-incompetent-type-radio-option"]').should(
-          'have.length',
-          5,
-        );
-        cy.get('[data-testid="minor-incompetent-type-radio-option"]').each(
-          (element, index) => {
-            cy.wrap(element).should('have.text', EXPECTED_FILING_TYPES[index]);
-          },
-        );
+
+        EXPECTED_FILING_TYPES.forEach((filingType, index) => {
+          cy.get(
+            `[data-testid="minor-incompetent-type-radio-option-${index}"]`,
+          ).should('have.text', filingType);
+        });
       });
 
       it('should display a validation error message when no minor or legally incompetent person role option is selected', () => {
@@ -147,9 +144,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Conservator', () => {
         beforeEach(() => {
-          cy.get('[data-testid="minor-incompetent-type-radio-option"]')
-            .eq(0)
-            .click();
+          cy.get(
+            '[data-testid="minor-incompetent-type-radio-option-0"]',
+          ).click();
         });
         describe('Domestic', () => {
           beforeEach(() => {
@@ -249,9 +246,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Guardian', () => {
         beforeEach(() => {
-          cy.get('[data-testid="minor-incompetent-type-radio-option"]')
-            .eq(1)
-            .click();
+          cy.get(
+            '[data-testid="minor-incompetent-type-radio-option-1"]',
+          ).click();
         });
         describe('Domestic', () => {
           beforeEach(() => {
@@ -352,9 +349,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Custodian', () => {
         beforeEach(() => {
-          cy.get('[data-testid="minor-incompetent-type-radio-option"]')
-            .eq(2)
-            .click();
+          cy.get(
+            '[data-testid="minor-incompetent-type-radio-option-2"]',
+          ).click();
         });
         describe('Domestic', () => {
           beforeEach(() => {
@@ -454,9 +451,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Next friend for a minor (without a guardian, conservator, or other like fiduciary)', () => {
         beforeEach(() => {
-          cy.get('[data-testid="minor-incompetent-type-radio-option"]')
-            .eq(3)
-            .click();
+          cy.get(
+            '[data-testid="minor-incompetent-type-radio-option-3"]',
+          ).click();
         });
         describe('Domestic', () => {
           beforeEach(() => {
@@ -556,9 +553,9 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
       describe('Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)', () => {
         beforeEach(() => {
-          cy.get('[data-testid="minor-incompetent-type-radio-option"]')
-            .eq(4)
-            .click();
+          cy.get(
+            '[data-testid="minor-incompetent-type-radio-option-4"]',
+          ).click();
         });
         describe('Domestic', () => {
           beforeEach(() => {

@@ -99,7 +99,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
     describe('Donor', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-radio-option"]').eq(2).click();
+        cy.get('[data-testid="other-type-2"]').click();
       });
       describe('Domestic', () => {
         beforeEach(() => {
@@ -199,7 +199,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
     describe('Transferee', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-radio-option"]').eq(3).click();
+        cy.get('[data-testid="other-type-3"]').click();
       });
       describe('Domestic', () => {
         beforeEach(() => {
@@ -299,7 +299,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
 
     describe('Deceased Spouse', () => {
       beforeEach(() => {
-        cy.get('[data-testid="other-radio-option"]').eq(4).click();
+        cy.get('[data-testid="other-type-4"]').click();
       });
       describe('Domestic', () => {
         beforeEach(() => {
