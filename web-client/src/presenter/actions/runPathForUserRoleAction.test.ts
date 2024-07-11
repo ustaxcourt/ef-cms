@@ -36,93 +36,100 @@ describe('runPathForUserRoleAction', () => {
   });
 
   it('should throw an exception for unrecognized roles', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: 'bananas',
-    });
     await expect(
       runAction(runPathForUserRoleAction, {
         modules: {
           presenter,
         },
-        state: {},
+        state: {
+          user: {
+            role: 'bananas',
+          },
+        },
       }),
     ).rejects.toThrow();
   });
 
   it('should return the petitioner path for user role petitioner', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {
+          role: ROLES.petitioner,
+        },
+      },
     });
     expect(petitionerStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the privatePractitioner path for user role privatePractitioner', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
-    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {
+          role: ROLES.privatePractitioner,
+        },
+      },
     });
     expect(privatePractitionerStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the irsPractitioner path for user role irsPractitioner', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {
+          role: ROLES.irsPractitioner,
+        },
+      },
     });
     expect(irsPractitionerStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the petitionsclerk path for user role petitionsclerk', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitionsClerk,
-    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {
+          role: ROLES.petitionsClerk,
+        },
+      },
     });
     expect(petitionsclerkStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the docketclerk path for user role docketclerk', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: ROLES.docketClerk,
-    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {
+          role: ROLES.docketClerk,
+        },
+      },
     });
     expect(docketclerkStub.mock.calls.length).toEqual(1);
   });
 
   it('should return the judge path for user role judge', async () => {
-    presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: ROLES.judge,
-    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        user: {
+          role: ROLES.judge,
+        },
+      },
     });
     expect(judgeStub.mock.calls.length).toEqual(1);
   });
