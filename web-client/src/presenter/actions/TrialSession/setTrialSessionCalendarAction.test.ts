@@ -20,15 +20,27 @@ describe('setTrialSessionCalendarAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        trialSessionId: '123',
+      state: {
+        trialSession: {
+          trialSessionId: '123',
+        },
       },
-      state: {},
     });
 
     expect(
       applicationContext.getUseCases().setTrialSessionCalendarInteractor.mock
         .calls.length,
     ).toEqual(1);
+  });
+
+  it('throws an error if there is no trialSessionId', async () => {
+    await expect(
+      runAction(setTrialSessionCalendarAction, {
+        modules: {
+          presenter,
+        },
+        state: {},
+      }),
+    ).rejects.toThrow();
   });
 });
