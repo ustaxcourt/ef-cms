@@ -898,8 +898,8 @@ app.delete(
     lambdaWrapper(getEligibleCasesForTrialSessionLambda),
   );
   app.post(
-    '/trial-sessions/:trialSessionId/set-calendar',
-    lambdaWrapper(setTrialSessionCalendarLambda),
+    '/async/trial-sessions/:trialSessionId/set-calendar',
+    lambdaWrapper(setTrialSessionCalendarLambda, { isAsync: true }),
   );
   app.get(
     '/trial-sessions/:trialSessionId/get-calendared-cases',
