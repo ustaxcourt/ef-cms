@@ -1,11 +1,12 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { batchDelete, put, query, remove } from '../../dynamodbClientService';
 import { createCaseTrialSortMappingRecords } from './createCaseTrialSortMappingRecords';
-import { put, query, remove } from '../../dynamodbClientService';
 
 jest.mock('../../dynamodbClientService');
 
 const queryMock = query as jest.Mock;
 const removeMock = remove as jest.Mock;
+const batchDeleteMock = batchDelete as jest.Mock;
 const putMock = put as jest.Mock;
 
 describe('createCaseTrialSortMappingRecords', () => {
@@ -53,6 +54,6 @@ describe('createCaseTrialSortMappingRecords', () => {
       docketNumber: '123-20',
     });
 
-    expect(removeMock.mock.calls.length).toEqual(2);
+    expect(batchDeleteMock.mock.calls.length).toEqual(1);
   });
 });
