@@ -24,6 +24,11 @@ import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkI
 import { associateIrsPractitionerWithCaseSequence } from './sequences/CaseAssociation/associateIrsPractitionerWithCaseSequence';
 import { associatePrivatePractitionerWithCaseSequence } from './sequences/CaseAssociation/associatePrivatePractitionerWithCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
+import {
+  batchCompleteMessageSequence,
+  completeMessageErrorSequence,
+  completeMessageSuccessSequence,
+} from './sequences/batchCompleteMessageSequence';
 import { batchDownloadDocketEntriesSequence } from '@web-client/presenter/sequences/batchDownloadDocketEntriesSequence';
 import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
@@ -80,6 +85,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
+import { completeTrialSessionCalendarSequence } from '@web-client/presenter/sequences/completeTrialSessionCalendarSequence';
 import { confirmSignUpSequence } from './sequences/Login/confirmSignUpSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
@@ -393,6 +399,8 @@ import { setPetitionTypeSequence } from '@web-client/presenter/sequences/setPeti
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
+import { setSelectedMessagesSequence } from './sequences/setSelectedMessagesSequence';
+import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
@@ -633,6 +641,8 @@ export const presenterSequences = {
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
+  batchCompleteMessageSequence:
+    batchCompleteMessageSequence as unknown as Function,
   batchDownloadDocketEntriesSequence,
   batchDownloadErrorSequence: batchDownloadErrorSequence as unknown as Function,
   batchDownloadReadySequence: batchDownloadReadySequence as unknown as Function,
@@ -721,12 +731,15 @@ export const presenterSequences = {
     completeDocketEntryQCSequence as unknown as Function,
   completeDocumentSelectSequence:
     completeDocumentSelectSequence as unknown as Function,
+  completeMessageErrorSequence,
   completeMessageSequence: completeMessageSequence as unknown as Function,
+  completeMessageSuccessSequence,
   completePrintPaperPetitionReceiptSequence:
     completePrintPaperPetitionReceiptSequence as unknown as Function,
   completeStartCaseWizardStepSequence:
     completeStartCaseWizardStepSequence as unknown as Function,
-  confirmSignUpSequence: confirmSignUpSequence as unknown as Function,
+  completeTrialSessionCalendarSequence,
+  confirmSignUpSequence,
   confirmStayLoggedInSequence:
     confirmStayLoggedInSequence as unknown as Function,
   confirmWorkItemAlreadyCompleteSequence:
@@ -1243,7 +1256,7 @@ export const presenterSequences = {
   setPDFSignatureDataSequence:
     setPDFSignatureDataSequence as unknown as Function,
   setPDFStampDataSequence: setPDFStampDataSequence as unknown as Function,
-  setPdfPreviewUrlSequence: setPdfPreviewUrlSequence as unknown as Function,
+  setPdfPreviewUrlSequence,
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
   setPetitionTypeSequence: setPetitionTypeSequence as unknown as Function,
@@ -1252,8 +1265,9 @@ export const presenterSequences = {
   setSelectedBatchIndexSequence:
     setSelectedBatchIndexSequence as unknown as Function,
   setSelectedDocumentsForDownloadSequence,
-  setTrialSessionCalendarSequence:
-    setTrialSessionCalendarSequence as unknown as Function,
+  setSelectedMessagesSequence,
+  setTrialSessionCalendarErrorSequence,
+  setTrialSessionCalendarSequence,
   setViewerCorrespondenceToDisplaySequence:
     setViewerCorrespondenceToDisplaySequence as unknown as Function,
   setViewerDocumentToDisplaySequence:

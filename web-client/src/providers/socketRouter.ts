@@ -30,6 +30,23 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
       case 'notice_generation_complete':
         await app.getSequence('noticeGenerationCompleteSequence')(message);
         break;
+      case 'set_trial_session_calendar_complete':
+        await app.getSequence('completeTrialSessionCalendarSequence')(message);
+        break;
+      case 'set_trial_session_calendar_error':
+        console.error(
+          'error setting trial session calendar: ',
+          message.message,
+        );
+        await app.getSequence('setTrialSessionCalendarErrorSequence')({
+          ...message,
+          alertError: {
+            message:
+              'We could not set the trial session calendar. Please contact support.',
+            title: 'Error setting trial session calendar.',
+          },
+        });
+        break;
       case 'serve_to_irs_complete':
         await app.getSequence('serveToIrsCompleteSequence')(message);
         break;
@@ -77,6 +94,12 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
         break;
       case 'admin_contact_update_progress':
         await app.getSequence('adminContactUpdateProgressSequence')(message);
+        break;
+      case 'message_completion_success':
+        await app.getSequence('completeMessageSuccessSequence')(message);
+        break;
+      case 'message_completion_error':
+        await app.getSequence('completeMessageErrorSequence')(message);
         break;
       case 'maintenance_mode_engaged':
         await app.getSequence('openAppMaintenanceModalSequence')({

@@ -728,7 +728,7 @@ app.delete(
   );
   app.post(
     '/messages/:parentMessageId/complete',
-    lambdaWrapper(completeMessageLambda),
+    lambdaWrapper(completeMessageLambda, { isAsync: true }),
   );
   app.post('/messages/:messageId/read', lambdaWrapper(setMessageAsReadLambda));
   app.get('/messages/:parentMessageId', lambdaWrapper(getMessageThreadLambda));
@@ -898,8 +898,8 @@ app.delete(
     lambdaWrapper(getEligibleCasesForTrialSessionLambda),
   );
   app.post(
-    '/trial-sessions/:trialSessionId/set-calendar',
-    lambdaWrapper(setTrialSessionCalendarLambda),
+    '/async/trial-sessions/:trialSessionId/set-calendar',
+    lambdaWrapper(setTrialSessionCalendarLambda, { isAsync: true }),
   );
   app.get(
     '/trial-sessions/:trialSessionId/get-calendared-cases',
