@@ -39,7 +39,7 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
     });
 }
 
-export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
+export function petitionerCreatesElectronicCase(primaryFilerName: string) {
   return cy
     .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
     .then(updatedFlow => {

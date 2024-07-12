@@ -145,3 +145,160 @@ export function fillStinInformation(filePath: string) {
   cy.get('[data-testid="stin-file"]').attachFile(filePath);
   cy.get('[data-testid="step-5-next-button"]').click();
 }
+
+export const contactInfo = {
+  address1: '111 South West St.',
+  city: 'Orlando',
+  country: 'Country Name',
+  email: 'petitioner1@example.com',
+  internationalPostalCode: '12345-AB',
+  internationalState: 'Province',
+  name: 'John',
+  phone: '3232323232',
+  placeOfLegalResidence: 'DE',
+  placeOfLegalResidenceLabel: 'Delaware',
+  postalCode: '33233',
+  state: 'AK',
+};
+
+export const secondaryContactInfo = {
+  address1: '222 North East blv.',
+  city: 'Boulder',
+  country: 'Another Country Name',
+  email: 'petitioner2@example.com',
+  inCareOf: 'Spouse Care of',
+  internationalPostalCode: '54321-CD',
+  internationalState: 'Province',
+  name: 'Bill',
+  phone: '7878787878',
+  placeOfLegalResidence: 'NJ',
+  placeOfLegalResidenceLabel: 'New Jersey',
+  postalCode: '88788',
+  state: 'CO',
+};
+
+export const businessAndOtherContactInfo = {
+  inCareOf: 'Test in care of',
+  name: 'Test name',
+  secondaryName: 'Test secondary name',
+  title: 'Test title',
+};
+
+export function fillPrimaryContact() {
+  cy.get('[data-testid="contact-primary-name"]').type(contactInfo.name);
+  cy.get('[data-testid="contactPrimary.address1"]').type(contactInfo.address1);
+  cy.get('[data-testid="contactPrimary.city"]').type(contactInfo.city);
+  cy.get('[data-testid="contactPrimary.state"]').select(contactInfo.state);
+  cy.get('[data-testid="contactPrimary.postalCode"]').type(
+    contactInfo.postalCode,
+  );
+  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+    contactInfo.placeOfLegalResidence,
+  );
+  cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
+}
+
+export function fillPrimaryContactInternational() {
+  cy.get('[data-testid="international-country-btn"]').click();
+  cy.get('[data-testid="international-country-input"]').type(
+    contactInfo.country,
+  );
+  cy.get('[data-testid="contactPrimary.address1"]').type(contactInfo.address1);
+  cy.get('[data-testid="contactPrimary.state"]').type(
+    contactInfo.internationalState,
+  );
+  cy.get('[data-testid="contactPrimary.city"]').type(contactInfo.city);
+  cy.get('[data-testid="contactPrimary.postalCode"]').type(
+    contactInfo.internationalPostalCode,
+  );
+}
+
+export function fillSecondaryContactInternational() {
+  cy.get('[data-testid="use-same-address-above-label"]').click();
+
+  cy.get('[data-testid="international-country-btn"]').eq(1).click();
+  cy.get('[data-testid="international-country-input"]').type(
+    secondaryContactInfo.country,
+  );
+  cy.get('[data-testid="contactSecondary.address1"]').type(
+    secondaryContactInfo.address1,
+  );
+  cy.get('[data-testid="contactSecondary.state"]').type(
+    secondaryContactInfo.internationalState,
+  );
+  cy.get('[data-testid="contactSecondary.city"]').type(
+    secondaryContactInfo.city,
+  );
+  cy.get('[data-testid="contactSecondary.postalCode"]').type(
+    secondaryContactInfo.internationalPostalCode,
+  );
+}
+
+export function fillSecondaryContact(useSameAddress = true) {
+  if (!useSameAddress) {
+    cy.get('[data-testid="use-same-address-above-label"]').click();
+    cy.get('[data-testid="contactSecondary.address1"]').type(
+      secondaryContactInfo.address1,
+    );
+    cy.get('[data-testid="contactSecondary.city"]').type(
+      secondaryContactInfo.city,
+    );
+    cy.get('[data-testid="contactSecondary.state"]').select(
+      secondaryContactInfo.state,
+    );
+
+    cy.get('[data-testid="contactSecondary.postalCode"]').type(
+      secondaryContactInfo.postalCode,
+    );
+  }
+  cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select(
+    secondaryContactInfo.placeOfLegalResidence,
+  );
+
+  cy.get('[data-testid="contact-secondary-email"]').type(
+    secondaryContactInfo.email,
+  );
+
+  cy.get(
+    '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
+  ).click();
+
+  cy.get('[data-testid="contact-secondary-phone"]').type(
+    secondaryContactInfo.phone,
+  );
+}
+
+export function fillBusinessandOtherContact({
+  fillInCareOf = false,
+  fillSecondaryName = false,
+  fillTitle = false,
+}: {
+  fillInCareOf?: boolean;
+  fillSecondaryName?: boolean;
+  fillTitle?: boolean;
+}) {
+  cy.get('[data-testid="contact-primary-name"]').type(
+    businessAndOtherContactInfo.name,
+  );
+  if (fillSecondaryName) {
+    cy.get('[data-testid="contact-primary-secondary-name"]').type(
+      businessAndOtherContactInfo.secondaryName,
+    );
+  }
+  if (fillTitle) {
+    cy.get('[data-testid="contact-primary-title"]').type(
+      businessAndOtherContactInfo.title,
+    );
+  }
+  if (fillInCareOf) {
+    cy.get('[data-testid="contactPrimary-in-care-of"]').type(
+      businessAndOtherContactInfo.inCareOf,
+    );
+  }
+  cy.get('[data-testid="contactPrimary.address1"]').type(contactInfo.address1);
+  cy.get('[data-testid="contactPrimary.city"]').type(contactInfo.city);
+  cy.get('[data-testid="contactPrimary.state"]').select(contactInfo.state);
+  cy.get('[data-testid="contactPrimary.postalCode"]').type(
+    contactInfo.postalCode,
+  );
+}

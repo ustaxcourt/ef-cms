@@ -86,7 +86,7 @@ export const UpdatedFilePetitionStep6 = connect(
                     A Few Reminders Before You Submit
                   </div>
                   <div className="content-wrapper line-height-2">
-                    <ol className="numbered-list">
+                    <ol className="petitioner-review-list">
                       <li>
                         <b>
                           In most cases, the Court must receive your
@@ -144,10 +144,13 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
         <div className="petition-review-petitioner-section">
           <div>
             <span className="usa-label usa-label-display">Party type</span>
-            <div>{petitionFormatted.partyType}</div>
+            <div data-testid="party-type">{petitionFormatted.partyType}</div>
             {petitionFormatted.corporateDisclosureFile && (
               <div className="margin-top-3">
-                <span className="usa-label usa-label-display">
+                <span
+                  className="usa-label usa-label-display"
+                  data-testid="corporate-disclosure-file-title"
+                >
                   Corporate Disclosure Statement
                 </span>
                 <div>
@@ -183,29 +186,37 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                     noMargin
                     contact={petitionFormatted.contactPrimary}
                   />
-                  <div className="margin-top-1">
-                    <span className="text-semibold">
-                      {Object.values(BUSINESS_TYPES).includes(
-                        petitionFormatted.partyType,
-                      )
-                        ? 'Place of business:'
-                        : 'Place of legal residence:'}
-                    </span>
-
-                    <span className="margin-left-05">
-                      {petitionFormatted.contactPrimary.placeOfLegalResidence
-                        ? ALL_STATE_OPTIONS[
+                  {petitionFormatted.contactPrimary.placeOfLegalResidence && (
+                    <div className="margin-top-1">
+                      <span
+                        className="text-semibold"
+                        data-testid="place-of-legal-residence-label"
+                      >
+                        {Object.values(BUSINESS_TYPES).includes(
+                          petitionFormatted.partyType,
+                        )
+                          ? 'Place of business:'
+                          : 'Place of legal residence:'}
+                      </span>
+                      <span
+                        className="margin-left-05"
+                        data-testid="primary-place-of-legal-residence"
+                      >
+                        {
+                          ALL_STATE_OPTIONS[
                             petitionFormatted.contactPrimary
                               .placeOfLegalResidence
                           ]
-                        : 'N/A'}
-                    </span>
-                  </div>
+                        }
+                      </span>
+                    </div>
+                  )}
+
                   <div className="margin-top-3">
                     <span className="usa-label usa-label-display">
                       Service email
                     </span>
-                    {userEmail}
+                    <span data-testid="contact-primary-email">{userEmail}</span>
                   </div>
                 </address>
               )}
@@ -227,7 +238,7 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                     contact={petitionFormatted.contactSecondary}
                   />
                 </address>
-                <div className="display-flex flex-align-center margin-top-1">
+                <div className="margin-top-1">
                   <span className="text-semibold">
                     Register for eService/filing:
                   </span>
@@ -237,19 +248,24 @@ function PetitionerInformation({ petitionFormatted, userEmail }) {
                       : 'No'}
                   </span>
                 </div>
-                <div className="margin-top-1">
-                  <span className="text-semibold">
-                    Place of legal residence:
-                  </span>
-                  <span className="margin-left-05">
-                    {petitionFormatted.contactSecondary.placeOfLegalResidence
-                      ? ALL_STATE_OPTIONS[
+                {petitionFormatted.contactSecondary.placeOfLegalResidence && (
+                  <div className="margin-top-1">
+                    <span className="text-semibold">
+                      Place of legal residence:
+                    </span>
+                    <span
+                      className="margin-left-05"
+                      data-testid="secondary-place-of-legal-residence"
+                    >
+                      {
+                        ALL_STATE_OPTIONS[
                           petitionFormatted.contactSecondary
                             .placeOfLegalResidence
                         ]
-                      : 'N / A'}
-                  </span>
-                </div>
+                      }
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -450,6 +466,7 @@ const CardHeader = connect(
           <Button
             link
             className="margin-left-2 padding-0"
+            data-testid={`edit-petition-section-button-${step}`}
             icon="edit"
             onClick={() => {
               updateStepIndicatorSequence({ step });
