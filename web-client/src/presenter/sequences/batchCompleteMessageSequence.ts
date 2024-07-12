@@ -36,8 +36,8 @@ export const completeMessageSuccessSequence = [
     ],
     inbox: [
       setCompleteMessageAlertAction,
-      removeCompletedMessagesFromDisplayAction,
       resetCacheKeyAction,
+      removeCompletedMessagesFromDisplayAction,
       fetchUserNotificationsSequence,
       setMessageCountsAction,
       resetSelectedMessageAction,
