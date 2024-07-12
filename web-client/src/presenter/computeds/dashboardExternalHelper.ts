@@ -12,7 +12,7 @@ export const dashboardExternalHelper = (
   showWhatToExpect: boolean;
 } => {
   const { USER_ROLES } = applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const openCases = get(state.openCases) || [];
   const closedCases = get(state.closedCases) || [];
