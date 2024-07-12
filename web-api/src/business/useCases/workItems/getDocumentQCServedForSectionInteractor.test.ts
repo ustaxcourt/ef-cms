@@ -1,7 +1,6 @@
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -14,18 +13,15 @@ import {
   calculateISODate,
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   describe('interactor', () => {
-    let user;
-
     beforeEach(() => {
-      user = {
-        role: ROLES.docketClerk,
-        userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-      };
-      applicationContext.getCurrentUser.mockReturnValue(user);
-
       applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
         () => [
           {
@@ -79,16 +75,16 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     });
 
     it('throws an error if the user does not have access to the work item', async () => {
-      user = {
-        role: ROLES.petitioner,
-        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-      };
-      applicationContext.getCurrentUser.mockReturnValue(user);
+      applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
 
       await expect(
-        getDocumentQCServedForSectionInteractor(applicationContext, {
-          section: DOCKET_SECTION,
-        }),
+        getDocumentQCServedForSectionInteractor(
+          applicationContext,
+          {
+            section: DOCKET_SECTION,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow(UnauthorizedError);
     });
 
@@ -98,6 +94,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         {
           section: DOCKET_SECTION,
         },
+        mockDocketClerkUser,
       );
 
       expect(result).toMatchObject([
@@ -128,17 +125,14 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     });
 
     it('successfully returns the work item for a petitionsclerk', async () => {
-      user = {
-        role: ROLES.petitionsClerk,
-        userId: '4b423e1f-4eb2-4011-a845-873b82bee0a8',
-      };
-      applicationContext.getCurrentUser.mockReturnValue(user);
+      applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerkUser);
 
       const result = await getDocumentQCServedForSectionInteractor(
         applicationContext,
         {
           section: PETITIONS_SECTION,
         },
+        mockPetitionsClerkUser,
       );
 
       expect(result).toMatchObject([
