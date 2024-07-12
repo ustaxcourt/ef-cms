@@ -8,7 +8,6 @@ describe('setAddEditSessionNoteModalStateAction', () => {
 
   let user;
   const { USER_ROLES } = applicationContext.getConstants();
-  applicationContext.getCurrentUser = () => user;
 
   it('should set the modal state', async () => {
     user = { role: USER_ROLES.judge };
@@ -24,6 +23,7 @@ describe('setAddEditSessionNoteModalStateAction', () => {
         trialSessionWorkingCopy: {
           sessionNotes: 'i got some notes',
         },
+        user,
       },
     });
 
@@ -46,6 +46,7 @@ describe('setAddEditSessionNoteModalStateAction', () => {
         trialSessionWorkingCopy: {
           sessionNotes: 'i got some notes',
         },
+        user,
       },
     });
 
