@@ -7,16 +7,25 @@ export const setSelectedMessagesAction = ({
 }: ActionProps<{
   messages: { messageId: string; parentMessageId: string }[];
 }>) => {
-  let selectedMap = get(state.messagesPage.selectedMessages);
-  if (props.messages.length === 0) {
-    selectedMap = new Map<string, string>();
+  let selectedMessagesMap = get(state.messagesPage.selectedMessages);
+  const allMessagesSelected = get(
+    state.messagesIndividualInboxHelper.allMessagesSelected,
+  );
+  const { messages } = props;
+
+  const selectAllBoxChecked = messages.length > 1;
+
+  if ((selectAllBoxChecked && allMessagesSelected) || messages.length === 0) {
+    selectedMessagesMap.clear();
+  } else {
+    messages.forEach(message => {
+      if (!selectedMessagesMap.has(message.messageId)) {
+        selectedMessagesMap.set(message.messageId, message.parentMessageId);
+      } else if (!selectAllBoxChecked) {
+        selectedMessagesMap.delete(message.messageId);
+      }
+    });
   }
-  props.messages.forEach(message => {
-    if (!selectedMap.has(message.messageId)) {
-      selectedMap.set(message.messageId, message.parentMessageId);
-    } else {
-      selectedMap.delete(message.messageId);
-    }
-  });
-  store.set(state.messagesPage.selectedMessages, selectedMap);
+
+  store.set(state.messagesPage.selectedMessages, selectedMessagesMap);
 };
