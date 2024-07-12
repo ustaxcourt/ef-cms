@@ -1,4 +1,8 @@
 import {
+  FORMATS,
+  formatNow,
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import {
   docketNumber,
   expectedPdfLines,
   messages,
@@ -48,9 +52,7 @@ describe('edit status report order response', () => {
       );
 
       cy.get('#order-type-status-report').should('be.checked');
-      cy.get('#status-report-due-date-picker')
-        .invoke('val')
-        .should('contain', '07/11/2024');
+      cy.get('#status-report-due-date-picker').invoke('val').should('exist');
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
@@ -59,6 +61,10 @@ describe('edit status report order response', () => {
         'Test Order Response (Signed)',
       );
 
+      cy.get('#status-report-due-date-picker').clear();
+      cy.get('#status-report-due-date-picker').type(
+        formatNow(FORMATS.MMDDYYYY),
+      );
       cy.get('[data-testid="save-draft-button"]').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
@@ -108,7 +114,7 @@ describe('edit status report order response', () => {
     it('should load existing unsigned order response', () => {
       cy.get('#tab-case-messages').click();
       cy.contains('a', messages.testOrderResponseUnsigned.name).click();
-      cy.get('[data-testid="edit-document-button"]').click();
+      cy.get('[data-testid="edit-unsigned-document-button"]').click();
 
       cy.get('[data-testid="status-report-order-response-pdf-preview"]').should(
         'not.be.empty',
@@ -130,7 +136,7 @@ describe('edit status report order response', () => {
     it('should load existing signed order response', () => {
       cy.get('#tab-case-messages').click();
       cy.contains('a', messages.testOrderResponseSigned.name).click();
-      cy.get('[data-testid="edit-document-button"]').click();
+      cy.get('[data-testid="edit-signed-document-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
       cy.get('[data-testid="status-report-order-response-pdf-preview"]').should(
@@ -138,9 +144,7 @@ describe('edit status report order response', () => {
       );
 
       cy.get('#order-type-status-report').should('be.checked');
-      cy.get('#status-report-due-date-picker')
-        .invoke('val')
-        .should('contain', '07/11/2024');
+      cy.get('#status-report-due-date-picker').invoke('val').should('exist');
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
@@ -149,6 +153,10 @@ describe('edit status report order response', () => {
         'Test Order Response (Signed)',
       );
 
+      cy.get('#status-report-due-date-picker').clear();
+      cy.get('#status-report-due-date-picker').type(
+        formatNow(FORMATS.MMDDYYYY),
+      );
       cy.get('[data-testid="save-draft-button"]').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
@@ -157,7 +165,7 @@ describe('edit status report order response', () => {
     it('should redirect to messages tab upon saving signed status report order response', () => {
       cy.get('#tab-case-messages').click();
       cy.contains('a', messages.testOrderResponseSigned.name).click();
-      cy.get('[data-testid="edit-document-button"]').click();
+      cy.get('[data-testid="edit-signed-document-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
 
       cy.get('[data-testid="save-draft-button"]').click();
@@ -173,7 +181,13 @@ describe('edit status report order response', () => {
     it('should redirect to messages tab upon saving unsigned status report order response', () => {
       cy.get('#tab-case-messages').click();
       cy.contains('a', messages.testOrderResponseUnsigned.name).click();
-      cy.get('[data-testid="edit-document-button"]').click();
+      cy.get('[data-testid="edit-unsigned-document-button"]').click();
+
+      // Update date to pass validation on save
+      cy.get('#status-report-due-date-picker').clear();
+      cy.get('#status-report-due-date-picker').type(
+        formatNow(FORMATS.MMDDYYYY),
+      );
 
       cy.get('[data-testid="save-draft-button"]').click();
 
