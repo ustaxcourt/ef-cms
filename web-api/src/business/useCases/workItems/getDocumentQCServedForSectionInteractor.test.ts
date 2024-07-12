@@ -75,8 +75,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     });
 
     it('throws an error if the user does not have access to the work item', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
-
       await expect(
         getDocumentQCServedForSectionInteractor(
           applicationContext,
@@ -125,8 +123,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     });
 
     it('successfully returns the work item for a petitionsclerk', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerkUser);
-
       const result = await getDocumentQCServedForSectionInteractor(
         applicationContext,
         {
