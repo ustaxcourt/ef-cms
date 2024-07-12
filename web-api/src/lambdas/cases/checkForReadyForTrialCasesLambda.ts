@@ -7,14 +7,8 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const checkForReadyForTrialCasesLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .checkForReadyForTrialCasesInteractor(applicationContext);
-    },
-    {
-      user: {},
-    },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .checkForReadyForTrialCasesInteractor(applicationContext);
+  });
