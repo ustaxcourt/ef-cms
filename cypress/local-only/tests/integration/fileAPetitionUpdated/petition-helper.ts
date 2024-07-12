@@ -58,11 +58,21 @@ export function fillPetitionFileInformation(filePath: string) {
   cy.get('[data-testid="step-2-next-button"]').click();
 }
 
-export function fillGeneratePetitionFileInformation() {
+export function fillGeneratePetitionFileInformation(fillMultiple = false) {
   cy.get('[data-testid="petition-reason--1"]').focus();
   cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
+  if (fillMultiple) {
+    cy.get('[data-testid="add-another-reason-link-button"]').click();
+    cy.get('[data-testid="petition-reason-0"]').focus();
+    cy.get('[data-testid="petition-reason-0"]').type('REASON 2');
+  }
   cy.get('[data-testid="petition-fact--1"]').focus();
   cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
+  if (fillMultiple) {
+    cy.get('[data-testid="add-another-fact-link-button"]').click();
+    cy.get('[data-testid="petition-fact-0"]').focus();
+    cy.get('[data-testid="petition-fact-0"]').type('FACT 2');
+  }
   cy.get('[data-testid="step-2-next-button"]').click();
 }
 
