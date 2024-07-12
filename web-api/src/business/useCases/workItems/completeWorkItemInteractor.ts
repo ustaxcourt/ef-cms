@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -27,10 +28,9 @@ export const completeWorkItem = async (
     completedMessage: string;
     workItemId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }
 
@@ -45,14 +45,14 @@ export const completeWorkItem = async (
   const completedWorkItem = originalWorkItemEntity
     .setAsCompleted({
       message: completedMessage,
-      user,
+      user: authorizedUser,
     })
     .validate()
     .toRawObject();
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    authorizedUser: user,
+    authorizedUser,
     workItem: {
       ...completedWorkItem,
       createdAt: createISODateString(),
@@ -71,7 +71,7 @@ export const completeWorkItem = async (
       docketNumber: completedWorkItem.docketNumber,
     });
 
-  const caseToUpdate = new Case(caseObject, { authorizedUser: user });
+  const caseToUpdate = new Case(caseObject, { authorizedUser });
 
   const workItemEntity = new WorkItem(completedWorkItem);
 
