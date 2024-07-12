@@ -12,7 +12,7 @@ export const setAddEditUserCaseNoteModalStateFromDetailAction = ({
   get,
   store,
 }: ActionProps) => {
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 
   const { caseCaption, docketNumber, docketNumberWithSuffix } = get(
