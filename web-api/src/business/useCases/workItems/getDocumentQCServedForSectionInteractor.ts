@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
@@ -21,10 +22,9 @@ import {
 export const getDocumentQCServedForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
@@ -41,7 +41,7 @@ export const getDocumentQCServedForSectionInteractor = async (
 
   const filteredWorkItems = workItems
     .filter(workItem =>
-      user.role === ROLES.petitionsClerk ? !!workItem.section : true,
+      authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
     )
     .map(workItem => new OutboxItem(workItem, { applicationContext }));
 
