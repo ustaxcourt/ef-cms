@@ -69,7 +69,7 @@ export const StatusReportOrderResponse = connect(
                           This is the lead case in a consolidateed group. Issue
                           this order in:
                         </label>
-                        <div className="usa-radio usa-radio__inline">
+                        <div className="usa-radio usa-radio">
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="all cases in group"
@@ -93,7 +93,7 @@ export const StatusReportOrderResponse = connect(
                             All cases in this group
                           </label>
                         </div>
-                        <div className="usa-radio usa-radio__inline">
+                        <div className="usa-radio usa-radio">
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="just this case"
