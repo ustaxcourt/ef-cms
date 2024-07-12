@@ -7,13 +7,13 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { assignWorkItemsInteractor } = applicationContext.getUseCases();
 
+  const user = {
+    name: 'Some One',
+    userId: 'abc',
+  };
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Some One',
-      userId: 'abc',
-    });
   });
 
   it('should not assign the workitem if the qc work item is not present', async () => {
@@ -25,6 +25,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
         caseDetail: {
           docketEntries: [],
         },
+        user,
       },
     });
 
@@ -45,6 +46,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
             },
           ],
         },
+        user,
       },
     });
 
