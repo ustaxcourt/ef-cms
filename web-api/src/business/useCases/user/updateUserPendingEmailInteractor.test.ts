@@ -1,6 +1,10 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
 import { validUser } from '../../../../../shared/src/test/mockUsers';
 
@@ -11,6 +15,7 @@ describe('updateUserPendingEmailInteractor', () => {
   beforeEach(() => {
     mockUser = {
       ...validUser,
+      ...mockPrivatePractitionerUser,
       admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'RA3333',
@@ -22,10 +27,8 @@ describe('updateUserPendingEmailInteractor', () => {
       originalBarState: 'FL',
       practiceType: 'Private',
       practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
     };
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
@@ -38,15 +41,14 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should throw unauthorized error when user does not have permission to manage emails', async () => {
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    };
-
     await expect(
-      updateUserPendingEmailInteractor(applicationContext, {
-        pendingEmail,
-      }),
+      updateUserPendingEmailInteractor(
+        applicationContext,
+        {
+          pendingEmail,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -56,24 +58,24 @@ describe('updateUserPendingEmailInteractor', () => {
       .isEmailAvailable.mockReturnValue(false);
 
     await expect(
-      updateUserPendingEmailInteractor(applicationContext, {
-        pendingEmail,
-      }),
+      updateUserPendingEmailInteractor(
+        applicationContext,
+        {
+          pendingEmail,
+        },
+        mockPrivatePractitionerUser,
+      ),
     ).rejects.toThrow('Email is not available');
   });
 
-  it('should make a call to get the current user', async () => {
-    await updateUserPendingEmailInteractor(applicationContext, {
-      pendingEmail,
-    });
-
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should make a call to getUserById with the logged in user.userId', async () => {
-    await updateUserPendingEmailInteractor(applicationContext, {
-      pendingEmail,
-    });
+    await updateUserPendingEmailInteractor(
+      applicationContext,
+      {
+        pendingEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUserById.mock.calls[0][0],
@@ -81,9 +83,13 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should update the user record in persistence with the pendingEmail value', async () => {
-    await updateUserPendingEmailInteractor(applicationContext, {
-      pendingEmail,
-    });
+    await updateUserPendingEmailInteractor(
+      applicationContext,
+      {
+        pendingEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -92,24 +98,38 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should return the updated User entity when currentUser.role is petitioner', async () => {
-    mockUser = validUser;
+    const mockUserPetitioner = { ...validUser, ...mockPetitionerUser };
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValueOnce(mockUserPetitioner);
+    applicationContext
+      .getPersistenceGateway()
+      .updateUser.mockReturnValueOnce(mockUserPetitioner);
 
-    const results = await updateUserPendingEmailInteractor(applicationContext, {
-      pendingEmail,
-    });
+    const results = await updateUserPendingEmailInteractor(
+      applicationContext,
+      {
+        pendingEmail,
+      },
+      mockPetitionerUser,
+    );
 
     expect(results.entityName).toBe('User');
     expect(results).toMatchObject({
-      ...mockUser,
+      ...mockUserPetitioner,
       pendingEmail,
       pendingEmailVerificationToken: expect.anything(),
     });
   });
 
   it('should return the updated Practitioner entity when currentUser.role is NOT petitioner', async () => {
-    const results = await updateUserPendingEmailInteractor(applicationContext, {
-      pendingEmail,
-    });
+    const results = await updateUserPendingEmailInteractor(
+      applicationContext,
+      {
+        pendingEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(results.entityName).toBe('Practitioner');
     expect(results).toMatchObject({
@@ -120,9 +140,13 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should call applicationContext.getUseCaseHelpers().sendEmailVerificationLink to send the verification link to the user', async () => {
-    await updateUserPendingEmailInteractor(applicationContext, {
-      pendingEmail,
-    });
+    await updateUserPendingEmailInteractor(
+      applicationContext,
+      {
+        pendingEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().sendEmailVerificationLink.mock
