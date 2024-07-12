@@ -27,7 +27,7 @@ describe('check permissions for status report order response', () => {
     cy.get('[data-testid="save-order-button"]').should('exist');
   });
 
-  it('docker clerk should not be able to view status report order response route', () => {
+  it('docket clerk should not be able to view status report order response route', () => {
     [
       `/case-detail/${docketNumber}/documents/${statusReportDocketEntryId}/order-response-create?statusReportFilingDate=2024-06-28&statusReportIndex=5`,
       `/case-detail/${docketNumber}/documents/${statusReportDocketEntryId}/order-response-edit`,

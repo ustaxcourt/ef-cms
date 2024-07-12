@@ -522,6 +522,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
+import { updateStatusReportOrderResponseFormValueSequence } from './sequences/StatusReportOrderResponse/updateStatusReportOrderResponseFormValueSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
@@ -1469,6 +1470,7 @@ export const presenterSequences = {
     updateStartCaseInternalPartyTypeSequence as unknown as Function,
   updateStatisticsFormValueSequence:
     updateStatisticsFormValueSequence as unknown as Function,
+  updateStatusReportOrderResponseFormValueSequence,
   updateTrialSessionCompleteSequence:
     updateTrialSessionCompleteSequence as unknown as Function,
   updateTrialSessionFormDataSequence:
