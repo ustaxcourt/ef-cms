@@ -10,7 +10,7 @@ The order tests will only hit the order search endpoint.  Before you can run the
 - DEFAULT_ACCOUNT_PASS
 - REGION
 
-After exporting tdhose ENV variables, you can run the following script `cd artillery && ./generate-tokens.sh`.
+After exporting those ENV variables, you can run the following script `cd artillery && ./generate-tokens.sh`.
 
 This will create JWT tokens and put them in a `tokens.csv` file which is later used as an artillery payload.
 
