@@ -18,6 +18,10 @@ import { v4 } from 'uuid';
 describe('file status report order response', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
+  const firstPdfLineJustThisCase =
+    'On June 28, 2024, a status report was filed in this case';
+  const firstPdfLineForAllCasesInGroup =
+    'On June 28, 2024, a status report was filed in the lead case of the consolidated group';
 
   describe('judge', () => {
     beforeEach(() => {
@@ -168,6 +172,10 @@ describe('file status report order response', () => {
             '104-67',
             '105-67',
           ]);
+          expect(req.body.contentHtml).to.include(
+            firstPdfLineForAllCasesInGroup,
+          );
+          expect(req.body.contentHtml).not.to.include(firstPdfLineJustThisCase);
         });
         cy.contains('Apply Signature').should('exist');
       });
@@ -186,6 +194,10 @@ describe('file status report order response', () => {
 
         cy.wait('@courtIssuedOrder').then(({ request: req }) => {
           expect(req.body.addedDocketNumbers).to.be.empty;
+          expect(req.body.contentHtml).to.include(firstPdfLineJustThisCase);
+          expect(req.body.contentHtml).not.to.include(
+            firstPdfLineForAllCasesInGroup,
+          );
         });
         cy.contains('Apply Signature').should('exist');
       });
