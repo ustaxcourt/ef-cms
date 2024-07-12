@@ -1,17 +1,16 @@
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import {
-  MOCK_PRACTITIONER,
-  docketClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { getIsUserAuthorized } from './updatePetitionerInformationInteractor';
+import {
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
-  let mockUser;
   let mockCase;
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
@@ -35,8 +34,6 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
   };
 
   beforeEach(() => {
-    mockUser = docketClerkUser;
-
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -51,8 +48,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
         oldCase: mockCase,
         updatedPetitionerData: {},
         user: {
-          ...mockUser,
-          role: ROLES.privatePractitioner,
+          ...mockPrivatePractitionerUser,
           userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
         },
       });
@@ -65,8 +61,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
         oldCase: mockCase,
         updatedPetitionerData: {},
         user: {
-          ...mockUser,
-          role: ROLES.petitioner,
+          ...mockPetitionerUser,
           userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
         },
       });
@@ -79,8 +74,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
         oldCase: mockCase,
         updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
         user: {
-          ...mockUser,
-          role: ROLES.petitioner,
+          ...mockPetitionerUser,
           userId: SECONDARY_CONTACT_ID,
         },
       });
@@ -103,8 +97,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
         },
         updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
         user: {
-          ...mockUser,
-          role: ROLES.privatePractitioner,
+          ...mockPrivatePractitionerUser,
           userId: SECONDARY_CONTACT_ID,
         },
       });
