@@ -1,7 +1,10 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
-import { privatePractitionerUser } from '../../../../shared/src/test/mockUsers';
+import {
+  petitionerUser,
+  privatePractitionerUser,
+} from '../../../../shared/src/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -16,6 +19,7 @@ describe('contactsHelper', () => {
       const result = runCompute(contactsHelper, {
         state: {
           form: { partyType: PARTY_TYPES.conservator },
+          user: petitionerUser,
         },
       });
 
@@ -33,6 +37,7 @@ describe('contactsHelper', () => {
           form: {
             partyType: undefined,
           },
+          user: petitionerUser,
         },
       });
 
@@ -45,6 +50,7 @@ describe('contactsHelper', () => {
           form: {
             partyType: PARTY_TYPES.petitioner,
           },
+          user: petitionerUser,
         },
       });
 
@@ -60,6 +66,7 @@ describe('contactsHelper', () => {
           form: {
             partyType: PARTY_TYPES.petitionerSpouse,
           },
+          user: petitionerUser,
         },
       });
 
@@ -79,18 +86,13 @@ describe('contactsHelper', () => {
   });
 
   describe('user role private practitioner', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        privatePractitionerUser,
-      );
-    });
-
     it('should validate form view information for party type Partnership (as the Tax Matters Partner)', () => {
       const result = runCompute(contactsHelper, {
         state: {
           form: {
             partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
           },
+          user: privatePractitionerUser,
         },
       });
 
@@ -108,6 +110,7 @@ describe('contactsHelper', () => {
           form: {
             partyType: PARTY_TYPES.petitioner,
           },
+          user: privatePractitionerUser,
         },
       });
 
@@ -123,6 +126,7 @@ describe('contactsHelper', () => {
           form: {
             partyType: PARTY_TYPES.petitionerSpouse,
           },
+          user: privatePractitionerUser,
         },
       });
 
@@ -146,6 +150,7 @@ describe('contactsHelper', () => {
           form: {
             partyType: undefined,
           },
+          user: privatePractitionerUser,
         },
       });
 

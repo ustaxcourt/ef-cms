@@ -17,7 +17,7 @@ export const contactsHelper = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const form = get(state.form);
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   let contactPrimary, contactSecondary;
