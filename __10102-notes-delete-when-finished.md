@@ -41,17 +41,20 @@ only 140 or 160 characters long. Which is it?
   "Due date is required for status reports and stipulated decisions", and the
   Due date field is highlighted red with "select due date" text in red below
   the field.~~
+  - Resolved!
 
 - ~~**Issue**: Desired behavior: a user cannot select a Jurisdiction if the Checkbox above is not
   selected.~~
+  - Resolved!
 
 - **Issue**: Desired behavior: a user is navigated back to the previous screen - the document
   preview of the Status Report document - after hitting the "Cancel" button on
   the Status Report Order Response form.
 
-- **Issue**: Desired behavior: for a lead case, the beginning sentence states, "On [date], a
+- ~~**Issue**: Desired behavior: for a lead case, the beginning sentence states, "On [date], a
   status report was filed in the lead case of the consolidated group (Index no.
-  [index number of document]). For cause, it is".
+  [index number of document]). For cause, it is".~~
+  - Resolved!
 
 ## Feedback from judges:
 
