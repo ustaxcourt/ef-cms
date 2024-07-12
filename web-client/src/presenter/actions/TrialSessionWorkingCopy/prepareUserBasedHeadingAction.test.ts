@@ -8,7 +8,6 @@ describe('prepareUserBasedHeadingAction', () => {
 
   let user;
   const { USER_ROLES } = applicationContext.getConstants();
-  applicationContext.getCurrentUser = () => user;
 
   it.each([
     [USER_ROLES.trialClerk, 'Test User - Session Copy'],
@@ -26,6 +25,7 @@ describe('prepareUserBasedHeadingAction', () => {
           formattedTrialSessionDetails: {
             formattedJudge: 'Buch',
           },
+          user,
         },
       });
       expect(result.output).toEqual({ userHeading: expected });
