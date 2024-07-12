@@ -39,7 +39,7 @@ export const caseAssociationRequestHelper = (
   const { GENERATION_TYPES, PARTY_TYPES, USER_ROLES } =
     applicationContext.getConstants();
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
