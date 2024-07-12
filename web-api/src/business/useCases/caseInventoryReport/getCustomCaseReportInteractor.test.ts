@@ -2,8 +2,11 @@ import {
   GetCustomCaseReportRequest,
   getCustomCaseReportInteractor,
 } from './getCustomCaseReportInteractor';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getCustomCaseReportInteractor', () => {
   let params: GetCustomCaseReportRequest;
@@ -20,35 +23,34 @@ describe('getCustomCaseReportInteractor', () => {
       searchAfter: { pk: '123-45', receivedAt: 827493 },
       startDate: '2022-01-01T17:21:05.483Z',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '9754a349-1013-44fa-9e61-d39aba2637e0',
-    });
   });
 
   describe('Validation', () => {
     it('throws an error if user is not authorized for case inventory report', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitioner, //petitioner does not have CASE_INVENTORY_REPORT permission
-        userId: '8e20dd1b-d142-40f4-8362-6297f1be68bf',
-      });
-
       await expect(
-        getCustomCaseReportInteractor(applicationContext, params),
+        getCustomCaseReportInteractor(
+          applicationContext,
+          params,
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized for case inventory report');
     });
 
     it('should be valid when no arguments are passed in for getCustomCaseReportInteractor', async () => {
       await expect(
-        getCustomCaseReportInteractor(applicationContext, {
-          caseStatuses: undefined,
-          caseTypes: undefined,
-          filingMethod: 'all',
-          judges: undefined,
-          pageSize: 10,
-          preferredTrialCities: undefined,
-          procedureType: 'All',
-        } as any),
+        getCustomCaseReportInteractor(
+          applicationContext,
+          {
+            caseStatuses: undefined,
+            caseTypes: undefined,
+            filingMethod: 'all',
+            judges: undefined,
+            pageSize: 10,
+            preferredTrialCities: undefined,
+            procedureType: 'All',
+          } as any,
+          mockDocketClerkUser,
+        ),
       ).resolves.not.toThrow();
     });
 
@@ -62,7 +64,11 @@ describe('getCustomCaseReportInteractor', () => {
         delete params[testCase.missingField];
 
         await expect(
-          getCustomCaseReportInteractor(applicationContext, params),
+          getCustomCaseReportInteractor(
+            applicationContext,
+            params,
+            mockDocketClerkUser,
+          ),
         ).rejects.toThrow();
       });
     });
@@ -76,7 +82,11 @@ describe('getCustomCaseReportInteractor', () => {
         totalCount: 0,
       });
 
-    await getCustomCaseReportInteractor(applicationContext, params);
+    await getCustomCaseReportInteractor(
+      applicationContext,
+      params,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCasesByFilters,
