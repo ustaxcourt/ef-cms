@@ -5,14 +5,14 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
 
 export const verifyUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
   { token }: { token: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
