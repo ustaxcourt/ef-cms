@@ -20,6 +20,7 @@ describe('caseAssociationRequestHelper', () => {
   const state = {
     caseDetail: MOCK_CASE,
     form: {} as any,
+    user: { role: ROLES.privatePractitioner } as RawUser,
     validationErrors: {},
   };
 
@@ -35,11 +36,6 @@ describe('caseAssociationRequestHelper', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.privatePractitioner,
-      }) as RawUser;
-
     state.form = {
       filersMap,
     };
@@ -108,10 +104,7 @@ describe('caseAssociationRequestHelper', () => {
   });
 
   it('returns correct number of document options for user role irsPractitioner', () => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.irsPractitioner,
-      }) as RawUser;
+    state.user.role = ROLES.irsPractitioner;
     const result = runCompute(caseAssociationRequestHelper, { state });
     expect(result.documents.length).toEqual(2);
   });
@@ -279,10 +272,7 @@ describe('caseAssociationRequestHelper', () => {
         petitioners: TEST_PETITIONERS,
       } as RawCase;
 
-      applicationContext.getCurrentUser = () =>
-        ({
-          role: ROLES.irsPractitioner,
-        }) as RawUser;
+      state.user.role = ROLES.irsPractitioner;
       const { showGenerationTypeForm } = runCompute(
         caseAssociationRequestHelper,
         {
@@ -296,10 +286,6 @@ describe('caseAssociationRequestHelper', () => {
       state.form = {
         eventCode: 'O',
       };
-      applicationContext.getCurrentUser = () =>
-        ({
-          role: ROLES.privatePractitioner,
-        }) as RawUser;
       const { showGenerationTypeForm } = runCompute(
         caseAssociationRequestHelper,
         {
@@ -310,10 +296,7 @@ describe('caseAssociationRequestHelper', () => {
     });
 
     it('should set showGenerationTypeForm to false when code is EA and any petitioner has paper and user is not a private practitioner', () => {
-      applicationContext.getCurrentUser = () =>
-        ({
-          role: ROLES.irsPractitioner,
-        }) as RawUser;
+      state.user.role = ROLES.irsPractitioner;
       const { showGenerationTypeForm } = runCompute(
         caseAssociationRequestHelper,
         {
@@ -324,6 +307,7 @@ describe('caseAssociationRequestHelper', () => {
     });
 
     it('should set showGenerationTypeForm to true when code is EA and user is a private practitioner with parties that have paper service', () => {
+      state.user.role = ROLES.privatePractitioner;
       const { showGenerationTypeForm } = runCompute(
         caseAssociationRequestHelper,
         {
