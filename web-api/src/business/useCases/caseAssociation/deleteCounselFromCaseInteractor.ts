@@ -6,16 +6,18 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const deleteCounselFromCase = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -33,7 +35,7 @@ export const deleteCounselFromCase = async (
       userId,
     });
 
-  let caseEntity = new Case(caseToUpdate, { authorizedUser: user });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (userToDelete.role === ROLES.privatePractitioner) {
     caseEntity.removePrivatePractitioner(userToDelete);
