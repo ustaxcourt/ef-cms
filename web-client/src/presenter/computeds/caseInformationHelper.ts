@@ -8,7 +8,7 @@ export const caseInformationHelper = (
 ): any => {
   const { STATUS_TYPES } = applicationContext.getConstants();
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const isInternalUser = applicationContext
