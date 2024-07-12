@@ -58,7 +58,9 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
           .description('When the status report or stipulated decision is due.'),
       })
       .messages({
-        '*': 'Enter a valid date',
+        'any.required':
+          'Due date is required for status reports and stipulated decisions',
+        'date.format': 'Enter a valid date',
         'date.min': 'Due date cannot be prior to today. Enter a valid date.',
       }),
     issueOrder: JoiValidationConstants.STRING.valid(
