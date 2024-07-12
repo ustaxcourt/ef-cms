@@ -684,6 +684,9 @@ const applicationContext = {
       console.timeEnd(key);
     },
   }),
+  getMessagesServiceUrl: () => {
+    return 'http://localhost:1337'; // TODO: should probably come from env
+  },
   getPdfJs: async () => {
     const pdfjsLib = (await import('pdfjs-dist')).default;
     const pdfjsWorker = (await import('pdfjs-dist/build/pdf.worker.entry'))

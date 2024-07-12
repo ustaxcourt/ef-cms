@@ -33,15 +33,19 @@ export const head = async ({ applicationContext, endpoint, params }) => {
  */
 const internalGet = async ({
   applicationContext,
+  baseUrl,
   endpoint,
   params,
 }: {
   applicationContext: ClientApplicationContext;
   endpoint: string;
   params?: any;
+  baseUrl?: string;
 }) => {
+  console.log(baseUrl);
   const response = await getResponse({
     applicationContext,
+    baseUrl,
     endpoint,
     params,
   });
@@ -57,10 +61,21 @@ const internalGet = async ({
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the complete http response
  */
-export const getResponse = ({ applicationContext, endpoint, params }) => {
+export const getResponse = ({
+  applicationContext,
+  baseUrl,
+  endpoint,
+  params,
+}: {
+  applicationContext: any;
+  baseUrl?: string;
+  endpoint: string;
+  params?: any;
+}) => {
+  console.log(baseUrl);
   return applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
+    .get(`${baseUrl ?? applicationContext.getBaseUrl()}${endpoint}`, {
       headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
     });

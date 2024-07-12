@@ -8,12 +8,15 @@ import { get } from '../requests';
  * @param {string} providers.section the section
  * @returns {Promise<*>} the promise of the api call
  */
-export const getInboxMessagesForSectionInteractor = (
+export const getInboxMessagesForSectionInteractor = async (
   applicationContext,
   { section },
 ) => {
+  console.log('wtfff', applicationContext.getMessagesServiceUrl);
+  console.log('we are here', applicationContext.getMessagesServiceUrl());
   return get({
     applicationContext,
+    baseUrl: applicationContext.getMessagesServiceUrl(),
     endpoint: `/messages/inbox/section/${section}`,
   });
 };
