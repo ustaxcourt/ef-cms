@@ -111,6 +111,7 @@ export const judgeColvin: RawUser = {
 };
 
 export const petitionerUser = {
+  email: 'petitioner@example.com',
   name: 'Tax Payer',
   role: ROLES.petitioner,
   section: 'petitioner',
