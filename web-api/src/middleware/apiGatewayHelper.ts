@@ -3,6 +3,7 @@ import {
   UnauthorizedError,
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
@@ -168,24 +169,20 @@ export const getAuthHeader = event => {
   }
 };
 
-/**
- * extracts and decodes the JWT token from the gateway response event's header / query string and returns the decoded user object
- *
- * @param {object} event the api gateway request event
- * @returns {object} the user decoded from the JWT token
- */
-export const getUserFromAuthHeader = event => {
+export const getUserFromAuthHeader = (event): UnknownAuthUser => {
   const token = getAuthHeader(event);
-  if (!token) return null;
+  if (!token) return undefined;
   const decoded = jwt.decode(token);
   if (decoded) {
     decoded.token = token;
-    decoded.role = decoded['custom:role'];
-    decoded.userId = decoded['custom:userId'];
-    decoded.name = decoded.name || decoded['custom:name']; // custom:name only exists locally. This is a workaround for cognito-local.
-    return decoded;
+    return {
+      email: decoded.email,
+      name: decoded.name || decoded['custom:name'], // custom:name only exists locally. This is a workaround for cognito-local.
+      role: decoded['custom:role'],
+      userId: decoded['custom:userId'],
+    };
   } else {
-    return null;
+    return undefined;
   }
 };
 
@@ -195,11 +192,8 @@ export const getUserFromAuthHeader = event => {
  * @param {object} event the api gateway request event
  * @returns {string|void} the connectionId
  */
-export const getConnectionIdFromEvent = event => {
-  if (
-    event.queryStringParameters &&
-    event.queryStringParameters.clientConnectionId
-  ) {
+export const getConnectionIdFromEvent = (event): string | undefined => {
+  if (event?.queryStringParameters?.clientConnectionId) {
     return event.queryStringParameters.clientConnectionId;
   }
 };
