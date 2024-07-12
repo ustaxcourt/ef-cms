@@ -3,6 +3,7 @@ import {
   fillCaseProcedureInformation,
   fillIrsNoticeInformation,
   fillPetitionFileInformation,
+  fillPetitionerInformation,
   fillPrimaryContact,
   fillPrimaryContactInternational,
   fillStinInformation,
@@ -15,6 +16,20 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
   beforeEach(() => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
+  });
+
+  describe('Edit step 1', () => {
+    it('should navigate to petition flow step 1 when user clicks on edit button', () => {
+      fillPetitionerInformation();
+      fillPetitionFileInformation(VALID_FILE);
+      fillIrsNoticeInformation(VALID_FILE);
+      fillCaseProcedureInformation();
+      fillStinInformation(VALID_FILE);
+      cy.get('[data-testid="edit-petition-section-button-1"]').click();
+      cy.get('[data-testid="step-indicator-current-step-1-icon"]').should(
+        'be.visible',
+      );
+    });
   });
 
   describe('Filing type: Myself', () => {
@@ -73,12 +88,6 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       cy.get('[data-testid="contact-primary-email"]').should(
         'have.text',
         contactInfo.email,
-      );
-
-      cy.get('[data-testid="edit-petition-section-button-1"]').click();
-
-      cy.get('[data-testid="step-indicator-current-step-1-icon"]').should(
-        'be.visible',
       );
     });
 
