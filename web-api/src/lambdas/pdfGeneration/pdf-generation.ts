@@ -36,6 +36,7 @@ export const changeOfAddressHandler = async event => {
 
   await applicationContext.getUseCaseHelpers().generateChangeOfAddressHelper({
     applicationContext,
+    // TODO: 10417
     authorizedUser: applicationContext.getCurrentUser(),
     bypassDocketEntry: eventBody.bypassDocketEntry,
     contactInfo: eventBody.contactInfo,
