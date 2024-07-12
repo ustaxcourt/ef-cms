@@ -55,7 +55,8 @@ export const MessageDocument = connect(
       <div className="message-document-actions">
         {messageDocumentHelper.showEditButtonNotSigned && (
           <Button
-            data-testid="edit-document-button"
+            link
+            data-testid="edit-unsigned-document-button"
             icon="edit"
             onClick={() =>
               editUnsignedDraftDocumentSequence({
@@ -74,7 +75,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showEditButtonSigned && (
           <Button
             link
-            data-testid="edit-document-button"
+            data-testid="edit-signed-document-button"
             icon="edit"
             onClick={() =>
               openConfirmEditModalSequence({
