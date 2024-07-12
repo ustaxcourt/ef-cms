@@ -70,15 +70,15 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     form: {
       generatedDocumentTitle: 'Circle of Life',
     },
+    user,
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-
     applicationContext.getConstants.mockImplementation(() => mockConstants);
   });
 
   it('should calculate document types based on constants in applicationContext', () => {
+    console.debug('*****************************************', state.user);
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.documentTypes).toEqual([
       {
@@ -208,6 +208,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   it('should return showSaveAndServeButton false if eventCode is found in unservable event codes list', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
+        ...state,
         caseDetail: {
           ...state.caseDetail,
           docketEntries: [
@@ -229,6 +230,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   it('should return showServiceWarning true and showSaveAndServeButton false if the case can NOT allow service', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
+        ...state,
         caseDetail: {
           ...state.caseDetail,
           docketEntries: [
@@ -253,6 +255,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   it('should return showServiceWarning true and showSaveAndServeButton false if eventCode is NOT found in unservable event codes list and case can NOT allow service', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
+        ...state,
         caseDetail: {
           ...state.caseDetail,
           docketEntries: [
@@ -281,6 +284,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   it('should return showServiceWarning false and showSaveAndServeButton true if eventCode is NOT found in unservable event codes list and case can allow service', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
+        ...state,
         caseDetail: {
           ...state.caseDetail,
           docketEntries: [
