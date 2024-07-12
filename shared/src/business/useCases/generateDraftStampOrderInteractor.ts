@@ -56,10 +56,14 @@ export const generateDraftStampOrderInteractor = async (
 
   await applicationContext
     .getUseCaseHelpers()
-    .generateStampedCoversheetInteractor(applicationContext, {
-      docketEntryId: motionDocketEntryId,
-      docketNumber,
-      stampData,
-      stampedDocketEntryId,
-    });
+    .generateStampedCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: motionDocketEntryId,
+        docketNumber,
+        stampData,
+        stampedDocketEntryId,
+      },
+      authorizedUser,
+    );
 };
