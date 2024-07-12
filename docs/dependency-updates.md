@@ -77,11 +77,12 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on.
-- As of 06/07/2024, we cannot update puppeteer beyond 22.6.5 because @sparticuz/chromium only supports version 123 of chromium.
+- As of 07/12/2024, we cannot update puppeteer beyond 22.6.5 because @sparticuz/chromium only supports version 123 of chromium.
 
 ### pdfjs-dist
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+- The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10407 and can therefore be ignored.
 
 ### @uswds/uswds
 - Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
