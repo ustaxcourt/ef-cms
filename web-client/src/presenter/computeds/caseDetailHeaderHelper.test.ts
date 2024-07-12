@@ -17,24 +17,17 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseDetailHeaderHelper', () => {
-  let globalUser;
-
   const getBaseState = user => {
-    globalUser = user;
     return {
       caseDetail: { docketEntries: [], petitioners: [] },
       permissions: getUserPermissions(user),
+      user,
     };
   };
 
   const caseDetailHeaderHelper = withAppContextDecorator(
     caseDetailHeaderHelperComputed,
-    {
-      ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
-    },
+    applicationContext,
   );
 
   describe('hidePublicCaseInformation', () => {
@@ -589,6 +582,7 @@ describe('caseDetailHeaderHelper', () => {
     it('should be true when the case is sealed', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
+          ...getBaseState(privatePractitionerUser),
           caseDetail: {
             ...getBaseState(privatePractitionerUser).caseDetail,
             isSealed: true,
