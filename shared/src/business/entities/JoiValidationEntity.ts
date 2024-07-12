@@ -195,7 +195,7 @@ export abstract class JoiValidationEntity {
   static validateRawCollection<T extends JoiValidationEntity>(
     this: new (someVar: any, someArgs: any) => T,
     collection: any[] = [],
-    args: any,
+    args?: any,
   ) {
     return collection.map(
       rawEntity =>
