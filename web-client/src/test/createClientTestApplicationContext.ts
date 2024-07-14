@@ -333,7 +333,6 @@ const createTestApplicationContext = () => {
       .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
-    uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
       .fn()
       .mockImplementation(DateHandler.validateDateAndCreateISO),
@@ -517,8 +516,8 @@ const createTestApplicationContext = () => {
   };
 
   const mockGetNotificationService = {
-    publish: jest.fn().mockReturnValue({
-      promise: () => Promise.resolve('ok'),
+    send: jest.fn().mockResolvedValue({
+      MessageId: 'mockMessageID',
     }),
   };
 

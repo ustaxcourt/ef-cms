@@ -44,13 +44,18 @@ note: we have 2 package.json files, be sure to update both
 
 regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
-	- ./web-api/workflow-terraform/glue-cron/main/main.tf
-	- ./web-api/workflow-terraform/migration/main/main.tf
-	- ./web-api/workflow-terraform/migration-cron/main/main.tf
-	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
-	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
-	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
-	- ./web-client/terraform/main/main.tf
+ - ./shared/admin-tools/glue/glue_migrations/main.tf
+ - ./shared/admin-tools/glue/remote_role/main.tf
+ - ./web-api/terraform/applyables/account-specific/account-specific.tf
+ - ./web-api/terraform/applyables/allColors/allColors.tf
+ - ./web-api/terraform/applyables/blue/blue.tf
+ - ./web-api/terraform/applyables/glue-cron/glue-cron-applyable.tf
+ - ./web-api/terraform/applyables/green/green.tf
+ - ./web-api/terraform/applyables/migration/migration-applyable.tf
+ - ./web-api/terraform/applyables/migration-cron/migration-cron-applyable.tf
+ - ./web-api/terraform/applyables/reindex-cron/reindex-cron-applyable.tf
+ - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
+ - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
 
 	> aws = "<LATEST_VERSION>"
 
@@ -78,9 +83,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 
-### s3-files (3.0.1)
-- (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
-
 ### @uswds/uswds
 - Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
 
@@ -88,6 +90,12 @@ Below is a list of dependencies that are locked down due to known issues with se
 - Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
 See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
 - Keep eslint-plugin-security at 2.1.1 since upgrading makes it only compatible with v9.0.0
+
+### ws, 3rd party dependency of Cerebral
+- When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
+
+### typescript
+- We currently run version 5.4.5; upon upgrading to version 5.5.3, we ran into a series of issues. While the tests passed, we ran into issues linting and type-checking. The recurring issue was a RangeError: Maximum call stack size exceeded, which occurred with our npx tsc command as well as our lint-staged command. We noticed related issues in Github around this release. In order to prevent delaying other devs and ensure the remaining dependency updates are completed, we decided to hold on this update till version 5.5.3+ and/or we can spend more time to determine why this is occurring.
 
 ## Incrementing the Node Cache Key Version
 

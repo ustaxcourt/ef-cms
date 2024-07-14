@@ -1,18 +1,13 @@
-/**
- * sendNotificationOfSealing
- *
- * This broadcasts a message to our Notification Service that a case has been sealed
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the Case that is being sealed (or where the docket entry lives)
- * @param {string} providers.docketEntryId the identifier of the Docket Entry that is being sealed
- * @returns {Promise} upon completion of notification delivery
- */
+import { PublishCommand } from '@aws-sdk/client-sns';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const sendNotificationOfSealing = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
-) => {
+  applicationContext: ServerApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId: string; docketNumber: string },
+): Promise<void> => {
   const params = {
     Message: JSON.stringify({ docketEntryId, docketNumber }),
     TopicArn: `arn:aws:sns:us-east-1:${process.env.AWS_ACCOUNT_ID}:seal_notifier`,
@@ -21,11 +16,11 @@ export const sendNotificationOfSealing = async (
   const maxRetries = 5;
 
   for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
+    const publishCommand = new PublishCommand(params);
     try {
       const response = await applicationContext
         .getNotificationService()
-        .publish(params)
-        .promise();
+        .send(publishCommand);
       applicationContext.logger.info('sent notification of sealing', {
         docketEntryId,
         docketNumber,

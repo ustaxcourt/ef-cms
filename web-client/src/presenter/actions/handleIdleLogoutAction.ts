@@ -1,15 +1,13 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const handleIdleLogoutAction = ({ get, path, store }) => {
+export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
   const constants = get(state.constants);
   const lastIdleAction = get(state.lastIdleAction);
   const idleLogoutState = get(state.idleLogoutState);
   const isUploading = get(state.fileUploadProgress.isUploading);
   const user = get(state.user);
 
-  if (!user) return path.continue();
-
-  if (!isUploading && idleLogoutState.state === 'INITIAL') {
+  if (user && !isUploading && idleLogoutState.state === 'INITIAL') {
     store.set(state.idleLogoutState, {
       logoutAt:
         Date.now() +
