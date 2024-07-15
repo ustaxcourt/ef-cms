@@ -12,5 +12,8 @@ export const getMostRecentMessageInThreadAction = ({ get }: ActionProps) => {
 
   const sortedMessages = orderBy(messageDetail, 'createdAt', 'desc');
 
-  return { mostRecentMessage: sortedMessages[0] };
+  return {
+    mostRecentMessage: sortedMessages[0],
+    parentMessageId: sortedMessages[0].parentMessageId,
+  };
 };
