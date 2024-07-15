@@ -18,6 +18,10 @@ import { v4 } from 'uuid';
 describe('file status report order response', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
+  const firstPdfLineJustThisCase =
+    'On June 28, 2024, a status report was filed in this case';
+  const firstPdfLineForAllCasesInGroup =
+    'On June 28, 2024, a status report was filed in the lead case of the consolidated group';
 
   describe('judge', () => {
     beforeEach(() => {
@@ -52,6 +56,22 @@ describe('file status report order response', () => {
         cy.get('[data-testid="order-response-button"]').click();
         cy.get('#docket-entry-description').clear();
         cy.get('#docket-entry-description').type(orderName);
+
+        cy.get('#jurisdiction-retained').should('be.disabled');
+        cy.get('#jurisdiction-restored-to-general-docket').should(
+          'be.disabled',
+        );
+
+        // We check that no options are selected when the user
+        // selects a jurisdiction but then unchecks case stricken
+        cy.get('#stricken-from-trial-sessions').check({ force: true });
+        cy.get('#jurisdiction-retained').check({ force: true });
+        cy.get('#stricken-from-trial-sessions').uncheck({ force: true });
+
+        cy.get('#jurisdiction-retained').should('be.disabled');
+        cy.get('#jurisdiction-restored-to-general-docket').should(
+          'be.disabled',
+        );
 
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
@@ -168,6 +188,10 @@ describe('file status report order response', () => {
             '104-67',
             '105-67',
           ]);
+          expect(req.body.contentHtml).to.include(
+            firstPdfLineForAllCasesInGroup,
+          );
+          expect(req.body.contentHtml).not.to.include(firstPdfLineJustThisCase);
         });
         cy.contains('Apply Signature').should('exist');
       });
@@ -186,6 +210,10 @@ describe('file status report order response', () => {
 
         cy.wait('@courtIssuedOrder').then(({ request: req }) => {
           expect(req.body.addedDocketNumbers).to.be.empty;
+          expect(req.body.contentHtml).to.include(firstPdfLineJustThisCase);
+          expect(req.body.contentHtml).not.to.include(
+            firstPdfLineForAllCasesInGroup,
+          );
         });
         cy.contains('Apply Signature').should('exist');
       });

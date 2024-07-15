@@ -24,7 +24,8 @@ export const StatusReportOrderResponse = connect(
       sequences.statusReportOrderResponsePdfPreviewSequence,
     submitStatusReportOrderResponseSequence:
       sequences.submitStatusReportOrderResponseSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFormValueSequence:
+      sequences.updateStatusReportOrderResponseFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function StatusReportOrderResponse({
@@ -69,7 +70,7 @@ export const StatusReportOrderResponse = connect(
                           This is the lead case in a consolidateed group. Issue
                           this order in:
                         </label>
-                        <div className="usa-radio usa-radio__inline">
+                        <div className="usa-radio usa-radio">
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="all cases in group"
@@ -93,7 +94,7 @@ export const StatusReportOrderResponse = connect(
                             All cases in this group
                           </label>
                         </div>
-                        <div className="usa-radio usa-radio__inline">
+                        <div className="usa-radio usa-radio">
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="just this case"
@@ -256,6 +257,7 @@ export const StatusReportOrderResponse = connect(
                         aria-label="retained"
                         checked={form.jurisdiction === 'retained'}
                         className="usa-radio__input"
+                        disabled={!form.strickenFromTrialSessions}
                         id="jurisdiction-retained"
                         name="jurisdiction"
                         type="radio"
@@ -282,6 +284,7 @@ export const StatusReportOrderResponse = connect(
                           form.jurisdiction === 'restoredToGeneralDocket'
                         }
                         className="usa-radio__input"
+                        disabled={!form.strickenFromTrialSessions}
                         id="jurisdiction-restored-to-general-docket"
                         name="jurisdiction"
                         type="radio"
@@ -322,8 +325,6 @@ export const StatusReportOrderResponse = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="additional-order-text"
-                        // TODO find the character limit used in the ApplyStamp
-                        // component and use that
                         maxLength={80}
                         name="additionalOrderText"
                         value={form.additionalOrderText}
@@ -335,7 +336,6 @@ export const StatusReportOrderResponse = connect(
                         }}
                       ></textarea>
                       <CharactersRemainingHint
-                        // TODO see above
                         maxCharacters={80}
                         stringToCount={form.additionalOrderText}
                       />
@@ -363,8 +363,6 @@ export const StatusReportOrderResponse = connect(
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="docket-entry-description"
-                        // TODO find the character limit used in the ApplyStamp
-                        // component and use that
                         maxLength={80}
                         name="docketEntryDescription"
                         value={form.docketEntryDescription}
@@ -376,8 +374,6 @@ export const StatusReportOrderResponse = connect(
                         }}
                       ></textarea>
                       <CharactersRemainingHint
-                        // TODO character counter doesn't work when setting the
-                        // default value of the field within the textarea
                         maxCharacters={80}
                         stringToCount={form.docketEntryDescription}
                       />

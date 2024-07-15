@@ -439,7 +439,6 @@ const router = {
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
-            docketEntryIdToEdit: docketEntryId,
             docketNumber,
             isEditing: true,
           });
@@ -1371,6 +1370,7 @@ const router = {
             docketEntryId,
             docketNumber,
             parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
             statusReportFilingDate,
             statusReportIndex,
           });
@@ -1388,10 +1388,10 @@ const router = {
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
-            docketEntryIdToEdit: docketEntryId,
             docketNumber,
             isEditing: true,
             parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
           });
         },
       ),

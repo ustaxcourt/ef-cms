@@ -93,7 +93,7 @@ describe('edit status report order response', () => {
 
       cy.wait('@courtIssuedOrder').then(({ request: req }) => {
         expectedPdfLines.forEach((pdfLine, i) => {
-          if (i === 2) {
+          if (i === 2 || i === 3) {
             expect(req.body.contentHtml).to.not.include(pdfLine);
           } else {
             expect(req.body.contentHtml).to.include(pdfLine);

@@ -9,14 +9,17 @@ export const prepareStatusReportOrderResponseAction = ({
   const {
     additionalOrderText,
     dueDate,
+    issueOrder,
     jurisdiction,
     orderType,
     strickenFromTrialSessions,
   } = get(state.form);
+  const caseDetail = get(state.caseDetail);
   const { statusReportFilingDate, statusReportIndex } = get(
     state.statusReportOrderResponse,
   );
 
+  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
@@ -30,7 +33,10 @@ export const prepareStatusReportOrderResponseAction = ({
     .getUtilities()
     .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
 
-  const filedLine = `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
+  const filedLine =
+    isLeadCase && issueOrder === 'allCasesInGroup'
+      ? `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in the lead case of the consolidated group (Index no. ${statusReportIndex}). For cause, it is</p>`
+      : `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType && orderType === 'statusReport'
