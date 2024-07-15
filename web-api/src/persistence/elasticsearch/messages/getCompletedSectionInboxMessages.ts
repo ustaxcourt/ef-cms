@@ -1,6 +1,8 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq, gt } from 'drizzle-orm';
 import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
-import { search } from '../searchClient';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 
 export const getCompletedSectionInboxMessages = async ({
   applicationContext,
@@ -8,38 +10,23 @@ export const getCompletedSectionInboxMessages = async ({
 }) => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'completedBySection.S': section },
-            },
-            {
-              term: { 'isCompleted.BOOL': true },
-            },
-            {
-              range: {
-                'completedAt.S': {
-                  format: 'strict_date_time', // ISO-8601 time stamp
-                  gte: filterDate,
-                },
-              },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms-message',
-  };
-
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
+  const messages = await db.query.messagesTable.findMany({
+    where: and(
+      eq(messagesTable.completedBySection, section),
+      eq(messagesTable.isCompleted, true),
+      gt(messagesTable.completedAt, new Date(filterDate)),
+    ),
   });
 
-  return results;
+  return messages.map(
+    result =>
+      new Message(
+        {
+          ...result,
+          completedAt: result.completedAt?.toISOString(),
+          createdAt: result.createdAt?.toISOString(),
+        },
+        { applicationContext },
+      ),
+  );
 };

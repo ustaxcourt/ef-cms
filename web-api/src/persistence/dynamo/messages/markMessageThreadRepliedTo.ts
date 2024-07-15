@@ -1,4 +1,12 @@
+import { Message } from '@shared/business/entities/Message';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
+import { db } from '@web-api/db';
+import { db } from '@web-api/db';
 import { getMessageThreadByParentId } from './getMessageThreadByParentId';
+import { messagesTable } from '@web-api/db/schema';
+import { messagesTable } from '@web-api/db/schema';
 import { update } from '../../dynamodbClientService';
 
 /**
@@ -22,21 +30,13 @@ export const markMessageThreadRepliedTo = async ({
   });
 
   if (messages.length) {
-    const updateMessage = async message => {
-      return await update({
-        ExpressionAttributeNames: {
-          '#isRepliedTo': 'isRepliedTo',
-        },
-        ExpressionAttributeValues: {
-          ':isRepliedTo': true,
-        },
-        Key: {
-          pk: `case|${message.docketNumber}`,
-          sk: `message|${message.messageId}`,
-        },
-        UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
-        applicationContext,
-      });
+    const updateMessage = async (message: Message) => {
+      return await db
+        .update(messagesTable)
+        .set({
+          isRepliedTo: true,
+        })
+        .where(eq(messagesTable.messageId, message.messageId));
     };
 
     await Promise.all(messages.map(updateMessage));

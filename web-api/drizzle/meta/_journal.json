@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1721059792457,
+      "tag": "0000_lean_argent",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1721061339528,
+      "tag": "0001_flaky_prism",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1721061363466,
+      "tag": "0002_material_kinsey_walden",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1721061481890,
+      "tag": "0003_dizzy_nightmare",
+      "breakpoints": true
+    }
+  ]
+}

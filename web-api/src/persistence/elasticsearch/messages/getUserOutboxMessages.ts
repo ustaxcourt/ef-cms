@@ -1,39 +1,24 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq, gte } from 'drizzle-orm';
 import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
-import { search } from '../searchClient';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 
 export const getUserOutboxMessages = async ({ applicationContext, userId }) => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'fromUserId.S': userId },
-            },
-            {
-              range: {
-                'createdAt.S': {
-                  format: 'strict_date_time', // ISO-8601 time stamp
-                  gte: filterDate,
-                },
-              },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms-message',
-  };
-
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
+  const messages = await db.query.messagesTable.findMany({
+    where: and(
+      eq(messagesTable.fromUserId, userId),
+      gte(messagesTable.createdAt, new Date(filterDate)),
+    ),
   });
 
-  return results;
+  return messages.map(
+    result =>
+      new Message(
+        { ...result, createdAt: result.createdAt?.toISOString() },
+        { applicationContext },
+      ),
+  );
 };

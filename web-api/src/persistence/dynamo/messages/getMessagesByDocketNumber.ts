@@ -1,4 +1,7 @@
-import { query } from '../../dynamodbClientService';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq } from 'drizzle-orm';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 
 /**
  * getMessagesByDocketNumber
@@ -8,22 +11,22 @@ import { query } from '../../dynamodbClientService';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the created message
  */
-export const getMessagesByDocketNumber = ({
+export const getMessagesByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-}) =>
-  query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'message|',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
+}) => {
+  const messages = await db.query.messagesTable.findMany({
+    where: and(eq(messagesTable.docketNumber, docketNumber)),
   });
+
+  return messages.map(
+    result =>
+      new Message(
+        { ...result, createdAt: result.createdAt?.toISOString() },
+        { applicationContext },
+      ),
+  );
+};

@@ -1,0 +1,170 @@
+{
+  "id": "f02cb53f-9037-4b53-9654-1d6c4ebf4b6d",
+  "prevId": "12741e89-313c-4cc5-ae96-d279161f66cb",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "dawson.messages": {
+      "name": "messages",
+      "schema": "dawson",
+      "columns": {
+        "attachments": {
+          "name": "attachments",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "caseStatus": {
+          "name": "caseStatus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caseTitle": {
+          "name": "caseTitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completedAt": {
+          "name": "completedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completedBySection": {
+          "name": "completedBySection",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completedByUserId": {
+          "name": "completedByUserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "docketNumber": {
+          "name": "docketNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "docketNumberWithSuffix": {
+          "name": "docketNumberWithSuffix",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "entityName": {
+          "name": "entityName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "from": {
+          "name": "from",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fromSection": {
+          "name": "fromSection",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fromUserId": {
+          "name": "fromUserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isCompleted": {
+          "name": "isCompleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "isRead": {
+          "name": "isRead",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "isRepliedTo": {
+          "name": "isRepliedTo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "parentMessageId": {
+          "name": "parentMessageId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subject": {
+          "name": "subject",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "to": {
+          "name": "to",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "toSection": {
+          "name": "toSection",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "toUserId": {
+          "name": "toUserId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "dawson": "dawson"
+  },
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

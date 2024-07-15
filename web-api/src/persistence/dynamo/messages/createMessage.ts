@@ -1,4 +1,6 @@
 import { RawMessage } from '@shared/business/entities/Message';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 import { put } from '../../dynamodbClientService';
 
 /**
@@ -9,19 +11,14 @@ import { put } from '../../dynamodbClientService';
  * @param {object} providers.message the message data
  * @returns {object} the created message
  */
-export const createMessage = ({
+export const createMessage = async ({
   applicationContext,
   message,
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) =>
-  put({
-    Item: {
-      ...message,
-      gsi1pk: `message|${message.parentMessageId}`,
-      pk: `case|${message.docketNumber}`,
-      sk: `message|${message.messageId}`,
-    },
-    applicationContext,
-  });
+}) => {
+  await db
+    .insert(messagesTable)
+    .values({ ...message, createdAt: new Date(message.createdAt) });
+};

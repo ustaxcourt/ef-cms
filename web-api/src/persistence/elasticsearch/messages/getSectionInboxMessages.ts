@@ -1,40 +1,27 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { search } from '../searchClient';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq } from 'drizzle-orm';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 
 export const getSectionInboxMessages = async ({
   applicationContext,
   section,
-}) => {
+}): Promise<Message[]> => {
   applicationContext.logger.info('getSectionInboxMessages start');
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'toSection.S': section },
-            },
-            {
-              term: { 'isRepliedTo.BOOL': false },
-            },
-            {
-              match: { 'isCompleted.BOOL': false },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms-message',
-  };
 
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
+  const messages = await db.query.messagesTable.findMany({
+    where: and(
+      eq(messagesTable.toSection, section),
+      eq(messagesTable.isCompleted, false),
+      eq(messagesTable.isRepliedTo, false),
+    ),
   });
 
-  applicationContext.logger.info('getSectionInboxMessages end');
-
-  return results;
+  return messages.map(
+    result =>
+      new Message(
+        { ...result, createdAt: result.createdAt?.toISOString() },
+        { applicationContext },
+      ),
+  );
 };

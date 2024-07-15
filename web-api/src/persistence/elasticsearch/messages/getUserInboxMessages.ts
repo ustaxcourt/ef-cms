@@ -1,38 +1,30 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { search } from '../searchClient';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq, gt } from 'drizzle-orm';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 
 export const getUserInboxMessages = async ({ applicationContext, userId }) => {
   applicationContext.logger.info('getUserInboxMessages start');
 
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'toUserId.S': userId },
-            },
-            {
-              term: { 'isRepliedTo.BOOL': false },
-            },
-            {
-              term: { 'isCompleted.BOOL': false },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms-message',
-  };
-
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
+  const messages = await db.query.messagesTable.findMany({
+    where: and(
+      eq(messagesTable.toUserId, userId),
+      eq(messagesTable.isRepliedTo, false),
+      gt(messagesTable.isCompleted, false),
+    ),
   });
 
-  applicationContext.logger.info('getUserInboxMessages end');
+  console.log('HERE', messages);
 
-  return results;
+  return messages.map(
+    result =>
+      new Message(
+        {
+          ...result,
+          completedAt: result.completedAt?.toISOString(),
+          createdAt: result.createdAt?.toISOString(),
+        },
+        { applicationContext },
+      ),
+  );
 };

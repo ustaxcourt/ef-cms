@@ -16,26 +16,52 @@ jobs:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+      DATABASE_URL: 'postgresql://postgres:example@localhost:5432/postgres'
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20.14.0'
+
+      - name: Seed Postgres
+        run: |
+          cd web-api
+          npx ts-node --transpile-only src/db/seed.ts
+
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
           opensearch-version: 2.11
+
       - name: Setup DynamoDB Local
         uses: rrainn/dynamodb-action@v4.0.0
         with:
           port: 8000
           cors: '*'
+
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
+
       - name: Install Node Dependencies
         run: npm ci
+
       - name: Run E2E Cypress
         run: |
           mkdir -p /tmp/cypress/
@@ -44,6 +70,7 @@ jobs:
           sleep 5
           export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
           npm run cypress:integration:file $TESTFILES
+
       - name: Store Cypress Videos
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,4 +1,6 @@
-import { get } from '../../dynamodbClientService';
+import { db } from '@web-api/db';
+import { eq } from 'drizzle-orm';
+import { messagesTable } from '@web-api/db/schema';
 
 /**
  * getMessageById
@@ -18,10 +20,6 @@ export const getMessageById = ({
   docketNumber: string;
   messageId: string;
 }) =>
-  get({
-    Key: {
-      pk: `case|${docketNumber}`,
-      sk: `message|${messageId}`,
-    },
-    applicationContext,
+  db.query.messagesTable.findFirst({
+    where: eq(messagesTable.messageId, messageId),
   });

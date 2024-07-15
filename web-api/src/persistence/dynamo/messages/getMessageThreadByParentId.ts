@@ -1,4 +1,7 @@
-import { query } from '../../dynamodbClientService';
+import { Message } from '@shared/business/entities/Message';
+import { and, eq } from 'drizzle-orm';
+import { db } from '@web-api/db';
+import { messagesTable } from '@web-api/db/schema';
 
 /**
  * getMessageThreadByParentId
@@ -8,21 +11,22 @@ import { query } from '../../dynamodbClientService';
  * @param {string} providers.parentMessageId the id of the parent message
  * @returns {object} the created message
  */
-export const getMessageThreadByParentId = ({
+export const getMessageThreadByParentId = async ({
   applicationContext,
   parentMessageId,
 }: {
   applicationContext: IApplicationContext;
   parentMessageId: string;
-}) =>
-  query({
-    ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
-    },
-    ExpressionAttributeValues: {
-      ':gsi1pk': `message|${parentMessageId}`,
-    },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
-    applicationContext,
+}) => {
+  const messages = await db.query.messagesTable.findMany({
+    where: and(eq(messagesTable.parentMessageId, parentMessageId)),
   });
+
+  return messages.map(
+    result =>
+      new Message(
+        { ...result, createdAt: result.createdAt?.toISOString() },
+        { applicationContext },
+      ),
+  );
+};

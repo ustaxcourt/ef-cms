@@ -1,4 +1,6 @@
-import { update } from '../../dynamodbClientService';
+import { db } from '@web-api/db';
+import { eq } from 'drizzle-orm';
+import { messagesTable } from '@web-api/db/schema';
 
 export const setMessageAsRead = ({
   applicationContext,
@@ -9,17 +11,9 @@ export const setMessageAsRead = ({
   messageId: string;
   docketNumber: string;
 }) =>
-  update({
-    ExpressionAttributeNames: {
-      '#isRead': 'isRead',
-    },
-    ExpressionAttributeValues: {
-      ':isRead': true,
-    },
-    Key: {
-      pk: `case|${docketNumber}`,
-      sk: `message|${messageId}`,
-    },
-    UpdateExpression: 'SET #isRead = :isRead',
-    applicationContext,
-  });
+  db
+    .update(messagesTable)
+    .set({
+      isRead: true,
+    })
+    .where(eq(messagesTable.messageId, messageId));

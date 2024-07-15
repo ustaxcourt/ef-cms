@@ -1,5 +1,7 @@
 import { RawMessage } from '@shared/business/entities/Message';
-import { put } from '../../dynamodbClientService';
+import { db } from '@web-api/db';
+import { eq } from 'drizzle-orm';
+import { messagesTable } from '@web-api/db/schema';
 
 /**
  * updateMessage
@@ -16,12 +18,10 @@ export const updateMessage = ({
   applicationContext: IApplicationContext;
   message: RawMessage;
 }) =>
-  put({
-    Item: {
+  db
+    .update(messagesTable)
+    .set({
       ...message,
-      gsi1pk: `message|${message.parentMessageId}`,
-      pk: `case|${message.docketNumber}`,
-      sk: `message|${message.messageId}`,
-    },
-    applicationContext,
-  });
+      createdAt: new Date(message.createdAt),
+    })
+    .where(eq(messagesTable.messageId, message.messageId));

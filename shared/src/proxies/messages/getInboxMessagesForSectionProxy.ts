@@ -12,11 +12,8 @@ export const getInboxMessagesForSectionInteractor = async (
   applicationContext,
   { section },
 ) => {
-  console.log('wtfff', applicationContext.getMessagesServiceUrl);
-  console.log('we are here', applicationContext.getMessagesServiceUrl());
   return get({
     applicationContext,
-    baseUrl: applicationContext.getMessagesServiceUrl(),
     endpoint: `/messages/inbox/section/${section}`,
   });
 };
