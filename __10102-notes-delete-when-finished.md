@@ -50,6 +50,7 @@ only 140 or 160 characters long. Which is it?
 - **Issue**: Desired behavior: a user is navigated back to the previous screen - the document
   preview of the Status Report document - after hitting the "Cancel" button on
   the Status Report Order Response form.
+  - Currently upon Editing an Order, when clicking cancel, it will return you to the previous page, but not the previous tab. I'd recommend making this a seperate ask on another ticket if this is still desired.
 
 - ~~**Issue**: Desired behavior: for a lead case, the beginning sentence states, "On [date], a
   status report was filed in the lead case of the consolidated group (Index no.
@@ -61,14 +62,6 @@ only 140 or 160 characters long. Which is it?
 1. Formatting of separate clauses should be: indent first line beginning with "ORDERED", following lines should return to left margin as in the example PDF you sent (so, normal paragraph formatting).
 
 2. Dates should have the following format in all cases where they've been generated/selected: "Month DD, YYYY" (essentially, spell out the month).
-
-## DOD
-
-- Upon refreshing from the messages tab, we lose redirectUrl
-- edit routes redundent with:
-  docketEntryId,
-  docketEntryIdToEdit: docketEntryId,
-- reduce number of routes?
 
 ## Notes
 

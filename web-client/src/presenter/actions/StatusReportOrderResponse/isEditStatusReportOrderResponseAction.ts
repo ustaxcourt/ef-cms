@@ -3,7 +3,7 @@ export const isEditStatusReportOrderResponseAction = ({
   props,
 }: ActionProps) => {
   if (props.isEditing) {
-    return path.edit();
+    return path.edit({ docketEntryIdToEdit: props.docketEntryId });
   }
   return path.create();
 };
