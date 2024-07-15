@@ -77,11 +77,6 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    // applicationContext.getCurrentUser.mockReturnValue({
-    //   role: ROLES.docketClerk,
-    //   userId: 'fb39f224-7985-438d-8327-2df162c20c8e',
-    // });
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(({ userId }) => {
