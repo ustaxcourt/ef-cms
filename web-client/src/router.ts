@@ -1363,6 +1363,7 @@ const router = {
             docketEntryId,
             docketNumber,
             parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
             statusReportFilingDate,
             statusReportIndex,
           });
@@ -1384,6 +1385,7 @@ const router = {
             docketNumber,
             isEditing: true,
             parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
           });
         },
       ),
