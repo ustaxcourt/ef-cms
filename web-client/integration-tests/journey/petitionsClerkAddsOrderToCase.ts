@@ -4,6 +4,16 @@ export const petitionsClerkAddsOrderToCase = cerebralTest => {
   return it('Petitions clerk adds Order to case', async () => {
     await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'testing',
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'richText',
+      value: 'testing',
+    });
+
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
@@ -28,6 +38,11 @@ export const petitionsClerkAddsOrderToCase = cerebralTest => {
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'documentContents',
+      value: 'This is a test order.',
     });
 
     await cerebralTest.runSequence('submitCourtIssuedOrderSequence');

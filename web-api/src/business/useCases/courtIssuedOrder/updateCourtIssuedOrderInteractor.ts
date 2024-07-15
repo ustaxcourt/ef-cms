@@ -67,6 +67,7 @@ export const updateCourtIssuedOrder = async (
 
   if (documentMetadata.documentContents) {
     const { documentContentsId } = currentDocument;
+    documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
