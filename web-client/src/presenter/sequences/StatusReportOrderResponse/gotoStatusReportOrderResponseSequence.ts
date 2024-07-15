@@ -8,6 +8,7 @@ import { setDocketEntryIdAction } from '../../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../../actions/setDocketEntrySelectedFromMessageAction';
 import { setDocumentToEditAction } from '@web-client/presenter/actions/setDocumentToEditAction';
 import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setEditStatusReportOrderResponseFormAction';
+import { setRedirectUrlAction } from '@web-client/presenter/actions/setRedirectUrlAction';
 import { setStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setStatusReportOrderResponseFormAction';
 import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { shouldUnsetParentMessageIdAction } from '@web-client/presenter/actions/shouldUnsetParentMessageIdAction';
@@ -21,6 +22,7 @@ export const gotoStatusReportOrderResponseSequence = [
   setCaseAction,
   setDocketEntryIdAction,
   setDocketEntrySelectedFromMessageAction,
+  setRedirectUrlAction,
   isEditStatusReportOrderResponseAction,
   {
     create: [
