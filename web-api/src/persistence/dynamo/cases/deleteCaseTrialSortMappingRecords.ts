@@ -1,4 +1,4 @@
-import { query, remove } from '../../dynamodbClientService';
+import { batchDelete, query } from '../../dynamodbClientService';
 
 /**
  * deleteCaseTrialSortMappingRecords
@@ -27,17 +27,8 @@ export const deleteCaseTrialSortMappingRecords = async ({
     applicationContext,
   });
 
-  const clientDelete = record => {
-    return remove({
-      applicationContext,
-      key: {
-        pk: record.pk,
-        sk: record.sk,
-      },
-    });
-  };
-
-  const results = await Promise.all(records.map(clientDelete));
-
-  return results;
+  await batchDelete({
+    applicationContext,
+    items: records,
+  });
 };
