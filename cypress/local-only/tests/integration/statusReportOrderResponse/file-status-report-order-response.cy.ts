@@ -57,6 +57,22 @@ describe('file status report order response', () => {
         cy.get('#docket-entry-description').clear();
         cy.get('#docket-entry-description').type(orderName);
 
+        cy.get('#jurisdiction-retained').should('be.disabled');
+        cy.get('#jurisdiction-restored-to-general-docket').should(
+          'be.disabled',
+        );
+
+        // We check that no options are selected when the user
+        // selects a jurisdiction but then unchecks case stricken
+        cy.get('#stricken-from-trial-sessions').check({ force: true });
+        cy.get('#jurisdiction-retained').check({ force: true });
+        cy.get('#stricken-from-trial-sessions').uncheck({ force: true });
+
+        cy.get('#jurisdiction-retained').should('be.disabled');
+        cy.get('#jurisdiction-restored-to-general-docket').should(
+          'be.disabled',
+        );
+
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
         );
