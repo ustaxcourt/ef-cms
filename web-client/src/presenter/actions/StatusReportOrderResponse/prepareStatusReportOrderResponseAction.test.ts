@@ -26,6 +26,7 @@ describe('prepareStatusReportOrderResponseAction,', () => {
         presenter,
       },
       state: {
+        caseDetail: {},
         form: {
           additionalOrderText: undefined,
           docketEntryDescription: 'Order',
@@ -58,6 +59,7 @@ describe('prepareStatusReportOrderResponseAction,', () => {
         presenter,
       },
       state: {
+        caseDetail: {},
         form: {
           additionalOrderText,
           dueDate,
@@ -77,6 +79,41 @@ describe('prepareStatusReportOrderResponseAction,', () => {
 
   it.each([
     [
+      'allCasesInGroup',
+      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in the lead case of the consolidated group (Index no. ${statusReportIndex}). For cause, it is</p>`,
+    ],
+    [
+      'justThisCase',
+      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p>`,
+    ],
+  ])(
+    'should have correct output for lead case with issue order %s',
+    async (input, output) => {
+      const result = await runAction(prepareStatusReportOrderResponseAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketNumber: '101-01',
+            leadDocketNumber: '101-01',
+          },
+          form: {
+            issueOrder: input,
+          },
+          statusReportOrderResponse: {
+            statusReportFilingDate,
+            statusReportIndex,
+          },
+        },
+      });
+
+      expect(result.state.form.richText).toBe(output);
+    },
+  );
+
+  it.each([
+    [
       'retained',
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>`,
     ],
@@ -92,6 +129,7 @@ describe('prepareStatusReportOrderResponseAction,', () => {
           presenter,
         },
         state: {
+          caseDetail: {},
           form: {
             jurisdiction: input,
           },
@@ -121,6 +159,7 @@ describe('prepareStatusReportOrderResponseAction,', () => {
         presenter,
       },
       state: {
+        caseDetail: {},
         form: {
           dueDate,
           orderType: input,
