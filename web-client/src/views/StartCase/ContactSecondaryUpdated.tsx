@@ -56,6 +56,7 @@ export const ContactSecondaryUpdated = connect<
         inCareOf: string;
         name: string;
         phone: string;
+        paperPetitionEmail: string;
       };
     },
   }) {
@@ -187,24 +188,27 @@ export const ContactSecondaryUpdated = connect<
             errorMessageId="email-error-message"
             errorText={
               validationErrors.contactSecondary &&
-              validationErrors.contactSecondary.email
+              validationErrors.contactSecondary.paperPetitionEmail
             }
           >
-            <label className="usa-label" htmlFor="email">
+            <label className="usa-label" htmlFor="paperPetitionEmail">
               Email address <span className="usa-hint">(Optional)</span>
             </label>
             <input
               autoCapitalize="none"
               className="usa-input"
               data-testid="contact-secondary-email"
-              id="email"
-              name="contactSecondary.email"
-              ref={registerRef && registerRef('contactSecondary.email')}
+              id="paperPetitionEmail"
+              name="contactSecondary.paperPetitionEmail"
+              ref={
+                registerRef &&
+                registerRef('contactSecondary.paperPetitionEmail')
+              }
               type="text"
-              value={addressInfo.email || ''}
+              value={addressInfo.paperPetitionEmail || ''}
               onBlur={() => {
                 handleBlur({
-                  validationKey: ['contactSecondary', 'email'],
+                  validationKey: ['contactSecondary', 'paperPetitionEmail'],
                 });
               }}
               onChange={e => {

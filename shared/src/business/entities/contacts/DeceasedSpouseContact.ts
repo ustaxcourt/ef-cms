@@ -10,13 +10,6 @@ export class DeceasedSpouseContact extends ContactUpdated {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      email: JoiValidationConstants.EMAIL.when('hasConsentedToEService', {
-        is: true,
-        otherwise: joi.optional(),
-        then: joi.string().required(),
-      }).messages({
-        '*': 'Enter an email address to register for electronic service',
-      }),
       hasConsentedToEService: joi
         .boolean()
         .optional()
@@ -26,6 +19,16 @@ export class DeceasedSpouseContact extends ContactUpdated {
       inCareOf: JoiValidationConstants.STRING.max(100)
         .required()
         .messages({ '*': 'Enter name for in care of' }),
+      paperPetitionEmail: JoiValidationConstants.EMAIL.when(
+        'hasConsentedToEService',
+        {
+          is: true,
+          otherwise: joi.optional(),
+          then: joi.string().required(),
+        },
+      ).messages({
+        '*': 'Enter an email address to register for electronic service',
+      }),
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
     };
   }

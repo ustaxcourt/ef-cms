@@ -17,6 +17,7 @@ export class ContactUpdated extends JoiValidationEntity {
   public country?: string;
   public countryType: CountryTypes;
   public email: string;
+  public paperPetitionEmail?: string;
   public inCareOf?: string;
   public name: string;
   public phone: string;
@@ -43,6 +44,7 @@ export class ContactUpdated extends JoiValidationEntity {
     this.country = rawContact.country;
     this.countryType = rawContact.countryType;
     this.email = rawContact.email;
+    this.paperPetitionEmail = rawContact.paperPetitionEmail;
     this.inCareOf = rawContact.inCareOf;
     this.name = rawContact.name;
     this.phone = formatPhoneNumber(rawContact.phone);
