@@ -21,6 +21,7 @@ export interface AddressType {
   state?: string;
   postalCode?: string;
   email?: string;
+  paperPetitionEmail?: string;
   phone?: string;
   hasConsentedToEService?: string;
 }
