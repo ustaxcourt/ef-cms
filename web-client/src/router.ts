@@ -439,7 +439,6 @@ const router = {
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
-            docketEntryIdToEdit: docketEntryId,
             docketNumber,
             isEditing: true,
           });
@@ -1381,7 +1380,6 @@ const router = {
           );
           return app.getSequence('gotoStatusReportOrderResponseSequence')({
             docketEntryId,
-            docketEntryIdToEdit: docketEntryId,
             docketNumber,
             isEditing: true,
             parentMessageId,
