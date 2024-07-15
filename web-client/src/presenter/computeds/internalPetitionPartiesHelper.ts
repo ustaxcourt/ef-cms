@@ -213,7 +213,7 @@ export const internalPetitionPartiesHelper = (
     applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
 
-  const { isPaper, partyType } = get(state.form);
+  const { filingType, isPaper, partyType } = get(state.form);
   const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
@@ -227,7 +227,17 @@ export const internalPetitionPartiesHelper = (
   const showPaperPetitionEmailFieldAndConsentBox =
     E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !!isPaper && !isExternalUser;
 
+  const showSecondaryContactEmailFieldAndConsentBox =
+    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
+    !isPaper &&
+    filingType === 'Myself and my spouse' &&
+    !isExternalUser;
+
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
-  return { ...contacts, showPaperPetitionEmailFieldAndConsentBox };
+  return {
+    ...contacts,
+    showPaperPetitionEmailFieldAndConsentBox,
+    showSecondaryContactEmailFieldAndConsentBox,
+  };
 };
