@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import 'reflect-metadata';
 import { addCaseToTrialSessionLambda } from './lambdas/trialSessions/addCaseToTrialSessionLambda';
 import { addConsolidatedCaseLambda } from './lambdas/cases/addConsolidatedCaseLambda';
 import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';

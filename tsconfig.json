@@ -3,41 +3,30 @@
     "module": "commonjs",
     "allowJs": false,
     "noImplicitAny": false,
+    "lib": ["es5", "es6"],
     "removeComments": true,
     "preserveConstEnums": true,
     "esModuleInterop": true,
     "inlineSourceMap": true,
     "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "skipLibCheck": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ],
-    "types": [
-      "jest",
-      "node"
-    ],
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["jest", "node"],
     "target": "es6",
     "jsx": "react",
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@web-client/*": [
-        "web-client/src/*"
-      ],
-      "@web-api/*": [
-        "web-api/src/*"
-      ],
-      "@shared/*": [
-        "shared/src/*"
-      ]
+      "@web-client/*": ["web-client/src/*"],
+      "@web-api/*": ["web-api/src/*"],
+      "@shared/*": ["shared/src/*"]
     }
   },
   "ts-node": {
     "files": true,
-    "require": [
-      "tsconfig-paths/register"
-    ]
+    "require": ["tsconfig-paths/register"]
   },
   "include": ["./**/*.ts", "./**/*.tsx"],
   "exclude": [
