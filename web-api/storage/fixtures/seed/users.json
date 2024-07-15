@@ -391,19 +391,21 @@
     "entityName": "IrsPractitioner"
   },
   {
-    "admissionsStatus": "Active",
-    "lastName": "DOJ_Practitioner",
     "role": "irsPractitioner",
     "admissionsDate": "2019-03-01",
-    "section": "irsPractitioner",
-    "practitionerType": "Attorney",
-    "userId": "867e7564-1d7f-44fb-b463-5e56479bc9e4",
-    "practiceType": "DOJ",
-    "firstName": "DOJ_Test",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
+    "admissionsStatus": "Active",
     "birthYear": "1950",
-    "entityName": "Practitioner",
+    "practiceType": "DOJ",
+    "practitionerType": "Attorney",
+    "name": "Test IRS Practitioner",
+    "firstName": "DOJ_Test",
+    "middleName": "DOJ",
+    "lastName": "DOJ_Practitioner",
+    "suffix": "",
+    "section": "irsPractitioner",
+    "userId": "867e7564-1d7f-44fb-b463-5e56479bc9e4",
+    "email": "dojpractitioner1@example.com",
+    "barNumber": "RT6789",
     "contact": {
       "address3": "",
       "address2": "",
@@ -414,12 +416,8 @@
       "state": "IL",
       "countryType": "domestic"
     },
-    "sk": "user|867e7564-1d7f-44fb-b463-5e56479bc9e4",
-    "name": "Test IRS Practitioner",
-    "middleName": "DOJ",
-    "pk": "user|867e7564-1d7f-44fb-b463-5e56479bc9e4",
     "originalBarState": "MD",
-    "email": "dojpractitioner1@example.com"
+    "entityName": "IrsPractitioner"
   },
   {
     "role": "irsPractitioner",
