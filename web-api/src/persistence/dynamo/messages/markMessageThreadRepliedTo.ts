@@ -1,13 +1,14 @@
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@web-api/persistence/repository/Message';
 import { getMessageThreadByParentId } from './getMessageThreadByParentId';
-import { update } from '../../dynamodbClientService';
 
 /**
  * markMessageThreadRepliedTo
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.messageId the id of the message to update
- * @returns {object} the created message
+ * @param {string} providers.parentMessageId the id of the parent message to update
+ * @returns {object} the updated messages
  */
 export const markMessageThreadRepliedTo = async ({
   applicationContext,
@@ -22,23 +23,15 @@ export const markMessageThreadRepliedTo = async ({
   });
 
   if (messages.length) {
-    const updateMessage = async message => {
-      return await update({
-        ExpressionAttributeNames: {
-          '#isRepliedTo': 'isRepliedTo',
-        },
-        ExpressionAttributeValues: {
-          ':isRepliedTo': true,
-        },
-        Key: {
-          pk: `case|${message.docketNumber}`,
-          sk: `message|${message.messageId}`,
-        },
-        UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
-        applicationContext,
-      });
-    };
+    const messageRepository = AppDataSource.getRepository(Message);
 
-    await Promise.all(messages.map(updateMessage));
+    await Promise.all(
+      messages.map(async message => {
+        await messageRepository.update(
+          { messageId: message.messageId },
+          { isRepliedTo: true },
+        );
+      }),
+    );
   }
 };

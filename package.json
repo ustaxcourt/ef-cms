@@ -96,7 +96,8 @@
     "servor": "4.0.2",
     "supports-color": "9.4.0",
     "tmp": "0.2.3",
-    "typeorm": "^0.3.20",
+    "typeorm": "0.3.20",
+    "typeorm-extension": "3.5.1",
     "util": "0.12.5",
     "uuid": "10.0.0",
     "websocket": "1.0.35",
@@ -238,7 +239,11 @@
     "test:watch": "jest --watch .*test\\.js$",
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
-    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html"
+    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
+    "typeorm:migrations:migrate": "npx typeorm-ts-node-commonjs migration:run -d postgres/data-source.ts",
+    "typeorm:migrations:revert": "npx typeorm-ts-node-commonjs migration:revert -d postgres/data-source.ts",
+    "typeorm:migrations:generate": "npx typeorm-ts-node-commonjs migration:generate ${MIGRATION_NAME} -d postgres/data-source.ts",
+    "typeorm:seed": "npx ts-node ./postgres/seed.ts"
   },
   "overrides": {
     "axios": "$axios",

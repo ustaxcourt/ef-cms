@@ -1,4 +1,5 @@
-import { get } from '../../dynamodbClientService';
+import { Message } from '@web-api/persistence/repository/Message';
+import { getDataSource } from '@web-api/data-source';
 
 /**
  * getMessageById
@@ -9,7 +10,7 @@ import { get } from '../../dynamodbClientService';
  * @param {string} providers.messageId the id of the message
  * @returns {object} the message
  */
-export const getMessageById = ({
+export const getMessageById = async ({
   applicationContext,
   docketNumber,
   messageId,
@@ -17,11 +18,12 @@ export const getMessageById = ({
   applicationContext: IApplicationContext;
   docketNumber: string;
   messageId: string;
-}) =>
-  get({
-    Key: {
-      pk: `case|${docketNumber}`,
-      sk: `message|${messageId}`,
-    },
-    applicationContext,
+}) => {
+  const appDataSource = await getDataSource();
+  const messageRepository = appDataSource.getRepository(Message);
+  const message = await messageRepository.findOne({
+    where: { messageId },
   });
+
+  return message;
+};

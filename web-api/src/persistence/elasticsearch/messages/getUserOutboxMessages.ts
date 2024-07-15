@@ -1,39 +1,27 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
-import { search } from '../searchClient';
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@shared/business/entities/Message';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import { Message as messageRepo } from '@web-api/persistence/repository/Message';
 
-export const getUserOutboxMessages = async ({ applicationContext, userId }) => {
+export const getUserOutboxMessages = async ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'fromUserId.S': userId },
-            },
-            {
-              range: {
-                'createdAt.S': {
-                  format: 'strict_date_time', // ISO-8601 time stamp
-                  gte: filterDate,
-                },
-              },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms-message',
-  };
+  const messageRepository = AppDataSource.getRepository(messageRepo);
 
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
-  });
+  const messages = await messageRepository
+    .createQueryBuilder('message')
+    .where('message.fromUserId = :userId', { userId })
+    .andWhere('message.createdAt >= :filterDate', { filterDate })
+    .limit(5000)
+    .getMany();
 
-  return results;
+  return messages.map(
+    message => new Message({ ...message }, { applicationContext }),
+  );
 };

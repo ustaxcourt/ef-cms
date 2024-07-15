@@ -1,6 +1,7 @@
-import { update } from '../../dynamodbClientService';
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@web-api/persistence/repository/Message';
 
-export const setMessageAsRead = ({
+export const setMessageAsRead = async ({
   applicationContext,
   docketNumber,
   messageId,
@@ -8,18 +9,8 @@ export const setMessageAsRead = ({
   applicationContext: IApplicationContext;
   messageId: string;
   docketNumber: string;
-}) =>
-  update({
-    ExpressionAttributeNames: {
-      '#isRead': 'isRead',
-    },
-    ExpressionAttributeValues: {
-      ':isRead': true,
-    },
-    Key: {
-      pk: `case|${docketNumber}`,
-      sk: `message|${messageId}`,
-    },
-    UpdateExpression: 'SET #isRead = :isRead',
-    applicationContext,
-  });
+}) => {
+  const messageRepository = AppDataSource.getRepository(Message);
+
+  await messageRepository.update({ docketNumber, messageId }, { isRead: true });
+};

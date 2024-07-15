@@ -1,5 +1,6 @@
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@web-api/persistence/repository/Message';
 import { RawMessage } from '@shared/business/entities/Message';
-import { put } from '../../dynamodbClientService';
 
 /**
  * createMessage
@@ -9,19 +10,16 @@ import { put } from '../../dynamodbClientService';
  * @param {object} providers.message the message data
  * @returns {object} the created message
  */
-export const createMessage = ({
+export const createMessage = async ({
   applicationContext,
   message,
 }: {
   applicationContext: IApplicationContext;
   message: RawMessage;
-}) =>
-  put({
-    Item: {
-      ...message,
-      gsi1pk: `message|${message.parentMessageId}`,
-      pk: `case|${message.docketNumber}`,
-      sk: `message|${message.messageId}`,
-    },
-    applicationContext,
+}) => {
+  const messageRepository = AppDataSource.getRepository(Message);
+
+  return await messageRepository.save({
+    ...message,
   });
+};

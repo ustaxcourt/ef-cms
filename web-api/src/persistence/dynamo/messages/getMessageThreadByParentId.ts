@@ -1,4 +1,6 @@
-import { query } from '../../dynamodbClientService';
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@web-api/persistence/repository/Message';
+import { Message as MessageEntity } from '@shared/business/entities/Message';
 
 /**
  * getMessageThreadByParentId
@@ -8,21 +10,26 @@ import { query } from '../../dynamodbClientService';
  * @param {string} providers.parentMessageId the id of the parent message
  * @returns {object} the created message
  */
-export const getMessageThreadByParentId = ({
+export const getMessageThreadByParentId = async ({
   applicationContext,
   parentMessageId,
 }: {
   applicationContext: IApplicationContext;
   parentMessageId: string;
-}) =>
-  query({
-    ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
+}) => {
+  const messageRepository = AppDataSource.getRepository(Message);
+
+  const messages = await messageRepository.find({
+    where: {
+      parentMessageId,
     },
-    ExpressionAttributeValues: {
-      ':gsi1pk': `message|${parentMessageId}`,
-    },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
-    applicationContext,
   });
+
+  return messages.map(
+    result =>
+      new MessageEntity(
+        { ...result, createdAt: result.createdAt?.toISOString() },
+        { applicationContext },
+      ),
+  );
+};

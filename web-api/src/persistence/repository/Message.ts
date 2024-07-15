@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Message {
@@ -8,10 +8,10 @@ export class Message {
   }[];
 
   @Column()
-  caseStatus: string;
+  caseStatus!: string;
 
   @Column()
-  caseTitle: string;
+  caseTitle!: string;
 
   @Column({ nullable: true })
   completedAt?: string;
@@ -29,53 +29,53 @@ export class Message {
   completedMessage?: string;
 
   @Column()
-  createdAt: string;
+  createdAt!: string;
 
   @Column()
-  docketNumber: string;
+  docketNumber!: string;
 
   @Column()
-  docketNumberWithSuffix: string;
+  docketNumberWithSuffix!: string;
 
   @Column()
-  from: string;
+  from!: string;
 
   @Column()
-  fromSection: string;
+  fromSection!: string;
 
   @Column()
-  fromUserId: string;
+  fromUserId!: string;
 
   @Column()
-  isCompleted: boolean;
+  isCompleted!: boolean;
 
   @Column()
-  isRead: boolean;
+  isRead!: boolean;
 
   @Column()
-  isRepliedTo: boolean;
+  isRepliedTo!: boolean;
 
   @Column({ nullable: true })
   leadDocketNumber?: string;
 
   @Column()
-  message: string;
+  message!: string;
 
   @PrimaryColumn()
-  messageId: string;
+  messageId!: string;
 
   @Column()
-  parentMessageId: string;
+  parentMessageId!: string;
 
   @Column()
-  subject: string;
+  subject!: string;
 
   @Column()
-  to: string;
+  to!: string;
 
   @Column()
-  toSection: string;
+  toSection!: string;
 
   @Column()
-  toUserId: string;
+  toUserId!: string;
 }

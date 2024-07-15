@@ -1,38 +1,42 @@
-import { GET_PARENT_CASE } from '../helpers/searchClauses';
-import { search } from '../searchClient';
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@shared/business/entities/Message';
+import { Message as messageRepo } from '@web-api/persistence/repository/Message';
 
-export const getUserInboxMessages = async ({ applicationContext, userId }) => {
+export const getUserInboxMessages = async ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) => {
   applicationContext.logger.info('getUserInboxMessages start');
 
-  const query = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              term: { 'toUserId.S': userId },
-            },
-            {
-              term: { 'isRepliedTo.BOOL': false },
-            },
-            {
-              term: { 'isCompleted.BOOL': false },
-            },
-            GET_PARENT_CASE,
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms-message',
-  };
+  const messageRepository = AppDataSource.getRepository(messageRepo);
 
-  const { results } = await search({
-    applicationContext,
-    searchParameters: query,
+  const messages = await messageRepository.find({
+    take: 5000,
+    where: {
+      isCompleted: false,
+      isRepliedTo: false,
+      toUserId: userId,
+    },
   });
 
   applicationContext.logger.info('getUserInboxMessages end');
 
-  return results;
+  console.log('messages', messages);
+
+  return messages.map(
+    message =>
+      new Message(
+        {
+          ...message,
+          leadDocketNumber:
+            message.leadDocketNumber === null
+              ? undefined
+              : message.leadDocketNumber,
+        },
+        { applicationContext },
+      ),
+  );
 };

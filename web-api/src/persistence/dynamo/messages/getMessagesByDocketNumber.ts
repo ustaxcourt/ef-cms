@@ -1,4 +1,5 @@
-import { query } from '../../dynamodbClientService';
+import { AppDataSource } from '@web-api/data-source';
+import { Message } from '@web-api/persistence/repository/Message';
 
 /**
  * getMessagesByDocketNumber
@@ -6,24 +7,21 @@ import { query } from '../../dynamodbClientService';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the created message
+ * @returns {object} the messages
  */
-export const getMessagesByDocketNumber = ({
+export const getMessagesByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-}) =>
-  query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'message|',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+}) => {
+  const messageRepository = AppDataSource.getRepository(Message);
+
+  const results = await messageRepository
+    .createQueryBuilder('message')
+    .where('message.docketNumber = :docketNumber', { docketNumber })
+    .getMany();
+
+  return results;
+};
