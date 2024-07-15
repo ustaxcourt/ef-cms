@@ -5,22 +5,14 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * updateCaseDeadlineInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseDeadline the case deadline data
- * @returns {object} the updated case deadline
- */
 export const updateCaseDeadlineInteractor = async (
   applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for updating case deadline');
   }
 
