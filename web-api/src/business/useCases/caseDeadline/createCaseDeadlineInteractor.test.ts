@@ -11,6 +11,7 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
@@ -47,15 +48,15 @@ describe('createCaseDeadlineInteractor', () => {
       ]);
   });
 
-  // TODO 10417: this test fails, and was failing prior to refactor
   it('throws an error if the user is not valid or authorized', async () => {
+    let user = {} as UnknownAuthUser;
     await expect(
       createCaseDeadlineInteractor(
         applicationContext,
         {
           caseDeadline: mockCaseDeadline as any,
         },
-        mockPetitionsClerkUser,
+        user,
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
