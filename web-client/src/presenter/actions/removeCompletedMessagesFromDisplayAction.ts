@@ -12,5 +12,11 @@ export const removeCompletedMessagesFromDisplayAction = ({
     message => !completedMessageIds.includes(message.messageId),
   );
 
+  const unreadMessageCount = remainingInboxItems.filter(
+    message => !message.isRead,
+  ).length;
+
+  store.set(state.notifications.unreadMessageCount, unreadMessageCount);
+  store.set(state.messagesInboxCount, remainingInboxItems.length);
   store.set(state.messages, remainingInboxItems);
 };
