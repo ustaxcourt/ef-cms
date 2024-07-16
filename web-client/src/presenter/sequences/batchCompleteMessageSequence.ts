@@ -36,10 +36,10 @@ export const completeMessageSuccessSequence = [
     ],
     inbox: [
       setCompleteMessageAlertAction,
-      resetCacheKeyAction,
       removeCompletedMessagesFromDisplayAction,
       fetchUserNotificationsSequence,
       setMessageCountsAction,
+      resetCacheKeyAction,
       resetSelectedMessageAction,
     ],
   },

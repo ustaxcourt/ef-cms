@@ -12,7 +12,7 @@ export const messagesIndividualInboxHelper = (
   allMessagesCheckboxEnabled: boolean;
   completionSuccess: boolean;
 } => {
-  const messagesInboxCount = get(state.messagesInboxCount);
+  const messagesInboxCount = get(state.messages).length;
   const messagesSelectedCount = get(state.messagesPage.selectedMessages).size;
   const completionSuccess = get(state.messagesPage.completionSuccess);
   const messagesCompletedAt = get(state.messagesPage.messagesCompletedAt);
