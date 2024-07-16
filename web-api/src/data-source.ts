@@ -7,7 +7,7 @@ export const AppDataSource = new DataSource({
   entities: [Message],
   host: 'localhost',
   logging: false,
-  migrations: ['migrations/*.ts'],
+  migrations: ['postgres/migrations/*.ts'],
   password: 'example',
   port: 5432,
   subscribers: [],

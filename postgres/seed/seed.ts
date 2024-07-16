@@ -1,5 +1,5 @@
 import { Message } from '../../web-api/src/persistence/repository/Message';
-import { getDataSource } from '../data-source';
+import { getDataSource } from '../../web-api/src/data-source';
 
 async function main() {
   const appDataSource = await getDataSource();
