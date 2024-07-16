@@ -7,7 +7,7 @@ const mockDocketNumber = '101-20';
 const mockDocument = {
   docketEntryId: mockDocketEntryId,
   documentTitle: 'Title of le Document',
-  filedBy: 'The one and only, Guy Fieri',
+  filedBy: 'The one and only, Roslindis Angelino',
   status: 'complete',
 };
 

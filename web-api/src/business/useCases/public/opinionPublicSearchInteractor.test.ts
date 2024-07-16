@@ -54,7 +54,7 @@ describe('opinionPublicSearchInteractor', () => {
       documentTitle: 'T.C. Opinion for More Candy',
       documentType: 'T.C. Opinion',
       eventCode: 'TCOP',
-      signedJudgeName: 'Guy Fieri',
+      signedJudgeName: 'Roslindis Angelino',
     });
     applicationContext
       .getPersistenceGateway()

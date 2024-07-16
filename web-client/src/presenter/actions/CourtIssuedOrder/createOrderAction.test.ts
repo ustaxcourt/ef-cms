@@ -30,7 +30,7 @@ describe('createOrderAction', () => {
       },
       state: {
         caseDetail: {
-          caseCaption: 'Guy Fieri',
+          caseCaption: 'Roslindis Angelino',
         },
         form: {
           documentTitle: 'Test Title',

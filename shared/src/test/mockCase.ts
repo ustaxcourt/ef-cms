@@ -402,7 +402,7 @@ export const MOCK_CASE_WITH_TRIAL_SESSION = {
 };
 
 export const MOCK_ELIGIBLE_CASE = {
-  caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
+  caseCaption: 'Roslindis Angelino & Saturnino Nao, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
@@ -412,7 +412,7 @@ export const MOCK_ELIGIBLE_CASE = {
 };
 
 export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
-  caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
+  caseCaption: 'Roslindis Angelino & Saturnino Nao, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',

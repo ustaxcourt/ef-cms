@@ -3,14 +3,14 @@ import { getUsersById } from './getUsersById';
 
 const mockUser1 = {
   contact: {},
-  name: 'Guy Fieri',
+  name: 'Roslindis Angelino',
   pendingEmail: 'pending@example.com',
   userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 const mockUser2 = {
   contact: {},
-  name: 'Guy Fieri',
+  name: 'Roslindis Angelino',
   pendingEmail: 'pending2@example.com',
   userId: 'a805d1ab-18d0-43ec-bafb-654e83405412',
 };

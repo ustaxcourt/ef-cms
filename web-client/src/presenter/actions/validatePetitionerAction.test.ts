@@ -64,7 +64,7 @@ describe('validatePetitionerAction', () => {
             address2: 'asdf',
             city: 'Flavortown',
             countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Guy Fieri',
+            name: 'Roslindis Angelino',
             phone: '1234567890',
             postalCode: '12345',
             state: 'TN',

@@ -20,7 +20,7 @@ describe('defaultRemoveFromTrialSessionModalValuesAction', () => {
         },
         state: {
           caseDetail: {
-            associatedJudge: 'Guy Fieri',
+            associatedJudge: 'Roslindis Angelino',
             status: STATUS_TYPES.assignedCase,
           },
           modal: {},
@@ -29,7 +29,7 @@ describe('defaultRemoveFromTrialSessionModalValuesAction', () => {
     );
 
     expect(result.state.modal).toMatchObject({
-      associatedJudge: 'Guy Fieri',
+      associatedJudge: 'Roslindis Angelino',
       caseStatus: STATUS_TYPES.generalDocketReadyForTrial,
     });
   });

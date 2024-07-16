@@ -20,7 +20,7 @@ describe('todaysOpinionsHelper', () => {
           docketNumber: '123-20',
           documentType: 'MOP - Memorandum Opinion',
           filingDate: '2020-06-11T20:17:10.646Z',
-          judge: 'Guy Fieri',
+          judge: 'Roslindis Angelino',
         },
       ],
     };

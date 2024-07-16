@@ -79,7 +79,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           form: {
             documentTitle: 'document title',
             secondaryDocument: {
-              freeText: 'Guy Fieri is my spirit animal.',
+              freeText: 'Roslindis Angelino is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
               serviceDate: applicationContext
@@ -105,7 +105,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           form: {
             documentTitle: 'document title',
             secondaryDocument: {
-              freeText: 'Guy Fieri is my spirit animal.',
+              freeText: 'Roslindis Angelino is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
               serviceDate: applicationContext
@@ -151,7 +151,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           form: {
             documentTitle: 'document title',
             secondaryDocument: {
-              freeText: 'Guy Fieri is my spirit animal.',
+              freeText: 'Roslindis Angelino is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
               serviceDate: applicationContext
@@ -185,7 +185,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           form: {
             documentTitle: 'document title',
             secondaryDocument: {
-              freeText: 'Guy Fieri is my spirit animal.',
+              freeText: 'Roslindis Angelino is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
               serviceDate: applicationContext
