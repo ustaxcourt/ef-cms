@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * deleteUserCaseNoteInteractor
@@ -16,17 +17,18 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const deleteUserCaseNoteInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const userId = await applicationContext
     .getUseCaseHelpers()
     .getUserIdForNote(applicationContext, {
-      userIdMakingRequest: user.userId,
+      userIdMakingRequest: authorizedUser.userId,
     });
 
   return await applicationContext.getPersistenceGateway().deleteUserCaseNote({
