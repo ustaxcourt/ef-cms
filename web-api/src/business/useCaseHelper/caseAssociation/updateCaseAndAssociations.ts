@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
@@ -442,15 +443,17 @@ const updateCaseDeadlines = async ({
  */
 export const updateCaseAndAssociations = async ({
   applicationContext,
+  authorizedUser,
   caseToUpdate,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
   caseToUpdate: any;
 }): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, {
-        authorizedUser: applicationContext.getCurrentUser(),
+        authorizedUser,
       });
 
   const oldCaseEntity = await applicationContext
