@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -18,10 +19,9 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 export const deleteCaseNote = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -38,10 +38,11 @@ export const deleteCaseNote = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseRecord,
     });
 
-  return new Case(result, { authorizedUser: user }).validate().toRawObject();
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const deleteCaseNoteInteractor = withLocking(
