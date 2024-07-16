@@ -9,7 +9,6 @@ import { createApplicationContext } from '../../applicationContext';
 export const sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
 
-  // TODO 10417 fix this.
   const applicationContext = createApplicationContext(user);
 
   const records = event.Records.map(record => ({

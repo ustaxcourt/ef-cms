@@ -60,8 +60,6 @@ export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
   let irsPractitioners = [];
   let privatePractitioners = [];
 
-  // console.log(caseAndCaseItems);
-
   caseAndCaseItems.forEach(item => {
     if (isDocketEntryItem(item)) {
       // Docket Entries

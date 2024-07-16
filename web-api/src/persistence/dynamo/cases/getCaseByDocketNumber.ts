@@ -32,8 +32,6 @@ export const getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  // console.log('caseItems', caseItems);
-
   const leadDocketNumber = caseItems.find((caseItem): caseItem is CaseRecord =>
     isCaseItem(caseItem),
   )?.leadDocketNumber;
