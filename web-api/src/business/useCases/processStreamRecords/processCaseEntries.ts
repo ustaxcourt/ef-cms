@@ -26,6 +26,8 @@ export const processCaseEntries = async ({
         docketNumber: caseNewImage.docketNumber.S,
       });
 
+    // TODO: use the caseNewImage to update the case table if the trialLocation or trialDate changes?
+
     const marshalledCase = marshall(caseMetadataWithCounsel);
 
     caseRecords.push({
