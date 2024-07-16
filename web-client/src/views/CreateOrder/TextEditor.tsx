@@ -19,6 +19,13 @@ const ReactQuill = React.lazy(async () => {
   return { default: reactQuill };
 });
 
+// reactQuill removes tabs around HTML tags. This function is a workaround
+// using zero-width spaces to force reactQuill to maintain tabs.
+// See https://github.com/slab/quill/issues/3580.
+const formatTextToMaintainTabs = (text: string) => {
+  return text.replace('\t', '\t&#x200B;');
+};
+
 export const TextEditor = ({
   defaultValue,
   editorDelta,
@@ -26,6 +33,8 @@ export const TextEditor = ({
   updateScreenMetadataSequence,
 }) => {
   const quillEscapeRef = useRef(null);
+  console.log('defaultValue', defaultValue);
+  defaultValue = formatTextToMaintainTabs(defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
@@ -81,6 +90,7 @@ export const TextEditor = ({
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();
             const documentContents = editor.getText();
+            console.log('TextEditor documentContents', documentContents);
             const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
               inlineStyles: {
                 size: inlineStylesFontSizes,
