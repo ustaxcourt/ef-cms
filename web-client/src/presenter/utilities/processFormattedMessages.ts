@@ -93,8 +93,8 @@ export const getFormattedMessages = ({
   cacheKey = applicationContext.getUniqueId(),
 }) => {
   // We cache these results because recalculating these dates takes a lot of time.
-  // this cache is cleared from the resetCacheKeyAction whenever a user changes their displayed
-  // queue & section type.
+  // this cache is cleared by the resetCacheKeyAction
+
   if (cacheKey !== lastCacheKey) {
     // we calculate these outside of the .map function because calling them 3000 times (ADC User)
     // takes a lot of time due to the nature of doing string / date logic.
