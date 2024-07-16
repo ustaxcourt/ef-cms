@@ -87,12 +87,14 @@ import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
+import { StatusReportOrderResponse } from './StatusReportOrderResponse';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UpdatedFilePetition } from './StartCaseUpdated/UpdatedFilePetition';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -186,11 +188,13 @@ const pages = {
   SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
+  StatusReportOrderResponse,
   StyleGuide,
   TrialSessionDetail,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UpdatedFilePetition,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,
@@ -221,9 +225,11 @@ export const AppComponent = connect(
     userContactEditInProgress,
     zipInProgress,
   }) {
-    const focusMain = e => {
+    const focusMain = (e?: any) => {
       e && e.preventDefault();
-      const header = window.document.querySelector('#main-content h1');
+      const header = window.document.querySelector(
+        '#main-content h1',
+      ) as HTMLElement;
       if (header) header.focus();
       return;
     };
