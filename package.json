@@ -240,6 +240,7 @@
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
     "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
+    "postgres:run": "cd postgres && docker compose up &",
     "typeorm:migrations:migrate": "npx typeorm-ts-node-commonjs migration:run -d web-api/src/data-source.ts",
     "typeorm:migrations:revert": "npx typeorm-ts-node-commonjs migration:revert -d web-api/src/data-source.ts",
     "typeorm:migrations:generate": "npx typeorm-ts-node-commonjs migration:generate ${MIGRATION_NAME} -d web-api/src/data-source.ts",
