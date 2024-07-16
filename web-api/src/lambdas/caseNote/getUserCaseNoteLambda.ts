@@ -1,3 +1,4 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -6,11 +7,17 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getUserCaseNoteLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getUserCaseNoteInteractor(applicationContext, {
-        ...event.pathParameters,
-      });
-  });
+export const getUserCaseNoteLambda = (event, authorizedUser: UnknownAuthUser) =>
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await applicationContext.getUseCases().getUserCaseNoteInteractor(
+        applicationContext,
+        {
+          ...event.pathParameters,
+        },
+        authorizedUser,
+      );
+    },
+    authorizedUser,
+  );
