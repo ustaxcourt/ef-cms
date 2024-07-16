@@ -1,5 +1,7 @@
 import { AppDataSource } from '@web-api/data-source';
-import { Message } from '@web-api/persistence/repository/Message';
+import { Message } from '@shared/business/entities/Message';
+import { Message as messageRepo } from '@web-api/persistence/repository/Message';
+import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
 /**
  * getMessagesByDocketNumber
@@ -16,12 +18,15 @@ export const getMessagesByDocketNumber = async ({
   applicationContext: IApplicationContext;
   docketNumber: string;
 }) => {
-  const messageRepository = AppDataSource.getRepository(Message);
+  const messageRepository = AppDataSource.getRepository(messageRepo);
 
-  const results = await messageRepository
+  const messages = await messageRepository
     .createQueryBuilder('message')
     .where('message.docketNumber = :docketNumber', { docketNumber })
     .getMany();
 
-  return results;
+  return messages.map(
+    message =>
+      new Message(transformNullToUndefined(message), { applicationContext }),
+  );
 };
