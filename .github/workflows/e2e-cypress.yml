@@ -16,6 +16,18 @@ jobs:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,6 +42,9 @@ jobs:
         with:
           port: 8000
           cors: '*'
+      - name: Seed Postgres
+        run: |
+          npm run typeorm:seed
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
