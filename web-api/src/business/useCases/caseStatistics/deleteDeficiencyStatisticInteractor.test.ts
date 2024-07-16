@@ -1,12 +1,11 @@
-import {
-  CASE_TYPES_MAP,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { CASE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteDeficiencyStatisticInteractor } from './deleteDeficiencyStatisticInteractor';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteDeficiencyStatisticInteractor', () => {
   const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
@@ -30,10 +29,6 @@ describe('deleteDeficiencyStatisticInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
 
     applicationContext
       .getPersistenceGateway()
@@ -43,12 +38,14 @@ describe('deleteDeficiencyStatisticInteractor', () => {
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      deleteDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      } as any),
+      deleteDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        } as any,
+        {} as unknown as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
@@ -59,6 +56,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         statisticId,
       },
+      mockDocketClerkUser,
     );
     expect(result).toMatchObject({
       statistics: [],
@@ -79,6 +77,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
       },
+      mockDocketClerkUser,
     );
     expect(result).toMatchObject({
       statistics: [statistic],
@@ -105,10 +104,14 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       );
 
     await expect(
-      deleteDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        statisticId: statistic.statisticId,
-      }),
+      deleteDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          statisticId: statistic.statisticId,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('The Case entity was invalid');
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -119,10 +122,14 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      deleteDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
-      }),
+      deleteDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -131,10 +138,14 @@ describe('deleteDeficiencyStatisticInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await deleteDeficiencyStatisticInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
-    });
+    await deleteDeficiencyStatisticInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
