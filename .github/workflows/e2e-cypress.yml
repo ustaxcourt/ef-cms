@@ -42,15 +42,15 @@ jobs:
         with:
           port: 8000
           cors: '*'
-      - name: Seed Postgres
-        run: |
-          npm run typeorm:seed
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
+      - name: Seed Postgres
+        run: |
+          npm run typeorm:seed
       - name: Run E2E Cypress
         run: |
           mkdir -p /tmp/cypress/
