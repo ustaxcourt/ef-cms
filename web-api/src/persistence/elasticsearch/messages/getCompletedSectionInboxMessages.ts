@@ -1,6 +1,8 @@
 import { AppDataSource } from '@web-api/data-source';
-import { Message } from '@web-api/persistence/repository/Message';
+import { Message } from '@shared/business/entities/Message';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import { Message as messageRepo } from '@web-api/persistence/repository/Message';
+import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
 export const getCompletedSectionInboxMessages = async ({
   applicationContext,
@@ -11,9 +13,9 @@ export const getCompletedSectionInboxMessages = async ({
 }) => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const messageRepository = AppDataSource.getRepository(Message);
+  const messageRepository = AppDataSource.getRepository(messageRepo);
 
-  const results = await messageRepository
+  const messages = await messageRepository
     .createQueryBuilder('message')
     .where('message.completedBySection = :section', { section })
     .andWhere('message.isCompleted = :isCompleted', { isCompleted: true })
@@ -21,5 +23,8 @@ export const getCompletedSectionInboxMessages = async ({
     .limit(5000)
     .getMany();
 
-  return results;
+  return messages.map(
+    message =>
+      new Message(transformNullToUndefined(message), { applicationContext }),
+  );
 };

@@ -1,6 +1,7 @@
 import { AppDataSource } from '@web-api/data-source';
 import { Message } from '@shared/business/entities/Message';
 import { Message as messageRepo } from '@web-api/persistence/repository/Message';
+import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
 export const getSectionInboxMessages = async ({
   applicationContext,
@@ -24,6 +25,7 @@ export const getSectionInboxMessages = async ({
   applicationContext.logger.info('getSectionInboxMessages end');
 
   return messages.map(
-    message => new Message({ ...message }, { applicationContext }),
+    message =>
+      new Message(transformNullToUndefined(message), { applicationContext }),
   );
 };

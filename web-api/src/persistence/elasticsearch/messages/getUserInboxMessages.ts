@@ -1,6 +1,7 @@
 import { AppDataSource } from '@web-api/data-source';
 import { Message } from '@shared/business/entities/Message';
 import { Message as messageRepo } from '@web-api/persistence/repository/Message';
+import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
 export const getUserInboxMessages = async ({
   applicationContext,
@@ -24,19 +25,8 @@ export const getUserInboxMessages = async ({
 
   applicationContext.logger.info('getUserInboxMessages end');
 
-  console.log('messages', messages);
-
   return messages.map(
     message =>
-      new Message(
-        {
-          ...message,
-          leadDocketNumber:
-            message.leadDocketNumber === null
-              ? undefined
-              : message.leadDocketNumber,
-        },
-        { applicationContext },
-      ),
+      new Message(transformNullToUndefined(message), { applicationContext }),
   );
 };

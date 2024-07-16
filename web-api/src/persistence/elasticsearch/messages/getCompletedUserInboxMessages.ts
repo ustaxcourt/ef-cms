@@ -2,6 +2,7 @@ import { AppDataSource } from '@web-api/data-source';
 import { Message } from '@shared/business/entities/Message';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { Message as messageRepo } from '@web-api/persistence/repository/Message';
+import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
 export const getCompletedUserInboxMessages = async ({
   applicationContext,
@@ -23,6 +24,7 @@ export const getCompletedUserInboxMessages = async ({
     .getMany();
 
   return messages.map(
-    message => new Message({ ...message }, { applicationContext }),
+    message =>
+      new Message(transformNullToUndefined(message), { applicationContext }),
   );
 };
