@@ -1,13 +1,13 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('getUserCaseNoteForCasesInteractor', () => {
-  let mockCurrentUser;
+  let mockCurrentUser: UnknownAuthUser;
   let mockNote;
 
   const MOCK_NOTE = {
@@ -17,17 +17,13 @@ describe('getUserCaseNoteForCasesInteractor', () => {
   };
 
   const mockJudge = {
-    role: ROLES.judge,
+    ...mockJudgeUser,
     section: 'colvinChambers',
-    userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-  };
+  } as UnknownAuthUser;
 
   beforeEach(() => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
-    applicationContext.getCurrentUser.mockImplementation(() =>
-      omit(new User(mockCurrentUser), 'section'),
-    );
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockCurrentUser);
@@ -43,11 +39,15 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     mockCurrentUser = {
       role: 'unauthorizedRole',
       userId: 'unauthorizedUser',
-    };
+    } as unknown as UnknownAuthUser;
     await expect(
-      getUserCaseNoteForCasesInteractor(applicationContext, {
-        docketNumbers: [MOCK_NOTE.docketNumber],
-      }),
+      getUserCaseNoteForCasesInteractor(
+        applicationContext,
+        {
+          docketNumbers: [MOCK_NOTE.docketNumber],
+        },
+        omit(mockCurrentUser, 'section'),
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -57,42 +57,48 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       .getUserCaseNoteForCases.mockResolvedValue([omit(MOCK_NOTE, 'userId')]);
 
     await expect(
-      getUserCaseNoteForCasesInteractor(applicationContext, {
-        docketNumbers: [MOCK_NOTE.docketNumber],
-      }),
+      getUserCaseNoteForCasesInteractor(
+        applicationContext,
+        {
+          docketNumbers: [MOCK_NOTE.docketNumber],
+        },
+        mockCurrentUser,
+      ),
     ).rejects.toThrow('The UserCaseNote entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {
-    const result = await getUserCaseNoteForCasesInteractor(applicationContext, {
-      docketNumbers: [MOCK_NOTE.docketNumber],
-    });
+    const result = await getUserCaseNoteForCasesInteractor(
+      applicationContext,
+      {
+        docketNumbers: [MOCK_NOTE.docketNumber],
+      },
+      mockCurrentUser,
+    );
 
     expect(result).toMatchObject([MOCK_NOTE]);
   });
 
   it('uses the current user userId when there is no associated judge', async () => {
     const userIdToExpect = 'f922e1fc-567f-4f7d-b1f5-c9eec1567643';
-    const mockUser = new User({
-      name: 'Judge Colvin',
-      role: ROLES.judge,
-      section: 'colvinChambers',
+    const mockUser = {
+      ...mockJudge,
       userId: userIdToExpect,
-    });
-    applicationContext.getCurrentUser.mockImplementation(() =>
-      omit(mockUser, 'section'),
-    );
+    } as UnknownAuthUser;
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
 
-    await getUserCaseNoteForCasesInteractor(applicationContext, {
-      docketNumbers: [MOCK_NOTE.docketNumber],
-    });
+    await getUserCaseNoteForCasesInteractor(
+      applicationContext,
+      {
+        docketNumbers: [MOCK_NOTE.docketNumber],
+      },
+      omit(mockUser, 'section'),
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUserCaseNoteForCases.mock
