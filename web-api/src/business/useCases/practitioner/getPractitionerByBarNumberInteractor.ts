@@ -19,7 +19,7 @@ export const getPractitionerByBarNumberInteractor = async (
   { barNumber }: { barNumber: string },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
-  const isLoggedInUser = !!requestUser;
+  const isLoggedInUser = !!requestUser?.userId;
 
   if (
     isLoggedInUser &&
