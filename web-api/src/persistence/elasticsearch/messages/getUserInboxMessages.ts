@@ -1,5 +1,6 @@
 import { AppDataSource } from '@web-api/data-source';
-import { Message } from '@shared/business/entities/Message';
+import { Case } from '@web-api/persistence/repository/Case';
+import { MessageResult } from '@shared/business/entities/MessageResult';
 import { Message as messageRepo } from '@web-api/persistence/repository/Message';
 import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
@@ -15,6 +16,7 @@ export const getUserInboxMessages = async ({
   const messageRepository = AppDataSource.getRepository(messageRepo);
 
   const messages = await messageRepository.find({
+    relations: { case: true },
     take: 5000,
     where: {
       isCompleted: false,
@@ -25,8 +27,16 @@ export const getUserInboxMessages = async ({
 
   applicationContext.logger.info('getUserInboxMessages end');
 
-  return messages.map(
-    message =>
-      new Message(transformNullToUndefined(message), { applicationContext }),
+  return messages.map(message =>
+    new MessageResult(
+      transformNullToUndefined({
+        ...message,
+        // trialDate: message.case?.trialDate,
+        // trialLocation: message.case?.trialLocation,
+      }),
+      {
+        applicationContext,
+      },
+    ).validate(),
   );
 };

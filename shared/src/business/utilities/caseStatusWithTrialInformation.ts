@@ -18,9 +18,12 @@ export function caseStatusWithTrialInformation({
     return caseStatus;
   }
 
-  const formattedTrialDate = applicationContext
-    .getUtilities()
-    .formatDateString(trialDate, 'MM/dd/yy');
+  const formattedTrialDate = trialDate
+    ? applicationContext.getUtilities().formatDateString(trialDate, 'MM/dd/yy')
+    : 'NA';
+
+  console.log('trialDate', trialDate);
+  console.log('trialLocation', trialLocation);
 
   const formattedTrialLocation =
     trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote

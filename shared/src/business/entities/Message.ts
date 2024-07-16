@@ -32,6 +32,8 @@ export class Message extends JoiValidationEntity {
   public to: string;
   public toSection: string;
   public toUserId: string;
+  public trialLocation?: string;
+  public trialDate?: string;
 
   constructor(rawMessage, { applicationContext }) {
     super('Message');
@@ -67,6 +69,8 @@ export class Message extends JoiValidationEntity {
     this.to = rawMessage.to;
     this.toSection = rawMessage.toSection;
     this.toUserId = rawMessage.toUserId;
+    this.trialDate = rawMessage.trialDate;
+    this.trialLocation = rawMessage.trialLocation;
   }
 
   static VALIDATION_RULES = {

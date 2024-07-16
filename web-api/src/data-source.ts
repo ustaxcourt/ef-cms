@@ -1,10 +1,11 @@
 import 'reflect-metadata';
+import { Case } from '@web-api/persistence/repository/Case';
 import { DataSource } from 'typeorm';
 import { Message } from './persistence/repository/Message';
 
 export const AppDataSource = new DataSource({
   database: 'postgres',
-  entities: [Message],
+  entities: [Message, Case],
   host: 'localhost',
   logging: false,
   migrations: ['postgres/migrations/*.ts'],

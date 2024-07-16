@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Case } from '@web-api/persistence/repository/Case';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Message {
@@ -78,4 +79,7 @@ export class Message {
 
   @Column()
   toUserId!: string;
+
+  @ManyToOne(() => Case, item => item.docketNumber)
+  case!: Case;
 }

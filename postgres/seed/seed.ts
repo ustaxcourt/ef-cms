@@ -1,3 +1,4 @@
+import { Case } from '@web-api/persistence/repository/Case';
 import { Message } from '../../web-api/src/persistence/repository/Message';
 import { getDataSource } from '../../web-api/src/data-source';
 
@@ -78,6 +79,27 @@ async function main() {
     },
   ];
   await messageRepository.save(messages);
+
+  const caseRepository = appDataSource.getRepository(Case);
+  const cases = [
+    {
+      docketNumber: '105-20',
+      trialDate: new Date('2021-03-18T18:07:36.333Z').toISOString(),
+      trialLocation: 'Detroit, Michigan',
+    },
+    {
+      docketNumber: '103-20',
+      trialDate: new Date('2023-04-18T18:07:36.333Z').toISOString(),
+      trialLocation: 'Denver, Colorado',
+    },
+    {
+      docketNumber: '104-19',
+      trialDate: new Date('2022-05-18T18:07:36.333Z').toISOString(),
+      trialLocation: 'Chicago, Illinois',
+    },
+  ];
+
+  await caseRepository.save(cases);
 }
 
 main().catch(console.error);
