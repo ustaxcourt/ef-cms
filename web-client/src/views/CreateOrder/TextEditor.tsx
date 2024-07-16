@@ -23,7 +23,7 @@ const ReactQuill = React.lazy(async () => {
 // using zero-width spaces to force reactQuill to maintain tabs.
 // See https://github.com/slab/quill/issues/3580.
 const formatTextToMaintainTabs = (text: string) => {
-  return text.replace('\t', '\t&#x200B;');
+  return text ? text.replace('\t', '\t&#x200B;') : text;
 };
 
 export const TextEditor = ({
