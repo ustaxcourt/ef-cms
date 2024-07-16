@@ -145,7 +145,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'],
+      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {});
@@ -163,7 +163,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: true,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'],
+      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {});
@@ -208,7 +208,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
           mockPrivatePractitionerRecord,
         ],
         shouldThrowError: false,
-        user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'],
+        user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
       });
 
       const response = await getCaseLambda(REQUEST_EVENT, {});

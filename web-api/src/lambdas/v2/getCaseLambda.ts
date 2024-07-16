@@ -9,8 +9,8 @@ import { v2ApiWrapper } from './v2ApiWrapper';
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getCaseLambda = (event, options) => {
-  return genericHandler(
+export const getCaseLambda = (event, options) =>
+  genericHandler(
     event,
     ({ applicationContext }) =>
       v2ApiWrapper(async () => {
@@ -24,4 +24,3 @@ export const getCaseLambda = (event, options) => {
       }),
     options,
   );
-};
