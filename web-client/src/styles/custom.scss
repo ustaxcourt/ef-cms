@@ -775,6 +775,10 @@ select.ustc-input-error {
 
 .usa-form-group--error {
   margin-top: 0;
+
+  &.maxw-none {
+    max-width: none;
+  }
 }
 
 textarea#case-caption {
@@ -2242,4 +2246,9 @@ button.change-scanner-button {
   @media only screen and (max-width: ($medium-screen - 1)) {
     padding-bottom: 2rem;
   }
+}
+
+.preformatted-text {
+  font-family: $font-source-sans;
+  text-wrap: balance;
 }

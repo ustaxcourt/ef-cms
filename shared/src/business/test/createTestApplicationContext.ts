@@ -410,6 +410,7 @@ export const createTestApplicationContext = ({
     getJudgeForUserHelper: jest.fn(),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
+    parseAndScrapePdfContents: jest.fn(),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
@@ -572,8 +573,7 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetMessagingClient = {
-    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
-    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -587,8 +587,8 @@ export const createTestApplicationContext = ({
   };
 
   const mockGetNotificationService = {
-    publish: jest.fn().mockReturnValue({
-      promise: () => Promise.resolve('ok'),
+    send: jest.fn().mockResolvedValue({
+      MessageId: 'mockMessageID',
     }),
   };
 
