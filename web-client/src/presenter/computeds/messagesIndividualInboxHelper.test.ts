@@ -16,7 +16,7 @@ describe('messagesIndividualInboxHelper', () => {
       messageId: '5a1adc58-2571-4a7f-be32-887fc3be9b67',
     },
   ];
-  mockMessages;
+
   it('should mark no messages selected when none are selected', () => {
     const result = runCompute(inboxHelperComputed, {
       state: {
