@@ -38,10 +38,7 @@ export const UpdatedFilePetition = connect(
           {currentStep === 7 && <UpdatedFilePetitionStep7 />}
         </section>
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog
-            useRunConfirmSequence={true}
-            onCancelSequence="closeModalAndReturnToDashboardSequence"
-          />
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
         )}
       </>
     );
