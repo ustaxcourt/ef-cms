@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  ROLES,
   STIN_DOCKET_ENTRY_TYPE,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
@@ -171,6 +172,48 @@ describe('isDownloadable', () => {
             options,
           ),
         ).toEqual(false);
+      });
+
+      ['P', 'ATP', 'DISC'].forEach(eventCode => {
+        it(`should return "true" if the document is servable and user is a "Petitioner" that submitted "${eventCode}" docket entry`, () => {
+          const TEST_USER_ID = 'TEST_USER_ID';
+          options.user.userId = TEST_USER_ID;
+          options.user.role = ROLES.petitioner;
+          options.rawCase.leadDocketNumber = undefined;
+          options.rawCase.petitioners = [{ contactId: TEST_USER_ID }];
+          const restults = DocketEntry.isDownloadable(
+            {
+              ...baseDocketEntry,
+              eventCode,
+              filers: [TEST_USER_ID],
+              servedAt: undefined,
+            },
+            options,
+          );
+
+          expect(restults).toEqual(true);
+        });
+      });
+
+      ['P', 'ATP', 'DISC'].forEach(eventCode => {
+        it(`should return "true" if the document is servable and user is a "Private Practitioner" that submitted "${eventCode}" docket entry`, () => {
+          const TEST_USER_ID = 'TEST_USER_ID';
+          options.user.userId = TEST_USER_ID;
+          options.user.role = ROLES.privatePractitioner;
+          options.rawCase.leadDocketNumber = undefined;
+          options.rawCase.petitioners = [{ contactId: TEST_USER_ID }];
+          const restults = DocketEntry.isDownloadable(
+            {
+              ...baseDocketEntry,
+              eventCode,
+              servedAt: undefined,
+              userId: TEST_USER_ID,
+            },
+            options,
+          );
+
+          expect(restults).toEqual(true);
+        });
       });
 
       describe('unservable', () => {
