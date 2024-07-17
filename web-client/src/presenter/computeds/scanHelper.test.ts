@@ -1,8 +1,13 @@
-import {
-  INITIAL_DOCUMENT_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import {
+  mockAdcUser,
+  mockDocketClerkUser,
+  mockIrsPractitionerUser,
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { scanHelper as scanHelperComputed } from './scanHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
@@ -20,72 +25,51 @@ describe('scanHelper', () => {
   );
 
   it('sets hasScanFeature to true for petitionsclerk user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitionsClerk,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: mockPetitionsClerkUser },
     });
 
     expect(result.hasScanFeature).toEqual(true);
   });
 
   it('sets hasScanFeature to true for docketclerk user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.docketClerk,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: mockDocketClerkUser },
     });
 
     expect(result.hasScanFeature).toEqual(true);
   });
 
   it('sets hasScanFeature to true for adc user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.adc,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: mockAdcUser },
     });
 
     expect(result.hasScanFeature).toEqual(true);
   });
 
   it('sets hasScanFeature to false for petitioner user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: mockPetitionerUser },
     });
 
     expect(result.hasScanFeature).toEqual(false);
   });
 
   it('sets hasScanFeature to false for practitioner user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: {
+        ...stateWithEmptyFormDocuments,
+        user: mockPrivatePractitionerUser,
+      },
     });
 
     expect(result.hasScanFeature).toEqual(false);
   });
 
   it('sets hasScanFeature to false for respondent user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: mockIrsPractitionerUser },
     });
 
     expect(result.hasScanFeature).toEqual(false);
@@ -98,6 +82,7 @@ describe('scanHelper', () => {
         modal: {
           showModal: 'SelectScannerSourceModal',
         },
+        user: mockPetitionerUser,
       },
     });
     expect(result.showScannerSourceModal).toEqual(true);
@@ -111,6 +96,7 @@ describe('scanHelper', () => {
         scanner: {
           sources: mockSources,
         },
+        user: mockPetitionerUser,
       },
     });
     expect(result.sources.length).toEqual(2);
@@ -123,6 +109,7 @@ describe('scanHelper', () => {
           form: {
             stinFile: {},
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -136,6 +123,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             stinFile: {},
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -149,6 +137,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             stinFile: null,
           },
+          user: mockPetitionerUser,
         },
       });
       expect(result.STINFileCompleted).toEqual(false);
@@ -164,6 +153,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -176,6 +166,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -191,6 +182,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             requestForPlaceOfTrialFile: {},
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -204,6 +196,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             requestForPlaceOfTrialFile: null,
           },
+          user: mockPetitionerUser,
         },
       });
       expect(result.RQTFileCompleted).toEqual(false);
@@ -220,6 +213,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -232,6 +226,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -247,6 +242,7 @@ describe('scanHelper', () => {
             applicationForWaiverOfFilingFeeFile: {},
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -260,6 +256,7 @@ describe('scanHelper', () => {
             applicationForWaiverOfFilingFeeFile: null,
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
       expect(result.APWFileCompleted).toEqual(false);
@@ -277,6 +274,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -289,6 +287,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -304,6 +303,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             petitionFile: {},
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -317,6 +317,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             petitionFileCompleted: null,
           },
+          user: mockPetitionerUser,
         },
       });
       expect(result.PFileCompleted).toEqual(false);
@@ -332,6 +333,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -344,6 +346,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -359,6 +362,7 @@ describe('scanHelper', () => {
             corporateDisclosureFile: {},
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -372,6 +376,7 @@ describe('scanHelper', () => {
             corporateDisclosureFile: null,
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
       expect(result.DISCFileCompleted).toEqual(false);
@@ -387,6 +392,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -399,6 +405,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -414,6 +421,7 @@ describe('scanHelper', () => {
             attachmentToPetitionFile: {},
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -427,6 +435,7 @@ describe('scanHelper', () => {
             attachmentToPetitionFile: null,
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
       expect(result.ATPFileCompleted).toEqual(false);
@@ -443,6 +452,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: mockPetitionerUser,
         },
       });
 
@@ -455,6 +465,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: mockPetitionerUser,
         },
       });
 
