@@ -103,8 +103,8 @@ export function ContactFactoryUpdated({
 
   return {
     primary: new ContactUpdated(
-      contactInfoPrimary,
-      CONTACT_TYPES.primary,
+      { ...contactInfoPrimary, contactType: CONTACT_TYPES.primary },
+      'PetitionerPrimaryContact',
       petitionType,
       partyType,
     ),
