@@ -56730,7 +56730,7 @@
     "middleName": "DOJ",
     "pk": "user|867e7564-1d7f-44fb-b463-5e56479bc9e4",
     "originalBarState": "MD",
-    "email": "dojpractitioner1@example.com"
+    "email": "dojPractitioner1@example.com"
   },
   {
     "admissionsStatus": "Active",
