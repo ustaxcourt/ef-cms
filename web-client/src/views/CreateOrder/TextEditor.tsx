@@ -19,11 +19,18 @@ const ReactQuill = React.lazy(async () => {
   return { default: reactQuill };
 });
 
-// reactQuill removes tabs around HTML tags. This function is a workaround
-// using zero-width spaces to force reactQuill to maintain tabs.
-// See https://github.com/slab/quill/issues/3580.
-const formatTextToMaintainTabs = (text: string) => {
-  return text ? text.replace('\t', '\t&#x200B;') : text;
+// reactQuill removes tabs around HTML tags. This function is a
+// very imperfect workaround using a zero-width space to force reactQuill
+// to maintain any initial tab. See https://github.com/slab/quill/issues/3580.
+const formatTextToMaintainInitialTab = (text: string) => {
+  if (text) {
+    // This will render an "invisible" space at the beginning of an initial tabbed line,
+    // which is not ideal, but which is better than not rendering the tab.
+    // eslint-disable-next-line no-control-regex
+    text = text.replace(/^<p>(?<!\u200B)\t/, '<p>&#x200B;\t');
+  }
+  console.log('defaultValue after applying', text);
+  return text;
 };
 
 export const TextEditor = ({
@@ -34,7 +41,7 @@ export const TextEditor = ({
 }) => {
   const quillEscapeRef = useRef(null);
   console.log('defaultValue', defaultValue);
-  defaultValue = formatTextToMaintainTabs(defaultValue);
+  defaultValue = formatTextToMaintainInitialTab(defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
