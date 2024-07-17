@@ -20,7 +20,7 @@ describe('removeCompletedMessagesFromDisplayAction', () => {
         formattedMessages: {
           messages: messagesInInbox,
         },
-        messages: [],
+        messages: messagesInInbox,
         messagesInboxCount: 0,
         notifications: {
           unreadMessageCount: 0,
@@ -45,7 +45,7 @@ describe('removeCompletedMessagesFromDisplayAction', () => {
         formattedMessages: {
           messages: messagesInInbox,
         },
-        messages: [],
+        messages: messagesInInbox,
         messagesInboxCount: 0,
         notifications: {
           unreadMessageCount: 0,
@@ -74,7 +74,7 @@ describe('removeCompletedMessagesFromDisplayAction', () => {
         formattedMessages: {
           messages: messagesInInbox,
         },
-        messages: [],
+        messages: messagesInInbox,
         messagesInboxCount: 0,
         notifications: {
           unreadMessageCount: 0,

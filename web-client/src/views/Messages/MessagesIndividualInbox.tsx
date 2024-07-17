@@ -21,7 +21,7 @@ export const MessagesIndividualInbox = connect(
     setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+    updateMessageFilterSequence: sequences.updateMessageFilterSequence,
   },
   function MessagesIndividualInbox({
     batchCompleteMessageSequence,
@@ -32,7 +32,7 @@ export const MessagesIndividualInbox = connect(
     setSelectedMessagesSequence,
     sortTableSequence,
     tableSort,
-    updateScreenMetadataSequence,
+    updateMessageFilterSequence,
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
@@ -88,7 +88,7 @@ export const MessagesIndividualInbox = connect(
                   options: formattedMessages.fromSections,
                 },
               ]}
-              onSelect={updateScreenMetadataSequence}
+              onSelect={updateMessageFilterSequence}
             ></TableFilters>
           </div>
 
