@@ -235,7 +235,8 @@
     "test:watch": "jest --watch .*test\\.js$",
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
     "verify-private-elasticsearch": "./scripts/circleci/verify-private-elasticsearch.sh",
-    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html"
+    "visualize-bundle": "esbuild-visualizer --metadata ./metadata.json && open stats.html",
+    "prepare": "husky"
   },
   "overrides": {
     "axios": "$axios",
