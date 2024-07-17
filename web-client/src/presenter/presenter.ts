@@ -83,6 +83,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
+import { completeTrialSessionCalendarSequence } from '@web-client/presenter/sequences/completeTrialSessionCalendarSequence';
 import { confirmSignUpSequence } from './sequences/Login/confirmSignUpSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
@@ -389,6 +390,7 @@ import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddress
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
 import { setSelectedMessagesSequence } from './sequences/setSelectedMessagesSequence';
+import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
@@ -550,6 +552,7 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCaseWorksheetSequence } from '@web-client/presenter/sequences/validateCaseWorksheetSequence';
 import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
+import { validateCourtOrderSequence } from './sequences/validateCourtOrderSequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
@@ -707,7 +710,8 @@ export const presenterSequences = {
     completePrintPaperPetitionReceiptSequence as unknown as Function,
   completeStartCaseWizardStepSequence:
     completeStartCaseWizardStepSequence as unknown as Function,
-  confirmSignUpSequence: confirmSignUpSequence as unknown as Function,
+  completeTrialSessionCalendarSequence,
+  confirmSignUpSequence,
   confirmStayLoggedInSequence:
     confirmStayLoggedInSequence as unknown as Function,
   confirmWorkItemAlreadyCompleteSequence:
@@ -1213,7 +1217,7 @@ export const presenterSequences = {
   setPDFSignatureDataSequence:
     setPDFSignatureDataSequence as unknown as Function,
   setPDFStampDataSequence: setPDFStampDataSequence as unknown as Function,
-  setPdfPreviewUrlSequence: setPdfPreviewUrlSequence as unknown as Function,
+  setPdfPreviewUrlSequence,
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
   setSelectedAddressOnFormSequence:
@@ -1222,8 +1226,8 @@ export const presenterSequences = {
     setSelectedBatchIndexSequence as unknown as Function,
   setSelectedDocumentsForDownloadSequence,
   setSelectedMessagesSequence,
-  setTrialSessionCalendarSequence:
-    setTrialSessionCalendarSequence as unknown as Function,
+  setTrialSessionCalendarErrorSequence,
+  setTrialSessionCalendarSequence,
   setViewerCorrespondenceToDisplaySequence:
     setViewerCorrespondenceToDisplaySequence as unknown as Function,
   setViewerDocumentToDisplaySequence:
@@ -1503,6 +1507,7 @@ export const presenterSequences = {
     validateChangeLoginAndServiceEmailSequence as unknown as Function,
   validateCourtIssuedDocketEntrySequence:
     validateCourtIssuedDocketEntrySequence as unknown as Function,
+  validateCourtOrderSequence,
   validateCreateMessageInModalSequence:
     validateCreateMessageInModalSequence as unknown as Function,
   validateDocketEntrySequence:
