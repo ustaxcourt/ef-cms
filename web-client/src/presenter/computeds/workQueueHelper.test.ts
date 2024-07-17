@@ -1,24 +1,23 @@
-import {
-  DOCKET_SECTION,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import {
+  mockAdcUser,
+  mockCaseServicesSupervisorUser,
+  mockChambersUser,
+  mockDocketClerkUser,
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from './workQueueHelper';
 
-let globalUser;
-
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed, {
   ...applicationContext,
-  getCurrentUser: () => {
-    return globalUser;
-  },
 });
 
 const getBaseState = user => {
-  globalUser = user;
   return {
     permissions: getUserPermissions(user),
   };
@@ -26,14 +25,11 @@ const getBaseState = user => {
 
 describe('workQueueHelper', () => {
   it('returns the expected state when selected work items are set', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockPetitionsClerkUser),
         selectedWorkItems: [true],
+        user: mockPetitionsClerkUser,
         workQueueToDisplay: { box: 'inbox', queue: 'section' },
       },
     });
@@ -48,14 +44,11 @@ describe('workQueueHelper', () => {
   });
 
   it('returns the expected state when selected work items are not set', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockPetitionsClerkUser),
         selectedWorkItems: [],
+        user: mockPetitionsClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -70,14 +63,11 @@ describe('workQueueHelper', () => {
   });
 
   it('returns My Document QC for workQueueTitle if showing individual non-internal work queue', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockPetitionsClerkUser),
         selectedWorkItems: [],
+        user: mockPetitionsClerkUser,
         workQueueToDisplay: {
           queue: 'my',
         },
@@ -89,14 +79,11 @@ describe('workQueueHelper', () => {
   });
 
   it('returns Document QC for workQueueTitle if showing section non-internal work queue and current user is not a docket or petitions clerk', () => {
-    const user = {
-      role: ROLES.adc,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockAdcUser),
         selectedWorkItems: [],
+        user: mockAdcUser,
         workQueueToDisplay: {
           queue: 'section',
         },
@@ -108,14 +95,11 @@ describe('workQueueHelper', () => {
   });
 
   it('returns Section Document QC for workQueueTitle if showing section non-internal work queue and current user is a docket clerk', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: {
           queue: 'section',
         },
@@ -127,15 +111,11 @@ describe('workQueueHelper', () => {
   });
 
   it('should set workQueueTitle to a capitalized section specific title when the user is caseServicesSupervisor and workQueueToDisplay.section exists', () => {
-    const user = {
-      role: ROLES.caseServicesSupervisor,
-      userId: '117c6e9c-3940-4693-8bc8-0b2a7ed59b06',
-    };
-
     let result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockCaseServicesSupervisorUser),
         selectedWorkItems: [],
+        user: mockCaseServicesSupervisorUser,
         workQueueToDisplay: {
           queue: 'section',
           section: DOCKET_SECTION,
@@ -147,15 +127,11 @@ describe('workQueueHelper', () => {
   });
 
   it('should set workQueueTitle to "My Document QC" when the user is caseServicesSupervisor and workQueueToDisplay.section does not exist', () => {
-    const user = {
-      role: ROLES.caseServicesSupervisor,
-      userId: '117c6e9c-3940-4693-8bc8-0b2a7ed59b06',
-    };
-
     let result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockCaseServicesSupervisorUser),
         selectedWorkItems: [],
+        user: mockCaseServicesSupervisorUser,
         workQueueToDisplay: {
           queue: 'section',
         },
@@ -166,14 +142,11 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the start a case button when role is petitions clerk', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockPetitionsClerkUser),
         selectedWorkItems: [],
+        user: mockPetitionsClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -183,14 +156,11 @@ describe('workQueueHelper', () => {
   });
 
   it('does not show the start a case button when role is docket clerk', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -200,14 +170,11 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the case status column when role is judge', () => {
-    const user = {
-      role: ROLES.judge,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockJudgeUser),
         selectedWorkItems: [],
+        user: mockJudgeUser,
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -215,14 +182,11 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the case status column when role is chambers', () => {
-    const user = {
-      role: ROLES.chambers,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockChambersUser),
         selectedWorkItems: [],
+        user: mockChambersUser,
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -230,14 +194,11 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the from column when role is judge', () => {
-    const user = {
-      role: ROLES.judge,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockJudgeUser),
         selectedWorkItems: [],
+        user: mockJudgeUser,
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -245,14 +206,11 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the from column when role is chambers', () => {
-    const user = {
-      role: ROLES.chambers,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockChambersUser),
         selectedWorkItems: [],
+        user: mockChambersUser,
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -260,14 +218,11 @@ describe('workQueueHelper', () => {
   });
 
   it('shows in progress petitions for a petitionsclerk', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockPetitionsClerkUser),
         selectedWorkItems: [],
+        user: mockPetitionsClerkUser,
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
@@ -280,14 +235,11 @@ describe('workQueueHelper', () => {
   });
 
   it('should return expected flags when user is the case services supervisor', () => {
-    const user = {
-      role: ROLES.caseServicesSupervisor,
-      userId: 'ed60ccc5-798c-4f9d-afed-f68f13f7c29b',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockCaseServicesSupervisorUser),
         selectedWorkItems: [],
+        user: mockCaseServicesSupervisorUser,
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
@@ -304,15 +256,12 @@ describe('workQueueHelper', () => {
   });
 
   it('returns the individualInboxCount for the work queue based on the value of state.individualInboxCount', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         individualInboxCount: 3,
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -320,15 +269,12 @@ describe('workQueueHelper', () => {
   });
 
   it('returns the individualInProgressCount for the work queue based on the value of state.individualInProgressCount', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         individualInProgressCount: 10,
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -336,15 +282,12 @@ describe('workQueueHelper', () => {
   });
 
   it('returns the sectionInboxCount for the work queue based on the value of state.sectionInboxCount', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         sectionInboxCount: 3,
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -352,15 +295,12 @@ describe('workQueueHelper', () => {
   });
 
   it('returns the sectionInProgressCount for the work queue based on the value of state.sectionInProgressCount', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         sectionInProgressCount: 10,
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -368,18 +308,15 @@ describe('workQueueHelper', () => {
   });
 
   it('should return the correct document qc queue path URL based on the box and queue type provided', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
     const mockQueue = 'test';
     const mockBox = 'my';
 
     const result = runCompute(workQueueHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(mockDocketClerkUser),
         sectionInProgressCount: 10,
         selectedWorkItems: [],
+        user: mockDocketClerkUser,
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -390,19 +327,13 @@ describe('workQueueHelper', () => {
   });
 
   describe('documentQCNavigationPath', () => {
-    let user;
-    beforeEach(() => {
-      user = {
-        role: ROLES.docketClerk,
-        userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-      };
-    });
     it('should construct a path based on the queue and box values passed in', () => {
       const { documentQCNavigationPath } = runCompute(workQueueHelper, {
         state: {
-          ...getBaseState(user),
+          ...getBaseState(mockDocketClerkUser),
           sectionInProgressCount: 10,
           selectedWorkItems: [],
+          user: mockDocketClerkUser,
           workQueueToDisplay: { box: 'outbox', queue: 'my' },
         },
       });
@@ -415,9 +346,10 @@ describe('workQueueHelper', () => {
     it('should construct a path based on the queue box, and section values when section is defined', () => {
       const { documentQCNavigationPath } = runCompute(workQueueHelper, {
         state: {
-          ...getBaseState(user),
+          ...getBaseState(mockDocketClerkUser),
           sectionInProgressCount: 10,
           selectedWorkItems: [],
+          user: mockDocketClerkUser,
           workQueueToDisplay: {
             box: 'outbox',
             queue: 'my',
@@ -436,16 +368,12 @@ describe('workQueueHelper', () => {
     });
 
     it('showSwitchToMyDocQCLink should be false when the user is a case services supervisor', () => {
-      user = {
-        role: ROLES.caseServicesSupervisor,
-        userId: '117c6e9c-3940-4693-8bc8-0b2a7ed59b06',
-      };
-
       const { showSwitchToMyDocQCLink } = runCompute(workQueueHelper, {
         state: {
-          ...getBaseState(user),
+          ...getBaseState(mockCaseServicesSupervisorUser),
           sectionInProgressCount: 10,
           selectedWorkItems: [],
+          user: mockCaseServicesSupervisorUser,
           workQueueToDisplay: {
             box: 'outbox',
             queue: 'my',
