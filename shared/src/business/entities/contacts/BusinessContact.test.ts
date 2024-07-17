@@ -3,6 +3,7 @@ import {
   RawBusinessContact,
 } from '@shared/business/entities/contacts/BusinessContact';
 import {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -14,6 +15,7 @@ describe('BusinessContact', () => {
   const VALID_CONTACT_INFO: RawBusinessContact = {
     address1: 'TEST_ADDRESS_1',
     city: 'TEST_CITY',
+    contactType: CONTACT_TYPES.petitioner,
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'TEST@TEST.COM',
     name: 'TEST_NAME',
