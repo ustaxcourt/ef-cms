@@ -7,12 +7,8 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const todaysOrdersLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getTodaysOrdersInteractor(applicationContext, event.pathParameters);
-    },
-    { user: {} },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .getTodaysOrdersInteractor(applicationContext, event.pathParameters);
+  });

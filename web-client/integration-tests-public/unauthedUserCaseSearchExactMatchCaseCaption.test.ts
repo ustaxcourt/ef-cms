@@ -15,7 +15,7 @@ const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 const updatedLastName = faker.person.lastName();
-const createdDocketNumbers = [];
+const createdDocketNumbers: string[] = [];
 
 const updateCaseCaption = (docketNumber, caseCaption) => {
   loginAs(testClient, 'docketclerk@example.com');
