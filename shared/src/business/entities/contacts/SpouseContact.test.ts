@@ -47,8 +47,8 @@ describe('SpouseContact', () => {
         const entity = new SpouseContact(
           {
             ...VALID_ENTITY,
-            email: undefined,
             hasConsentedToEService: true,
+            paperPetitionEmail: undefined,
           },
           TEST_PETITION_TYPE,
           TEST_PARTY_TYPE,
@@ -56,7 +56,8 @@ describe('SpouseContact', () => {
 
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({
-          email: 'Enter an email address to register for electronic service',
+          paperPetitionEmail:
+            'Enter an email address to register for electronic service',
         });
       });
     });
