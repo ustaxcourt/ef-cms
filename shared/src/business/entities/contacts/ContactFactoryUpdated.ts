@@ -33,7 +33,11 @@ export function ContactFactoryUpdated({
     ).includes(partyType)
   ) {
     return {
-      primary: new BusinessContact(contactInfoPrimary, petitionType, partyType),
+      primary: new BusinessContact(
+        { ...contactInfoPrimary, contactType: CONTACT_TYPES.primary },
+        petitionType,
+        partyType,
+      ),
       secondary: null,
     };
   }
@@ -41,15 +45,15 @@ export function ContactFactoryUpdated({
   if (partyType === PARTY_TYPES.petitionerDeceasedSpouse) {
     return {
       primary: new ContactUpdated(
-        contactInfoPrimary,
-        CONTACT_TYPES.primary,
+        { ...contactInfoPrimary, contactType: CONTACT_TYPES.primary },
+        'PetitionerPrimaryContact',
         petitionType,
         partyType,
       ),
       secondary:
         contactInfoSecondary &&
         new DeceasedSpouseContact(
-          contactInfoSecondary,
+          { ...contactInfoSecondary, contactType: CONTACT_TYPES.secondary },
           petitionType,
           partyType,
         ),
@@ -60,15 +64,19 @@ export function ContactFactoryUpdated({
     const shouldValidateSecondary = !!hasSpouseConsent;
     return {
       primary: new ContactUpdated(
-        contactInfoPrimary,
-        CONTACT_TYPES.primary,
+        { ...contactInfoPrimary, contactType: CONTACT_TYPES.primary },
+        'PetitionerPrimaryContact',
         petitionType,
         partyType,
       ),
       secondary:
         contactInfoSecondary &&
         shouldValidateSecondary &&
-        new SpouseContact(contactInfoSecondary, petitionType, partyType),
+        new SpouseContact(
+          { ...contactInfoSecondary, contactType: CONTACT_TYPES.secondary },
+          petitionType,
+          partyType,
+        ),
     };
   }
 
@@ -95,8 +103,8 @@ export function ContactFactoryUpdated({
 
   return {
     primary: new ContactUpdated(
-      contactInfoPrimary,
-      CONTACT_TYPES.primary,
+      { ...contactInfoPrimary, contactType: CONTACT_TYPES.primary },
+      'PetitionerPrimaryContact',
       petitionType,
       partyType,
     ),

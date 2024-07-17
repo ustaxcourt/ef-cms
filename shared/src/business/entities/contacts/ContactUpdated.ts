@@ -1,4 +1,5 @@
 import {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   CountryTypes,
   STATE_NOT_AVAILABLE,
@@ -8,15 +9,18 @@ import {
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import joi from 'joi';
 
 export class ContactUpdated extends JoiValidationEntity {
   public address1: string;
   public address2?: string;
   public address3?: string;
   public city: string;
+  public contactType: string;
   public country?: string;
   public countryType: CountryTypes;
   public email: string;
+  public paperPetitionEmail?: string;
   public inCareOf?: string;
   public name: string;
   public phone: string;
@@ -40,9 +44,11 @@ export class ContactUpdated extends JoiValidationEntity {
     this.address2 = rawContact.address2 || undefined;
     this.address3 = rawContact.address3 || undefined;
     this.city = rawContact.city;
+    this.contactType = rawContact.contactType;
     this.country = rawContact.country;
     this.countryType = rawContact.countryType;
     this.email = rawContact.email;
+    this.paperPetitionEmail = rawContact.paperPetitionEmail;
     this.inCareOf = rawContact.inCareOf;
     this.name = rawContact.name;
     this.phone = formatPhoneNumber(rawContact.phone);
@@ -70,7 +76,11 @@ export class ContactUpdated extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Enter name' }),
     phone: JoiValidationConstants.STRING.max(100)
-      .required()
+      .when('contactType', {
+        is: CONTACT_TYPES.secondary,
+        otherwise: joi.required(),
+        then: joi.optional(),
+      })
       .messages({ '*': 'Enter phone number' }),
     placeOfLegalResidence: JoiValidationConstants.STRING.optional()
       .valid(

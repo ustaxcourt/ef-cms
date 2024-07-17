@@ -1,5 +1,6 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -8,8 +9,9 @@ let PREVIOUS_STEP = 0;
 export const StepIndicator = connect(
   {
     stepIndicatorInfo: state.stepIndicatorInfo,
+    updateStepIndicatorSequence: sequences.updateStepIndicatorSequence,
   },
-  function StepIndicator({ stepIndicatorInfo }) {
+  function StepIndicator({ stepIndicatorInfo, updateStepIndicatorSequence }) {
     const { currentStep, steps } = stepIndicatorInfo;
 
     if (PREVIOUS_STEP !== currentStep) {
@@ -31,20 +33,30 @@ export const StepIndicator = connect(
               const currentClass = isCurrentStep
                 ? 'usa-step-indicator__segment--current'
                 : '';
-
               return (
                 <li
                   aria-current={isCurrentStep}
                   className={`usa-step-indicator__segment ${completedClass} ${currentClass}`}
                   key={title}
                 >
-                  <span className="usa-step-indicator__segment-label">
-                    {title}
-                    <AccessibilitySpan
-                      completed={completed}
-                      isCurrentStep={isCurrentStep}
-                    />
-                  </span>
+                  <Button
+                    className="usa-button--unstyled no-underline"
+                    disabled={
+                      +step > currentStep ||
+                      currentStep > Object.keys(steps).length
+                    }
+                    onClick={() => {
+                      updateStepIndicatorSequence({ step: +step });
+                    }}
+                  >
+                    <span className="usa-step-indicator__segment-label">
+                      {title}
+                      <AccessibilitySpan
+                        completed={completed}
+                        isCurrentStep={isCurrentStep}
+                      />
+                    </span>
+                  </Button>
                 </li>
               );
             })}

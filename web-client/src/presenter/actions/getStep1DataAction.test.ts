@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
 import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -50,6 +51,7 @@ describe('getStep1DataAction', () => {
         address2: 'TEST_PRIMARY_address2',
         address3: 'TEST_PRIMARY_address3',
         city: 'TEST_PRIMARY_city',
+        contactType: CONTACT_TYPES.primary,
         country: 'TEST_PRIMARY_country',
         countryType: 'TEST_PRIMARY_countryType',
         placeOfLegalResidence: 'TEST_PRIMARY_placeOfLegalResidence',
@@ -62,6 +64,7 @@ describe('getStep1DataAction', () => {
         address2: 'TEST_PRIMARY_address2',
         address3: 'TEST_PRIMARY_address3',
         city: 'TEST_PRIMARY_city',
+        contactType: CONTACT_TYPES.secondary,
         country: 'TEST_PRIMARY_country',
         countryType: 'TEST_PRIMARY_countryType',
         postalCode: 'TEST_PRIMARY_postalCode',
@@ -91,7 +94,6 @@ describe('getStep1DataAction', () => {
           contactPrimary: {
             address2: 'TEST_PRIMARY_address2',
             address3: 'TEST_PRIMARY_address3',
-
             primary: true,
           },
           contactSecondary: {
@@ -114,11 +116,13 @@ describe('getStep1DataAction', () => {
       contactPrimary: {
         address2: 'TEST_PRIMARY_address2',
         address3: 'TEST_PRIMARY_address3',
+        contactType: CONTACT_TYPES.primary,
         primary: true,
       },
       contactSecondary: {
         address1: 'TEST_SECONDARY_address1',
         city: 'TEST_SECONDARY_city',
+        contactType: CONTACT_TYPES.secondary,
         countryType: 'TEST_SECONDARY_countryType',
         placeOfLegalResidence: 'TEST_SECONDARY_placeOfLegalResidence',
         postalCode: 'TEST_SECONDARY_postalCode',
