@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -24,10 +25,9 @@ export const updateOtherStatistics = async (
     docketNumber,
     litigationCosts,
   }: { damages: number; docketNumber: string; litigationCosts: number },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
 
@@ -37,7 +37,7 @@ export const updateOtherStatistics = async (
 
   const newCase = new Case(
     { ...oldCase, damages, litigationCosts },
-    { authorizedUser: user },
+    { authorizedUser },
   );
 
   const updatedCase = await applicationContext
@@ -47,9 +47,7 @@ export const updateOtherStatistics = async (
       caseToUpdate: newCase,
     });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const updateOtherStatisticsInteractor = withLocking(
