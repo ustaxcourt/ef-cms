@@ -113,7 +113,6 @@ export const getCaseInteractor = async (
       docketNumber: Case.formatDocketNumber(docketNumber),
     }),
   );
-
   const isValidCase = Boolean(caseRecord.docketNumber && caseRecord.entityName);
 
   if (!isValidCase) {
@@ -123,7 +122,6 @@ export const getCaseInteractor = async (
   }
 
   const currentUser = applicationContext.getCurrentUser();
-
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,

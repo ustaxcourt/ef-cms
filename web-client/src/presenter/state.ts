@@ -4,6 +4,7 @@ import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/j
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -95,6 +96,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
+import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
@@ -128,6 +130,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { statusReportOrderResponseHelper } from './computeds/statusReportOrderResponseHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -404,6 +407,10 @@ export const computeds = {
   messagesHelper: messagesHelper as unknown as ReturnType<
     typeof messagesHelper
   >,
+  messagesIndividualInboxHelper:
+    messagesIndividualInboxHelper as unknown as ReturnType<
+      typeof messagesIndividualInboxHelper
+    >,
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
@@ -507,6 +514,10 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
+  statusReportOrderResponseHelper:
+    statusReportOrderResponseHelper as unknown as ReturnType<
+      typeof statusReportOrderResponseHelper
+    >,
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
   >,
@@ -642,6 +653,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },
@@ -681,7 +693,14 @@ export const baseState = {
   legacyAndCurrentJudges: [],
   login: {} as any,
   maintenanceMode: false,
+  messages: [] as RawMessage[],
   messagesInboxCount: 0,
+  messagesPage: {
+    completionSuccess: false,
+    messagesCompletedAt: '',
+    messagesCompletedBy: '',
+    selectedMessages: new Map() as Map<string, string>,
+  },
   messagesSectionCount: 0,
   modal: {
     docketEntry: undefined,
@@ -793,6 +812,11 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  statusReportOrderResponse: {
+    docketNumbersToDisplay: [],
+    statusReportFilingDate: '',
+    statusReportIndex: 1,
+  },
   stepIndicatorInfo: { currentStep: 0, steps: ['no steps defined yet'] },
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],

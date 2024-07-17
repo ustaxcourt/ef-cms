@@ -24,6 +24,7 @@ export const messageDocumentHelper = (
     GENERIC_ORDER_EVENT_CODE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
@@ -163,13 +164,34 @@ export const messageDocumentHelper = (
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
+  // declare a constant called showOrderResponseButton
+  // 1 does the user have permission? i.e., are they a judge, chambers, or adc user?
+  //   - refer to how roles and permissions are set up in authorizationClientService.ts
+  //
+  // 2 does the document have an `eventCode` === "RPT"
+  //   -add a property called something like `allowOrderResponse` to the status
+  //   report object in externalFilingEvents.json and internalFilingEvents.json
+
+  const showOrderResponseButton =
+    permissions.ORDER_RESPONSE &&
+    (ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
+        formattedDocument?.eventCode,
+      ));
+
+  const { filingDate, index } = caseDocument;
+
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
     applyStampFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`,
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
+    filingDate,
+    formattedDocument,
+    index,
     messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+    orderResponseFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/order-response-create`,
     servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
     showAddDocketEntryButton,
     showApplySignatureButton:
@@ -182,8 +204,11 @@ export const messageDocumentHelper = (
       showEditButtonForDocument &&
       (!documentIsSigned || isNotice),
     showEditButtonSigned,
+
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
+    // export the constant defined above
+    showOrderResponseButton,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showRemoveSignatureButtonForDocument &&
