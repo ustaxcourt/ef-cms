@@ -24,7 +24,7 @@ describe('fileDocumentHelper', () => {
     validationErrors: {},
   };
 
-  applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+  //applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
   const fileDocumentHelper = withAppContextDecorator(
     fileDocumentHelperComputed,
@@ -36,7 +36,11 @@ describe('fileDocumentHelper', () => {
   });
 
   it('returns correct values when documentType is undefined', () => {
-    let testState = { ...state, form: { documentType: undefined } };
+    let testState = {
+      ...state,
+      form: { documentType: undefined },
+      user: docketClerkUser,
+    };
 
     const expected = {
       isSecondaryDocumentUploadOptional: false,
@@ -54,7 +58,9 @@ describe('fileDocumentHelper', () => {
   });
 
   it('returns a correctly-formatted list of supporting documents', () => {
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.supportingDocumentTypeList.length > 0).toBeTruthy();
 
     expect(
@@ -64,13 +70,17 @@ describe('fileDocumentHelper', () => {
 
   it('has optional secondary document upload when motion for leave to file', () => {
     state.form = { documentType: 'Motion for Leave to File' };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.isSecondaryDocumentUploadOptional).toBeTruthy();
   });
 
   it('does not show secondary inclusions if document type is motion for leave to file and a secondary document has not been selected', () => {
     state.form = { documentType: 'Motion for Leave to File' };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.showSecondaryDocumentInclusionsForm).toBeFalsy();
   });
 
@@ -79,13 +89,17 @@ describe('fileDocumentHelper', () => {
       documentType: 'Motion for Leave to File',
       secondaryDocumentFile: 'something',
     };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.showSecondaryDocumentInclusionsForm).toBeTruthy();
   });
 
   it('shows primary objection if primary document type is a motion', () => {
     state.form = { documentType: 'Motion for Leave to File' };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.primaryDocument.showObjection).toBeTruthy();
   });
 
@@ -96,7 +110,9 @@ describe('fileDocumentHelper', () => {
         documentType: 'Motion for Continuance',
       },
     };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.primaryDocument.showObjection).toBeTruthy();
     expect(result.secondaryDocument.showObjection).toBeFalsy();
   });
@@ -109,7 +125,9 @@ describe('fileDocumentHelper', () => {
       },
       secondaryDocumentFile: 'something',
     };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.primaryDocument.showObjection).toBeTruthy();
     expect(result.secondaryDocument.showObjection).toBeTruthy();
   });
@@ -118,7 +136,9 @@ describe('fileDocumentHelper', () => {
     state.form = {
       documentType: 'Supplemental Brief',
     };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.primaryDocument.showObjection).toBeFalsy();
     expect(result.secondaryDocument.showObjection).toBeFalsy();
   });
@@ -130,7 +150,9 @@ describe('fileDocumentHelper', () => {
         documentType: 'Supplemental Brief',
       },
     };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.primaryDocument.showObjection).toBeTruthy();
     expect(result.secondaryDocument.showObjection).toBeFalsy();
   });
@@ -142,20 +164,26 @@ describe('fileDocumentHelper', () => {
       secondaryDocumentFile: { some: 'file' },
     };
 
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.showPrimaryDocumentValid).toBeTruthy();
     expect(result.showSecondaryDocumentValid).toBeTruthy();
   });
 
   it('shows secondary party for petitionerSpouse or petitionerDeceasedSpouse', () => {
     state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.showSecondaryParty).toBeTruthy();
   });
 
   it('generates correctly formatted service date', () => {
     state.form.certificateOfServiceDate = '2012-05-31';
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
@@ -164,20 +192,26 @@ describe('fileDocumentHelper', () => {
       certificateOfService: true,
       certificateOfServiceDate: '2012-06-30',
     };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.secondaryDocument.certificateOfServiceDateFormatted).toEqual(
       '06/30/12',
     );
   });
 
   it('does not generate a formatted service date if a service date is not entered on the form', () => {
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.certificateOfServiceDateFormatted).toBeUndefined();
   });
 
   it('does not generate a formatted service date for secondary document if a service date is not entered on the form', () => {
     state.form.secondaryDocument = undefined;
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(
       result.secondaryDocument.certificateOfServiceDateFormatted,
     ).toBeUndefined();
@@ -186,25 +220,33 @@ describe('fileDocumentHelper', () => {
   it('shows Filing Includes on review page if certificateOfService is true', () => {
     state.form.certificateOfService = true;
     state.form.certificateOfServiceDate = '2018-01-01';
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.showFilingIncludes).toEqual(true);
   });
 
   it('does not show Filing Includes if certOfService and attachments are false', () => {
     state.form.certificateOfService = false;
     state.form.attachments = false;
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.showFilingIncludes).toEqual(false);
   });
 
   it('does not show party validation error if none of the party validation errors exists', () => {
-    const result = runCompute(fileDocumentHelper, { state });
+    const result = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.partyValidationError).toBeUndefined();
   });
 
   it('shows party validation error if any one of the party validation errors exists', () => {
     state.validationErrors = { filers: 'You did something bad.' };
-    const result: any = runCompute(fileDocumentHelper, { state });
+    const result: any = runCompute(fileDocumentHelper, {
+      state: { ...state, user: docketClerkUser },
+    });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
@@ -215,7 +257,9 @@ describe('fileDocumentHelper', () => {
     });
 
     it('shows Add Supporting Document button and not limit reached message when supportingDocuments is undefined', () => {
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(result.showAddSupportingDocuments).toBeTruthy();
       expect(result.showAddSupportingDocumentsLimitReached).toBeFalsy();
     });
@@ -227,7 +271,9 @@ describe('fileDocumentHelper', () => {
         { id: '3' },
         { id: '4' },
       ];
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(result.showAddSupportingDocuments).toBeTruthy();
       expect(result.showAddSupportingDocumentsLimitReached).toBeFalsy();
     });
@@ -240,7 +286,9 @@ describe('fileDocumentHelper', () => {
         { id: '4' },
         { id: '5' },
       ];
-      let result: any = runCompute(fileDocumentHelper, { state });
+      let result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(result.showAddSupportingDocuments).toBeFalsy();
       expect(result.showAddSupportingDocumentsLimitReached).toBeTruthy();
       state.form.supportingDocuments = [
@@ -251,14 +299,18 @@ describe('fileDocumentHelper', () => {
         { id: '5' },
         { id: '6' },
       ];
-      result = runCompute(fileDocumentHelper, { state });
+      result = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(result.showAddSupportingDocuments).toBeFalsy();
       expect(result.showAddSupportingDocumentsLimitReached).toBeTruthy();
     });
 
     it('upload and free text not shown if no type selected', () => {
       state.form.supportingDocuments = [{ supportingDocument: '' }];
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(
         result.supportingDocuments[0].showSupportingDocumentFreeText,
       ).toBeFalsy();
@@ -271,7 +323,9 @@ describe('fileDocumentHelper', () => {
       state.form.supportingDocuments = [
         { supportingDocument: 'Some Document type' },
       ];
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(
         result.supportingDocuments[0].showSupportingDocumentFreeText,
       ).toBeFalsy();
@@ -284,7 +338,9 @@ describe('fileDocumentHelper', () => {
       state.form.supportingDocuments = [
         { supportingDocument: 'Affidavit in Support' },
       ];
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(
         result.supportingDocuments[0].showSupportingDocumentFreeText,
       ).toBeTruthy();
@@ -295,7 +351,9 @@ describe('fileDocumentHelper', () => {
 
     it('filing includes is shown if attachments is true', () => {
       state.form.supportingDocuments = [{ attachments: true }];
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(result.supportingDocuments[0].showFilingIncludes).toBeTruthy();
     });
 
@@ -306,7 +364,9 @@ describe('fileDocumentHelper', () => {
           certificateOfServiceDate: '2019-01-01',
         },
       ];
-      const result: any = runCompute(fileDocumentHelper, { state });
+      const result: any = runCompute(fileDocumentHelper, {
+        state: { ...state, user: docketClerkUser },
+      });
       expect(result.supportingDocuments[0].showFilingIncludes).toBeTruthy();
       expect(
         result.supportingDocuments[0].certificateOfServiceDateFormatted,
@@ -315,7 +375,9 @@ describe('fileDocumentHelper', () => {
 
     describe('for secondary supporting document', () => {
       it('shows Add Secondary Supporting Document button and not limit reached message when secondarySupportingDocuments is undefined', () => {
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
         expect(
           result.showAddSecondarySupportingDocumentsLimitReached,
@@ -324,7 +386,9 @@ describe('fileDocumentHelper', () => {
 
       it('does not show Add Secondary Supporting Document button or limit reached message when primary document type is Motion for Leave to File and secondary file is not selected', () => {
         state.form.documentType = 'Motion for Leave to File';
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
         expect(
           result.showAddSecondarySupportingDocumentsLimitReached,
@@ -338,7 +402,9 @@ describe('fileDocumentHelper', () => {
           { id: '3' },
           { id: '4' },
         ];
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
         expect(
           result.showAddSecondarySupportingDocumentsLimitReached,
@@ -353,7 +419,9 @@ describe('fileDocumentHelper', () => {
           { id: '4' },
           { id: '5' },
         ];
-        let result: any = runCompute(fileDocumentHelper, { state });
+        let result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
         expect(
           result.showAddSecondarySupportingDocumentsLimitReached,
@@ -366,7 +434,9 @@ describe('fileDocumentHelper', () => {
           { id: '5' },
           { id: '6' },
         ];
-        result = runCompute(fileDocumentHelper, { state });
+        result = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
         expect(
           result.showAddSecondarySupportingDocumentsLimitReached,
@@ -375,7 +445,9 @@ describe('fileDocumentHelper', () => {
 
       it('upload and free text not shown if no type selected', () => {
         state.form.secondarySupportingDocuments = [{ supportingDocument: '' }];
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(
           result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeFalsy();
@@ -388,7 +460,9 @@ describe('fileDocumentHelper', () => {
         state.form.secondarySupportingDocuments = [
           { supportingDocument: 'Declaration of Undying Love' },
         ];
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(
           result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeFalsy();
@@ -401,7 +475,9 @@ describe('fileDocumentHelper', () => {
         state.form.secondarySupportingDocuments = [
           { supportingDocument: 'Affidavit in Support' },
         ];
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(
           result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeTruthy();
@@ -412,7 +488,9 @@ describe('fileDocumentHelper', () => {
 
       it('filing includes is shown if attachments is true', () => {
         state.form.secondarySupportingDocuments = [{ attachments: true }];
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(
           result.secondarySupportingDocuments[0].showFilingIncludes,
         ).toBeTruthy();
@@ -425,7 +503,9 @@ describe('fileDocumentHelper', () => {
             certificateOfServiceDate: '2019-01-01',
           },
         ];
-        const result: any = runCompute(fileDocumentHelper, { state });
+        const result: any = runCompute(fileDocumentHelper, {
+          state: { ...state, user: docketClerkUser },
+        });
         expect(
           result.secondarySupportingDocuments[0].showFilingIncludes,
         ).toBeTruthy();
@@ -474,7 +554,7 @@ describe('fileDocumentHelper', () => {
 
     it('should be set to the names of all filing petitioners and their titles', () => {
       const { formattedFilingParties } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: docketClerkUser },
       });
 
       expect(formattedFilingParties).toEqual([
@@ -492,7 +572,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: docketClerkUser },
       });
 
       expect(EARedactionAcknowledgement).toEqual(true);
@@ -505,7 +585,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: docketClerkUser },
       });
 
       expect(EARedactionAcknowledgement).toEqual(false);
@@ -518,7 +598,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: docketClerkUser },
       });
 
       expect(EARedactionAcknowledgement).toEqual(false);
@@ -532,7 +612,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { isAutoGenerated } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: docketClerkUser },
       });
 
       expect(isAutoGenerated).toEqual(true);
@@ -541,8 +621,6 @@ describe('fileDocumentHelper', () => {
 
   describe('showGenerationTypeForm', () => {
     it('should set showGenerationTypeForm to true if showGenerationType returns true', () => {
-      applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
-
       state.form = {
         eventCode: 'EA',
         generationType: GENERATION_TYPES.AUTO,
@@ -557,7 +635,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { showGenerationTypeForm } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: irsPractitionerUser },
       });
 
       expect(showGenerationTypeForm).toEqual(true);
@@ -565,10 +643,6 @@ describe('fileDocumentHelper', () => {
   });
 
   describe('showPartiesFiling', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
-    });
-
     it('should set showPartiesFiling to false if IRS practitioner is filing first IRS document', () => {
       state.form = {
         generationType: GENERATION_TYPES.AUTO,
@@ -583,7 +657,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { showPartiesFiling } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: irsPractitionerUser },
       });
 
       expect(showPartiesFiling).toEqual(false);
@@ -608,7 +682,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { showPartiesFiling } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: docketClerkUser },
       });
 
       expect(showPartiesFiling).toEqual(true);
@@ -617,10 +691,6 @@ describe('fileDocumentHelper', () => {
 
   describe('showPartiesFiling', () => {
     it('should set showPartiesFiling to true if private practitioner is filing a document', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        privatePractitionerUser,
-      );
-
       state.form = {
         generationType: GENERATION_TYPES.AUTO,
       };
@@ -634,7 +704,7 @@ describe('fileDocumentHelper', () => {
       };
 
       const { showPartiesFiling } = runCompute(fileDocumentHelper, {
-        state,
+        state: { ...state, user: privatePractitionerUser },
       });
 
       expect(showPartiesFiling).toEqual(true);
