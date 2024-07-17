@@ -13,7 +13,7 @@ describe('check permissions for status report order response', () => {
   it('docket clerk should not be able to create status report order response', () => {
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-document-view').click();
-    cy.contains('Status Report').click();
+    cy.get(`[data-entry-id="${statusReportDocketEntryId}"]`).click();
 
     cy.get('[data-testid="order-response-button"]').should('not.exist');
   });

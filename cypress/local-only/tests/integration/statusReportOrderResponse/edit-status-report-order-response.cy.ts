@@ -7,6 +7,7 @@ import {
   expectedPdfLines,
   messages,
   selectAllOptionsInForm,
+  statusReportDocketEntryId,
 } from '../../../support/statusReportOrderResponse';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 import { v4 } from 'uuid';
@@ -79,7 +80,7 @@ describe('edit status report order response', () => {
       const orderName = `Order ${v4()}`;
       const revisedOrderName = `Order ${v4()}`;
       cy.get('#tab-document-view').click();
-      cy.contains('Status Report').click();
+      cy.get(`[data-entry-id="${statusReportDocketEntryId}"]`).click();
       cy.get('[data-testid="order-response-button"]').click();
       selectAllOptionsInForm({ orderName });
       cy.get('[data-testid="save-draft-button"]').click();

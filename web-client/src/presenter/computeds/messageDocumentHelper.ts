@@ -164,14 +164,6 @@ export const messageDocumentHelper = (
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
-  // declare a constant called showOrderResponseButton
-  // 1 does the user have permission? i.e., are they a judge, chambers, or adc user?
-  //   - refer to how roles and permissions are set up in authorizationClientService.ts
-  //
-  // 2 does the document have an `eventCode` === "RPT"
-  //   -add a property called something like `allowOrderResponse` to the status
-  //   report object in externalFilingEvents.json and internalFilingEvents.json
-
   const showOrderResponseButton =
     permissions.ORDER_RESPONSE &&
     (ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
