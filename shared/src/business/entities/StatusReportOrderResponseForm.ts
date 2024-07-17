@@ -5,6 +5,7 @@ import {
 } from '../utilities/DateHandler';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -64,14 +65,14 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
         'date.min': 'Due date cannot be prior to today. Enter a valid date.',
       }),
     issueOrder: JoiValidationConstants.STRING.valid(
-      'allCasesInGroup',
-      'justThisCase',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.allCasesInGroup,
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.justThisCase,
     )
       .optional()
       .allow(null),
     jurisdiction: JoiValidationConstants.STRING.valid(
-      'retained',
-      'restoredToGeneralDocket',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.restored,
     )
       .when('strickenFromTrialSessions', {
         is: joi.exist().not(null, false),
@@ -84,8 +85,8 @@ export class StatusReportOrderResponseForm extends JoiValidationEntity {
       .optional()
       .allow(null),
     orderType: JoiValidationConstants.STRING.valid(
-      'statusReport',
-      'orStipulatedDecision',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport,
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.stipulatedDecision,
     )
       .optional()
       .allow(null),

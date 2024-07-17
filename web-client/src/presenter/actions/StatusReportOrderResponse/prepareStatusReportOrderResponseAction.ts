@@ -1,4 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareStatusReportOrderResponseAction = ({
@@ -34,12 +35,16 @@ export const prepareStatusReportOrderResponseAction = ({
     .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
 
   const filedLine =
-    isLeadCase && issueOrder === 'allCasesInGroup'
+    isLeadCase &&
+    issueOrder ===
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.allCasesInGroup
       ? `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in the lead case of the consolidated group (Index no. ${statusReportIndex}). For cause, it is</p>`
       : `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
-    hasOrderType && orderType === 'statusReport'
+    hasOrderType &&
+    orderType ===
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport
       ? `<p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}.</p>`
       : hasOrderType
         ? `<p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDateFormatted}.</p>`
@@ -50,7 +55,9 @@ export const prepareStatusReportOrderResponseAction = ({
     : '';
 
   const jurisdictionLine =
-    hasJurisdiction && jurisdiction === 'retained'
+    hasJurisdiction &&
+    jurisdiction ===
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained
       ? '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>'
       : hasJurisdiction
         ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'

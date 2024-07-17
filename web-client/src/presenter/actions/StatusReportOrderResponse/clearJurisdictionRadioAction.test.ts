@@ -1,3 +1,4 @@
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { clearJurisdictionRadioAction } from './clearJurisdictionRadioAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -10,7 +11,8 @@ describe('clearJurisdictionRadioAction,', () => {
       },
       state: {
         form: {
-          jurisdiction: 'retained',
+          jurisdiction:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
         },
       },
     });
@@ -26,13 +28,15 @@ describe('clearJurisdictionRadioAction,', () => {
       },
       state: {
         form: {
-          jurisdiction: 'retained',
+          jurisdiction:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
         },
       },
     });
 
     expect(result.state.form).toEqual({
-      jurisdiction: 'retained',
+      jurisdiction:
+        STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
     });
   });
 });

@@ -1,4 +1,5 @@
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -27,9 +28,12 @@ describe('validateStatusReportOrderResponseFormAction,', () => {
           additionalOrderText: 'Test',
           docketEntryDescription: 'Order',
           dueDate: today,
-          issueOrder: 'justThisCase',
-          jurisdiction: 'retained',
-          orderType: 'statusReport',
+          issueOrder:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.justThisCase,
+          jurisdiction:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
+          orderType:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport,
           strickenFromTrialSessions: 'true',
         },
       },
@@ -47,8 +51,10 @@ describe('validateStatusReportOrderResponseFormAction,', () => {
         form: {
           additionalOrderText: 'Test',
           dueDate: 'bb-bb-bbbb',
-          issueOrder: 'justThisCase',
-          orderType: 'statusReport',
+          issueOrder:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.justThisCase,
+          orderType:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport,
           strickenFromTrialSessions: 'true',
         },
       },
@@ -77,9 +83,12 @@ describe('validateStatusReportOrderResponseFormAction,', () => {
           additionalOrderText: 'Test',
           docketEntryDescription: 'Order',
           dueDate: '2024-07-03',
-          issueOrder: 'justThisCase',
-          jurisdiction: 'retained',
-          orderType: 'statusReport',
+          issueOrder:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.justThisCase,
+          jurisdiction:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
+          orderType:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport,
           strickenFromTrialSessions: 'true',
         },
       },

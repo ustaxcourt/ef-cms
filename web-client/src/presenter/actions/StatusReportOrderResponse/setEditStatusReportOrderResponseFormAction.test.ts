@@ -1,3 +1,4 @@
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setEditStatusReportOrderResponseFormAction } from './setEditStatusReportOrderResponseFormAction';
 
@@ -16,8 +17,11 @@ describe('setEditStatusReportOrderResponseFormAction,', () => {
             additionalOrderText: 'Test',
             docketEntryDescription: 'Order',
             dueDate: '07/04/2024',
-            jurisdiction: 'retained',
-            orderType: 'statusReport',
+            jurisdiction:
+              STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
+            orderType:
+              STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions
+                .statusReport,
             strickenFromTrialSessions: 'true',
           },
         },
@@ -28,8 +32,10 @@ describe('setEditStatusReportOrderResponseFormAction,', () => {
       additionalOrderText: 'Test',
       docketEntryDescription: 'Order',
       dueDate: '07/04/2024',
-      jurisdiction: 'retained',
-      orderType: 'statusReport',
+      jurisdiction:
+        STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
+      orderType:
+        STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport,
       strickenFromTrialSessions: 'true',
     });
     expect(result.output).toEqual({
