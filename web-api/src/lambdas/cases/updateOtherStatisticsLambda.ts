@@ -1,3 +1,4 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -6,12 +7,19 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const updateOtherStatisticsLambda = event =>
+export const updateOtherStatisticsLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateOtherStatisticsInteractor(applicationContext, {
-        ...event.pathParameters,
-        ...JSON.parse(event.body),
-      });
+      .updateOtherStatisticsInteractor(
+        applicationContext,
+        {
+          ...event.pathParameters,
+          ...JSON.parse(event.body),
+        },
+        authorizedUser,
+      );
   });
