@@ -6,6 +6,10 @@ import {
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
+import {
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 jest.mock('./addToTrialSessionModalHelper.ts');
@@ -20,7 +24,6 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
   {
     ...applicationContext,
-    getCurrentUser: () => currentUser,
   },
 );
 
@@ -29,12 +32,6 @@ const getStartOfWeek = date => {
 };
 
 let nextYear;
-let currentUser = {};
-
-const testJudgeUser = {
-  role: ROLES.judge,
-  userId: '1',
-};
 
 const testTrialClerkUser = {
   role: ROLES.trialClerk,
@@ -43,7 +40,7 @@ const testTrialClerkUser = {
 
 const baseState = {
   constants: { USER_ROLES: ROLES },
-  judgeUser: testJudgeUser,
+  judgeUser: mockJudgeUser,
 };
 
 let TRIAL_SESSIONS_LIST: any[] = [];
@@ -54,12 +51,11 @@ describe('formattedTrialSessions', () => {
   });
 
   beforeEach(() => {
-    currentUser = testJudgeUser;
     TRIAL_SESSIONS_LIST = [
       {
         caseOrder: [],
         isCalendared: true,
-        judge: { name: '1', userId: '1' },
+        judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
         sessionType: SESSION_TYPES.regular,
@@ -177,6 +173,7 @@ describe('formattedTrialSessions', () => {
         state: {
           ...baseState,
           trialSessions: TRIAL_SESSIONS_LIST,
+          user: mockJudgeUser,
         },
       });
     } catch (err) {
@@ -190,7 +187,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
 
@@ -208,9 +205,11 @@ describe('formattedTrialSessions', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
-        screenMetadata: { trialSessionFilters: { judge: { userId: '1' } } },
+        screenMetadata: {
+          trialSessionFilters: { judge: { userId: mockJudgeUser.userId } },
+        },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     expect(result.formattedSessions.length).toBe(1);
@@ -227,7 +226,7 @@ describe('formattedTrialSessions', () => {
           },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     const flattenedSessions = result.formattedSessions.flatMap(
@@ -242,7 +241,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         screenMetadata: { trialSessionFilters: { judge: { userId: '' } } },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     expect(result.formattedSessions.length).toBe(4);
@@ -261,7 +260,7 @@ describe('formattedTrialSessions', () => {
           trialSessionFilters: { judge: { userId: 'unassigned' } },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
 
@@ -278,7 +277,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         form,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     expect(result.sessionsByTerm.length).toEqual(0);
@@ -290,7 +289,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         form,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     expect(result.sessionsByTerm.length).toEqual(1);
@@ -302,7 +301,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         form,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     expect(result.sessionsByTerm.length).toEqual(0);
@@ -317,7 +316,7 @@ describe('formattedTrialSessions', () => {
           term: 'Winter',
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
 
@@ -417,7 +416,7 @@ describe('formattedTrialSessions', () => {
           term: 'Winter',
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
 
@@ -433,7 +432,7 @@ describe('formattedTrialSessions', () => {
         },
         trialSession: { trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
 
@@ -451,7 +450,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         judgeUser: undefined,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: { role: ROLES.petitionsClerk, userId: '1' },
+        user: mockPetitionsClerkUser,
       },
     });
 
@@ -463,7 +462,7 @@ describe('formattedTrialSessions', () => {
           userIsAssignedToSession: false,
         },
         {
-          judge: { name: '1', userId: '1' },
+          judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
           userIsAssignedToSession: false,
         },
         {
@@ -499,7 +498,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: testJudgeUser,
+        user: mockJudgeUser,
       },
     });
     expect(result.formattedSessions).toMatchObject([
@@ -511,7 +510,7 @@ describe('formattedTrialSessions', () => {
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: '1', userId: '1' },
+            judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
             userIsAssignedToSession: true,
           },
           {
@@ -577,13 +576,12 @@ describe('formattedTrialSessions', () => {
   });
 
   it('sets userIsAssignedToSession true for sessions the current trial clerk user is assigned to', () => {
-    currentUser = testTrialClerkUser;
-
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
         judgeUser: undefined,
         trialSessions: TRIAL_SESSIONS_LIST,
+        user: testTrialClerkUser,
       },
     });
 
@@ -595,7 +593,7 @@ describe('formattedTrialSessions', () => {
           userIsAssignedToSession: false,
         },
         {
-          judge: { name: '1', userId: '1' },
+          judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
           userIsAssignedToSession: false,
         },
         {
@@ -642,7 +640,7 @@ describe('formattedTrialSessions', () => {
             trialLocation: 'Jacksonville, FL',
           },
         ],
-        user: { role: ROLES.petitionsClerk, userId: '1' },
+        user: mockPetitionsClerkUser,
       },
     });
     expect(result.formattedSessions).toMatchObject([
