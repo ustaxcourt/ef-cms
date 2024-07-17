@@ -13,6 +13,7 @@ import {
   loginAsColvin,
   loginAsColvinChambers,
 } from '../../../../helpers/authentication/login-as-helpers';
+import { retry } from '../../../../helpers/retry';
 import { v4 } from 'uuid';
 
 describe('file status report order response', () => {
@@ -35,14 +36,17 @@ describe('file status report order response', () => {
         cy.contains('Status Report').click();
         cy.get('[data-testid="order-response-button"]').click();
 
-        // TODO: Review this test and try to find the iframe using a retry instead
-        cy.intercept('POST', '**/api/court-issued-order').as(
-          'courtIssuedOrder',
-        );
         cy.get('[data-testid="preview-pdf-button"]').click();
 
-        cy.wait('@courtIssuedOrder').then(({ response: res }) => {
-          expect(res?.body.url).to.not.be.empty;
+        // Expect pdf wrapper to contain preview content
+        retry(() => {
+          return cy.get('body').then(body => {
+            /** Assert */
+            return (
+              body.find('#status-report-order-response-pdf-preview').children
+                .length > 1
+            );
+          });
         });
       });
     });

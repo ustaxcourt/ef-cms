@@ -869,59 +869,39 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
-
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
-
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
-
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
-
   gotoPractitionerAddDocumentSequence:
     gotoPractitionerAddDocumentSequence as unknown as Function,
-
   gotoPractitionerDetailSequence:
     gotoPractitionerDetailSequence as unknown as Function,
-
   gotoPractitionerDocumentationSequence:
     gotoPractitionerDocumentationSequence as unknown as Function,
-
   gotoPractitionerEditDocumentSequence:
     gotoPractitionerEditDocumentSequence as unknown as Function,
-
   gotoPrintPaperServiceSequence:
     gotoPrintPaperServiceSequence as unknown as Function,
-
   gotoPrintPaperTrialNoticesSequence:
     gotoPrintPaperTrialNoticesSequence as unknown as Function,
-
   gotoPrintPractitionerCasesSequence:
     gotoPrintPractitionerCasesSequence as unknown as Function,
-
   gotoPrintableCaseConfirmationSequence:
     gotoPrintableCaseConfirmationSequence as unknown as Function,
-
   gotoPrintableCaseInventoryReportSequence:
     gotoPrintableCaseInventoryReportSequence as unknown as Function,
-
   gotoPrintableDocketRecordSequence:
     gotoPrintableDocketRecordSequence as unknown as Function,
-
   gotoPrintablePendingReportForCaseSequence:
     gotoPrintablePendingReportForCaseSequence as unknown as Function,
-
   gotoPrintablePendingReportSequence:
     gotoPrintablePendingReportSequence as unknown as Function,
-
   gotoPrintableTrialSessionWorkingCopySequence:
     gotoPrintableTrialSessionWorkingCopySequence as unknown as Function,
-
   gotoPrivacySequence: gotoPrivacySequence as unknown as Function,
-
   gotoReviewSavedPetitionSequence:
     gotoReviewSavedPetitionSequence as unknown as Function,
-
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,
-
   gotoStartCaseWizardSequence:
     gotoStartCaseWizardSequence as unknown as Function,
   gotoStatusReportOrderResponseSequence,
