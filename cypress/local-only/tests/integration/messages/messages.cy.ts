@@ -691,27 +691,7 @@ function sendMessagesToCompletedTab(DOCKET_CLERK_ID: string) {
   }
 
   cy.login('docketclerk');
-  // for (let i = 0; i < 3; i++) {
   cy.get('[data-testid="all-messages-checkbox"]').click();
   cy.get('[data-testid="message-batch-mark-as-complete"]').click();
   cy.get('[data-testid="message-detail-success-alert"]').should('exist');
-
-  // cy.get(`a[href^="/messages/${docketNumber}/message-detail"]`).eq(0).click();
-  // cy.get('[data-testid="message-mark-as-complete"]').click();
-  // cy.get('[data-testid="complete-message-body"]').type('MARK AS COMPLETE');
-  // cy.get('[data-testid="modal-confirm"]').click();
-  // cy.get('[data-testid="message-detail-success-alert"]').should('exist');
-  // cy.get('[data-testid="header-messages-link"]').click();
-  // retry(() => {
-  //   cy.reload(true);
-  //   cy.get('[data-testid="inbox-tab-content"]').should('exist');
-  //   return cy.get('body').then(body => {
-  //     return (
-  //       body.find(`a[href^="/messages/${docketNumber}/message-detail"]`)
-  //         .length ===
-  //       2 - i
-  //     );
-  //   });
-  // });
-  // }
 }
