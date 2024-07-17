@@ -74,6 +74,5 @@ export const addPetitionerToCaseLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
   );
 ```

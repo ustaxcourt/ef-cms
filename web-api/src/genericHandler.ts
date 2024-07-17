@@ -78,19 +78,15 @@ export const genericHandler = (
     applicationContext: ServerApplicationContext;
     clientConnectionId?: string;
   }) => any,
-  user: UnknownAuthUser,
   options: {
     bypassMaintenanceCheck?: boolean;
     logResults?: boolean;
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const deprecatedUser = getUserFromAuthHeader(awsEvent); // TODO 10417: remove getting user here. Should be passed in.
+    const user = getUserFromAuthHeader(awsEvent); // TODO 10417: remove getting user here. Should be passed in.
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext = createApplicationContext(
-      deprecatedUser,
-      awsEvent.logger,
-    );
+    const applicationContext = createApplicationContext(user, awsEvent.logger);
 
     delete awsEvent.logger;
 
