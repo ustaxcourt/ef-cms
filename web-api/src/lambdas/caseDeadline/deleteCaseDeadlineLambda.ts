@@ -11,18 +11,12 @@ export const deleteCaseDeadlineLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .deleteCaseDeadlineInteractor(
-          applicationContext,
-          {
-            ...event.pathParameters,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext.getUseCases().deleteCaseDeadlineInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
+  });

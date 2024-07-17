@@ -8,16 +8,12 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getUserCaseNoteLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext.getUseCases().getUserCaseNoteInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext.getUseCases().getUserCaseNoteInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
+  });
