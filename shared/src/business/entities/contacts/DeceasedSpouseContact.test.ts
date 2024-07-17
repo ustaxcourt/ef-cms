@@ -25,13 +25,13 @@ describe('DeceasedSpouseContact', () => {
   });
 
   describe('VALIDATION', () => {
-    describe('email', () => {
-      it('should return an error message for "email" when "hasConsentedToEService" is true', () => {
+    describe('paperPetitionEmail', () => {
+      it('should return an error message for "paperPetitionEmail" when "hasConsentedToEService" is true', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            email: undefined,
             hasConsentedToEService: true,
+            paperPetitionEmail: undefined,
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -39,7 +39,8 @@ describe('DeceasedSpouseContact', () => {
 
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({
-          email: 'Enter an email address to register for electronic service',
+          paperPetitionEmail:
+            'Enter an email address to register for electronic service',
         });
       });
 
@@ -47,8 +48,8 @@ describe('DeceasedSpouseContact', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            email: undefined,
             hasConsentedToEService: false,
+            paperPetitionEmail: undefined,
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -58,12 +59,12 @@ describe('DeceasedSpouseContact', () => {
         expect(errors).toEqual(null);
       });
 
-      it('should not return an error message for "email" if not a valid email string', () => {
+      it('should not return an error message for "paperPetitionEmail" if not a valid email string', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            email: 'not a email string',
             hasConsentedToEService: true,
+            paperPetitionEmail: 'not a email string',
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,
@@ -71,7 +72,8 @@ describe('DeceasedSpouseContact', () => {
 
         const errors = entity.getFormattedValidationErrors();
         expect(errors).toEqual({
-          email: 'Enter an email address to register for electronic service',
+          paperPetitionEmail:
+            'Enter an email address to register for electronic service',
         });
       });
     });
