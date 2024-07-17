@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
 import { pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -20,9 +21,17 @@ export const getStep1DataAction = ({ get }: ActionProps) => {
     useSameAsPrimary,
   } = get(state.form);
 
+  const contactSecondaryWithType = {
+    ...contactSecondary,
+    contactType: CONTACT_TYPES.secondary,
+  };
+
   const step1Data = {
     businessType,
-    contactPrimary,
+    contactPrimary: {
+      ...contactPrimary,
+      contactType: CONTACT_TYPES.primary,
+    },
     contactSecondary: useSameAsPrimary
       ? {
           ...pick(contactPrimary, [
@@ -35,9 +44,9 @@ export const getStep1DataAction = ({ get }: ActionProps) => {
             'postalCode',
             'state',
           ]),
-          ...contactSecondary,
+          ...contactSecondaryWithType,
         }
-      : contactSecondary,
+      : contactSecondaryWithType,
     corporateDisclosureFile,
     corporateDisclosureFileSize,
     countryType,
