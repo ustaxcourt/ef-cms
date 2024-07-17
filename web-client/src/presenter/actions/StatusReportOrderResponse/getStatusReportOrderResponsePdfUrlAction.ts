@@ -1,3 +1,4 @@
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getStatusReportOrderResponsePdfUrlAction = async ({
@@ -17,7 +18,9 @@ export const getStatusReportOrderResponsePdfUrlAction = async ({
   const issueOrder = get(state.form.issueOrder);
 
   const addedDocketNumbers =
-    !!issueOrder && issueOrder === 'allCasesInGroup'
+    !!issueOrder &&
+    issueOrder ===
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.allCasesInGroup
       ? docketNumbersToDisplay
       : [];
 

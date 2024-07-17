@@ -1654,3 +1654,18 @@ export type CreatedCaseType = {
     name: string;
   };
 };
+
+export const STATUS_REPORT_ORDER_RESPONSE_OPTIONS = {
+  issueOrderOptions: {
+    justThisCase: 'justThisCase',
+    allCasesInGroup: 'allCasesInGroup',
+  },
+  orderTypeOptions: {
+    statusReport: 'statusReport',
+    stipulatedDecision: 'orStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
+};

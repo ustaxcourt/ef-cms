@@ -74,12 +74,19 @@ export const StatusReportOrderResponse = connect(
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="all cases in group"
-                            checked={form.issueOrder === 'allCasesInGroup'}
+                            checked={
+                              form.issueOrder ===
+                              constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                                .issueOrderOptions.allCasesInGroup
+                            }
                             className="usa-radio__input"
                             id="all-cases-in-group"
                             name="issueOrder"
                             type="radio"
-                            value="allCasesInGroup"
+                            value={
+                              constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                                .issueOrderOptions.allCasesInGroup
+                            }
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
@@ -94,16 +101,23 @@ export const StatusReportOrderResponse = connect(
                             All cases in this group
                           </label>
                         </div>
-                        <div className="usa-radio usa-radio">
+                        <div className="usa-radio">
                           <input
                             aria-describedby="issue-order-radios"
                             aria-label="just this case"
-                            checked={form.issueOrder === 'justThisCase'}
+                            checked={
+                              form.issueOrder ===
+                              constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                                .issueOrderOptions.justThisCase
+                            }
                             className="usa-radio__input"
                             id="just-this-case"
                             name="issueOrder"
                             type="radio"
-                            value="justThisCase"
+                            value={
+                              constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                                .issueOrderOptions.justThisCase
+                            }
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
@@ -134,12 +148,19 @@ export const StatusReportOrderResponse = connect(
                       <input
                         aria-describedby="order-type-radios"
                         aria-label="status report"
-                        checked={form.orderType === 'statusReport'}
+                        checked={
+                          form.orderType ===
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .orderTypeOptions.statusReport
+                        }
                         className="usa-radio__input"
                         id="order-type-status-report"
                         name="orderType"
                         type="radio"
-                        value="statusReport"
+                        value={
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .orderTypeOptions.statusReport
+                        }
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -159,12 +180,19 @@ export const StatusReportOrderResponse = connect(
                       <input
                         aria-describedby="order-type-radios"
                         aria-label="status report or stipulated decision"
-                        checked={form.orderType === 'orStipulatedDecision'}
+                        checked={
+                          form.orderType ===
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .orderTypeOptions.stipulatedDecision
+                        }
                         className="usa-radio__input"
                         id="order-type-or-stipulated-decision"
                         name="orderType"
                         type="radio"
-                        value="orStipulatedDecision"
+                        value={
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .orderTypeOptions.stipulatedDecision
+                        }
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -251,17 +279,24 @@ export const StatusReportOrderResponse = connect(
                     <label className="usa-label" htmlFor="jurisdiction-radios">
                       Jurisdiction
                     </label>
-                    <div className="usa-radio usa-radio">
+                    <div className="usa-radio">
                       <input
                         aria-describedby="jurisdiction-radios"
                         aria-label="retained"
-                        checked={form.jurisdiction === 'retained'}
+                        checked={
+                          form.jurisdiction ===
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .jurisdictionOptions.retained
+                        }
                         className="usa-radio__input"
                         disabled={!form.strickenFromTrialSessions}
                         id="jurisdiction-retained"
                         name="jurisdiction"
                         type="radio"
-                        value="retained"
+                        value={
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .jurisdictionOptions.retained
+                        }
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -276,19 +311,24 @@ export const StatusReportOrderResponse = connect(
                         Retained
                       </label>
                     </div>
-                    <div className="usa-radio usa-radio">
+                    <div className="usa-radio">
                       <input
                         aria-describedby="jurisdiction-radios"
                         aria-label="restored to general docket"
                         checked={
-                          form.jurisdiction === 'restoredToGeneralDocket'
+                          form.jurisdiction ===
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .jurisdictionOptions.restored
                         }
                         className="usa-radio__input"
                         disabled={!form.strickenFromTrialSessions}
                         id="jurisdiction-restored-to-general-docket"
                         name="jurisdiction"
                         type="radio"
-                        value="restoredToGeneralDocket"
+                        value={
+                          constants.STATUS_REPORT_ORDER_RESPONSE_OPTIONS
+                            .jurisdictionOptions.restored
+                        }
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,

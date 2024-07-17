@@ -1,4 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { prepareStatusReportOrderResponseAction } from './prepareStatusReportOrderResponseAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
@@ -49,8 +50,10 @@ describe('prepareStatusReportOrderResponseAction,', () => {
 
   it('prepare status report with all options selected', async () => {
     const additionalOrderText = 'Test Additional Order Text';
-    const jurisdiction = 'retained'; // TODO: use enum?
-    const orderType = 'statusReport'; // TODO: use enum?
+    const jurisdiction =
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained;
+    const orderType =
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport;
     const strickenFromTrialSessions = true;
     const expectedFullText = `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test Additional Order Text</p>`;
 
@@ -79,11 +82,11 @@ describe('prepareStatusReportOrderResponseAction,', () => {
 
   it.each([
     [
-      'allCasesInGroup',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.allCasesInGroup,
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in the lead case of the consolidated group (Index no. ${statusReportIndex}). For cause, it is</p>`,
     ],
     [
-      'justThisCase',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.justThisCase,
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p>`,
     ],
   ])(
@@ -114,11 +117,11 @@ describe('prepareStatusReportOrderResponseAction,', () => {
 
   it.each([
     [
-      'retained',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.retained,
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>`,
     ],
     [
-      'restoredToGeneralDocket',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.jurisdictionOptions.restored,
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>`,
     ],
   ])(
@@ -146,11 +149,11 @@ describe('prepareStatusReportOrderResponseAction,', () => {
 
   it.each([
     [
-      'statusReport',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.statusReport,
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}.</p>`,
     ],
     [
-      'orStipulatedDecision',
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.orderTypeOptions.stipulatedDecision,
       `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDateFormatted}.</p>`,
     ],
   ])('should have correct output for order type %s', async (input, output) => {

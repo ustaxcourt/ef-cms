@@ -1,3 +1,4 @@
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -13,6 +14,9 @@ export const clearStatusReportOrderResponseFormAction = ({
     store.unset(state.form.jurisdiction);
     store.set(state.form.additionalOrderText, '');
     store.set(state.form.docketEntryDescription, 'Order');
-    store.set(state.form.issueOrder, 'allCasesInGroup');
+    store.set(
+      state.form.issueOrder,
+      STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.allCasesInGroup,
+    );
   }
 };

@@ -1,3 +1,4 @@
+import { STATUS_REPORT_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getStatusReportOrderResponsePdfUrlAction } from './getStatusReportOrderResponsePdfUrlAction';
 import { presenter } from '../../presenter-mock';
@@ -134,7 +135,8 @@ describe('getPdfUrlAction', () => {
           docketNumber,
         },
         form: {
-          issueOrder: 'justThisCase',
+          issueOrder:
+            STATUS_REPORT_ORDER_RESPONSE_OPTIONS.issueOrderOptions.justThisCase,
         },
         statusReportOrderResponse: {
           docketNumbersToDisplay: [docketNumber],
