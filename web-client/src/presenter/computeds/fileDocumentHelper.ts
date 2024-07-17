@@ -87,7 +87,7 @@ export const fileDocumentHelper = (
   const EARedactionAcknowledgement =
     form.generationType === GENERATION_TYPES.MANUAL && form.eventCode === 'EA';
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const showGenerationTypeForm = showGenerationType(
     user,
     form.eventCode,
