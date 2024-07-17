@@ -86,7 +86,7 @@ export const formattedTrialSessionDetails = (
       .getUtilities()
       .formatNow(DATE_FORMATS.YYYYMMDD);
 
-    const user = applicationContext.getCurrentUser();
+    const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
 
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
