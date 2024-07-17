@@ -11,18 +11,14 @@ export const getCaseInventoryReportLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getCaseInventoryReportInteractor(
-          applicationContext,
-          {
-            ...event.queryStringParameters,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .getCaseInventoryReportInteractor(
+        applicationContext,
+        {
+          ...event.queryStringParameters,
+        },
+        authorizedUser,
+      );
+  });

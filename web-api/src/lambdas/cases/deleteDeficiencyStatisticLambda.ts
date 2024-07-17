@@ -11,18 +11,14 @@ export const deleteDeficiencyStatisticLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .deleteDeficiencyStatisticInteractor(
-          applicationContext,
-          {
-            ...event.pathParameters,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .deleteDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          ...event.pathParameters,
+        },
+        authorizedUser,
+      );
+  });

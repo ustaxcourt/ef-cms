@@ -11,18 +11,12 @@ export const createCaseDeadlineLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ): Promise<any | undefined> =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .createCaseDeadlineInteractor(
-          applicationContext,
-          {
-            ...JSON.parse(event.body),
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext.getUseCases().createCaseDeadlineInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

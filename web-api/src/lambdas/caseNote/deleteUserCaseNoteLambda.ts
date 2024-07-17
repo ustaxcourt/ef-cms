@@ -11,18 +11,12 @@ export const deleteUserCaseNoteLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .deleteUserCaseNoteInteractor(
-          applicationContext,
-          {
-            ...event.pathParameters,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext.getUseCases().deleteUserCaseNoteInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
+  });

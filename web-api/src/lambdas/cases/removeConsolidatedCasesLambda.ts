@@ -11,23 +11,19 @@ export const removeConsolidatedCasesLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const docketNumbersToRemove = (
-        event.queryStringParameters.docketNumbersToRemove || ''
-      ).split(',');
+  genericHandler(event, async ({ applicationContext }) => {
+    const docketNumbersToRemove = (
+      event.queryStringParameters.docketNumbersToRemove || ''
+    ).split(',');
 
-      return await applicationContext
-        .getUseCases()
-        .removeConsolidatedCasesInteractor(
-          applicationContext,
-          {
-            ...event.pathParameters,
-            docketNumbersToRemove,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+    return await applicationContext
+      .getUseCases()
+      .removeConsolidatedCasesInteractor(
+        applicationContext,
+        {
+          ...event.pathParameters,
+          docketNumbersToRemove,
+        },
+        authorizedUser,
+      );
+  });

@@ -11,23 +11,17 @@ export const updateUserCaseNoteLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const lambdaArguments = {
-        ...event.pathParameters,
-        ...JSON.parse(event.body),
-      };
+  genericHandler(event, async ({ applicationContext }) => {
+    const lambdaArguments = {
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
+    };
 
-      return await applicationContext
-        .getUseCases()
-        .updateUserCaseNoteInteractor(
-          applicationContext,
-          {
-            ...lambdaArguments,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+    return await applicationContext.getUseCases().updateUserCaseNoteInteractor(
+      applicationContext,
+      {
+        ...lambdaArguments,
+      },
+      authorizedUser,
+    );
+  });

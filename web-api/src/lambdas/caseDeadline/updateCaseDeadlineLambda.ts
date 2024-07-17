@@ -11,18 +11,12 @@ export const updateCaseDeadlineLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .updateCaseDeadlineInteractor(
-          applicationContext,
-          {
-            ...JSON.parse(event.body),
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext.getUseCases().updateCaseDeadlineInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });
