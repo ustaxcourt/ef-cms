@@ -42,6 +42,8 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
+type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
+
 /* eslint-disable max-lines */
 const canDownloadSTIN = (
   entry: RawDocketEntry,
@@ -77,6 +79,9 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
+  public caseType?: string;
+  public taxYear?: string;
+  public noticeIssuedDate?: string;
   public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
@@ -191,6 +196,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
     this.archived = rawDocketEntry.archived;
     this.attachments = rawDocketEntry.attachments;
+    this.caseType = rawDocketEntry.caseType;
+    this.taxYear = rawDocketEntry.taxYear;
+    this.noticeIssuedDate = rawDocketEntry.noticeIssuedDate;
     this.certificateOfService = rawDocketEntry.certificateOfService;
     this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
     this.createdAt = rawDocketEntry.createdAt || createISODateString();
@@ -614,7 +622,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
       !!filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        filedByRole as PractitionerRole,
+      )
     );
   }
 
@@ -683,6 +693,41 @@ export class DocketEntry extends JoiValidationEntity {
   static isSealedToExternal = ({ sealedTo }: RawDocketEntry): boolean =>
     sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL;
 
+  static canUserViewSubmittedDocketEntry(
+    entry: RawDocketEntry,
+    user: {
+      userId: string;
+      role: Role;
+    },
+  ) {
+    type userFillingLogic = (
+      docketEntry: RawDocketEntry,
+      userInfo: {
+        userId: string;
+        role: Role;
+      },
+    ) => boolean;
+
+    const USER_FILLED_LOGIC_DICTIONARY: { [key: string]: userFillingLogic } = {
+      [ROLES.privatePractitioner]: (docketEntry, userInfo) =>
+        docketEntry.userId === userInfo.userId,
+      [ROLES.petitioner]: (docketEntry, userInfo) =>
+        (docketEntry.filers || []).some(userId => userInfo.userId === userId),
+    };
+    const DEFAULT_CALLBACK = () => false;
+
+    const USER_FILLED_LOGIC =
+      USER_FILLED_LOGIC_DICTIONARY[user.role] || DEFAULT_CALLBACK;
+    const USER_FILLED_DOCKET_ENTRY = USER_FILLED_LOGIC(entry, user);
+
+    const ALLOWED_EVENT_CODES_TO_VIEW = ['P', 'ATP', 'DISC'];
+
+    return (
+      USER_FILLED_DOCKET_ENTRY &&
+      ALLOWED_EVENT_CODES_TO_VIEW.includes(entry.eventCode)
+    );
+  }
+
   static isDownloadable = (
     entry: RawDocketEntry,
     {
@@ -712,7 +757,10 @@ export class DocketEntry extends JoiValidationEntity {
     if (User.isInternalUser(user.role)) return true;
 
     if (!DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry)) {
-      return false;
+      const USER_CAN_VIEW_SUBMITTED_DOCKET_ENTRY =
+        DocketEntry.canUserViewSubmittedDocketEntry(entry, user);
+
+      if (!USER_CAN_VIEW_SUBMITTED_DOCKET_ENTRY) return false;
     }
 
     if (user.role === ROLES.irsSuperuser)
