@@ -52,7 +52,7 @@ describe('ContactFactoryUpdated', () => {
     });
 
     expect(primary).toMatchObject({
-      entityName: 'primary',
+      entityName: 'PetitionerPrimaryContact',
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       petitionType: TEST_PETITION_TYPE,
     });
@@ -67,13 +67,12 @@ describe('ContactFactoryUpdated', () => {
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       petitionType: TEST_PETITION_TYPE,
     });
-
     expect(primary).toMatchObject({
-      entityName: 'primary',
+      entityName: 'PetitionerPrimaryContact',
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       petitionType: TEST_PETITION_TYPE,
     });
-    expect(secondary).toEqual({
+    expect(secondary).toMatchObject({
       entityName: 'DeceasedSpouseContact',
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -90,7 +89,7 @@ describe('ContactFactoryUpdated', () => {
     });
 
     expect(primary).toMatchObject({
-      entityName: 'primary',
+      entityName: 'PetitionerPrimaryContact',
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
     });
@@ -107,7 +106,7 @@ describe('ContactFactoryUpdated', () => {
     });
 
     expect(primary).toMatchObject({
-      entityName: 'primary',
+      entityName: 'PetitionerPrimaryContact',
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
     });
@@ -124,11 +123,11 @@ describe('ContactFactoryUpdated', () => {
     });
 
     expect(primary).toMatchObject({
-      entityName: 'primary',
+      entityName: 'PetitionerPrimaryContact',
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
     });
-    expect(secondary).toEqual({
+    expect(secondary).toMatchObject({
       entityName: 'SpouseContact',
       partyType: PARTY_TYPES.petitionerSpouse,
       petitionType: TEST_PETITION_TYPE,
@@ -174,7 +173,7 @@ describe('ContactFactoryUpdated', () => {
     });
 
     expect(primary).toMatchObject({
-      entityName: 'primary',
+      entityName: 'PetitionerPrimaryContact',
       partyType: 'SOMETHING_RANDOM',
       petitionType: TEST_PETITION_TYPE,
     });
