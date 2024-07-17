@@ -18,7 +18,7 @@ export const trialSessionHeaderHelper = (
 } => {
   const { USER_ROLES } = applicationContext.getConstants();
 
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
 
   const trialSession = get(state.trialSession);
   const judgeUser = get(state.judgeUser);
