@@ -505,6 +505,7 @@ import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
+import { updateMessageFilterSequence } from '@web-client/presenter/sequences/updateMessageFilterSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
@@ -1419,6 +1420,7 @@ export const presenterSequences = {
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
   updateJudgesCaseNoteOnCaseDetailSequence:
     updateJudgesCaseNoteOnCaseDetailSequence as unknown as Function,
+  updateMessageFilterSequence,
   updateMessageModalAttachmentsSequence:
     updateMessageModalAttachmentsSequence as unknown as Function,
   updateModalFormValueSequence:

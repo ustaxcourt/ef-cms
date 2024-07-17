@@ -6,17 +6,17 @@ export const removeCompletedMessagesFromDisplayAction = ({
   store,
 }: ActionProps) => {
   const { completedMessageIds } = props;
-  const messagesInInbox = get(state.formattedMessages.messages);
+  const allMessages = get(state.messages);
 
-  const remainingInboxItems = messagesInInbox.filter(
+  const remainingMessages = allMessages.filter(
     message => !completedMessageIds.includes(message.messageId),
   );
 
-  const unreadMessageCount = remainingInboxItems.filter(
+  const unreadMessageCount = remainingMessages.filter(
     message => !message.isRead,
   ).length;
 
   store.set(state.notifications.unreadMessageCount, unreadMessageCount);
-  store.set(state.messagesInboxCount, remainingInboxItems.length);
-  store.set(state.messages, remainingInboxItems);
+  store.set(state.messagesInboxCount, remainingMessages.length);
+  store.set(state.messages, remainingMessages);
 };
