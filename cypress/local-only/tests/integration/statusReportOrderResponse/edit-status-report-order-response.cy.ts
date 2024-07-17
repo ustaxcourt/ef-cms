@@ -29,9 +29,14 @@ describe('edit status report order response', () => {
       );
 
       cy.get('#order-type-status-report').should('be.checked');
-      cy.get('#status-report-due-date-picker')
-        .invoke('val')
-        .should('contain', '07/11/2024');
+      // expect either the seeded data's date or else the updated date we set in these tests
+      cy.get('#status-report-due-date-picker').should($el => {
+        expect($el.val()).to.satisfy(
+          (t: string | string[]) =>
+            t.includes('07/11/2024') ||
+            t.includes(`${formatNow(FORMATS.MMDDYYYY)}`),
+        );
+      });
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
@@ -121,9 +126,14 @@ describe('edit status report order response', () => {
       );
 
       cy.get('#order-type-status-report').should('be.checked');
-      cy.get('#status-report-due-date-picker')
-        .invoke('val')
-        .should('contain', '07/11/2024');
+      // expect either the seeded data's date or else the updated date we set in these tests
+      cy.get('#status-report-due-date-picker').should($el => {
+        expect($el.val()).to.satisfy(
+          (t: string | string[]) =>
+            t.includes('07/11/2024') ||
+            t.includes(`${formatNow(FORMATS.MMDDYYYY)}`),
+        );
+      });
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');

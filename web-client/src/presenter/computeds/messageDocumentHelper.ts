@@ -207,7 +207,6 @@ export const messageDocumentHelper = (
 
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    // export the constant defined above
     showOrderResponseButton,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
