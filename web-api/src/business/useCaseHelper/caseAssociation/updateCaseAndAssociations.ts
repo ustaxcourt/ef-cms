@@ -447,9 +447,14 @@ export const updateCaseAndAssociations = async ({
   caseToUpdate,
 }: {
   applicationContext: ServerApplicationContext;
-  authorizedUser: AuthUser;
+  // TODO 10417: making authorizedUser an optional property for now. Make required when when updateCaseAndAssociations references are refactored.
+  authorizedUser?: AuthUser;
   caseToUpdate: any;
 }): Promise<RawCase> => {
+  // TODO 10417: remove this if-block when updateCaseAndAssociations references are refactored
+  if (!authorizedUser) {
+    authorizedUser = applicationContext.getCurrentUser();
+  }
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, {
