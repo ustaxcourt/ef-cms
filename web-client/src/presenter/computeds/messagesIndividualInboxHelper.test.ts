@@ -92,7 +92,7 @@ describe('messagesIndividualInboxHelper', () => {
       allMessagesSelected: true,
       completionSuccess: false,
       isCompletionButtonEnabled: true,
-      messagesCompletedAt: '2023-01-01T00:00:00.000Z',
+      messagesCompletedAt: 'Yesterday',
       messagesCompletedBy: 'Test User',
       someMessagesSelected: true,
     });
