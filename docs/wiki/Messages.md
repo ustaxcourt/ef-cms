@@ -64,7 +64,7 @@
 * Optional field - current functionality
 
 **On Complete**
-* App remains on Message Detail with completed warning displayed
+* App remains on Message Detail with completed success alert displayed
 * Message no longer displays in any user Inbox
 * Completed message displays in My Messages > Completed and Section Messages > Completed
 * Message thread displays as Completed on Message Detail screen
