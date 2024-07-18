@@ -20,7 +20,6 @@ import {
   loginAsDocketClerk,
   loginAsPetitionsClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { retry } from '../../../../helpers/retry';
 
 describe('Messages', () => {
   describe('Message filtering', () => {
@@ -93,6 +92,74 @@ describe('Messages', () => {
     });
 
     describe('Individual Message Boxes', () => {
+      describe('Sorting on the Individual Message Inbox', () => {
+        it('individual inbox subject column', () => {
+          loginAsDocketClerk();
+          cy.get(
+            '[data-testid="message-individual-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-subject-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+        });
+
+        it('individual inbox received at column when defaulted to sort ascending', () => {
+          loginAsDocketClerk();
+          cy.get(
+            '[data-testid="message-individual-received-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-received-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: true,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+        });
+
+        it('individual inbox docket number column', () => {
+          loginAsDocketClerk();
+          cy.get(
+            '[data-testid="message-individual-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+          cy.get(
+            '[data-testid="message-individual-docket-number-header-button"]',
+          ).click();
+          verifySubjectTitleOrder({
+            boxType: 'inbox',
+            isAscending: false,
+            prefix: 'Subject Line',
+            queueType: 'individual',
+          });
+        });
+      });
+
       describe('Sorting on the Individual Message Inbox', () => {
         it('individual inbox subject column', () => {
           loginAsDocketClerk();
@@ -611,10 +678,7 @@ function sendMessages(DOCKET_CLERK_ID: string) {
   }
 }
 
-function sendMessagesToCompletedTab(
-  DOCKET_CLERK_ID: string,
-  docketNumber: string,
-) {
+function sendMessagesToCompletedTab(DOCKET_CLERK_ID: string) {
   for (let i = 0; i < 3; i++) {
     cy.get('[data-testid="case-detail-menu-button"]').click();
     cy.get('[data-testid="menu-button-add-new-message"]').click();
@@ -627,23 +691,7 @@ function sendMessagesToCompletedTab(
   }
 
   cy.login('docketclerk');
-  for (let i = 0; i < 3; i++) {
-    cy.get(`a[href^="/messages/${docketNumber}/message-detail"]`).eq(0).click();
-    cy.get('[data-testid="message-mark-as-complete"]').click();
-    cy.get('[data-testid="complete-message-body"]').type('MARK AS COMPLETE');
-    cy.get('[data-testid="modal-confirm"]').click();
-    cy.get('[data-testid="message-detail-success-alert"]').should('exist');
-    cy.get('[data-testid="header-messages-link"]').click();
-    retry(() => {
-      cy.reload(true);
-      cy.get('[data-testid="inbox-tab-content"]').should('exist');
-      return cy.get('body').then(body => {
-        return (
-          body.find(`a[href^="/messages/${docketNumber}/message-detail"]`)
-            .length ===
-          2 - i
-        );
-      });
-    });
-  }
+  cy.get('[data-testid="all-messages-checkbox"]').click();
+  cy.get('[data-testid="message-batch-mark-as-complete"]').click();
+  cy.get('[data-testid="message-detail-success-alert"]').should('exist');
 }
