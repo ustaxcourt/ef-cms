@@ -10,7 +10,7 @@ const formattedCaseMessages = withAppContextDecorator(
 const { DOCKET_SECTION, PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('formattedCaseMessages', () => {
-  it('returns formatted date strings and splits messages into completed and in-progress', () => {
+  it('should return formatted date strings and splits messages into completed and in-progress', () => {
     const result = runCompute(formattedCaseMessages, {
       state: {
         caseDetail: {
@@ -70,6 +70,27 @@ describe('formattedCaseMessages', () => {
           createdAtFormatted: '01/01/19',
         },
       ],
+    });
+  });
+
+  it('should pass an empty array if caseDetail.messages is undefined', () => {
+    const result = runCompute(formattedCaseMessages, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Test Document',
+            },
+          ],
+          messages: [],
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      completedMessages: [],
+      inProgressMessages: [],
     });
   });
 });

@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   decorateWithPostCallback,
@@ -19,6 +20,7 @@ import classNames from 'classnames';
 export function AccordionItem(properties: {
   children: React.ReactNode;
   customClassName?: string;
+  customTitleClassName?: string;
   displayIcon?: boolean;
   iconClassName?: string;
   iconSize?: string;
@@ -34,6 +36,7 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
     const {
       children,
       customClassName,
+      customTitleClassName,
       displayIcon = false,
       iconClassName,
       iconSize,
@@ -65,6 +68,15 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
       type: 'button',
     };
 
+    const baseTitleClassName = 'accordion-item-title grid-col-8';
+    const titleClassName = classNames(baseTitleClassName, customTitleClassName);
+
+    const mobileBaseTitleClassName = 'accordion-item-title grid-col-10';
+    const mobileTitleClassName = classNames(
+      mobileBaseTitleClassName,
+      customTitleClassName,
+    );
+
     return (
       <>
         <HeadingElement className={customClassName || 'usa-accordion__heading'}>
@@ -81,7 +93,12 @@ const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
                   </span>
                 </span>
               )}
-              <div className="accordion-item-title grid-col-8">{title}</div>
+              <Mobile>
+                <div className={mobileTitleClassName}>{title}</div>
+              </Mobile>
+              <NonMobile>
+                <div className={titleClassName}>{title}</div>
+              </NonMobile>
             </div>
           </button>
         </HeadingElement>
