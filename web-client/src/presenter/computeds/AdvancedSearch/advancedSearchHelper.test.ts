@@ -3,6 +3,7 @@ import {
   paginationHelper,
 } from './advancedSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { docketClerk1User } from '@shared/test/mockUsers';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -18,6 +19,7 @@ describe('advancedSearchHelper', () => {
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
+      user,
     };
   };
 
@@ -50,10 +52,7 @@ describe('advancedSearchHelper', () => {
   };
 
   beforeEach(() => {
-    globalUser = {
-      role: USER_ROLES.docketClerk,
-      userId: 'docketClerk',
-    };
+    globalUser = docketClerk1User;
   });
 
   it('returns appropriate defaults if permissions are not defined in state', () => {
