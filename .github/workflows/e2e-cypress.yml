@@ -50,7 +50,7 @@ jobs:
         run: npm ci
       - name: Seed Postgres
         run: |
-          npm run typeorm:seed
+          npm run seed:postgres
       - name: Run E2E Cypress
         run: |
           mkdir -p /tmp/cypress/
