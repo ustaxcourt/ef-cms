@@ -92,6 +92,7 @@ export const StepIndicator = connect(
                   className={classNames(
                     'usa-step-indicator__total-steps',
                     'margin-left-05',
+                    'no-wrap',
                   )}
                 >
                   of {Object.keys(steps).length}
