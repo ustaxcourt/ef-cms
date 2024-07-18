@@ -13,6 +13,7 @@ import {
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
@@ -55,16 +56,6 @@ const addPetitionDocketEntryToCase = ({
   return workItemEntity;
 };
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.corporateDisclosureFileId the id of the corporate disclosure file
- * @param {string} providers.petitionFileId the id of the petition file
- * @param {object} providers.petitionMetadata the petition metadata
- * @param {string} providers.stinFileId the id of the stin file
- * @returns {object} the created case
- */
 export const createCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -80,9 +71,8 @@ export const createCaseInteractor = async (
     petitionMetadata: any;
     stinFileId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
