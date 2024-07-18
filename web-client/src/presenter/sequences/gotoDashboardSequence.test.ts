@@ -36,10 +36,7 @@ describe('gotoDashboardSequence', () => {
   });
 
   it('should set up state for petitioner going to dashboard', async () => {
-    console.debug('Before runSequence');
     await cerebralTest.runSequence('gotoDashboardSequence');
-    const cerebralTestState = cerebralTest.getState();
-    console.debug('cerebralTestState:', cerebralTestState);
 
     expect(cerebralTest.getState()).toMatchObject({
       closedCases,
