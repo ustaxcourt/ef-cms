@@ -21,10 +21,12 @@ export const getStep1DataAction = ({ get }: ActionProps) => {
     useSameAsPrimary,
   } = get(state.form);
 
-  const contactSecondaryWithType = {
-    ...contactSecondary,
-    contactType: CONTACT_TYPES.secondary,
-  };
+  const contactSecondaryWithType = contactSecondary
+    ? {
+        ...contactSecondary,
+        contactType: CONTACT_TYPES.secondary,
+      }
+    : contactSecondary;
 
   const step1Data = {
     businessType,
