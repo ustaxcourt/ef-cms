@@ -19,7 +19,7 @@ const isUserADojPractitioner = (
   return true;
 };
 
-const shouldShowRepresentAPartButton = (
+const shouldShowRepresentAPartyButton = (
   caseDetail: RawCase,
   user: RawUser | RawPractitioner | RawIrsPractitioner,
   caseHasRespondent: boolean,
@@ -29,15 +29,12 @@ const shouldShowRepresentAPartButton = (
 ): boolean => {
   const isDojPractitioner = isUserADojPractitioner(user);
 
-  const hideRepresentAPartyToDojUser =
-    !isDojPractitioner || caseDetail.canDojPractitionersRepresentParty;
-
   return (
     caseHasRespondent &&
     !isRepresentAPartyForm &&
     !isCaseSealed &&
     !isCurrentPageFilePetitionSuccess &&
-    !!hideRepresentAPartyToDojUser
+    !!(!isDojPractitioner || caseDetail.canDojPractitionersRepresentParty)
   );
 };
 
@@ -96,7 +93,7 @@ export const caseDetailHeaderHelper = (
 
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
 
-      showRepresentAPartyButton = shouldShowRepresentAPartButton(
+      showRepresentAPartyButton = shouldShowRepresentAPartyButton(
         caseDetail,
         user,
         caseHasRespondent,
