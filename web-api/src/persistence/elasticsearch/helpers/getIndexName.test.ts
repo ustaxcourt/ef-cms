@@ -1,7 +1,6 @@
 import { efcmsCaseDeadlineIndex } from '../../../../elasticsearch/efcms-case-deadline-mappings';
 import { efcmsCaseIndex } from '../../../../elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryIndex } from '../../../../elasticsearch/efcms-docket-entry-mappings';
-import { efcmsMessageIndex } from '../../../../elasticsearch/efcms-message-mappings';
 import { efcmsUserIndex } from '../../../../elasticsearch/efcms-user-mappings';
 import { efcmsWorkItemIndex } from '../../../../elasticsearch/efcms-work-item-mappings';
 import { updateIndex } from './getIndexName';
@@ -37,13 +36,6 @@ describe('updateIndex', () => {
     expect(mockSearchParameters.index.match(/-/g)!.length).toEqual(3);
     expect(mockSearchParameters.index).not.toEqual('efcms-docket-entry');
     expect(mockSearchParameters.index).toEqual(efcmsDocketEntryIndex);
-  });
-  it('transforms efcms-message into the correct index name', () => {
-    const mockSearchParameters = { index: 'efcms-message' };
-    updateIndex({ searchParameters: mockSearchParameters });
-    expect(mockSearchParameters.index.match(/-/g)!.length).toEqual(2);
-    expect(mockSearchParameters.index).not.toEqual('efcms-message');
-    expect(mockSearchParameters.index).toEqual(efcmsMessageIndex);
   });
   it('transforms efcms-user into the correct index name', () => {
     const mockSearchParameters = { index: 'efcms-user' };

@@ -195,6 +195,7 @@
     "secrets:rotate-environment": "npx ts-node --transpile-only scripts/user/rotate-environment-secrets.ts",
     "seed:db": "npx ts-node --transpile-only ./web-api/create-dynamo-tables.ts && npx ts-node --transpile-only ./web-api/seed-dynamo.ts",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
+    "seed:postgres": "npx ts-node postgres/seed/seed.ts",
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed": "run-p seed:db seed:s3",
     "shell": "docker-compose run -it shell /bin/bash",
@@ -243,8 +244,7 @@
     "postgres:run": "cd postgres && docker compose up &",
     "typeorm:migrations:migrate": "npx typeorm-ts-node-commonjs migration:run -d web-api/src/data-source.ts",
     "typeorm:migrations:revert": "npx typeorm-ts-node-commonjs migration:revert -d web-api/src/data-source.ts",
-    "typeorm:migrations:generate": "npx typeorm-ts-node-commonjs migration:generate ${MIGRATION_NAME} -d web-api/src/data-source.ts",
-    "typeorm:seed": "npx ts-node postgres/seed/seed.ts"
+    "typeorm:migrations:generate": "npx typeorm-ts-node-commonjs migration:generate ${MIGRATION_NAME} -d web-api/src/data-source.ts"
   },
   "overrides": {
     "axios": "$axios",
@@ -258,6 +258,7 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "7.24.8",
     "@babel/eslint-parser": "7.24.8",
+    "@babel/plugin-proposal-decorators": "^7.24.7",
     "@babel/preset-env": "7.24.8",
     "@babel/preset-react": "7.24.7",
     "@babel/preset-typescript": "7.24.7",

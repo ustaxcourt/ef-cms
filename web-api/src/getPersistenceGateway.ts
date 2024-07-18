@@ -161,6 +161,7 @@ import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessi
 import { updateCase } from './persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
+import { updateCase as updateCasePostgres } from './persistence/postgres/cases/updateCase';
 import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/updateCaseWorksheet';
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
@@ -390,6 +391,7 @@ const gatewayMethods = {
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
+  updateCasePostgres,
   uploadDocument,
   verifyCaseForUser,
   verifyPendingCaseForUser,

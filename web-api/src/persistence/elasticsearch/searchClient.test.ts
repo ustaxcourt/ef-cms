@@ -6,7 +6,6 @@ import {
   mockCaseSearchResult,
   mockDocketEntrySearchResult,
   mockMalformedQueryResult,
-  mockMessageSearchResult,
   mockNonexistentDocumentCountResult,
   mockOpenCasesReceivedOnJulyFourthCountResult,
   mockOpenCasesReceivedOnJulyFourthFormattedResults,
@@ -409,22 +408,6 @@ describe('searchClient', () => {
         1,
       );
       expect(formatDocketEntryResult).toHaveBeenCalledTimes(1);
-    });
-
-    it('search should format and return the list of results when they are message search results', async () => {
-      applicationContext
-        .getSearchClient()
-        .search.mockReturnValue(mockMessageSearchResult);
-
-      await search({
-        applicationContext,
-        searchParameters: {},
-      });
-
-      expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(formatMessageResult).toHaveBeenCalledTimes(1);
     });
 
     it('should format and return the list of results when they are work item search results', async () => {

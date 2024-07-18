@@ -49,6 +49,8 @@ else
   fi
 fi
 
+npm run seed:postgres
+
 echo "Seeding cognito-local users"
 npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 

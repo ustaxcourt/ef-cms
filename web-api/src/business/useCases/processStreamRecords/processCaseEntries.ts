@@ -49,6 +49,10 @@ export const processCaseEntries = async ({
       eventName: 'MODIFY',
     });
 
+    await applicationContext
+      .getPersistenceGateway()
+      .updateCasePostgres(caseMetadataWithCounsel);
+
     caseRecords.push({
       dynamodb: {
         Keys: {
