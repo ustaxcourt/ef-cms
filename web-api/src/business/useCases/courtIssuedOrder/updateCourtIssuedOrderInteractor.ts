@@ -10,22 +10,15 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketEntryIdToEdit the id of the docket entry to update
- * @param {object} providers.documentMetadata the document metadata
- * @returns {Promise<*>} the updated case entity after the document is updated
- */
 export const updateCourtIssuedOrder = async (
   applicationContext,
   { docketEntryIdToEdit, documentMetadata },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
