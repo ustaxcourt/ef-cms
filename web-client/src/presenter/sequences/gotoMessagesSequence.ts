@@ -11,6 +11,7 @@ import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesF
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
 import { parallel } from 'cerebral';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
+import { resetSelectedMessageAction } from '@web-client/presenter/actions/Messages/resetSelectedMessageAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
@@ -26,6 +27,7 @@ export const gotoMessagesSequence = startWebSocketConnectionSequenceDecorator([
   clearErrorAlertsAction,
   setDefaultTableSortAction,
   setSectionForMessageBoxAction,
+  resetSelectedMessageAction,
   parallel([
     [fetchUserNotificationsSequence, setMessageCountsAction],
     [
