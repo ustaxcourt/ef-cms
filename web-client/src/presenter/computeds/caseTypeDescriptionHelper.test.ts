@@ -10,7 +10,7 @@ const caseTypeDescriptionHelper = withAppContextDecorator(
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('caseTypeDescriptionHelper', () => {
-  it('should return case types with proper descriptions for hasIrsNotice true', () => {
+  it('should return case types with proper descriptions and ordered correctly for hasIrsNotice true', () => {
     const result = runCompute(caseTypeDescriptionHelper, {
       state: {
         form: { hasIrsNotice: true },
@@ -79,7 +79,7 @@ describe('caseTypeDescriptionHelper', () => {
     });
   });
 
-  it('should return case types with proper descriptions for hasIrsNotice false', () => {
+  it('should return case types with proper descriptions and ordered correctly for hasIrsNotice false', () => {
     const result = runCompute(caseTypeDescriptionHelper, {
       state: {
         form: { hasIrsNotice: false },
@@ -89,12 +89,16 @@ describe('caseTypeDescriptionHelper', () => {
     expect(result).toMatchObject({
       caseTypes: [
         {
-          description: 'CDP (Lien/Levy)',
+          description: 'Deficiency',
+          type: CASE_TYPES_MAP.deficiency,
+        },
+        {
+          description: 'Collection (Lien/Levy)',
           type: CASE_TYPES_MAP.cdp,
         },
         {
-          description: 'Notice of Deficiency',
-          type: CASE_TYPES_MAP.deficiency,
+          description: 'Other',
+          type: CASE_TYPES_MAP.other,
         },
         {
           description: 'Declaratory Judgment (Exempt Organization)',
@@ -117,10 +121,7 @@ describe('caseTypeDescriptionHelper', () => {
             'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement',
           type: CASE_TYPES_MAP.interestAbatement,
         },
-        {
-          description: 'Other',
-          type: CASE_TYPES_MAP.other,
-        },
+
         {
           description: 'Passport',
           type: CASE_TYPES_MAP.passport,
