@@ -8,6 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
@@ -25,13 +26,12 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
     documentTitle: string;
     eventCode: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   fileId: string;
   url: string;
 }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -67,6 +67,8 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       addedDocketNumbers,
       caseCaptionExtension,
       caseTitle,
+      // TODO 10417: docketNumberwithSuffix should be properly typed
+      // @ts-ignore
       docketNumberWithSuffix,
       nameOfClerk,
       orderContent: contentHtml,
@@ -77,6 +79,8 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
+    // TODO 10417: file should be properly typed
+    // @ts-ignore
     file: orderPdf,
     useTempBucket: true,
   });
