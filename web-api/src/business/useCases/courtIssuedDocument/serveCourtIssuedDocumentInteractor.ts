@@ -7,6 +7,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -23,9 +24,8 @@ export const serveCourtIssuedDocument = async (
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const hasPermission =
     (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
       isAuthorized(

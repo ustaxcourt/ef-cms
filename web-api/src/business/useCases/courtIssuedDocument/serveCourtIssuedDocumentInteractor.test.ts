@@ -2,11 +2,13 @@ import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../../../../shared/sr
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   docketClerkUser,
   judgeUser,
 } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
@@ -14,8 +16,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockClientConnectionId = 'ABC123';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -42,15 +42,19 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the user role does not have permission to serve a court issued document', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
+    // applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: '',
-        docketNumbers: [],
-        subjectCaseDocketNumber: '',
-      }),
+      serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: '',
+          docketNumbers: [],
+          subjectCaseDocketNumber: '',
+        },
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -60,12 +64,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({});
 
     await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: '',
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      }),
+      serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: '',
+          docketNumbers: [],
+          subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(`Case ${MOCK_CASE.docketNumber} was not found`);
   });
 
@@ -78,12 +86,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
     await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      }),
+      serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(`Docket entry ${mockDocketEntryId} was not found`);
   });
 
@@ -101,12 +113,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
     await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      }),
+      serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry has already been served');
   });
 
@@ -124,12 +140,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
     await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      }),
+      serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry is already being served');
 
     expect(
@@ -155,12 +175,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(3256);
 
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     const servedDocketEntry =
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -182,12 +206,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ],
       });
 
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [MOCK_CASE.docketNumber],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [MOCK_CASE.docketNumber],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().autoGenerateDeadline,
@@ -218,12 +246,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ],
       });
 
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [MOCK_CASE.docketNumber],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [MOCK_CASE.docketNumber],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().autoGenerateDeadline.mock
@@ -250,12 +282,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ],
       });
 
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: ['200-21', '300-33'],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: ['200-21', '300-33'],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
@@ -276,12 +312,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ],
       });
 
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     const expectedDocketEntry =
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -302,12 +342,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ],
       });
 
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-    });
+    await serveCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -348,12 +392,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       );
 
     await expect(
-      serveCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: MOCK_CASE.docketNumber,
-      }),
+      serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('whoops, that is an error!');
 
     expect(
