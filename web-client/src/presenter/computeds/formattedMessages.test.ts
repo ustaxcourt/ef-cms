@@ -11,33 +11,55 @@ describe('formattedMessages', () => {
     applicationContext.getConstants();
   const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
+  const mockMessage1 = {
+    caseStatus: 'Closed',
+    completedAt: '2019-01-02T16:29:13.122Z',
+    createdAt: '2019-01-01T16:29:13.122Z',
+    docketNumber: '101-20',
+    from: 'docket',
+    fromSection: 'adc',
+    message: 'This is a test message',
+    messageId: '1',
+    to: 'adc',
+    toSection: 'adc',
+  };
+  const mockMessage2 = {
+    caseStatus: 'Open',
+    completedAt: '2019-01-01T16:29:13.122Z',
+    completedBy: 'Test User',
+    createdAt: '2019-01-02T17:29:13.122Z',
+    docketNumber: '103-20',
+    from: 'petitionsclerk',
+    fromSection: 'petitionsclerk',
+    isCompleted: true,
+    message: 'This is a test message',
+    messageId: '2',
+    to: 'petitionsclerk',
+    toSection: 'petitionsclerk',
+  };
+  const mockMessage3 = {
+    caseStatus: 'New',
+    completedAt: '2019-01-03T16:29:13.122Z',
+    createdAt: '2019-01-03T17:29:13.122Z',
+    docketNumber: '102-20',
+    from: 'adc',
+    fromSection: 'docket',
+    message: 'This is a test message',
+    messageId: '3',
+    to: 'docket',
+    toSection: 'docket',
+  };
+
   it('returns filtered messages sorted oldest to newest and completedMessages from state.messages when messageBoxToDisplay.box is inbox', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
           box: 'inbox',
         },
-        messages: [
-          {
-            completedAt: '2019-01-02T16:29:13.122Z',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            message: 'This is a test message',
-          },
-          {
-            completedAt: '2019-01-01T16:29:13.122Z',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            isCompleted: true,
-            message: 'This is a test message',
-          },
-          {
-            completedAt: '2019-01-03T16:29:13.122Z',
-            createdAt: '2019-01-01T17:29:13.122Z',
-            docketNumber: '102-20',
-            message: 'This is a test message',
-          },
-        ],
+        messages: [mockMessage1, mockMessage2, mockMessage3],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
@@ -46,35 +68,9 @@ describe('formattedMessages', () => {
     });
 
     expect(result).toMatchObject({
-      completedMessages: [
-        {
-          completedAt: '2019-01-01T16:29:13.122Z',
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: '103-20',
-          isCompleted: true,
-          message: 'This is a test message',
-        },
-      ],
+      completedMessages: [mockMessage2],
       hasMessages: true,
-      messages: [
-        {
-          createdAt: '2019-01-01T16:29:13.122Z',
-          docketNumber: '101-20',
-          message: 'This is a test message',
-        },
-        {
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '102-20',
-          message: 'This is a test message',
-        },
-        {
-          completedAt: '2019-01-01T16:29:13.122Z',
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: '103-20',
-          isCompleted: true,
-          message: 'This is a test message',
-        },
-      ],
+      messages: [mockMessage1, mockMessage2, mockMessage3],
     });
   });
 
@@ -85,27 +81,10 @@ describe('formattedMessages', () => {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            completedAt: '2019-01-02T16:29:13.122Z',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            message: 'This is a test message',
-          },
-          {
-            completedAt: '2019-01-01T16:29:13.122Z',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            isCompleted: true,
-            message: 'This is a test message',
-          },
-          {
-            completedAt: '2019-01-03T16:29:13.122Z',
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: '102-20',
-            message: 'This is a test message',
-          },
-        ],
+        messages: [mockMessage1, mockMessage2, mockMessage3],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         tableSort: { sortOrder: DESCENDING },
         user: {
@@ -115,26 +94,7 @@ describe('formattedMessages', () => {
     });
 
     expect(result).toMatchObject({
-      messages: [
-        {
-          completedAt: '2019-01-03T16:29:13.122Z',
-          createdAt: '2019-01-03T17:29:13.122Z',
-          docketNumber: '102-20',
-          message: 'This is a test message',
-        },
-        {
-          completedAt: '2019-01-01T16:29:13.122Z',
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: '103-20',
-          message: 'This is a test message',
-        },
-        {
-          completedAt: '2019-01-02T16:29:13.122Z',
-          createdAt: '2019-01-01T16:29:13.122Z',
-          docketNumber: '101-20',
-          message: 'This is a test message',
-        },
-      ],
+      messages: [mockMessage3, mockMessage2, mockMessage1],
     });
   });
 
@@ -143,6 +103,9 @@ describe('formattedMessages', () => {
       state: {
         messageBoxToDisplay: {
           box: 'inbox',
+        },
+        messagesPage: {
+          selectedMessages: new Map(),
         },
         screenMetadata: {},
         user: {
@@ -164,43 +127,10 @@ describe('formattedMessages', () => {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            caseStatus: 'Closed',
-            completedAt: '2019-01-02T16:29:13.122Z',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            from: 'docket',
-            fromSection: 'adc',
-            message: 'This is a test message',
-            to: 'adc',
-            toSection: 'adc',
-          },
-          {
-            caseStatus: 'Open',
-            completedAt: '2019-01-01T16:29:13.122Z',
-            completedBy: 'Test User',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            from: 'petitionsclerk',
-            fromSection: 'petitionsclerk',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'petitionsclerk',
-            toSection: 'petitionsclerk',
-          },
-          {
-            caseStatus: 'New',
-            completedAt: '2019-01-03T16:29:13.122Z',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '102-20',
-            from: 'adc',
-            fromSection: 'docket',
-            message: 'This is a test message',
-            to: 'docket',
-            toSection: 'docket',
-          },
-        ],
+        messages: [mockMessage1, mockMessage2, mockMessage3],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
@@ -209,47 +139,23 @@ describe('formattedMessages', () => {
     });
 
     expect(result).toMatchObject({
-      caseStatuses: expect.arrayContaining(['New', 'Open', 'Closed']),
-      fromSections: expect.arrayContaining(['docket', 'petitionsclerk', 'adc']),
-      fromUsers: expect.arrayContaining(['adc', 'petitionsclerk', 'docket']),
-      toUsers: expect.arrayContaining(['docket', 'petitionsclerk', 'adc']),
+      caseStatuses: expect.arrayContaining(['Closed', 'Open', 'New']),
+      fromSections: expect.arrayContaining(['adc', 'petitionsclerk', 'docket']),
+      fromUsers: expect.arrayContaining(['docket', 'petitionsclerk', 'adc']),
+      toUsers: expect.arrayContaining(['adc', 'petitionsclerk', 'docket']),
     });
   });
 
-  it('the filter dropdown values should be set correct for the completed messages data', () => {
+  it('the filter dropdown values should be set correctly for the completed messages data', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            caseStatus: 'Closed',
-            completedAt: '2019-01-02T16:29:13.122Z',
-            completedBy: 'Other',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            from: 'docket',
-            fromSection: 'adc',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'adc',
-            toSection: 'adc',
-          },
-          {
-            caseStatus: 'Open',
-            completedAt: '2019-01-01T16:29:13.122Z',
-            completedBy: 'Test User',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            from: 'petitionsclerk',
-            fromSection: 'petitionsclerk',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'petitionsclerk',
-            toSection: 'petitionsclerk',
-          },
-        ],
+        messages: [mockMessage1, mockMessage2],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
@@ -258,7 +164,7 @@ describe('formattedMessages', () => {
     });
 
     expect(result).toMatchObject({
-      completedByUsers: expect.arrayContaining(['Test User', 'Other']),
+      completedByUsers: expect.arrayContaining(['Test User']),
     });
   });
 
@@ -268,28 +174,10 @@ describe('formattedMessages', () => {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            caseStatus: 'Closed',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            from: 'docket',
-            fromSection: 'adc',
-            message: 'This is a test message',
-            to: 'adc',
-            toSection: 'adc',
-          },
-          {
-            caseStatus: 'Open',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            from: 'petitionsclerk',
-            fromSection: 'petitionsclerk',
-            message: 'This is a test message',
-            to: 'petitionsclerk',
-            toSection: 'petitionsclerk',
-          },
-        ],
+        messages: [mockMessage1, mockMessage2],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {
           caseStatus: 'Open',
           fromSection: 'petitionsclerk',
@@ -305,17 +193,7 @@ describe('formattedMessages', () => {
 
     expect(result.messages.length).toEqual(1);
     expect(result.messages).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          caseStatus: 'Open',
-          docketNumber: '103-20',
-          from: 'petitionsclerk',
-          fromSection: 'petitionsclerk',
-          message: 'This is a test message',
-          to: 'petitionsclerk',
-          toSection: 'petitionsclerk',
-        }),
-      ]),
+      expect.arrayContaining([expect.objectContaining(mockMessage2)]),
     );
     expect(result).toMatchObject({
       caseStatuses: expect.arrayContaining(['Open']),
@@ -327,39 +205,28 @@ describe('formattedMessages', () => {
   });
 
   it('the completed messages should be filtered correctly when we are an ADC user', () => {
+    const mockCompletedMessage1 = {
+      ...mockMessage1,
+      completedAt: '2019-05-01T17:29:13.122Z',
+      completedBy: 'ruth',
+      isCompleted: true,
+    };
+    const mockCompletedMessage2 = {
+      ...mockMessage2,
+      completedAt: '2019-05-01T17:29:13.122Z',
+      completedBy: 'bob',
+      isCompleted: true,
+    };
+
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            caseStatus: 'Closed',
-            completedAt: '2019-05-01T17:29:13.122Z',
-            completedBy: 'ruth',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            from: 'docket',
-            fromSection: 'adc',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'adc',
-            toSection: 'adc',
-          },
-          {
-            caseStatus: 'Open',
-            completedAt: '2019-05-01T17:29:13.122Z',
-            completedBy: 'bob',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            from: 'petitionsclerk',
-            fromSection: 'petitionsclerk',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'petitionsclerk',
-            toSection: 'petitionsclerk',
-          },
-        ],
+        messages: [mockCompletedMessage1, mockCompletedMessage2],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {
           caseStatus: 'Open',
           completedBy: 'bob',
@@ -372,51 +239,23 @@ describe('formattedMessages', () => {
 
     expect(result.completedMessages.length).toEqual(1);
     expect(result.completedMessages).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          caseStatus: 'Open',
-          docketNumber: '103-20',
-          from: 'petitionsclerk',
-          fromSection: 'petitionsclerk',
-          message: 'This is a test message',
-          to: 'petitionsclerk',
-          toSection: 'petitionsclerk',
-        }),
-      ]),
+      expect.arrayContaining([expect.objectContaining(mockCompletedMessage2)]),
     );
     expect(result).toMatchObject({
       completedByUsers: expect.arrayContaining(['bob']),
     });
   });
 
-  it('the return the messages unfiltered if no filters are set', () => {
+  it('should return the messages unfiltered if no filters are set', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            caseStatus: 'Closed',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            from: 'docket',
-            fromSection: 'adc',
-            message: 'This is a test message',
-            to: 'adc',
-            toSection: 'adc',
-          },
-          {
-            caseStatus: 'Open',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            from: 'petitionsclerk',
-            fromSection: 'petitionsclerk',
-            message: 'This is a test message',
-            to: 'petitionsclerk',
-            toSection: 'petitionsclerk',
-          },
-        ],
+        messages: [mockMessage1, mockMessage2],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
@@ -426,65 +265,36 @@ describe('formattedMessages', () => {
 
     expect(result.messages).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          caseStatus: 'Closed',
-          createdAt: '2019-01-01T16:29:13.122Z',
-          docketNumber: '101-20',
-          from: 'docket',
-          fromSection: 'adc',
-          message: 'This is a test message',
-          to: 'adc',
-          toSection: 'adc',
-        }),
-        expect.objectContaining({
-          caseStatus: 'Open',
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: '103-20',
-          from: 'petitionsclerk',
-          fromSection: 'petitionsclerk',
-          message: 'This is a test message',
-          to: 'petitionsclerk',
-          toSection: 'petitionsclerk',
-        }),
+        expect.objectContaining(mockMessage1),
+        expect.objectContaining(mockMessage2),
       ]),
     );
     expect(result.messages.length).toEqual(2);
   });
 
-  it('the return the completed messaged unfiltered if no filters are set', () => {
+  it('should return the completed messages unfiltered if no filters are set', () => {
+    const mockCompletedMessage1 = {
+      ...mockMessage1,
+      completedAt: '2019-05-01T17:29:13.122Z',
+      completedBy: 'ruth',
+      isCompleted: true,
+    };
+    const mockCompletedMessage2 = {
+      ...mockMessage2,
+      completedAt: '2019-05-01T17:29:13.122Z',
+      completedBy: 'bob',
+      isCompleted: true,
+    };
+
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
           box: 'outbox',
         },
-        messages: [
-          {
-            caseStatus: 'Closed',
-            completedAt: '2019-05-01T17:29:13.122Z',
-            completedBy: 'ruth',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            from: 'docket',
-            fromSection: 'adc',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'adc',
-            toSection: 'adc',
-          },
-          {
-            caseStatus: 'Open',
-            completedAt: '2019-05-01T17:29:13.122Z',
-            completedBy: 'bob',
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            from: 'petitionsclerk',
-            fromSection: 'petitionsclerk',
-            isCompleted: true,
-            message: 'This is a test message',
-            to: 'petitionsclerk',
-            toSection: 'petitionsclerk',
-          },
-        ],
+        messages: [mockCompletedMessage1, mockCompletedMessage2],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
@@ -492,16 +302,13 @@ describe('formattedMessages', () => {
       },
     });
 
-    expect(result.messages.length).toEqual(2);
+    expect(result.completedMessages.length).toEqual(2);
   });
 
   it('should format the case status on the message when caseStatus is Calendared', () => {
     const mockCalendaredMessage = {
+      ...mockMessage1,
       caseStatus: STATUS_TYPES.calendared,
-      completedAt: '2019-01-02T16:29:13.122Z',
-      createdAt: '2019-01-01T16:29:13.122Z',
-      docketNumber: '101-20',
-      message: 'This is a test message',
       trialDate: '2019-01-01T16:29:13.122Z',
       trialLocation: 'Houston, Texas',
     };
@@ -512,6 +319,9 @@ describe('formattedMessages', () => {
           box: 'outbox',
         },
         messages: [mockCalendaredMessage],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
@@ -526,11 +336,8 @@ describe('formattedMessages', () => {
 
   it(`should not abbreviate trialLocation when it is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
     const mockCalendaredMessage = {
+      ...mockMessage1,
       caseStatus: STATUS_TYPES.calendared,
-      completedAt: '2019-01-02T16:29:13.122Z',
-      createdAt: '2019-01-01T16:29:13.122Z',
-      docketNumber: '101-20',
-      message: 'This is a test message',
       trialDate: '2019-01-01T16:29:13.122Z',
       trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     };
@@ -541,6 +348,9 @@ describe('formattedMessages', () => {
           box: 'outbox',
         },
         messages: [mockCalendaredMessage],
+        messagesPage: {
+          selectedMessages: new Map(),
+        },
         screenMetadata: {},
         user: {
           role: 'adc',
