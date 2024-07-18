@@ -7,11 +7,12 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import {
-  docketClerkUser,
-  petitionerUser,
-} from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { fileCorrespondenceDocumentInteractor } from './fileCorrespondenceDocumentInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCase = {
@@ -57,7 +58,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCorrespondenceId = '14bb669b-0962-4781-87a0-50718f556e2b';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -68,16 +68,17 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user role does not have theCASE_CORRESPONDENCE permission', async () => {
-    const user = petitionerUser;
-    applicationContext.getCurrentUser.mockReturnValue(user);
-
     await expect(
-      fileCorrespondenceDocumentInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: mockCase.docketNumber,
-        } as any,
-        primaryDocumentFileId: mockCorrespondenceId,
-      }),
+      fileCorrespondenceDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: mockCase.docketNumber,
+          } as any,
+          primaryDocumentFileId: mockCorrespondenceId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -87,10 +88,14 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
-      fileCorrespondenceDocumentInteractor(applicationContext, {
-        documentMetadata: { docketNumber: mockCase.docketNumber } as any,
-        primaryDocumentFileId: mockCorrespondenceId,
-      }),
+      fileCorrespondenceDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: { docketNumber: mockCase.docketNumber } as any,
+          primaryDocumentFileId: mockCorrespondenceId,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(`Case ${mockCase.docketNumber} was not found`);
   });
 
@@ -102,14 +107,18 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    await fileCorrespondenceDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: mockDocumentTitle,
-        filingDate: mockFilingDate,
-      } as any,
-      primaryDocumentFileId: mockCorrespondenceId,
-    });
+    await fileCorrespondenceDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: mockDocumentTitle,
+          filingDate: mockFilingDate,
+        } as any,
+        primaryDocumentFileId: mockCorrespondenceId,
+      },
+      docketClerkUser,
+    );
     expect(
       applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
@@ -140,6 +149,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         } as any,
         primaryDocumentFileId: mockCorrespondenceId,
       },
+      mockDocketClerkUser,
     );
     expect(result).toMatchObject({
       ...mockCase,
