@@ -1,5 +1,6 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+//import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -18,6 +19,7 @@ const getBaseState = user => {
       unreadCount: 0,
     },
     permissions: getUserPermissions(user),
+    user,
   };
 };
 
@@ -100,9 +102,14 @@ describe('headerHelper', () => {
   });
 
   it('should show trial sessions for internal users', () => {
+    const user = {
+      email: 'something@mail.com',
+      name: 'Jody',
+      userId: '77747b11-19b3-4c96-b7a1-fa6a5654e2d5',
+    };
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getBaseState({ role }),
+        state: getBaseState({ role, ...user }),
       });
       expect(result.showTrialSessions).toBeTruthy();
     });

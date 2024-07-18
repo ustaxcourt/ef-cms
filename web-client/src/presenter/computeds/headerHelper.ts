@@ -6,7 +6,7 @@ export const headerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const userRole = user && user.role;
   const isLoggedIn = !!user;
   const currentPage = get(state.currentPage) || '';
