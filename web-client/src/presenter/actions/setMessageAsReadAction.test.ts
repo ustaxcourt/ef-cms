@@ -8,7 +8,7 @@ describe('setMessageAsReadAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should set message as read', async () => {
+  it('should set message as read and update unreadMessageCount in state', async () => {
     const result = await runAction(setMessageAsReadAction, {
       modules: { presenter },
       props: {
