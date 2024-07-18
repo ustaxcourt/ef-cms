@@ -101,7 +101,6 @@ describe('caseInformationHelper', () => {
     });
 
     it('should be true when the user is an internal user with permissions to edit counsel', () => {
-      let state = getBaseState(mockDocketClerk);
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
@@ -111,8 +110,6 @@ describe('caseInformationHelper', () => {
           form: {},
         },
       });
-
-      console.debug('********************', state);
 
       expect(result.showAddCounsel).toEqual(true);
     });

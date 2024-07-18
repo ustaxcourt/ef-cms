@@ -10,6 +10,5 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const setUserPermissionsAction = ({ get, store }: ActionProps) => {
   const user = get(state.user);
   const userPermissions = getUserPermissions(user);
-  console.debug('userPermissions:', userPermissions);
   store.set(state.permissions, userPermissions);
 };
