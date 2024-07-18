@@ -350,6 +350,7 @@ export const isAuthorized = (
   owner?: string,
 ): user is AuthUser => {
   if (!isAuthUser(user)) {
+    console.debug('User is not authenticated');
     return false;
   }
 
