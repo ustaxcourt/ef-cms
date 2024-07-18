@@ -33,6 +33,7 @@ export const adcUser = {
 };
 
 export const colvinsChambersUser = {
+  email: 'chambers@e.mail',
   name: 'Chandler Chambers',
   role: ROLES.chambers,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
