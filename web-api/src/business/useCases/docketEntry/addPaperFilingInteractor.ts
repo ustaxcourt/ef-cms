@@ -19,17 +19,6 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.clientConnectionId the client connection Id
- * @param {string} providers.docketEntryId the id of the docket entry to add
- * @param {object} providers.consolidatedGroupDocketNumbers the docket numbers from the consolidated group
- * @param {object} providers.documentMetadata the document metadata
- * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
- * @returns {object} the updated case after the documents are added
- */
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
   {
