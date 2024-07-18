@@ -1,6 +1,9 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './createCourtIssuedOrderPdfFromHtmlInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -26,23 +29,12 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       });
   });
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '321',
-    });
-  });
-
   it('throws an error if the user is not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '432',
-    });
-
     await expect(
       createCourtIssuedOrderPdfFromHtmlInteractor(
         applicationContext,
         {} as any,
+        mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
@@ -51,6 +43,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {} as any,
+      mockDocketClerkUser,
     );
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -61,6 +54,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {} as any,
+      mockDocketClerkUser,
     );
     expect(
       applicationContext.getDocumentGenerators().order,
@@ -77,6 +71,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {} as any,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -91,6 +86,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       {
         addedDocketNumbers: ['101-20'],
       } as any,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -109,6 +105,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       {
         eventCode: 'NOT',
       } as any,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -125,9 +122,13 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   });
 
   it('calls the generate the order pdf WITHOUT a defined name or title of the clerk for non-NOT event codes', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
-      eventCode: 'O',
-    } as any);
+    await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {
+        eventCode: 'O',
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getConfigurationItemValue,
