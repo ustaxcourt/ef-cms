@@ -253,10 +253,12 @@ describe('orders and notices', () => {
             caseCaptionExtension: 'Petitioner(s)',
             caseTitle: 'Test Petitioner',
             docketNumberWithSuffix: '123-45S',
+            nameOfClerk: '',
             orderContent: orderContentWithMultiplePages,
             orderTitle:
               SYSTEM_GENERATED_DOCUMENT_TYPES
                 .orderForAmendedPetitionAndFilingFee.documentTitle,
+            titleOfClerk: '',
           },
         }),
       testDescription:
@@ -276,10 +278,12 @@ describe('orders and notices', () => {
             caseCaptionExtension: 'Petitioner(s)',
             caseTitle: 'Test Petitioner',
             docketNumberWithSuffix: '123-45S',
+            nameOfClerk: '',
             orderContent: orderContentWithMultiplePages,
             orderTitle:
               SYSTEM_GENERATED_DOCUMENT_TYPES
                 .orderForAmendedPetitionAndFilingFee.documentTitle,
+            titleOfClerk: '',
           },
         }),
       testDescription:
