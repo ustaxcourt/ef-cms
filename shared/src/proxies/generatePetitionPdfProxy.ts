@@ -9,7 +9,6 @@ export const generatePetitionPdfInteractor = (
     contactPrimary,
     contactSecondary,
     irsNotices,
-    isDraft,
     noticeIssuedDate,
     partyType,
     petitionFacts,
@@ -20,7 +19,6 @@ export const generatePetitionPdfInteractor = (
   }: any,
 ): Promise<{
   fileId: string;
-  url: string;
 }> => {
   return post({
     applicationContext,
@@ -31,7 +29,6 @@ export const generatePetitionPdfInteractor = (
       contactPrimary,
       contactSecondary,
       irsNotices,
-      isDraft,
       noticeIssuedDate,
       partyType,
       petitionFacts,

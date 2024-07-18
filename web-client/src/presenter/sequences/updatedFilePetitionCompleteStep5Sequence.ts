@@ -1,6 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
-import { generatePetitionPdfAction } from '@web-client/presenter/actions/generatePetitionPdfAction';
 import { generatePetitionPreviewPdfUrlAction } from '@web-client/presenter/actions/generatePetitionPreviewPdfUrlAction';
 import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
 import { getStep2DataAction } from '@web-client/presenter/actions/getStep2DataAction';
@@ -8,7 +7,6 @@ import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAc
 import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
 import { getStep5DataAction } from '@web-client/presenter/actions/getStep5DataAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
-import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -29,8 +27,6 @@ export const updatedFilePetitionCompleteStep5Sequence = [
       getStep3DataAction,
       getStep4DataAction,
       formatPetitionAction,
-      generatePetitionPdfAction,
-      setPdfPreviewUrlAction,
       generatePetitionPreviewPdfUrlAction,
       incrementCurrentStepIndicatorAction,
     ]),
