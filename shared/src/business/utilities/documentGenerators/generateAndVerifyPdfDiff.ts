@@ -24,6 +24,21 @@ const convertPdfPageToImageFile = async ({ fileName, pageNumber }) => {
   );
 };
 
+const cropImage = ({
+  height,
+  image,
+  width,
+}: {
+  height: number;
+  image: PNG;
+  width: number;
+}): PNG => {
+  // Cropped from (0, 0) (top left) to (width, height)
+  const cropped = new PNG({ height, width });
+  PNG.bitblt(image, cropped, 0, 0, width, height, 0, 0);
+  return cropped;
+};
+
 const getImageDiff = ({ actualImage, expectedImage }) => {
   const { height, width } = actualImage;
   const diff = new PNG({ height, width });
@@ -48,10 +63,19 @@ const getImageDiff = ({ actualImage, expectedImage }) => {
 };
 
 export const generateAndVerifyPdfDiff = ({
+  croppedHeight,
+  croppedWidth,
   fileName,
   pageNumber,
   pdfGenerateFunction,
   testDescription,
+}: {
+  croppedHeight?: number;
+  croppedWidth?: number;
+  fileName: string;
+  pageNumber: number;
+  pdfGenerateFunction: any; // TODO
+  testDescription: string;
 }) => {
   const testOutputPath = path.resolve(
     __dirname,
@@ -76,16 +100,24 @@ export const generateAndVerifyPdfDiff = ({
     const pdf = await pdfGenerateFunction();
     fs.writeFileSync(`${testOutputPath}/${fileName}`, pdf);
 
-    const actualImage = await convertPdfPageToImageFile({
+    let actualImage = await convertPdfPageToImageFile({
       fileName,
       pageNumber,
     });
 
-    const expectedImage = PNG.sync.read(
+    let expectedImage = PNG.sync.read(
       fs.readFileSync(
         `./shared/test-pdf-expected-images/${fileName}.${pageNumber}.png`,
       ),
     );
+
+    const shouldCropImage = croppedWidth || croppedHeight;
+    if (shouldCropImage) {
+      const width = croppedWidth || actualImage.width;
+      const height = croppedHeight || actualImage.height;
+      actualImage = cropImage({ height, image: actualImage, width });
+      expectedImage = cropImage({ height, image: expectedImage, width });
+    }
 
     const { imageDiff, percentDifference } = getImageDiff({
       actualImage,
