@@ -40,22 +40,25 @@ export const caseTypeDescriptionHelper = (
     }
   });
 
+  const reorderedList = form.hasIrsNotice
+    ? [
+        'Notice of Deficiency',
+        'Notice of Determination Concerning Collection Action',
+        'Other',
+      ]
+    : ['Deficiency', 'Collection (Lien/Levy)', 'Other'];
+
+  const caseTypes = reorderCaseTypes(caseTypesWithDescriptions, reorderedList);
+
   return {
-    caseTypes: form.hasIrsNotice
-      ? reorderCaseTypesForIrsNoticeCaseTypes(caseTypesWithDescriptions)
-      : caseTypesWithDescriptions,
+    caseTypes,
   };
 };
 
-function reorderCaseTypesForIrsNoticeCaseTypes(
+function reorderCaseTypes(
   caseTypes: { description: string; type: string }[],
+  specificOrder: string[],
 ) {
-  const specificOrder = [
-    'Notice of Deficiency',
-    'Notice of Determination Concerning Collection Action',
-    'Other',
-  ];
-
   const orderedItems: { description: string; type: string }[] = [];
   const otherItems: { description: string; type: string }[] = [];
 
