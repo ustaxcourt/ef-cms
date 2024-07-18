@@ -1,11 +1,9 @@
 variable "db_username" {
-  type    = string
-  default = "mydbuser"
+  type = string
 }
 
 variable "db_password" {
-  type    = string
-  default = "mypassword"
+  type = string
 }
 
 variable "environment" {
