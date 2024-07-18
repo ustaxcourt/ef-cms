@@ -49,9 +49,9 @@ describe('handleLockError', () => {
       .getUserById.mockReturnValue(docketClerkUser);
   });
 
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
+  it('should determine who the user is based on method arg, not applicationContext', async () => {
+    await handleLockError(applicationContext, { foo: 'bar' }, docketClerkUser);
+    expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
@@ -59,7 +59,11 @@ describe('handleLockError', () => {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      docketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -99,8 +103,6 @@ describe('addPaperFilingInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -117,7 +119,11 @@ describe('addPaperFilingInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        addPaperFilingInteractor(applicationContext, mockRequest),
+        addPaperFilingInteractor(
+          applicationContext,
+          mockRequest,
+          docketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -127,7 +133,11 @@ describe('addPaperFilingInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        addPaperFilingInteractor(applicationContext, mockRequest),
+        addPaperFilingInteractor(
+          applicationContext,
+          mockRequest,
+          docketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -155,7 +165,11 @@ describe('addPaperFilingInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await addPaperFilingInteractor(applicationContext, mockRequest);
+      await addPaperFilingInteractor(
+        applicationContext,
+        mockRequest,
+        docketClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -166,7 +180,11 @@ describe('addPaperFilingInteractor', () => {
       });
     });
     it('should remove the lock', async () => {
-      await addPaperFilingInteractor(applicationContext, mockRequest);
+      await addPaperFilingInteractor(
+        applicationContext,
+        mockRequest,
+        docketClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().removeLock,
