@@ -23,9 +23,12 @@ export const PetitionSuccessHeader = connect(
             data-testid="header-text"
             tabIndex={-1}
           >
-            <CaseLink formattedCase={caseDetail}>
+            <CaseLink
+              className="no-wrap-white-space"
+              formattedCase={caseDetail}
+            >
               Docket Number:{' '}
-              <span data-testid="case-link-docket-number">
+              <span className="no-wrap" data-testid="case-link-docket-number">
                 {caseDetail.docketNumberWithSuffix}
               </span>
             </CaseLink>
