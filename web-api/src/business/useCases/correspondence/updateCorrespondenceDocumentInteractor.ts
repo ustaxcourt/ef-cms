@@ -6,20 +6,13 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * updateCorrespondenceDocumentInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the document metadata
- * @returns {Promise<*>} the updated case entity after the correspondence document is updated
- */
 export const updateCorrespondenceDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: TDocumentMetaData },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
