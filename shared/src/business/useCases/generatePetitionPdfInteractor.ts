@@ -7,12 +7,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 // TODO type for props
 
 export const generatePetitionPdfInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseCaptionExtension,
     caseTitle,
@@ -20,7 +21,6 @@ export const generatePetitionPdfInteractor = async (
     contactPrimary,
     contactSecondary,
     irsNotices,
-    isDraft,
     noticeIssuedDate,
     partyType,
     petitionFacts,
@@ -29,7 +29,7 @@ export const generatePetitionPdfInteractor = async (
     procedureType,
     taxYear,
   }: any,
-) => {
+): Promise<{ fileId: string }> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
@@ -67,22 +67,13 @@ export const generatePetitionPdfInteractor = async (
     },
   });
 
-  if (isDraft) {
-    pdfFile = await applicationContext
-      .getUseCaseHelpers()
-      .addDraftWatermarkToDocument({
-        applicationContext,
-        pdfFile,
-      });
-  }
+  const fileId = applicationContext.getUniqueId();
 
-  // 24 hrs
-  const urlTtl = 60 * 60 * 24;
-
-  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    file: pdfFile,
-    urlTtl,
-    useTempBucket: isDraft,
+    document: pdfFile,
+    key: fileId,
   });
+
+  return { fileId };
 };
