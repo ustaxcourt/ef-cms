@@ -143,4 +143,50 @@ describe('getStep1DataAction', () => {
       useSameAsPrimary: false,
     });
   });
+
+  it('should set contact type for secondary contact when a secondary contact is present', async () => {
+    const results = await runAction(getStep1DataAction, {
+      state: {
+        form: {
+          ...STATE_FORM,
+          contactPrimary: {
+            address2: 'TEST_PRIMARY_address2',
+            address3: 'TEST_PRIMARY_address3',
+            primary: true,
+          },
+          contactSecondary: {
+            address1: 'TEST_SECONDARY_address1',
+            city: 'TEST_SECONDARY_city',
+            countryType: 'TEST_SECONDARY_countryType',
+            placeOfLegalResidence: 'TEST_SECONDARY_placeOfLegalResidence',
+            postalCode: 'TEST_SECONDARY_postalCode',
+            secondary: true,
+            state: 'TEST_SECONDARY_state',
+          },
+          useSameAsPrimary: false,
+        },
+      },
+    });
+    const { step1Data } = results.output;
+    expect(step1Data.contactSecondary.contactType).toEqual(
+      CONTACT_TYPES.secondary,
+    );
+  });
+
+  it('should not set contact type for secondary contact when a secondary contact is not present', async () => {
+    const results = await runAction(getStep1DataAction, {
+      state: {
+        form: {
+          ...STATE_FORM,
+          contactPrimary: {
+            address2: 'TEST_PRIMARY_address2',
+            address3: 'TEST_PRIMARY_address3',
+            primary: true,
+          },
+        },
+      },
+    });
+    const { step1Data } = results.output;
+    expect(step1Data.contactSecondary).toBeUndefined();
+  });
 });
