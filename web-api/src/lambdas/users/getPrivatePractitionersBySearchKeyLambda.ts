@@ -1,3 +1,4 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -6,13 +7,20 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getPrivatePractitionersBySearchKeyLambda = event =>
+export const getPrivatePractitionersBySearchKeyLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
     const { searchKey } = event.queryStringParameters;
 
     return await applicationContext
       .getUseCases()
-      .getPrivatePractitionersBySearchKeyInteractor(applicationContext, {
-        searchKey,
-      });
+      .getPrivatePractitionersBySearchKeyInteractor(
+        applicationContext,
+        {
+          searchKey,
+        },
+        authorizedUser,
+      );
   });

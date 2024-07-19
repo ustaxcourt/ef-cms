@@ -1,29 +1,32 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPrivatePractitionersBySearchKeyInteractor } from './getPrivatePractitionersBySearchKeyInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 let user;
 describe('getPrivatePractitionersBySearchKeyInteractor', () => {
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   it('should throw an error when not authorized', async () => {
     let error;
-    user = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    user = mockPetitionerUser;
     applicationContext
       .getPersistenceGateway()
       .getUsersBySearchKey.mockResolvedValue([]);
 
     try {
-      await getPrivatePractitionersBySearchKeyInteractor(applicationContext, {
-        searchKey: 'something',
-      });
+      await getPrivatePractitionersBySearchKeyInteractor(
+        applicationContext,
+        {
+          searchKey: 'something',
+        },
+        user,
+      );
     } catch (err) {
       error = err;
     }
@@ -31,11 +34,7 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
   });
 
   it('should return users from persistence', async () => {
-    user = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
+    user = mockPetitionsClerkUser;
     applicationContext
       .getPersistenceGateway()
       .getUsersBySearchKey.mockResolvedValue([
@@ -52,6 +51,7 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
       {
         searchKey: 'Test Practitioner',
       },
+      user,
     );
 
     expect(result).toMatchObject([{ name: 'Test Practitioner' }]);
