@@ -14,3 +14,6 @@ export USER_POOL_ID='local_2pHzece7'
 export COGNITO_CLIENT_ID='bvjrggnd3co403c0aahscinne'
 export DISABLE_EMAILS=true
 export ENV=local
+export POSTGRES_USERNAME='postgres'
+export POSTGRES_PASSWORD='example'
+export POSTGRES_HOST='localhost'

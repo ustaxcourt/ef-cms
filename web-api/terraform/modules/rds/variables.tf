@@ -1,8 +1,8 @@
-variable "db_username" {
+variable "postgres_username" {
   type = string
 }
 
-variable "db_password" {
+variable "postgres_password" {
   type = string
 }
 

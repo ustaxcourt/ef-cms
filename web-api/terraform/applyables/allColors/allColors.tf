@@ -116,6 +116,8 @@ module "ui-healthcheck" {
 }
 
 module "rds" {
-  source      = "../../modules/rds"
-  environment = var.environment
+  source            = "../../modules/rds"
+  environment       = var.environment
+  postgres_username = var.postgres_username
+  postgres_password = var.postgres_password
 }

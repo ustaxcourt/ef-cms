@@ -1,14 +1,14 @@
 resource "aws_db_instance" "postgres" {
-  allocated_storage      = 20
-  engine                 = "postgres"
-  engine_version         = "16.3"
-  instance_class         = "db.t4g.small"
-  db_name                = "${var.environment}_dawson"
-  username               = var.environment.POSTGRES_USERNAME
-  password               = var.environment.POSTGRES_PASSWORD
-  parameter_group_name   = aws_db_parameter_group.postgres.name
-  vpc_security_group_ids = [aws_security_group.db.id]
-  skip_final_snapshot    = true
+  allocated_storage    = 20
+  engine               = "postgres"
+  engine_version       = "16.3"
+  instance_class       = "db.t4g.small"
+  db_name              = "${var.environment}_dawson"
+  username             = var.postgres_username
+  password             = var.postgres_password
+  parameter_group_name = aws_db_parameter_group.postgres.name
+  # vpc_security_group_ids = [aws_security_group.db.id]
+  skip_final_snapshot = true
 }
 
 resource "aws_db_parameter_group" "postgres" {

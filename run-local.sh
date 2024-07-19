@@ -49,6 +49,7 @@ else
   fi
 fi
 
+npm run typeorm:migrations:migrate
 npm run seed:postgres
 
 echo "Seeding cognito-local users"

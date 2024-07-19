@@ -26,7 +26,6 @@ S3RVER_PID=$!
 URL=http://0.0.0.0:9001/ ./wait-until.sh
 npm run seed:s3
 
-
 if [ -n "${RESUME}" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
 else
@@ -39,6 +38,8 @@ if [ "${exitCode}" != 0 ]; then
   echo "Failed to seed data!". 1>&2 && exit 1
 fi
 
+npm run typeorm:migrations:migrate
+npm run seed:postgres
 
 if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
