@@ -7,20 +7,21 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 // TODO type for props
 
 export const generatePetitionPdfInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseCaptionExtension,
     caseTitle,
     caseType,
     contactPrimary,
     contactSecondary,
+    hasIrsNotice,
     irsNotices,
-    isDraft,
     noticeIssuedDate,
     partyType,
     petitionFacts,
@@ -29,16 +30,16 @@ export const generatePetitionPdfInteractor = async (
     procedureType,
     taxYear,
   }: any,
-) => {
+): Promise<{ fileId: string }> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseDescription =
-    CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType] ||
-    CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
+  const caseDescription = hasIrsNotice
+    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType]
+    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
 
   let pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
@@ -50,9 +51,9 @@ export const generatePetitionPdfInteractor = async (
       contactSecondary,
       irsNotices: irsNotices.map(irsNotice => ({
         ...irsNotice,
-        caseDescription:
-          CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[irsNotice.caseType] ||
-          CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[irsNotice.caseType],
+        caseDescription: hasIrsNotice
+          ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[irsNotice.caseType]
+          : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[irsNotice.caseType],
         noticeIssuedDateFormatted: applicationContext
           .getUtilities()
           .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
@@ -67,22 +68,13 @@ export const generatePetitionPdfInteractor = async (
     },
   });
 
-  if (isDraft) {
-    pdfFile = await applicationContext
-      .getUseCaseHelpers()
-      .addDraftWatermarkToDocument({
-        applicationContext,
-        pdfFile,
-      });
-  }
+  const fileId = applicationContext.getUniqueId();
 
-  // 24 hrs
-  const urlTtl = 60 * 60 * 24;
-
-  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    file: pdfFile,
-    urlTtl,
-    useTempBucket: isDraft,
+    document: pdfFile,
+    key: fileId,
   });
+
+  return { fileId };
 };

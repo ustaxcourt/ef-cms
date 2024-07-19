@@ -4,6 +4,8 @@ import { generatePetitionPdfInteractor } from '@shared/business/useCases/generat
 import { petitionerUser } from '@shared/test/mockUsers';
 
 describe('generatePetitionPdfInteractor', () => {
+  const mockFileId = '9085265b-e8ad-4bab-9e7c-f82e847b41f9';
+
   beforeEach(() => {
     applicationContext.getCurrentUser.mockImplementation(() => petitionerUser);
 
@@ -16,18 +18,11 @@ describe('generatePetitionPdfInteractor', () => {
           ),
       );
 
-    applicationContext
-      .getUseCaseHelpers()
-      .addDraftWatermarkToDocument.mockImplementation(
-        () =>
-          new Promise(resolve =>
-            resolve('RESULTS_addDraftWatermarkToDocument'),
-          ),
-      );
+    applicationContext.getUniqueId.mockReturnValue(mockFileId);
 
     applicationContext
-      .getUseCaseHelpers()
-      .saveFileAndGenerateUrl.mockImplementation(
+      .getPersistenceGateway()
+      .saveDocumentFromLambda.mockImplementation(
         () => new Promise(resolve => resolve('RESULTS_saveFileAndGenerateUrl')),
       );
   });
@@ -40,15 +35,15 @@ describe('generatePetitionPdfInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should generate petition and call save and generate URL', async () => {
+  it('should generate petition and call save document', async () => {
     const results = await generatePetitionPdfInteractor(applicationContext, {
       caseCaptionExtension: 'TEST_caseCaptionExtension',
       caseTitle: 'TEST_caseTitle',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: 'TEST_contactPrimary',
       contactSecondary: 'TEST_contactSecondary',
+      hasIrsNotice: false,
       irsNotices: [],
-      isDraft: false,
       noticeIssuedDate: 'TEST_noticeIssuedDate',
       partyType: 'TEST_partyType',
       petitionFacts: 'TEST_petitionFacts',
@@ -63,7 +58,7 @@ describe('generatePetitionPdfInteractor', () => {
     expect(petitionCalls.length).toEqual(1);
     expect(petitionCalls[0][0].data).toEqual({
       caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseDescription: 'Notice of Deficiency',
+      caseDescription: 'Deficiency',
       caseTitle: 'TEST_caseTitle',
       contactPrimary: 'TEST_contactPrimary',
       contactSecondary: 'TEST_contactSecondary',
@@ -76,79 +71,16 @@ describe('generatePetitionPdfInteractor', () => {
       procedureType: 'TEST_procedureType',
       taxYear: 'TEST_taxYear',
     });
-
-    const addDraftWatermarkToDocumentCalls =
-      applicationContext.getUseCaseHelpers().addDraftWatermarkToDocument.mock
-        .calls;
-    expect(addDraftWatermarkToDocumentCalls.length).toEqual(0);
 
     const saveFileAndGenerateUrlCalls =
-      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
-    expect(saveFileAndGenerateUrlCalls.length).toEqual(1);
-    expect(saveFileAndGenerateUrlCalls[0][0].file).toEqual(
-      'RESULTS_getDocumentGenerators_petition',
-    );
-    expect(saveFileAndGenerateUrlCalls[0][0].urlTtl).toEqual(60 * 60 * 24);
-    expect(saveFileAndGenerateUrlCalls[0][0].useTempBucket).toEqual(false);
-
-    expect(results).toEqual('RESULTS_saveFileAndGenerateUrl');
-  });
-
-  it('should generate petition, add watermark and call save and generate URL', async () => {
-    const results = await generatePetitionPdfInteractor(applicationContext, {
-      caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseTitle: 'TEST_caseTitle',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: 'TEST_contactPrimary',
-      contactSecondary: 'TEST_contactSecondary',
-      irsNotices: [],
-      isDraft: true,
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      partyType: 'TEST_partyType',
-      petitionFacts: 'TEST_petitionFacts',
-      petitionReasons: 'TEST_petitionReasons',
-      preferredTrialCity: 'TEST_preferredTrialCity',
-      procedureType: 'TEST_procedureType',
-      taxYear: 'TEST_taxYear',
-    });
-
-    const petitionCalls =
-      applicationContext.getDocumentGenerators().petition.mock.calls;
-    expect(petitionCalls.length).toEqual(1);
-    expect(petitionCalls[0][0].data).toEqual({
-      caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseDescription: 'Notice of Deficiency',
-      caseTitle: 'TEST_caseTitle',
-      contactPrimary: 'TEST_contactPrimary',
-      contactSecondary: 'TEST_contactSecondary',
-      irsNotices: [],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      partyType: 'TEST_partyType',
-      petitionFacts: 'TEST_petitionFacts',
-      petitionReasons: 'TEST_petitionReasons',
-      preferredTrialCity: 'TEST_preferredTrialCity',
-      procedureType: 'TEST_procedureType',
-      taxYear: 'TEST_taxYear',
-    });
-
-    const addDraftWatermarkToDocumentCalls =
-      applicationContext.getUseCaseHelpers().addDraftWatermarkToDocument.mock
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls;
-    expect(addDraftWatermarkToDocumentCalls.length).toEqual(1);
-    expect(addDraftWatermarkToDocumentCalls[0][0].pdfFile).toEqual(
+    expect(saveFileAndGenerateUrlCalls.length).toEqual(1);
+    expect(saveFileAndGenerateUrlCalls[0][0].document).toEqual(
       'RESULTS_getDocumentGenerators_petition',
     );
 
-    const saveFileAndGenerateUrlCalls =
-      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock.calls;
-    expect(saveFileAndGenerateUrlCalls.length).toEqual(1);
-    expect(saveFileAndGenerateUrlCalls[0][0].file).toEqual(
-      'RESULTS_addDraftWatermarkToDocument',
-    );
-    expect(saveFileAndGenerateUrlCalls[0][0].urlTtl).toEqual(60 * 60 * 24);
-    expect(saveFileAndGenerateUrlCalls[0][0].useTempBucket).toEqual(true);
-
-    expect(results).toEqual('RESULTS_saveFileAndGenerateUrl');
+    expect(results.fileId).toEqual(mockFileId);
   });
 
   it('should generate petition with correct irsNotice information', async () => {
@@ -161,14 +93,14 @@ describe('generatePetitionPdfInteractor', () => {
       },
     ];
 
-    await generatePetitionPdfInteractor(applicationContext, {
+    const results = await generatePetitionPdfInteractor(applicationContext, {
       caseCaptionExtension: 'TEST_caseCaptionExtension',
       caseTitle: 'TEST_caseTitle',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: 'TEST_contactPrimary',
       contactSecondary: 'TEST_contactSecondary',
+      hasIrsNotice: true,
       irsNotices,
-      isDraft: false,
       noticeIssuedDate: 'TEST_noticeIssuedDate',
       partyType: 'TEST_partyType',
       petitionFacts: 'TEST_petitionFacts',
@@ -193,5 +125,6 @@ describe('generatePetitionPdfInteractor', () => {
         },
       ],
     });
+    expect(results.fileId).toEqual(mockFileId);
   });
 });

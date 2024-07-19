@@ -43,7 +43,7 @@ export const StepIndicator = connect(
                     className="usa-button--unstyled no-underline"
                     disabled={
                       +step > currentStep ||
-                      currentStep > Object.keys(steps).length
+                      currentStep >= Object.keys(steps).length
                     }
                     onClick={() => {
                       updateStepIndicatorSequence({ step: +step });
@@ -92,6 +92,7 @@ export const StepIndicator = connect(
                   className={classNames(
                     'usa-step-indicator__total-steps',
                     'margin-left-05',
+                    'no-wrap',
                   )}
                 >
                   of {Object.keys(steps).length}
