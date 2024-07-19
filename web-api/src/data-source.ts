@@ -3,8 +3,6 @@ import { Case } from '@web-api/persistence/repository/Case';
 import { DataSource } from 'typeorm';
 import { Message } from './persistence/repository/Message';
 
-console.log('*** pass', process.env.POSTGRES_PASSWORD);
-
 export const AppDataSource = new DataSource({
   database: 'postgres',
   entities: [Message, Case],
