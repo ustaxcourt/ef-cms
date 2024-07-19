@@ -3,21 +3,18 @@ import {
   MOCK_CASE_WITH_TRIAL_SESSION,
 } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '../../../../../shared/src/test/mockTrial';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { setForHearingInteractor } from './setForHearingInteractor';
 
 describe('setForHearingInteractor', () => {
-  let mockCurrentUser;
   let mockTrialSession;
   let mockCase;
 
   beforeEach(() => {
-    mockCurrentUser = {
-      role: ROLES.docketClerk,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
     mockTrialSession = MOCK_TRIAL_REMOTE;
 
     mockCase = MOCK_CASE;
@@ -32,17 +29,16 @@ describe('setForHearingInteractor', () => {
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    mockCurrentUser = {
-      role: ROLES.petitioner,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
     await expect(
-      setForHearingInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
-      }),
+      setForHearingInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: mockCase.docketNumber,
+          trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -52,11 +48,15 @@ describe('setForHearingInteractor', () => {
     };
 
     await expect(
-      setForHearingInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
-      }),
+      setForHearingInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: mockCase.docketNumber,
+          trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('That Hearing is already assigned to the Case');
   });
 
@@ -69,11 +69,15 @@ describe('setForHearingInteractor', () => {
     };
 
     await expect(
-      setForHearingInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
-      }),
+      setForHearingInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: mockCase.docketNumber,
+          trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('That Hearing is already assigned to the Case');
   });
 
@@ -83,11 +87,15 @@ describe('setForHearingInteractor', () => {
       hearings: [],
     };
 
-    await setForHearingInteractor(applicationContext, {
-      calendarNotes: 'testing',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
-    });
+    await setForHearingInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'testing',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().addCaseToHearing,
@@ -99,11 +107,15 @@ describe('setForHearingInteractor', () => {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
     };
 
-    await setForHearingInteractor(applicationContext, {
-      calendarNotes: 'testing',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-    });
+    await setForHearingInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'testing',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().addCaseToHearing,
@@ -127,11 +139,15 @@ describe('setForHearingInteractor', () => {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
     };
 
-    await setForHearingInteractor(applicationContext, {
-      calendarNotes: 'this is a calendarNote',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-    });
+    await setForHearingInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'this is a calendarNote',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().addCaseToHearing,
