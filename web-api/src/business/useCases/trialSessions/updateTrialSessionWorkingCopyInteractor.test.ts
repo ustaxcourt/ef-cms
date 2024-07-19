@@ -1,7 +1,7 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
 
@@ -20,7 +20,6 @@ const MOCK_WORKING_COPY = {
 describe('Update trial session working copy', () => {
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionWorkingCopy.mockReturnValue(MOCK_WORKING_COPY);
@@ -37,19 +36,18 @@ describe('Update trial session working copy', () => {
       .updateTrialSessionWorkingCopy.mockReturnValue({});
 
     await expect(
-      updateTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
-      }),
+      updateTrialSessionWorkingCopyInteractor(
+        applicationContext,
+        {
+          trialSessionWorkingCopyToUpdate:
+            MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+        },
+        user,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    user = {
-      role: ROLES.judge,
-      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionWorkingCopy.mockResolvedValue(
@@ -57,19 +55,18 @@ describe('Update trial session working copy', () => {
       );
 
     await expect(
-      updateTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
-      }),
+      updateTrialSessionWorkingCopyInteractor(
+        applicationContext,
+        {
+          trialSessionWorkingCopyToUpdate:
+            MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {
-    user = {
-      role: ROLES.judge,
-      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .updateTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
@@ -80,6 +77,7 @@ describe('Update trial session working copy', () => {
         trialSessionWorkingCopyToUpdate:
           MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
       },
+      mockJudgeUser,
     );
     expect(result).toMatchObject(MOCK_WORKING_COPY);
   });
