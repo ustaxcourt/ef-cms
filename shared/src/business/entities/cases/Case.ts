@@ -131,6 +131,7 @@ export class Case extends JoiValidationEntity {
   public docketNumberWithSuffix?: string;
   public canAllowDocumentService?: boolean;
   public canAllowPrintableDocketRecord!: boolean;
+  public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed?: boolean;
@@ -397,6 +398,7 @@ export class Case extends JoiValidationEntity {
       .meta({ tags: ['Restricted'] }),
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
+    canDojPractitionersRepresentParty: joi.boolean().optional(),
     caseCaption: CASE_CAPTION_RULE.messages({ '*': 'Enter a case caption' }),
     caseNote: JoiValidationConstants.STRING.max(9000)
       .optional()
@@ -2127,6 +2129,13 @@ export const canAllowPrintableDocketRecord = rawCase => {
     return rawCase.canAllowPrintableDocketRecord;
   }
   return rawCase.status !== CASE_STATUS_TYPES.new;
+};
+
+export const canDojPractitionersRepresentPartyForCase = (rawCase: RawCase) => {
+  if (typeof rawCase.canDojPractitionersRepresentParty !== 'undefined') {
+    return rawCase.canDojPractitionersRepresentParty;
+  }
+  return rawCase.status === CASE_STATUS_TYPES.onAppeal;
 };
 
 /**

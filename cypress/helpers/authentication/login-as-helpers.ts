@@ -15,6 +15,16 @@ export function loginAsAdmissionsClerk(
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
+export function loginAsDojPractitioner(
+  dojPractitionerUser:
+    | 'dojPractitioner1'
+    | 'dojPractitioner2'
+    | 'dojPractitioner3' = 'dojPractitioner1',
+) {
+  cy.login(dojPractitionerUser);
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+}
+
 export function loginAsPrivatePractitioner(
   practitionerUser:
     | 'privatePractitioner1'
