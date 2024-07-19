@@ -14,14 +14,12 @@ import {
 
 describe('getTrialSessionsInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+    //applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
   });
 
   it('should throw an unauthorized error when the user does not have permission to view trial sessions', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      getTrialSessionsInteractor(applicationContext),
+      getTrialSessionsInteractor(applicationContext, petitionerUser),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
@@ -33,7 +31,7 @@ describe('getTrialSessionsInteractor', () => {
       ]);
 
     await expect(
-      getTrialSessionsInteractor(applicationContext),
+      getTrialSessionsInteractor(applicationContext, petitionsClerkUser),
     ).rejects.toThrow('The TrialSession entity was invalid.');
   });
 
@@ -45,8 +43,10 @@ describe('getTrialSessionsInteractor', () => {
         MOCK_TRIAL_REGULAR,
       ]);
 
-    const trialSessionDTOs =
-      await getTrialSessionsInteractor(applicationContext);
+    const trialSessionDTOs = await getTrialSessionsInteractor(
+      applicationContext,
+      petitionsClerkUser,
+    );
 
     trialSessionDTOs.forEach(trialSessionDTO => {
       expect(trialSessionDTO instanceof TrialSessionInfoDTO).toBe(true);
