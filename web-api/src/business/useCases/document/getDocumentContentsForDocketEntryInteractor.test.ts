@@ -1,14 +1,20 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentContentsForDocketEntryInteractor } from './getDocumentContentsForDocketEntryInteractor';
+import {
+  mockDocketClerkUser,
+  mockJudgeUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getDocumentContentsForDocketEntryInteractor', () => {
   const mockDocumentContentsId = '599dbad3-4912-4a61-9525-3da245700893';
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Tasha Yar',
-      role: ROLES.docketClerk,
-    });
+    // applicationContext.getCurrentUser.mockReturnValue({
+    //   name: 'Tasha Yar',
+    //   role: ROLES.docketClerk,
+    // });
 
     applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
       Buffer.from(
@@ -21,27 +27,38 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the logged in user does not have permission to EDIT_ORDER', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Tasha Yar',
+    // applicationContext.getCurrentUser.mockReturnValue({
+    //   name: 'Tasha Yar',
+    //   role: ROLES.inactivePractitioner,
+    // });
+    let authorizedUser = {
+      ...mockPrivatePractitionerUser,
       role: ROLES.inactivePractitioner,
-    });
-
+    } as UnknownAuthUser;
     await expect(
-      getDocumentContentsForDocketEntryInteractor(applicationContext, {
-        documentContentsId: mockDocumentContentsId,
-      }),
+      getDocumentContentsForDocketEntryInteractor(
+        applicationContext,
+        {
+          documentContentsId: mockDocumentContentsId,
+        },
+        authorizedUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should allow the logged in internal user with permissions to edit the order', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Test Judge',
-      role: ROLES.judge,
-    });
+    // applicationContext.getCurrentUser.mockReturnValue({
+    //   name: 'Test Judge',
+    //   role: ROLES.judge,
+    // });
 
-    await getDocumentContentsForDocketEntryInteractor(applicationContext, {
-      documentContentsId: mockDocumentContentsId,
-    });
+    await getDocumentContentsForDocketEntryInteractor(
+      applicationContext,
+      {
+        documentContentsId: mockDocumentContentsId,
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
@@ -49,9 +66,13 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should call applicationContext.getPersistenceGateway().getDocument with documentCntentsId as the key', async () => {
-    await getDocumentContentsForDocketEntryInteractor(applicationContext, {
-      documentContentsId: mockDocumentContentsId,
-    });
+    await getDocumentContentsForDocketEntryInteractor(
+      applicationContext,
+      {
+        documentContentsId: mockDocumentContentsId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
@@ -64,6 +85,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
       {
         documentContentsId: mockDocumentContentsId,
       },
+      mockDocketClerkUser,
     );
 
     expect(result).toEqual({
@@ -82,9 +104,13 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
       );
 
     await expect(
-      getDocumentContentsForDocketEntryInteractor(applicationContext, {
-        documentContentsId: mockDocumentContentsId,
-      }),
+      getDocumentContentsForDocketEntryInteractor(
+        applicationContext,
+        {
+          documentContentsId: mockDocumentContentsId,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       `Document contents ${mockDocumentContentsId} could not be found in the S3 bucket.`,
     );
