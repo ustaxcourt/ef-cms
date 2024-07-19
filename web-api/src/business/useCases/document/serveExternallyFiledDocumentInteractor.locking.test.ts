@@ -9,7 +9,7 @@ import {
   handleLockError,
   serveExternallyFiledDocumentInteractor,
 } from '../../../../../web-api/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('determineEntitiesToLock', () => {
@@ -49,12 +49,22 @@ describe('handleLockError', () => {
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+      .getUserById.mockReturnValue(mockDocketClerkUser);
   });
 
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
+  it('should determine who the user is based on arguents to handleLockError, not appcontext', async () => {
+    await handleLockError(
+      applicationContext,
+      { foo: 'bar' },
+      mockDocketClerkUser,
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: mockDocketClerkUser.userId,
+      }),
+    );
   });
 
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
@@ -62,7 +72,11 @@ describe('handleLockError', () => {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -103,7 +117,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    // applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getUseCaseHelpers()
@@ -119,7 +133,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+      .getUserById.mockReturnValue(mockDocketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -133,7 +147,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        serveExternallyFiledDocumentInteractor(applicationContext, mockRequest),
+        serveExternallyFiledDocumentInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -143,7 +161,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        serveExternallyFiledDocumentInteractor(applicationContext, mockRequest),
+        serveExternallyFiledDocumentInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -156,7 +178,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'serve_externally_filed_document',
         },
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       });
 
       expect(
@@ -174,6 +196,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       await serveExternallyFiledDocumentInteractor(
         applicationContext,
         mockRequest,
+        mockDocketClerkUser,
       );
 
       expect(
@@ -189,6 +212,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       await serveExternallyFiledDocumentInteractor(
         applicationContext,
         mockRequest,
+        mockDocketClerkUser,
       );
 
       expect(
