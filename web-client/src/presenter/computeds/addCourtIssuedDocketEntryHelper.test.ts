@@ -78,7 +78,6 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   });
 
   it('should calculate document types based on constants in applicationContext', () => {
-    console.debug('*****************************************', state.user);
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.documentTypes).toEqual([
       {

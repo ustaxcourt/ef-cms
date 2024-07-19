@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
-import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { petitionsClerkUser } from '@shared/test/mockUsers';
 
 const {
   DOCKET_SECTION,
@@ -204,7 +204,7 @@ describe('filterWorkItems', () => {
   it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', () => {
     const filtered = filterWorkItems({
       applicationContext,
-      authorizedUser: mockPetitionsClerkUser,
+      authorizedUser: petitionsClerkUser,
       section: PETITIONS_SECTION,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,

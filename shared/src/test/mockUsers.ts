@@ -19,6 +19,7 @@ import {
 } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adminUser: RawUser = {
+  email: 'admin@example.com',
   entityName: 'User',
   name: 'Test admin',
   role: ROLES.admin,
@@ -26,10 +27,11 @@ export const adminUser: RawUser = {
 };
 
 export const adcUser = {
+  email: 'adc@example.com',
   name: 'ADC',
   role: ROLES.adc,
   section: ADC_SECTION,
-  userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
+  userId: '9f357f78-a8fa-40bf-83db-8144ddf14047',
 };
 
 export const colvinsChambersUser = {
@@ -121,6 +123,7 @@ export const petitionerUser = {
 
 export const privatePractitionerUser = {
   barNumber: 'BN1234',
+  email: 'privatePractitioner@example.com',
   name: 'Private Practitioner',
   role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
@@ -171,6 +174,7 @@ export const petitionsClerkUser: RawUser = {
 };
 
 export const admissionsClerkUser = {
+  email: 'admissionsClerk@example.com',
   name: 'AdmissionsClerk',
   role: ROLES.admissionsClerk,
   section: ADMISSIONS_SECTION,

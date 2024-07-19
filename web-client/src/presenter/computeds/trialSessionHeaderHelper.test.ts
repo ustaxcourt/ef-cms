@@ -2,10 +2,10 @@ import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
-  mockDocketClerkUser,
-  mockJudgeUser,
-  mockTrialClerkUser,
-} from '@shared/test/mockAuthUsers';
+  docketClerkUser,
+  judgeUser,
+  trialClerkUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -47,7 +47,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, user: mockDocketClerkUser },
+        state: { ...baseState, user: docketClerkUser },
       });
 
       expect(isStandaloneSession).toEqual(true);
@@ -57,7 +57,7 @@ describe('trialSessionHeaderHelper', () => {
   describe('nameToDisplay', () => {
     it("should be the assigned judge's name when the current user is NOT a trial clerk", () => {
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, user: mockJudgeUser },
+        state: { ...baseState, user: judgeUser },
       });
 
       expect(result.nameToDisplay).toBe(
@@ -67,10 +67,10 @@ describe('trialSessionHeaderHelper', () => {
 
     it("should be the current user's name when the current user is a trial clerk", () => {
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, user: mockTrialClerkUser },
+        state: { ...baseState, user: trialClerkUser },
       });
 
-      expect(result.nameToDisplay).toBe(mockTrialClerkUser.name);
+      expect(result.nameToDisplay).toBe(trialClerkUser.name);
     });
   });
 
@@ -82,7 +82,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, user: mockTrialClerkUser },
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.showBatchDownloadButton).toBe(false);
@@ -95,7 +95,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, user: mockTrialClerkUser },
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.showBatchDownloadButton).toBe(true);
@@ -110,7 +110,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, user: mockTrialClerkUser },
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.showPrintCalendarButton).toBe(true);
@@ -133,7 +133,7 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           permissions: { TRIAL_SESSIONS: true },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -147,11 +147,11 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -166,7 +166,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: 'NOT_ASSIGNED' },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -179,9 +179,9 @@ describe('trialSessionHeaderHelper', () => {
           ...baseState,
           currentPage: 'TrialSessionDetail',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -194,9 +194,9 @@ describe('trialSessionHeaderHelper', () => {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -208,11 +208,11 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
-            judge: { userId: mockJudgeUser.userId },
+            judge: { userId: judgeUser.userId },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -226,11 +226,11 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionDetail',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -245,7 +245,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: 'NOT_ASSIGNED' },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -258,9 +258,9 @@ describe('trialSessionHeaderHelper', () => {
           ...baseState,
           currentPage: 'TrialSessionWorkingCopy',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -273,9 +273,9 @@ describe('trialSessionHeaderHelper', () => {
           ...baseState,
           currentPage: 'TrialSessionDetail',
           trialSession: {
-            trialClerk: { userId: mockTrialClerkUser.userId },
+            trialClerk: { userId: trialClerkUser.userId },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 
@@ -287,11 +287,11 @@ describe('trialSessionHeaderHelper', () => {
         state: {
           ...baseState,
           currentPage: 'TrialSessionDetail',
-          judgeUser: { userId: mockJudgeUser.userId },
+          judgeUser: { userId: judgeUser.userId },
           trialSession: {
-            judge: { userId: mockJudgeUser.userId },
+            judge: { userId: judgeUser.userId },
           },
-          user: mockTrialClerkUser,
+          user: trialClerkUser,
         },
       });
 

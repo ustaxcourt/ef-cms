@@ -7,13 +7,13 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import {
-  mockAdcUser as mockAdc,
-  mockDocketClerkUser as mockDocketClerk,
-  mockJudgeUser as mockJudge,
-  mockPetitionerUser as mockPetitioner,
-  mockPetitionsClerkUser as mockPetitionsClerk,
-  mockPrivatePractitionerUser as mockPrivatePractitioner,
-} from '@shared/test/mockAuthUsers';
+  adcUser as mockAdc,
+  docketClerkUser as mockDocketClerk,
+  judgeUser as mockJudge,
+  petitionerUser as mockPetitioner,
+  petitionsClerkUser as mockPetitionsClerk,
+  privatePractitionerUser as mockPrivatePractitioner,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 

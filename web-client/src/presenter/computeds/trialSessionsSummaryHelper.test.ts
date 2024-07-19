@@ -1,5 +1,5 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { mockChambersUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
+import { colvinsChambersUser, judgeUser } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionsSummaryHelper as trialSessionsSummaryHelperComputed } from './trialSessionsSummaryHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -17,11 +17,11 @@ describe('trialSessionsSummaryHelper', () => {
   it('should return the judeUserId as the logged in user when that user is a judge', () => {
     const result = runCompute(trialSessionsSummaryHelper, {
       state: {
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
 
-    expect(result.judgeUserId).toEqual(mockJudgeUser.userId);
+    expect(result.judgeUserId).toEqual(judgeUser.userId);
   });
 
   it('should return the judeUserId as the chambers judge associated with the logged in user', () => {
@@ -29,12 +29,12 @@ describe('trialSessionsSummaryHelper', () => {
       state: {
         judgeUser: {
           role: ROLES.judge,
-          userId: mockJudgeUser.userId,
+          userId: judgeUser.userId,
         },
-        user: mockChambersUser,
+        user: colvinsChambersUser,
       },
     });
 
-    expect(result.judgeUserId).toEqual(mockJudgeUser.userId);
+    expect(result.judgeUserId).toEqual(judgeUser.userId);
   });
 });
