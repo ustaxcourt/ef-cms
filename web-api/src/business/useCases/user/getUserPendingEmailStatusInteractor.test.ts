@@ -1,35 +1,27 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPendingEmailStatusInteractor } from './getUserPendingEmailStatusInteractor';
+import {
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getUserPendingEmailStatusInteractor', () => {
-  let currentLoggedInUser;
   const PENDING_EMAIL = 'pending@example.com';
   const USER_ID = 'a8024d79-1cd0-4864-bdd9-60325bd6d6b9';
 
-  beforeEach(() => {
-    currentLoggedInUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(
-      () => currentLoggedInUser,
-    );
-  });
-
   it('should throw an error when not authorized', async () => {
-    currentLoggedInUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.inactivePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     await expect(
-      getUserPendingEmailStatusInteractor(applicationContext, {
-        userId: USER_ID,
-      }),
+      getUserPendingEmailStatusInteractor(
+        applicationContext,
+        {
+          userId: USER_ID,
+        },
+        {
+          ...mockPrivatePractitionerUser,
+          role: ROLES.inactivePractitioner,
+        },
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -46,6 +38,7 @@ describe('getUserPendingEmailStatusInteractor', () => {
       {
         userId: USER_ID,
       },
+      mockPetitionerUser,
     );
 
     expect(result).toEqual(true);
@@ -63,6 +56,7 @@ describe('getUserPendingEmailStatusInteractor', () => {
       {
         userId: USER_ID,
       },
+      mockPetitionerUser,
     );
 
     expect(result).toEqual(false);
@@ -78,6 +72,7 @@ describe('getUserPendingEmailStatusInteractor', () => {
       {
         userId: USER_ID,
       },
+      mockPetitionerUser,
     );
 
     expect(result).toBeUndefined();
