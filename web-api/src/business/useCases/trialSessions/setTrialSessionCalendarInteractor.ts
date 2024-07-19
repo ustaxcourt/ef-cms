@@ -11,16 +11,18 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { flatten, partition, uniq } from 'lodash';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawTrialSession> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -102,7 +104,7 @@ export const setTrialSessionCalendarInteractor = async (
    * @returns {Promise} the promise of the updateCase call
    */
   const setManuallyAddedCaseAsCalendared = caseRecord => {
-    const caseEntity = new Case(caseRecord, { authorizedUser: user });
+    const caseEntity = new Case(caseRecord, { authorizedUser });
 
     caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -126,7 +128,7 @@ export const setTrialSessionCalendarInteractor = async (
    * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
    */
   const setTrialSessionCalendarForEligibleCase = caseRecord => {
-    const caseEntity = new Case(caseRecord, { authorizedUser: user });
+    const caseEntity = new Case(caseRecord, { authorizedUser });
 
     caseEntity.setAsCalendared(trialSessionEntity);
     trialSessionEntity.addCaseToCalendar(caseEntity);
