@@ -11,9 +11,9 @@ import { ThirtyDayNoticeOfTrialRequiredInfo } from '../../../../../shared/src/bu
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
-  docketClerkUser,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+  mockDocketClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
@@ -34,8 +34,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
         title: 'clerk of court',
       }));
 
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
 
     applicationContext
@@ -44,22 +42,28 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     await expect(
-      serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      }),
+      serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
     await expect(
-      serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: undefined as any,
-      }),
+      serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: undefined as any,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(new InvalidRequest('No trial Session Id provided'));
   });
 
@@ -108,10 +112,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         )
         .mockResolvedValueOnce(caseWithProSePetitioner);
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       const expectedThirtyDayNoticeInfo: ThirtyDayNoticeOfTrialRequiredInfo = {
         caseCaptionExtension: expect.anything(),
@@ -166,7 +174,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
           noticePdf: expect.anything(),
           onlyProSePetitioners: true,
         },
-        petitionsClerkUser,
+        mockPetitionsClerkUser,
       );
     });
 
@@ -178,10 +186,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         'thirty_day_notice_paper_service_complete',
       ];
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       const actualNotificationOrder = applicationContext
         .getNotificationGateway()
@@ -199,10 +211,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         },
       ];
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
@@ -235,7 +251,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
           hasPaper: true,
           pdfUrl: mockPdfUrl,
         },
-        userId: petitionsClerkUser.userId,
+        userId: mockPetitionsClerkUser.userId,
       });
     });
 
@@ -249,10 +265,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         },
       ];
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -263,7 +283,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
           action: 'thirty_day_notice_paper_service_complete',
           pdfUrl: undefined,
         },
-        userId: petitionsClerkUser.userId,
+        userId: mockPetitionsClerkUser.userId,
       });
     });
 
@@ -275,10 +295,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         .getPersistenceGateway()
         .getDocument.mockResolvedValue(testPdfDoc);
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
@@ -293,10 +317,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         .getPersistenceGateway()
         .getDocument.mockResolvedValue(testPdfDoc);
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
@@ -338,10 +366,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
         },
       ];
 
-      await serveThirtyDayNoticeInteractor(applicationContext, {
-        clientConnectionId: TEST_CLIENT_CONNECTION_ID,
-        trialSessionId: trialSession.trialSessionId!,
-      });
+      await serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
