@@ -15,6 +15,7 @@ type FormattedMessageResult = MessageResult & {
   consolidatedIconTooltipText: string;
   messageDetailLink: string;
   fromSectionFormatted: string;
+  isSelected: boolean;
 };
 
 export const formattedMessages = (
@@ -59,6 +60,15 @@ export const formattedMessages = (
     screenMetadata: get(state.screenMetadata),
   });
 
+  const returnedMessages = messageFilterResults.filteredMessages.map(
+    message => {
+      const isSelected =
+        get(state.messagesPage.selectedMessages).get(message.messageId) ||
+        false;
+      return { ...message, isSelected };
+    },
+  );
+
   const completedMessageFilterResults = applyFiltersToCompletedMessages({
     completedMessages,
     screenMetadata: get(state.screenMetadata),
@@ -69,7 +79,7 @@ export const formattedMessages = (
     ...completedMessageFilterResults.filterValues,
     completedMessages: completedMessageFilterResults.filteredCompletedMessages,
     hasMessages,
-    messages: messageFilterResults.filteredMessages,
+    messages: returnedMessages,
   };
 
   return sharedComputedResult;
