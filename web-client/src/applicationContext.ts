@@ -28,9 +28,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { RawUser, User } from '../../shared/src/business/entities/User';
+import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
@@ -371,15 +369,6 @@ const reduce = ImageBlobReduce({
 let user;
 let broadcastChannel;
 
-const getCurrentUser = (): RawUser | RawPractitioner | RawIrsPractitioner => {
-  return user;
-};
-const setCurrentUser = (
-  newUser: RawUser | RawPractitioner | RawIrsPractitioner,
-) => {
-  user = newUser;
-};
-
 let forceRefreshCallback: () => {};
 
 const allUseCases = {
@@ -644,11 +633,6 @@ const applicationContext = {
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => appConstants,
-  getCurrentUser,
-  getCurrentUserPermissions: () => {
-    const currentUser = getCurrentUser();
-    return getUserPermissions(currentUser);
-  },
   getEnvironment,
   getFileReaderInstance: () => new FileReader(),
   getForceRefreshCallback() {
@@ -811,7 +795,6 @@ const applicationContext = {
     return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
   isPublicUser: () => false,
-  setCurrentUser,
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },

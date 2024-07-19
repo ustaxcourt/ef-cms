@@ -14,11 +14,11 @@ describe('setUserAction', () => {
     delete global.window;
   });
 
-  it('stores the user onto the application context', async () => {
+  it('stores the user cerebral state', async () => {
     const user = {
       userId: 'petitioner',
     };
-    await runAction(setUserAction, {
+    const { state } = await runAction(setUserAction, {
       modules: {
         presenter,
       },
@@ -27,9 +27,6 @@ describe('setUserAction', () => {
       },
       state: {},
     });
-    expect(applicationContext.setCurrentUser.mock.calls.length).toEqual(1);
-    expect(applicationContext.setCurrentUser.mock.calls[0][0]).toMatchObject(
-      user,
-    );
+    expect(state.user).toEqual(user);
   });
 });
