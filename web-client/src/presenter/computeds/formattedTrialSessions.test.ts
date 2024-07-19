@@ -6,10 +6,7 @@ import {
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
-import {
-  mockJudgeUser,
-  mockPetitionsClerkUser,
-} from '@shared/test/mockAuthUsers';
+import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 jest.mock('./addToTrialSessionModalHelper.ts');
@@ -40,7 +37,7 @@ const testTrialClerkUser = {
 
 const baseState = {
   constants: { USER_ROLES: ROLES },
-  judgeUser: mockJudgeUser,
+  judgeUser,
 };
 
 let TRIAL_SESSIONS_LIST: any[] = [];
@@ -55,7 +52,7 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         isCalendared: true,
-        judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
+        judge: { name: judgeUser.name, userId: judgeUser.userId },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
         sessionType: SESSION_TYPES.regular,
@@ -173,7 +170,7 @@ describe('formattedTrialSessions', () => {
         state: {
           ...baseState,
           trialSessions: TRIAL_SESSIONS_LIST,
-          user: mockJudgeUser,
+          user: judgeUser,
         },
       });
     } catch (err) {
@@ -187,7 +184,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
 
@@ -206,10 +203,10 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         screenMetadata: {
-          trialSessionFilters: { judge: { userId: mockJudgeUser.userId } },
+          trialSessionFilters: { judge: { userId: judgeUser.userId } },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     expect(result.formattedSessions.length).toBe(1);
@@ -226,7 +223,7 @@ describe('formattedTrialSessions', () => {
           },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     const flattenedSessions = result.formattedSessions.flatMap(
@@ -241,7 +238,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         screenMetadata: { trialSessionFilters: { judge: { userId: '' } } },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     expect(result.formattedSessions.length).toBe(4);
@@ -260,7 +257,7 @@ describe('formattedTrialSessions', () => {
           trialSessionFilters: { judge: { userId: 'unassigned' } },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
 
@@ -277,7 +274,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         form,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     expect(result.sessionsByTerm.length).toEqual(0);
@@ -289,7 +286,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         form,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     expect(result.sessionsByTerm.length).toEqual(1);
@@ -301,7 +298,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         form,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     expect(result.sessionsByTerm.length).toEqual(0);
@@ -316,7 +313,7 @@ describe('formattedTrialSessions', () => {
           term: 'Winter',
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
 
@@ -416,7 +413,7 @@ describe('formattedTrialSessions', () => {
           term: 'Winter',
         },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
 
@@ -432,7 +429,7 @@ describe('formattedTrialSessions', () => {
         },
         trialSession: { trialSessionId: TRIAL_SESSIONS_LIST[1].trialSessionId },
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
 
@@ -450,7 +447,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         judgeUser: undefined,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockPetitionsClerkUser,
+        user: petitionsClerkUser,
       },
     });
 
@@ -462,7 +459,7 @@ describe('formattedTrialSessions', () => {
           userIsAssignedToSession: false,
         },
         {
-          judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
+          judge: { name: judgeUser.name, userId: judgeUser.userId },
           userIsAssignedToSession: false,
         },
         {
@@ -498,7 +495,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: mockJudgeUser,
+        user: judgeUser,
       },
     });
     expect(result.formattedSessions).toMatchObject([
@@ -510,7 +507,7 @@ describe('formattedTrialSessions', () => {
             userIsAssignedToSession: false,
           },
           {
-            judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
+            judge: { name: judgeUser.name, userId: judgeUser.userId },
             userIsAssignedToSession: true,
           },
           {
@@ -593,7 +590,7 @@ describe('formattedTrialSessions', () => {
           userIsAssignedToSession: false,
         },
         {
-          judge: { name: mockJudgeUser.name, userId: mockJudgeUser.userId },
+          judge: { name: judgeUser.name, userId: judgeUser.userId },
           userIsAssignedToSession: false,
         },
         {
@@ -640,7 +637,7 @@ describe('formattedTrialSessions', () => {
             trialLocation: 'Jacksonville, FL',
           },
         ],
-        user: mockPetitionsClerkUser,
+        user: petitionsClerkUser,
       },
     });
     expect(result.formattedSessions).toMatchObject([

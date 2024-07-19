@@ -6,10 +6,10 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import {
-  mockIrsPractitionerUser,
-  mockPetitionerUser,
-  mockPrivatePractitionerUser,
-} from '@shared/test/mockAuthUsers';
+  irsPractitionerUser,
+  petitionerUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -33,7 +33,7 @@ describe('startCaseHelper', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {},
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.showPetitionFileValid).toBeFalsy();
@@ -43,7 +43,7 @@ describe('startCaseHelper', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: { petitionFile: true },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.showPetitionFileValid).toBeTruthy();
@@ -57,7 +57,7 @@ describe('startCaseHelper', () => {
           partyType: true,
           petitionFile: true,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.showCorporateDisclosure).toBeTruthy();
@@ -71,7 +71,7 @@ describe('startCaseHelper', () => {
           partyType: true,
           petitionFile: true,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.showCorporateDisclosure).toBeFalsy();
@@ -83,7 +83,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: true,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.showHasIrsNoticeOptions).toBeTruthy();
@@ -96,7 +96,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: false,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
@@ -109,7 +109,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: false,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
@@ -121,7 +121,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: false,
         },
-        user: mockPrivatePractitionerUser,
+        user: privatePractitionerUser,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.privatePractitioner);
@@ -133,7 +133,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: false,
         },
-        user: mockIrsPractitionerUser,
+        user: irsPractitionerUser,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
@@ -146,7 +146,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: 'Michael G. Scott' },
           partyType: PARTY_TYPES.petitioner,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -161,7 +161,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -176,7 +176,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerSpouse,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -191,7 +191,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -208,7 +208,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerSpouse,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -224,7 +224,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -238,7 +238,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -252,7 +252,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
-        user: mockPetitionerUser,
+        user: petitionerUser,
       },
     });
 
@@ -314,7 +314,7 @@ describe('startCaseHelper', () => {
           form: {
             caseType: 'Disclosure1',
           },
-          user: mockPetitionerUser,
+          user: petitionerUser,
         },
       });
 
@@ -327,7 +327,7 @@ describe('startCaseHelper', () => {
           form: {
             caseType: 'Disclosure2',
           },
-          user: mockPetitionerUser,
+          user: petitionerUser,
         },
       });
 
@@ -340,7 +340,7 @@ describe('startCaseHelper', () => {
           form: {
             caseType: CASE_TYPES_MAP.deficiency,
           },
-          user: mockPetitionerUser,
+          user: petitionerUser,
         },
       });
 
