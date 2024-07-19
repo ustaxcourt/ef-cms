@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
@@ -25,6 +26,7 @@ describe('chooseWorkQueueSequence', () => {
       chooseWorkQueueSequence,
     };
     cerebralTest = CerebralTest(presenter);
+    cerebralTest.setState('user', mockDocketClerkUser);
   });
 
   it('should set the workQueueToDisplay to match the props passed in', async () => {
