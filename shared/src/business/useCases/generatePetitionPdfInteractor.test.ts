@@ -42,6 +42,7 @@ describe('generatePetitionPdfInteractor', () => {
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: 'TEST_contactPrimary',
       contactSecondary: 'TEST_contactSecondary',
+      hasIrsNotice: false,
       irsNotices: [],
       noticeIssuedDate: 'TEST_noticeIssuedDate',
       partyType: 'TEST_partyType',
@@ -57,7 +58,7 @@ describe('generatePetitionPdfInteractor', () => {
     expect(petitionCalls.length).toEqual(1);
     expect(petitionCalls[0][0].data).toEqual({
       caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseDescription: 'Notice of Deficiency',
+      caseDescription: 'Deficiency',
       caseTitle: 'TEST_caseTitle',
       contactPrimary: 'TEST_contactPrimary',
       contactSecondary: 'TEST_contactSecondary',
@@ -98,6 +99,7 @@ describe('generatePetitionPdfInteractor', () => {
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: 'TEST_contactPrimary',
       contactSecondary: 'TEST_contactSecondary',
+      hasIrsNotice: true,
       irsNotices,
       noticeIssuedDate: 'TEST_noticeIssuedDate',
       partyType: 'TEST_partyType',
