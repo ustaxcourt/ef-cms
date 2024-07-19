@@ -16,6 +16,10 @@ import {
   petitionerUser,
   trialClerkUser,
 } from '@shared/test/mockUsers';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor', () => {
@@ -38,10 +42,14 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     await expect(
-      updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_REMOTE,
-      }),
+      updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: MOCK_TRIAL_REMOTE,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -54,10 +62,14 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await expect(
-      updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: { ...MOCK_TRIAL_REMOTE, startDate: '1776-12-01' },
-      }),
+      updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: { ...MOCK_TRIAL_REMOTE, startDate: '1776-12-01' },
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Trial session cannot be updated after its start date');
   });
 
@@ -69,10 +81,14 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await expect(
-      updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: MOCK_TRIAL_REMOTE,
-      }),
+      updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: MOCK_TRIAL_REMOTE,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -81,10 +97,14 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: MOCK_TRIAL_INPERSON,
-    });
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: MOCK_TRIAL_INPERSON,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
@@ -99,13 +119,17 @@ describe('updateTrialSessionInteractor', () => {
         judge: undefined,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        judge: undefined,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          judge: undefined,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
@@ -121,13 +145,17 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(mockTrialSessionWithJudge);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        judge: judgeUser,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          judge: judgeUser,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
@@ -149,16 +177,20 @@ describe('updateTrialSessionInteractor', () => {
         },
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        judge: {
-          name: 'Judge North',
-          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different judge id
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          judge: {
+            name: 'Judge North',
+            userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different judge id
+          },
         },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
@@ -177,13 +209,17 @@ describe('updateTrialSessionInteractor', () => {
         trialClerk: undefined,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        trialClerk: trialClerkUser,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          trialClerk: trialClerkUser,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
@@ -205,16 +241,20 @@ describe('updateTrialSessionInteractor', () => {
         },
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        trialClerk: {
-          name: 'Clerk Magni',
-          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different trial clerk id
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          trialClerk: {
+            name: 'Clerk Magni',
+            userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different trial clerk id
+          },
         },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
@@ -237,10 +277,14 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: MOCK_TRIAL_INPERSON,
-    });
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: MOCK_TRIAL_INPERSON,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCaseHearing.mock
@@ -265,10 +309,14 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: MOCK_TRIAL_INPERSON,
-    });
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: MOCK_TRIAL_INPERSON,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -318,13 +366,17 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        ...updatedFields,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          ...updatedFields,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
@@ -344,13 +396,17 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        ...updatedFields,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          ...updatedFields,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
@@ -369,13 +425,17 @@ describe('updateTrialSessionInteractor', () => {
         isCalendared: false,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        isCalendared: true,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          isCalendared: true,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
@@ -395,10 +455,14 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: MOCK_TRIAL_INPERSON,
-    });
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: MOCK_TRIAL_INPERSON,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -413,10 +477,14 @@ describe('updateTrialSessionInteractor', () => {
         caseOrder: [],
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: MOCK_TRIAL_INPERSON,
-    });
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: MOCK_TRIAL_INPERSON,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -430,18 +498,22 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        caseOrder: [
-          {
-            docketNumber: mockCaseRemovedFromTrialDocketNumber,
-            removedFromTrial: true,
-          },
-        ],
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          caseOrder: [
+            {
+              docketNumber: mockCaseRemovedFromTrialDocketNumber,
+              removedFromTrial: true,
+            },
+          ],
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -454,14 +526,18 @@ describe('updateTrialSessionInteractor', () => {
   it('should associate swing trial sessions when the current trial session has a swing session', async () => {
     const mockSwingSessionId = '06419775-e726-4c3b-a7e0-193d379fa39d';
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        swingSession: true,
-        swingSessionId: mockSwingSessionId,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...MOCK_TRIAL_INPERSON,
+          swingSession: true,
+          swingSessionId: mockSwingSessionId,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().associateSwingTrialSessions,
@@ -515,10 +591,14 @@ describe('updateTrialSessionInteractor', () => {
       desiredTrialSession.judge!.userId =
         '07a2a119-c142-4811-87e0-7d6bc2d06a1b';
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: desiredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: desiredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
@@ -535,10 +615,14 @@ describe('updateTrialSessionInteractor', () => {
       originalTrialSession.proceedingType =
         TRIAL_SESSION_PROCEEDING_TYPES.remote;
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: desiredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: desiredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -559,10 +643,14 @@ describe('updateTrialSessionInteractor', () => {
       originalTrialSession.proceedingType =
         TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: desiredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: desiredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()

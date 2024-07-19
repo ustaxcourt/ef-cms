@@ -13,6 +13,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -22,10 +23,9 @@ export const updateTrialSession = async (
     clientConnectionId,
     trialSession,
   }: { trialSession: RawTrialSession; clientConnectionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -148,7 +148,7 @@ export const updateTrialSession = async (
 
     await updateCasesAndSetNoticeOfChange({
       applicationContext,
-      authorizedUser: user,
+      authorizedUser,
       currentTrialSession,
       paperServicePdfsCombined,
       shouldIssueNoticeOfChangeOfTrialJudge,
@@ -185,7 +185,7 @@ export const updateTrialSession = async (
         swingSessionId: trialSession.swingSessionId,
         trialSessionEntity: updatedTrialSessionEntity,
       },
-      user,
+      authorizedUser,
     );
   }
 
@@ -204,7 +204,7 @@ export const updateTrialSession = async (
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
 
@@ -254,7 +254,7 @@ const updateCasesAndSetNoticeOfChange = async ({
           caseEntity,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
+          user: authorizedUser,
         });
     }
 
@@ -373,9 +373,8 @@ export const determineEntitiesToLock = async (
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
@@ -383,7 +382,7 @@ export const handleLockError = async (
       originalRequest,
       requestToRetry: 'update_trial_session',
     },
-    userId: user.userId,
+    userId: authorizedUser?.userId || '',
   });
 };
 

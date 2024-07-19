@@ -1,6 +1,5 @@
 import {
   CASE_STATUS_TYPES,
-  ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
@@ -8,20 +7,12 @@ import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
 } from '../../../../../shared/src/test/mockTrial';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor should Generate Notices of', () => {
-  const mockUser = new User({
-    name: 'Docket Clerk',
-    role: ROLES.docketClerk,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
-
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
-
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue({
@@ -57,10 +48,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: inPersonNonCalendaredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: inPersonNonCalendaredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -96,10 +91,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: inPersonCalendaredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: inPersonCalendaredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -132,10 +131,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: inPersonCalendaredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: inPersonCalendaredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -169,10 +172,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: inPersonCalendaredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: inPersonCalendaredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -207,10 +214,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: remoteCalendaredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: remoteCalendaredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -246,10 +257,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: remoteCalendaredTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: remoteCalendaredTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -283,10 +298,14 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
           trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
         });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        clientConnectionId: '123',
-        trialSession: remoteTrialSession,
-      });
+      await updateTrialSessionInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '123',
+          trialSession: remoteTrialSession,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -333,13 +352,17 @@ describe('Change of Trial Judge', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...remoteCalendaredTrialSession,
-        judge: mockJudgeOne,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...remoteCalendaredTrialSession,
+          judge: mockJudgeOne,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
@@ -374,13 +397,17 @@ describe('Change of Trial Judge', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...remoteCalendaredTrialSession,
-        judge: mockJudgeTwo,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...remoteCalendaredTrialSession,
+          judge: mockJudgeTwo,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
@@ -413,13 +440,17 @@ describe('Change of Trial Judge', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...remoteCalendaredTrialSession,
-        judge: mockJudgeTwo,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...remoteCalendaredTrialSession,
+          judge: mockJudgeTwo,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
@@ -453,13 +484,17 @@ describe('Change of Trial Judge', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...remoteCalendaredTrialSession,
-        judge: mockJudgeOne,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...remoteCalendaredTrialSession,
+          judge: mockJudgeOne,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
@@ -492,13 +527,17 @@ describe('Change of Trial Judge', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...remoteCalendaredTrialSession,
-        judge: undefined,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...remoteCalendaredTrialSession,
+          judge: undefined,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
@@ -532,13 +571,17 @@ describe('Change of Trial Judge', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       });
 
-    await updateTrialSessionInteractor(applicationContext, {
-      clientConnectionId: '123',
-      trialSession: {
-        ...remoteCalendaredTrialSession,
-        judge: mockJudgeTwo,
+    await updateTrialSessionInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '123',
+        trialSession: {
+          ...remoteCalendaredTrialSession,
+          judge: mockJudgeTwo,
+        },
       },
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
