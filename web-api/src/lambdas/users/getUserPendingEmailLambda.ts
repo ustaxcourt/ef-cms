@@ -6,11 +6,13 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getUserPendingEmailLambda = event =>
+export const getUserPendingEmailLambda = (event, authorizedUser) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getUserPendingEmailInteractor(applicationContext, {
+    return await applicationContext.getUseCases().getUserPendingEmailInteractor(
+      applicationContext,
+      {
         userId: event.pathParameters.userId,
-      });
+      },
+      authorizedUser,
+    );
   });
