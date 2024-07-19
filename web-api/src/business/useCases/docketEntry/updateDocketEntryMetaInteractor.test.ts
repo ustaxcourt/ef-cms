@@ -6,9 +6,10 @@ import {
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 
 describe('updateDocketEntryMetaInteractor', () => {
@@ -121,7 +122,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
     ];
 
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    // applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -155,10 +156,14 @@ describe('updateDocketEntryMetaInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: mockDocketEntries[0],
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: mockDocketEntries[0],
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -167,10 +172,14 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: mockDocketEntries[0],
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: mockDocketEntries[0],
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -189,13 +198,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
+    // applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: undefined,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: undefined,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -204,59 +217,83 @@ describe('updateDocketEntryMetaInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(undefined);
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: undefined,
-        docketNumber: '999-99',
-      }),
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: undefined,
+          docketNumber: '999-99',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(NotFoundError);
   });
 
   it('should throw an error when the docket entry has not been served', async () => {
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: {
-          docketEntryId: mockDocketEntries[3].docketEntryId, // Order that has not been served
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: {
+            docketEntryId: mockDocketEntries[3].docketEntryId, // Order that has not been served
+          },
+          docketNumber: MOCK_CASE.docketNumber,
         },
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Unable to update unserved docket entry.');
   });
 
   it('should throw an error when the docket entry is not found on the case', async () => {
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: {
-          ...mockDocketEntries[6],
-          docketEntryId: 'not-a-guid',
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: {
+            ...mockDocketEntries[6],
+            docketEntryId: 'not-a-guid',
+          },
+          docketNumber: MOCK_CASE.docketNumber,
         },
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry with id not-a-guid not found.');
   });
 
   it("should not throw an error when the docket entry has not been served and it's unservable", async () => {
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: mockDocketEntries[4], // Unservable document
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: mockDocketEntries[4], // Unservable document
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
   });
 
   it("should not throw an error when the docket entry has not been served and it's a minute entry", async () => {
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: mockDocketEntries[7], // Minute entry
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: mockDocketEntries[7], // Minute entry
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
   });
 
   it('should call the persistence method to load the case by its docket number', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: mockDocketEntries[0],
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: mockDocketEntries[0],
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -274,13 +311,17 @@ describe('updateDocketEntryMetaInteractor', () => {
       servedAt: '2020-01-01T00:01:00.000Z',
     };
 
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        ...editedFields,
+    const result = await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          ...editedFields,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
@@ -289,13 +330,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        freeText: undefined,
+    const result = await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          freeText: undefined,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
@@ -304,13 +349,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        servedAt: '2020-01-01T00:01:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          servedAt: '2020-01-01T00:01:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -318,13 +367,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should NOT generate a new coversheet for the document if the servedAt field metadata formatted as YYYY-MM-DD is equivalent to the strict ISO formatted date on the entity', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        servedAt: '2019-01-01',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          servedAt: '2019-01-01',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -334,15 +387,19 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
     mockDocketEntries[3].servedAt = '2012-02-22T02:22:00.000Z';
     mockDocketEntries[3].servedParties = [{ name: 'bob evans' }];
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[3], // originally an Order
-        documentType: 'U.S.C.A',
-        eventCode: 'USCA', // changing to USCA - which DOES require a coversheet
-        filingDate: '2020-02-22T02:22:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[3], // originally an Order
+          documentType: 'U.S.C.A',
+          eventCode: 'USCA', // changing to USCA - which DOES require a coversheet
+          filingDate: '2020-02-22T02:22:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -350,13 +407,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[4], // was already a USCA - which DOES require a coversheet
-        filingDate: '2012-02-22T02:22:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[4], // was already a USCA - which DOES require a coversheet
+          filingDate: '2012-02-22T02:22:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -376,13 +437,17 @@ describe('updateDocketEntryMetaInteractor', () => {
     mockDocketEntries[4].servedParties = [{ name: 'bob evans' }];
     expect(mockDocketEntries[4].eventCode).toBe('USCA'); // requires a cover sheet.
 
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[4],
-        eventCode: 'MISC', // does NOT require a cover sheet
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[4],
+          eventCode: 'MISC', // does NOT require a cover sheet
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().removeCoversheet,
@@ -390,13 +455,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should not generate a coversheet for the document if the filingDate field is changed on a document that does NOT require a coversheet', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[5], // HEAR - which does NOT require a coversheet
-        filingDate: '2012-02-22T02:22:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[5], // HEAR - which does NOT require a coversheet
+          filingDate: '2012-02-22T02:22:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -404,13 +473,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should not generate a new coversheet for a court-issued docket entry if the servedAt field is changed', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[1],
-        servedAt: '2019-01-02T00:01:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[1],
+          servedAt: '2019-01-02T00:01:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -418,13 +491,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should make a call to update the docketEntryEntity before adding a coversheet when the filingDate field is changed', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        filingDate: '2020-08-01T00:01:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          filingDate: '2020-08-01T00:01:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry.mock
@@ -436,13 +513,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should add a new coversheet when filingDate field is changed', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        filingDate: '2020-01-01T00:01:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          filingDate: '2020-01-01T00:01:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
@@ -453,14 +534,18 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should NOT generate a new coversheet for the document if the servedAt and filingDate fields are NOT changed', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        filingDate: mockDocketEntries[0].filingDate,
-        servedAt: mockDocketEntries[0].servedAt,
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          filingDate: mockDocketEntries[0].filingDate,
+          servedAt: mockDocketEntries[0].servedAt,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -468,13 +553,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should not call addCoversheetInteractor if filingDate field is changed and the docket entry is a minute entry', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[2], // minute entry
-        filingDate: '2020-01-01T00:01:00.000Z',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[2], // minute entry
+          filingDate: '2020-01-01T00:01:00.000Z',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -482,13 +571,17 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should call the updateCase persistence method', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        documentTitle: 'Updated Description',
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          documentTitle: 'Updated Description',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -497,28 +590,36 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
     await expect(
-      updateDocketEntryMetaInteractor(applicationContext, {
-        docketEntryMeta: {
-          ...mockDocketEntries[0],
-          action: 'asdf',
-          certificateOfServiceDate: null,
-          documentTitle: 'Request for Place of Trial at Houston, Texas',
-          eventCode: 'RQT',
-          filingDate: '2020-02-03T08:06:07.539Z',
+      updateDocketEntryMetaInteractor(
+        applicationContext,
+        {
+          docketEntryMeta: {
+            ...mockDocketEntries[0],
+            action: 'asdf',
+            certificateOfServiceDate: null,
+            documentTitle: 'Request for Place of Trial at Houston, Texas',
+            eventCode: 'RQT',
+            filingDate: '2020-02-03T08:06:07.539Z',
+          },
+          docketNumber: MOCK_CASE.docketNumber,
         },
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        pending: true,
+    const result = await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          pending: true,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
@@ -530,15 +631,19 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the previousDocument', async () => {
-    const result = await updateDocketEntryMetaInteractor(applicationContext, {
-      docketEntryMeta: {
-        ...mockDocketEntries[0],
-        previousDocument: {
-          ...mockDocketEntries[1],
+    const result = await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          previousDocument: {
+            ...mockDocketEntries[1],
+          },
         },
+        docketNumber: MOCK_CASE.docketNumber,
       },
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+      mockDocketClerkUser,
+    );
 
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
