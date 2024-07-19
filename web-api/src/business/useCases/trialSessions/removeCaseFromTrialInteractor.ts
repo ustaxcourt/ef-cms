@@ -7,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const removeCaseFromTrial = async (
@@ -26,10 +27,9 @@ export const removeCaseFromTrial = async (
     docketNumber: string;
     trialSessionId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -64,13 +64,13 @@ export const removeCaseFromTrial = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(myCase, { authorizedUser: user });
+  const caseEntity = new Case(myCase, { authorizedUser });
 
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
       associatedJudge,
       associatedJudgeId,
-      changedBy: user.name,
+      changedBy: authorizedUser?.name,
       updatedCaseStatus: caseStatus,
     });
 
@@ -104,9 +104,7 @@ export const removeCaseFromTrial = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const removeCaseFromTrialInteractor = withLocking(
