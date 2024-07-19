@@ -7,6 +7,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -137,12 +138,11 @@ export const updateUserContactInformation = async (
     firmName,
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authenticatedUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.UPDATE_CONTACT_INFO) ||
-    authenticatedUser.userId !== userId
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CONTACT_INFO) ||
+    authorizedUser?.userId !== userId
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -161,7 +161,7 @@ export const updateUserContactInformation = async (
         action: 'user_contact_update_error',
         error: (error as Error).toString(),
       },
-      userId: authenticatedUser.userId,
+      userId: authorizedUser.userId,
     });
     throw error;
   }
@@ -170,9 +170,8 @@ export const updateUserContactInformation = async (
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
@@ -180,7 +179,7 @@ export const handleLockError = async (
       originalRequest,
       requestToRetry: 'update_user_contact_information',
     },
-    userId: user.userId,
+    userId: authorizedUser?.userId || '',
   });
 };
 
