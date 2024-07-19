@@ -1,12 +1,20 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import {
+  UnknownAuthUser,
+  UserUndefinedError,
+} from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../../applicationContext';
 
-export const handler = async event => {
+export const handler = async (event, authorizedUser: UnknownAuthUser) => {
   const applicationContext = createApplicationContext({});
+  if (!authorizedUser) {
+    throw new UserUndefinedError('User was not defined.');
+  }
+
   try {
     const { Records } = event;
     const { body, receiptHandle } = Records[0];
-    const { docketNumber, jobId, trialSession, userId } = JSON.parse(body);
+    const { docketNumber, jobId, trialSession } = JSON.parse(body);
 
     applicationContext.logger.info(
       `received an event to generate notices for trial session ${trialSession.trialSessionId} on case ${docketNumber} for job ${jobId}`,
@@ -17,11 +25,11 @@ export const handler = async event => {
       .getUseCases()
       .generateNoticesForCaseTrialSessionCalendarInteractor(
         applicationContext,
+        authorizedUser,
         {
           docketNumber,
           jobId,
           trialSession,
-          userId,
         },
       );
 
