@@ -19,16 +19,24 @@ describe('dismissNOTTReminderForTrialInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     await expect(
-      dismissNOTTReminderForTrialInteractor(applicationContext, {
-        trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
-      }),
+      dismissNOTTReminderForTrialInteractor(
+        applicationContext,
+        docketClerkUser,
+        {
+          trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
+        },
+      ),
     ).rejects.toThrow('Unauthorized to dismiss NOTT reminder');
   });
 
   it('should update the trial session with a flag indicating that the NOTT filing reminder has been dismissed', async () => {
-    await dismissNOTTReminderForTrialInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
-    });
+    await dismissNOTTReminderForTrialInteractor(
+      applicationContext,
+      docketClerkUser,
+      {
+        trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
