@@ -13,7 +13,6 @@ export const getTrialSessionsInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<TrialSessionInfoDTO[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    console.debug('Unauthorized');
     throw new UnauthorizedError('Unauthorized');
   }
 
