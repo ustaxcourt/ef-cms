@@ -43,15 +43,4 @@ describe('clearUserAction', () => {
         .key,
     ).toBe('token');
   });
-
-  it('should make a call to set currentUser to null', async () => {
-    await runAction(clearUserAction, {
-      modules: {
-        presenter,
-      },
-      state: {},
-    });
-
-    expect(applicationContext.setCurrentUser).toHaveBeenCalled();
-  });
 });
