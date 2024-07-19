@@ -14,6 +14,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, uniq } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -34,11 +35,14 @@ interface IEditPaperFilingRequest {
 export const editPaperFiling = async (
   applicationContext: ServerApplicationContext,
   request: IEditPaperFilingRequest,
+  authorizedUser: UnknownAuthUser,
 ) => {
   request.consolidatedGroupDocketNumbers =
     request.consolidatedGroupDocketNumbers || [];
 
-  authorizeRequest(applicationContext);
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
     applicationContext,
@@ -368,16 +372,6 @@ const validateMultiDocketPaperFilingRequest = ({
       throw new Error('Cannot multi-docket on a case that is not consolidated');
     }
   });
-};
-
-const authorizeRequest = (
-  applicationContext: ServerApplicationContext,
-): void => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
 };
 
 const updateDocketEntry = async ({
