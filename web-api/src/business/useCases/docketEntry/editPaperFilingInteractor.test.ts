@@ -6,12 +6,13 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  docketClerkUser,
-  petitionerUser,
-} from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { editPaperFilingInteractor } from './editPaperFilingInteractor';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -73,8 +74,6 @@ describe('editPaperFilingInteractor', () => {
       ],
     };
 
-    applicationContext.getCurrentUser.mockImplementation(() => docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -87,24 +86,24 @@ describe('editPaperFilingInteractor', () => {
   describe('Save For Later or Serve Agnostic', () => {
     describe('Sad Path', () => {
       it('should throw an error when the user is not authorized to edit docket entries', async () => {
-        applicationContext.getCurrentUser.mockImplementation(
-          () => petitionerUser,
-        );
-
         await expect(
-          editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
-              documentTitle: 'My Document',
-              documentType: 'Memorandum in Support',
-              eventCode: 'MISP',
-              filers: [mockPrimaryId],
-              isFileAttached: false,
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                filers: [mockPrimaryId],
+                isFileAttached: false,
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          }),
+            mockPetitionerUser,
+          ),
         ).rejects.toThrow('Unauthorized');
       });
 
@@ -112,12 +111,16 @@ describe('editPaperFilingInteractor', () => {
         const notFoundDocketEntryId = 'this is not an ID';
 
         await expect(
-          editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            docketEntryId: notFoundDocketEntryId,
-            documentMetadata: {},
-            isSavingForLater: true,
-          }),
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: notFoundDocketEntryId,
+              documentMetadata: {},
+              isSavingForLater: true,
+            },
+            mockDocketClerkUser,
+          ),
         ).rejects.toThrow(
           `Docket entry ${notFoundDocketEntryId} was not found.`,
         );
@@ -125,15 +128,19 @@ describe('editPaperFilingInteractor', () => {
 
       it('should throw an error when the docket entry has already been served', async () => {
         await expect(
-          editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
 
-            docketEntryId: mockServedDocketEntryId,
-            documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
+              docketEntryId: mockServedDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          }),
+            mockDocketClerkUser,
+          ),
         ).rejects.toThrow('Docket entry has already been served');
       });
 
@@ -142,12 +149,16 @@ describe('editPaperFilingInteractor', () => {
         docketEntry.isPendingService = true;
 
         await expect(
-          editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            docketEntryId: docketEntry.docketEntryId,
-            documentMetadata: docketEntry,
-            isSavingForLater: false,
-          }),
+          editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: docketEntry.docketEntryId,
+              documentMetadata: docketEntry,
+              isSavingForLater: false,
+            },
+            mockDocketClerkUser,
+          ),
         ).rejects.toThrow('Docket entry is already being served');
 
         expect(
@@ -165,19 +176,23 @@ describe('editPaperFilingInteractor', () => {
           .getUseCaseHelpers()
           .countPagesInDocument.mockResolvedValueOnce(2);
 
-        await editPaperFilingInteractor(applicationContext, {
-          clientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'My Document',
-            documentType: 'Memorandum in Support',
-            eventCode: 'MISP',
-            filers: [mockPrimaryId],
-            isFileAttached: true,
+        await editPaperFilingInteractor(
+          applicationContext,
+          {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              documentTitle: 'My Document',
+              documentType: 'Memorandum in Support',
+              eventCode: 'MISP',
+              filers: [mockPrimaryId],
+              isFileAttached: true,
+            },
+            isSavingForLater: true,
           },
-          isSavingForLater: true,
-        });
+          mockDocketClerkUser,
+        );
 
         const updatedDocketEntry = applicationContext
           .getUseCaseHelpers()
@@ -194,19 +209,23 @@ describe('editPaperFilingInteractor', () => {
       });
 
       it('should update the docket entry without updating the page count when the docket entry does NOT have a file attached', async () => {
-        await editPaperFilingInteractor(applicationContext, {
-          clientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'My Document',
-            documentType: 'Memorandum in Support',
-            eventCode: 'MISP',
-            filers: [mockPrimaryId],
-            isFileAttached: false,
+        await editPaperFilingInteractor(
+          applicationContext,
+          {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              documentTitle: 'My Document',
+              documentType: 'Memorandum in Support',
+              eventCode: 'MISP',
+              filers: [mockPrimaryId],
+              isFileAttached: false,
+            },
+            isSavingForLater: true,
           },
-          isSavingForLater: true,
-        });
+          mockDocketClerkUser,
+        );
 
         expect(
           applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -223,12 +242,16 @@ describe('editPaperFilingInteractor', () => {
       });
 
       it('should not call the persistence method to set and unset the pending service status on the docket entry', async () => {
-        await editPaperFilingInteractor(applicationContext, {
-          clientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: caseRecord.docketEntries[0],
-          isSavingForLater: true,
-        });
+        await editPaperFilingInteractor(
+          applicationContext,
+          {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: caseRecord.docketEntries[0],
+            isSavingForLater: true,
+          },
+          mockDocketClerkUser,
+        );
 
         expect(
           applicationContext.getPersistenceGateway()
@@ -237,12 +260,16 @@ describe('editPaperFilingInteractor', () => {
       });
 
       it('should not generate a paper service url', async () => {
-        await editPaperFilingInteractor(applicationContext, {
-          clientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: caseRecord.docketEntries[0],
-          isSavingForLater: true,
-        });
+        await editPaperFilingInteractor(
+          applicationContext,
+          {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: caseRecord.docketEntries[0],
+            isSavingForLater: true,
+          },
+          mockDocketClerkUser,
+        );
 
         expect(
           applicationContext.getUseCaseHelpers()
@@ -251,12 +278,16 @@ describe('editPaperFilingInteractor', () => {
       });
 
       it('should send a message to the user when persisting edits has completed', async () => {
-        await editPaperFilingInteractor(applicationContext, {
-          clientConnectionId,
-          docketEntryId: mockDocketEntryId,
-          documentMetadata: caseRecord.docketEntries[0],
-          isSavingForLater: true,
-        });
+        await editPaperFilingInteractor(
+          applicationContext,
+          {
+            clientConnectionId,
+            docketEntryId: mockDocketEntryId,
+            documentMetadata: caseRecord.docketEntries[0],
+            isSavingForLater: true,
+          },
+          mockDocketClerkUser,
+        );
 
         expect(
           applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -281,25 +312,30 @@ describe('editPaperFilingInteractor', () => {
     describe('Single Docketing', () => {
       describe('Happy Path', () => {
         it('should update only allowed editable fields on a docket entry document', async () => {
-          await editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: {
-              docketEntryId:
-                'maliciously Update Docket Entry Id.  DONT SAVE ME.',
-              docketNumber: 'maliciously Updated Docket Number. DONT SAVE ME.',
-              documentTitle: 'My Edited Document',
-              documentType: 'Memorandum in Support',
-              eventCode: 'MISP',
-              filers: [mockPrimaryId],
-              freeText: 'Some text about this document',
-              hasOtherFilingParty: true,
-              isFileAttached: true,
-              isPaper: true,
-              otherFilingParty: 'Bert Brooks',
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketEntryId:
+                  'maliciously Update Docket Entry Id.  DONT SAVE ME.',
+                docketNumber:
+                  'maliciously Updated Docket Number. DONT SAVE ME.',
+                documentTitle: 'My Edited Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                filers: [mockPrimaryId],
+                freeText: 'Some text about this document',
+                hasOtherFilingParty: true,
+                isFileAttached: true,
+                isPaper: true,
+                otherFilingParty: 'Bert Brooks',
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          });
+            mockDocketClerkUser,
+          );
 
           const updatedDocketEntry = applicationContext
             .getPersistenceGateway()
@@ -318,12 +354,16 @@ describe('editPaperFilingInteractor', () => {
         });
 
         it('should call the persistence method to set and unset the pending service status on the docket entry', async () => {
-          await editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: caseRecord.docketEntries[0],
-            isSavingForLater: false,
-          });
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: caseRecord.docketEntries[0],
+              isSavingForLater: false,
+            },
+            mockDocketClerkUser,
+          );
 
           const firstStatusCall =
             applicationContext.getPersistenceGateway()
@@ -345,17 +385,21 @@ describe('editPaperFilingInteractor', () => {
               pdfUrl: mockPdfUrl,
             });
 
-          await editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: {
-              documentTitle: 'My Document',
-              documentType: 'Memorandum in Support',
-              eventCode: 'MISP',
-              isFileAttached: true,
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          });
+            mockDocketClerkUser,
+          );
 
           expect(
             applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -386,12 +430,16 @@ describe('editPaperFilingInteractor', () => {
             );
 
           await expect(
-            editPaperFilingInteractor(applicationContext, {
-              clientConnectionId,
-              docketEntryId: mockDocketEntryId,
-              documentMetadata: caseRecord.docketEntries[0],
-              isSavingForLater: false,
-            }),
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                docketEntryId: mockDocketEntryId,
+                documentMetadata: caseRecord.docketEntries[0],
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
           ).rejects.toThrow('whoops, that is an error!');
 
           const firstStatusCall =
@@ -425,18 +473,23 @@ describe('editPaperFilingInteractor', () => {
             });
           const mockConsolidatedGroupDocketNumbers = ['101-23', '101-24'];
 
-          await editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            consolidatedGroupDocketNumbers: mockConsolidatedGroupDocketNumbers,
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: {
-              documentTitle: 'My Document',
-              documentType: 'Memorandum in Support',
-              eventCode: 'MISP',
-              isFileAttached: true,
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              consolidatedGroupDocketNumbers:
+                mockConsolidatedGroupDocketNumbers,
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          });
+            mockDocketClerkUser,
+          );
 
           const expectedCount = [
             caseRecord.docketNumber,
@@ -476,19 +529,23 @@ describe('editPaperFilingInteractor', () => {
               pdfUrl: mockedPaperServicePdfUrl,
             });
 
-          await editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            consolidatedGroupDocketNumbers: ['101-23', '101-24'],
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
-              documentTitle: 'My Document',
-              documentType: 'Memorandum in Support',
-              eventCode: 'MISP',
-              isFileAttached: true,
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              consolidatedGroupDocketNumbers: ['101-23', '101-24'],
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          });
+            mockDocketClerkUser,
+          );
 
           expect(
             applicationContext.getUseCaseHelpers()
@@ -542,19 +599,23 @@ describe('editPaperFilingInteractor', () => {
             .getUseCaseHelpers()
             .serveDocumentAndGetPaperServicePdf.mockResolvedValue(undefined);
 
-          await editPaperFilingInteractor(applicationContext, {
-            clientConnectionId,
-            consolidatedGroupDocketNumbers: ['101-23', '101-24'],
-            docketEntryId: mockDocketEntryId,
-            documentMetadata: {
-              docketNumber: caseRecord.docketNumber,
-              documentTitle: 'My Document',
-              documentType: 'Memorandum in Support',
-              eventCode: 'MISP',
-              isFileAttached: true,
+          await editPaperFilingInteractor(
+            applicationContext,
+            {
+              clientConnectionId,
+              consolidatedGroupDocketNumbers: ['101-23', '101-24'],
+              docketEntryId: mockDocketEntryId,
+              documentMetadata: {
+                docketNumber: caseRecord.docketNumber,
+                documentTitle: 'My Document',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                isFileAttached: true,
+              },
+              isSavingForLater: false,
             },
-            isSavingForLater: false,
-          });
+            mockDocketClerkUser,
+          );
 
           expect(
             applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -593,13 +654,17 @@ describe('editPaperFilingInteractor', () => {
             });
 
           await expect(
-            editPaperFilingInteractor(applicationContext, {
-              clientConnectionId,
-              consolidatedGroupDocketNumbers: [nonConsolidatedDocketNumber],
-              docketEntryId: mockDocketEntryId,
-              documentMetadata: caseRecord.docketEntries[0],
-              isSavingForLater: false,
-            }),
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                consolidatedGroupDocketNumbers: [nonConsolidatedDocketNumber],
+                docketEntryId: mockDocketEntryId,
+                documentMetadata: caseRecord.docketEntries[0],
+                isSavingForLater: false,
+              },
+              mockDocketClerkUser,
+            ),
           ).rejects.toThrow(
             'Cannot multi-docket on a case that is not consolidated',
           );
@@ -614,16 +679,20 @@ describe('editPaperFilingInteractor', () => {
             });
 
           await expect(
-            editPaperFilingInteractor(applicationContext, {
-              clientConnectionId,
-              consolidatedGroupDocketNumbers: ['101-23'],
-              docketEntryId: mockDocketEntryId,
-              documentMetadata: {
-                docketNumber: caseRecord.docketNumber,
-                isFileAttached: true,
+            editPaperFilingInteractor(
+              applicationContext,
+              {
+                clientConnectionId,
+                consolidatedGroupDocketNumbers: ['101-23'],
+                docketEntryId: mockDocketEntryId,
+                documentMetadata: {
+                  docketNumber: caseRecord.docketNumber,
+                  isFileAttached: true,
+                },
+                isSavingForLater: false,
               },
-              isSavingForLater: false,
-            }),
+              mockDocketClerkUser,
+            ),
           ).rejects.toThrow(
             'Cannot multi-docket on a case that is not consolidated',
           );

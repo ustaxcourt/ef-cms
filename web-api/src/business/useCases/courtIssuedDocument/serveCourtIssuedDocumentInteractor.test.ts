@@ -42,8 +42,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the user role does not have permission to serve a court issued document', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
       serveCourtIssuedDocumentInteractor(
         applicationContext,
