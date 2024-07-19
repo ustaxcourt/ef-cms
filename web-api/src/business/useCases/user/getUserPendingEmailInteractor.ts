@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 
 /**
@@ -17,9 +18,8 @@ import { User } from '../../../../../shared/src/business/entities/User';
 export const getUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL)) {
     throw new UnauthorizedError('Unauthorized to get user pending email');
   }
