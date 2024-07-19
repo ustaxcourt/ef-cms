@@ -11,6 +11,7 @@ import {
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * get eligible cases for trial session
@@ -23,10 +24,9 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const getEligibleCasesForTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
