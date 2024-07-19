@@ -3,31 +3,33 @@ import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { checkEmailAvailabilityInteractor } from './checkEmailAvailabilityInteractor';
 import {
-  petitionsClerkUser,
-  privatePractitionerUser,
-} from '@shared/test/mockUsers';
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('checkEmailAvailabilityInteractor', () => {
   const mockEmail = 'test@example.com';
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-  });
-
   it('should throw an error when the logged in user is unauthorized to check email availability', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     await expect(
-      checkEmailAvailabilityInteractor(applicationContext, {
-        email: mockEmail,
-      }),
+      checkEmailAvailabilityInteractor(
+        applicationContext,
+        {
+          email: mockEmail,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized to manage emails.');
   });
 
   it('should attempt to retrieve the user by email', async () => {
-    await checkEmailAvailabilityInteractor(applicationContext, {
-      email: mockEmail,
-    });
+    await checkEmailAvailabilityInteractor(
+      applicationContext,
+      {
+        email: mockEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getUserGateway().getUserByEmail.mock.calls[0][1],
@@ -39,9 +41,13 @@ describe('checkEmailAvailabilityInteractor', () => {
   it('should return true when the specified email is not already in use', async () => {
     applicationContext.getUserGateway().getUserByEmail.mockReturnValue();
 
-    const result = await checkEmailAvailabilityInteractor(applicationContext, {
-      email: mockEmail,
-    });
+    const result = await checkEmailAvailabilityInteractor(
+      applicationContext,
+      {
+        email: mockEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(result.isEmailAvailable).toEqual(true);
   });
@@ -55,9 +61,13 @@ describe('checkEmailAvailabilityInteractor', () => {
       userId: '85e2ca3e-6521-4b10-8edb-91c934c78c43',
     });
 
-    const result = await checkEmailAvailabilityInteractor(applicationContext, {
-      email: mockEmail,
-    });
+    const result = await checkEmailAvailabilityInteractor(
+      applicationContext,
+      {
+        email: mockEmail,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(result.isEmailAvailable).toEqual(false);
   });
