@@ -1,3 +1,4 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -6,16 +7,21 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const saveCalendarNoteLambda = event =>
+export const saveCalendarNoteLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
     const lambdaArguments = {
       ...event.pathParameters,
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext
-      .getUseCases()
-      .saveCalendarNoteInteractor(applicationContext, {
+    return await applicationContext.getUseCases().saveCalendarNoteInteractor(
+      applicationContext,
+      {
         ...lambdaArguments,
-      });
+      },
+      authorizedUser,
+    );
   });
