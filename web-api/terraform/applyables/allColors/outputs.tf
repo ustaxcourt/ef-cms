@@ -48,5 +48,5 @@ output "aws_cognito_user_pool_irs_id" {
 }
 
 output "rds_host_name" {
-  value = module.rds.endpoint
+  value = module.rds.address
 }

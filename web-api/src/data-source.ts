@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Case } from '@web-api/persistence/repository/Case';
 import { DataSource } from 'typeorm';
 import { Message } from './persistence/repository/Message';
+import fs from 'fs';
 
 export const AppDataSource = new DataSource({
   database: 'postgres',
@@ -11,12 +12,9 @@ export const AppDataSource = new DataSource({
   migrations: ['postgres/migrations/*.ts'],
   password: process.env.POSTGRES_PASSWORD,
   port: 5432,
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? {
-          ca: './us-east-1-bundle.pem',
-        }
-      : undefined,
+  ssl: {
+    ca: fs.readFileSync('us-east-1-bundle.pem').toString(),
+  },
   subscribers: [],
   type: 'postgres',
   username: process.env.POSTGRES_USERNAME,
