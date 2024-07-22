@@ -6,7 +6,10 @@ import {
 } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import {
+  mockDocketClerkUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {
@@ -31,11 +34,15 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
   });
 
   it('should generate and serve a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      caseEntity: mockOpenCase,
-      newPdfDoc: mockNewPdf,
-      newTrialSessionEntity: MOCK_TRIAL_REMOTE,
-    });
+    await setNoticeOfChangeToRemoteProceeding(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        newPdfDoc: mockNewPdf,
+        newTrialSessionEntity: MOCK_TRIAL_REMOTE,
+      },
+      mockTrialClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases()

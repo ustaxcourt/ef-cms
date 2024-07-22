@@ -253,11 +253,15 @@ const updateCasesAndSetNoticeOfChange = async ({
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
         .getUseCaseHelpers()
-        .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-          caseEntity,
-          newPdfDoc: paperServicePdfsCombined,
-          newTrialSessionEntity: updatedTrialSessionEntity,
-        });
+        .setNoticeOfChangeToRemoteProceeding(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     if (shouldSetNoticeOfChangeToInPersonProceeding) {
