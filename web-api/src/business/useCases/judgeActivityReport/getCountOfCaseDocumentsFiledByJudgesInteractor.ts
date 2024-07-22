@@ -6,6 +6,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
 export type JudgeActivityReportFilters = {
@@ -30,8 +31,9 @@ export type GetCountOfCaseDocumentsFiledByJudgesRequest = {
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
   applicationContext: ServerApplicationContext,
   params: GetCountOfCaseDocumentsFiledByJudgesRequest,
+  authorizedUser: UnknownAuthUser,
 ): Promise<AggregatedEventCodesType> => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  // const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized to view Judge Activity Report');

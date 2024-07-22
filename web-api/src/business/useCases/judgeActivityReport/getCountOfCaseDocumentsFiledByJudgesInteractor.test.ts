@@ -1,16 +1,20 @@
 import { AggregatedEventCodesType } from '../../../persistence/elasticsearch/fetchEventCodesCountForJudges';
 import {
-  JudgeActivityReportFilters,
+  GetCountOfCaseDocumentsFiledByJudgesRequest,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
 } from './getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
+import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockCountOfOpinionsIssuedByJudge,
   mockCountOfOrdersIssuedByJudge,
 } from '@shared/test/mockSearchResults';
+import {
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 jest.mock('./addDocumentTypeToEventCodeAggregation');
 
@@ -18,7 +22,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   const mockStartDate = '02/12/2020';
   const mockEndDate = '03/21/2020';
   const mockJudges = [judgeUser.name];
-  const mockValidRequest: JudgeActivityReportFilters = {
+  const mockValidRequest: GetCountOfCaseDocumentsFiledByJudgesRequest = {
     documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     endDate: mockEndDate,
     judges: mockJudges,
@@ -26,7 +30,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    // applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -37,23 +41,29 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+    // applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
       getCountOfCaseDocumentsFiledByJudgesInteractor(
         applicationContext,
         mockValidRequest,
+        mockPetitionsClerkUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      getCountOfCaseDocumentsFiledByJudgesInteractor(applicationContext, {
-        endDate: 'baddabingbaddaboom',
-        judges: [judgeUser.name],
-        startDate: 'yabbadabbadoo',
-      }),
+      getCountOfCaseDocumentsFiledByJudgesInteractor(
+        applicationContext,
+        {
+          documentEventCodes: [],
+          endDate: 'baddabingbaddaboom',
+          judges: [judgeUser.name],
+          startDate: 'yabbadabbadoo',
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -62,6 +72,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
       await getCountOfCaseDocumentsFiledByJudgesInteractor(
         applicationContext,
         mockValidRequest,
+        mockJudgeUser,
       );
 
     expect(
