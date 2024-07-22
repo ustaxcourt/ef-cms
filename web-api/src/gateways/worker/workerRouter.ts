@@ -36,7 +36,11 @@ export const workerRouter = async (
     case MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES:
       await applicationContext
         .getUseCases()
-        .queueUpdateAssociatedCasesWorker(applicationContext, message.payload);
+        .queueUpdateAssociatedCasesWorker(
+          applicationContext,
+          message.payload,
+          message.authorizedUser,
+        );
       break;
     default:
       throw new Error(
