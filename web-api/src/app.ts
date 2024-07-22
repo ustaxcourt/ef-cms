@@ -723,7 +723,7 @@ app.delete(
   );
   app.post(
     '/messages/:parentMessageId/complete',
-    lambdaWrapper(completeMessageLambda),
+    lambdaWrapper(completeMessageLambda, { isAsync: true }),
   );
   app.post('/messages/:messageId/read', lambdaWrapper(setMessageAsReadLambda));
   app.get('/messages/:parentMessageId', lambdaWrapper(getMessageThreadLambda));
