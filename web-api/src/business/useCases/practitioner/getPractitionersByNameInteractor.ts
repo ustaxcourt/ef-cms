@@ -28,7 +28,7 @@ export const getPractitionersByNameInteractor = async (
   { name, searchAfter }: { name: string; searchAfter: string },
 ): Promise<PractitionersByName> => {
   const authenticatedUser = applicationContext.getCurrentUser();
-  const isLoggedInUser = !!authenticatedUser;
+  const isLoggedInUser = !!authenticatedUser?.userId;
 
   if (
     isLoggedInUser &&

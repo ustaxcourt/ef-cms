@@ -1,3 +1,4 @@
+import { petitionerCreatesElectronicCaseUpdated } from './petitioner-creates-electronic-case-updated';
 import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
@@ -38,7 +39,19 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
     });
 }
 
-export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
+export function petitionerCreatesElectronicCase(primaryFilerName: string) {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseUpdated(primaryFilerName);
+      } else {
+        return petitionerCreatesElectronicCaseOld(primaryFilerName);
+      }
+    });
+}
+
+function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   uploadFile('stin-file');
@@ -79,6 +92,18 @@ export function petitionerCreatesElectronicCase(primaryFilerName = 'John') {
 }
 
 export function petitionerCreatesElectronicCaseForBusiness() {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseForBusinessUpdated();
+      } else {
+        return petitionerCreatesElectronicCaseForBusinessOld();
+      }
+    });
+}
+
+export function petitionerCreatesElectronicCaseForBusinessOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   uploadFile('stin-file');
@@ -118,6 +143,49 @@ export function petitionerCreatesElectronicCaseForBusiness() {
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();
+      return cy.wrap<string>(docketNumberWithSuffix);
+    });
+}
+
+export function petitionerCreatesElectronicCaseForBusinessUpdated() {
+  cy.get('[data-testid="file-a-petition"]').click();
+  cy.get('[data-testid="go-to-step-1"]').click();
+  cy.get('[data-testid="filing-type-2"]').click();
+  cy.get('#is-business-type-0').click();
+  cy.get('[data-testid="contact-primary-name"]').type('awd');
+  cy.get('[data-testid="contactPrimary.address1"]').type('awd');
+  cy.get('[data-testid="contactPrimary.city"]').type('awd');
+  cy.get('[data-testid="contactPrimary.state"]').select('AK');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('12312');
+  cy.get('[data-testid="contact-primary-phone"]').type('awd');
+  uploadFile('corporate-disclosure-file');
+
+  cy.get('[data-testid="step-1-next-button"]').click();
+  cy.get('[data-testid="petition-reason--1"]').type('aws');
+  cy.get('[data-testid="petition-fact--1"]').type('aws');
+  cy.get('[data-testid="step-2-next-button"]').click();
+
+  cy.get('[data-testid="irs-notice-Yes"]').click();
+  cy.get('[data-testid="irs-notice-upload-0"]').click();
+  uploadFile('irs-notice-upload-0');
+  cy.get('[data-testid="case-type-select"]').select('Deficiency');
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="step-3-next-button"]').click();
+
+  cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
+  cy.get('[data-testid="step-4-next-button"]').click();
+
+  cy.get('[data-testid="stin-file"]').click();
+  uploadFile('stin-file');
+  cy.get('[data-testid="step-5-next-button"]').click();
+
+  cy.get('[data-testid="step-6-next-button"]').click();
+
+  return cy
+    .get('[data-testid="case-link-docket-number"]')
+    .invoke('text')
+    .then(docketNumberWithSuffix => {
+      cy.get('[data-testid="case-link"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
     });
 }

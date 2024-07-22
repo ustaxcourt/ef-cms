@@ -9,19 +9,21 @@ export const Country = connect(
   {
     constants: state.constants,
     data: state[props.bind],
+    onBlurSequence: sequences[props.onBlur],
     onChangeCountryType: sequences[props.onChangeCountryType],
+    registerRef: props.registerRef,
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
-    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   function Country({
     constants,
     data,
+    onBlurSequence,
     onChangeCountryType,
+    registerRef,
     type,
     updateFormValueSequence,
-    validateStartCaseSequence,
     validationErrors,
   }) {
     return (
@@ -38,17 +40,18 @@ export const Country = connect(
               className="usa-radio__input"
               id={`${type}-countryType-domestic`}
               name={`${type}.countryType`}
+              ref={registerRef && registerRef(`${type}.countryType`)}
               type="radio"
               value={constants.COUNTRY_TYPES.DOMESTIC}
               onChange={e => {
                 const method = onChangeCountryType || updateFormValueSequence;
                 method({
                   key: e.target.name,
+                  type,
                   value: e.target.value,
                 });
-
-                if (validateStartCaseSequence) {
-                  validateStartCaseSequence();
+                if (onBlurSequence) {
+                  onBlurSequence({ validationKey: [type, 'countryType'] });
                 }
               }}
             />
@@ -73,11 +76,13 @@ export const Country = connect(
                 const method = onChangeCountryType || updateFormValueSequence;
                 method({
                   key: e.target.name,
+                  type,
                   value: e.target.value,
                 });
-
-                if (validateStartCaseSequence) {
-                  validateStartCaseSequence();
+                if (onBlurSequence) {
+                  onBlurSequence({
+                    validationKey: [type, 'countryType'],
+                  });
                 }
               }}
             />
@@ -92,7 +97,10 @@ export const Country = connect(
           </div>
         </FormGroup>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <FormGroup errorText={validationErrors?.[type]?.country}>
+          <FormGroup
+            errorMessageId="country-error-message"
+            errorText={validationErrors?.[type]?.country}
+          >
             <label className="usa-label" htmlFor={`${type}.country`}>
               Country name
             </label>
@@ -102,11 +110,14 @@ export const Country = connect(
               data-testid="international-country-input"
               id={`${type}.country`}
               name={`${type}.country`}
+              ref={registerRef && registerRef(`${type}.country`)}
               type="text"
               value={data[type].country || ''}
               onBlur={() => {
-                if (validateStartCaseSequence) {
-                  validateStartCaseSequence();
+                if (onBlurSequence) {
+                  onBlurSequence({
+                    validationKey: [type, 'country'],
+                  });
                 }
               }}
               onChange={e => {
