@@ -1,22 +1,17 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
+import {
+  mockPetitionerUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generatePrintableTrialSessionCopyReportInteractor', () => {
-  let mockUser;
   let mockTrialSession;
 
   beforeEach(() => {
-    mockUser = {
-      role: ROLES.trialClerk,
-      userId: 'trialclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
@@ -31,32 +26,33 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   });
 
   it('should throw an error when the user is not authorized to generate a printable trial session report', async () => {
-    mockUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
-      generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-        filters: {
-          aBasisReached: true,
-          continued: true,
-          dismissed: true,
-          recall: true,
-          rule122: true,
-          setForTrial: true,
-          settled: true,
-          showAll: true,
-          statusUnassigned: true,
-          takenUnderAdvisement: true,
+      generatePrintableTrialSessionCopyReportInteractor(
+        applicationContext,
+        {
+          filters: {
+            aBasisReached: true,
+            continued: true,
+            dismissed: true,
+            recall: true,
+            rule122: true,
+            setForTrial: true,
+            settled: true,
+            showAll: true,
+            statusUnassigned: true,
+            takenUnderAdvisement: true,
+          },
+          formattedCases: [
+            new Case(MOCK_CASE, { authorizedUser: mockTrialClerkUser }),
+          ],
+          formattedTrialSession: mockTrialSession,
+          sessionNotes: 'session notes',
+          showCaseNotes: true,
+          sort: 'docket',
+          userHeading: 'Yggdrasil - Session Copy',
         },
-        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
-        formattedTrialSession: mockTrialSession,
-        sessionNotes: 'session notes',
-        showCaseNotes: true,
-        sort: 'docket',
-        userHeading: 'Yggdrasil - Session Copy',
-      }),
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -76,13 +72,16 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
           statusUnassigned: true,
           takenUnderAdvisement: true,
         },
-        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedCases: [
+          new Case(MOCK_CASE, { authorizedUser: mockTrialClerkUser }),
+        ],
         formattedTrialSession: mockTrialSession,
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
         userHeading: 'Yggdrasil - Session Copy',
       },
+      mockTrialClerkUser,
     );
 
     expect(
@@ -103,7 +102,9 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
           statusUnassigned: true,
           takenUnderAdvisement: true,
         },
-        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedCases: [
+          new Case(MOCK_CASE, { authorizedUser: mockTrialClerkUser }),
+        ],
         formattedTrialSession: mockTrialSession,
         sessionNotes: 'session notes',
         showCaseNotes: true,
@@ -129,13 +130,14 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
           statusUnassigned: true,
           takenUnderAdvisement: true,
         },
-        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedCases: [new Case(MOCK_CASE, { mockTrialClerkUser })],
         formattedTrialSession: mockTrialSession,
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
         userHeading: 'Yggdrasil - Session Copy',
       },
+      mockTrialClerkUser,
     );
 
     expect(
@@ -159,13 +161,16 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
           statusUnassigned: true,
           takenUnderAdvisement: true,
         },
-        formattedCases: [new Case(MOCK_CASE, { applicationContext })],
+        formattedCases: [
+          new Case(MOCK_CASE, { authorizedUser: mockTrialClerkUser }),
+        ],
         formattedTrialSession: mockTrialSession,
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
         userHeading: 'Yggdrasil - Session Copy',
       },
+      mockTrialClerkUser,
     );
 
     expect(
