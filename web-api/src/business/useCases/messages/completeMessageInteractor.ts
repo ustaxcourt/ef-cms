@@ -5,6 +5,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { orderBy } from 'lodash';
 
 export const completeMessageInteractor = async (
@@ -12,9 +13,8 @@ export const completeMessageInteractor = async (
   {
     messages,
   }: { messages: { messageBody: string; parentMessageId: string }[] },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -47,6 +47,8 @@ export const completeMessageInteractor = async (
         applicationContext,
       }).validate();
 
+      // TODO 10417: fix typing for call to markAsCompleted
+      // @ts-ignore fix typing for call to markAsCompleted
       updatedMessage.markAsCompleted({ message: message.messageBody, user });
 
       const validatedRawMessage = updatedMessage.validate().toRawObject();
