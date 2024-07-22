@@ -1,7 +1,10 @@
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteDocketEntryWorksheetInteractor } from '@web-api/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
-import { docketClerkUser } from '@shared/test/mockUsers';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('deleteDocketEntryWorksheetInteractor', () => {
   const TEST_DOCKET_ENTRY_ID = 'TEST_DOCKET_ENTRY_ID';
@@ -10,8 +13,6 @@ describe('deleteDocketEntryWorksheetInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .deleteDocketEntryWorksheetRecord.mockReturnValue(null);
-
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
   });
 
   it('should throw an Unauthorized Error when user does not have permission', async () => {
@@ -20,6 +21,7 @@ describe('deleteDocketEntryWorksheetInteractor', () => {
       deleteDocketEntryWorksheetInteractor(
         applicationContext,
         TEST_DOCKET_ENTRY_ID,
+        mockPetitionerUser,
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -28,6 +30,7 @@ describe('deleteDocketEntryWorksheetInteractor', () => {
     await deleteDocketEntryWorksheetInteractor(
       applicationContext,
       TEST_DOCKET_ENTRY_ID,
+      mockDocketClerkUser,
     );
 
     const { calls } =
