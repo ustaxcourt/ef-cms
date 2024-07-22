@@ -267,7 +267,7 @@ const setNoticeForCase = async ({
       judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },
-    { authorizedUser: applicationContext.getCurrentUser() },
+    { authorizedUser: undefined },
   );
 
   standingPretrialDocketEntry.setFiledBy(user);
