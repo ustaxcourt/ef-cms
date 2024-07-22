@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { dismissNOTTReminderForTrialInteractor } from '@web-api/business/useCases/trialSessions/dismissNOTTReminderForTrialInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -11,13 +12,11 @@ export const dismissNOTTReminderForTrialLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .dismissNOTTReminderForTrialInteractor(
-        applicationContext,
-        authorizedUser,
-        {
-          ...JSON.parse(event.body),
-        },
-      );
+    return await dismissNOTTReminderForTrialInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
   });

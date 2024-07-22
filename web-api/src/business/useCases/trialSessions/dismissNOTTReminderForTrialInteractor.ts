@@ -16,12 +16,10 @@ import { UnknownAuthUser } from '../../../../../shared/src/business/entities/aut
  */
 export const dismissNOTTReminderForTrialInteractor = async (
   applicationContext: ServerApplicationContext,
-  authorizedUser: UnknownAuthUser,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser(); // TODO 10417 remove this
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER)) {
     throw new UnauthorizedError('Unauthorized to dismiss NOTT reminder');
   }
 
