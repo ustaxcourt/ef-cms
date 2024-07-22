@@ -2,29 +2,25 @@ import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { dismissNOTTReminderForTrialInteractor } from './dismissNOTTReminderForTrialInteractor';
 import {
-  docketClerkUser,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+  mockDocketClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('dismissNOTTReminderForTrialInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REGULAR);
   });
 
   it('should throw an error when the user is unauthorized to dismiss NOTT alerts', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     await expect(
       dismissNOTTReminderForTrialInteractor(
         applicationContext,
-        docketClerkUser,
         {
           trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
         },
+        mockDocketClerkUser,
       ),
     ).rejects.toThrow('Unauthorized to dismiss NOTT reminder');
   });
@@ -32,10 +28,10 @@ describe('dismissNOTTReminderForTrialInteractor', () => {
   it('should update the trial session with a flag indicating that the NOTT filing reminder has been dismissed', async () => {
     await dismissNOTTReminderForTrialInteractor(
       applicationContext,
-      docketClerkUser,
       {
         trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId!,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(
