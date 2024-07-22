@@ -9,7 +9,7 @@ import {
   handleLockError,
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
-import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -61,7 +61,7 @@ describe('handleLockError', () => {
     await handleLockError(
       applicationContext,
       mockOriginalRequest,
-      mockDocketClerkUser,
+      mockTrialClerkUser,
     );
 
     expect(
@@ -123,7 +123,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         setNoticesForCalendaredTrialSessionInteractor(
           applicationContext,
           mockRequest,
-          mockDocketClerkUser,
+          mockTrialClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
@@ -137,7 +137,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         setNoticesForCalendaredTrialSessionInteractor(
           applicationContext,
           mockRequest,
-          mockDocketClerkUser,
+          mockTrialClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
@@ -150,7 +150,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'set_notices_for_calendared_trial_session',
         },
-        userId: mockDocketClerkUser.userId,
+        userId: mockTrialClerkUser.userId,
       });
 
       expect(
@@ -168,7 +168,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
-        mockDocketClerkUser,
+        mockTrialClerkUser,
       );
 
       expect(
@@ -184,7 +184,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
-        mockDocketClerkUser,
+        mockTrialClerkUser,
       );
 
       const expectedIdentifiers = mockCases.map(
