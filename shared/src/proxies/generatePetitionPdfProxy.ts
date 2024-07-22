@@ -8,6 +8,7 @@ export const generatePetitionPdfInteractor = (
     caseType,
     contactPrimary,
     contactSecondary,
+    hasIrsNotice,
     irsNotices,
     noticeIssuedDate,
     partyType,
@@ -16,7 +17,10 @@ export const generatePetitionPdfInteractor = (
     preferredTrialCity,
     procedureType,
     taxYear,
-  }: any,
+  }: {
+    [key: string]: any;
+    hasIrsNotice: boolean;
+  },
 ): Promise<{
   fileId: string;
 }> => {
@@ -28,6 +32,7 @@ export const generatePetitionPdfInteractor = (
       caseType,
       contactPrimary,
       contactSecondary,
+      hasIrsNotice,
       irsNotices,
       noticeIssuedDate,
       partyType,
