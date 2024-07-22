@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -18,10 +19,9 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     trialSessionId: string;
     clientConnectionId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -35,7 +35,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       action: 'paper_service_started',
       totalPdfs: trialNoticePdfsKeys.length,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 
   let pdfsAppended = 0;
@@ -65,7 +65,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
         action: 'paper_service_updated',
         pdfsAppended,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   }
 
@@ -115,6 +115,6 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       hasPaper: true,
       pdfUrl,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
