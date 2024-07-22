@@ -1,17 +1,17 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const startPollingForResultsInteractor = async (
   applicationContext: ServerApplicationContext,
   { requestId }: { requestId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{ response: any } | undefined> => {
-  const user = applicationContext.getCurrentUser();
-
   const records = await applicationContext
     .getPersistenceGateway()
     .getRequestResults({
       applicationContext,
       requestId,
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
 
   if (records.length === 0) return undefined;
