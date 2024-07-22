@@ -5,7 +5,10 @@ import {
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { judgeColvin, petitionsClerkUser } from '@shared/test/mockUsers';
+import {
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -33,8 +36,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   const CASE_BY_DOCKET_NUMBER: { [key: string]: any } = {};
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeColvin);
-
     applicationContext
       .getPersistenceGateway()
       .getAllPendingMotionDocketEntriesForJudge.mockReturnValue(
@@ -73,14 +74,13 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   });
 
   it('should throw an error when the user does not have access to the case worksheet feature', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     await expect(
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
         applicationContext,
         {
           judgeIds: ['judgeId'],
         },
+        mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -121,6 +121,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         {
           judgeIds: ['judgeId'],
         },
+        mockJudgeUser,
       );
 
     expect(
@@ -212,6 +213,7 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         {
           judgeIds: ['judgeId'],
         },
+        mockJudgeUser,
       );
 
     expect(results.docketEntries.length).toEqual(1);
