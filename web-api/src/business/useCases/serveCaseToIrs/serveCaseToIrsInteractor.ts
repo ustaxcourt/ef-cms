@@ -33,11 +33,7 @@ import { getClinicLetterKey } from '../../../../../shared/src/business/utilities
 import { random, remove } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-export const addDocketEntryForPaymentStatus = ({
-  applicationContext,
-  caseEntity,
-  user,
-}) => {
+export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     const paymentStatusDocketEntry = new DocketEntry(
       {
@@ -49,7 +45,7 @@ export const addDocketEntryForPaymentStatus = ({
         isOnDocketRecord: true,
         processingStatus: 'complete',
       },
-      { authorizedUser: applicationContext.getCurrentUser() },
+      { authorizedUser: user },
     );
 
     paymentStatusDocketEntry.setFiledBy(user);
@@ -66,7 +62,7 @@ export const addDocketEntryForPaymentStatus = ({
         isOnDocketRecord: true,
         processingStatus: 'complete',
       },
-      { authorizedUser: applicationContext.getCurrentUser() },
+      { authorizedUser: user },
     );
 
     petitionPaymentStatusDocketEntry.setFiledBy(user);
@@ -341,7 +337,7 @@ const generateNoticeOfReceipt = async ({
       isOnDocketRecord: true,
     },
     {
-      authorizedUser: applicationContext.getCurrentUser,
+      authorizedUser: userServingPetition,
       petitioners: caseEntity.petitioners,
     },
   );
@@ -516,12 +512,10 @@ export const serveCaseToIrs = async (
     }
 
     addDocketEntryForPaymentStatus({
-      applicationContext,
       caseEntity,
       user: authorizedUser,
     });
 
-    // TODO 10417 type weirdness -- why is this angry?
     caseEntity
       .updateCaseCaptionDocketRecord({ authorizedUser })
       .updateDocketNumberRecord({ authorizedUser })
@@ -537,7 +531,7 @@ export const serveCaseToIrs = async (
           .getUseCaseHelpers()
           .addDocketEntryForSystemGeneratedOrder({
             applicationContext,
-            authorizedUser: applicationContext.getCurrentUser(),
+            authorizedUser,
             caseEntity,
             systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
           }),
@@ -678,7 +672,7 @@ export const serveCaseToIrs = async (
       message: {
         action: 'serve_to_irs_error',
       },
-      userId: authorizedUser.userId,
+      userId: authorizedUser?.userId || '',
     });
   }
 };
