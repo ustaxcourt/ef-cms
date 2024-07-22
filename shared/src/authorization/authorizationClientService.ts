@@ -2,7 +2,7 @@ import {
   AuthUser,
   UnknownAuthUser,
   isAuthUser,
-} from '@shared/business/entities/authUser/AuthUser';
+} from '../business/entities/authUser/AuthUser';
 
 export const ROLE_PERMISSIONS = {
   ADD_CASE_TO_TRIAL_SESSION: 'ADD_CASE_TO_TRIAL_SESSION',
