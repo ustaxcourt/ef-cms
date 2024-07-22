@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -30,6 +31,7 @@ export const setNoticeOfChangeToRemoteProceeding = async (
     newPdfDoc,
     newTrialSessionEntity,
   }: { caseEntity: Case; newPdfDoc: any; newTrialSessionEntity: any },
+  authorizedUser: AuthUser,
 ): Promise<void> => {
   const trialSessionInformation: TrialSessionInformationType = {
     chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
@@ -58,6 +60,6 @@ export const setNoticeOfChangeToRemoteProceeding = async (
       newPdfDoc,
       noticePdf,
     },
-    applicationContext.getCurrentUser(),
+    authorizedUser,
   );
 };
