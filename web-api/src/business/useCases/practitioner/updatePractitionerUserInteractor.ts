@@ -128,6 +128,7 @@ export const updatePractitionerUser = async (
   if (combinedDiffKeys.length > propertiesNotRequiringChangeOfAddress.length) {
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser,
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
       firmName: validatedUserData.firmName,

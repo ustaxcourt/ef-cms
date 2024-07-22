@@ -1,3 +1,7 @@
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
@@ -7,7 +11,6 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -28,6 +31,7 @@ const updateUserContactInformationHelper = async (
     firmName,
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
+  authorizedUser: AuthUser,
 ) => {
   const user = await applicationContext
     .getPersistenceGateway()
@@ -100,6 +104,7 @@ const updateUserContactInformationHelper = async (
 
   const results = await generateChangeOfAddress({
     applicationContext,
+    authorizedUser,
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
@@ -148,11 +153,15 @@ export const updateUserContactInformation = async (
   }
 
   try {
-    await updateUserContactInformationHelper(applicationContext, {
-      contactInfo,
-      firmName,
-      userId,
-    });
+    await updateUserContactInformationHelper(
+      applicationContext,
+      {
+        contactInfo,
+        firmName,
+        userId,
+      },
+      authorizedUser,
+    );
   } catch (error) {
     applicationContext.logger.error(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
