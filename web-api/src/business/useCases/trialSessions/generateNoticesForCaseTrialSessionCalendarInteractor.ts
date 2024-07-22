@@ -9,10 +9,6 @@ import {
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  UnknownAuthUser,
-  UserUndefinedError,
-} from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { copyPagesAndAppendToTargetPdf } from '../../../../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf';
 import { shouldAppendClinicLetter } from '../../../../../shared/src/business/utilities/shouldAppendClinicLetter';
@@ -203,7 +199,7 @@ const setNoticeForCase = async ({
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
     },
-    { authorizedUser: user },
+    { authorizedUser: applicationContext.getCurrentUser() },
   );
 
   noticeOfTrialDocketEntry.setFiledBy(user);
@@ -329,21 +325,18 @@ const setNoticeForCase = async ({
 
 export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  authorizedUser: UnknownAuthUser, // TODO 10417: did we need this change or should we stick with the passed-in userId coming from the event that triggers this?
   {
     docketNumber,
     jobId,
     trialSession,
+    userId,
   }: {
     docketNumber: string;
     jobId: string;
     trialSession: RawTrialSession;
+    userId: string;
   },
 ) => {
-  if (!authorizedUser) {
-    throw new UserUndefinedError('User was not defined.');
-  }
-
   const jobStatus = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionJobStatusForCase({
@@ -360,7 +353,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
 
   const user = await applicationContext.getPersistenceGateway().getUserById({
     applicationContext,
-    userId: authorizedUser.userId,
+    userId,
   });
 
   await applicationContext
@@ -410,6 +403,6 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     message: {
       action: 'notice_generation_updated',
     },
-    userId: authorizedUser.userId,
+    userId,
   });
 };

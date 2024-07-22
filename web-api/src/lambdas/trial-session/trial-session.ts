@@ -1,20 +1,12 @@
 import { DeleteMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import {
-  UnknownAuthUser,
-  UserUndefinedError,
-} from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../../applicationContext';
 
-export const handler = async (event, authorizedUser: UnknownAuthUser) => {
+export const handler = async event => {
   const applicationContext = createApplicationContext({});
-  if (!authorizedUser) {
-    throw new UserUndefinedError('User was not defined.');
-  }
-
   try {
     const { Records } = event;
     const { body, receiptHandle } = Records[0];
-    const { docketNumber, jobId, trialSession } = JSON.parse(body); // TODO 10417 should we be changing something coming in from an event external to this lambda?
+    const { docketNumber, jobId, trialSession, userId } = JSON.parse(body);
 
     applicationContext.logger.info(
       `received an event to generate notices for trial session ${trialSession.trialSessionId} on case ${docketNumber} for job ${jobId}`,
@@ -25,11 +17,11 @@ export const handler = async (event, authorizedUser: UnknownAuthUser) => {
       .getUseCases()
       .generateNoticesForCaseTrialSessionCalendarInteractor(
         applicationContext,
-        authorizedUser,
         {
           docketNumber,
           jobId,
           trialSession,
+          userId,
         },
       );
 
