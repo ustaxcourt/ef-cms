@@ -1,11 +1,24 @@
-import { createApplicationContext } from './applicationContext';
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from './applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
 
-export const dataSecurityFilter = (data, { applicationContext }) => {
+export const dataSecurityFilter = (
+  data,
+  {
+    applicationContext,
+    authorizedUser,
+  }: {
+    applicationContext: ServerApplicationContext;
+    authorizedUser: UnknownAuthUser;
+  },
+) => {
   let returnData = data;
   if (data && Array.isArray(data) && data.length && data[0].entityName) {
     const entityConstructor = applicationContext.getEntityByName(
@@ -16,6 +29,7 @@ export const dataSecurityFilter = (data, { applicationContext }) => {
         result =>
           new entityConstructor(result, {
             applicationContext,
+            authorizedUser,
             filtered: true,
           }),
       );
@@ -27,6 +41,7 @@ export const dataSecurityFilter = (data, { applicationContext }) => {
     if (entityConstructor) {
       returnData = new entityConstructor(data, {
         applicationContext,
+        authorizedUser,
         filtered: true,
       });
     }
@@ -56,14 +71,21 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
  * @param options
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-
-export const genericHandler = (awsEvent, cb, options = {}) => {
+export const genericHandler = (
+  awsEvent,
+  cb: (params: {
+    applicationContext: ServerApplicationContext;
+    clientConnectionId?: string;
+  }) => any,
+  options: {
+    bypassMaintenanceCheck?: boolean;
+    logResults?: boolean;
+  } = {},
+) => {
   return handle(awsEvent, async () => {
-    const user = options.user || getUserFromAuthHeader(awsEvent);
+    const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext =
-      options.applicationContext ||
-      createApplicationContext(user, awsEvent.logger);
+    const applicationContext = createApplicationContext(user, awsEvent.logger);
 
     delete awsEvent.logger;
 
@@ -82,11 +104,11 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
       const results = await cb({
         applicationContext,
         clientConnectionId,
-        user,
       });
 
       const returnResults = dataSecurityFilter(results, {
         applicationContext,
+        authorizedUser: user,
       });
 
       if (options.logResults !== false) {

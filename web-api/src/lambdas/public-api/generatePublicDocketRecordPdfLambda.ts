@@ -17,5 +17,5 @@ export const generatePublicDocketRecordPdfLambda = event =>
           includePartyDetail: false,
         });
     },
-    { logResults: false, user: {} },
+    { logResults: false },
   );

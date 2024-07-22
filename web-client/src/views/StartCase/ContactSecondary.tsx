@@ -174,7 +174,8 @@ export const ContactSecondary = connect(
             />
           )}
 
-          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
+          {(contactsHelper.showPaperPetitionEmailFieldAndConsentBox ||
+            contactsHelper.showSecondaryContactEmailFieldAndConsentBox) && (
             <>
               <PaperPetitionEmail bind={bind} contactType="contactSecondary" />
               <EConsent bind={bind} contactType="contactSecondary" />
