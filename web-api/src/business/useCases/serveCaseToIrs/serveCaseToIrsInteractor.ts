@@ -1,5 +1,8 @@
 /* eslint-disable complexity */
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
@@ -482,12 +485,13 @@ export const serveCaseToIrs = async (
     clientConnectionId,
     docketNumber,
   }: { clientConnectionId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
   try {
     if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_PETITION)) {
       throw new UnauthorizedError('Unauthorized');
     }
+
     const caseToBatch = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
@@ -517,6 +521,7 @@ export const serveCaseToIrs = async (
       user: authorizedUser,
     });
 
+    // TODO 10417 type weirdness -- why is this angry?
     caseEntity
       .updateCaseCaptionDocketRecord({ authorizedUser })
       .updateDocketNumberRecord({ authorizedUser })
