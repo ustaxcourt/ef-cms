@@ -5,6 +5,7 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/busin
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 
 jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
@@ -53,12 +54,16 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
   });
 
   it('should retrieve the judge title and fullname for the current and new judges', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-    });
+    await setNoticeOfChangeOfTrialJudge(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        currentTrialSession,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: updatedTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(getJudgeWithTitle.mock.calls[0][0]).toMatchObject({
       judgeUserName: currentTrialSession.judge.name,
@@ -71,12 +76,16 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
   });
 
   it('should create a docket entry and serve the generated notice', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-    });
+    await setNoticeOfChangeOfTrialJudge(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        currentTrialSession,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: updatedTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry
