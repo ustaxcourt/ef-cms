@@ -11,8 +11,8 @@ export function UpdatedFilePetitionStep7() {
     <>
       <SuccessNotification isDismissible={false} />
       <div className="petitioner-flow-text">
-        Once the Petition is processed by the Court, you will be able to view
-        and submit documents.
+        Once the Petition is processed by the Court, you will be able to submit
+        documents.
       </div>
       <h3 className="margin-top-205">Pay $60 filing fee</h3>
       <div className="petitioner-flow-text">
