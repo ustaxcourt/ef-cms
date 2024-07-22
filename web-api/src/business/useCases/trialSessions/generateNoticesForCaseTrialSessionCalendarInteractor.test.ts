@@ -86,7 +86,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
     expect(
@@ -97,7 +96,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should set the job status to processing the first time the job executes', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
     expect(
@@ -109,7 +107,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should decrement the job counter when a worker has processed a pdf file', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
     expect(
@@ -120,7 +117,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should save a copy of the combined notice of trial issued letter and a clinic letter for pro se petitioners', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -146,7 +142,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -170,7 +165,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -213,7 +207,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -249,7 +242,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
     expect(
@@ -272,7 +264,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
     expect(
@@ -287,7 +278,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should send out notifications emails for the notice docket entry AND standing pretrial notice', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
     expect(
@@ -316,7 +306,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should NOT save pdf copies of notices, standing pretrial and the address page for electronic parties', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -346,7 +335,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -373,7 +361,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -392,7 +379,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -411,7 +397,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should set the presiding judge on the generated SPTO and persist it to the case', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      docketClerkUser,
       interactorParamObject,
     );
 
@@ -426,14 +411,5 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       signedByUserId: undefined,
       signedJudgeName: undefined,
     });
-  });
-  it('should throw an error if the user is not defined', async () => {
-    await expect(
-      generateNoticesForCaseTrialSessionCalendarInteractor(
-        applicationContext,
-        undefined,
-        interactorParamObject,
-      ),
-    ).rejects.toThrow('User was not defined.');
   });
 });

@@ -8,17 +8,6 @@ export type AuthUser = {
   name: string;
 };
 
-export class UserUndefinedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'UserUndefinedError';
-    // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, UserUndefinedError);
-    }
-  }
-}
-
 export type UnknownAuthUser = AuthUser | undefined;
 
 export function isAuthUser(user): user is AuthUser {
