@@ -7,6 +7,7 @@ import {
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
@@ -21,11 +22,10 @@ export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
 export const getCaseWorksheetsByJudgeInteractor = async (
   applicationContext: ServerApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
 }> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
