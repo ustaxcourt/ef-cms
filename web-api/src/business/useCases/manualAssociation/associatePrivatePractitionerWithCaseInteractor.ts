@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -30,25 +31,26 @@ export const associatePrivatePractitionerWithCase = async (
     serviceIndicator: string;
     userId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authenticatedUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  // TODO 10417: type for practitioner lookup is wrong here
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
   return await associatePrivatePractitionerToCase({
     applicationContext,
-    authorizedUser: authenticatedUser,
+    authorizedUser,
     docketNumber,
     representing,
     serviceIndicator,
+    //@ts-ignore 10417: fix typing in future update
     user,
   });
 };
