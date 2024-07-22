@@ -128,7 +128,7 @@ const setNoticeForCase = async ({
   trialSessionEntity,
   user,
 }) => {
-  const caseEntity = new Case(caseRecord, { authorizedUser: user });
+  const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
 
   let noticeOfTrialIssued = await applicationContext
@@ -199,7 +199,7 @@ const setNoticeForCase = async ({
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
     },
-    { authorizedUser: applicationContext.getCurrentUser() },
+    { authorizedUser: undefined },
   );
 
   noticeOfTrialDocketEntry.setFiledBy(user);
