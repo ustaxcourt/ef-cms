@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   ssl:
     process.env.NODE_ENV === 'production'
       ? {
-          cert: './us-east-1-bundle.pem',
+          ca: './us-east-1-bundle.pem',
         }
       : undefined,
   subscribers: [],
