@@ -33,7 +33,7 @@ const cropImage = ({
   image: PNG;
   width: number;
 }): PNG => {
-  // Cropped from (0, 0) (top left) to (width, height)
+  // Cropped from (0, 0) (the top left) to (width, height)
   const cropped = new PNG({ height, width });
   PNG.bitblt(image, cropped, 0, 0, width, height, 0, 0);
   return cropped;
