@@ -8,14 +8,14 @@ import {
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const createTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: RawTrialSession },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawTrialSession> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -35,7 +35,7 @@ export const createTrialSessionInteractor = async (
         swingSessionId: trialSessionToAdd.swingSessionId,
         trialSessionEntity: trialSessionToAdd,
       },
-      user,
+      authorizedUser,
     );
   }
 
