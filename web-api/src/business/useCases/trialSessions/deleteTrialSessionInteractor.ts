@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -18,10 +19,9 @@ import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 export const deleteTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -56,6 +56,7 @@ export const deleteTrialSessionInteractor = async (
 
     await acquireLock({
       applicationContext,
+      authorizedUser,
       identifiers: docketNumbers?.map(item => `case|${item}`),
     });
 
@@ -67,7 +68,7 @@ export const deleteTrialSessionInteractor = async (
           docketNumber: order.docketNumber,
         });
 
-      const caseEntity = new Case(myCase, { authorizedUser: user });
+      const caseEntity = new Case(myCase, { authorizedUser });
 
       caseEntity.removeFromTrial({});
 

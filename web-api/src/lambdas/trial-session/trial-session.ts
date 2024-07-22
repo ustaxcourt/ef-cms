@@ -14,7 +14,7 @@ export const handler = async (event, authorizedUser: UnknownAuthUser) => {
   try {
     const { Records } = event;
     const { body, receiptHandle } = Records[0];
-    const { docketNumber, jobId, trialSession } = JSON.parse(body);
+    const { docketNumber, jobId, trialSession } = JSON.parse(body); // TODO 10417 should we be changing something coming in from an event external to this lambda?
 
     applicationContext.logger.info(
       `received an event to generate notices for trial session ${trialSession.trialSessionId} on case ${docketNumber} for job ${jobId}`,

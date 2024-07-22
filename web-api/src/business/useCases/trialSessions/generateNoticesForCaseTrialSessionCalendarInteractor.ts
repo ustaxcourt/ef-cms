@@ -329,7 +329,7 @@ const setNoticeForCase = async ({
 
 export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  authorizedUser: UnknownAuthUser,
+  authorizedUser: UnknownAuthUser, // TODO 10417: did we need this change or should we stick with the passed-in userId coming from the event that triggers this?
   {
     docketNumber,
     jobId,
