@@ -21,6 +21,8 @@ export const DocumentViewerDocument = connect(
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
+    navigateToStatusReportOrderResponseSequence:
+      sequences.navigateToStatusReportOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence:
@@ -41,6 +43,7 @@ export const DocumentViewerDocument = connect(
     gotoCompleteDocketEntryQCSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
+    navigateToStatusReportOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
@@ -183,7 +186,23 @@ export const DocumentViewerDocument = connect(
                   Apply Stamp
                 </Button>
               )}
-
+              {documentViewerHelper.showOrderResponseButton && (
+                <Button
+                  link
+                  data-testid="order-response-button"
+                  icon="edit"
+                  onClick={() => {
+                    navigateToStatusReportOrderResponseSequence({
+                      path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
+                      statusReportFilingDate:
+                        viewerDocumentToDisplay.filingDate,
+                      statusReportIndex: viewerDocumentToDisplay.index,
+                    });
+                  }}
+                >
+                  Order Response
+                </Button>
+              )}
               <Button
                 link
                 icon="file-pdf"
