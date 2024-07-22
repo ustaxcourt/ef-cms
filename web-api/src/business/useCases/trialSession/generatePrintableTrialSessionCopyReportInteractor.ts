@@ -6,6 +6,7 @@ import {
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -26,8 +27,8 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     sort: string;
     userHeading: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
-  const authorizedUser = applicationContext.getCurrentUser();
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
   ) {

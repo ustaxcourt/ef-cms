@@ -7,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -29,10 +30,11 @@ export const addCaseToTrialSession = async (
     docketNumber: string;
     trialSessionId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -54,7 +56,7 @@ export const addCaseToTrialSession = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseDetails, { authorizedUser: user });
+  const caseEntity = new Case(caseDetails, { authorizedUser });
 
   const trialSessionEntity = new TrialSession(trialSession);
 
@@ -100,9 +102,7 @@ export const addCaseToTrialSession = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  return new Case(updatedCase, { authorizedUser: user })
-    .validate()
-    .toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const addCaseToTrialSessionInteractor = withLocking(
