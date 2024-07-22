@@ -553,6 +553,7 @@ export const serveCaseToIrs = async (
       generatedDocuments.push(
         generateDraftDocument({
           applicationContext,
+          authorizedUser,
           caseEntity,
           document: orderDesignatingPlaceOfTrial,
           replacements: [
@@ -574,6 +575,7 @@ export const serveCaseToIrs = async (
       generatedDocuments.push(
         generateDraftDocument({
           applicationContext,
+          authorizedUser,
           caseEntity,
           document: orderForFilingFee,
           replacements: [todayPlus30, todayPlus30],
@@ -588,6 +590,7 @@ export const serveCaseToIrs = async (
       generatedDocuments.push(
         generateDraftDocument({
           applicationContext,
+          authorizedUser,
           caseEntity,
           document: orderForAmendedPetitionAndFilingFee,
           replacements: [formattedFiledDate, todayPlus30, todayPlus30],
@@ -606,6 +609,7 @@ export const serveCaseToIrs = async (
       generatedDocuments.push(
         generateDraftDocument({
           applicationContext,
+          authorizedUser,
           caseEntity,
           document: orderForAmendedPetition,
           replacements: [formattedFiledDate, todayPlus60, todayPlus60],
@@ -620,6 +624,7 @@ export const serveCaseToIrs = async (
       generatedDocuments.push(
         generateDraftDocument({
           applicationContext,
+          authorizedUser,
           caseEntity,
           document: orderPetitionersToShowCause,
           replacements: [formattedFiledDate, todayPlus60],
