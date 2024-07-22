@@ -4,10 +4,12 @@ import {
   workerRouter,
 } from '@web-api/gateways/worker/workerRouter';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('workerRouter', () => {
   it('should make a call to update a user`s associated case when the message type is UPDATE_ASSOCIATED_CASE', async () => {
     const mockMessage: WorkerMessage = {
+      authorizedUser: mockDocketClerkUser,
       payload: {
         abc: '123',
       },
@@ -25,6 +27,7 @@ describe('workerRouter', () => {
 
   it('should make a call to queue a user`s associated cases for update when the message type is QUEUE_UPDATE_ASSOCIATED_CASES', async () => {
     const mockMessage: WorkerMessage = {
+      authorizedUser: mockDocketClerkUser,
       payload: {
         abc: '123',
       },
@@ -42,9 +45,11 @@ describe('workerRouter', () => {
 
   it('should throw an error when the message type provided was not recognized by the router', async () => {
     const mockMessage: WorkerMessage = {
+      authorizedUser: mockDocketClerkUser,
       payload: {
         abc: '123',
       },
+
       type: 'DOES_NOT_EXIST' as any,
     };
 

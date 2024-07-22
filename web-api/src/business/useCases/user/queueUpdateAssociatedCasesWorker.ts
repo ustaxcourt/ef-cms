@@ -18,9 +18,9 @@ export const queueUpdateAssociatedCasesWorker = async (
     docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getWorkerGateway().queueWork(applicationContext, {
         message: {
+          authorizedUser: applicationContext.getCurrentUser(),
           payload: { docketNumber, user },
           type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-          user: applicationContext.getCurrentUser(),
         },
       }),
     ),

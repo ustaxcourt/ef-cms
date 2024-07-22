@@ -8,15 +8,15 @@ import { worker } from '@web-api/gateways/worker/worker';
 describe('worker', () => {
   it('should use the messaging service to send the provided message to the environment`s message queue', async () => {
     const mockMessage: WorkerMessage = {
-      payload: {
-        abc: 'def',
-      },
-      type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
-      user: {
+      authorizedUser: {
         name: 'ignored',
         role: 'ignored',
         userId: 'ignored',
       },
+      payload: {
+        abc: 'def',
+      },
+      type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
     };
     const mockQueueUrl = 'www.send_a_message.com';
     applicationContext.environment.workerQueueUrl = mockQueueUrl;
