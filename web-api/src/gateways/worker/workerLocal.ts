@@ -13,7 +13,7 @@ export const workerLocal: WorkerHandler = async (
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
   // Simulate what happens on a deployed environment when a message is sent to SQS.
-  const appContext = createApplicationContext(message.user);
+  const appContext = createApplicationContext(message.authorizedUser);
   setTimeout(
     async () => {
       try {
