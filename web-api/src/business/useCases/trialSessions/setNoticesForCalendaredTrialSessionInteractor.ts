@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { generateTrialSessionPaperServicePdfInteractor } from '@web-api/business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const setNoticesForCalendaredTrialSession = async (
@@ -164,13 +165,15 @@ const setNoticesForCalendaredTrialSession = async (
   });
 
   if (trialNoticePdfsKeys.length) {
-    await applicationContext
-      .getUseCases()
-      .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
+    await generateTrialSessionPaperServicePdfInteractor(
+      applicationContext,
+      {
         clientConnectionId,
         trialNoticePdfsKeys,
         trialSessionId,
-      });
+      },
+      authorizedUser,
+    );
   }
 };
 
