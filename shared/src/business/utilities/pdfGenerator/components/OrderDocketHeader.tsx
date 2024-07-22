@@ -31,10 +31,10 @@ export const OrderDocketHeader = ({
         <div id="caption-respondent">Respondent</div>
       </div>
       <div id="docket-number">
-        Docket No.{' '}
+        Docket No
         {isEtAlOrder
-          ? addedDocketNumbers.join(', ') + '.'
-          : docketNumberWithSuffix}
+          ? 's. ' + addedDocketNumbers.join(', ') + '.'
+          : '. ' + docketNumberWithSuffix}
       </div>
       <div className="clear"></div>
       {orderTitle && <h3 className="document-title">{orderTitle}</h3>}
