@@ -6,13 +6,15 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getPractitionerDocumentLambda = event =>
+export const getPractitionerDocumentLambda = (event, authorizedUser) =>
   genericHandler(event, ({ applicationContext }) => {
-    return applicationContext
-      .getUseCases()
-      .getPractitionerDocumentInteractor(applicationContext, {
+    return applicationContext.getUseCases().getPractitionerDocumentInteractor(
+      applicationContext,
+      {
         barNumber: event.pathParameters.barNumber,
         practitionerDocumentFileId:
           event.pathParameters.practitionerDocumentFileId,
-      });
+      },
+      authorizedUser,
+    );
   });

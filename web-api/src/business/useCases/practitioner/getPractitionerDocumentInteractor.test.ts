@@ -5,12 +5,12 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentInteractor } from './getPractitionerDocumentInteractor';
+import {
+  mockAdmissionsClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionerDocumentInteractor', () => {
-  const testUser = {
-    role: ROLES.admissionsClerk,
-    userId: 'admissionsclerk',
-  };
   const barNumber = 'PT4785';
   const practitionerDocumentFileId = '14c373ff-3335-400d-8b39-3e4053072512';
   const practitionerDocument = {
@@ -20,7 +20,6 @@ describe('getPractitionerDocumentInteractor', () => {
   };
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(testUser);
     applicationContext
       .getPersistenceGateway()
       .getPractitionerDocumentByFileId.mockReturnValue(practitionerDocument);
@@ -34,10 +33,14 @@ describe('getPractitionerDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValueOnce(testPetitionerUser);
 
     await expect(
-      getPractitionerDocumentInteractor(applicationContext, {
-        barNumber,
-        practitionerDocumentFileId,
-      }),
+      getPractitionerDocumentInteractor(
+        applicationContext,
+        {
+          barNumber,
+          practitionerDocumentFileId,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -48,6 +51,7 @@ describe('getPractitionerDocumentInteractor', () => {
         barNumber,
         practitionerDocumentFileId,
       },
+      mockAdmissionsClerkUser,
     );
 
     expect(
