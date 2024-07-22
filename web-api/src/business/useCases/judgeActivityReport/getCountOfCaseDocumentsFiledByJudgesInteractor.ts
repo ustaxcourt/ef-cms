@@ -33,8 +33,6 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
   params: GetCountOfCaseDocumentsFiledByJudgesRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<AggregatedEventCodesType> => {
-  // const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized to view Judge Activity Report');
   }

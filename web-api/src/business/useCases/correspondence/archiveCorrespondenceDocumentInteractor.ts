@@ -16,8 +16,6 @@ export const archiveCorrespondenceDocument = async (
   }: { correspondenceId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  // const user = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
