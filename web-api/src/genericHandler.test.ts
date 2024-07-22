@@ -7,7 +7,6 @@ import {
   mockAdcUser,
   mockDocketClerkUser,
   mockIrsPractitionerUser,
-  mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { applicationContext as mockApplicationContext } from '../../shared/src/business/test/createTestApplicationContext';
@@ -21,7 +20,13 @@ const MOCK_EVENT = {
   },
 };
 
-let logged = [];
+let logged: string[] = [];
+
+jest.mock('./applicationContext', () => ({
+  createApplicationContext: () => {
+    return mockApplicationContext;
+  },
+}));
 
 jest.mock('./applicationContext', () => ({
   createApplicationContext: () => {
@@ -64,11 +69,7 @@ describe('genericHandler', () => {
       return Promise.reject(new Error('Test Error'));
     };
 
-    const response = await genericHandler(
-      MOCK_EVENT,
-      callback,
-      mockDocketClerkUser,
-    );
+    const response = await genericHandler(MOCK_EVENT, callback);
 
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
@@ -78,7 +79,7 @@ describe('genericHandler', () => {
   it('defaults the options param to an empty object if not provided', async () => {
     const callback = () => null;
 
-    await genericHandler({ ...MOCK_EVENT }, callback, mockDocketClerkUser);
+    await genericHandler({ ...MOCK_EVENT }, callback);
 
     expect(mockApplicationContext.logger.error).not.toHaveBeenCalled();
   });
@@ -90,11 +91,7 @@ describe('genericHandler', () => {
       throw error;
     };
 
-    const response = await genericHandler(
-      { ...MOCK_EVENT },
-      callback,
-      mockPetitionsClerkUser,
-    );
+    const response = await genericHandler({ ...MOCK_EVENT }, callback);
 
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
@@ -104,7 +101,7 @@ describe('genericHandler', () => {
   it('should log `request` and `results` by default', async () => {
     const callback = () => null;
 
-    await genericHandler(MOCK_EVENT, callback, mockPetitionerUser);
+    await genericHandler(MOCK_EVENT, callback);
 
     expect(logged).toContain('Request:');
     expect(logged).toContain('Results:');
@@ -113,7 +110,7 @@ describe('genericHandler', () => {
   it('should not log `results` when disabled in options', async () => {
     const callback = () => null;
 
-    await genericHandler(MOCK_EVENT, callback, mockAdcUser, {
+    await genericHandler(MOCK_EVENT, callback, {
       logResults: false,
     });
 
@@ -126,11 +123,7 @@ describe('genericHandler', () => {
       return Promise.resolve('some data');
     };
 
-    const result = await genericHandler(
-      MOCK_EVENT,
-      callback,
-      mockIrsPractitionerUser,
-    );
+    const result = await genericHandler(MOCK_EVENT, callback);
 
     expect(JSON.parse(result.body)).toEqual('some data');
   });
@@ -144,11 +137,7 @@ describe('genericHandler', () => {
       });
     };
 
-    const result = await genericHandler(
-      MOCK_EVENT,
-      callback,
-      mockIrsPractitionerUser,
-    );
+    const result = await genericHandler(MOCK_EVENT, callback);
 
     expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
   });

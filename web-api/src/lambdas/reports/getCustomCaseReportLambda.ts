@@ -6,14 +6,10 @@ export const getCustomCaseReportLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getCustomCaseReportInteractor(
-        applicationContext,
-        event.queryStringParameters,
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getCustomCaseReportInteractor(
+      applicationContext,
+      event.queryStringParameters,
+      authorizedUser,
+    );
+  });

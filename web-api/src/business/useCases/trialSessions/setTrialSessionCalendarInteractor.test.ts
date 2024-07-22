@@ -1,12 +1,7 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  mockPetitionerUser,
-  mockPetitionsClerkUser,
-} from '@shared/test/mockAuthUsers';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 
 describe('setTrialSessionCalendarInteractor', () => {
@@ -55,15 +50,15 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
 
-    await expect(
-      setTrialSessionCalendarInteractor(
-        applicationContext,
-        {
-          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        mockPetitionerUser,
-      ),
-    ).rejects.toThrow('Unauthorized');
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hellomom',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('set_trial_session_calendar_error');
   });
 
   it('should set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
@@ -93,14 +88,15 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .setPriorityOnAllWorkItems.mockReturnValue({});
 
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hellomom',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('set_trial_session_calendar_complete');
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -133,13 +129,10 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hi',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -175,13 +168,10 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hi',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
@@ -211,13 +201,10 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([]);
 
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hi',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
@@ -240,13 +227,10 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hi',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
@@ -259,29 +243,25 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
-    await expect(
-      setTrialSessionCalendarInteractor(
-        applicationContext,
-        {
-          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        mockPetitionsClerkUser,
-      ),
-    ).rejects.toThrow(ServiceUnavailableError);
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hi',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('set_trial_session_calendar_error');
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId: 'hi',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

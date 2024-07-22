@@ -119,7 +119,6 @@ export const getCaseInteractor = async (
       docketNumber: Case.formatDocketNumber(docketNumber),
     }),
   );
-
   const isValidCase = Boolean(caseRecord.docketNumber && caseRecord.entityName);
 
   if (!isValidCase) {

@@ -71,7 +71,6 @@ export const checkMaintenanceMode = async ({ applicationContext }) => {
  * @param options
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-
 export const genericHandler = (
   awsEvent,
   cb: (params: {
@@ -84,7 +83,7 @@ export const genericHandler = (
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const user = getUserFromAuthHeader(awsEvent); // TODO 10417: remove getting user here. Should be passed in.
+    const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext = createApplicationContext(user, awsEvent.logger);
 
