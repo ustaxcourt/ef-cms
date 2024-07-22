@@ -20,7 +20,7 @@ const defaultOptions: {
 } = {};
 
 export const lambdaWrapper = (
-  lambda: (awsEvent: Record<string, any>, user: UnknownAuthUser) => any,
+  lambda: (awsEvent: any, user?: UnknownAuthUser) => any,
   options = defaultOptions,
   applicationContext?: IApplicationContext,
 ) => {

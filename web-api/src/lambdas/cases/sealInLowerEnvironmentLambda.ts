@@ -9,6 +9,7 @@ import { sealInLowerEnvironment } from '@web-api/business/useCaseHelper/sealInLo
  */
 export const sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
+
   const applicationContext = createApplicationContext(user);
 
   const records = event.Records.map(record => ({

@@ -20,7 +20,6 @@ export const handle = async (event, fun) => {
   const applicationContext = createApplicationContext({});
   try {
     let response = await fun();
-
     // Check to see if the server responded with a pdf buffer
     const isPdfBuffer =
       response != null &&
