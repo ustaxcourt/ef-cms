@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
@@ -12,6 +13,7 @@ import { replaceBracketed } from '../../../../../shared/src/business/utilities/r
  */
 export const generateDraftDocument = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   document,
   replacements,
@@ -20,6 +22,7 @@ export const generateDraftDocument = async ({
   caseEntity: Case;
   document: any;
   replacements: string[];
+  authorizedUser: AuthUser;
 }) => {
   const content = replaceBracketed(document.content, ...replacements);
 
@@ -27,7 +30,7 @@ export const generateDraftDocument = async ({
     .getUseCaseHelpers()
     .addDocketEntryForSystemGeneratedOrder({
       applicationContext,
-      authorizedUser: applicationContext.getCurrentUser(),
+      authorizedUser,
       caseEntity,
       systemGeneratedDocument: {
         ...document,
