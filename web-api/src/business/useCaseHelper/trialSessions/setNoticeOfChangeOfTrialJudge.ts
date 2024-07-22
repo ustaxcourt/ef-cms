@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
@@ -5,6 +6,7 @@ import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/
 export const setNoticeOfChangeOfTrialJudge = async (
   applicationContext: ServerApplicationContext,
   { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity },
+  authorizedUser: AuthUser,
 ) => {
   const priorJudgeTitleWithFullName = await getJudgeWithTitle({
     applicationContext,
@@ -44,6 +46,6 @@ export const setNoticeOfChangeOfTrialJudge = async (
       newPdfDoc,
       noticePdf,
     },
-    applicationContext.getCurrentUser(),
+    authorizedUser,
   );
 };

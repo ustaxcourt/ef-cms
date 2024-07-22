@@ -1,4 +1,8 @@
 /* eslint-disable complexity */
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import {
@@ -13,7 +17,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -222,7 +225,7 @@ const updateCasesAndSetNoticeOfChange = async ({
   currentTrialSession: RawTrialSession;
   paperServicePdfsCombined: any;
   updatedTrialSessionEntity: TrialSession;
-  authorizedUser: any;
+  authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
@@ -254,7 +257,6 @@ const updateCasesAndSetNoticeOfChange = async ({
           caseEntity,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user: authorizedUser,
         });
     }
 
@@ -275,12 +277,16 @@ const updateCasesAndSetNoticeOfChange = async ({
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
       await applicationContext
         .getUseCaseHelpers()
-        .setNoticeOfChangeOfTrialJudge(applicationContext, {
-          caseEntity,
-          currentTrialSession,
-          newPdfDoc: paperServicePdfsCombined,
-          newTrialSessionEntity: updatedTrialSessionEntity,
-        });
+        .setNoticeOfChangeOfTrialJudge(
+          applicationContext,
+          {
+            caseEntity,
+            currentTrialSession,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
