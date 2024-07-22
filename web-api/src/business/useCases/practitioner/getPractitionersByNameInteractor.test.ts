@@ -1,6 +1,10 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionersByNameInteractor', () => {
   describe('Logged in User', () => {
@@ -21,6 +25,7 @@ describe('getPractitionersByNameInteractor', () => {
         getPractitionersByNameInteractor(
           applicationContext,
           {} as { name: string; searchAfter: string },
+          mockPetitionerUser,
         ),
       ).rejects.toThrow('Unauthorized for searching practitioners');
     });
@@ -30,6 +35,7 @@ describe('getPractitionersByNameInteractor', () => {
         getPractitionersByNameInteractor(
           applicationContext,
           {} as { name: string; searchAfter: string },
+          mockPetitionsClerkUser,
         ),
       ).rejects.toThrow('Name must be provided to search');
     });
@@ -64,6 +70,7 @@ describe('getPractitionersByNameInteractor', () => {
           name: 'Test Practitioner',
           searchAfter: undefined as unknown as string,
         },
+        mockPetitionsClerkUser,
       );
 
       expect(results).toMatchObject({
@@ -124,6 +131,7 @@ describe('getPractitionersByNameInteractor', () => {
           name: 'Test Practitioner',
           searchAfter: undefined as unknown as string,
         },
+        mockPetitionsClerkUser,
       );
 
       expect(results).toBeDefined();
@@ -136,6 +144,7 @@ describe('getPractitionersByNameInteractor', () => {
           name: 'Test Practitioner',
           searchAfter: undefined as unknown as string,
         },
+        undefined,
       );
 
       expect(results).toMatchObject({
