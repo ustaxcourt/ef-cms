@@ -16,7 +16,6 @@ describe('deleteDocketEntryWorksheetInteractor', () => {
   });
 
   it('should throw an Unauthorized Error when user does not have permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
     await expect(
       deleteDocketEntryWorksheetInteractor(
         applicationContext,

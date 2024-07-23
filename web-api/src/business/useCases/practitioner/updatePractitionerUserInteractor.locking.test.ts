@@ -101,7 +101,6 @@ describe('updatePractitionerUserInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
 
     applicationContext
       .getPersistenceGateway()

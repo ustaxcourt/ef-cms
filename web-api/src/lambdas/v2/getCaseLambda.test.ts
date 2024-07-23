@@ -1,11 +1,6 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../../shared/src/test/mockComplexCase';
-import {
-  MOCK_PRACTITIONER,
-  MOCK_USERS,
-} from '../../../../shared/src/test/mockUsers';
-import { Role } from '@shared/business/entities/EntityConstants';
+import { MOCK_PRACTITIONER } from '../../../../shared/src/test/mockUsers';
 import { getCaseLambda } from './getCaseLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseInteractor as mockGetCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
@@ -26,8 +21,6 @@ jest.mock('@web-api/applicationContext', () => {
         .fn()
         .mockImplementation(mockGetCaseInteractor);
 
-      appContext.getCurrentUser = jest.fn().mockReturnValue(mockUser);
-
       if (mockShouldThrowError) {
         appContext.getDocumentClient = jest.fn().mockReturnValue({
           query: jest.fn().mockRejectedValue(new Error('test error')),
@@ -42,19 +35,15 @@ jest.mock('@web-api/applicationContext', () => {
 let mockItems;
 let mockFeatureFlag;
 let mockShouldThrowError;
-let mockUser;
 const setupMock = ({
   featureFlag,
   items,
   shouldThrowError,
-  user,
 }: {
   items: any[];
   featureFlag: boolean;
   shouldThrowError: boolean;
-  user: AuthUser;
 }) => {
-  mockUser = user;
   mockItems = items;
   mockShouldThrowError = shouldThrowError;
   mockFeatureFlag = featureFlag;
@@ -93,12 +82,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: {
-        email: '',
-        name: '',
-        role: 'roleWithNoPermissions' as Role,
-        userId: '',
-      },
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {});
@@ -116,12 +99,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [mockDynamoCaseRecord],
       shouldThrowError: false,
-      user: {
-        email: '',
-        name: '',
-        role: 'roleWithNoPermissions' as Role,
-        userId: '',
-      },
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {});
@@ -145,7 +122,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {});
@@ -163,7 +139,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: true,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
     const response = await getCaseLambda(REQUEST_EVENT, {});
@@ -208,7 +183,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
           mockPrivatePractitionerRecord,
         ],
         shouldThrowError: false,
-        user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
       });
 
       const response = await getCaseLambda(REQUEST_EVENT, {});

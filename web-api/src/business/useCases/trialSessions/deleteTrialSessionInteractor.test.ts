@@ -1,7 +1,6 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
@@ -31,11 +30,6 @@ describe('deleteTrialSessionInteractor', () => {
   });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    });
-
     await expect(
       deleteTrialSessionInteractor(
         applicationContext,

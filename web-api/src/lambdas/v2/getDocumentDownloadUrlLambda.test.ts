@@ -1,10 +1,5 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  CASE_STATUS_TYPES,
-  Role,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getDownloadPolicyUrlInteractor as mockGetDownloadPolicyUrlInteractor } from '@web-api/business/useCases/document/getDownloadPolicyUrlInteractor';
@@ -19,8 +14,6 @@ jest.mock('@web-api/applicationContext', () => {
       appContext.getUseCases().getDownloadPolicyUrlInteractor = jest
         .fn()
         .mockImplementation(mockGetDownloadPolicyUrlInteractor);
-
-      appContext.getCurrentUser = jest.fn().mockReturnValue(mockUser);
 
       appContext.getDocumentClient = jest.fn().mockReturnValue({
         query: jest.fn().mockResolvedValue({
@@ -51,20 +44,16 @@ jest.mock('@web-api/applicationContext', () => {
 
 let mockFeatureFlag;
 let mockShouldThrowError;
-let mockUser;
 let mockItems;
 const setupMock = ({
   featureFlag,
   items,
   shouldThrowError,
-  user,
 }: {
   items: any[];
   featureFlag: boolean;
   shouldThrowError: boolean;
-  user: AuthUser;
 }) => {
-  mockUser = user;
   mockShouldThrowError = shouldThrowError;
   mockFeatureFlag = featureFlag;
   mockItems = items;
@@ -95,12 +84,6 @@ describe('getDocumentDownloadUrlLambda', () => {
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: {
-        email: '',
-        name: '',
-        role: 'roleWithNoPermissions' as Role,
-        userId: '',
-      },
     });
 
     const response = await getDocumentDownloadUrlLambda(REQUEST_EVENT, {});
@@ -122,7 +105,6 @@ describe('getDocumentDownloadUrlLambda', () => {
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
     const response = await getDocumentDownloadUrlLambda(request, {});
@@ -162,7 +144,6 @@ describe('getDocumentDownloadUrlLambda', () => {
         },
       ],
       shouldThrowError: false,
-      user: MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'] as AuthUser,
     });
 
     const response = await getDocumentDownloadUrlLambda(request, {});
@@ -187,7 +168,6 @@ describe('getDocumentDownloadUrlLambda', () => {
       featureFlag: true,
       items: [],
       shouldThrowError: true,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
     const response = await getDocumentDownloadUrlLambda(request, {});
@@ -228,7 +208,6 @@ describe('getDocumentDownloadUrlLambda', () => {
           },
         ],
         shouldThrowError: false,
-        user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
       });
 
       const response = await getDocumentDownloadUrlLambda(request, {});

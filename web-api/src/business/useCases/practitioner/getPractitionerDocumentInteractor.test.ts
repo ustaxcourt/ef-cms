@@ -1,13 +1,10 @@
-import {
-  PRACTITIONER_DOCUMENT_TYPES_MAP,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentInteractor } from './getPractitionerDocumentInteractor';
 import {
   mockAdmissionsClerkUser,
-  mockPetitionsClerkUser,
+  mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('getPractitionerDocumentInteractor', () => {
@@ -26,12 +23,6 @@ describe('getPractitionerDocumentInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
-    const testPetitionerUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-    applicationContext.getCurrentUser.mockReturnValueOnce(testPetitionerUser);
-
     await expect(
       getPractitionerDocumentInteractor(
         applicationContext,
@@ -39,7 +30,7 @@ describe('getPractitionerDocumentInteractor', () => {
           barNumber,
           practitionerDocumentFileId,
         },
-        mockPetitionsClerkUser,
+        mockPetitionerUser,
       ),
     ).rejects.toThrow(UnauthorizedError);
   });

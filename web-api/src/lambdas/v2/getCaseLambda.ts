@@ -14,7 +14,7 @@ import { v2ApiWrapper } from './v2ApiWrapper';
 export const getCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
-  options,
+  options, // TODO 10417 Remove all instances of passing in options via lambda params
 ) =>
   genericHandler(
     event,
