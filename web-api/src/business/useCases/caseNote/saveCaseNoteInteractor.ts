@@ -46,6 +46,7 @@ export const saveCaseNote = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate,
     });
 

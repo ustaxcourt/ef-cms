@@ -50,6 +50,7 @@ export const updateQcCompleteForTrial = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: newCase,
     });
 

@@ -185,6 +185,7 @@ export const updateDocketEntryMeta = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

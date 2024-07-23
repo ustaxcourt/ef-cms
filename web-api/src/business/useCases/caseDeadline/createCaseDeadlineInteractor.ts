@@ -51,6 +51,7 @@ export const createCaseDeadline = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

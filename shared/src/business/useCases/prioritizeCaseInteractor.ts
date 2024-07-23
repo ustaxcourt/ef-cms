@@ -57,6 +57,7 @@ export const prioritizeCase = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

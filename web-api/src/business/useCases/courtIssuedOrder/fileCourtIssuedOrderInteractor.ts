@@ -97,6 +97,7 @@ export const fileCourtIssuedOrder = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

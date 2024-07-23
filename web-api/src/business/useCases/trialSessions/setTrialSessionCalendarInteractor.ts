@@ -214,6 +214,7 @@ const removeManuallyAddedCaseFromTrialSession = (
 
   return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 };
@@ -243,6 +244,7 @@ const setManuallyAddedCaseAsCalendared = async (
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     }),
   ]);
@@ -274,6 +276,7 @@ const setTrialSessionCalendarForEligibleCase = async (
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     }),
     applicationContext

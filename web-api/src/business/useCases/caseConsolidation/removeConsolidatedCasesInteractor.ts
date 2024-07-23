@@ -68,6 +68,7 @@ export const removeConsolidatedCases = async (
       updateCasePromises.push(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         }),
       );
@@ -82,6 +83,7 @@ export const removeConsolidatedCases = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );
@@ -107,6 +109,7 @@ export const removeConsolidatedCases = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );

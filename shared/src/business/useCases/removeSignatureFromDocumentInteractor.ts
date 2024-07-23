@@ -1,6 +1,9 @@
 import { Case } from '../entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * Removes a signature from a document
@@ -16,6 +19,11 @@ export const removeSignatureFromDocumentInteractor = async (
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
 ) => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new Error(
+      'User attempting to remove signature from document is not an auth user',
+    );
+  }
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -47,6 +55,7 @@ export const removeSignatureFromDocumentInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

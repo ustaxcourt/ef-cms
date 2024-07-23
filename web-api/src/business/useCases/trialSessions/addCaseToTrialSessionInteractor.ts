@@ -94,6 +94,7 @@ export const addCaseToTrialSession = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

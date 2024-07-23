@@ -166,6 +166,7 @@ export const fileCourtIssuedDocketEntry = async (
       const saveItems = [
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         }),
       ];

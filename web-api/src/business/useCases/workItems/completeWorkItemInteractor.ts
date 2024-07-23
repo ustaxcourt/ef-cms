@@ -83,6 +83,7 @@ export const completeWorkItem = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate,
   });
 

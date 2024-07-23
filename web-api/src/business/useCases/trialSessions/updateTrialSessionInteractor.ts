@@ -297,6 +297,7 @@ const updateCasesAndSetNoticeOfChange = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
   }

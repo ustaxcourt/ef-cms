@@ -36,6 +36,21 @@ describe('removeSignatureFromDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
+  it('should throw an error when user is undefined', async () => {
+    await expect(
+      removeSignatureFromDocumentInteractor(
+        applicationContext,
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: mockCase.docketNumber,
+        },
+        undefined,
+      ),
+    ).rejects.toThrow(
+      'User attempting to remove signature from document is not an auth user',
+    );
+  });
+
   it('should retrieve the original, unsigned document from S3', async () => {
     await removeSignatureFromDocumentInteractor(
       applicationContext,

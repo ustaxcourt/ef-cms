@@ -133,6 +133,7 @@ export const updateCaseDetails = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: newCaseEntity,
     });
 

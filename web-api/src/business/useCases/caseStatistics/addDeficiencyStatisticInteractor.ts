@@ -80,6 +80,7 @@ export const addDeficiencyStatistic = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: newCase,
     });
 

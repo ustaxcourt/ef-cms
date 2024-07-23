@@ -164,6 +164,7 @@ export const saveCaseDetailInternalEdit = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

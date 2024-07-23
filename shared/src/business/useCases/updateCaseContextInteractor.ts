@@ -114,6 +114,7 @@ export const updateCaseContext = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: newCase,
     });
 

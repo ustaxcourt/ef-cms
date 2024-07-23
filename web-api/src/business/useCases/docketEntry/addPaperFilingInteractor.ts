@@ -176,6 +176,7 @@ export const addPaperFiling = async (
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
   }

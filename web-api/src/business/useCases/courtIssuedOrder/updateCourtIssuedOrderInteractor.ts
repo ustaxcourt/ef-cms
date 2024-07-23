@@ -15,7 +15,7 @@ import { get } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateCourtIssuedOrder = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketEntryIdToEdit, documentMetadata },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -124,6 +124,7 @@ export const updateCourtIssuedOrder = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

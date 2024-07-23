@@ -213,6 +213,7 @@ export const fileExternalDocument = async (
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         });
 
