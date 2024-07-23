@@ -121,9 +121,6 @@ describe('updateDocketEntryMetaInteractor', () => {
         judge: 'Buch',
       },
     ];
-
-    // applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -198,8 +195,6 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
       updateDocketEntryMetaInteractor(
         applicationContext,
