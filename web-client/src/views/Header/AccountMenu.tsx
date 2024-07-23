@@ -10,7 +10,7 @@ export const AccountMenu = connect(
   {
     headerHelper: state.headerHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    signOutSequence: sequences.signOutSequence,
+    signOutSequence: sequences.signOutUserInitiatedSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   function AccountMenu({

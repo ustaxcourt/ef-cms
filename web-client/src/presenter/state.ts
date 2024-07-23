@@ -672,6 +672,7 @@ export const baseState = {
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
+  logoutType: '',
   maintenanceMode: false,
   messagesInboxCount: 0,
   messagesSectionCount: 0,

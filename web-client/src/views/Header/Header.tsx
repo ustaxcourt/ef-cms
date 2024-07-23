@@ -221,7 +221,7 @@ export const Header = connect(
     menuHelper: state.menuHelper,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showMobileMenu: state.header.showMobileMenu,
-    signOutSequence: sequences.signOutSequence,
+    signOutSequence: sequences.signOutUserInitiatedSequence,
     templateHelper: state.templateHelper,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
