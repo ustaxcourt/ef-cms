@@ -306,6 +306,7 @@ const setNoticeForCase = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser: undefined,
     caseToUpdate: caseEntity,
   });
 
