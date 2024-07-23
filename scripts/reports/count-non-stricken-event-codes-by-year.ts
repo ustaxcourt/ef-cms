@@ -1,62 +1,28 @@
-// usage: npx ts-node --transpile-only scripts/reports/event-codes-by-year.ts M071,M074 2021-2022 > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
+// usage: npx ts-node --transpile-only scripts/reports/count-non-stricken-event-codes-by-year.ts M071,M074 2021-2022 [includeStricken]  > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
 
+import { count } from '@web-api/persistence/elasticsearch/searchClient';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
-import {
-  search,
-  searchAll,
-} from '@web-api/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 requireEnvVars(['ENV', 'REGION']);
 
-const cachedCases: { [key: string]: RawCase } = {};
+const includeStricken = !!(process.argv.length > 4);
+if (includeStricken) {
+  console.log('including stricken docket entries');
+}
 
-const getCase = async ({
-  applicationContext,
-  docketNumber,
-}: {
-  applicationContext: IApplicationContext;
-  docketNumber: string;
-}): Promise<RawCase | undefined> => {
-  if (docketNumber in cachedCases) {
-    return cachedCases[docketNumber];
-  }
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            must: {
-              term: {
-                'docketNumber.S': docketNumber,
-              },
-            },
-          },
-        },
-        size: 1,
-      },
-      index: 'efcms-case',
-    },
-  });
-  if (!results) {
-    return;
-  }
-  cachedCases[docketNumber] = results[0];
-  return cachedCases[docketNumber];
-};
-
-const getDocketEntriesByEventCodesAndYears = async ({
+const getCountDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
   eventCodes,
+  onlyNonStricken,
   years,
 }: {
   applicationContext: IApplicationContext;
   eventCodes: string[];
+  onlyNonStricken: boolean;
   years?: number[];
-}): Promise<RawDocketEntry[]> => {
+}): Promise<number> => {
   const must: {}[] = [
     {
       bool: {
@@ -70,6 +36,13 @@ const getDocketEntriesByEventCodesAndYears = async ({
       },
     },
   ];
+  if (onlyNonStricken) {
+    must.push({
+      term: {
+        'isStricken.BOOL': false,
+      },
+    });
+  }
   if (years && years.length) {
     if (years.length === 1) {
       must.push({
@@ -120,13 +93,12 @@ const getDocketEntriesByEventCodesAndYears = async ({
           must,
         },
       },
-      sort: [{ 'receivedAt.S': 'asc' }],
     },
     index: 'efcms-docket-entry',
   };
-  console.log('Effective Query:', JSON.stringify(searchParameters, null, 4));
+  // console.log('Effective Query:', JSON.stringify(searchParameters, null, 4));
 
-  const { results } = await searchAll({
+  const results = await count({
     applicationContext,
     searchParameters,
   });
@@ -152,35 +124,11 @@ const getDocketEntriesByEventCodesAndYears = async ({
     }
   }
 
-  const docketEntries = await getDocketEntriesByEventCodesAndYears({
+  const ret = await getCountDocketEntriesByEventCodesAndYears({
     applicationContext,
     eventCodes,
+    onlyNonStricken: !includeStricken,
     years,
   });
-
-  console.log(
-    '"Docket Number","Date Filed","Document Type","Associated Judge",' +
-      '"Case Status","Case Caption"',
-  );
-  for (const de of docketEntries) {
-    if (!('docketNumber' in de)) {
-      continue;
-    }
-    const c = await getCase({
-      applicationContext,
-      docketNumber: de.docketNumber,
-    });
-    if (!c) {
-      continue;
-    }
-    const associatedJudge = c.associatedJudge
-      ?.replace('Chief Special Trial ', '')
-      .replace('Special Trial ', '')
-      .replace('Judge ', '');
-    console.log(
-      `"${c.docketNumberWithSuffix}","${de.receivedAt.split('T')[0]}",` +
-        `"${de.documentType}","${associatedJudge}","${c.status}",` +
-        `"${c.caseCaption}"`,
-    );
-  }
+  console.log(ret);
 })();
