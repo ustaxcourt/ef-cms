@@ -3,13 +3,13 @@ import { Message } from '@web-api/persistence/repository/Message';
 
 @Entity()
 export class Case {
-  @PrimaryColumn()
+  @PrimaryColumn('varchar')
   docketNumber!: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   trialLocation?: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   trialDate?: string;
 
   @OneToMany(() => Message, message => message.docketNumber)

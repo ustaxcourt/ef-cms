@@ -12,9 +12,12 @@ export const AppDataSource = new DataSource({
   migrations: ['postgres/migrations/*.ts'],
   password: process.env.POSTGRES_PASSWORD,
   port: 5432,
-  ssl: {
-    ca: fs.readFileSync('us-east-1-bundle.pem').toString(),
-  },
+  ssl:
+    process.env.NODE_ENV === 'production' || process.env.CIRCLE_BRANCH
+      ? {
+          ca: fs.readFileSync('us-east-1-bundle.pem').toString(),
+        }
+      : undefined,
   subscribers: [],
   type: 'postgres',
   username: process.env.POSTGRES_USERNAME,

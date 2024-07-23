@@ -8,76 +8,76 @@ export class Message {
     documentId: string;
   }[];
 
-  @Column()
+  @Column('varchar')
   caseStatus!: string;
 
-  @Column()
+  @Column('varchar')
   caseTitle!: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   completedAt?: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   completedBy?: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   completedBySection?: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   completedByUserId?: string;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   completedMessage?: string;
 
-  @Column()
+  @Column('varchar')
   createdAt!: string;
 
-  @Column()
+  @Column('varchar')
   docketNumber!: string;
 
-  @Column()
+  @Column('varchar')
   docketNumberWithSuffix!: string;
 
-  @Column()
+  @Column('varchar')
   from!: string;
 
-  @Column()
+  @Column('varchar')
   fromSection!: string;
 
-  @Column()
+  @Column('varchar')
   fromUserId!: string;
 
-  @Column()
+  @Column('bool')
   isCompleted!: boolean;
 
-  @Column()
+  @Column('bool')
   isRead!: boolean;
 
-  @Column()
+  @Column('bool')
   isRepliedTo!: boolean;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   leadDocketNumber?: string;
 
-  @Column()
+  @Column('varchar')
   message!: string;
 
-  @PrimaryColumn()
+  @PrimaryColumn('varchar')
   messageId!: string;
 
-  @Column()
+  @Column('varchar')
   parentMessageId!: string;
 
-  @Column()
+  @Column('varchar')
   subject!: string;
 
-  @Column()
+  @Column('varchar')
   to!: string;
 
-  @Column()
+  @Column('varchar')
   toSection!: string;
 
-  @Column()
+  @Column('varchar')
   toUserId!: string;
 
   @ManyToOne(() => Case, item => item.docketNumber)
