@@ -76,6 +76,25 @@ export function fillGeneratePetitionFileInformation(fillMultiple = false) {
   cy.get('[data-testid="step-2-next-button"]').click();
 }
 
+export function fillPetitionerAndSpouseInformation(addPhone: boolean = false) {
+  cy.get('[data-testid="filing-type-1"').click();
+  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AL');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('33233');
+  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
+  cy.get('[data-testid="contact-primary-phone"]').type('3232323232');
+  cy.get('[data-testid="is-spouse-deceased-0"]').click();
+  cy.get('[data-testid="contact-secondary-name"]').type('John Spouse');
+  cy.get('[data-testid="contactSecondary-in-care-of"]').type('John Doe');
+  if (addPhone) {
+    cy.get('[data-testid="contact-secondary-phone"]').type('1232323232');
+  }
+  cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select('AK');
+  cy.get('[data-testid="step-1-next-button"]').click();
+}
+
 export function fillPetitionerInformation() {
   cy.get('[data-testid="filing-type-0"').click();
   const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
@@ -145,8 +164,42 @@ export function fillIrsNotice(index: number, filePath: string) {
     .type('05/02/2024');
 }
 
-export function fillCaseProcedureInformation() {
-  cy.get('[data-testid="procedure-type-1"]').click();
+export function fillMultipleIRSNotices(filePath: string) {
+  cy.get('[data-testid="irs-notice-Yes"]').click();
+
+  // IRS Notice #1
+  cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
+  cy.get('[data-testid="case-type-select"]').select('Deficiency');
+  cy.get(
+    '.usa-date-picker__wrapper > [data-testid="notice-issued-date-0-picker"]',
+  ).type('05/02/2024');
+  cy.get('[data-testid="irs-notice-tax-year-0"]').type('2024');
+  cy.get('[data-testid="city-and-state-issuing-office-0"]').type('Jackson, NJ');
+
+  cy.get('[data-testid="add-another-irs-notice-button"]').click();
+
+  // IRS Notice #2
+  cy.get('[data-testid="irs-notice-upload-1"]').attachFile(filePath);
+  cy.get('[data-testid="case-type-select"]').eq(1).select('CDP (Lien/Levy)');
+  cy.get(
+    '.usa-date-picker__wrapper > [data-testid="notice-issued-date-1-picker"]',
+  ).type('05/02/2023');
+  cy.get('[data-testid="irs-notice-tax-year-1"]').type('2023');
+  cy.get('[data-testid="city-and-state-issuing-office-1"]').type(
+    'New York, NY',
+  );
+
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="step-3-next-button"]').click();
+}
+
+export function fillCaseProcedureInformation(procedureType = 'regular') {
+  if (procedureType === 'regular') {
+    cy.get('[data-testid="procedure-type-0"]').click();
+  }
+  if (procedureType === 'small') {
+    cy.get('[data-testid="procedure-type-1"]').click();
+  }
   cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 }
