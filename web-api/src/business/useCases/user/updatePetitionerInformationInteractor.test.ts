@@ -82,6 +82,21 @@ describe('updatePetitionerInformationInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
+  it('should throw an error when an undefined user attempts to update petitioner information', async () => {
+    await expect(
+      updatePetitionerInformationInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {},
+        },
+        undefined,
+      ),
+    ).rejects.toThrow(
+      'User attempting to update petitioner information is not an auth user',
+    );
+  });
+
   it('should throw an error when the user making the request does not have permission to edit petition details', async () => {
     await expect(
       updatePetitionerInformationInteractor(

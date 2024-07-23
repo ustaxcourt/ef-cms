@@ -187,6 +187,7 @@ const updateCaseEntityAndGenerateChange = async ({
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         documentType,
         newData,

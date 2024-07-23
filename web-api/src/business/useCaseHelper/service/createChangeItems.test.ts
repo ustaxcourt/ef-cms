@@ -23,6 +23,7 @@ describe('generateAndServeDocketEntry', () => {
     });
     testArguments = {
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       barNumber: 'DD44444',
       caseEntity: testCaseEntity,
       contactName: 'Test Petitioner',
