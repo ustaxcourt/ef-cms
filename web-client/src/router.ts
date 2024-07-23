@@ -1125,7 +1125,7 @@ const router = {
     );
 
     registerRoute('/idle-logout', () => {
-      return app.getSequence('gotoIdleLogoutSequence')();
+      return app.getSequence('signOutIdleSequence')();
     });
 
     registerRoute('/login', () => {

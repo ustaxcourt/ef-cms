@@ -46,6 +46,9 @@ export const IdleActivityMonitor = connect(
         handleIdleLogoutSequence();
       }, 1000);
 
+      // Make sure we broadcast activity as soon as a new tab loads
+      broadcastIdleStatusActiveSequence();
+
       return () => {
         clearInterval(interval);
       };
