@@ -1,5 +1,12 @@
 import { Case } from '@web-api/persistence/repository/Case';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity()
 export class Message {
@@ -21,9 +28,11 @@ export class Message {
   completedBy?: string;
 
   @Column('varchar', { nullable: true })
+  @Index()
   completedBySection?: string;
 
   @Column('varchar', { nullable: true })
+  @Index()
   completedByUserId?: string;
 
   @Column('varchar', { nullable: true })
@@ -33,6 +42,7 @@ export class Message {
   createdAt!: string;
 
   @Column('varchar')
+  @Index()
   docketNumber!: string;
 
   @Column('varchar')
@@ -42,9 +52,11 @@ export class Message {
   from!: string;
 
   @Column('varchar')
+  @Index()
   fromSection!: string;
 
   @Column('varchar')
+  @Index()
   fromUserId!: string;
 
   @Column('bool')
@@ -66,6 +78,7 @@ export class Message {
   messageId!: string;
 
   @Column('varchar')
+  @Index()
   parentMessageId!: string;
 
   @Column('varchar')
@@ -75,9 +88,11 @@ export class Message {
   to!: string;
 
   @Column('varchar')
+  @Index()
   toSection!: string;
 
   @Column('varchar')
+  @Index()
   toUserId!: string;
 
   @ManyToOne(() => Case, item => item.docketNumber)
