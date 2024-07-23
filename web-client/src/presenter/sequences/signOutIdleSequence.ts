@@ -1,6 +1,5 @@
 import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { isLoggedInAction } from '@web-client/presenter/actions/isLoggedInAction';
-import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setLogoutTypeAction } from '@web-client/presenter/actions/setLogoutTypeAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { signOutSequence } from '@web-client/presenter/sequences/signOutSequence';
@@ -15,7 +14,6 @@ export const signOutIdleSequence = [
     yes: [
       setLogoutTypeAction(LOGOUT_BROADCAST_MESSAGES.idleLogout),
       signOutSequence,
-      navigateToLoginSequence,
       setupCurrentPageAction('IdleLogout'),
     ],
   },
