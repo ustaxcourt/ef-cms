@@ -2,8 +2,8 @@
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
+  IDLE_LOGOUT_STATES,
   IdleLogoutStateType,
-  LOGOUT_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
@@ -660,7 +660,7 @@ export const baseState = {
   health: undefined as any,
   idleLogoutState: {
     logoutAt: undefined,
-    state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL as IdleLogoutStateType,
+    state: IDLE_LOGOUT_STATES.INITIAL as IdleLogoutStateType,
   },
   idleStatus: IDLE_STATUS.ACTIVE,
   iframeSrc: '',

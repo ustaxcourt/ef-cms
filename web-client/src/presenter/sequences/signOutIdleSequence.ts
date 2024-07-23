@@ -1,3 +1,4 @@
+import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { isLoggedInAction } from '@web-client/presenter/actions/isLoggedInAction';
 import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setLogoutTypeAction } from '@web-client/presenter/actions/setLogoutTypeAction';
@@ -12,7 +13,7 @@ export const signOutIdleSequence = [
     // multiple tabs broadcast the idle sign out event.
     no: [],
     yes: [
-      setLogoutTypeAction('idleLogout'),
+      setLogoutTypeAction(LOGOUT_BROADCAST_MESSAGES.idleLogout),
       signOutSequence,
       navigateToLoginSequence,
       setupCurrentPageAction('IdleLogout'),

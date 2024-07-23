@@ -1,4 +1,4 @@
-import { LOGOUT_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { IDLE_LOGOUT_STATES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { handlePeerResetIdleTimerAction } from './handlePeerResetIdleTimerAction';
 import { presenter } from '../presenter-mock';
@@ -16,13 +16,13 @@ describe('handlePeerResetIdleTimerAction', () => {
       },
       state: {
         idleLogoutState: {
-          state: LOGOUT_OPTIONS.idleLogoutStates.COUNTDOWN,
+          state: IDLE_LOGOUT_STATES.COUNTDOWN,
         },
       },
     });
 
     expect(result.state.idleLogoutState.state).toEqual(
-      LOGOUT_OPTIONS.idleLogoutStates.COUNTDOWN,
+      IDLE_LOGOUT_STATES.COUNTDOWN,
     );
   });
 
@@ -33,13 +33,13 @@ describe('handlePeerResetIdleTimerAction', () => {
       },
       state: {
         idleLogoutState: {
-          state: LOGOUT_OPTIONS.idleLogoutStates.MONITORING,
+          state: IDLE_LOGOUT_STATES.MONITORING,
         },
       },
     });
 
     expect(result.state.idleLogoutState.state).toEqual(
-      LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
+      IDLE_LOGOUT_STATES.INITIAL,
     );
   });
 });
