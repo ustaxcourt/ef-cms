@@ -1,6 +1,10 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import {
+  IdleLogoutStateType,
+  LOGOUT_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { JudgeActivityReportState } from './judgeActivityReportState';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawUser } from '@shared/business/entities/User';
@@ -656,7 +660,7 @@ export const baseState = {
   health: undefined as any,
   idleLogoutState: {
     logoutAt: undefined,
-    state: 'INITIAL' as 'INITIAL' | 'MONITORING' | 'COUNTDOWN',
+    state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL as IdleLogoutStateType,
   },
   idleStatus: IDLE_STATUS.ACTIVE,
   iframeSrc: '',

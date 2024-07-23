@@ -1,3 +1,4 @@
+import { LOGOUT_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { showAppTimeoutModalHelper } from './showAppTimeoutModalHelper';
 
@@ -6,7 +7,7 @@ describe('showAppTimeoutModalHelper', () => {
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         idleLogoutState: {
-          state: 'COUNTDOWN',
+          state: LOGOUT_OPTIONS.idleLogoutStates.COUNTDOWN,
         },
         user: {},
       },

@@ -1,3 +1,4 @@
+import { LOGOUT_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -7,11 +8,11 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const handlePeerResetIdleTimerAction = ({ get, store }: ActionProps) => {
   const idleLogoutState = get(state.idleLogoutState);
-  if (idleLogoutState.state !== 'COUNTDOWN') {
+  if (idleLogoutState.state !== LOGOUT_OPTIONS.idleLogoutStates.COUNTDOWN) {
     store.set(state.lastIdleAction, Date.now());
     store.set(state.idleLogoutState, {
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
     });
   }
 };

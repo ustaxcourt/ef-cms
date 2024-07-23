@@ -1,3 +1,4 @@
+import { LOGOUT_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { handleIdleLogoutAction } from './handleIdleLogoutAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -30,7 +31,7 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'INITIAL',
+          state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
         },
         lastIdleAction: 0,
         user: undefined,
@@ -39,7 +40,7 @@ describe('handleIdleLogoutAction', () => {
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
     });
   });
 
@@ -58,7 +59,7 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'INITIAL',
+          state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
         },
         lastIdleAction: 0,
         user: {},
@@ -67,7 +68,7 @@ describe('handleIdleLogoutAction', () => {
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
     });
   });
 
@@ -86,7 +87,7 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'INITIAL',
+          state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
         },
         lastIdleAction: 0,
         user: {},
@@ -95,7 +96,7 @@ describe('handleIdleLogoutAction', () => {
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: expect.any(Number),
-      state: 'MONITORING',
+      state: LOGOUT_OPTIONS.idleLogoutStates.MONITORING,
     });
   });
 
@@ -115,7 +116,7 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'MONITORING',
+          state: LOGOUT_OPTIONS.idleLogoutStates.MONITORING,
         },
         lastIdleAction: 0,
         user: {},
@@ -124,7 +125,7 @@ describe('handleIdleLogoutAction', () => {
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: expect.any(Number),
-      state: 'COUNTDOWN',
+      state: LOGOUT_OPTIONS.idleLogoutStates.COUNTDOWN,
     });
   });
 
@@ -144,7 +145,7 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: 15000,
-          state: 'COUNTDOWN',
+          state: LOGOUT_OPTIONS.idleLogoutStates.COUNTDOWN,
         },
         lastIdleAction: 0,
         user: {},
@@ -153,7 +154,7 @@ describe('handleIdleLogoutAction', () => {
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
     });
     expect(presenter.providers.path.logout).toHaveBeenCalled();
   });
