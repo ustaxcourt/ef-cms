@@ -12,6 +12,7 @@ import {
   handleLockError,
   updatePractitionerUserInteractor,
 } from './updatePractitionerUserInteractor';
+import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('determineEntitiesToLock', () => {
   const mockPractitioner: RawPractitioner = MOCK_PRACTITIONER;
@@ -55,17 +56,16 @@ describe('handleLockError', () => {
       .getUserById.mockReturnValue(admissionsClerkUser);
   });
 
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
     const mockOriginalRequest = {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockAdmissionsClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -119,7 +119,11 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        updatePractitionerUserInteractor(applicationContext, mockRequest),
+        updatePractitionerUserInteractor(
+          applicationContext,
+          mockRequest,
+          mockAdmissionsClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -129,7 +133,11 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        updatePractitionerUserInteractor(applicationContext, mockRequest),
+        updatePractitionerUserInteractor(
+          applicationContext,
+          mockRequest,
+          mockAdmissionsClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -141,7 +149,7 @@ describe('updatePractitionerUserInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'update_practitioner_user',
         },
-        userId: admissionsClerkUser.userId,
+        userId: mockAdmissionsClerkUser.userId,
       });
 
       expect(
@@ -156,7 +164,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await updatePractitionerUserInteractor(applicationContext, mockRequest);
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        mockRequest,
+        mockAdmissionsClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -167,7 +179,11 @@ describe('updatePractitionerUserInteractor', () => {
       });
     });
     it('should remove the lock', async () => {
-      await updatePractitionerUserInteractor(applicationContext, mockRequest);
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        mockRequest,
+        mockAdmissionsClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().removeLock,

@@ -207,9 +207,8 @@ const getUpdatedFieldNames = ({
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId: originalRequest.clientConnectionId,
@@ -218,7 +217,7 @@ export const handleLockError = async (
       originalRequest,
       requestToRetry: 'update_practitioner_user',
     },
-    userId: user.userId,
+    userId: authorizedUser?.userId || '',
   });
 };
 
