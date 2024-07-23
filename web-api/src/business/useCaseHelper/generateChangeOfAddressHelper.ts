@@ -89,6 +89,7 @@ export const generateChangeOfAddressHelper = async ({
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
       await prepareToGenerateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         newData,
         oldData,
@@ -161,11 +162,20 @@ export const generateChangeOfAddressHelper = async ({
  */
 const prepareToGenerateAndServeDocketEntry = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   newData,
   oldData,
   practitionerName,
   user,
+}: {
+  applicationContext: any;
+  caseEntity: any;
+  newData: any;
+  oldData: any;
+  practitionerName: any;
+  user: any;
+  authorizedUser: AuthUser;
 }) => {
   const documentType = applicationContext
     .getUtilities()
@@ -192,6 +202,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
   newData.name = practitionerName;
   const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
     applicationContext,
+    authorizedUser,
     barNumber: user.barNumber,
     caseEntity,
     docketMeta,

@@ -1,4 +1,9 @@
 import {
+  AuthUser,
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -14,7 +19,6 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -50,10 +54,18 @@ export const getIsUserAuthorized = ({
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   petitionerOnCase,
   user,
   userHasAnEmail,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: any;
+  petitionerOnCase: any;
+  user: any;
+  userHasAnEmail: any;
+  authorizedUser: AuthUser;
 }) => {
   const newData = {
     email: petitionerOnCase.newEmail,
@@ -81,6 +93,7 @@ const updateCaseEntityAndGenerateChange = async ({
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         documentType,
         newData,
@@ -111,6 +124,12 @@ export const updatePetitionerInformation = async (
   { docketNumber, updatedPetitionerData },
   authorizedUser: UnknownAuthUser,
 ) => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new Error(
+      'User attempting to update petitioner information is not an auth user',
+    );
+  }
+
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
@@ -284,6 +303,7 @@ export const updatePetitionerInformation = async (
 
       await updateCaseEntityAndGenerateChange({
         applicationContext,
+        authorizedUser,
         caseEntity,
         petitionerOnCase: oldCaseContact,
         user: authorizedUser,
