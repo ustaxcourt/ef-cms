@@ -1,6 +1,6 @@
-import { AppDataSource } from '@web-api/data-source';
 import { Message } from '@web-api/persistence/repository/Message';
 import { RawMessage } from '@shared/business/entities/Message';
+import { getDataSource } from '@web-api/data-source';
 
 /**
  * createMessage
@@ -17,7 +17,8 @@ export const createMessage = async ({
   applicationContext: IApplicationContext;
   message: RawMessage;
 }) => {
-  const messageRepository = AppDataSource.getRepository(Message);
+  const dataSource = await getDataSource();
+  const messageRepository = dataSource.getRepository(Message);
 
   return await messageRepository.save({
     ...message,

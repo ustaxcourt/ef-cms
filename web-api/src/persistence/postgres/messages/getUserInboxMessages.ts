@@ -1,5 +1,5 @@
-import { AppDataSource } from '@web-api/data-source';
 import { MessageResult } from '@shared/business/entities/MessageResult';
+import { getDataSource } from '@web-api/data-source';
 import { Message as messageRepo } from '@web-api/persistence/repository/Message';
 import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
 
@@ -12,7 +12,8 @@ export const getUserInboxMessages = async ({
 }) => {
   applicationContext.logger.info('getUserInboxMessages start');
 
-  const messageRepository = AppDataSource.getRepository(messageRepo);
+  const dataSource = await getDataSource();
+  const messageRepository = dataSource.getRepository(messageRepo);
 
   const messages = await messageRepository.find({
     relations: { case: true },

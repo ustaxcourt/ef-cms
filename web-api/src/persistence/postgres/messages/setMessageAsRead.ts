@@ -1,5 +1,5 @@
-import { AppDataSource } from '@web-api/data-source';
 import { Message } from '@web-api/persistence/repository/Message';
+import { getDataSource } from '@web-api/data-source';
 
 export const setMessageAsRead = async ({
   applicationContext,
@@ -10,7 +10,8 @@ export const setMessageAsRead = async ({
   messageId: string;
   docketNumber: string;
 }) => {
-  const messageRepository = AppDataSource.getRepository(Message);
+  const dataSource = await getDataSource();
+  const messageRepository = dataSource.getRepository(Message);
 
   await messageRepository.update({ docketNumber, messageId }, { isRead: true });
 };
