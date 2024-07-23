@@ -588,6 +588,12 @@ export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
     .map(x => x.eventCode),
 );
 
+export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .map(x => x.eventCode),
+);
+
 export const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
   EXTERNAL_DOCUMENTS_ARRAY.filter(
     doc =>
@@ -1473,7 +1479,17 @@ export const SCAN_MODE_LABELS = {
   FLATBED: 'Flatbed',
 };
 
-export const PRACTICE_TYPE_OPTIONS = ['IRS', 'DOJ', 'Private'];
+export const PRACTICE_TYPE = {
+  IRS: 'IRS',
+  DOJ: 'DOJ',
+  Private: 'Private',
+};
+
+export const PRACTICE_TYPE_OPTIONS = [
+  PRACTICE_TYPE.IRS,
+  PRACTICE_TYPE.DOJ,
+  PRACTICE_TYPE.Private,
+];
 
 export const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 
