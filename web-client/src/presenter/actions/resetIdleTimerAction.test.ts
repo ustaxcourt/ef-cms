@@ -1,3 +1,4 @@
+import { LOGOUT_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { resetIdleTimerAction } from './resetIdleTimerAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 describe('resetIdleTimerAction', () => {
@@ -6,7 +7,7 @@ describe('resetIdleTimerAction', () => {
       state: {
         idleLogoutState: {
           logoutAt: 300,
-          state: 'MONITORING',
+          state: LOGOUT_OPTIONS.idleLogoutStates.MONITORING,
         },
         lastIdleAction: 23423,
       },
@@ -14,7 +15,7 @@ describe('resetIdleTimerAction', () => {
     expect(output.state).toMatchObject({
       idleLogoutState: {
         logoutAt: undefined,
-        state: 'INITIAL',
+        state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
       },
       lastIdleAction: expect.any(Number),
     });

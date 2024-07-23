@@ -1648,3 +1648,18 @@ export type CreatedCaseType = {
     name: string;
   };
 };
+
+export const LOGOUT_OPTIONS = {
+  logoutTypes: {
+    userLogout: 'userLogout',
+    idleLogout: 'idleLogout',
+  },
+  idleLogoutStates: {
+    INITIAL: 'INITIAL',
+    MONITORING: 'MONITORING',
+    COUNTDOWN: 'COUNTDOWN',
+  },
+};
+
+export type IdleLogoutStateType =
+  (typeof LOGOUT_OPTIONS.idleLogoutStates)[keyof typeof LOGOUT_OPTIONS.idleLogoutStates];

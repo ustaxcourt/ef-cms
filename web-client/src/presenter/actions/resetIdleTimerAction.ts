@@ -1,3 +1,4 @@
+import { LOGOUT_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -9,6 +10,6 @@ export const resetIdleTimerAction = ({ store }: ActionProps) => {
   store.set(state.lastIdleAction, Date.now());
   store.set(state.idleLogoutState, {
     logoutAt: undefined,
-    state: 'INITIAL',
+    state: LOGOUT_OPTIONS.idleLogoutStates.INITIAL,
   });
 };
