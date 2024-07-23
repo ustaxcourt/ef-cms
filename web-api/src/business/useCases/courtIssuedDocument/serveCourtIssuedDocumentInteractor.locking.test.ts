@@ -9,6 +9,7 @@ import {
   serveCourtIssuedDocumentInteractor,
 } from './serveCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
@@ -53,17 +54,16 @@ describe('handleLockError', () => {
       .getUserById.mockReturnValue(docketClerkUser);
   });
 
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
     const mockOriginalRequest = {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -134,7 +134,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        serveCourtIssuedDocumentInteractor(applicationContext, mockRequest),
+        serveCourtIssuedDocumentInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -144,7 +148,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        serveCourtIssuedDocumentInteractor(applicationContext, mockRequest),
+        serveCourtIssuedDocumentInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -157,7 +165,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'serve_court_issued_document',
         },
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       });
 
       expect(
@@ -172,7 +180,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await serveCourtIssuedDocumentInteractor(applicationContext, mockRequest);
+      await serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -184,7 +196,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     it('should remove the lock', async () => {
-      await serveCourtIssuedDocumentInteractor(applicationContext, mockRequest);
+      await serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().removeLock,

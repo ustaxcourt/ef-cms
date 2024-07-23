@@ -213,9 +213,11 @@ export const determineEntitiesToLock = (
   ttl: 15 * 60,
 });
 
-export const handleLockError = async (applicationContext, originalRequest) => {
-  const user = applicationContext.getCurrentUser();
-
+export const handleLockError = async (
+  applicationContext,
+  originalRequest,
+  authorizedUser: UnknownAuthUser,
+) => {
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId: originalRequest.clientConnectionId,
@@ -224,7 +226,7 @@ export const handleLockError = async (applicationContext, originalRequest) => {
       originalRequest,
       requestToRetry: 'serve_court_issued_document',
     },
-    userId: user.userId,
+    userId: authorizedUser?.userId || '',
   });
 };
 
