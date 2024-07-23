@@ -341,7 +341,7 @@ function IRSNoticeInformation({ petitionFormatted }) {
         <div className="petition-review-irs-notice-section">
           {!petitionFormatted.hasIrsNotice && (
             <div>
-              <div className="line-height-2">
+              <div className="line-height-2" data-testid="irs-notice-type">
                 <div className="margin-bottom-1 semi-bold">
                   Type of notice/case
                 </div>
@@ -361,6 +361,7 @@ function IRSNoticeInformation({ petitionFormatted }) {
                     'line-height-2',
                     !isFirstNotice && 'petition-review-spacing',
                   )}
+                  data-testid={`irs-notice-info-${index}`}
                   key={`${irsNotice.caseType}`}
                 >
                   <div className="margin-bottom-1 semi-bold">
@@ -411,13 +412,15 @@ function CaseInformation({ petitionFormatted }) {
         <div className="petition-review-case-information-section">
           <div className="line-height-2">
             <div className="margin-bottom-1 semi-bold">Case procedure</div>
-            <div>{petitionFormatted.procedureType}</div>
+            <div data-testid="procedure-type">
+              {petitionFormatted.procedureType}
+            </div>
           </div>
           <div className="line-height-2 petition-review-spacing">
             <div className="margin-bottom-1 semi-bold">
               Requested trial location
             </div>
-            <div className="margin-bottom-1">
+            <div className="margin-bottom-1" data-testid="trial-location">
               {petitionFormatted.preferredTrialCity}
             </div>
           </div>
