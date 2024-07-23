@@ -91,7 +91,7 @@ export const fileAndServeDocumentOnOneCase = async ({
     });
 
   return new Case(validRawCaseEntity, {
-    authorizedUser: applicationContext.getCurrentUser(),
+    authorizedUser: user,
   });
 };
 
