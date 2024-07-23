@@ -16,7 +16,6 @@ describe('reportMenuHelper', () => {
   );
 
   const getBaseState = user => {
-    applicationContext.getCurrentUser.mockReturnValue(user);
     return {
       currentPage: 'CaseDetailInternal',
       permissions: getUserPermissions(user),

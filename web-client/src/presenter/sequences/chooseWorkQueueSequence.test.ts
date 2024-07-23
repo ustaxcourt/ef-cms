@@ -5,14 +5,9 @@ import { docketClerk1User } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
-  const { PETITIONS_SECTION } = applicationContext.getConstants();
   let cerebralTest;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitionsclerk',
-      section: PETITIONS_SECTION,
-    });
     applicationContext
       .getUseCases()
       .getDocumentQCInboxForSectionInteractor.mockReturnValue([

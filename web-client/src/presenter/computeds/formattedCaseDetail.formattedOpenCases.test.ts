@@ -1,4 +1,3 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formattedOpenCases as formattedOpenCasesComputed } from './formattedCaseDetail';
 import {
@@ -11,13 +10,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('formattedOpenCases', () => {
   const formattedOpenCases = withAppContextDecorator(
     formattedOpenCasesComputed,
-    {
-      ...applicationContext,
-      getCurrentUser: () => ({
-        role: ROLES.petitionsClerk,
-        userId: '111',
-      }),
-    },
+    applicationContext,
   );
 
   it('should return formatted open cases', () => {

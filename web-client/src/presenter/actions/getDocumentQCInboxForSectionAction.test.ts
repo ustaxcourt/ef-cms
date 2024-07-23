@@ -10,9 +10,6 @@ describe('getDocumentQCInboxForSectionAction', () => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: 'judgy section',
-    });
     applicationContext
       .getUseCases()
       .getDocumentQCInboxForSectionInteractor.mockReturnValue(mockWorkItems);

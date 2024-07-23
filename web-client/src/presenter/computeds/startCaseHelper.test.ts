@@ -1,9 +1,7 @@
 import {
   CASE_TYPES_MAP,
   FILING_TYPES,
-  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import {
   irsPractitionerUser,
@@ -21,13 +19,6 @@ describe('startCaseHelper', () => {
     startCaseHelperComputed,
     applicationContext,
   );
-
-  beforeAll(() => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.petitioner,
-      }) as RawUser;
-  });
 
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
     const result = runCompute(startCaseHelper, {

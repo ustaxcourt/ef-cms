@@ -53,9 +53,6 @@ describe('getUsersInSectionAction', () => {
 
   it("should retrieve all the users in the current user's section when a section is not provided", async () => {
     const mockSection = 'Test User Section';
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: mockSection,
-    });
     applicationContext
       .getUseCases()
       .getUsersInSectionInteractor.mockReturnValue([]);

@@ -25,8 +25,6 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
   });
 
   it('should call submitCaseAssociationRequestInteractor when the logged in user is an IRS practitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
-
     await runAction(submitRespondentCaseAssociationRequestAction, {
       modules: { presenter },
       state: {
@@ -46,7 +44,6 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
   });
 
   it('should return the updated case as props', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
     applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor.mockResolvedValue(MOCK_CASE);

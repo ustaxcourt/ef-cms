@@ -17,10 +17,6 @@ describe('scanBatchPreviewerHelper', () => {
     applicationContext,
   );
 
-  applicationContext.getCurrentUser = () => ({
-    role: applicationContext.getConstants().ROLES.privatePractitioner,
-  });
-
   beforeEach(() => {
     state.form = {};
   });

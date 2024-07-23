@@ -24,8 +24,6 @@ describe('fileDocumentHelper', () => {
     validationErrors: {},
   };
 
-  //applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
   const fileDocumentHelper = withAppContextDecorator(
     fileDocumentHelperComputed,
     applicationContext,

@@ -9,16 +9,10 @@ const caseDetailPractitionerSearchHelper = withAppContextDecorator(
   caseDetailPractitionerSearchHelperComputed,
   {
     ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
   },
 );
 
-let globalUser;
-
 const getBaseState = user => {
-  globalUser = user;
   return {
     permissions: getUserPermissions(user),
   };

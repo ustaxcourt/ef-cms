@@ -40,12 +40,6 @@ describe('documentViewerHelper', () => {
     };
   };
 
-  beforeAll(() => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(docketClerkUser);
-  });
-
   describe('showCompleteQcButton', () => {
     const showCompleteQcButtonTests = [
       {

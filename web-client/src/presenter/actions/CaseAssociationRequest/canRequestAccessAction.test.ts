@@ -1,4 +1,3 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { canRequestAccessAction } from './canRequestAccessAction';
 import { presenter } from '../../presenter';
@@ -10,10 +9,6 @@ describe('canRequestAccessAction', () => {
     no: jest.fn(),
     yes: jest.fn(),
   };
-
-  (applicationContext.getCurrentUser as jest.Mock).mockReturnValue({
-    role: ROLES.irsPractitioner,
-  });
 
   it('should call path.yes if props.isAssociated is false or undefined', async () => {
     await runAction(canRequestAccessAction, {
