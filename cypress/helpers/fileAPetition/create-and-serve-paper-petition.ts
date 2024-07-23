@@ -173,12 +173,10 @@ export function createAndServePaperPetitionMyselfAndSpouse() {
   cy.get('[data-testid="tab-irs-notice"] > .button-text').click();
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
 
-  // ****
   cy.get('#upload-mode-upload').click();
   cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
 
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
-  // cy.get('#scan-mode-radios').click();
   cy.get('#upload-mode-upload').click();
   cy.get('#requestForPlaceOfTrialFile-file').attachFile(
     '../../helpers/file/sample.pdf',
