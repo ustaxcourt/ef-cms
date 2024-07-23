@@ -174,8 +174,13 @@ export function fillMultipleIRSNotices(filePath: string) {
   cy.get('[data-testid="step-3-next-button"]').click();
 }
 
-export function fillCaseProcedureInformation() {
-  cy.get('[data-testid="procedure-type-1"]').click();
+export function fillCaseProcedureInformation(procedureType = 'regular') {
+  if (procedureType === 'regular') {
+    cy.get('[data-testid="procedure-type-0"]').click();
+  }
+  if (procedureType === 'small') {
+    cy.get('[data-testid="procedure-type-1"]').click();
+  }
   cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 }
