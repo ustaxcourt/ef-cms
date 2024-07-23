@@ -21,10 +21,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   } as any;
 
   beforeEach(() => {
-    // applicationContext.getCurrentUser = jest
-    //   .fn()
-    //   .mockReturnValue(docketClerkUser);
-
     applicationContext.getNotificationGateway().sendNotificationToUser = jest
       .fn()
       .mockReturnValue(null);
@@ -106,10 +102,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   });
 
   it('should throw an error if a user is not authorized', async () => {
-    // applicationContext.getCurrentUser = jest
-    //   .fn()
-    //   .mockReturnValue(privatePractitionerUser);
-
     await expect(
       createCsvCustomCaseReportFileInteractor(
         applicationContext,
