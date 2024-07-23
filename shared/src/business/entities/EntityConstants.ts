@@ -1649,17 +1649,22 @@ export type CreatedCaseType = {
   };
 };
 
-export const LOGOUT_OPTIONS = {
-  logoutTypes: {
-    userLogout: 'userLogout',
-    idleLogout: 'idleLogout',
-  },
-  idleLogoutStates: {
-    INITIAL: 'INITIAL',
-    MONITORING: 'MONITORING',
-    COUNTDOWN: 'COUNTDOWN',
-  },
+export const LOGOUT_BROADCAST_MESSAGES = {
+  userLogout: 'userLogout',
+  idleLogout: 'idleLogout',
+  idleStatusActive: 'idleStatusActive',
+  stayLoggedIn: 'stayLoggedIn',
+};
+
+export const IDLE_LOGOUT_STATES = {
+  INITIAL: 'INITIAL',
+  MONITORING: 'MONITORING',
+  COUNTDOWN: 'COUNTDOWN',
 };
 
 export type IdleLogoutStateType =
-  (typeof LOGOUT_OPTIONS.idleLogoutStates)[keyof typeof LOGOUT_OPTIONS.idleLogoutStates];
+  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
+
+export type IdleLogoutType =
+  | (typeof LOGOUT_BROADCAST_MESSAGES)['idleLogout']
+  | (typeof LOGOUT_BROADCAST_MESSAGES)['userLogout'];
