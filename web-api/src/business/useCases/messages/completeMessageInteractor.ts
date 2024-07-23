@@ -47,8 +47,6 @@ export const completeMessageInteractor = async (
         applicationContext,
       }).validate();
 
-      // TODO 10417: fix typing for call to markAsCompleted
-      // @ts-ignore fix typing for call to markAsCompleted
       updatedMessage.markAsCompleted({ message: message.messageBody, user });
 
       const validatedRawMessage = updatedMessage.validate().toRawObject();

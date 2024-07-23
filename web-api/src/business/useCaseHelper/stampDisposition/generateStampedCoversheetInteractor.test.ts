@@ -4,7 +4,6 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { generateStampedCoversheetInteractor } from './generateStampedCoversheetInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
-// TODO 10417: these tests pass irrespective of which mock user (or even no user)
 describe('generateStampedCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 

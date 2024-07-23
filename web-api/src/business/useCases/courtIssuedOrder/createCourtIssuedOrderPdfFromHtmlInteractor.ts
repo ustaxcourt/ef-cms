@@ -67,8 +67,6 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       addedDocketNumbers,
       caseCaptionExtension,
       caseTitle,
-      // TODO 10417: docketNumberwithSuffix should be properly typed
-      // @ts-ignore
       docketNumberWithSuffix,
       nameOfClerk,
       orderContent: contentHtml,
@@ -79,8 +77,6 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    // TODO 10417: file should be properly typed
-    // @ts-ignore
     file: orderPdf,
     useTempBucket: true,
   });
