@@ -76,6 +76,25 @@ export function fillGeneratePetitionFileInformation(fillMultiple = false) {
   cy.get('[data-testid="step-2-next-button"]').click();
 }
 
+export function fillPetitionerAndSpouseInformation(addPhone: boolean = false) {
+  cy.get('[data-testid="filing-type-1"').click();
+  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AL');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('33233');
+  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
+  cy.get('[data-testid="contact-primary-phone"]').type('3232323232');
+  cy.get('[data-testid="is-spouse-deceased-0"]').click();
+  cy.get('[data-testid="contact-secondary-name"]').type('John Spouse');
+  cy.get('[data-testid="contactSecondary-in-care-of"]').type('John Doe');
+  if (addPhone) {
+    cy.get('[data-testid="contact-secondary-phone"]').type('1232323232');
+  }
+  cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select('AK');
+  cy.get('[data-testid="step-1-next-button"]').click();
+}
+
 export function fillPetitionerInformation() {
   cy.get('[data-testid="filing-type-0"').click();
   const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
