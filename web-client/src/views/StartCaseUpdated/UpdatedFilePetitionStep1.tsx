@@ -200,6 +200,7 @@ function PetitionerAndSpouseInfo({
         validationErrors.isSpouseDeceased && 'usa-form-group--error',
       )}
     >
+      <h2>Your spouse&#39;s information</h2>
       <fieldset className="usa-fieldset usa-sans" id="deceased-spouse-radios">
         <legend id="deceased-spouse-legend">Is your spouse deceased?</legend>
         {['Yes', 'No'].map((isSpouseDeceased, idx) => (
