@@ -32,9 +32,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
       ],
     };
-
-    // applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
@@ -57,8 +54,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should throw an error when the user is not authorized to serve externally filed documents', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
       serveExternallyFiledDocumentInteractor(
         applicationContext,

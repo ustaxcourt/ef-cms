@@ -30,8 +30,6 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   };
 
   beforeEach(() => {
-    // applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
     applicationContext
       .getPersistenceGateway()
       .fetchEventCodesCountForJudges.mockResolvedValueOnce(
@@ -41,8 +39,6 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     await expect(
       getCountOfCaseDocumentsFiledByJudgesInteractor(
         applicationContext,
