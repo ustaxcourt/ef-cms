@@ -11,11 +11,6 @@ import {
 describe('getDocumentContentsForDocketEntryInteractor', () => {
   const mockDocumentContentsId = '599dbad3-4912-4a61-9525-3da245700893';
   beforeEach(() => {
-    // applicationContext.getCurrentUser.mockReturnValue({
-    //   name: 'Tasha Yar',
-    //   role: ROLES.docketClerk,
-    // });
-
     applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
       Buffer.from(
         JSON.stringify({
@@ -27,10 +22,6 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the logged in user does not have permission to EDIT_ORDER', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({
-    //   name: 'Tasha Yar',
-    //   role: ROLES.inactivePractitioner,
-    // });
     let authorizedUser = {
       ...mockPrivatePractitionerUser,
       role: ROLES.inactivePractitioner,
@@ -47,11 +38,6 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should allow the logged in internal user with permissions to edit the order', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({
-    //   name: 'Test Judge',
-    //   role: ROLES.judge,
-    // });
-
     await getDocumentContentsForDocketEntryInteractor(
       applicationContext,
       {

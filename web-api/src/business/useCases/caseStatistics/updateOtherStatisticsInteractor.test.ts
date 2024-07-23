@@ -18,10 +18,6 @@ describe('updateOtherStatisticsInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    // applicationContext.getCurrentUser.mockReturnValue({
-    //   role: ROLES.docketClerk,
-    //   userId: 'docketClerk',
-    // });
     authorizedUser = mockDocketClerkUser;
 
     applicationContext
@@ -30,7 +26,6 @@ describe('updateOtherStatisticsInteractor', () => {
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({});
     authorizedUser = {} as UnknownAuthUser;
 
     await expect(

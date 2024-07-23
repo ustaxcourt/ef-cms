@@ -9,7 +9,6 @@ import { omit } from 'lodash';
 
 describe('deleteUserCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
-    // applicationContext.getCurrentUser.mockReturnValue({});
     let user = {} as UnknownAuthUser;
 
     await expect(
@@ -31,10 +30,6 @@ describe('deleteUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     }) as UnknownAuthUser;
-
-    // applicationContext.getCurrentUser.mockReturnValue(
-    //   omit(mockUser, 'section'),
-    // );
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockUser);
