@@ -623,7 +623,6 @@ export const createTestApplicationContext = () => {
         ERROR_MAP_429,
       };
     }),
-    getCurrentUserPermissions: jest.fn(),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
