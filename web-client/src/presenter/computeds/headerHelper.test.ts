@@ -12,7 +12,6 @@ const headerHelper = withAppContextDecorator(
 );
 
 const getBaseState = user => {
-  applicationContext.getCurrentUser = () => user;
   applicationContext.getPublicSiteUrl = () => 'localhost:5678/';
   return {
     notifications: {

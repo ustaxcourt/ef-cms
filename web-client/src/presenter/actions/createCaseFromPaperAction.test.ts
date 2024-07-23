@@ -48,9 +48,6 @@ describe('createCaseFromPaperAction', () => {
       requestForPlaceOfTrialFileId: '123',
       stinFileId: '123',
     });
-    applicationContext.getCurrentUser.mockReturnValue({
-      email: 'petitioner1@example.com',
-    });
   });
 
   it('should generate document ids for files selected, then call createCaseFromPaperInteractor with the petition metadata and ids and call the success path when finished', async () => {

@@ -9,7 +9,6 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import {
   colvinsChambersUser,
   docketClerk1User,
-  judgeUser,
 } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -278,8 +277,6 @@ describe('formattedTrialSessionDetails', () => {
         sessionStatus: SESSION_STATUS_GROUPS.open,
         startDate: FUTURE_DATE,
       };
-
-      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {

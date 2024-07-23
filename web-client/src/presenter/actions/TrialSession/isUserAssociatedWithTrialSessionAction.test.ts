@@ -59,10 +59,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the user is in the chambers section and their judge is not associated with the trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.chambers,
-      userId: '234',
-    });
     await runAction(isUserAssociatedWithTrialSessionAction, {
       modules: {
         presenter,
@@ -104,10 +100,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the current user is a trial clerk for this trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.trialClerk,
-      userId: '123',
-    });
     await runAction(isUserAssociatedWithTrialSessionAction, {
       modules: {
         presenter,

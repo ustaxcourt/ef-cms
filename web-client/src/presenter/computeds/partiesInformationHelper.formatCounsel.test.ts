@@ -1,5 +1,4 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatCounsel } from './partiesInformationHelper';
 
 describe('partiesInformationHelper', () => {
@@ -7,10 +6,7 @@ describe('partiesInformationHelper', () => {
 
   let mockIrsPractitioner;
 
-  let mockUser;
-
   beforeEach(() => {
-    mockUser = {};
     mockIrsPractitioner = {
       barNumber: 'RT1111',
       email: mockEmail,
@@ -18,7 +14,6 @@ describe('partiesInformationHelper', () => {
       role: ROLES.irsPractitioner,
       userId: 'c6df4afc-286b-4979-92e2-b788e49dc51d',
     };
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
   });
 
   describe('formatCounsel', () => {

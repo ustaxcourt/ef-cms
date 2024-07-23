@@ -107,11 +107,6 @@ describe('filterWorkItems', () => {
   let workQueueOutbox;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
-    });
-
     workItemPetitionsMyDocumentQCInbox = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       docketNumber: '100-05',

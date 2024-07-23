@@ -25,7 +25,6 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -546,13 +545,6 @@ const createTestApplicationContext = () => {
         ...getConstants(),
         ERROR_MAP_429,
       };
-    }),
-    getCurrentUser: jest.fn().mockImplementation(() => {
-      return new User({
-        name: 'richard',
-        role: ROLES.petitioner,
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      });
     }),
     getCurrentUserPermissions: jest.fn(),
     getDispatchers: jest.fn().mockReturnValue({

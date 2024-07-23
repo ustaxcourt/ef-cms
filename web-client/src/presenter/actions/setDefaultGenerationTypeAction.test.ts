@@ -11,8 +11,6 @@ import { setDefaultGenerationTypeAction } from './setDefaultGenerationTypeAction
 describe('setDefaultGenerationTypeAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-
   it('should set the generation type to auto when the changed event code is EA', async () => {
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },

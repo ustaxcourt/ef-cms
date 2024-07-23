@@ -34,9 +34,6 @@ describe('advancedSearchHelper', () => {
           MAX_SEARCH_RESULTS: maxSearchResultsOverride,
         };
       },
-      getCurrentUser: () => {
-        return globalUser;
-      },
     },
   );
 

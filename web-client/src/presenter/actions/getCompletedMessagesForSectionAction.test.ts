@@ -48,7 +48,6 @@ describe('getCompletedMessagesForSectionAction', () => {
       applicationContext.getUseCases().getCompletedMessagesForSectionInteractor
         .mock.calls[0][1],
     ).toEqual({ section: DOCKET_SECTION });
-    expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
   });
 
   it("retrieves completed messages for the current user's section when state.messageBoxToDisplay.section is undefined", async () => {
