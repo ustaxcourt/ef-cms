@@ -1,6 +1,7 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 
@@ -10,6 +11,12 @@ export const fileAndServeDocumentOnOneCase = async ({
   docketEntryEntity,
   subjectCaseDocketNumber,
   user,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: any;
+  docketEntryEntity: any;
+  subjectCaseDocketNumber: any;
+  user: any;
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -87,6 +94,7 @@ export const fileAndServeDocumentOnOneCase = async ({
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser: user,
       caseToUpdate: caseEntity,
     });
 

@@ -1,4 +1,3 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
@@ -7,6 +6,7 @@ import { IrsPractitioner } from '../../../../../shared/src/business/entities/Irs
 import { Message } from '../../../../../shared/src/business/entities/Message';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import diff from 'diff-arrays-of-objects';
 
@@ -447,7 +447,7 @@ export const updateCaseAndAssociations = async ({
   caseToUpdate,
 }: {
   applicationContext: ServerApplicationContext;
-  authorizedUser: AuthUser;
+  authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
 }): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate

@@ -2,7 +2,6 @@ import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/Enti
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
 import { uniqBy } from 'lodash';
@@ -12,7 +11,6 @@ import { uniqBy } from 'lodash';
  */
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
-  authorizedUser: UnknownAuthUser,
 ) => {
   applicationContext.logger.debug('Time', createISODateString());
 
@@ -27,6 +25,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     const caseEntity = entity.validate();
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser: undefined,
       caseToUpdate: caseEntity,
     });
 
@@ -52,6 +51,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     try {
       await acquireLock({
         applicationContext,
+        authorizedUser: undefined,
         identifiers: [`case|${docketNumber}`],
         onLockError: new ServiceUnavailableError(
           `${docketNumber} is currently being updated`,
@@ -83,7 +83,7 @@ export const checkForReadyForTrialCasesInteractor = async (
 
     if (caseToCheck) {
       const caseEntity = new Case(caseToCheck, {
-        authorizedUser,
+        authorizedUser: undefined,
       });
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
