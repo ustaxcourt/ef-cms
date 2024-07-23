@@ -100,6 +100,7 @@ export const generateChangeOfAddressHelper = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
   } catch (error) {

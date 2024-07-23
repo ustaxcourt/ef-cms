@@ -44,6 +44,7 @@ export const updateOtherStatistics = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: newCase,
     });
 

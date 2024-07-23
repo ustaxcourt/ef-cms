@@ -53,6 +53,7 @@ export const associateIrsPractitionerToCase = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
   }

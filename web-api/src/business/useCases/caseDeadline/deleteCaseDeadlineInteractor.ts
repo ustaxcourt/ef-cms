@@ -43,6 +43,7 @@ export const deleteCaseDeadline = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: updatedCase,
     });
   return new Case(result, { authorizedUser }).validate().toRawObject();

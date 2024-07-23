@@ -36,6 +36,7 @@ export const unsealCase = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: newCase,
     });
 

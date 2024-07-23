@@ -3,6 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -16,7 +17,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const removePdfFromDocketEntry = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -50,6 +51,7 @@ export const removePdfFromDocketEntry = async (
       .getUseCaseHelpers()
       .updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       });
 

@@ -55,6 +55,23 @@ describe('saveSignedDocumentInteractor', () => {
       ]);
   });
 
+  it('should throw an error when an unknown user attempts to save a signed document', async () => {
+    await expect(
+      saveSignedDocumentInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          nameForSigning: mockSigningName,
+          originalDocketEntryId: mockOriginalDocketEntryId,
+          signedDocketEntryId: mockSignedDocketEntryId,
+        } as any,
+        undefined,
+      ),
+    ).rejects.toThrow(
+      'User attempting to save signed document is not an auth user',
+    );
+  });
+
   it('should save the original, unsigned document to S3 with a new id', async () => {
     await saveSignedDocumentInteractor(
       applicationContext,

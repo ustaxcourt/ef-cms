@@ -95,6 +95,7 @@ export const updateCourtIssuedDocketEntry = async (
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     }),
   ];

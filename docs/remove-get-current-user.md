@@ -7,6 +7,7 @@
 - Look at validateRawCollection()
 - Look at all references of genericHandler to make sure authorizedUser is being passed in.
 - check instances of `handleLockError` (or `OnLockError`)
+- Look at all new Case and new DocketEntry
 
 # Web-Client 
 Steps to transition getCurrentUser() in web-client

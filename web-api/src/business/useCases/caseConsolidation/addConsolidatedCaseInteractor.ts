@@ -94,6 +94,7 @@ export const addConsolidatedCase = async (
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );

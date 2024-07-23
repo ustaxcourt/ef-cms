@@ -5,7 +5,11 @@ import {
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { orderBy } from 'lodash';
 
 const saveOriginalDocumentWithNewId = async ({
@@ -63,7 +67,7 @@ const replaceOriginalWithSignedDocument = async ({
  * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
 export const saveSignedDocumentInteractor = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     nameForSigning,
@@ -73,6 +77,11 @@ export const saveSignedDocumentInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new Error(
+      'User attempting to save signed document is not an auth user',
+    );
+  }
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -168,6 +177,7 @@ export const saveSignedDocumentInteractor = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

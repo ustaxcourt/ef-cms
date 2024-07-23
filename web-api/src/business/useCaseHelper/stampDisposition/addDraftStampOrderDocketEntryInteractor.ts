@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -27,7 +28,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {string} providers.stampData the stampData from the form
  */
 export const addDraftStampOrderDocketEntry = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     formattedDraftDocumentTitle,
@@ -131,6 +132,7 @@ export const addDraftStampOrderDocketEntry = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 };

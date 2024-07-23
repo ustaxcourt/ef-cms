@@ -78,6 +78,7 @@ export const updatePetitionerCase = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate,
   });
 };
@@ -126,6 +127,7 @@ export const updatePractitionerCase = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: validatedCaseToUpdate,
   });
 };

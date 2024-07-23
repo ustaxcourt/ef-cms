@@ -240,6 +240,7 @@ export const updateContact = async (
   if (shouldUpdateCase) {
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
   }
