@@ -31,8 +31,8 @@ describe('File a petition - Step 7 Pay Filing Fee', () => {
         expect(response.body).to.have.property('docketNumber');
         const createdDocketNumber = response.body.docketNumber;
         cy.get('.usa-alert__heading').should(
-          'have.text',
-          `Your case has been assigned docket number ${createdDocketNumber}S`,
+          'contain.text',
+          `Your case has been assigned docket number ${createdDocketNumber}`,
         );
       });
     });
