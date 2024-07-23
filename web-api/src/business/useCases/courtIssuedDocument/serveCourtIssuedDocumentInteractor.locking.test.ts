@@ -104,8 +104,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getUseCaseHelpers()
       .fileAndServeDocumentOnOneCase.mockImplementation(

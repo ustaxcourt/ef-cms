@@ -1,5 +1,3 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseDeadlinesForCaseInteractor } from './getCaseDeadlinesForCaseInteractor';
 
@@ -12,15 +10,8 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
     docketNumber: '123-20',
   };
 
-  const mockUser = new User({
-    name: 'Test Petitionsclerk',
-    role: ROLES.petitionsClerk,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
-
   it('gets the case deadlines', async () => {
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
 
     applicationContext
       .getPersistenceGateway()
