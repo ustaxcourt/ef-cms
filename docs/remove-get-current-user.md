@@ -9,6 +9,9 @@
 - check instances of `handleLockError` (or `OnLockError`)
 - Look at all new Case and new DocketEntry
 
+# Problems we see with the app that are unrelated to changes
+- generateStampedCoversheetInteractor does not have any authorization
+
 # Web-Client 
 Steps to transition getCurrentUser() in web-client
 1. Find applicationContext.getCurrentUser() and replace with get(state.user);

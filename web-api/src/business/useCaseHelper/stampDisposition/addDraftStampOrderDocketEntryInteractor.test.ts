@@ -82,8 +82,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     });
   });
 
-  //TODO 10417: authorizedUser never has judgeFullName property - is this test still relevant?
-  it("should set the filedBy to the current user's name if there is no judge full name on the user", async () => {
+  it("should set the filedBy to the current user's name", async () => {
     await addDraftStampOrderDocketEntryInteractor(
       applicationContext,
       args,

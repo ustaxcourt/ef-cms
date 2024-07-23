@@ -39,7 +39,6 @@ export const associatePrivatePractitionerWithCase = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // TODO 10417: type for practitioner lookup is wrong here
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
@@ -50,7 +49,6 @@ export const associatePrivatePractitionerWithCase = async (
     docketNumber,
     representing,
     serviceIndicator,
-    //@ts-ignore 10417: fix typing in future update
     user,
   });
 };
