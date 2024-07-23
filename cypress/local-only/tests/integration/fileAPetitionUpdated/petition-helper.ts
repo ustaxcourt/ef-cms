@@ -145,6 +145,35 @@ export function fillIrsNotice(index: number, filePath: string) {
     .type('05/02/2024');
 }
 
+export function fillMultipleIRSNotices(filePath: string) {
+  cy.get('[data-testid="irs-notice-Yes"]').click();
+
+  // IRS Notice #1
+  cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
+  cy.get('[data-testid="case-type-select"]').select('Deficiency');
+  cy.get(
+    '.usa-date-picker__wrapper > [data-testid="notice-issued-date-0-picker"]',
+  ).type('05/02/2024');
+  cy.get('[data-testid="irs-notice-tax-year-0"]').type('2024');
+  cy.get('[data-testid="city-and-state-issuing-office-0"]').type('Jackson, NJ');
+
+  cy.get('[data-testid="add-another-irs-notice-button"]').click();
+
+  // IRS Notice #2
+  cy.get('[data-testid="irs-notice-upload-1"]').attachFile(filePath);
+  cy.get('[data-testid="case-type-select"]').eq(1).select('CDP (Lien/Levy)');
+  cy.get(
+    '.usa-date-picker__wrapper > [data-testid="notice-issued-date-1-picker"]',
+  ).type('05/02/2023');
+  cy.get('[data-testid="irs-notice-tax-year-1"]').type('2023');
+  cy.get('[data-testid="city-and-state-issuing-office-1"]').type(
+    'New York, NY',
+  );
+
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="step-3-next-button"]').click();
+}
+
 export function fillCaseProcedureInformation() {
   cy.get('[data-testid="procedure-type-1"]').click();
   cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
