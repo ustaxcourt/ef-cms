@@ -291,16 +291,18 @@ export const handleLockError = async (
   originalRequest,
   authorizedUser: UnknownAuthUser,
 ) => {
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'add_paper_filing',
-    },
-    userId: authorizedUser!.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'add_paper_filing',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const addPaperFilingInteractor = withLocking(

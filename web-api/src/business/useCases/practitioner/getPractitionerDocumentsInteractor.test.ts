@@ -1,4 +1,3 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentsInteractor } from './getPractitionerDocumentsInteractor';
 import {
@@ -8,11 +7,6 @@ import {
 
 describe('getPractitionersDocumentsInteractor', () => {
   it('throws an unauthorized error exception when user is not an admissions clerk', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    });
-
     await expect(
       getPractitionerDocumentsInteractor(
         applicationContext,
@@ -25,11 +19,6 @@ describe('getPractitionersDocumentsInteractor', () => {
   });
 
   it('returns and validates the documents returned from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-      userId: 'bob',
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getPractitionerDocuments.mockResolvedValue([

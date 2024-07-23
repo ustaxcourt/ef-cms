@@ -8,19 +8,7 @@ import {
 
 describe('getPractitionersByNameInteractor', () => {
   describe('Logged in User', () => {
-    beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsClerk',
-      });
-    });
-
     it('returns an unauthorized error on petitioner user role', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitioner,
-        userId: 'petitioner',
-      });
-
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
@@ -96,8 +84,6 @@ describe('getPractitionersByNameInteractor', () => {
 
   describe('Public User', () => {
     beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue(undefined);
-
       applicationContext
         .getPersistenceGateway()
         .getPractitionersByName.mockReturnValue({

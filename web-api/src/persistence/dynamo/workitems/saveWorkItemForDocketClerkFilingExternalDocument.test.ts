@@ -22,10 +22,6 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
 
   it('invokes the persistence layer 5 times to store the work item, user and section outbox records, and work item mapping record', async () => {
     const timestamp = createISODateString();
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: DOCKET_SECTION,
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    });
     applicationContext.getDocumentClient.mockReturnValue({
       get: getStub,
       put: putStub,

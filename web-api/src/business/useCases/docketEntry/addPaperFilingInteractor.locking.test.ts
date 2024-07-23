@@ -49,9 +49,11 @@ describe('handleLockError', () => {
       .getUserById.mockReturnValue(docketClerkUser);
   });
 
-  it('should determine who the user is based on method arg, not applicationContext', async () => {
+  it('should send notification to user when there is a lock error', async () => {
     await handleLockError(applicationContext, { foo: 'bar' }, docketClerkUser);
-    expect(applicationContext.getCurrentUser).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
   });
 
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {

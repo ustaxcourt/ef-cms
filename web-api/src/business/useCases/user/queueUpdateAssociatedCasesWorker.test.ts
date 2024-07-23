@@ -37,7 +37,6 @@ describe('queueUpdateAssociatedCasesWorker', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
-    applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
     applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
     const authorizedUser = {
       email: MOCK_PRACTITIONER.email!,
@@ -87,7 +86,6 @@ describe('queueUpdateAssociatedCasesWorker', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
     const authorizedUser = {
       email: petitionerUser.email,

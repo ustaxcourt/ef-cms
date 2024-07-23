@@ -102,8 +102,6 @@ describe('updateUserContactInformationInteractor', () => {
   beforeEach(() => {
     mockLock = undefined; // unlocked
 
-    applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
-
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...MOCK_PRACTITIONER,
       entityName: 'Practitioner',

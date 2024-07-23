@@ -45,7 +45,6 @@ describe('Get trial session working copy', () => {
         trialLocation: 'Birmingham, Alabama',
       });
 
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...user,
       section: 'colvinsChambers',
@@ -198,7 +197,6 @@ describe('Get trial session working copy', () => {
           trialClerk: undefined,
           trialLocation: 'Birmingham, Alabama',
         });
-      applicationContext.getCurrentUser.mockReturnValue();
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {

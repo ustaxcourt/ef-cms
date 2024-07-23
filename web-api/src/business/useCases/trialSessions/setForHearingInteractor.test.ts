@@ -19,7 +19,6 @@ describe('setForHearingInteractor', () => {
 
     mockCase = MOCK_CASE;
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);

@@ -10,12 +10,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import {
-  docketClerkUser,
-  judgeUser,
-  petitionerUser,
-  trialClerkUser,
-} from '@shared/test/mockUsers';
+import { judgeUser, trialClerkUser } from '@shared/test/mockUsers';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -24,8 +19,6 @@ import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue({
@@ -39,8 +32,6 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('should throw an error when the user is not unauthorized to update a trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
       updateTrialSessionInteractor(
         applicationContext,
