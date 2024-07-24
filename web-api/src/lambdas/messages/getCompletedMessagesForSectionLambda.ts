@@ -12,16 +12,12 @@ export const getCompletedMessagesForSectionLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getCompletedMessagesForSectionInteractor(
-        applicationContext,
-        {
-          section: event.pathParameters.section,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getCompletedMessagesForSectionInteractor(
+      applicationContext,
+      {
+        section: event.pathParameters.section,
+      },
+      authorizedUser,
+    );
+  });

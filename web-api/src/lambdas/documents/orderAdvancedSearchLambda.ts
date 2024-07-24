@@ -12,14 +12,10 @@ export const orderAdvancedSearchLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await orderAdvancedSearchInteractor(
-        applicationContext,
-        event.queryStringParameters,
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await orderAdvancedSearchInteractor(
+      applicationContext,
+      event.queryStringParameters,
+      authorizedUser,
+    );
+  });

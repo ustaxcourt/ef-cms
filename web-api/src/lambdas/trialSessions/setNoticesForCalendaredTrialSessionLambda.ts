@@ -12,19 +12,15 @@ export const setNoticesForCalendaredTrialSessionLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const { trialSessionId } = event.pathParameters || event.path || {};
+  genericHandler(event, async ({ applicationContext }) => {
+    const { trialSessionId } = event.pathParameters || event.path || {};
 
-      return await setNoticesForCalendaredTrialSessionInteractor(
-        applicationContext,
-        {
-          ...JSON.parse(event.body),
-          trialSessionId,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await setNoticesForCalendaredTrialSessionInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(event.body),
+        trialSessionId,
+      },
+      authorizedUser,
+    );
+  });

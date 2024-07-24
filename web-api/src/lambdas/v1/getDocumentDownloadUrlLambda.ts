@@ -31,6 +31,5 @@ export const getDocumentDownloadUrlLambda = (
         return marshallDocumentDownloadUrl(urlObject);
       });
     },
-    authorizedUser,
     options,
   );

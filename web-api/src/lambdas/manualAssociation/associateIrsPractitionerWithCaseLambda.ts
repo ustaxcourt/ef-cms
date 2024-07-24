@@ -12,16 +12,12 @@ export const associateIrsPractitionerWithCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await associateIrsPractitionerWithCaseInteractor(
-        applicationContext,
-        {
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await associateIrsPractitionerWithCaseInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

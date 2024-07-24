@@ -12,20 +12,16 @@ export const updatePractitionerUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const { bypassDocketEntry = false, user } = JSON.parse(event.body);
+  genericHandler(event, async ({ applicationContext }) => {
+    const { bypassDocketEntry = false, user } = JSON.parse(event.body);
 
-      return await updatePractitionerUserInteractor(
-        applicationContext,
-        {
-          barNumber: event.pathParameters.barNumber,
-          bypassDocketEntry: bypassDocketEntry || false,
-          user,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await updatePractitionerUserInteractor(
+      applicationContext,
+      {
+        barNumber: event.pathParameters.barNumber,
+        bypassDocketEntry: bypassDocketEntry || false,
+        user,
+      },
+      authorizedUser,
+    );
+  });

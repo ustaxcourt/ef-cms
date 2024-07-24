@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { updateUserContactInformationInteractor } from '@web-api/business/useCases/user/updateUserContactInformationInteractor';
 
 /**
  * updates the user contact info (used for a privatePractitioner or irsPractitioner)
@@ -13,15 +14,13 @@ export const updateUserContactInformationLambda = (
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
     const { contactInfo, firmName } = JSON.parse(event.body);
-    return await applicationContext
-      .getUseCases()
-      .updateUserContactInformationInteractor(
-        applicationContext,
-        {
-          contactInfo,
-          firmName,
-          userId: (event.pathParameters || event.path).userId,
-        },
-        authorizedUser,
-      );
+    return await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        firmName,
+        userId: (event.pathParameters || event.path).userId,
+      },
+      authorizedUser,
+    );
   });

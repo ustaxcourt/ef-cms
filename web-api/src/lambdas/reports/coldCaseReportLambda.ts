@@ -3,10 +3,6 @@ import { coldCaseReportInteractor } from '@web-api/business/useCases/reports/col
 import { genericHandler } from '../../genericHandler';
 
 export const coldCaseReportLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await coldCaseReportInteractor(applicationContext, authorizedUser);
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await coldCaseReportInteractor(applicationContext, authorizedUser);
+  });

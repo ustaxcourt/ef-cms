@@ -24,6 +24,5 @@ export const generateDraftStampOrderLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
     { logResults: false },
   );

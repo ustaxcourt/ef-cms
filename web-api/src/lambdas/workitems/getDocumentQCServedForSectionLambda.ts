@@ -12,17 +12,13 @@ export const getDocumentQCServedForSectionLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const { section } = event.pathParameters || {};
-      return await getDocumentQCServedForSectionInteractor(
-        applicationContext,
-        {
-          section,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    const { section } = event.pathParameters || {};
+    return await getDocumentQCServedForSectionInteractor(
+      applicationContext,
+      {
+        section,
+      },
+      authorizedUser,
+    );
+  });

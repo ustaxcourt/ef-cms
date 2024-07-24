@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getPractitionersByNameInteractor } from '@web-api/business/useCases/practitioner/getPractitionersByNameInteractor';
 
 /**
  * gets practitioner users by a search string (name or bar number)
@@ -14,14 +15,12 @@ export const getPractitionersByNameLambda = (
   genericHandler(event, async ({ applicationContext }) => {
     const { name, searchAfter } = event.queryStringParameters;
 
-    return await applicationContext
-      .getUseCases()
-      .getPractitionersByNameInteractor(
-        applicationContext,
-        {
-          name,
-          searchAfter,
-        },
-        authorizedUser,
-      );
+    return await getPractitionersByNameInteractor(
+      applicationContext,
+      {
+        name,
+        searchAfter,
+      },
+      authorizedUser,
+    );
   });

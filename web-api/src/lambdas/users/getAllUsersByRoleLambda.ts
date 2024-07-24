@@ -15,7 +15,6 @@ export const getAllUsersByRoleLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
     {
       bypassMaintenanceCheck: true,
     },

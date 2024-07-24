@@ -12,17 +12,13 @@ export const addConsolidatedCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      await addConsolidatedCaseInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

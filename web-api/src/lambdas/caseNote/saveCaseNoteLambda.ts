@@ -9,21 +9,17 @@ import { saveCaseNoteInteractor } from '@web-api/business/useCases/caseNote/save
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const saveCaseNoteLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const lambdaArguments = {
-        ...event.pathParameters,
-        ...JSON.parse(event.body),
-      };
+  genericHandler(event, async ({ applicationContext }) => {
+    const lambdaArguments = {
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
+    };
 
-      return await saveCaseNoteInteractor(
-        applicationContext,
-        {
-          ...lambdaArguments,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await saveCaseNoteInteractor(
+      applicationContext,
+      {
+        ...lambdaArguments,
+      },
+      authorizedUser,
+    );
+  });

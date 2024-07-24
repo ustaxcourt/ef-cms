@@ -12,23 +12,19 @@ export const getGeneratePrintableTrialSessionCopyReportLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const body = JSON.parse(event.body);
-      return await generatePrintableTrialSessionCopyReportInteractor(
-        applicationContext,
-        {
-          filters: body.filters,
-          formattedCases: body.formattedCases,
-          formattedTrialSession: body.formattedTrialSession,
-          sessionNotes: body.sessionNotes,
-          showCaseNotes: body.showCaseNotes,
-          sort: body.sort,
-          userHeading: body.userHeading,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    const body = JSON.parse(event.body);
+    return await generatePrintableTrialSessionCopyReportInteractor(
+      applicationContext,
+      {
+        filters: body.filters,
+        formattedCases: body.formattedCases,
+        formattedTrialSession: body.formattedTrialSession,
+        sessionNotes: body.sessionNotes,
+        showCaseNotes: body.showCaseNotes,
+        sort: body.sort,
+        userHeading: body.userHeading,
+      },
+      authorizedUser,
+    );
+  });

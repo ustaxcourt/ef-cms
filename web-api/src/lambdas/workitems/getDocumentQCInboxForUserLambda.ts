@@ -12,18 +12,14 @@ export const getDocumentQCInboxForUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const { userId } = event.pathParameters || {};
+  genericHandler(event, async ({ applicationContext }) => {
+    const { userId } = event.pathParameters || {};
 
-      return await getDocumentQCInboxForUserInteractor(
-        applicationContext,
-        {
-          userId,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await getDocumentQCInboxForUserInteractor(
+      applicationContext,
+      {
+        userId,
+      },
+      authorizedUser,
+    );
+  });

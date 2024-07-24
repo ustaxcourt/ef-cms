@@ -12,14 +12,10 @@ export const completeDocketEntryQCLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await completeDocketEntryQCInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await completeDocketEntryQCInteractor(
+      applicationContext,
+      JSON.parse(event.body),
+      authorizedUser,
+    );
+  });

@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createTrialSessionInteractor } from '@web-api/business/useCases/trialSessions/createTrialSessionInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,7 +13,7 @@ export const createTrialSessionLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createTrialSessionInteractor(
+    return await createTrialSessionInteractor(
       applicationContext,
       {
         trialSession: JSON.parse(event.body),

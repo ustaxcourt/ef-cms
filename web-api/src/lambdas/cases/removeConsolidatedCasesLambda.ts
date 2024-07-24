@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 
 /**
  * used for removing cases from consolidation
@@ -16,14 +17,12 @@ export const removeConsolidatedCasesLambda = (
       event.queryStringParameters.docketNumbersToRemove || ''
     ).split(',');
 
-    return await applicationContext
-      .getUseCases()
-      .removeConsolidatedCasesInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          docketNumbersToRemove,
-        },
-        authorizedUser,
-      );
+    return await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        docketNumbersToRemove,
+      },
+      authorizedUser,
+    );
   });

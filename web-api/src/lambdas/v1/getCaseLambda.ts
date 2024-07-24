@@ -30,6 +30,5 @@ export const getCaseLambda = (
 
         return marshallCase(caseObject);
       }),
-    authorizedUser,
     options,
   );

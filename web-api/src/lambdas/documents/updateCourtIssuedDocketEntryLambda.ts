@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { updateCourtIssuedDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/updateCourtIssuedDocketEntryInteractor';
 
 /**
  * lambda which is used for updating a court issued docket entry
@@ -13,11 +14,9 @@ export const updateCourtIssuedDocketEntryLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .updateCourtIssuedDocketEntryInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-        authorizedUser,
-      );
+    return await updateCourtIssuedDocketEntryInteractor(
+      applicationContext,
+      JSON.parse(event.body),
+      authorizedUser,
+    );
   });

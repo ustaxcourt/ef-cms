@@ -9,17 +9,13 @@ import { prioritizeCaseInteractor } from '@shared/business/useCases/prioritizeCa
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const prioritizeCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await prioritizeCaseInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await prioritizeCaseInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

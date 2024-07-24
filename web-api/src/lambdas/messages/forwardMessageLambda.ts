@@ -1,3 +1,4 @@
+import { forwardMessageInteractor } from '@web-api/business/useCases/messages/forwardMessageInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -8,10 +9,8 @@ import { genericHandler } from '../../genericHandler';
  */
 export const forwardMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .forwardMessageInteractor(applicationContext, {
-        parentMessageId: event.pathParameters.parentMessageId,
-        ...JSON.parse(event.body),
-      });
+    return await forwardMessageInteractor(applicationContext, {
+      parentMessageId: event.pathParameters.parentMessageId,
+      ...JSON.parse(event.body),
+    });
   });

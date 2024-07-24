@@ -1,3 +1,4 @@
+import { generateTrialCalendarPdfInteractor } from '@web-api/business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,11 +13,9 @@ export const generateTrialCalendarPdfLambda = event =>
     async ({ applicationContext }) => {
       const { trialSessionId } = JSON.parse(event.body);
 
-      return await applicationContext
-        .getUseCases()
-        .generateTrialCalendarPdfInteractor(applicationContext, {
-          trialSessionId,
-        });
+      return await generateTrialCalendarPdfInteractor(applicationContext, {
+        trialSessionId,
+      });
     },
     { logResults: false },
   );

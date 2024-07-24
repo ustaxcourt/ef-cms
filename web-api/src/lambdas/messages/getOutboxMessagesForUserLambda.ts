@@ -12,16 +12,12 @@ export const getOutboxMessagesForUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getOutboxMessagesForUserInteractor(
-        applicationContext,
-        {
-          userId: event.pathParameters.userId,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getOutboxMessagesForUserInteractor(
+      applicationContext,
+      {
+        userId: event.pathParameters.userId,
+      },
+      authorizedUser,
+    );
+  });

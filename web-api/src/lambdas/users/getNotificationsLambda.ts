@@ -12,16 +12,12 @@ export const getNotificationsLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getNotificationsInteractor(
-        applicationContext,
-        {
-          ...event.queryStringParameters,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getNotificationsInteractor(
+      applicationContext,
+      {
+        ...event.queryStringParameters,
+      },
+      authorizedUser,
+    );
+  });

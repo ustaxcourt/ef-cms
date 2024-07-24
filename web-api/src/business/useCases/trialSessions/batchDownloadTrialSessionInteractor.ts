@@ -145,10 +145,14 @@ const batchDownloadTrialSessionInteractorHelper = async (
   for (const sessionCase of batchableSessionCases) {
     const result = await applicationContext
       .getUseCases()
-      .generateDocketRecordPdfInteractor(applicationContext, {
-        docketNumber: sessionCase.docketNumber,
-        includePartyDetail: true,
-      });
+      .generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: sessionCase.docketNumber,
+          includePartyDetail: true,
+        },
+        authorizedUser,
+      );
 
     await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
 

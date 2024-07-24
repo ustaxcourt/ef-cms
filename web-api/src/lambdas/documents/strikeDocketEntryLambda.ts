@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { strikeDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/strikeDocketEntryInteractor';
 
 /**
  * used for striking docket records
@@ -17,7 +18,7 @@ export const strikeDocketEntryLambda = (
       pathParameters: { docketEntryId, docketNumber },
     } = event;
 
-    return await applicationContext.getUseCases().strikeDocketEntryInteractor(
+    return await strikeDocketEntryInteractor(
       applicationContext,
       {
         docketEntryId,

@@ -25,6 +25,5 @@ export const generatePractitionerCaseListPdfLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
     { logResults: false },
   );

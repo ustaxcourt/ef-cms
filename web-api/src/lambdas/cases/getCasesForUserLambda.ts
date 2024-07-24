@@ -9,13 +9,6 @@ import { getCasesForUserInteractor } from '@shared/business/useCases/getCasesFor
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getCasesForUserLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getCasesForUserInteractor(
-        applicationContext,
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getCasesForUserInteractor(applicationContext, authorizedUser);
+  });

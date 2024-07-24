@@ -12,19 +12,15 @@ export const getDocumentQCInboxForSectionLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const { section } = event.pathParameters || {};
+  genericHandler(event, async ({ applicationContext }) => {
+    const { section } = event.pathParameters || {};
 
-      return await getDocumentQCInboxForSectionInteractor(
-        applicationContext,
-        {
-          section,
-          ...event.queryStringParameters,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await getDocumentQCInboxForSectionInteractor(
+      applicationContext,
+      {
+        section,
+        ...event.queryStringParameters,
+      },
+      authorizedUser,
+    );
+  });

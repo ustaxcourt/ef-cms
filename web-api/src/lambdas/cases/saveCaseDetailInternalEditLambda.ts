@@ -12,18 +12,14 @@ export const saveCaseDetailInternalEditLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await saveCaseDetailInternalEditInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          ...JSON.parse(event.body),
-          caseToUpdate: JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+        caseToUpdate: JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

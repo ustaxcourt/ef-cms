@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deletePractitionerDocumentInteractor } from '@web-api/business/useCases/practitioner/deletePractitionerDocumentInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,15 +13,13 @@ export const deletePractitionerDocumentLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .deletePractitionerDocumentInteractor(
-        applicationContext,
-        {
-          barNumber: event.pathParameters.barNumber,
-          practitionerDocumentFileId:
-            event.pathParameters.practitionerDocumentFileId,
-        },
-        authorizedUser,
-      );
+    return await deletePractitionerDocumentInteractor(
+      applicationContext,
+      {
+        barNumber: event.pathParameters.barNumber,
+        practitionerDocumentFileId:
+          event.pathParameters.practitionerDocumentFileId,
+      },
+      authorizedUser,
+    );
   });

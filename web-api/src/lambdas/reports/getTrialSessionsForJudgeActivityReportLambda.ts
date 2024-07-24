@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getTrialSessionsForJudgeActivityReportInteractor } from '@web-api/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 
 export const getTrialSessionsForJudgeActivityReportLambda = (
   event,
@@ -8,15 +9,13 @@ export const getTrialSessionsForJudgeActivityReportLambda = (
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getTrialSessionsForJudgeActivityReportInteractor(
-          applicationContext,
-          {
-            ...JSON.parse(event.body),
-          },
-          authorizedUser,
-        );
+      return await getTrialSessionsForJudgeActivityReportInteractor(
+        applicationContext,
+        {
+          ...JSON.parse(event.body),
+        },
+        authorizedUser,
+      );
     },
     { logResults: false },
   );

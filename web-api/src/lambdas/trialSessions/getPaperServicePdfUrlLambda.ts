@@ -16,6 +16,5 @@ export const getPaperServicePdfUrlLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
     { logResults: false },
   );

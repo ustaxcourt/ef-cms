@@ -12,16 +12,12 @@ export const getPractitionerDocumentsLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getPractitionerDocumentsInteractor(
-        applicationContext,
-        {
-          barNumber: event.pathParameters.barNumber,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getPractitionerDocumentsInteractor(
+      applicationContext,
+      {
+        barNumber: event.pathParameters.barNumber,
+      },
+      authorizedUser,
+    );
+  });

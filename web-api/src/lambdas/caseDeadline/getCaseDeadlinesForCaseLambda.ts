@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getCaseDeadlinesForCaseInteractor } from '@web-api/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 
 /**
  * get case deadlines for case
@@ -8,9 +9,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const getCaseDeadlinesForCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getCaseDeadlinesForCaseInteractor(applicationContext, {
-        docketNumber: event.pathParameters.docketNumber,
-      });
+    return await getCaseDeadlinesForCaseInteractor(applicationContext, {
+      docketNumber: event.pathParameters.docketNumber,
+    });
   });

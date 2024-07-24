@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import { genericHandler } from '../../genericHandler';
 
 export const createCsvCustomCaseReportFileLambda = (
@@ -6,11 +7,9 @@ export const createCsvCustomCaseReportFileLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .createCsvCustomCaseReportFileInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-        authorizedUser,
-      );
+    return await createCsvCustomCaseReportFileInteractor(
+      applicationContext,
+      JSON.parse(event.body),
+      authorizedUser,
+    );
   });

@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { updateUserCaseNoteInteractor } from '@web-api/business/useCases/caseNote/updateUserCaseNoteInteractor';
 
 /**
  * used for updating a judge's case note
@@ -17,7 +18,7 @@ export const updateUserCaseNoteLambda = (
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext.getUseCases().updateUserCaseNoteInteractor(
+    return await updateUserCaseNoteInteractor(
       applicationContext,
       {
         ...lambdaArguments,

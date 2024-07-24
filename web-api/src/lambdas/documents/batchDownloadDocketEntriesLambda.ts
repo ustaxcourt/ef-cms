@@ -12,14 +12,10 @@ export const batchDownloadDocketEntriesLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      await batchDownloadDocketEntriesInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    await batchDownloadDocketEntriesInteractor(
+      applicationContext,
+      JSON.parse(event.body),
+      authorizedUser,
+    );
+  });

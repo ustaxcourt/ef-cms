@@ -12,14 +12,10 @@ export const downloadPolicyUrlLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getDownloadPolicyUrlInteractor(
-        applicationContext,
-        event.pathParameters,
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getDownloadPolicyUrlInteractor(
+      applicationContext,
+      event.pathParameters,
+      authorizedUser,
+    );
+  });

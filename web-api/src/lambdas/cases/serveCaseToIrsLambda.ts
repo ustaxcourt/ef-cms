@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { serveCaseToIrsInteractor } from '@web-api/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor';
 
 /**
  * serve case to irs
@@ -11,7 +12,7 @@ export const serveCaseToIrsLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext.getUseCases().serveCaseToIrsInteractor(
+      return await serveCaseToIrsInteractor(
         applicationContext,
         {
           ...event.pathParameters,

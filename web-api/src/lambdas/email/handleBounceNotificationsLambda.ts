@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { handleBounceNotificationInteractor } from '@web-api/business/useCases/email/handleBounceNotificationInteractor';
 
 /**
  * This lambda handles SNS notifications that occur whenever a service Email bounces. We
@@ -17,9 +18,7 @@ export const handleBounceNotificationsLambda = event =>
 
       return await Promise.all(
         records.map(record =>
-          applicationContext
-            .getUseCases()
-            .handleBounceNotificationInteractor(applicationContext, record),
+          handleBounceNotificationInteractor(applicationContext, record),
         ),
       );
     },

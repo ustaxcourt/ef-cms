@@ -23,6 +23,5 @@ export const generatePrintableCaseInventoryReportLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
     { logResults: false },
   );

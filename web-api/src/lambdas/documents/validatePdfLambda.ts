@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { validatePdfInteractor } from '@web-api/business/useCases/pdf/validatePdfInteractor';
 
 /**
  * used for validating PDF documents
@@ -10,9 +11,7 @@ export const validatePdfLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { key } = event.pathParameters || {};
 
-    return await applicationContext
-      .getUseCases()
-      .validatePdfInteractor(applicationContext, {
-        key,
-      });
+    return await validatePdfInteractor(applicationContext, {
+      key,
+    });
   });
