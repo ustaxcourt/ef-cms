@@ -1,4 +1,7 @@
-import { petitionerCreatesElectronicCaseUpdated } from './petitioner-creates-electronic-case-updated';
+import {
+  petitionerCreatesElectronicCaseForBusinessUpdated,
+  petitionerCreatesElectronicCaseUpdated,
+} from './petitioner-creates-electronic-case-updated';
 import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
@@ -91,7 +94,7 @@ function petitionerCreatesElectronicCaseOld(primaryFilerName = 'John') {
     });
 }
 
-export function petitionerCreatesElectronicCaseForBusiness() {
+export function petitionerCreatesElectronicCaseForBusinessOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   uploadFile('stin-file');
@@ -108,7 +111,7 @@ export function petitionerCreatesElectronicCaseForBusiness() {
   cy.get('#businessType-Corporation').check();
   cy.get('[data-testid="contact-primary-name"]').type('Business Test Name');
   cy.get('[data-testid="contactPrimary.address1"]').type('Some Random Street');
-  cy.get('[data-testid="contactPrimary.city"]').type('Bouler');
+  cy.get('[data-testid="contactPrimary.city"]').type('Boulder');
   cy.get('[data-testid="contactPrimary.state"]').select('CO');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('32154');
   cy.get('[data-testid="phone"]').type('123456789');
@@ -135,6 +138,18 @@ export function petitionerCreatesElectronicCaseForBusiness() {
     });
 }
 
+export function petitionerCreatesElectronicCaseForBusiness() {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseForBusinessUpdated();
+      } else {
+        return petitionerCreatesElectronicCaseForBusinessOld();
+      }
+    });
+}
+
 export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('[data-testid="file-a-petition"]').click();
   uploadFile('stin-file');
@@ -151,7 +166,7 @@ export function privatePractitionerCreatesElectronicCaseForBusiness() {
   cy.get('#businessType-Corporation').check();
   cy.get('[data-testid="contact-primary-name"]').type('Business Test Name');
   cy.get('[data-testid="contactPrimary.address1"]').type('Some Random Street');
-  cy.get('[data-testid="contactPrimary.city"]').type('Bouler');
+  cy.get('[data-testid="contactPrimary.city"]').type('Boulder');
   cy.get('[data-testid="contactPrimary.state"]').select('CO');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('32154');
   cy.get('[data-testid="phone"]').type('123456789');
