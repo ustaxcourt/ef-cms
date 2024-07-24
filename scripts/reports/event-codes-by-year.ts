@@ -113,22 +113,19 @@ const getDocketEntriesByEventCodesAndYears = async ({
       });
     }
   }
-  const searchParameters = {
-    body: {
-      query: {
-        bool: {
-          must,
-        },
-      },
-      sort: [{ 'receivedAt.S': 'asc' }],
-    },
-    index: 'efcms-docket-entry',
-  };
-  console.log('Effective Query:', JSON.stringify(searchParameters, null, 4));
-
   const { results } = await searchAll({
     applicationContext,
-    searchParameters,
+    searchParameters: {
+      body: {
+        query: {
+          bool: {
+            must,
+          },
+        },
+        sort: [{ 'receivedAt.S': 'asc' }],
+      },
+      index: 'efcms-docket-entry',
+    },
   });
   return results;
 };
