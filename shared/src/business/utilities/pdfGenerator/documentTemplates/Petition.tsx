@@ -16,8 +16,8 @@ export const Petition = ({
   caseTitle,
   contactPrimary,
   contactSecondary,
+  hasUploadedIrsNotice,
   irsNotices,
-  noticeIssuedDate,
   partyType,
   petitionFacts,
   petitionReasons,
@@ -29,9 +29,9 @@ export const Petition = ({
   caseDescription: string;
   caseTitle: string;
   procedureType: string;
+  hasUploadedIrsNotice: boolean;
   taxYear: string;
   irsNotices: any[];
-  noticeIssuedDate: string;
   partyType: string;
   petitionFacts: string[];
   preferredTrialCity: string;
@@ -141,7 +141,7 @@ export const Petition = ({
           <b>You have included the following items with this petition:</b>
         </p>
         <ol className="list-disc">
-          {noticeIssuedDate && (
+          {hasUploadedIrsNotice && (
             <li>
               <span>Any NOTICE(S) the IRS issued to you</span>
             </li>
