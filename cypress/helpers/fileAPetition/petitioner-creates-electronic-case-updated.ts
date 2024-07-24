@@ -58,7 +58,6 @@ export function petitionerCreatesElectronicCaseForBusinessUpdated() {
   cy.get('[data-testid="contactPrimary.city"]').type('Boulder');
   cy.get('[data-testid="contactPrimary.state"]').select('CO');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get(':nth-child(2) > :nth-child(1) > :nth-child(6)').click();
   cy.get('[data-testid="contact-primary-phone"]').type('123456789');
   uploadFile('corporate-disclosure-file');
   cy.get('[data-testid="step-1-next-button"]').click();
