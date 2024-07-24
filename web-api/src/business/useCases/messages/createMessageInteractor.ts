@@ -9,6 +9,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { createMessage } from '@web-api/persistence/postgres/createMessage';
 
 export type MessageType = {
   attachments: {
@@ -80,10 +81,12 @@ export const createMessageInteractor = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
-    applicationContext,
-    message: validatedRawMessage,
-  });
+  // await applicationContext.getPersistenceGateway().createMessage({
+  //   applicationContext,
+  //   message: validatedRawMessage,
+  // });
+
+  await createMessage({ applicationContext, message: validatedRawMessage });
 
   return validatedRawMessage;
 };
