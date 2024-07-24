@@ -141,11 +141,12 @@ describe('removeCounselFromRemovedPetitioner', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
