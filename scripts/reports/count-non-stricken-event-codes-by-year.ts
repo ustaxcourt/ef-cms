@@ -1,16 +1,16 @@
-// usage: npx ts-node --transpile-only scripts/reports/count-non-stricken-event-codes-by-year.ts M071,M074 2021-2022 [includeStricken]  > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
+// usage: npx ts-node --transpile-only scripts/reports/count-non-stricken-event-codes-by-year.ts M071,M074 2021-2022 [includeStricken]
 
+import {
+  ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import { count } from '@web-api/persistence/elasticsearch/searchClient';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 requireEnvVars(['ENV', 'REGION']);
 
 const includeStricken = !!(process.argv.length > 4);
-if (includeStricken) {
-  console.log('including stricken docket entries');
-}
 
 const getCountDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
@@ -18,7 +18,7 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
   onlyNonStricken,
   years,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   eventCodes: string[];
   onlyNonStricken: boolean;
   years?: number[];
