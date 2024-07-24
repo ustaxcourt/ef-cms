@@ -45,7 +45,6 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
         '*': 'Add at least one fact',
         'string.max': `Facts cannot exceed ${this.PETITION_FACT_MAX_LENGTH} characters`,
       }),
-
     petitionFile: joi.object().when('petitionType', {
       is: JoiValidationConstants.STRING.valid(PETITION_TYPES.userUploaded),
       otherwise: joi.optional(),
