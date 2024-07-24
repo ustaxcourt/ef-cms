@@ -1,4 +1,5 @@
 import {
+  petitionerAttemptsToUploadCorruptPdfUpdated,
   petitionerCreatesElectronicCaseForBusinessUpdated,
   petitionerCreatesElectronicCaseUpdated,
 } from './petitioner-creates-electronic-case-updated';
@@ -42,7 +43,9 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
     });
 }
 
-export function petitionerCreatesElectronicCase(primaryFilerName: string) {
+export function petitionerCreatesElectronicCase(
+  primaryFilerName: string = 'John',
+) {
   return cy
     .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
     .then(updatedFlow => {
@@ -194,6 +197,18 @@ export function privatePractitionerCreatesElectronicCaseForBusiness() {
 }
 
 export function petitionerAttemptsToUploadCorruptPdf() {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerAttemptsToUploadCorruptPdfUpdated();
+      } else {
+        return petitionerAttemptsToUploadCorruptPdfOld();
+      }
+    });
+}
+
+export function petitionerAttemptsToUploadCorruptPdfOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   cy.get('[data-testid="stin-file"]').attachFile(
