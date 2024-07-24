@@ -1,7 +1,11 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  Role,
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getDownloadPolicyUrlInteractor as mockGetDownloadPolicyUrlInteractor } from '@web-api/business/useCases/document/getDownloadPolicyUrlInteractor';
 
 jest.mock('@web-api/applicationContext', () => {
@@ -86,7 +90,16 @@ describe('getDocumentDownloadUrlLambda', () => {
       shouldThrowError: false,
     });
 
-    const response = await getDocumentDownloadUrlLambda(REQUEST_EVENT, {});
+    const response = await getDocumentDownloadUrlLambda(
+      REQUEST_EVENT,
+      {
+        email: 'test@e.mail',
+        name: '',
+        role: 'roleWithNoPermissions' as Role,
+        userId: '612e3eb3-332c-4f1f-aaff-44ac8eae9a5f',
+      },
+      {},
+    );
 
     expect(response.statusCode).toBe(403);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -107,7 +120,11 @@ describe('getDocumentDownloadUrlLambda', () => {
       shouldThrowError: false,
     });
 
-    const response = await getDocumentDownloadUrlLambda(request, {});
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockDocketClerkUser,
+      {},
+    );
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -146,7 +163,11 @@ describe('getDocumentDownloadUrlLambda', () => {
       shouldThrowError: false,
     });
 
-    const response = await getDocumentDownloadUrlLambda(request, {});
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockDocketClerkUser,
+      {},
+    );
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -170,7 +191,11 @@ describe('getDocumentDownloadUrlLambda', () => {
       shouldThrowError: true,
     });
 
-    const response = await getDocumentDownloadUrlLambda(request, {});
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockDocketClerkUser,
+      {},
+    );
 
     expect(response.statusCode).toBe(500);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -210,7 +235,11 @@ describe('getDocumentDownloadUrlLambda', () => {
         shouldThrowError: false,
       });
 
-      const response = await getDocumentDownloadUrlLambda(request, {});
+      const response = await getDocumentDownloadUrlLambda(
+        request,
+        mockDocketClerkUser,
+        {},
+      );
 
       expect(response.statusCode).toBe('200');
       expect(response.headers['Content-Type']).toBe('application/json');
