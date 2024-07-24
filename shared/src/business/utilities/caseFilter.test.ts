@@ -8,6 +8,12 @@ import {
   caseSealedFormatter,
   caseSearchFilter,
 } from './caseFilter';
+import {
+  mockIrsPractitionerUser,
+  mockIrsSuperuser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -167,10 +173,10 @@ describe('caseFilter', () => {
     ];
 
     it('should remove sealed cases from a set of advanced search results', () => {
-      const result = caseSearchFilter(caseSearchResults, {
-        role: ROLES.irsPractitioner,
-        userId: '0e69052d-b59d-496e-ba2a-39af3a9535dc',
-      });
+      const result = caseSearchFilter(
+        caseSearchResults,
+        mockIrsPractitionerUser,
+      );
 
       expect(result).toMatchObject([
         {
@@ -184,10 +190,7 @@ describe('caseFilter', () => {
     });
 
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
-      let result = caseSearchFilter(caseSearchResults, {
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsClerk',
-      });
+      let result = caseSearchFilter(caseSearchResults, mockPetitionsClerkUser);
 
       expect(result.length).toEqual(4);
       expect(result[2].petitioners[0]).toMatchObject({
@@ -198,31 +201,27 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an internal user with permission to see sealed cases', () => {
-      let result = caseSearchFilter(caseSearchResults, {
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsClerk',
-      });
+      let result = caseSearchFilter(caseSearchResults, mockPetitionsClerkUser);
 
       expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
-      let result = caseSearchFilter(caseSearchResults, {
-        role: ROLES.irsSuperuser,
-        userId: 'irsSuperuser',
-      });
+      let result = caseSearchFilter(caseSearchResults, mockIrsSuperuser);
 
       expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is associated as practitioner or respondent', () => {
       let result = caseSearchFilter(caseSearchResults, {
+        ...mockPrivatePractitionerUser,
         userId: 'authPractitioner',
       });
 
       expect(result.length).toEqual(4);
 
       result = caseSearchFilter(caseSearchResults, {
+        ...mockPrivatePractitionerUser,
         userId: 'authRespondent',
       });
 
@@ -230,9 +229,10 @@ describe('caseFilter', () => {
     });
 
     it('should filter out sealed documents in search results when the user is not associated with the case', () => {
-      const result = caseSearchFilter(documentSearchResults, {
-        userId: 'unassociatedPractitioner',
-      });
+      const result = caseSearchFilter(
+        documentSearchResults,
+        mockPrivatePractitionerUser,
+      );
 
       expect(result.length).toEqual(1);
       expect(result[0].docketEntryId).toEqual(unsealedDocketEntryId);
@@ -240,6 +240,7 @@ describe('caseFilter', () => {
 
     it('should NOT filter out sealed documents in search results when the user is associated with the case', () => {
       const result = caseSearchFilter(documentSearchResults, {
+        ...mockPrivatePractitionerUser,
         userId: 'associatedPractitioner',
       });
 
