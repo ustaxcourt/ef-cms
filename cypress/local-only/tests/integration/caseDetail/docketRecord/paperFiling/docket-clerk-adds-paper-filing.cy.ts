@@ -12,22 +12,6 @@ import { petitionsClerkServesPetition } from '../../../../../../helpers/document
  * Then they should see a validation error message
  */
 describe('Docket clerk adding a paper filing', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   it('should be alerted when the paper filing is not valid when they attempt to serve', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
