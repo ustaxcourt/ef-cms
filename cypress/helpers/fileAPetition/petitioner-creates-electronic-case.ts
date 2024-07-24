@@ -2,10 +2,32 @@ import {
   petitionerAttemptsToUploadCorruptPdfUpdated,
   petitionerCreatesElectronicCaseForBusinessUpdated,
   petitionerCreatesElectronicCaseUpdated,
+  petitionerCreatesElectronicCaseWithSpouseUpdated,
 } from './petitioner-creates-electronic-case-updated';
 import { uploadFile } from '../file/upload-file';
 
-export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
+export function petitionerCreatesElectronicCaseWithSpouse(
+  primaryFilerName: string = 'John',
+  secondaryFilerName: string = 'Sally',
+) {
+  return cy
+    .task('getFeatureFlagValue', { flag: 'updated-petition-flow' })
+    .then(updatedFlow => {
+      if (updatedFlow) {
+        return petitionerCreatesElectronicCaseWithSpouseUpdated(
+          primaryFilerName,
+          secondaryFilerName,
+        );
+      } else {
+        return petitionerCreatesElectronicCaseWithSpouseOld(
+          primaryFilerName,
+          secondaryFilerName,
+        );
+      }
+    });
+}
+
+export function petitionerCreatesElectronicCaseWithSpouseOld(
   primaryFilerName = 'John',
   secondaryFilerName = 'Sally',
 ) {

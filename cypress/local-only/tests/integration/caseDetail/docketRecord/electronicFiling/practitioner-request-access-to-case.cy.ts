@@ -8,36 +8,20 @@ import {
 } from '../../../../../../helpers/authentication/login-as-helpers';
 import {
   petitionerCreatesElectronicCase,
-  petitionerCreatesElectronicCaseWithDeceasedSpouse,
+  petitionerCreatesElectronicCaseWithSpouse,
 } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { uploadFile } from '../../../../../../helpers/file/upload-file';
 
 describe('Private Practitioner requests to represent a party to a case', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   describe('Auto Generate Entry of Appearance', () => {
     it('should have access to auto generate entry of appearance if a party service preference is paper', () => {
       const primaryFilerName = 'John';
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCaseWithDeceasedSpouse(
+      petitionerCreatesElectronicCaseWithSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
@@ -108,7 +92,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       const secondaryFilerName = 'Sally';
 
       loginAsPetitioner();
-      petitionerCreatesElectronicCaseWithDeceasedSpouse(
+      petitionerCreatesElectronicCaseWithSpouse(
         primaryFilerName,
         secondaryFilerName,
       ).then(docketNumber => {
