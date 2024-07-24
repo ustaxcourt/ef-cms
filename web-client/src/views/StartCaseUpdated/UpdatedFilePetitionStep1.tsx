@@ -470,6 +470,7 @@ function CorporateDisclosureUpload({
               'ustc-upload-cds usa-label with-hint',
               hasCorporateDisclosureFile && 'validated',
             )}
+            data-testid="corporate-disclosure-file-label"
             htmlFor="corporate-disclosure-file"
             id="corporate-disclosure-file-label"
           >

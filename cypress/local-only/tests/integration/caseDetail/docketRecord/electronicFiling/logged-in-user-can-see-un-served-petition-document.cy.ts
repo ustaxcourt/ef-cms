@@ -9,22 +9,6 @@ import {
 } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Logged In User Can See Un-Served Petition Document', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   it('should display a preview link to ["P", "ATP", "DISC"] documents for the Petitioner that created the case', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCaseForBusiness().as('DOCKET_NUMBER');
