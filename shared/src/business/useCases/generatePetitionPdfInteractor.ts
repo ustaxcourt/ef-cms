@@ -21,8 +21,8 @@ export const generatePetitionPdfInteractor = async (
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
+    hasUploadedIrsNotice,
     irsNotices,
-    noticeIssuedDate,
     partyType,
     petitionFacts,
     petitionReasons,
@@ -49,6 +49,7 @@ export const generatePetitionPdfInteractor = async (
       caseTitle,
       contactPrimary,
       contactSecondary,
+      hasUploadedIrsNotice,
       irsNotices: irsNotices.map(irsNotice => ({
         ...irsNotice,
         caseDescription: hasIrsNotice
@@ -58,7 +59,6 @@ export const generatePetitionPdfInteractor = async (
           .getUtilities()
           .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
       })),
-      noticeIssuedDate,
       partyType,
       petitionFacts,
       petitionReasons,

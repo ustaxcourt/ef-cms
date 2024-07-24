@@ -9,8 +9,8 @@ export const generatePetitionPdfInteractor = (
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
+    hasUploadedIrsNotice,
     irsNotices,
-    noticeIssuedDate,
     partyType,
     petitionFacts,
     petitionReasons,
@@ -19,6 +19,7 @@ export const generatePetitionPdfInteractor = (
     taxYear,
   }: {
     [key: string]: any;
+    hasUploadedIrsNotice: boolean;
     hasIrsNotice: boolean;
   },
 ): Promise<{
@@ -33,8 +34,8 @@ export const generatePetitionPdfInteractor = (
       contactPrimary,
       contactSecondary,
       hasIrsNotice,
+      hasUploadedIrsNotice,
       irsNotices,
-      noticeIssuedDate,
       partyType,
       petitionFacts,
       petitionReasons,
