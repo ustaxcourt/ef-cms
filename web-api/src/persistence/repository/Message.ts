@@ -8,7 +8,7 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'message' })
 export class Message {
   @Column('jsonb', { nullable: true })
   attachments?: {

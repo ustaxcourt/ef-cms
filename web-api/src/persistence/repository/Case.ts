@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Message } from '@web-api/persistence/repository/Message';
 
-@Entity()
+@Entity({ name: 'case' })
 export class Case {
   @PrimaryColumn('varchar')
   docketNumber!: string;
