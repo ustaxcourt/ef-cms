@@ -3,6 +3,10 @@ import { MOCK_COMPLEX_CASE } from '../../../../shared/src/test/mockComplexCase';
 import { MOCK_PRACTITIONER } from '../../../../shared/src/test/mockUsers';
 import { getCaseLambda } from './getCaseLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { getCaseInteractor as mockGetCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
 
 jest.mock('@web-api/applicationContext', () => {
@@ -84,7 +88,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: false,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser, {});
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -101,7 +105,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: false,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser, {});
 
     expect(response.statusCode).toBe('200');
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -124,7 +128,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: false,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(
+      REQUEST_EVENT,
+      mockDocketClerkUser,
+      {},
+    );
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -141,7 +149,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: true,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(
+      REQUEST_EVENT,
+      mockDocketClerkUser,
+      {},
+    );
 
     expect(response.statusCode).toBe(500);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -185,7 +197,11 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
         shouldThrowError: false,
       });
 
-      const response = await getCaseLambda(REQUEST_EVENT, {});
+      const response = await getCaseLambda(
+        REQUEST_EVENT,
+        mockDocketClerkUser,
+        {},
+      );
 
       expect(response.statusCode).toBe('200');
       expect(response.headers['Content-Type']).toBe('application/json');
