@@ -130,6 +130,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { statusReportOrderResponseHelper } from './computeds/statusReportOrderResponseHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -513,6 +514,10 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
+  statusReportOrderResponseHelper:
+    statusReportOrderResponseHelper as unknown as ReturnType<
+      typeof statusReportOrderResponseHelper
+    >,
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
   >,
@@ -648,6 +653,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },
@@ -806,6 +812,11 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  statusReportOrderResponse: {
+    docketNumbersToDisplay: [],
+    statusReportFilingDate: '',
+    statusReportIndex: 1,
+  },
   stepIndicatorInfo: { currentStep: 0, steps: ['no steps defined yet'] },
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],

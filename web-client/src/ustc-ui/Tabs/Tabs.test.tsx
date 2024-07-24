@@ -170,7 +170,7 @@ describe('TabsComponent', () => {
     const testInstance = testRenderer.root;
 
     expect(
-      testInstance.findByProps({ id: 'tab-with-content' }).parent.props[
+      testInstance.findByProps({ id: 'tab-with-content' }).props[
         'aria-controls'
       ],
     ).toEqual('tabContent-withContent');
