@@ -12,6 +12,6 @@ export class Case {
   @Column('varchar', { nullable: true })
   trialDate?: string;
 
-  @OneToMany(() => Message, message => message.docketNumber)
-  messages?: Message[];
+  // @OneToMany(() => Message, message => message.docketNumber, { nullable: true })
+  // messages?: Message[];
 }

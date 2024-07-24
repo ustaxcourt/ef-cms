@@ -95,7 +95,7 @@ export class Message {
   @Index()
   toUserId!: string;
 
-  @ManyToOne(() => Case, item => item.docketNumber)
-  @JoinColumn({ name: 'docketNumber' })
-  case!: Case;
+  // @ManyToOne(() => Case, item => item.docketNumber, { nullable: true })
+  // @JoinColumn({ name: 'docketNumber' })
+  // case?: Case;
 }
