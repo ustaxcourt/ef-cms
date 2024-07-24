@@ -2,7 +2,7 @@ import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navig
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('navigateToForgotPasswordAction', () => {
+describe('navigateToLoginAction', () => {
   let routeStub;
 
   beforeAll(() => {

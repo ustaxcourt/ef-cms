@@ -100,7 +100,7 @@ describe('handleIdleLogoutAction', () => {
     });
   });
 
-  it('should move into the COUNTDOWN if the current time is passed the session timeout limits', async () => {
+  it('should move into the COUNTDOWN if the current time is past the session timeout limits', async () => {
     jest.spyOn(Date, 'now').mockReturnValue(11000);
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
@@ -129,7 +129,7 @@ describe('handleIdleLogoutAction', () => {
     });
   });
 
-  it('should logout if in COUNTDOWN and the total time has elasped the total elasped time', async () => {
+  it('should logout if in COUNTDOWN and the total time has elapsed the total elapsed time', async () => {
     jest.spyOn(Date, 'now').mockReturnValue(16000);
     const result = await runAction(handleIdleLogoutAction, {
       modules: {

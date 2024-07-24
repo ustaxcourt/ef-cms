@@ -1,4 +1,5 @@
 import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { navigateToLoginSequence } from '@web-client/presenter/sequences/Login/navigateToLoginSequence';
 import { setLogoutTypeAction } from '@web-client/presenter/actions/setLogoutTypeAction';
 import { signOutSequence } from '@web-client/presenter/sequences/signOutSequence';
 
@@ -6,4 +7,5 @@ import { signOutSequence } from '@web-client/presenter/sequences/signOutSequence
 export const signOutUserInitiatedSequence = [
   setLogoutTypeAction(LOGOUT_BROADCAST_MESSAGES.userLogout),
   signOutSequence,
+  navigateToLoginSequence,
 ];
