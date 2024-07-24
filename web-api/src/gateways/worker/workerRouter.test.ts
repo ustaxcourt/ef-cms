@@ -22,7 +22,11 @@ describe('workerRouter', () => {
 
     expect(
       applicationContext.getUseCases().updateAssociatedCaseWorker,
-    ).toHaveBeenCalledWith(applicationContext, mockMessage.payload);
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      mockMessage.payload,
+      mockMessage.authorizedUser,
+    );
   });
 
   it('should make a call to queue a user`s associated cases for update when the message type is QUEUE_UPDATE_ASSOCIATED_CASES', async () => {
@@ -40,7 +44,11 @@ describe('workerRouter', () => {
 
     expect(
       applicationContext.getUseCases().queueUpdateAssociatedCasesWorker,
-    ).toHaveBeenCalledWith(applicationContext, mockMessage.payload);
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      mockMessage.payload,
+      mockMessage.authorizedUser,
+    );
   });
 
   it('should throw an error when the message type provided was not recognized by the router', async () => {
