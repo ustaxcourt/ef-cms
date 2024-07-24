@@ -9,29 +9,23 @@ import { v2ApiWrapper } from './v2ApiWrapper';
  * day (12:00am-11:59:59pm ET)
  *
  * @param {object} event the AWS event object
- * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the reconciliation report
  */
 export const getReconciliationReportLambda = (
   event,
   authorizedUser: UnknownAuthUser,
-  options = {},
 ) =>
-  genericHandler(
-    event,
-    ({ applicationContext }) => {
-      return v2ApiWrapper(async () => {
-        const { end, start } = event.queryStringParameters;
-        //url will contain the reconciliation date in path parameters, and times in the query string
-        const parms = { ...event.pathParameters, end, start };
-        const report = await getReconciliationReportInteractor(
-          applicationContext,
-          parms,
-          authorizedUser,
-        );
+  genericHandler(event, ({ applicationContext }) => {
+    return v2ApiWrapper(async () => {
+      const { end, start } = event.queryStringParameters;
+      //url will contain the reconciliation date in path parameters, and times in the query string
+      const parms = { ...event.pathParameters, end, start };
+      const report = await getReconciliationReportInteractor(
+        applicationContext,
+        parms,
+        authorizedUser,
+      );
 
-        return report;
-      });
-    },
-    options,
-  );
+      return report;
+    });
+  });
