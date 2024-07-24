@@ -5,10 +5,9 @@ import React from 'react';
 
 export const IdleLogout = connect(
   {
-    gotoLoginSequence: sequences.gotoLoginSequence,
     navigateToLoginSequence: sequences.navigateToLoginSequence,
   },
-  function IdleLogout({ gotoLoginSequence, navigateToLoginSequence }) {
+  function IdleLogout({ navigateToLoginSequence }) {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex={-1}>Session Timeout</h1>
@@ -22,7 +21,6 @@ export const IdleLogout = connect(
         <Button
           onClick={() => {
             navigateToLoginSequence();
-            gotoLoginSequence();
           }}
         >
           Log In
