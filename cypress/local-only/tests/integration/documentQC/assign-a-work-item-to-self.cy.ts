@@ -2,22 +2,6 @@ import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-h
 import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Work item assignment', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   it('petitionsClerk assigns a work item to themselves, docketClerk should NOT see that work item as unassigned', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {

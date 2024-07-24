@@ -1,4 +1,4 @@
-export function petitionsclerkAddsRespondentToCase(
+export function petitionsClerkAddsRespondentToCase(
   docketNumber: string,
   barNumber: string,
 ) {
