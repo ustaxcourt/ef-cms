@@ -43,7 +43,7 @@ export function petitionerCreatesElectronicCaseUpdated(
     .get('[data-testid="case-link-docket-number"]')
     .invoke('text')
     .then(docketNumberWithSuffix => {
-      cy.get('[data-testid="case-link"]').click();
+      cy.get('[data-testid="button-back-to-dashboard"]').click();
       return cy.wrap<string>(docketNumberWithSuffix);
     });
 }
