@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { fileExternalDocumentInteractor } from '@web-api/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,11 +13,9 @@ export const fileExternalDocumentToCaseLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .fileExternalDocumentInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-        authorizedUser,
-      );
+    return await fileExternalDocumentInteractor(
+      applicationContext,
+      JSON.parse(event.body),
+      authorizedUser,
+    );
   });

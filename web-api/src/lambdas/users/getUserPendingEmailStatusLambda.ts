@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getUserPendingEmailStatusInteractor } from '@web-api/business/useCases/user/getUserPendingEmailStatusInteractor';
 
 /**
  * gets the user pending email
@@ -12,13 +13,11 @@ export const getUserPendingEmailStatusLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getUserPendingEmailStatusInteractor(
-        applicationContext,
-        {
-          userId: event.pathParameters.userId,
-        },
-        authorizedUser,
-      );
+    return await getUserPendingEmailStatusInteractor(
+      applicationContext,
+      {
+        userId: event.pathParameters.userId,
+      },
+      authorizedUser,
+    );
   });

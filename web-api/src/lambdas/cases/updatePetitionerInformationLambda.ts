@@ -12,17 +12,13 @@ export const updatePetitionerInformationLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await updatePetitionerInformationInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

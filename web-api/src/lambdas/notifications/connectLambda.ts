@@ -30,6 +30,5 @@ export const connectLambda = (event, authorizedUser: UnknownAuthUser) =>
         },
       });
     },
-    authorizedUser,
     { bypassMaintenanceCheck: true },
   );

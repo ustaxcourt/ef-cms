@@ -12,14 +12,10 @@ export const generatePrintableFilingReceiptLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await generatePrintableFilingReceiptInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await generatePrintableFilingReceiptInteractor(
+      applicationContext,
+      JSON.parse(event.body),
+      authorizedUser,
+    );
+  });

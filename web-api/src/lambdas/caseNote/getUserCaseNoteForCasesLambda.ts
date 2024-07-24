@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getUserCaseNoteForCasesInteractor } from '@web-api/business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 
 /**
  * used for fetching a judge's case note
@@ -12,13 +13,11 @@ export const getUserCaseNoteForCasesLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getUserCaseNoteForCasesInteractor(
-        applicationContext,
-        {
-          docketNumbers: JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
+    return await getUserCaseNoteForCasesInteractor(
+      applicationContext,
+      {
+        docketNumbers: JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
   });

@@ -33,6 +33,5 @@ export const getReconciliationReportLambda = (
         return report;
       });
     },
-    authorizedUser,
     options,
   );

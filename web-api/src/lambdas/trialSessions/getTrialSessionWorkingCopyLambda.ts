@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getTrialSessionWorkingCopyInteractor } from '@web-api/business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor';
 
 /**
  * get a judge's working copy of a trial session
@@ -14,13 +15,11 @@ export const getTrialSessionWorkingCopyLambda = (
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || {};
 
-    return await applicationContext
-      .getUseCases()
-      .getTrialSessionWorkingCopyInteractor(
-        applicationContext,
-        {
-          trialSessionId,
-        },
-        authorizedUser,
-      );
+    return await getTrialSessionWorkingCopyInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      authorizedUser,
+    );
   });

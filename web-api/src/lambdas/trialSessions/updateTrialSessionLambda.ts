@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { updateTrialSessionInteractor } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractor';
 
 /**
  * updates a trial session.
@@ -11,7 +12,7 @@ export const updateTrialSessionLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().updateTrialSessionInteractor(
+    return await updateTrialSessionInteractor(
       applicationContext,
       {
         ...JSON.parse(event.body),

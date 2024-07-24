@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteDeficiencyStatisticInteractor } from '@web-api/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,13 +13,11 @@ export const deleteDeficiencyStatisticLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .deleteDeficiencyStatisticInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-        },
-        authorizedUser,
-      );
+    return await deleteDeficiencyStatisticInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
   });

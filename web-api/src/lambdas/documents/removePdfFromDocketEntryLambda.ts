@@ -12,14 +12,10 @@ export const removePdfFromDocketEntryLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await removePdfFromDocketEntryInteractor(
-        applicationContext,
-        event.pathParameters,
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await removePdfFromDocketEntryInteractor(
+      applicationContext,
+      event.pathParameters,
+      authorizedUser,
+    );
+  });

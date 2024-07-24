@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getEligibleCasesForTrialSessionInteractor } from '@web-api/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 
 /**
  * get eligible cases for trial session
@@ -14,13 +15,11 @@ export const getEligibleCasesForTrialSessionLambda = (
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || {};
 
-    return await applicationContext
-      .getUseCases()
-      .getEligibleCasesForTrialSessionInteractor(
-        applicationContext,
-        {
-          trialSessionId,
-        },
-        authorizedUser,
-      );
+    return await getEligibleCasesForTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      authorizedUser,
+    );
   });

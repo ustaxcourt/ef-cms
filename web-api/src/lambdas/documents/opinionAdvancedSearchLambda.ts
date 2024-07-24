@@ -12,20 +12,16 @@ export const opinionAdvancedSearchLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const opinionTypes =
-        event.queryStringParameters.opinionTypes?.split(',') || [];
+  genericHandler(event, async ({ applicationContext }) => {
+    const opinionTypes =
+      event.queryStringParameters.opinionTypes?.split(',') || [];
 
-      return await opinionAdvancedSearchInteractor(
-        applicationContext,
-        {
-          ...event.queryStringParameters,
-          opinionTypes,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await opinionAdvancedSearchInteractor(
+      applicationContext,
+      {
+        ...event.queryStringParameters,
+        opinionTypes,
+      },
+      authorizedUser,
+    );
+  });

@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { setForHearingInteractor } from '@web-api/business/useCases/trialSessions/setForHearingInteractor';
 
 /**
  * creates a new trial session.
@@ -13,7 +14,7 @@ export const setForHearingLambda = (event, authorizedUser: UnknownAuthUser) =>
       event.pathParameters || event.path || {};
     const { calendarNotes } = JSON.parse(event.body);
 
-    return await applicationContext.getUseCases().setForHearingInteractor(
+    return await setForHearingInteractor(
       applicationContext,
       {
         calendarNotes,

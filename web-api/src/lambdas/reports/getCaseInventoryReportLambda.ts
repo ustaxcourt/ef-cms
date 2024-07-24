@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getCaseInventoryReportInteractor } from '@web-api/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
 
 /**
  * used for fetching the case inventory report data
@@ -12,13 +13,11 @@ export const getCaseInventoryReportLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getCaseInventoryReportInteractor(
-        applicationContext,
-        {
-          ...event.queryStringParameters,
-        },
-        authorizedUser,
-      );
+    return await getCaseInventoryReportInteractor(
+      applicationContext,
+      {
+        ...event.queryStringParameters,
+      },
+      authorizedUser,
+    );
   });

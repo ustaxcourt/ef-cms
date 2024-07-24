@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { archiveCorrespondenceDocumentInteractor } from '@web-api/business/useCases/correspondence/archiveCorrespondenceDocumentInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,13 +13,11 @@ export const archiveCorrespondenceDocumentLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .archiveCorrespondenceDocumentInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-        },
-        authorizedUser,
-      );
+    return await archiveCorrespondenceDocumentInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
   });

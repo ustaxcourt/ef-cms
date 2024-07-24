@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteTrialSessionInteractor } from '@web-api/business/useCases/trialSessions/deleteTrialSessionInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -14,7 +15,7 @@ export const deleteTrialSessionLambda = (
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || {};
 
-    return await applicationContext.getUseCases().deleteTrialSessionInteractor(
+    return await deleteTrialSessionInteractor(
       applicationContext,
       {
         trialSessionId,

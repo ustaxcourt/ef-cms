@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { sealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/sealDocketEntryInteractor';
 
 /**
  * used for sealing docket entries
@@ -16,7 +17,7 @@ export const sealDocketEntryLambda = (event, authorizedUser: UnknownAuthUser) =>
 
     const { docketEntrySealedTo } = JSON.parse(event.body);
 
-    return await applicationContext.getUseCases().sealDocketEntryInteractor(
+    return await sealDocketEntryInteractor(
       applicationContext,
       {
         docketEntryId,

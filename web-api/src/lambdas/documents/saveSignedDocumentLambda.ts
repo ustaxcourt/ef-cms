@@ -12,23 +12,19 @@ export const saveSignedDocumentLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const {
-        body,
-        pathParameters: { docketEntryId: originalDocketEntryId, docketNumber },
-      } = event;
+  genericHandler(event, async ({ applicationContext }) => {
+    const {
+      body,
+      pathParameters: { docketEntryId: originalDocketEntryId, docketNumber },
+    } = event;
 
-      return await saveSignedDocumentInteractor(
-        applicationContext,
-        {
-          ...JSON.parse(body),
-          docketNumber,
-          originalDocketEntryId,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await saveSignedDocumentInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(body),
+        docketNumber,
+        originalDocketEntryId,
+      },
+      authorizedUser,
+    );
+  });

@@ -12,17 +12,13 @@ export const updateCounselOnCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await updateCounselOnCaseInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          userData: JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await updateCounselOnCaseInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        userData: JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

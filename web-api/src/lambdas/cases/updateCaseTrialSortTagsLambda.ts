@@ -12,16 +12,12 @@ export const updateCaseTrialSortTagsLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await updateCaseTrialSortTagsInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await updateCaseTrialSortTagsInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
+  });

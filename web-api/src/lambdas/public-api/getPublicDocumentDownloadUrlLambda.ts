@@ -1,5 +1,6 @@
-import { UnknownUserAuth } from '../../../shared/src/auth/UserAuthType';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getPublicDownloadPolicyUrlInteractor } from '@web-api/business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 
 /**
  * used for fetching a single case
@@ -9,17 +10,15 @@ import { genericHandler } from '../../genericHandler';
  */
 export const getPublicDocumentDownloadUrlLambda = (
   event,
-  authorizdeUser: UnknownUserAuth,
+  authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getPublicDownloadPolicyUrlInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          isTerminalUser: event.isTerminalUser,
-        },
-        authorizdeUser,
-      );
+    return await getPublicDownloadPolicyUrlInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        isTerminalUser: event.isTerminalUser,
+      },
+      authorizedUser,
+    );
   });

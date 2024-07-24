@@ -12,16 +12,12 @@ export const createCaseFromPaperLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await createCaseFromPaperInteractor(
-        applicationContext,
-        {
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await createCaseFromPaperInteractor(
+      applicationContext,
+      {
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

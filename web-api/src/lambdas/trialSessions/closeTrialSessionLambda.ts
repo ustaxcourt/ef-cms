@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { closeTrialSessionInteractor } from '@web-api/business/useCases/trialSessions/closeTrialSessionInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -14,7 +15,7 @@ export const closeTrialSessionLambda = (
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || {};
 
-    return await applicationContext.getUseCases().closeTrialSessionInteractor(
+    return await closeTrialSessionInteractor(
       applicationContext,
       {
         trialSessionId,

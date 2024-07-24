@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createCaseInteractor } from '@web-api/business/useCases/createCaseInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -9,7 +10,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const createCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createCaseInteractor(
+    return await createCaseInteractor(
       applicationContext,
       {
         ...JSON.parse(event.body),

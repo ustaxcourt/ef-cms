@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { editPractitionerDocumentInteractor } from '@web-api/business/useCases/practitioner/editPractitionerDocumentInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,14 +13,12 @@ export const editPractitionerDocumentLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .editPractitionerDocumentInteractor(
-        applicationContext,
-        {
-          barNumber: event.pathParameters.barNumber,
-          documentMetadata: JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
+    return await editPractitionerDocumentInteractor(
+      applicationContext,
+      {
+        barNumber: event.pathParameters.barNumber,
+        documentMetadata: JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
   });

@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { checkEmailAvailabilityInteractor } from '@web-api/business/useCases/user/checkEmailAvailabilityInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -14,13 +15,11 @@ export const checkEmailAvailabilityLambda = (
   genericHandler(event, async ({ applicationContext }) => {
     const { email } = event.queryStringParameters;
 
-    return await applicationContext
-      .getUseCases()
-      .checkEmailAvailabilityInteractor(
-        applicationContext,
-        {
-          email,
-        },
-        authorizedUser,
-      );
+    return await checkEmailAvailabilityInteractor(
+      applicationContext,
+      {
+        email,
+      },
+      authorizedUser,
+    );
   });

@@ -21,6 +21,5 @@ export const appendAmendedPetitionFormLambda = (
         authorizedUser,
       );
     },
-    authorizedUser,
     { logResults: false },
   );

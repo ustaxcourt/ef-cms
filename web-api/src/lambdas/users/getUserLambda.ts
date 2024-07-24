@@ -14,7 +14,6 @@ export const getUserLambda = (event, authorizedUser: UnknownAuthUser) =>
     async ({ applicationContext }) => {
       return await getUserInteractor(applicationContext, authorizedUser);
     },
-    authorizedUser,
     {
       bypassMaintenanceCheck: true,
     },

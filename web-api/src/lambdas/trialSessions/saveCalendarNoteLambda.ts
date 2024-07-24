@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { saveCalendarNoteInteractor } from '@web-api/business/useCases/trialSessions/saveCalendarNoteInteractor';
 
 /**
  * used for saving a case's calendar note for a trial session
@@ -17,7 +18,7 @@ export const saveCalendarNoteLambda = (
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext.getUseCases().saveCalendarNoteInteractor(
+    return await saveCalendarNoteInteractor(
       applicationContext,
       {
         ...lambdaArguments,

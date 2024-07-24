@@ -12,17 +12,13 @@ export const updateQcCompleteForTrialLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }): Promise<RawCase> => {
-      return await updateQcCompleteForTrialInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }): Promise<RawCase> => {
+    return await updateQcCompleteForTrialInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

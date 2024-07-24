@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { completeMessageInteractor } from '@web-api/business/useCases/messages/completeMessageInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -16,12 +17,10 @@ export const completeMessageLambda = (event, authorizedUser: UnknownAuthUser) =>
     }: {
       applicationContext: ServerApplicationContext;
     }) => {
-      return await applicationContext
-        .getUseCases()
-        .completeMessageInteractor(
-          applicationContext,
-          JSON.parse(event.body),
-          authorizedUser,
-        );
+      return await completeMessageInteractor(
+        applicationContext,
+        JSON.parse(event.body),
+        authorizedUser,
+      );
     },
   );

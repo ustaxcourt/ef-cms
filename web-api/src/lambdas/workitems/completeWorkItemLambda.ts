@@ -12,17 +12,13 @@ export const completeWorkItemLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await completeWorkItemInteractor(
-        applicationContext,
-        {
-          completedMessage: JSON.parse(event.body).completedMessage,
-          workItemId: event.pathParameters.workItemId,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await completeWorkItemInteractor(
+      applicationContext,
+      {
+        completedMessage: JSON.parse(event.body).completedMessage,
+        workItemId: event.pathParameters.workItemId,
+      },
+      authorizedUser,
+    );
+  });

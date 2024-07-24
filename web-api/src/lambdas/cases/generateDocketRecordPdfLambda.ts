@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { generateDocketRecordPdfInteractor } from '@web-api/business/useCases/generateDocketRecordPdfInteractor';
 import { genericHandler } from '../../genericHandler';
 
 export const generateDocketRecordPdfLambda = (
@@ -8,15 +9,13 @@ export const generateDocketRecordPdfLambda = (
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .generateDocketRecordPdfInteractor(
-          applicationContext,
-          {
-            ...JSON.parse(event.body),
-          },
-          authorizedUser,
-        );
+      return await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          ...JSON.parse(event.body),
+        },
+        authorizedUser,
+      );
     },
     { logResults: false },
   );

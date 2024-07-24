@@ -18,6 +18,5 @@ export const addCoversheetLambda = (event, authorizedUser: UnknownAuthUser) =>
         authorizedUser,
       );
     },
-    authorizedUser,
     { logResults: false },
   );

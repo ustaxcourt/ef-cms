@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { serveCourtIssuedDocumentInteractor } from '@web-api/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor';
 
 /**
  * used for serving a court-issued document on all parties and closing the case for some document types
@@ -14,15 +15,13 @@ export const serveCourtIssuedDocumentLambda = (
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .serveCourtIssuedDocumentInteractor(
-          applicationContext,
-          {
-            ...JSON.parse(event.body),
-          },
-          authorizedUser,
-        );
+      return await serveCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          ...JSON.parse(event.body),
+        },
+        authorizedUser,
+      );
     },
     { logResults: false },
   );

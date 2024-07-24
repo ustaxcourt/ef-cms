@@ -12,21 +12,17 @@ export const blockCaseFromTrialLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const lambdaArguments = {
-        ...event.pathParameters,
-        ...JSON.parse(event.body),
-      };
+  genericHandler(event, async ({ applicationContext }) => {
+    const lambdaArguments = {
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
+    };
 
-      return await blockCaseFromTrialInteractor(
-        applicationContext,
-        {
-          ...lambdaArguments,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+    return await blockCaseFromTrialInteractor(
+      applicationContext,
+      {
+        ...lambdaArguments,
+      },
+      authorizedUser,
+    );
+  });

@@ -9,16 +9,12 @@ import { getUploadPolicyInteractor } from '@web-api/business/useCases/document/g
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getUploadPolicyLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getUploadPolicyInteractor(
-        applicationContext,
-        {
-          key: event.pathParameters.key,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getUploadPolicyInteractor(
+      applicationContext,
+      {
+        key: event.pathParameters.key,
+      },
+      authorizedUser,
+    );
+  });

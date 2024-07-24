@@ -12,16 +12,12 @@ export const unprioritizeCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await unprioritizeCaseInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await unprioritizeCaseInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
+  });

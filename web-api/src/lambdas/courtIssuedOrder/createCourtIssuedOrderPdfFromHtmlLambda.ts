@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createCourtIssuedOrderPdfFromHtmlInteractor } from '@web-api/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -14,15 +15,13 @@ export const createCourtIssuedOrderPdfFromHtmlLambda = (
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .createCourtIssuedOrderPdfFromHtmlInteractor(
-          applicationContext,
-          {
-            ...JSON.parse(event.body),
-          },
-          authorizedUser,
-        );
+      return await createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {
+          ...JSON.parse(event.body),
+        },
+        authorizedUser,
+      );
     },
     { logResults: false },
   );

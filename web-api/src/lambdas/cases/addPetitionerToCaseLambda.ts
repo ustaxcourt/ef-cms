@@ -12,17 +12,13 @@ export const addPetitionerToCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await addPetitionerToCaseInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-          ...JSON.parse(event.body),
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await addPetitionerToCaseInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      },
+      authorizedUser,
+    );
+  });

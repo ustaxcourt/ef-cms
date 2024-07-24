@@ -12,14 +12,10 @@ export const archiveDraftDocumentLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await archiveDraftDocumentInteractor(
-        applicationContext,
-        event.pathParameters,
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await archiveDraftDocumentInteractor(
+      applicationContext,
+      event.pathParameters,
+      authorizedUser,
+    );
+  });

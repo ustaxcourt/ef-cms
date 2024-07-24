@@ -9,16 +9,12 @@ import { getWorkItemInteractor } from '@web-api/business/useCases/workItems/getW
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getWorkItemLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await getWorkItemInteractor(
-        applicationContext,
-        {
-          workItemId: event.pathParameters.workItemId,
-        },
-        authorizedUser,
-      );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getWorkItemInteractor(
+      applicationContext,
+      {
+        workItemId: event.pathParameters.workItemId,
+      },
+      authorizedUser,
+    );
+  });
