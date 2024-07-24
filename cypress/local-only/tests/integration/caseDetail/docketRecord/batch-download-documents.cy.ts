@@ -56,22 +56,6 @@ const checkFileCounts = ({
 };
 
 describe('Batch Download Documents', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   beforeEach(() => {
     const downloadPath = Cypress.config('downloadsFolder');
     cy.task('ensureFolderExists', downloadPath);
