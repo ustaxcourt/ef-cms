@@ -4,7 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { setMessageAsRead } from '@web-api/persistence/postgres/setMessageAsRead';
+import { setMessageAsRead } from '@web-api/persistence/postgres/messages/setMessageAsRead';
 
 /**
  * setMessageAsReadInteractor

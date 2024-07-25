@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getUserOutboxMessages } from '@web-api/persistence/postgres/getUserOutboxMessages';
+import { getUserOutboxMessages } from '@web-api/persistence/postgres/messages/getUserOutboxMessages';
 
 /**
  * getOutboxMessagesForUserInteractor

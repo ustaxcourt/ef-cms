@@ -1,6 +1,6 @@
 import { RawMessage } from '@shared/business/entities/Message';
 import { db } from '@web-api/database';
-import { getMessageById } from '@web-api/persistence/postgres/getMessageById';
+import { getMessageById } from '@web-api/persistence/postgres/messages/getMessageById';
 import { omit } from 'lodash';
 
 export const updateMessage = async ({ message }: { message: RawMessage }) => {

@@ -5,9 +5,9 @@ import {
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
-import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,

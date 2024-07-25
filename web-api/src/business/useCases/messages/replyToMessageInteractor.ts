@@ -10,7 +10,8 @@ import {
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/markMessageThreadRepliedTo';
+import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
+import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 
 export const replyToMessage = async (
   applicationContext: ServerApplicationContext,
@@ -70,8 +71,7 @@ export const replyToMessage = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createMessage({
-    applicationContext,
+  await createMessage({
     message: validatedRawMessage,
   });
 

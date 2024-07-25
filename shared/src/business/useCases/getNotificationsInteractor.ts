@@ -1,7 +1,7 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getSectionInboxMessages } from '@web-api/persistence/postgres/getSectionInboxMessages';
-import { getUserInboxMessages } from '@web-api/persistence/postgres/getUserInboxMessages';
+import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
+import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
 
 const getJudgeUser = async (

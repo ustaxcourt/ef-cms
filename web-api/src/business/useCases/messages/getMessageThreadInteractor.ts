@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 
 /**
  * gets a message thread by parent id

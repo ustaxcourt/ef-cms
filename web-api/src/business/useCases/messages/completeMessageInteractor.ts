@@ -5,10 +5,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
-import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/markMessageThreadRepliedTo';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
+import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
