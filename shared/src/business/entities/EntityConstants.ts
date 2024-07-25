@@ -1144,7 +1144,8 @@ export type AbbrevatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
 
-export const STATE_NOT_AVAILABLE = 'N/A';
+export const NOT_AVAILABLE_OPTION = 'N/A';
+export const STATE_NOT_AVAILABLE = NOT_AVAILABLE_OPTION;
 
 export const PARTY_TYPES = {
   conservator: 'Conservator',

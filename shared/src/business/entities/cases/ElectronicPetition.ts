@@ -4,6 +4,7 @@ import {
   LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
+  NOT_AVAILABLE_OPTION,
   PARTY_TYPES,
   PROCEDURE_TYPES,
   ROLES,
@@ -80,7 +81,7 @@ export class ElectronicPetition extends JoiValidationEntity {
 
     if (contacts.secondary) {
       if (!contacts.secondary.phone) {
-        contacts.secondary.phone = 'N/A';
+        contacts.secondary.phone = NOT_AVAILABLE_OPTION;
       }
       this.petitioners.push(contacts.secondary);
     }

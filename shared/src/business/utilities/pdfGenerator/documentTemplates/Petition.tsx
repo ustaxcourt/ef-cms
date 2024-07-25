@@ -3,6 +3,7 @@ import {
   ALL_STATE_OPTIONS,
   BUSINESS_TYPES,
   COUNTRY_TYPES,
+  NOT_AVAILABLE_OPTION,
   PARTY_TYPES,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
@@ -98,12 +99,12 @@ export const Petition = ({
             <ol className="list-disc">
               {irsNotices.map(irsNotice => (
                 <li key={irsNotice.taxYear}>
-                  <span>{irsNotice.taxYear || 'N/A'}</span>
+                  <span>{irsNotice.taxYear || NOT_AVAILABLE_OPTION}</span>
                 </li>
               ))}
             </ol>
           ) : (
-            <p>{taxYear || 'N/A'}</p>
+            <p>{taxYear || NOT_AVAILABLE_OPTION}</p>
           )}
 
           <li className="list-bold">
@@ -274,7 +275,7 @@ const renderIrsNotice = irsNotice => {
   } else {
     return (
       <span>
-        {`${irsNotice.noticeIssuedDateFormatted || 'N/A'} - ${irsNotice.cityAndStateIssuingOffice || 'N/A'}`}
+        {`${irsNotice.noticeIssuedDateFormatted || NOT_AVAILABLE_OPTION} - ${irsNotice.cityAndStateIssuingOffice || NOT_AVAILABLE_OPTION}`}
       </span>
     );
   }
