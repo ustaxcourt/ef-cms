@@ -10,7 +10,7 @@ describe('formatPetitionAction', () => {
       contactPrimary: {},
     },
     createPetitionStep2Data: {},
-    step3Data: {
+    createPetitionStep3Data: {
       caseType: CASE_TYPES_MAP.cdp,
       irsNotices: [
         {
@@ -112,7 +112,7 @@ describe('formatPetitionAction', () => {
   it('should update caseType if caseType is a disclosure', async () => {
     const propsWithDisclosure = {
       ...PROPS,
-      step3Data: {
+      createPetitionStep3Data: {
         caseType: 'Disclosure1',
         irsNotices: [
           {
@@ -158,7 +158,7 @@ describe('formatPetitionAction', () => {
   it('should set noticeIssuedDate and taxYear as undefined if there is no irsNotice', async () => {
     const propsWithoutIrsNotice = {
       ...PROPS,
-      step3Data: {
+      createPetitionStep3Data: {
         caseType: CASE_TYPES_MAP.deficiency,
         irsNotices: [],
       },

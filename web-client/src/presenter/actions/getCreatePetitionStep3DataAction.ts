@@ -21,7 +21,7 @@ export const getCreatePetitionStep3DataAction = ({
     };
   });
 
-  const step3Data = {
+  const createPetitionStep3Data = {
     caseType: hasIrsNotice ? irsNotices[0].caseType : caseType,
     hasIrsNotice,
     hasUploadedIrsNotice,
@@ -30,6 +30,6 @@ export const getCreatePetitionStep3DataAction = ({
   };
 
   return {
-    step3Data,
+    createPetitionStep3Data,
   };
 };
