@@ -1,3 +1,5 @@
 import { setPetitionFormValueAction } from '@web-client/presenter/actions/setPetitionFormValueAction';
-//TODO: type here instead of presenter.ts
-export const updatePetitionFormValueSequence = [setPetitionFormValueAction];
+
+export const updatePetitionFormValueSequence = [
+  setPetitionFormValueAction,
+] as unknown as (props: { index: number; key: string; value: any }) => void;
