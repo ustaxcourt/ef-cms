@@ -18,11 +18,11 @@ export const getMessagesByDocketNumber = async ({
   docketNumber: string;
 }): Promise<MessageResult[]> => {
   const messages = await db
-    .selectFrom('message')
-    .leftJoin('case', 'case.docketNumber', 'message.docketNumber')
-    .where('docketNumber', '=', docketNumber)
-    .selectAll()
-    .select(['message.docketNumber as docketNumber']) // required to ensure docketNumber exists even if not in case
+    .selectFrom('message as m')
+    .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+    .where('m.docketNumber', '=', docketNumber)
+    .selectAll('m')
+    .select(['m.docketNumber'])
     .execute();
 
   return messages.map(

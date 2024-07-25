@@ -9,7 +9,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { createMessage } from '@web-api/persistence/postgres/createMessage';
+import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 
 export type MessageType = {
   attachments: {
@@ -66,7 +66,6 @@ export const createMessageInteractor = async (
       caseStatus: status,
       caseTitle: Case.getCaseTitle(caseCaption),
       docketNumber,
-      docketNumberWithSuffix,
       from: fromUser.name,
       fromSection: fromUser.section,
       fromUserId: fromUser.userId,
@@ -83,12 +82,7 @@ export const createMessageInteractor = async (
 
   console.log('*** validatedRawMessage', validatedRawMessage);
 
-  // await applicationContext.getPersistenceGateway().createMessage({
-  //   applicationContext,
-  //   message: validatedRawMessage,
-  // });
-
-  await createMessage({ applicationContext, message: validatedRawMessage });
+  await createMessage({ message: validatedRawMessage });
 
   return validatedRawMessage;
 };

@@ -12,7 +12,7 @@ import {
 import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**

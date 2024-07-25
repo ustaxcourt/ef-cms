@@ -12,16 +12,16 @@ export const getUserInboxMessages = async ({
   applicationContext.logger.info('getUserInboxMessages start');
 
   const messages = await db
-    .selectFrom('message')
-    .leftJoin('case', 'case.docketNumber', 'message.docketNumber')
-    .where('isCompleted', '=', false)
-    .where('isRepliedTo', '=', false)
-    .where('toUserId', '=', userId)
-    .selectAll()
-    .select(['message.docketNumber as docketNumber']) // required to ensure docketNumber exists even if not in case
+    .selectFrom('message as m')
+    .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+    .where('m.isCompleted', '=', false)
+    .where('m.isRepliedTo', '=', false)
+    .where('m.toUserId', '=', userId)
+    .selectAll('m')
+    .select('m.docketNumber')
     .execute();
 
-  console.log('**** messages', messages);
+  console.log('**** getUserInboxMessages', messages);
 
   applicationContext.logger.info('getUserInboxMessages end');
 

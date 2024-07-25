@@ -7,8 +7,8 @@ import { Message } from '../../../../../shared/src/business/entities/Message';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/getMessagesByDocketNumber';
-import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
+import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
+import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import diff from 'diff-arrays-of-objects';
 
 /**

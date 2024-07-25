@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/getCompletedUserInboxMessages';
+import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedUserInboxMessages';
 
 /**
  * getCompletedMessagesForUserInteractor

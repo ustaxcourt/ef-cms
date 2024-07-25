@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getSectionInboxMessages } from '@web-api/persistence/postgres/getSectionInboxMessages';
+import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 
 /**
  * getInboxMessagesForSectionInteractor
