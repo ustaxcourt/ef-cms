@@ -135,7 +135,7 @@ export const fileCourtIssuedDocketEntry = async (
           trialDate: caseEntity.trialDate,
           trialLocation: caseEntity.trialLocation,
         },
-        caseEntity,
+        { caseEntity },
       );
 
       if (isUnservable) {

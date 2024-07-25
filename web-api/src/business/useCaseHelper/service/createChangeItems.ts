@@ -160,7 +160,7 @@ const createWorkItemForChange = async ({
       trialDate: caseEntity.trialDate,
       trialLocation: caseEntity.trialLocation,
     },
-    caseEntity,
+    { caseEntity },
   );
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
