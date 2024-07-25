@@ -472,4 +472,99 @@ describe('scanHelper', () => {
       expect(result.ATPFileCompleted).toEqual(false);
     });
   });
+
+  describe('disableModalSelect', () => {
+    it('should be true when scan mode and scanner are not selected', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          modal: {
+            scanMode: null,
+            scanner: null,
+          },
+          scanner: {
+            sources: ['sourceA, sourceB'],
+          },
+        },
+      });
+
+      expect(result.disableModalSelect).toEqual(true);
+    });
+
+    it('should be true when scan mode is not selected', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          modal: {
+            scanMode: null,
+            scanner: 'someScanner',
+          },
+          scanner: {
+            sources: ['sourceA, sourceB'],
+          },
+        },
+      });
+
+      expect(result.disableModalSelect).toEqual(true);
+    });
+
+    it('should be true when scanner is not selected', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          modal: {
+            scanMode: 'someScanMode',
+            scanner: null,
+          },
+          scanner: {
+            sources: ['sourceA, sourceB'],
+          },
+        },
+      });
+
+      expect(result.disableModalSelect).toEqual(true);
+    });
+
+    it('should be true when the scanner sources property in state is an empty array', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          modal: {
+            scanMode: 'someScanMode',
+            scanner: 'someScanner',
+          },
+          scanner: {
+            sources: [],
+          },
+        },
+      });
+
+      expect(result.disableModalSelect).toEqual(true);
+    });
+
+    it('should be true when there the scanner sources property in state is undefined', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          modal: {
+            scanMode: 'someScanMode',
+            scanner: 'someScanner',
+          },
+        },
+      });
+
+      expect(result.disableModalSelect).toEqual(true);
+    });
+
+    it('should be false when scan mode and scanner are selected', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          modal: {
+            scanMode: 'someScanMode',
+            scanner: 'someScanner',
+          },
+          scanner: {
+            sources: ['sourceA, sourceB'],
+          },
+        },
+      });
+
+      expect(result.disableModalSelect).toEqual(false);
+    });
+  });
 });
