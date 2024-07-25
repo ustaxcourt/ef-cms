@@ -146,9 +146,8 @@ export class PaperPetition extends JoiValidationEntity {
     });
     this.petitioners = [contacts.primary];
     if (contacts.secondary) {
-      if (!contacts.secondary.phone) {
-        contacts.secondary.phone = NOT_AVAILABLE_OPTION;
-      }
+      contacts.secondary.phone =
+        contacts.secondary.phone || NOT_AVAILABLE_OPTION;
       this.petitioners.push(contacts.secondary);
     }
   }
