@@ -1482,8 +1482,7 @@ export const presenterSequences = {
   updatePaperServiceProgressSequence:
     updatePaperServiceProgressSequence as unknown as Function,
   updatePartyViewTabSequence: updatePartyViewTabSequence as unknown as Function,
-  updatePetitionFormValueSequence:
-    updatePetitionFormValueSequence as unknown as Function,
+  updatePetitionFormValueSequence,
   updatePetitionPaymentFormValueSequence:
     updatePetitionPaymentFormValueSequence as unknown as Function,
   updateQcCompleteForTrialSequence:
