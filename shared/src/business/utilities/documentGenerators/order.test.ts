@@ -220,6 +220,74 @@ describe('orders and notices', () => {
               .documentTitle,
         },
       }),
-    testDescription: 'generates an Notice with added docket entries',
+    testDescription: 'generates a Notice with added docket entries',
+  });
+
+  describe('non-first page docket headers', () => {
+    const orderContentWithMultiplePages =
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee.content.repeat(
+        3,
+      );
+    // A full-image comparison is not granular enough to detect the difference we are trying
+    // to test, so we focus the comparison on the part of the image that matters.
+    const croppedWidth = 200;
+    const croppedHeight = 50;
+
+    generateAndVerifyPdfDiff({
+      croppedHeight,
+      croppedWidth,
+      fileName: 'Order_With_Added_Docket_Numbers_Second_Page.pdf',
+      pageNumber: 2,
+      pdfGenerateFunction: () =>
+        order({
+          applicationContext,
+          data: {
+            addedDocketNumbers: [
+              '101-20',
+              '102-20',
+              '103-20',
+              '104-20',
+              '105-20',
+              '106-20',
+            ],
+            caseCaptionExtension: 'Petitioner(s)',
+            caseTitle: 'Test Petitioner',
+            docketNumberWithSuffix: '123-45S',
+            nameOfClerk: '',
+            orderContent: orderContentWithMultiplePages,
+            orderTitle:
+              SYSTEM_GENERATED_DOCUMENT_TYPES
+                .orderForAmendedPetitionAndFilingFee.documentTitle,
+            titleOfClerk: '',
+          },
+        }),
+      testDescription:
+        'generates the second page of an order that has header docker number and et al. at top',
+    });
+
+    generateAndVerifyPdfDiff({
+      croppedHeight,
+      croppedWidth,
+      fileName: 'Order_Without_Added_Docket_Numbers_Second_Page.pdf',
+      pageNumber: 2,
+      pdfGenerateFunction: () =>
+        order({
+          applicationContext,
+          data: {
+            addedDocketNumbers: ['123-45S'],
+            caseCaptionExtension: 'Petitioner(s)',
+            caseTitle: 'Test Petitioner',
+            docketNumberWithSuffix: '123-45S',
+            nameOfClerk: '',
+            orderContent: orderContentWithMultiplePages,
+            orderTitle:
+              SYSTEM_GENERATED_DOCUMENT_TYPES
+                .orderForAmendedPetitionAndFilingFee.documentTitle,
+            titleOfClerk: '',
+          },
+        }),
+      testDescription:
+        'generates the second page of an order that has header docker number without et al. at top',
+    });
   });
 });
