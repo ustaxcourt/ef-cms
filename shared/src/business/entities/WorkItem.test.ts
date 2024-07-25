@@ -115,7 +115,7 @@ describe('WorkItem', () => {
       mockCase.trialDate = '2018-11-21T20:49:28.192Z';
       mockCase.trialLocation = 'Seattle, WA';
 
-      const workItem = new WorkItem(aValidWorkItem, mockCase);
+      const workItem = new WorkItem(aValidWorkItem, { caseEntity: mockCase });
 
       expect(workItem.isValid()).toBeTruthy();
       expect(workItem.associatedJudge).toBe(mockCase.associatedJudge);

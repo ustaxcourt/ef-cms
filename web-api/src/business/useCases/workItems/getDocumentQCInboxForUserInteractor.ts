@@ -40,7 +40,5 @@ export const getDocumentQCInboxForUserInteractor = async (
       workItem.assigneeId === user.userId && workItem.section === user.section,
   );
 
-  return WorkItem.validateRawCollection(filteredWorkItems, {
-    applicationContext,
-  });
+  return WorkItem.validateRawCollection(filteredWorkItems);
 };

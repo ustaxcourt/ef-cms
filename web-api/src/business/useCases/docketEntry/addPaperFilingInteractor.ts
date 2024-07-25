@@ -133,7 +133,7 @@ export const addPaperFiling = async (
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
       },
-      caseEntity,
+      { caseEntity },
     );
 
     if (isReadyForService) {
