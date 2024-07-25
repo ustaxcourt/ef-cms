@@ -9,7 +9,7 @@ describe('formatPetitionAction', () => {
     createPetitionStep1Data: {
       contactPrimary: {},
     },
-    step2Data: {},
+    createPetitionStep2Data: {},
     step3Data: {
       caseType: CASE_TYPES_MAP.cdp,
       irsNotices: [

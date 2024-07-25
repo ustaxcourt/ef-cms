@@ -20,8 +20,8 @@ describe('getCreatePetitionStep2DataAction', () => {
       },
     });
 
-    const { step2Data } = results.output;
-    expect(step2Data).toEqual({
+    const { createPetitionStep2Data } = results.output;
+    expect(createPetitionStep2Data).toEqual({
       petitionFacts: 'TEST_petitionFacts',
       petitionFile: 'TEST_petitionFile',
       petitionFileSize: 'TEST_petitionFileSize',
