@@ -53,7 +53,9 @@ export class Message extends JoiValidationEntity {
     this.createdAt = rawMessage.createdAt || createISODateString();
     this.leadDocketNumber = rawMessage.leadDocketNumber;
     this.docketNumber = rawMessage.docketNumber;
-    this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
+    this.docketNumberWithSuffix = `${rawMessage.docketNumber}${
+      rawMessage.docketNumberSuffix ? rawMessage.docketNumberSuffix : ''
+    }`;
     this.from = rawMessage.from;
     this.fromSection = rawMessage.fromSection;
     this.fromUserId = rawMessage.fromUserId;

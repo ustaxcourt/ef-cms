@@ -1,5 +1,4 @@
-import { Message } from '@web-api/persistence/repository/Message';
-import { getDataSource } from '@web-api/data-source';
+import { db } from '@web-api/database';
 import { getMessageThreadByParentId } from './getMessageThreadByParentId';
 
 /**
@@ -23,15 +22,15 @@ export const markMessageThreadRepliedTo = async ({
   });
 
   if (messages.length) {
-    const dataSource = await getDataSource();
-    const messageRepository = dataSource.getRepository(Message);
-
     await Promise.all(
       messages.map(async message => {
-        await messageRepository.update(
-          { messageId: message.messageId },
-          { isRepliedTo: true },
-        );
+        await db
+          .updateTable('message')
+          .set({
+            isRepliedTo: true,
+          })
+          .where('messageId', '=', message.messageId)
+          .execute();
       }),
     );
   }

@@ -6,6 +6,7 @@ import joi from 'joi';
 export class MessageResult extends Message {
   public trialDate: string;
   public trialLocation: string;
+  public docketNumberSuffix?: string;
 
   constructor(rawMessage, { applicationContext }) {
     super(rawMessage, { applicationContext });
@@ -13,9 +14,11 @@ export class MessageResult extends Message {
     this.entityName = 'MessageResult';
     this.trialDate = rawMessage.trialDate;
     this.trialLocation = rawMessage.trialLocation;
+    this.docketNumberSuffix = rawMessage.docketNumberSuffix;
   }
 
   static VALIDATION_RULES = {
+    docketNumberSuffix: JoiValidationConstants.STRING.optional(),
     entityName: JoiValidationConstants.STRING.valid('MessageResult').required(),
     trialDate: JoiValidationConstants.ISO_DATE.optional().description(
       'When this case goes to trial.',

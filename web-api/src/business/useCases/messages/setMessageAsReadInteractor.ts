@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { setMessageAsRead } from '@web-api/persistence/postgres/setMessageAsRead';
 
 /**
  * setMessageAsReadInteractor
@@ -16,6 +17,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
  */
 export const setMessageAsReadInteractor = async (
   applicationContext: ServerApplicationContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { docketNumber, messageId }: { docketNumber: string; messageId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -24,7 +26,5 @@ export const setMessageAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .setMessageAsRead({ applicationContext, docketNumber, messageId });
+  await setMessageAsRead({ messageId });
 };

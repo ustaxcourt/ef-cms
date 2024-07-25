@@ -1,5 +1,7 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getSectionInboxMessages } from '@web-api/persistence/postgres/getSectionInboxMessages';
+import { getUserInboxMessages } from '@web-api/persistence/postgres/getUserInboxMessages';
 import { isEmpty } from 'lodash';
 
 const getJudgeUser = async (
@@ -83,11 +85,11 @@ export const getNotificationsInteractor = async (
     documentQCIndividualInbox,
     documentQCSectionInbox,
   ] = await Promise.all([
-    applicationContext.getPersistenceGateway().getUserInboxMessages({
+    getUserInboxMessages({
       applicationContext,
       userId,
     }),
-    applicationContext.getPersistenceGateway().getSectionInboxMessages({
+    getSectionInboxMessages({
       applicationContext,
       section,
     }),

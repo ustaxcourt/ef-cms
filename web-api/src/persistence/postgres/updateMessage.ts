@@ -1,27 +1,11 @@
-import { Message } from '@web-api/persistence/repository/Message';
 import { RawMessage } from '@shared/business/entities/Message';
-import { getDataSource } from '@web-api/data-source';
+import { db } from '@web-api/database';
+import { getMessageById } from '@web-api/persistence/postgres/getMessageById';
+import { omit } from 'lodash';
 
-/**
- * updateMessage
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.message the message data
- * @returns {object} the updated message
- */
-export const updateMessage = async ({
-  applicationContext,
-  message,
-}: {
-  applicationContext: IApplicationContext;
-  message: RawMessage;
-}) => {
-  const dataSource = await getDataSource();
-  const messageRepository = dataSource.getRepository(Message);
-
-  const existingMessage = await messageRepository.findOne({
-    where: { messageId: message.messageId },
+export const updateMessage = async ({ message }: { message: RawMessage }) => {
+  const existingMessage = await getMessageById({
+    messageId: message.messageId,
   });
 
   if (existingMessage) {
@@ -30,9 +14,15 @@ export const updateMessage = async ({
       ...message,
     };
 
-    await messageRepository.save(updatedMessage);
-
-    return updatedMessage;
+    return await db
+      .updateTable('message')
+      .set({
+        ...omit(updatedMessage, 'entityName'),
+        attachments: JSON.stringify(updatedMessage.attachments),
+      })
+      .where('messageId', '=', message.messageId)
+      .returningAll()
+      .executeTakeFirst();
   } else {
     throw new Error(`Message with id ${message.messageId} not found`);
   }
