@@ -24,6 +24,7 @@ Javis Sullivan - Software Engineer
 
 Tom Elliott- Software Engineer
 
+Andy Kuny - Software Engineer
 Jonathan Cruz - Software Engineer
 
 Zach Rogers - Software Engineer
