@@ -14,6 +14,7 @@ describe('formatPetitionAction', () => {
       caseType: CASE_TYPES_MAP.cdp,
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
           taxYear: 'TEST_taxYear',
         },
@@ -52,7 +53,6 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
-      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -60,11 +60,14 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: CASE_TYPES_MAP.cdp,
           taxYear: 'TEST_taxYear',
         },
       ],
       noticeIssuedDate: 'TEST_noticeIssuedDate',
+      originalCaseType: CASE_TYPES_MAP.cdp,
       taxYear: 'TEST_taxYear',
     });
   });
@@ -87,7 +90,6 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: '',
       caseCaptionExtension: '',
-      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: '',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -95,11 +97,14 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: CASE_TYPES_MAP.cdp,
           taxYear: 'TEST_taxYear',
         },
       ],
       noticeIssuedDate: 'TEST_noticeIssuedDate',
+      originalCaseType: CASE_TYPES_MAP.cdp,
       taxYear: 'TEST_taxYear',
     });
   });
@@ -111,6 +116,7 @@ describe('formatPetitionAction', () => {
         caseType: 'Disclosure1',
         irsNotices: [
           {
+            caseType: 'Disclosure1',
             noticeIssuedDate: 'TEST_noticeIssuedDate',
             taxYear: 'TEST_taxYear',
           },
@@ -137,11 +143,14 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.disclosure,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: 'Disclosure1',
           taxYear: 'TEST_taxYear',
         },
       ],
       noticeIssuedDate: 'TEST_noticeIssuedDate',
+      originalCaseType: 'Disclosure1',
       taxYear: 'TEST_taxYear',
     });
   });
@@ -167,7 +176,6 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
-      caseDescription: 'Deficiency',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
@@ -175,6 +183,7 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [],
       noticeIssuedDate: undefined,
+      originalCaseType: CASE_TYPES_MAP.deficiency,
       taxYear: undefined,
     });
   });

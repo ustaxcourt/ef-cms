@@ -1,7 +1,4 @@
-import {
-  CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
-  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -27,16 +24,8 @@ export const formatPetitionAction = ({
     caseCaption,
   });
 
-  const caseDescription = petitionInfo.hasIrsNotice
-    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[petitionInfo.caseType]
-    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[petitionInfo.caseType];
-
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
-  const disclosureCaseTypes = ['Disclosure1', 'Disclosure2'];
-
-  if (disclosureCaseTypes.includes(petitionInfo.caseType)) {
-    petitionInfo.caseType = CASE_TYPES_MAP.disclosure;
-  }
+  petitionInfo.originalCaseType = petitionInfo.caseType;
+  petitionInfo.caseType = formatCaseType(petitionInfo.caseType);
 
   const { contactPrimary, irsNotices } = petitionInfo;
 
@@ -50,14 +39,29 @@ export const formatPetitionAction = ({
     ({ noticeIssuedDate, taxYear } = irsNotices[0]);
   }
 
+  const irsNoticesWithCaseTypes = irsNotices.map(irsNotice => {
+    return {
+      ...irsNotice,
+      caseType: formatCaseType(irsNotice.caseType),
+      originalCaseType: irsNotice.caseType,
+    };
+  });
+
   store.set(state.petitionFormatted, {
     ...petitionInfo,
     caseCaption,
     caseCaptionExtension,
-    caseDescription,
     caseTitle,
     contactPrimary,
+    irsNotices: irsNoticesWithCaseTypes,
     noticeIssuedDate,
     taxYear,
   });
 };
+
+function formatCaseType(caseType: string) {
+  if (caseType === 'Disclosure1' || caseType === 'Disclosure2') {
+    return CASE_TYPES_MAP.disclosure;
+  }
+  return caseType;
+}

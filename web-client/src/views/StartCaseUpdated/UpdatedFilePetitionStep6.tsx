@@ -1,4 +1,3 @@
-import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
@@ -125,10 +124,3 @@ export const UpdatedFilePetitionStep6 = connect(
     );
   },
 );
-
-export function formatCaseType(caseType: string) {
-  if (caseType === 'Disclosure1' || caseType === 'Disclosure2') {
-    return CASE_TYPES_MAP.disclosure;
-  }
-  return caseType;
-}
