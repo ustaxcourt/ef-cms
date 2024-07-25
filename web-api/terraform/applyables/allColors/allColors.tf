@@ -114,3 +114,11 @@ module "ui-healthcheck" {
   alarm_name = "app.${var.dns_domain} is accessible over HTTPS"
   dns_domain = "app.${var.dns_domain}"
 }
+
+module "rds" {
+  source            = "../../modules/rds"
+  environment       = var.environment
+  postgres_user     = var.postgres_user
+  postgres_password = var.postgres_password
+}
+

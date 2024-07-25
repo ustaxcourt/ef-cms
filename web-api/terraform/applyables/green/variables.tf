@@ -79,3 +79,11 @@ variable "viewer_protocol_policy" {
   type    = string
   default = "redirect-to-https"
 }
+
+variable "postgres_user" {
+  type = string
+}
+
+variable "postgres_password" {
+  type = string
+}
