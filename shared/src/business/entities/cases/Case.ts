@@ -2132,9 +2132,6 @@ export const canAllowPrintableDocketRecord = rawCase => {
 };
 
 export const canDojPractitionersRepresentPartyForCase = (rawCase: RawCase) => {
-  if (typeof rawCase.canDojPractitionersRepresentParty !== 'undefined') {
-    return rawCase.canDojPractitionersRepresentParty;
-  }
   return rawCase.status === CASE_STATUS_TYPES.onAppeal;
 };
 
