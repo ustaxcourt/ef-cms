@@ -8,22 +8,6 @@ describe(
   'Petitioner files external document on case',
   { scrollBehavior: 'center' },
   () => {
-    before(() => {
-      cy.task('toggleFeatureFlag', {
-        flag: 'updated-petition-flow',
-        flagValue: false,
-      });
-
-      cy.reload(true);
-    });
-
-    after(() => {
-      cy.task('toggleFeatureFlag', {
-        flag: 'updated-petition-flow',
-        flagValue: true,
-      });
-    });
-
     it('should create an electronic petition, serve the petition, and files an "Answer" on the petition', () => {
       loginAsPetitioner();
       petitionerCreatesElectronicCase().then(docketNumber => {

@@ -114,6 +114,17 @@ const setupPractitionerInformationArray = (
 const setupPractitioners = async (
   applicationContext: ServerApplicationContext,
 ) => {
+  const PRACTICE_TYPES = {
+    DOJ: 'DOJ',
+    IRS: 'IRS',
+    Private: 'Private',
+  };
+
+  const PRACTITIONER_ROLE = {
+    IRS: 'irsPractitioner',
+    PRIVATE: 'privatePractitioner',
+  };
+
   const privatePractitionersBarNumbers = [
     'PT1234',
     'PT5432',
@@ -128,8 +139,8 @@ const setupPractitioners = async (
   ];
   const privatePractitioners = setupPractitionerInformationArray(
     privatePractitionersBarNumbers,
-    'Private',
-    'privatePractitioner',
+    PRACTICE_TYPES.Private,
+    PRACTITIONER_ROLE.PRIVATE,
   );
 
   const irsPractitionersBarNumbers = [
@@ -146,15 +157,15 @@ const setupPractitioners = async (
   ];
   const irsPractitioners = setupPractitionerInformationArray(
     irsPractitionersBarNumbers,
-    'IRS',
-    'irsPractitioner',
+    PRACTICE_TYPES.IRS,
+    PRACTITIONER_ROLE.IRS,
   );
 
   const dojBarNumbers = ['DT1111', 'DT2222', 'DT3333'];
   const dojPractitioners = setupPractitionerInformationArray(
     dojBarNumbers,
-    'DOJ',
-    'irsPractitioner',
+    PRACTICE_TYPES.DOJ,
+    PRACTITIONER_ROLE.IRS,
     'dojPractitioner',
   );
 

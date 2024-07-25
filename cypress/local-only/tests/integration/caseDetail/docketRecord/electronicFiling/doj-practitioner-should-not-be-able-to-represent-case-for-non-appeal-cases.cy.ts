@@ -7,8 +7,8 @@ import {
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCaseWithDeceasedSpouse } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkAddsRespondentToCase } from '../../../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { petitionsclerkAddsRespondentToCase } from '../../../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { updateCaseStatus } from '../../../../../../helpers/caseDetail/caseInformation/update-case-status';
 
@@ -40,43 +40,31 @@ describe('DOJ Practitioners - Represent A Party', () => {
       secondaryFilerName,
     ).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
-      petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
-
+      petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       loginAsPrivatePractitioner();
       externalUserSearchesDocketNumber(docketNumber);
-
       cy.get('[data-testid="request-represent-a-party-button"]').click();
-
       selectTypeaheadInput('document-type', 'Entry of Appearance');
-
       cy.get(`[data-testid="filer-${primaryFilerName}, Petitioner"]`).click();
       cy.get(`[data-testid="filer-${secondaryFilerName}, Petitioner"]`).click();
-
       cy.get('[data-testid="auto-generation"]').should('exist');
       cy.get('[data-testid="request-access-submit-document"]').click();
-
       cy.get('[data-testid="entry-of-appearance-pdf-preview"]').should('exist');
       cy.get('[data-testid="submit-represent-a-party-button"]').click();
-
       cy.get('[data-testid="document-download-link-EA"]').should(
         'contain.text',
         `Entry of Appearance for Petrs. ${primaryFilerName} & ${secondaryFilerName}`,
       );
-
       loginAsDojPractitioner();
       externalUserSearchesDocketNumber(docketNumber);
-
       cy.get('[data-testid="request-represent-a-party-button"]').should(
         'not.exist',
       );
-
       loginAsDocketClerk1();
       goToCase(docketNumber);
       updateCaseStatus('On Appeal');
-
       loginAsDojPractitioner();
       externalUserSearchesDocketNumber(docketNumber);
-
       cy.get('[data-testid="request-represent-a-party-button"]').should(
         'exist',
       );
