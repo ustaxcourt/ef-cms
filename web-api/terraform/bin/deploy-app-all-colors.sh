@@ -98,6 +98,9 @@ export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
 export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
 export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
+export TF_VAR_postgres_username=$POSTGRES_USER
+export TF_VAR_postgres_password=$POSTGRES_PASSWORD
+
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
