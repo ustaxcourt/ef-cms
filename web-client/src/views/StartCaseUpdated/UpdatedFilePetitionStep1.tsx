@@ -9,7 +9,6 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { useValidationFocus } from '@web-client/views/UseValidationFocus';
 import React from 'react';
 
-/* eslint-disable max-lines */
 export const UpdatedFilePetitionStep1 = connect(
   {
     form: state.form,

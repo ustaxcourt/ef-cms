@@ -1,4 +1,7 @@
-import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePetitionPdfInteractor } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { petitionerUser } from '@shared/test/mockUsers';
@@ -46,6 +49,7 @@ describe('generatePetitionPdfInteractor', () => {
       hasIrsNotice: false,
       hasUploadedIrsNotice: 'TEST_hasUploadedIrsNotice',
       irsNotices: [],
+      originalCaseType: CASE_TYPES_MAP.deficiency,
       partyType: 'TEST_partyType',
       petitionFacts: 'TEST_petitionFacts',
       petitionReasons: 'TEST_petitionReasons',
@@ -90,6 +94,7 @@ describe('generatePetitionPdfInteractor', () => {
         caseType: CASE_TYPES_MAP.deficiency,
         key: 'TEST_KEY',
         noticeIssuedDate: '2024-05-02T00:00:00.000-04:00',
+        originalCaseType: 'Deficiency',
         taxYear: 'TEST_TAX_YEAR',
       },
     ];
@@ -103,6 +108,7 @@ describe('generatePetitionPdfInteractor', () => {
       hasIrsNotice: true,
       hasUploadedIrsNotice: 'TEST_hasUploadedIrsNotice',
       irsNotices,
+      originalCaseType: CASE_TYPES_MAP.deficiency,
       partyType: 'TEST_partyType',
       petitionFacts: 'TEST_petitionFacts',
       petitionReasons: 'TEST_petitionReasons',
@@ -123,6 +129,49 @@ describe('generatePetitionPdfInteractor', () => {
           noticeIssuedDate: '2024-05-02T00:00:00.000-04:00',
           noticeIssuedDateFormatted: '05/02/24',
           taxYear: 'TEST_TAX_YEAR',
+        },
+      ],
+    });
+    expect(results.fileId).toEqual(mockFileId);
+  });
+
+  it('should generate petition with correct case description when case type is disclosure', async () => {
+    const irsNotices: any[] = [
+      {
+        caseType: CASE_TYPES_MAP.disclosure,
+        key: 'TEST_KEY',
+        noticeIssuedDate: '2024-05-02T00:00:00.000-04:00',
+        originalCaseType: 'Disclosure1',
+        taxYear: 'TEST_TAX_YEAR',
+      },
+    ];
+
+    const results = await generatePetitionPdfInteractor(applicationContext, {
+      caseCaptionExtension: 'TEST_caseCaptionExtension',
+      caseTitle: 'TEST_caseTitle',
+      caseType: CASE_TYPES_MAP.disclosure,
+      contactPrimary: 'TEST_contactPrimary',
+      contactSecondary: 'TEST_contactSecondary',
+      hasIrsNotice: true,
+      hasUploadedIrsNotice: 'TEST_hasUploadedIrsNotice',
+      irsNotices,
+      originalCaseType: 'Disclosure1',
+      partyType: 'TEST_partyType',
+      petitionFacts: 'TEST_petitionFacts',
+      petitionReasons: 'TEST_petitionReasons',
+      preferredTrialCity: 'TEST_preferredTrialCity',
+      procedureType: 'TEST_procedureType',
+      taxYear: 'TEST_taxYear',
+    });
+
+    const petitionCalls =
+      applicationContext.getDocumentGenerators().petition.mock.calls;
+    expect(petitionCalls.length).toEqual(1);
+    expect(petitionCalls[0][0].data).toMatchObject({
+      caseDescription: CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE.Disclosure1,
+      irsNotices: [
+        {
+          caseDescription: CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE.Disclosure1,
         },
       ],
     });

@@ -16,13 +16,13 @@ export const generatePetitionPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     caseCaptionExtension,
-    caseDescription,
     caseTitle,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
     hasUploadedIrsNotice,
     irsNotices,
+    originalCaseType,
     partyType,
     petitionFacts,
     petitionReasons,
@@ -36,6 +36,7 @@ export const generatePetitionPdfInteractor = async (
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const caseDescription = getCaseDescription(hasIrsNotice, originalCaseType);
 
   let pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
@@ -48,9 +49,10 @@ export const generatePetitionPdfInteractor = async (
       hasUploadedIrsNotice,
       irsNotices: irsNotices.map(irsNotice => ({
         ...irsNotice,
-        caseDescription: hasIrsNotice
-          ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[irsNotice.caseType]
-          : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[irsNotice.caseType],
+        caseDescription: getCaseDescription(
+          hasIrsNotice,
+          irsNotice.originalCaseType,
+        ),
         noticeIssuedDateFormatted: applicationContext
           .getUtilities()
           .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
@@ -74,3 +76,10 @@ export const generatePetitionPdfInteractor = async (
 
   return { fileId };
 };
+
+function getCaseDescription(hasIrsNotice: boolean, caseType: string) {
+  if (hasIrsNotice) {
+    return CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];
+  }
+  return CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
+}
