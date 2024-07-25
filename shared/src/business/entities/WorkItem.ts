@@ -37,7 +37,7 @@ export class WorkItem extends JoiValidationEntity {
   public updatedAt: string;
   public workItemId: string;
 
-  constructor(rawWorkItem, caseEntity?: Case) {
+  constructor(rawWorkItem, secondParam: {}, caseEntity?: Case) {
     super('WorkItem');
 
     this.assigneeId = rawWorkItem.assigneeId;
