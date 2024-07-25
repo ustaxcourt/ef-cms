@@ -38,6 +38,7 @@ describe('generatePetitionPdfInteractor', () => {
   it('should generate petition and call save document', async () => {
     const results = await generatePetitionPdfInteractor(applicationContext, {
       caseCaptionExtension: 'TEST_caseCaptionExtension',
+      caseDescription: 'Deficiency',
       caseTitle: 'TEST_caseTitle',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: 'TEST_contactPrimary',
