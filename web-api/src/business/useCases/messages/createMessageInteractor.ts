@@ -81,6 +81,8 @@ export const createMessageInteractor = async (
     .validate()
     .toRawObject();
 
+  console.log('*** validatedRawMessage', validatedRawMessage);
+
   // await applicationContext.getPersistenceGateway().createMessage({
   //   applicationContext,
   //   message: validatedRawMessage,
