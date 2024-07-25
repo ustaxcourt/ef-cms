@@ -193,6 +193,7 @@
     "secrets:rotate-environment": "npx ts-node --transpile-only scripts/user/rotate-environment-secrets.ts",
     "seed:db": "npx ts-node --transpile-only ./web-api/create-dynamo-tables.ts && npx ts-node --transpile-only ./web-api/seed-dynamo.ts",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
+    "seed:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/seed/seed.ts",
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "seed": "run-p seed:db seed:s3",
     "shell": "docker-compose run -it shell /bin/bash",
