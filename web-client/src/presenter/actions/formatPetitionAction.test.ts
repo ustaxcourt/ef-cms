@@ -21,7 +21,7 @@ describe('formatPetitionAction', () => {
       ],
     },
     createPetitionStep4Data: {},
-    step5Data: {},
+    createPetitionStep5Data: {},
   };
 
   const TEST_CASE_CAPTION = 'TEST_CASE_CAPTION';
