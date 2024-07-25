@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getStep5DataAction } from '@web-client/presenter/actions/getStep5DataAction';
+import { getCreatePetitionStep5DataAction } from '@web-client/presenter/actions/getCreatePetitionStep5DataAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -8,7 +8,7 @@ import { validateUploadPetitionStep5Action } from '@web-client/presenter/actions
 
 export const validateUpdatedFilePetitionStep5Sequence = [
   startShowValidationAction,
-  getStep5DataAction,
+  getCreatePetitionStep5DataAction,
   validateUploadPetitionStep5Action,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],

@@ -2,7 +2,7 @@ import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
 import { pick } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getStep1DataAction = ({ get }: ActionProps) => {
+export const getCreatePetitionStep1DataAction = ({ get }: ActionProps) => {
   const {
     businessType,
     contactPrimary,

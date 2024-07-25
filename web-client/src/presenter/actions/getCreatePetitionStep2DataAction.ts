@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getStep2DataAction = ({ get }: ActionProps) => {
+export const getCreatePetitionStep2DataAction = ({ get }: ActionProps) => {
   const {
     petitionFacts,
     petitionFile,

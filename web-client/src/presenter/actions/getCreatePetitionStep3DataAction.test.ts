@@ -1,9 +1,9 @@
-import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAction';
+import { getCreatePetitionStep3DataAction } from '@web-client/presenter/actions/getCreatePetitionStep3DataAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getStep3DataAction', () => {
+describe('getCreatePetitionStep3DataAction', () => {
   it('should fetch step 3 related data from state.form when user has IRS notice', async () => {
-    const results = await runAction(getStep3DataAction, {
+    const results = await runAction(getCreatePetitionStep3DataAction, {
       state: {
         form: {
           caseType: 'ROOT_LEVEL_CASE_TYPE',
@@ -45,7 +45,7 @@ describe('getStep3DataAction', () => {
   });
 
   it('should fetch step 3 related data from state.form when user does not have IRS notice', async () => {
-    const results = await runAction(getStep3DataAction, {
+    const results = await runAction(getCreatePetitionStep3DataAction, {
       state: {
         form: {
           caseType: 'ROOT_LEVEL_CASE_TYPE',

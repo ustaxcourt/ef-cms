@@ -1,9 +1,9 @@
-import { getStep2DataAction } from '@web-client/presenter/actions/getStep2DataAction';
+import { getCreatePetitionStep2DataAction } from '@web-client/presenter/actions/getCreatePetitionStep2DataAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getStep2DataAction', () => {
+describe('getCreatePetitionStep2DataAction', () => {
   it('should fetch Petition Information related data from state.form', async () => {
-    const results = await runAction(getStep2DataAction, {
+    const results = await runAction(getCreatePetitionStep2DataAction, {
       state: {
         form: {
           petitionFacts: 'TEST_petitionFacts',

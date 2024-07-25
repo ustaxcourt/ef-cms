@@ -1,9 +1,9 @@
-import { getStep4DataAction } from '@web-client/presenter/actions/getStep4DataAction';
+import { getCreatePetitionStep4DataAction } from '@web-client/presenter/actions/getCreatePetitionStep4DataAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getStep4DataAction', () => {
+describe('getCreatePetitionStep4DataAction', () => {
   it('should fetch step 4 related data from state.form', async () => {
-    const results = await runAction(getStep4DataAction, {
+    const results = await runAction(getCreatePetitionStep4DataAction, {
       state: {
         form: {
           preferredTrialCity: 'TEST_preferredTrialCity',
