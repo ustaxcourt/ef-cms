@@ -47,10 +47,9 @@ export const createMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const { caseCaption, status } = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()
@@ -79,8 +78,6 @@ export const createMessageInteractor = async (
   )
     .validate()
     .toRawObject();
-
-  console.log('*** validatedRawMessage', validatedRawMessage);
 
   await createMessage({ message: validatedRawMessage });
 
