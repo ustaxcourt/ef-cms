@@ -1,8 +1,8 @@
-import { Message } from '../../../../../shared/src/business/entities/Message';
+import { Message } from '@shared/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
@@ -10,19 +10,12 @@ import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/markMe
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
 
-/**
- * completes a message thread
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.message the message text
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @returns {object} the message
- */
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
-  { message, parentMessageId }: { message: string; parentMessageId: string },
-) => {
+  {
+    messages,
+  }: { messages: { messageBody: string; parentMessageId: string }[] },
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -33,29 +26,55 @@ export const completeMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  await markMessageThreadRepliedTo({
+  let completedMessageIds: string[] = [];
+
+  try {
+    for (const message of messages) {
+      await markMessageThreadRepliedTo({
+        applicationContext,
+        parentMessageId: message.parentMessageId,
+      });
+
+      const messageThread = await getMessageThreadByParentId({
+        applicationContext,
+        parentMessageId: message.parentMessageId,
+      });
+
+      const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
+
+      const updatedMessage = new Message(mostRecentMessage, {
+        applicationContext,
+      }).validate();
+
+      updatedMessage.markAsCompleted({ message: message.messageBody, user });
+
+      const validatedRawMessage = updatedMessage.validate().toRawObject();
+
+      await updateMessage({
+        message: validatedRawMessage,
+      });
+
+      completedMessageIds.push(validatedRawMessage.messageId);
+    }
+  } catch (error) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'message_completion_error',
+        alertError: {
+          message: 'Please try again',
+          title: 'Message(s) could not be completed',
+        },
+      },
+      userId: user.userId,
+    });
+  }
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
-    parentMessageId,
+    message: {
+      action: 'message_completion_success',
+      completedMessageIds,
+    },
+    userId: user.userId,
   });
-
-  const messages = await getMessageThreadByParentId({
-    applicationContext,
-    parentMessageId,
-  });
-
-  const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
-
-  const updatedMessage = new Message(mostRecentMessage, {
-    applicationContext,
-  }).validate();
-
-  updatedMessage.markAsCompleted({ message, user });
-
-  const validatedRawMessage = updatedMessage.validate().toRawObject();
-
-  await updateMessage({
-    message: validatedRawMessage,
-  });
-
-  return validatedRawMessage;
 };

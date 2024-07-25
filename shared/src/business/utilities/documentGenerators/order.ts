@@ -53,6 +53,7 @@ export const order = async ({
 
   const headerHtml = ReactDOM.renderToString(
     React.createElement(PageMetaHeaderDocket, {
+      addedDocketNumbers,
       docketNumber: docketNumberWithSuffix,
       useCenturySchoolbookFont: true,
     }),
