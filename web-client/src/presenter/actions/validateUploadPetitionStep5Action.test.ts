@@ -22,7 +22,7 @@ describe('validateUploadPetitionStep5Action', () => {
         presenter,
       },
       props: {
-        step5Data: {
+        createPetitionStep5Data: {
           stinFile: {},
           stinFileSize: 1,
         },
@@ -39,7 +39,7 @@ describe('validateUploadPetitionStep5Action', () => {
         presenter,
       },
       props: {
-        step5Data: {},
+        createPetitionStep5Data: {},
       },
     });
 

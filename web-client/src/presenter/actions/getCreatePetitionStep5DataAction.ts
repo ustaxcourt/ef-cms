@@ -5,12 +5,12 @@ export const getCreatePetitionStep5DataAction = ({
 }: ActionProps<{ selectedPage: number }>) => {
   const { stinFile, stinFileSize } = get(state.form);
 
-  const step5Data = {
+  const createPetitionStep5Data = {
     stinFile,
     stinFileSize,
   };
 
   return {
-    step5Data,
+    createPetitionStep5Data,
   };
 };

@@ -12,8 +12,8 @@ describe('getCreatePetitionStep5DataAction', () => {
       },
     });
 
-    const { step5Data } = results.output;
-    expect(step5Data).toEqual({
+    const { createPetitionStep5Data } = results.output;
+    expect(createPetitionStep5Data).toEqual({
       stinFile: 'TEST_stinFile',
       stinFileSize: 'TEST_stinFileSize',
     });

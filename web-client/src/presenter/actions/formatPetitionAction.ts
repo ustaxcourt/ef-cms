@@ -12,7 +12,7 @@ export const formatPetitionAction = ({
     ...props.createPetitionStep2Data,
     ...props.createPetitionStep3Data,
     ...props.createPetitionStep4Data,
-    ...props.step5Data,
+    ...props.createPetitionStep5Data,
   };
 
   const caseCaption =
