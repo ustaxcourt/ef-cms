@@ -215,7 +215,7 @@ describe('order search journey for docket number', () => {
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         docketNumber: `${cerebralTest.createdCases[2]}`,
-        keyword: 'magic',
+        keyword: 'you found the Easter Egg',
       },
     });
 
