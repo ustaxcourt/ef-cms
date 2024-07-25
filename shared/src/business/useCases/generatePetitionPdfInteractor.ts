@@ -16,8 +16,8 @@ export const generatePetitionPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     caseCaptionExtension,
+    caseDescription,
     caseTitle,
-    caseType,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
@@ -36,10 +36,6 @@ export const generatePetitionPdfInteractor = async (
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const caseDescription = hasIrsNotice
-    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType]
-    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
 
   let pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
