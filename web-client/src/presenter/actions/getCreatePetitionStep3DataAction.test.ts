@@ -24,8 +24,8 @@ describe('getCreatePetitionStep3DataAction', () => {
       },
     });
 
-    const { step3Data } = results.output;
-    expect(step3Data).toEqual({
+    const { createPetitionStep3Data } = results.output;
+    expect(createPetitionStep3Data).toEqual({
       caseType: 'IRS_NOTICE_CASE_TYPE',
       hasIrsNotice: 'TEST_hasIrsNotice',
       hasUploadedIrsNotice: true,
@@ -58,8 +58,8 @@ describe('getCreatePetitionStep3DataAction', () => {
       },
     });
 
-    const { step3Data } = results.output;
-    expect(step3Data).toEqual({
+    const { createPetitionStep3Data } = results.output;
+    expect(createPetitionStep3Data).toEqual({
       caseType: 'ROOT_LEVEL_CASE_TYPE',
       hasIrsNotice: false,
       hasUploadedIrsNotice: false,
