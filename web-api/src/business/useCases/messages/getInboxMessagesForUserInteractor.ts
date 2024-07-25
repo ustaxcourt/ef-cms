@@ -25,13 +25,6 @@ export const getInboxMessagesForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // const messages = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getUserInboxMessages({
-  //     applicationContext,
-  //     userId,
-  //   });
-
   const messages = await getUserInboxMessages({
     applicationContext,
     userId,

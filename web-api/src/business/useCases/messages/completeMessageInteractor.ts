@@ -5,7 +5,10 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
+import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
+import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
 
 /**
  * completes a message thread
@@ -30,17 +33,15 @@ export const completeMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
+  await markMessageThreadRepliedTo({
     applicationContext,
     parentMessageId,
   });
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getMessageThreadByParentId({
-      applicationContext,
-      parentMessageId,
-    });
+  const messages = await getMessageThreadByParentId({
+    applicationContext,
+    parentMessageId,
+  });
 
   const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
@@ -52,8 +53,7 @@ export const completeMessageInteractor = async (
 
   const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-  await applicationContext.getPersistenceGateway().updateMessage({
-    applicationContext,
+  await updateMessage({
     message: validatedRawMessage,
   });
 

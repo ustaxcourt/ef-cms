@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getSectionInboxMessages } from '@web-api/persistence/postgres/getSectionInboxMessages';
 
 /**
  * getInboxMessagesForSectionInteractor
@@ -24,12 +25,10 @@ export const getInboxMessagesForSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getSectionInboxMessages({
-      applicationContext,
-      section,
-    });
+  const messages = await getSectionInboxMessages({
+    applicationContext,
+    section,
+  });
 
   return MessageResult.validateRawCollection(messages, {
     applicationContext,

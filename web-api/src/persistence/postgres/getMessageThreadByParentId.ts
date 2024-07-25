@@ -1,7 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
-import { getDataSource } from '@web-api/data-source';
-import { Message as messageRepo } from '@web-api/persistence/repository/Message';
-import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
+import { db } from '@web-api/database';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 /**
  * getMessageThreadByParentId
@@ -18,14 +17,11 @@ export const getMessageThreadByParentId = async ({
   applicationContext: IApplicationContext;
   parentMessageId: string;
 }) => {
-  const dataSource = await getDataSource();
-  const messageRepository = dataSource.getRepository(messageRepo);
-
-  const messages = await messageRepository.find({
-    where: {
-      parentMessageId,
-    },
-  });
+  const messages = await db
+    .selectFrom('message')
+    .where('parentMessageId', '=', parentMessageId)
+    .selectAll()
+    .execute();
 
   return messages.map(
     result =>

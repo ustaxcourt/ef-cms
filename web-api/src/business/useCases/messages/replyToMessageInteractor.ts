@@ -10,6 +10,7 @@ import {
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/markMessageThreadRepliedTo';
 
 export const replyToMessage = async (
   applicationContext: ServerApplicationContext,
@@ -29,7 +30,7 @@ export const replyToMessage = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
+  await markMessageThreadRepliedTo({
     applicationContext,
     parentMessageId,
   });

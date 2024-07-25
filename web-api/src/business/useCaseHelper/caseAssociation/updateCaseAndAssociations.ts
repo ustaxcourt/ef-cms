@@ -7,6 +7,8 @@ import { Message } from '../../../../../shared/src/business/entities/Message';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/getMessagesByDocketNumber';
+import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
 import diff from 'diff-arrays-of-objects';
 
 /**
@@ -82,12 +84,10 @@ const updateCaseMessages = async ({
     return [];
   }
 
-  const caseMessages = await applicationContext
-    .getPersistenceGateway()
-    .getMessagesByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-    });
+  const caseMessages = await getMessagesByDocketNumber({
+    applicationContext,
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
   if (!caseMessages) {
     return [];
@@ -105,9 +105,8 @@ const updateCaseMessages = async ({
 
   return validMessages.map(
     message =>
-      function updateCaseMessages_cb() {
-        return applicationContext.getPersistenceGateway().updateMessage({
-          applicationContext,
+      async function updateCaseMessages_cb() {
+        return await updateMessage({
           message,
         });
       },

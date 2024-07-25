@@ -1,7 +1,6 @@
-import { Message } from '@shared/business/entities/Message';
-import { getDataSource } from '@web-api/data-source';
-import { Message as messageRepo } from '@web-api/persistence/repository/Message';
-import { transformNullToUndefined } from 'postgres/helpers/transformNullToUndefined';
+import { MessageResult } from '@shared/business/entities/MessageResult';
+import { db } from '@web-api/database';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 /**
  * getMessagesByDocketNumber
@@ -17,17 +16,19 @@ export const getMessagesByDocketNumber = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-}) => {
-  const dataSource = await getDataSource();
-  const messageRepository = dataSource.getRepository(messageRepo);
-
-  const messages = await messageRepository
-    .createQueryBuilder('message')
-    .where('message.docketNumber = :docketNumber', { docketNumber })
-    .getMany();
+}): Promise<MessageResult[]> => {
+  const messages = await db
+    .selectFrom('message')
+    .leftJoin('case', 'case.docketNumber', 'message.docketNumber')
+    .where('docketNumber', '=', docketNumber)
+    .selectAll()
+    .select(['message.docketNumber as docketNumber']) // required to ensure docketNumber exists even if not in case
+    .execute();
 
   return messages.map(
     message =>
-      new Message(transformNullToUndefined(message), { applicationContext }),
+      new MessageResult(transformNullToUndefined(message), {
+        applicationContext,
+      }),
   );
 };

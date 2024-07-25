@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
 
 /**
  * gets a message thread by parent id
@@ -24,12 +25,10 @@ export const getMessageThreadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getMessageThreadByParentId({
-      applicationContext,
-      parentMessageId,
-    });
+  const messages = await getMessageThreadByParentId({
+    applicationContext,
+    parentMessageId,
+  });
 
   return Message.validateRawCollection(messages, {
     applicationContext,

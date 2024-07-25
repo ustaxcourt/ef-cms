@@ -1,17 +1,15 @@
-import { Message } from '@web-api/persistence/repository/Message';
-import { getDataSource } from '@web-api/data-source';
+import { db } from '@web-api/database';
 
 export const setMessageAsRead = async ({
-  applicationContext,
-  docketNumber,
   messageId,
 }: {
-  applicationContext: IApplicationContext;
   messageId: string;
-  docketNumber: string;
 }) => {
-  const dataSource = await getDataSource();
-  const messageRepository = dataSource.getRepository(Message);
-
-  await messageRepository.update({ docketNumber, messageId }, { isRead: true });
+  await db
+    .updateTable('message')
+    .set({
+      isRead: true,
+    })
+    .where('messageId', '=', messageId)
+    .execute();
 };

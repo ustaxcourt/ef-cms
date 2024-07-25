@@ -8,7 +8,9 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
+import { updateMessage } from '@web-api/persistence/postgres/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const fileCourtIssuedOrder = async (
@@ -116,12 +118,10 @@ export const fileCourtIssuedOrder = async (
   });
 
   if (documentMetadata.parentMessageId) {
-    const messages = await applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId({
-        applicationContext,
-        parentMessageId: documentMetadata.parentMessageId,
-      });
+    const messages = await getMessageThreadByParentId({
+      applicationContext,
+      parentMessageId: documentMetadata.parentMessageId,
+    });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
@@ -133,8 +133,7 @@ export const fileCourtIssuedOrder = async (
       documentTitle: docketEntryEntity.documentTitle,
     });
 
-    await applicationContext.getPersistenceGateway().updateMessage({
-      applicationContext,
+    await updateMessage({
       message: messageEntity.validate().toRawObject(),
     });
   }

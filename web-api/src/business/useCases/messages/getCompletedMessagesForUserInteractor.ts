@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/getCompletedUserInboxMessages';
 
 /**
  * getCompletedMessagesForUserInteractor
@@ -24,12 +25,10 @@ export const getCompletedMessagesForUserInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getCompletedUserInboxMessages({
-      applicationContext,
-      userId,
-    });
+  const messages = await getCompletedUserInboxMessages({
+    applicationContext,
+    userId,
+  });
 
   return MessageResult.validateRawCollection(messages, {
     applicationContext,

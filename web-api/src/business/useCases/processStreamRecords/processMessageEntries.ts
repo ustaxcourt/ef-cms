@@ -1,4 +1,5 @@
 import { cloneDeep, compact } from 'lodash';
+import { getMessageById } from '@web-api/persistence/postgres/getMessageById';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
@@ -35,15 +36,11 @@ export const processMessageEntries = async ({
     // go get the latest message - it might
     // have been updated in dynamo since this record was created to be processed
     if (!messageNewImage.isRepliedTo.BOOL) {
-      const latestMessageData = await applicationContext
-        .getPersistenceGateway()
-        .getMessageById({
-          applicationContext,
-          docketNumber: messageNewImage.docketNumber.S,
-          messageId: messageNewImage.messageId.S,
-        });
+      const latestMessageData = await getMessageById({
+        messageId: messageNewImage.messageId.S,
+      });
 
-      if (!latestMessageData.isRepliedTo) {
+      if (!latestMessageData?.isRepliedTo) {
         NewImage = marshall(latestMessageData);
       }
     }

@@ -1,10 +1,4 @@
-import {
-  ColumnType,
-  Insertable,
-  JSONColumnType,
-  Selectable,
-  Updateable,
-} from 'kysely';
+import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
   message: MessageTable;
@@ -22,7 +16,6 @@ export interface MessageTable {
   completedMessage?: string;
   createdAt: string;
   docketNumber: string;
-  docketNumberWithSuffix: string;
   from: string;
   fromSection: string;
   fromUserId: string;
@@ -47,6 +40,7 @@ export interface CaseTable {
   docketNumber: string;
   trialLocation?: string;
   trialDate?: string;
+  docketNumberSuffix?: string;
 }
 
 export type Case = Selectable<CaseTable>;
