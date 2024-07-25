@@ -1,7 +1,42 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import {
+  PRACTICE_TYPE,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
+
+const isUserADojPractitioner = (
+  user: RawUser | RawPractitioner | RawIrsPractitioner,
+): boolean => {
+  if (user.role !== ROLES.irsPractitioner) return false;
+  const irsPractitioner: RawPractitioner = user as RawPractitioner;
+  if (irsPractitioner.practiceType !== PRACTICE_TYPE.DOJ) return false;
+  return true;
+};
+
+const shouldShowRepresentAPartyButton = (
+  caseDetail: RawCase,
+  user: RawUser | RawPractitioner | RawIrsPractitioner,
+  caseHasRespondent: boolean,
+  isRepresentAPartyForm: boolean,
+  isCaseSealed: boolean,
+  isCurrentPageFilePetitionSuccess: boolean,
+): boolean => {
+  const isDojPractitioner = isUserADojPractitioner(user);
+
+  return (
+    caseHasRespondent &&
+    !isRepresentAPartyForm &&
+    !isCaseSealed &&
+    !isCurrentPageFilePetitionSuccess &&
+    !!(!isDojPractitioner || caseDetail.canDojPractitionersRepresentParty)
+  );
+};
 
 export const caseDetailHeaderHelper = (
   get: Get,
@@ -58,11 +93,14 @@ export const caseDetailHeaderHelper = (
 
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
 
-      showRepresentAPartyButton =
-        caseHasRespondent &&
-        !isRepresentAPartyForm &&
-        !isCaseSealed &&
-        !isCurrentPageFilePetitionSuccess;
+      showRepresentAPartyButton = shouldShowRepresentAPartyButton(
+        caseDetail,
+        user,
+        caseHasRespondent,
+        isRepresentAPartyForm,
+        isCaseSealed,
+        isCurrentPageFilePetitionSuccess,
+      );
     }
   }
 
