@@ -28,7 +28,7 @@ export const getCreatePetitionStep1DataAction = ({ get }: ActionProps) => {
       }
     : contactSecondary;
 
-  const step1Data = {
+  const createPetitionStep1Data = {
     businessType,
     contactPrimary: {
       ...contactPrimary,
@@ -64,6 +64,6 @@ export const getCreatePetitionStep1DataAction = ({ get }: ActionProps) => {
   };
 
   return {
-    step1Data,
+    createPetitionStep1Data,
   };
 };

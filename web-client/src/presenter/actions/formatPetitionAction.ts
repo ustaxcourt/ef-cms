@@ -8,7 +8,7 @@ export const formatPetitionAction = ({
   store,
 }: ActionProps) => {
   const petitionInfo = {
-    ...props.step1Data,
+    ...props.createPetitionStep1Data,
     ...props.step2Data,
     ...props.step3Data,
     ...props.step4Data,

@@ -43,8 +43,8 @@ describe('getCreatePetitionStep1DataAction', () => {
       },
     });
 
-    const { step1Data } = results.output;
-    expect(step1Data).toEqual({
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data).toEqual({
       businessType: 'TEST_businessType',
       contactPrimary: {
         address1: 'TEST_PRIMARY_address1',
@@ -110,8 +110,8 @@ describe('getCreatePetitionStep1DataAction', () => {
       },
     });
 
-    const { step1Data } = results.output;
-    expect(step1Data).toEqual({
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data).toEqual({
       businessType: 'TEST_businessType',
       contactPrimary: {
         address2: 'TEST_PRIMARY_address2',
@@ -167,8 +167,8 @@ describe('getCreatePetitionStep1DataAction', () => {
         },
       },
     });
-    const { step1Data } = results.output;
-    expect(step1Data.contactSecondary.contactType).toEqual(
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data.contactSecondary.contactType).toEqual(
       CONTACT_TYPES.secondary,
     );
   });
@@ -186,7 +186,7 @@ describe('getCreatePetitionStep1DataAction', () => {
         },
       },
     });
-    const { step1Data } = results.output;
-    expect(step1Data.contactSecondary).toBeUndefined();
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data.contactSecondary).toBeUndefined();
   });
 });
