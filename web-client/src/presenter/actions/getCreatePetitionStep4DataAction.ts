@@ -5,12 +5,12 @@ export const getCreatePetitionStep4DataAction = ({
 }: ActionProps<{ selectedPage: number }>) => {
   const { preferredTrialCity, procedureType } = get(state.form);
 
-  const step4Data = {
+  const createPetitionStep4Data = {
     preferredTrialCity,
     procedureType,
   };
 
   return {
-    step4Data,
+    createPetitionStep4Data,
   };
 };
