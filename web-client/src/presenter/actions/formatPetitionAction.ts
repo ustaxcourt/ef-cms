@@ -1,3 +1,7 @@
+import {
+  CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
+  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
+} from '@shared/business/entities/EntityConstants';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -23,6 +27,10 @@ export const formatPetitionAction = ({
     caseCaption,
   });
 
+  const caseDescription = petitionInfo.hasIrsNotice
+    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[petitionInfo.caseType]
+    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[petitionInfo.caseType];
+
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const disclosureCaseTypes = ['Disclosure1', 'Disclosure2'];
 
@@ -46,6 +54,7 @@ export const formatPetitionAction = ({
     ...petitionInfo,
     caseCaption,
     caseCaptionExtension,
+    caseDescription,
     caseTitle,
     contactPrimary,
     noticeIssuedDate,
