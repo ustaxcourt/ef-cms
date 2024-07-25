@@ -1,4 +1,10 @@
-import { Insertable, JSONColumnType, Selectable, Updateable } from 'kysely';
+import {
+  ColumnType,
+  Insertable,
+  JSONColumnType,
+  Selectable,
+  Updateable,
+} from 'kysely';
 
 export interface Database {
   message: MessageTable;
@@ -6,14 +12,7 @@ export interface Database {
 }
 
 export interface MessageTable {
-  // attachments?: JSONColumnType<
-  //   {
-  //     documentId: string;
-  //   }[]
-  // >;
-  attachments?: {
-    documentId: string;
-  }[];
+  attachments?: ColumnType<{ documentId: string }[], string, string>;
   caseStatus: string;
   caseTitle: string;
   completedAt?: string;

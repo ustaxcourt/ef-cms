@@ -19,7 +19,10 @@ export const createMessage = async ({
 }) => {
   return await db
     .insertInto('message')
-    .values(omit(message, 'entityName'))
+    .values({
+      ...omit(message, 'entityName'),
+      attachments: JSON.stringify(message.attachments),
+    })
     .returningAll()
     .executeTakeFirstOrThrow();
 };

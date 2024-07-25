@@ -36,22 +36,24 @@ export const getUserInboxMessages = async ({
 
   const messages = await db
     .selectFrom('message')
-    .leftJoin('case', 'case.docketNumber', 'docketNumber')
+    .leftJoin('case', 'case.docketNumber', 'message.docketNumber')
     .where('isCompleted', '=', false)
     .where('isRepliedTo', '=', false)
     .where('toUserId', '=', userId)
     .selectAll()
     .execute();
 
+  console.log('**** messages', messages);
+
   applicationContext.logger.info('getUserInboxMessages end');
 
   return messages.map(message =>
     new MessageResult(
-      transformNullToUndefined({
-        ...message,
-        trialDate: message.case?.trialDate,
-        trialLocation: message.case?.trialLocation,
-      }),
+      // transformNullToUndefined({
+      message,
+      // trialDate: message.case?.trialDate,
+      // trialLocation: message.case?.trialLocation,
+
       {
         applicationContext,
       },
