@@ -2,6 +2,7 @@ import {
   Case,
   canAllowDocumentServiceForCase,
   canAllowPrintableDocketRecord,
+  canDojPractitionersRepresentPartyForCase,
   getPetitionerById,
   isAssociatedUser,
   isUserPartOfGroup,
@@ -92,6 +93,9 @@ export const decorateForCaseStatus = (caseRecord: RawCase) => {
 
   caseRecord.canAllowPrintableDocketRecord =
     canAllowPrintableDocketRecord(caseRecord);
+
+  caseRecord.canDojPractitionersRepresentParty =
+    canDojPractitionersRepresentPartyForCase(caseRecord);
 
   return caseRecord;
 };
