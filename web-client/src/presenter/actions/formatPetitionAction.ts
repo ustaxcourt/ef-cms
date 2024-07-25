@@ -11,7 +11,7 @@ export const formatPetitionAction = ({
     ...props.createPetitionStep1Data,
     ...props.createPetitionStep2Data,
     ...props.createPetitionStep3Data,
-    ...props.step4Data,
+    ...props.createPetitionStep4Data,
     ...props.step5Data,
   };
 

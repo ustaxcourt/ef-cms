@@ -3,11 +3,11 @@ import { UploadPetitionStep4 } from '@shared/business/entities/startCase/UploadP
 export const validateUploadPetitionStep4Action = ({
   path,
   props,
-}: ActionProps<{ step4Data: any }>) => {
-  const { step4Data } = props;
+}: ActionProps<{ createPetitionStep4Data: any }>) => {
+  const { createPetitionStep4Data } = props;
 
   const errors = new UploadPetitionStep4(
-    step4Data,
+    createPetitionStep4Data,
   ).getFormattedValidationErrors();
 
   return errors

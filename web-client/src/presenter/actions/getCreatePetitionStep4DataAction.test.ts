@@ -13,8 +13,8 @@ describe('getCreatePetitionStep4DataAction', () => {
       },
     });
 
-    const { step4Data } = results.output;
-    expect(step4Data).toEqual({
+    const { createPetitionStep4Data } = results.output;
+    expect(createPetitionStep4Data).toEqual({
       preferredTrialCity: 'TEST_preferredTrialCity',
       procedureType: 'TEST_procedureType',
     });

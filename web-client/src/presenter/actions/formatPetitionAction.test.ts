@@ -20,7 +20,7 @@ describe('formatPetitionAction', () => {
         },
       ],
     },
-    step4Data: {},
+    createPetitionStep4Data: {},
     step5Data: {},
   };
 
