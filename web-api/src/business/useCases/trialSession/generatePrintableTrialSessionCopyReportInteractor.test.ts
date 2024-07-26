@@ -130,7 +130,9 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
           statusUnassigned: true,
           takenUnderAdvisement: true,
         },
-        formattedCases: [new Case(MOCK_CASE, { mockTrialClerkUser })],
+        formattedCases: [
+          new Case(MOCK_CASE, { authorizedUser: mockTrialClerkUser }),
+        ],
         formattedTrialSession: mockTrialSession,
         sessionNotes: 'session notes',
         showCaseNotes: true,
