@@ -11,7 +11,7 @@ export const validateUploadPetitionStep4Action = ({
   ).getFormattedValidationErrors();
 
   if (errors) {
-    path.error({
+    return path.error({
       errors,
     });
   }
