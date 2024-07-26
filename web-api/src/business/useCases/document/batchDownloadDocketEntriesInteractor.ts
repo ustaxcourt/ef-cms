@@ -100,7 +100,7 @@ const batchDownloadDocketEntriesHelper = async (
     useTempBucket: boolean;
   }[] = [];
 
-  const caseEntity = new Case(caseToBatch, { applicationContext });
+  const caseEntity = new Case(caseToBatch, { authorizedUser });
 
   documentsSelectedForDownload.forEach(docketEntryId => {
     const docInfo = caseEntity.getDocketEntryById({
