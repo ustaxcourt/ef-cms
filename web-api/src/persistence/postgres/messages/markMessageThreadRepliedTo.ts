@@ -10,14 +10,11 @@ import { getMessageThreadByParentId } from './getMessageThreadByParentId';
  * @returns {object} the updated messages
  */
 export const markMessageThreadRepliedTo = async ({
-  applicationContext,
   parentMessageId,
 }: {
-  applicationContext: IApplicationContext;
   parentMessageId: string;
-}) => {
+}): Promise<void> => {
   const messages = await getMessageThreadByParentId({
-    applicationContext,
     parentMessageId,
   });
 

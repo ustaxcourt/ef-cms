@@ -3,14 +3,11 @@ import { db } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getSectionInboxMessages = async ({
-  applicationContext,
   section,
 }: {
   applicationContext: IApplicationContext;
   section: string;
-}) => {
-  applicationContext.logger.info('getSectionInboxMessages start');
-
+}): Promise<Message[]> => {
   const messages = await db
     .selectFrom('message')
     .where('toSection', '=', section)
@@ -20,10 +17,7 @@ export const getSectionInboxMessages = async ({
     .limit(5000)
     .execute();
 
-  applicationContext.logger.info('getSectionInboxMessages end');
-
-  return messages.map(
-    message =>
-      new Message(transformNullToUndefined(message), { applicationContext }),
+  return messages.map(message =>
+    new Message(transformNullToUndefined(message)).validate(),
   );
 };

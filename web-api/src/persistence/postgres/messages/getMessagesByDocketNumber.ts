@@ -25,10 +25,9 @@ export const getMessagesByDocketNumber = async ({
     .select(['m.docketNumber'])
     .execute();
 
-  return messages.map(
-    message =>
-      new MessageResult(transformNullToUndefined(message), {
-        applicationContext,
-      }),
+  return messages.map(message =>
+    new MessageResult(transformNullToUndefined(message), {
+      applicationContext,
+    }).validate(),
   );
 };

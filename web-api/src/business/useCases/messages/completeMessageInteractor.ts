@@ -31,20 +31,16 @@ export const completeMessageInteractor = async (
   try {
     for (const message of messages) {
       await markMessageThreadRepliedTo({
-        applicationContext,
         parentMessageId: message.parentMessageId,
       });
 
       const messageThread = await getMessageThreadByParentId({
-        applicationContext,
         parentMessageId: message.parentMessageId,
       });
 
       const mostRecentMessage = orderBy(messageThread, 'createdAt', 'desc')[0];
 
-      const updatedMessage = new Message(mostRecentMessage, {
-        applicationContext,
-      }).validate();
+      const updatedMessage = new Message(mostRecentMessage).validate();
 
       updatedMessage.markAsCompleted({ message: message.messageBody, user });
 
