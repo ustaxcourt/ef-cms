@@ -8,7 +8,7 @@ describe('Idle Logout Behavior', () => {
   it('should automatically log user out after refresh with option to log back in', () => {
     loginAsColvin();
     cy.reload(); // Refresh ensures we track idle time even without interaction on the page
-
+    cy.get('[data-testid="header-text"]');
     cy.window().then((window: Window) => {
       overrideIdleTimeouts({
         modalTimeout: DEFAULT_IDLE_TIMEOUT,
