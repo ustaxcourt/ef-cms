@@ -6,7 +6,6 @@
 - Go back to all // TODO 10417
 - Look at validateRawCollection()
 - check instances of `handleLockError` (or `OnLockError`)
-- Look at all new DocketEntry
 
 # Problems we see with the app that are unrelated to changes
 - generateStampedCoversheetInteractor does not have any authorization
