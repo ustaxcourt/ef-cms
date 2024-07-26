@@ -40,6 +40,10 @@ await esbuild.build({
           keepStructure: true,
           to: [getPathFromRoot(`dist-lambdas/${fileName}/out`)],
         },
+        {
+          from: [getPathFromRoot('./us-east-1-bundle.pem')],
+          to: [getPathFromRoot(`dist-lambdas/${fileName}/out`)],
+        },
       ],
     }),
     clean({
