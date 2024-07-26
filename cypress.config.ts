@@ -10,7 +10,9 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
+  getFeatureFlagValue,
   getNewAccountVerificationCode,
+  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
@@ -48,13 +50,18 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
+        getFeatureFlagValue({ flag }) {
+          return getFeatureFlagValue({ flag });
+        },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
         table(message) {
           console.table(message);
-
           return null;
+        },
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });

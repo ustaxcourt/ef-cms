@@ -6,7 +6,10 @@ import {
   IdleLogoutStateType,
 } from '@shared/business/entities/EntityConstants';
 import { JudgeActivityReportState } from './judgeActivityReportState';
+import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
+import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -98,6 +101,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
+import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
@@ -139,6 +143,7 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { updatedFilePetitionHelper } from '@web-client/presenter/computeds/updatedFilePetitionHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
@@ -406,6 +411,10 @@ export const computeds = {
   messagesHelper: messagesHelper as unknown as ReturnType<
     typeof messagesHelper
   >,
+  messagesIndividualInboxHelper:
+    messagesIndividualInboxHelper as unknown as ReturnType<
+      typeof messagesIndividualInboxHelper
+    >,
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
@@ -535,6 +544,9 @@ export const computeds = {
   updateCaseModalHelper: updateCaseModalHelper as unknown as ReturnType<
     typeof updateCaseModalHelper
   >,
+  updatedFilePetitionHelper: updatedFilePetitionHelper as unknown as ReturnType<
+    typeof updatedFilePetitionHelper
+  >,
   userContactEditHelper: userContactEditHelper as unknown as ReturnType<
     typeof userContactEditHelper
   >,
@@ -558,6 +570,7 @@ export const baseState = {
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   alertError: undefined,
+  alertInfo: undefined,
   alertSuccess: undefined,
   alertWarning: undefined,
   allJudges: [],
@@ -642,6 +655,7 @@ export const baseState = {
   docketRecordIndex: 0,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
+  featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,
@@ -666,6 +680,7 @@ export const baseState = {
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  irsNoticeUploadFormInfo: [] as CreateCaseIrsForm[],
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
   judgeActivityReport: {
@@ -678,7 +693,14 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  messages: [] as RawMessage[],
   messagesInboxCount: 0,
+  messagesPage: {
+    completionSuccess: false,
+    messagesCompletedAt: '',
+    messagesCompletedBy: '',
+    selectedMessages: new Map() as Map<string, string>,
+  },
   messagesSectionCount: 0,
   modal: {
     docketEntry: undefined,
@@ -716,12 +738,45 @@ export const baseState = {
     stampApplied: false,
     stampData: null,
   },
+  pdfGeneratedUrl: '',
   pdfPreviewUrl: '',
   pendingMotions: {
     docketEntries: [] as FormattedPendingMotionWithWorksheet[],
   },
   pendingReports: cloneDeep(initialPendingReportsState),
   permissions: {} as Record<string, boolean>,
+  petitionFormatted: {
+    applicationForWaiverOfFilingFeeFile: undefined,
+    attachmentToPetitionFile: undefined,
+    caseCaptionExtension: undefined,
+    caseTitle: undefined,
+    caseType: undefined,
+    contactPrimary: undefined,
+    contactSecondary: undefined,
+    corporateDisclosureFile: undefined,
+    corporateDisclosureFileUrl: undefined,
+    hasIrsNotice: undefined,
+    irsNoticeFileUrl: undefined,
+    irsNotices: undefined as
+      | (IrsNoticeForm & { irsNoticeFileUrl?: string })[]
+      | undefined,
+    noticeIssuedDate: undefined as string | undefined,
+    partyType: undefined,
+    petitionFacts: [''],
+    petitionFile: undefined,
+    petitionFileId: undefined,
+    petitionFileUrl: undefined,
+    petitionReasons: [''],
+    petitionRedactionAcknowledgement: false,
+    petitionType: undefined,
+    preferredTrialCity: undefined,
+    primaryDocumentFile: undefined,
+    procedureType: undefined,
+    requestForPlaceOfTrialFile: undefined,
+    stinFile: undefined,
+    stinFileUrl: undefined,
+    taxYear: undefined,
+  },
   practitionerDetail: {},
   previewPdfFile: null,
   progressIndicator: {
@@ -757,6 +812,7 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  stepIndicatorInfo: { currentStep: 0, steps: ['no steps defined yet'] },
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
   },
@@ -771,8 +827,13 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
+  updatedFilePetitionStep2State: {
+    selectedFilingOption: undefined,
+  } as {
+    selectedFilingOption?: string;
+  },
   user: null as any,
-  userContactEditProgress: {},
+  userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
@@ -790,3 +851,15 @@ export const initialState = {
 };
 
 export type ClientState = typeof initialState;
+
+export type CreateCaseIrsForm = {
+  key: string;
+  todayDate: string;
+  file?: File;
+  size?: number;
+  caseType?: string;
+  noticeIssuedDate?: string;
+  taxYear?: number;
+  irsNoticeFileUrl?: string;
+  cityAndStateIssuingOffice?: string;
+};
