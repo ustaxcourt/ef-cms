@@ -9,8 +9,6 @@ import { onConnectInteractor } from '@web-api/business/useCases/notifications/on
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-// TODO 10417 This lambda was causing issues locally (and presumably also would deployed, given how it's a standalone lambda).
-// Current approach solves it, but is this what we want to do?
 export const connectLambda = event => {
   const authorizedUser: UnknownAuthUser = getUserFromAuthHeader(event);
   return genericHandler(
