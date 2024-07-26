@@ -75,6 +75,9 @@ export default defineConfig({
           });
         },
       });
+      require('cypress-terminal-report/src/installLogsPrinter')(on, {
+        printLogsToConsole: 'always',
+      });
       // Setup for puppeteer, which supports multi-tab tests
       // Define your function in onMessage, and call it like cy.puppeteer('yourFunctionName', arg1, arg2 ...)
       setup({

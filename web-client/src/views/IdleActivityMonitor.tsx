@@ -49,7 +49,19 @@ export const IdleActivityMonitor = connect(
     }, []);
 
     useEffect(() => {
+      console.log('TESTING');
       const interval = setInterval(() => {
+        console.log(
+          'Session modal timeout',
+          window.cerebral.getState().constants.SESSION_MODAL_TIMEOUT,
+        );
+        console.log(
+          'Session timeout',
+          window.cerebral.getState().constants.SESSION_TIMEOUT,
+        );
+        console.log('user', window.cerebral.getState().user?.name);
+        console.log('idle time', window.cerebral.getState().lastIdleAction);
+        console.log('idle state', window.cerebral.getState().idleLogoutState);
         handleIdleLogoutSequence();
       }, 1000);
 
