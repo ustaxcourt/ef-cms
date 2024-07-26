@@ -3,9 +3,8 @@ import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FilingFeeOptions } from './FilingFeeOptions';
-import { OtherFilingOptions } from '@web-client/views/Dashboards/OtherFilingOptions';
+import { PetitionWelcomePage } from '../PetitionWelcomePage';
 import { SuccessNotification } from '../SuccessNotification';
-import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -24,8 +23,8 @@ export const DashboardPetitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap taxpayer-tools">
             <div className="tablet:grid-col-8">
-              {dashboardExternalHelper.showWhatToExpect ? (
-                <WhatToExpect />
+              {dashboardExternalHelper.showPetitionWelcomePage ? (
+                <PetitionWelcomePage />
               ) : (
                 <CaseListTable />
               )}
@@ -36,16 +35,6 @@ export const DashboardPetitioner = connect(
                 <div className="content-wrapper gray">
                   <h3>Taxpayer Tools</h3>
                   <hr />
-                  <p>
-                    <a
-                      className="usa-link--external"
-                      href="https://www.ustaxcourt.gov/efile_a_petition.html"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      How to Create a Case
-                    </a>
-                  </p>
                   <p>
                     <a
                       className="usa-link--external"
@@ -90,13 +79,15 @@ export const DashboardPetitioner = connect(
                 </div>
               </div>
 
-              {dashboardExternalHelper.showWhatToExpect && <FilingFeeOptions />}
-
-              {dashboardExternalHelper.showWhatToExpect && (
-                <OtherFilingOptions />
+              {dashboardExternalHelper.showPetitionWelcomePage && (
+                <FilingFeeOptions />
               )}
+              {/* are we 100% sure that it's ok to remove this even with the feature flag off? */}
+              {/* {dashboardExternalHelper.showPetitionWelcomePage && (
+                <OtherFilingOptions />
+              )} */}
 
-              {!dashboardExternalHelper.showWhatToExpect && (
+              {!dashboardExternalHelper.showPetitionWelcomePage && (
                 <FilingFeeOptions />
               )}
             </div>
