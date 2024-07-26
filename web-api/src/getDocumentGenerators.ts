@@ -13,6 +13,7 @@ import { noticeOfTrialIssued } from '../../shared/src/business/utilities/documen
 import { noticeOfTrialIssuedInPerson } from '../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson';
 import { order } from '../../shared/src/business/utilities/documentGenerators/order';
 import { pendingReport } from '../../shared/src/business/utilities/documentGenerators/pendingReport';
+import { petition } from '@shared/business/utilities/documentGenerators/petition';
 import { practitionerCaseList } from '../../shared/src/business/utilities/documentGenerators/practitionerCaseList';
 import { printableWorkingCopySessionList } from '../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList';
 import { receiptOfFiling } from '../../shared/src/business/utilities/documentGenerators/receiptOfFiling';
@@ -38,6 +39,7 @@ export const getDocumentGenerators = () => ({
   noticeOfTrialIssuedInPerson,
   order,
   pendingReport,
+  petition,
   practitionerCaseList,
   printableWorkingCopySessionList,
   receiptOfFiling,
