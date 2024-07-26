@@ -7,7 +7,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { generateTrialSessionPaperServicePdfInteractor } from '@web-api/business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const setNoticesForCalendaredTrialSession = async (
@@ -165,15 +164,19 @@ const setNoticesForCalendaredTrialSession = async (
   });
 
   if (trialNoticePdfsKeys.length) {
-    await generateTrialSessionPaperServicePdfInteractor(
-      applicationContext,
-      {
-        clientConnectionId,
-        trialNoticePdfsKeys,
-        trialSessionId,
-      },
-      authorizedUser,
-    );
+    // TODO 10417 should we do direct import here as part of this story?
+    // if so, we need to change how we're mocking in the tests.
+    await applicationContext
+      .getUseCases()
+      .generateTrialSessionPaperServicePdfInteractor(
+        applicationContext,
+        {
+          clientConnectionId,
+          trialNoticePdfsKeys,
+          trialSessionId,
+        },
+        authorizedUser,
+      );
   }
 };
 
