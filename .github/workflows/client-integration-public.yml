@@ -53,8 +53,9 @@ jobs:
           comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
-      - name: Seed Postgres
+      - name: Setup Postgres
         run: |
+          npm run migration:postgres
           npm run seed:postgres
       - name: Web Client - Integration Tests Public
         run: |
