@@ -5,7 +5,6 @@ import {
   IDLE_LOGOUT_STATES,
   IdleLogoutStateType,
 } from '@shared/business/entities/EntityConstants';
-import { JudgeActivityReportState } from './judgeActivityReportState';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
