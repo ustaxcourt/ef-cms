@@ -30,7 +30,7 @@ export const AutoGeneratePetitionForm = connect(
                 form.petitionReasons.map((_reason, index) => {
                   return (
                     <PetitionFormResponse
-                      count={index}
+                      factOrReasonCount={index}
                       id={`petition-reason-${index - 1}`}
                       key={`petition-reason-${index - 1}`}
                       textName="petitionReasons"
@@ -65,7 +65,7 @@ export const AutoGeneratePetitionForm = connect(
                 form.petitionFacts.map((_fact, index) => {
                   return (
                     <PetitionFormResponse
-                      count={index}
+                      factOrReasonCount={index}
                       id={`petition-fact-${index - 1}`}
                       key={`petition-fact-${index - 1}`}
                       textName="petitionFacts"
