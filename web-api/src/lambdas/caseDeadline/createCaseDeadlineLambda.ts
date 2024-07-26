@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createCaseDeadlineInteractor } from '@web-api/business/useCases/caseDeadline/createCaseDeadlineInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -12,7 +13,7 @@ export const createCaseDeadlineLambda = (
   authorizedUser: UnknownAuthUser,
 ): Promise<any | undefined> =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createCaseDeadlineInteractor(
+    return await createCaseDeadlineInteractor(
       applicationContext,
       {
         ...JSON.parse(event.body),

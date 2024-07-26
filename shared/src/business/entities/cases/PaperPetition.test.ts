@@ -487,7 +487,7 @@ describe('paperPetition entity', () => {
           contactSecondary: {},
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
       expect(paperPetition.petitioners[1].phone).toEqual('N/A');
     });
