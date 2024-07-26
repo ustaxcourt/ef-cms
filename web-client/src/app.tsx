@@ -275,13 +275,20 @@ const app = {
     const container = window.document.querySelector('#app');
     const root = createRoot(container);
 
+    window.renderInstanceManagement = false;
+
+    const renderInstanceManagement =
+      !process.env.CI || window.renderInstanceManagement;
+
     root.render(
       <Container app={cerebralApp}>
-        <>
-          <IdleActivityMonitor />
-          <AppInstanceManager />
-          <GlobalModalWrapper />
-        </>
+        {renderInstanceManagement && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+            <GlobalModalWrapper />
+          </>
+        )}
         <AppComponent />
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}

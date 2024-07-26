@@ -5,6 +5,11 @@ import { overrideIdleTimeouts } from '../../../support/idleLogoutHelpers';
 import { retry } from '../../../../helpers/retry';
 
 describe('Idle Logout Behavior', () => {
+  beforeEach(() => {
+    cy.window().then((window: Window) => {
+      window.renderInstanceManagement = true;
+    });
+  });
   const DEFAULT_IDLE_TIMEOUT = 500;
   it('should automatically log user out after refresh with option to log back in', () => {
     loginAsColvin();
