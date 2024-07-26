@@ -1,4 +1,4 @@
-import { RawMessage } from '@shared/business/entities/Message';
+import { Message, RawMessage } from '@shared/business/entities/Message';
 import { db } from '@web-api/database';
 import { toKyselyNewMessage } from './mapper';
 
@@ -7,9 +7,15 @@ export const createMessage = async ({
 }: {
   message: RawMessage;
 }): Promise<RawMessage> => {
-  return (await db
+  const createdMessage = await db
     .insertInto('message')
     .values(toKyselyNewMessage(message))
     .returningAll()
-    .executeTakeFirst()) as RawMessage;
+    .executeTakeFirst();
+
+  if (!createdMessage) {
+    throw new Error('could not create a message');
+  }
+
+  return new Message(createdMessage);
 };

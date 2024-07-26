@@ -119,15 +119,12 @@ export const fileCourtIssuedOrder = async (
 
   if (documentMetadata.parentMessageId) {
     const messages = await getMessageThreadByParentId({
-      applicationContext,
       parentMessageId: documentMetadata.parentMessageId,
     });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const messageEntity = new Message(mostRecentMessage, {
-      applicationContext,
-    }).validate();
+    const messageEntity = new Message(mostRecentMessage).validate();
     messageEntity.addAttachment({
       documentId: docketEntryEntity.docketEntryId,
       documentTitle: docketEntryEntity.documentTitle,

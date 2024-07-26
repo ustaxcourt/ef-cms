@@ -116,15 +116,12 @@ export const saveSignedDocumentInteractor = async (
 
     if (parentMessageId) {
       const messages = await getMessageThreadByParentId({
-        applicationContext,
         parentMessageId,
       });
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-      const messageEntity = new Message(mostRecentMessage, {
-        applicationContext,
-      }).validate();
+      const messageEntity = new Message(mostRecentMessage).validate();
       messageEntity.addAttachment({
         documentId: signedDocketEntryEntity.docketEntryId,
         documentTitle: signedDocketEntryEntity.documentTitle,

@@ -11,6 +11,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -105,15 +106,12 @@ export const addDraftStampOrderDocketEntry = async (
 
   if (parentMessageId) {
     const messages = await getMessageThreadByParentId({
-      applicationContext,
       parentMessageId,
     });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const messageEntity = new Message(mostRecentMessage, {
-      applicationContext,
-    }).validate();
+    const messageEntity = new Message(mostRecentMessage).validate();
     messageEntity.addAttachment({
       documentId: stampedDocketEntryEntity.docketEntryId,
       documentTitle: stampedDocketEntryEntity.documentTitle,

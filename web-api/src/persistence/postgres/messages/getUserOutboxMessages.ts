@@ -4,12 +4,10 @@ import { db } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getUserOutboxMessages = async ({
-  applicationContext,
   userId,
 }: {
-  applicationContext: IApplicationContext;
   userId: string;
-}) => {
+}): Promise<Message[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
   const messages = await db
@@ -20,8 +18,7 @@ export const getUserOutboxMessages = async ({
     .limit(5000)
     .execute();
 
-  return messages.map(
-    message =>
-      new Message(transformNullToUndefined(message), { applicationContext }),
+  return messages.map(message =>
+    new Message(transformNullToUndefined(message)).validate(),
   );
 };

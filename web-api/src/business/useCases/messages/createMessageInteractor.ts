@@ -59,23 +59,20 @@ export const createMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage = new Message(
-    {
-      attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      from: fromUser.name,
-      fromSection: fromUser.section,
-      fromUserId: fromUser.userId,
-      message,
-      subject,
-      to: toUser.name,
-      toSection,
-      toUserId,
-    },
-    { applicationContext },
-  )
+  const validatedRawMessage = new Message({
+    attachments,
+    caseStatus: status,
+    caseTitle: Case.getCaseTitle(caseCaption),
+    docketNumber,
+    from: fromUser.name,
+    fromSection: fromUser.section,
+    fromUserId: fromUser.userId,
+    message,
+    subject,
+    to: toUser.name,
+    toSection,
+    toUserId,
+  })
     .validate()
     .toRawObject();
 

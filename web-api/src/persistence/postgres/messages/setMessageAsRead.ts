@@ -4,7 +4,7 @@ export const setMessageAsRead = async ({
   messageId,
 }: {
   messageId: string;
-}) => {
+}): Promise<void> => {
   await db
     .updateTable('message')
     .set({
