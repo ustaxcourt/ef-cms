@@ -9,11 +9,15 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const broadcastIdleStatusActiveAction = async ({
   applicationContext,
+  props,
   store,
 }: ActionProps) => {
   store.set(state.lastIdleAction, Date.now());
   const broadcastChannel = applicationContext.getBroadcastGateway();
+  const message = props.closeModal
+    ? LOGOUT_BROADCAST_MESSAGES.stayLoggedIn
+    : LOGOUT_BROADCAST_MESSAGES.idleStatusActive;
   await broadcastChannel.postMessage({
-    subject: LOGOUT_BROADCAST_MESSAGES.idleStatusActive,
+    subject: message,
   });
 };

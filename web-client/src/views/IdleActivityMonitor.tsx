@@ -42,12 +42,16 @@ export const IdleActivityMonitor = connect(
     });
 
     useEffect(() => {
+      // Broadcast activity as soon as a new tab loads to keep idle sign in times in sync across browser tabs.
+      // Also, dismiss modals in other, potentially unseen tabs to ensure
+      // unseen tabs do not trigger a surprise logout in the current tab.
+      broadcastIdleStatusActiveSequence({ closeModal: true });
+    }, []);
+
+    useEffect(() => {
       const interval = setInterval(() => {
         handleIdleLogoutSequence();
       }, 1000);
-
-      // Make sure we broadcast activity as soon as a new tab loads
-      broadcastIdleStatusActiveSequence();
 
       return () => {
         clearInterval(interval);
