@@ -2,7 +2,18 @@
   $theme-show-notifications: false,
   $theme-font-path: '../../node_modules/@uswds/uswds/dist/fonts',
   $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
-  $theme-font-weight-semibold: 600
+  $theme-font-weight-semibold: 600,
+  $theme-utility-breakpoints: (
+    "card": true,
+    "card-lg": true,
+    "mobile": true,
+    "mobile-lg": true,
+    "tablet": true,
+    "tablet-lg": true,
+    "desktop": true,
+    "desktop-lg": true,
+    "widescreen": true
+  ),
 );
 @forward 'uswds-global';
 @forward 'usa-date-picker';
@@ -40,3 +51,9 @@
 @forward 'usa-textarea';
 @forward 'usa-tooltip';
 @forward 'uswds-utilities';
+@forward 'usa-step-indicator';
+
+* {
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}

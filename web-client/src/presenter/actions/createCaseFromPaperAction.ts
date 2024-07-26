@@ -1,5 +1,7 @@
-import { CreatedCaseType } from '@shared/business/entities/EntityConstants';
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import {
+  CreatedCaseType,
+  FileUploadProgressType,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const createCaseFromPaperAction = async ({
@@ -8,16 +10,23 @@ export const createCaseFromPaperAction = async ({
   path,
   props,
 }: ActionProps<{
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
   const petitionMetadata: CreatedCaseType = get(state.form);
   const { fileUploadProgressMap } = props;
   let caseDetail: RawCase;
 
+  const attachmentToPetitionUploadProgress =
+    fileUploadProgressMap.attachmentToPetition
+      ? ([
+          fileUploadProgressMap.attachmentToPetition,
+        ] as FileUploadProgressType[])
+      : undefined;
+
   try {
     const {
       applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId,
+      attachmentToPetitionFileIds,
       corporateDisclosureFileId,
       petitionFileId,
       requestForPlaceOfTrialFileId,
@@ -27,8 +36,7 @@ export const createCaseFromPaperAction = async ({
       .generateDocumentIds(applicationContext, {
         applicationForWaiverOfFilingFeeUploadProgress:
           fileUploadProgressMap.applicationForWaiverOfFilingFee,
-        attachmentToPetitionUploadProgress:
-          fileUploadProgressMap.attachmentToPetition,
+        attachmentToPetitionUploadProgress,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure,
         petitionUploadProgress: fileUploadProgressMap.petition,
@@ -41,7 +49,7 @@ export const createCaseFromPaperAction = async ({
       .getUseCases()
       .createCaseFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeFileId,
-        attachmentToPetitionFileId,
+        attachmentToPetitionFileId: attachmentToPetitionFileIds[0],
         corporateDisclosureFileId,
         petitionFileId,
         petitionMetadata,

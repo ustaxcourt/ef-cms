@@ -1,4 +1,4 @@
-#docket-header {
+#docket-header, #petition-header {
   .case-information #caption,
   #case-caption {
     width: 49%;
@@ -42,10 +42,28 @@
     }
   }
 
+  .case-information #temp-docket-number, .case-information #electronically-filed {
+    width: 48%;
+    float: right;
+    font-size: 14px;
+    text-indent: 5px;
+  }
+
+  .case-information #temp-docket-number {
+    margin-top: 4px;
+  }
+
+  .case-information #electronically-filed {
+    margin-top: 40px;
+  }
+
   .document-title {
     margin-top: 30px;
     font-size: 16px;
     text-align: center;
-    text-decoration: underline;
+
+    .underline {
+      text-decoration: underline;
+    }
   }
 }
