@@ -143,7 +143,7 @@ export const PetitionQcScanBatchPreviewer = connect(
             </div>
           </div>
 
-          <div className="preview-container--image-area">
+          <div className="preview-container--image-area" id="preview-container">
             <img
               alt="preview"
               src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
@@ -254,6 +254,7 @@ export const PetitionQcScanBatchPreviewer = connect(
             {scanBatchPreviewerHelper.uploadMode === 'scan' &&
               scanBatchPreviewerHelper.scannerSource && (
                 <Button
+                  data-testid="start-scan-button"
                   onClick={e => {
                     e.preventDefault();
                     startScanSequence();
@@ -507,6 +508,8 @@ export const PetitionQcScanBatchPreviewer = connect(
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
                   className="change-scanner-button padding-0"
+                  data-testid="change-scanner-button"
+                  id="change-scanner-button"
                   onClick={e => {
                     e.preventDefault();
                     openChangeScannerSourceModalSequence();

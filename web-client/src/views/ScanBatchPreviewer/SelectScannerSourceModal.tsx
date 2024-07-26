@@ -34,6 +34,7 @@ export const SelectScannerSourceModal = connect(
           </legend>
           <select
             className="usa-select"
+            data-testid="scanner-select"
             defaultValue={modal.scanner}
             id="scanner-select"
             onChange={e => {
@@ -74,6 +75,7 @@ export const SelectScannerSourceModal = connect(
 
           <select
             className="usa-select"
+            data-testid="scanner-duplex-select"
             defaultValue={modal.scanMode}
             id="scanner-duplex-select"
             onChange={e => {
