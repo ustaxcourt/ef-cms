@@ -289,6 +289,7 @@
     "cypress": "13.13.0",
     "cypress-axe": "1.5.0",
     "cypress-file-upload": "5.0.8",
+    "cypress-terminal-report": "^6.1.2",
     "decimal.js": "10.4.3",
     "dynamodb-admin": "4.6.1",
     "dynamodb-streams-readable": "3.0.0",
