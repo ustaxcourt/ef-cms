@@ -9,8 +9,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-
-// TODO type for props
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generatePetitionPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -30,10 +29,9 @@ export const generatePetitionPdfInteractor = async (
     procedureType,
     taxYear,
   }: any,
+  authorizedUser: UnknownAuthUser,
 ): Promise<{ fileId: string }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
