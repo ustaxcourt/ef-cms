@@ -23,12 +23,18 @@ describe('Authorization client service', () => {
 
   it('should return true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
     expect(
-      isAuthorized(mockPetitionerUser, 'unknown action' as any, 'someUser'),
+      isAuthorized(
+        mockPetitionerUser,
+        'unknown action' as any,
+        mockPetitionerUser.userId,
+      ),
     ).toBeTruthy();
   });
 
   it('should return false when the role provided is not found in the AUTHORIZATION_MAP', () => {
-    expect(isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.WORKITEM)).toBe(false);
+    expect(isAuthorized(mockPetitionerUser, ROLE_PERMISSIONS.WORKITEM)).toBe(
+      false,
+    );
   });
 
   it('should contain NO falsy values in the AUTHORIZATION_MAP', () => {
