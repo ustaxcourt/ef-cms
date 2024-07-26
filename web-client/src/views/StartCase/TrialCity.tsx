@@ -9,7 +9,9 @@ import classNames from 'classnames';
 export const TrialCity = connect(
   {
     label: props.label,
+    onBlur: props.onBlur,
     onChange: props.onChange,
+    procedureType: props.procedureType,
     showDefaultOption: props.showDefaultOption,
     showHint: props.showHint,
     showRegularTrialCitiesHint: props.showRegularTrialCitiesHint,
@@ -20,6 +22,7 @@ export const TrialCity = connect(
   },
   function TrialCity({
     label,
+    onBlur,
     onChange,
     procedureType,
     showDefaultOption,
@@ -31,6 +34,7 @@ export const TrialCity = connect(
   }) {
     return (
       <FormGroup
+        errorMessageId="trial-city-error-message"
         errorText={[
           validationErrors.preferredTrialCity,
           !!validationErrors['object.missing'],
@@ -64,6 +68,7 @@ export const TrialCity = connect(
           id="preferred-trial-city"
           name="preferredTrialCity"
           value={value}
+          onBlur={onBlur}
           onChange={onChange}
         >
           {showDefaultOption && <option value="">-- Select --</option>}

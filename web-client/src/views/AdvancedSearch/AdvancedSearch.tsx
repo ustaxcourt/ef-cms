@@ -101,7 +101,7 @@ export const AdvancedSearch = connect(
               >
                 <SearchBoilerplateText
                   formTypeText="an opinion"
-                  isOpinion="true"
+                  isOpinion={true}
                 />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
@@ -181,7 +181,7 @@ export const AdvancedSearch = connect(
               <>
                 <SearchBoilerplateText
                   formTypeText="an opinion"
-                  isOpinion="true"
+                  isOpinion={true}
                 />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
