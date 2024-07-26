@@ -16,8 +16,8 @@ export const PlaceOfLegalResidenceSelect = ({
   return (
     <select
       className={className ? classNames(className, 'usa-select') : 'usa-select'}
-      data-testid={`${type}.placeOfLegalResidence`}
-      id={`${type}.placeOfLegalResidence`}
+      data-testid={`${type}-placeOfLegalResidence`}
+      id={`${type}-placeOfLegalResidence`}
       name={`${type}.placeOfLegalResidence`}
       ref={refProp || undefined}
       value={data.placeOfLegalResidence || ''}
