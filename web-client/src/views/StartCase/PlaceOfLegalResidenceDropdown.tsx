@@ -47,7 +47,7 @@ export const PlaceOfLegalResidenceDropdown = connect<
             <label
               aria-hidden
               className="usa-label"
-              htmlFor={`${type}.placeOfLegalResidence`}
+              htmlFor={`${type}-placeOfLegalResidence`}
             >
               {placeOfLegalResidenceTitle || 'Place of legal residence'}{' '}
               <span className="usa-hint">
@@ -59,7 +59,7 @@ export const PlaceOfLegalResidenceDropdown = connect<
               handleBlur={handleBlur}
               handleChange={handleChange}
               refProp={
-                registerRef && registerRef(`${type}.placeOfLegalResidence`)
+                registerRef && registerRef(`${type}-placeOfLegalResidence`)
               }
               type={type}
             />
@@ -73,7 +73,7 @@ export const PlaceOfLegalResidenceDropdown = connect<
             <label
               aria-hidden
               className="usa-label"
-              htmlFor={`${type}.placeOfLegalResidence`}
+              htmlFor={`${type}-placeOfLegalResidence`}
             >
               {placeOfLegalResidenceTitle || 'Place of legal residence'}{' '}
               <span className="usa-hint">
@@ -86,7 +86,7 @@ export const PlaceOfLegalResidenceDropdown = connect<
               handleBlur={handleBlur}
               handleChange={handleChange}
               refProp={
-                registerRef && registerRef(`${type}.placeOfLegalResidence`)
+                registerRef && registerRef(`${type}-placeOfLegalResidence`)
               }
               type={type}
             />
