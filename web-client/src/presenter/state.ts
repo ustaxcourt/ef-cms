@@ -1,13 +1,13 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { GetUserResponse } from '@shared/business/useCases/getUserInteractor';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawMessage } from '@shared/business/entities/Message';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
+import { Role } from '@shared/business/entities/EntityConstants';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -828,7 +828,15 @@ export const baseState = {
   } as {
     selectedFilingOption?: string;
   },
-  user: null as unknown as RawUser | RawPractitioner | RawIrsPractitioner, // TODO 10417 initialize to the correct shape after verifying no where in the application is doing a null check for state.user.
+  user: {
+    email: '',
+    name: '',
+    role: '' as Role,
+    section: '',
+    userId: '',
+  } as GetUserResponse & {
+    email: string;
+  }, // We know that the logged in user has an email otherwise they could not login.
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
