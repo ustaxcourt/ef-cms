@@ -83,7 +83,7 @@ export function fillPetitionerAndSpouseInformation(addPhone: boolean = false) {
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('33233');
-  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
+  cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select('AL');
   cy.get('[data-testid="contact-primary-phone"]').type('3232323232');
   cy.get('[data-testid="is-spouse-deceased-0"]').click();
   cy.get('[data-testid="contact-secondary-name"]').type('John Spouse');
@@ -91,7 +91,7 @@ export function fillPetitionerAndSpouseInformation(addPhone: boolean = false) {
   if (addPhone) {
     cy.get('[data-testid="contact-secondary-phone"]').type('1232323232');
   }
-  cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select('AK');
+  cy.get('[data-testid="contactSecondary-placeOfLegalResidence"]').select('AK');
   cy.get('[data-testid="step-1-next-button"]').click();
 }
 
@@ -255,7 +255,7 @@ export function fillPrimaryContact() {
   cy.get('[data-testid="contactPrimary.postalCode"]').type(
     contactInfo.postalCode,
   );
-  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+  cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
     contactInfo.placeOfLegalResidence,
   );
   cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
@@ -314,7 +314,7 @@ export function fillSecondaryContact(useSameAddress = true) {
       secondaryContactInfo.postalCode,
     );
   }
-  cy.get('[data-testid="contactSecondary.placeOfLegalResidence"]').select(
+  cy.get('[data-testid="contactSecondary-placeOfLegalResidence"]').select(
     secondaryContactInfo.placeOfLegalResidence,
   );
 
