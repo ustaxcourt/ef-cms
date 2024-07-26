@@ -1,10 +1,12 @@
 import {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   PARTY_TYPES,
 } from '../EntityConstants';
 import { ElectronicPetition } from './ElectronicPetition';
+import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 
 describe('ElectronicPetition entity', () => {
   describe('isValid', () => {
@@ -14,6 +16,7 @@ describe('ElectronicPetition entity', () => {
         caseType: CASE_TYPES_MAP.other,
         filingType: 'A business',
         hasIrsNotice: false,
+        petitionType: undefined,
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
@@ -335,6 +338,10 @@ describe('ElectronicPetition entity', () => {
         electronicPetition.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toBeUndefined();
+
+      expect(electronicPetition.petitionType).toEqual(
+        PETITION_TYPES.userUploaded,
+      );
     });
 
     it('should error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
@@ -353,6 +360,35 @@ describe('ElectronicPetition entity', () => {
         electronicPetition.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
       ).toEqual('Your Corporate Disclosure Statement file size is empty');
+    });
+  });
+
+  describe('Secondary contact phone', () => {
+    it('should use secondary contact phone when provided', () => {
+      const electronicPetition = new ElectronicPetition({
+        contactSecondary: {
+          contactType: CONTACT_TYPES.secondary,
+          phone: '123-234-3456',
+        },
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
+      const secondaryContact = electronicPetition
+        .toRawObject()
+        .petitioners.find(p => p.contactType === CONTACT_TYPES.secondary);
+      expect(secondaryContact.phone).toEqual('123-234-3456');
+    });
+
+    it('should use default secondary contact phone when no phone is provided', () => {
+      const electronicPetition = new ElectronicPetition({
+        contactSecondary: {
+          contactType: CONTACT_TYPES.secondary,
+        },
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
+      const secondaryContact = electronicPetition
+        .toRawObject()
+        .petitioners.find(p => p.contactType === CONTACT_TYPES.secondary);
+      expect(secondaryContact.phone).toEqual('N/A');
     });
   });
 });

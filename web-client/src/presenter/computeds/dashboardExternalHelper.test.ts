@@ -23,7 +23,7 @@ describe('dashboardExternalHelper', () => {
         user: petitionerUser,
       },
     });
-    expect(result.showWhatToExpect).toEqual(true);
+    expect(result.showPetitionWelcomePage).toEqual(true);
   });
 
   it('should show case list but not "what to expect" when there is an open or closed case case', () => {
@@ -34,7 +34,7 @@ describe('dashboardExternalHelper', () => {
         user: petitionerUser,
       },
     });
-    expect(result.showWhatToExpect).toEqual(false);
+    expect(result.showPetitionWelcomePage).toEqual(false);
   });
 
   it('should keep the showFileACase flag as false when the user role is petitioner', () => {

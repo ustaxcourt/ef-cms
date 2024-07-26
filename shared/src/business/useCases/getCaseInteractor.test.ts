@@ -1,4 +1,5 @@
 import {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -489,10 +490,26 @@ describe('getCaseInteractor', () => {
 
   describe('decorateForCaseStatus', () => {
     it('sets the canAllowDocumentService on the given case record', () => {
-      expect(MOCK_CASE.canAllowDocumentService).not.toBeDefined();
+      const TEST_MOCK_CASE: RawCase = {
+        ...MOCK_CASE,
+      };
+
+      expect(TEST_MOCK_CASE.canAllowDocumentService).not.toBeDefined();
       expect(
-        decorateForCaseStatus(MOCK_CASE).canAllowDocumentService,
+        decorateForCaseStatus(TEST_MOCK_CASE).canAllowDocumentService,
       ).toBeDefined();
+    });
+
+    it('should set "canDojPractitionersRepresentParty" when the case status is "On Appeal"', () => {
+      const TEST_MOCK_CASE: RawCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.onAppeal,
+      };
+
+      expect(TEST_MOCK_CASE.canDojPractitionersRepresentParty).toBeUndefined();
+
+      const DECORATED_CASE = decorateForCaseStatus(TEST_MOCK_CASE);
+      expect(DECORATED_CASE.canDojPractitionersRepresentParty).toEqual(true);
     });
   });
 });

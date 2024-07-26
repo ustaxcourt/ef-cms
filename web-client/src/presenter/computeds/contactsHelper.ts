@@ -34,7 +34,6 @@ export const contactsHelper = (
       partyType: form.partyType,
     }));
   }
-
   return {
     contactPrimary,
     contactSecondary,

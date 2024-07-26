@@ -30,6 +30,7 @@ export class Petitioner extends JoiValidationEntity {
   public serviceIndicator?: string;
   public state?: string;
   public title?: string;
+  public placeOfLegalResidence?: string;
 
   constructor(rawProps) {
     super('Petitioner');
@@ -52,6 +53,7 @@ export class Petitioner extends JoiValidationEntity {
     this.name = rawProps.name;
     this.phone = formatPhoneNumber(rawProps.phone);
     this.postalCode = rawProps.postalCode;
+    this.placeOfLegalResidence = rawProps.placeOfLegalResidence;
     this.sealedAndUnavailable = rawProps.sealedAndUnavailable || false;
     this.secondaryName = rawProps.secondaryName;
     this.serviceIndicator = rawProps.serviceIndicator;

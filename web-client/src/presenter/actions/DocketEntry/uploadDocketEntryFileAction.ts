@@ -1,4 +1,4 @@
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const uploadDocketEntryFileAction = async ({
@@ -7,7 +7,7 @@ export const uploadDocketEntryFileAction = async ({
   path,
   props,
 }: ActionProps<{
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
   const docketEntryId = get(state.docketEntryId);
   const user = get(state.user);

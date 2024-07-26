@@ -7,6 +7,7 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { ElectronicPetitionInformationFactory } from './ElectronicPetitionInformationFactory';
+import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 
 describe('ElectronicPetitionInformationFactory entity', () => {
   it('requires wizard step', () => {
@@ -151,6 +152,7 @@ describe('ElectronicPetitionInformationFactory entity', () => {
         partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
+        petitionType: undefined,
         petitioners: [
           {
             name: 'Something',
@@ -161,6 +163,9 @@ describe('ElectronicPetitionInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(electronicPetition.getFormattedValidationErrors()!).toEqual(null);
+      expect(electronicPetition.petitionType).toEqual(
+        PETITION_TYPES.userUploaded,
+      );
     });
   });
 
@@ -333,7 +338,6 @@ describe('ElectronicPetitionInformationFactory entity', () => {
             countryType: 'Enter country type',
             index: 1,
             name: 'Enter name',
-            phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
           },

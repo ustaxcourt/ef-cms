@@ -1,0 +1,57 @@
+.petition-pdf {
+    margin: 0 -25px;
+
+    ol {
+        padding-left: 0;
+        margin-left: 0;
+        list-style-position: inside;
+
+        li {
+            margin-top: 4px;
+            margin-bottom: 2px;
+
+            &.list-bold {
+                margin-top: 15px;
+                font-weight: bold;
+            }
+        }
+
+        ol {
+            padding-left: 0;
+            margin-left: 1rem;
+            list-style-type: lower-alpha;
+
+            li {
+                padding-left: 0;
+                margin-left: -5px;
+            }
+        }
+    }
+
+    ol.list-disc {
+        padding-left: 10px;
+        margin-top: 0;
+        list-style-type: disc;
+
+        li span {
+            margin-left: -8px;
+        }
+    }
+
+    p {
+        padding-left: 0;
+        margin: 2px 0;
+    }
+
+    .petitioner-info {
+        width: 50%;
+        margin-top: 1rem;
+        float: left;
+      }
+
+    .petition-list-item {
+        padding-left: 20px;
+        list-style-position: outside;
+    }
+}
+

@@ -1,6 +1,5 @@
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import { ATP_DOCKET_ENTRY, MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
@@ -11,48 +10,30 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('createCaseAction', () => {
   const errorStub = jest.fn();
   const successStub = jest.fn();
-  const fileUploadProgressMap: FileUploadProgressMapType = {
-    applicationForWaiverOfFilingFee: {
-      file: {},
-      uploadProgress: jest.fn(),
-    },
-    attachmentToPetition: {
-      file: {},
-      uploadProgress: jest.fn(),
-    },
-    corporateDisclosure: {
-      file: {},
-      uploadProgress: jest.fn(),
-    },
-    petition: {
-      file: {},
-      uploadProgress: jest.fn(),
-    },
-    requestForPlaceOfTrial: {
-      file: {},
-      uploadProgress: jest.fn(),
-    },
-    stin: {
-      file: {},
-      uploadProgress: jest.fn(),
-    },
+
+  const fileUploadProgressMap = {
+    applicationForWaiverOfFilingFee: { file: {}, uploadProgress: jest.fn() },
+    attachmentToPetition: { file: {}, uploadProgress: jest.fn() },
+    corporateDisclosure: { file: {}, uploadProgress: jest.fn() },
+    petition: { file: {}, uploadProgress: jest.fn() },
+    requestForPlaceOfTrial: { file: {}, uploadProgress: jest.fn() },
+    stin: { file: {}, uploadProgress: jest.fn() },
   };
 
   presenter.providers.applicationContext = applicationContext;
-
-  presenter.providers.path = {
-    error: errorStub,
-    success: successStub,
-  };
+  presenter.providers.path = { error: errorStub, success: successStub };
 
   const { US_STATES } = applicationContext.getConstants();
 
-  const mockPetitionMetadata = {
-    trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
+  const mockCaseWithATP = {
     ...MOCK_CASE,
-    contactPrimary: {
-      ...getContactPrimary(MOCK_CASE),
-    },
+    docketEntries: [...MOCK_CASE.docketEntries, ATP_DOCKET_ENTRY],
+  };
+
+  const mockPetitionMetadata = {
+    ...mockCaseWithATP,
+    contactPrimary: { ...getContactPrimary(MOCK_CASE) },
+    trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
   };
 
   const mockForm = omit(mockPetitionMetadata, 'trialCities');
@@ -60,16 +41,16 @@ describe('createCaseAction', () => {
   const { addCoversheetInteractor, createCaseInteractor, generateDocumentIds } =
     applicationContext.getUseCases();
 
-  beforeEach(() => {
+  beforeAll(() => {
     generateDocumentIds.mockReturnValue({
-      attachmentToPetitionFileId: '123',
+      attachmentToPetitionFileIds: ['123'],
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
       stinFileId: '123',
     });
   });
 
-  it('should call createCaseInteractor and addCoversheetInteractor THREE times (when we have an CDS form) with the petition metadata and files, then call the success path after completion', async () => {
+  it('should call createCaseInteractor and addCoversheetInteractor FOUR times when there is a CDS form, and then call the success path', async () => {
     createCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
       docketEntries: [
@@ -90,16 +71,13 @@ describe('createCaseAction', () => {
           eventCode: 'CDS',
           isFileAttached: true,
         },
+        ATP_DOCKET_ENTRY,
       ],
     });
 
     await runAction(createCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        fileUploadProgressMap,
-      },
+      modules: { presenter },
+      props: { fileUploadProgressMap },
       state: {
         form: mockPetitionMetadata,
         user: { email: 'petitioner1@example.com' },
@@ -107,9 +85,10 @@ describe('createCaseAction', () => {
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
-    expect(generateDocumentIds.mock.calls[0][1]).toMatchObject({
-      attachmentToPetitionUploadProgress:
+    expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
+      attachmentToPetitionUploadProgress: [
         fileUploadProgressMap.attachmentToPetition,
+      ],
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
       petitionUploadProgress: fileUploadProgressMap.petition,
@@ -117,39 +96,43 @@ describe('createCaseAction', () => {
     });
 
     expect(createCaseInteractor).toHaveBeenCalled();
-    expect(createCaseInteractor.mock.calls[0][1]).toMatchObject({
-      attachmentToPetitionFileId: '123',
+
+    expect(createCaseInteractor).toHaveBeenCalledWith(expect.anything(), {
+      attachmentToPetitionFileIds: ['123'],
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
       petitionMetadata: mockForm,
       stinFileId: '123',
     });
-    expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and CDS
+
+    expect(addCoversheetInteractor).toHaveBeenCalledTimes(4); // STIN, Petition, ATP and CDS
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should call createCaseInteractor and call path.error when finished if it throws an error', async () => {
-    createCaseInteractor.mockImplementation(() => {
+  it('should call createCaseInteractor and call path.error if it throws an error', async () => {
+    generateDocumentIds.mockReturnValueOnce({
+      corporateDisclosureFileId: '123',
+      petitionFileId: '123',
+      stinFileId: '123',
+    });
+    createCaseInteractor.mockImplementationOnce(() => {
       throw new Error('error');
     });
 
     await runAction(createCaseAction, {
-      modules: {
-        presenter,
-      },
+      modules: { presenter },
       props: {
-        fileUploadProgressMap,
-      },
-      state: {
-        form: mockPetitionMetadata,
+        fileUploadProgressMap: {
+          ...fileUploadProgressMap,
+          attachmentToPetition: undefined,
+        },
         user: { email: 'petitioner1@example.com' },
       },
+      state: { form: mockPetitionMetadata },
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
-    expect(generateDocumentIds.mock.calls[0][1]).toMatchObject({
-      attachmentToPetitionUploadProgress:
-        fileUploadProgressMap.attachmentToPetition,
+    expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
       corporateDisclosureUploadProgress:
         fileUploadProgressMap.corporateDisclosure,
       petitionUploadProgress: fileUploadProgressMap.petition,
@@ -157,13 +140,13 @@ describe('createCaseAction', () => {
     });
 
     expect(createCaseInteractor).toHaveBeenCalled();
-    expect(createCaseInteractor.mock.calls[0][1]).toMatchObject({
-      attachmentToPetitionFileId: '123',
+    expect(createCaseInteractor).toHaveBeenCalledWith(expect.anything(), {
       corporateDisclosureFileId: '123',
       petitionFileId: '123',
       petitionMetadata: mockForm,
       stinFileId: '123',
     });
+
     expect(addCoversheetInteractor).not.toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalled();
   });
