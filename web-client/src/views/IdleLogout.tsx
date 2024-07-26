@@ -19,6 +19,7 @@ export const IdleLogout = connect(
           contact information.
         </p>
         <Button
+          data-testid="idle-logout-login-button"
           onClick={() => {
             navigateToLoginSequence();
           }}
