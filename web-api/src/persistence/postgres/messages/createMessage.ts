@@ -1,6 +1,6 @@
 import { RawMessage } from '@shared/business/entities/Message';
 import { db } from '@web-api/database';
-import { omit } from 'lodash';
+import { toKyselyNewMessage } from './mapper';
 
 export const createMessage = async ({
   message,
@@ -9,10 +9,7 @@ export const createMessage = async ({
 }): Promise<RawMessage> => {
   return (await db
     .insertInto('message')
-    .values({
-      ...omit(message, ['entityName', 'docketNumberWithSuffix']),
-      attachments: JSON.stringify(message.attachments),
-    })
+    .values(toKyselyNewMessage(message))
     .returningAll()
     .executeTakeFirst()) as RawMessage;
 };
