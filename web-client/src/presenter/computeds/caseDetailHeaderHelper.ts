@@ -21,14 +21,12 @@ const isUserADojPractitioner = (
 
 const shouldShowRepresentAPartyButton = (
   caseDetail: RawCase,
-  user: RawUser | RawPractitioner | RawIrsPractitioner,
+  isDojPractitioner: boolean,
   caseHasRespondent: boolean,
   isRepresentAPartyForm: boolean,
   isCaseSealed: boolean,
   isCurrentPageFilePetitionSuccess: boolean,
 ): boolean => {
-  const isDojPractitioner = isUserADojPractitioner(user);
-
   return (
     caseHasRespondent &&
     !isRepresentAPartyForm &&
@@ -70,6 +68,7 @@ export const caseDetailHeaderHelper = (
   let showRepresentAPartyButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
+  const isDojPractitioner = isUserADojPractitioner(user);
 
   if (isExternalUser && !userDirectlyAssociatedWithCase) {
     const pendingAssociation = get(state.screenMetadata.pendingAssociation);
@@ -91,11 +90,12 @@ export const caseDetailHeaderHelper = (
         !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length
       );
 
-      showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
+      showFileFirstDocumentButton =
+        !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
 
       showRepresentAPartyButton = shouldShowRepresentAPartyButton(
         caseDetail,
-        user,
+        isDojPractitioner,
         caseHasRespondent,
         isRepresentAPartyForm,
         isCaseSealed,
