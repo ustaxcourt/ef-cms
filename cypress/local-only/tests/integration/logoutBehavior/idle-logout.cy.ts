@@ -2,32 +2,32 @@
 import { IWindowWithCerebralExposed } from '../../../../../types/IWindow';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 import { overrideIdleTimeouts } from '../../../support/idleLogoutHelpers';
-// import { retry } from '../../../../helpers/retry';
+import { retry } from '../../../../helpers/retry';
 
 describe('Idle Logout Behavior', () => {
   const DEFAULT_IDLE_TIMEOUT = 500;
-  // it('should automatically log user out after refresh with option to log back in', () => {
-  //   loginAsColvin();
-  //   cy.reload(); // Refresh ensures we track idle time even without interaction on the page
-  //   cy.get('[data-testid="header-text"]');
+  it('should automatically log user out after refresh with option to log back in', () => {
+    loginAsColvin();
+    cy.reload(); // Refresh ensures we track idle time even without interaction on the page
+    cy.get('[data-testid="header-text"]');
 
-  //   cy.window().then((window: Window) => {
-  //     overrideIdleTimeouts({
-  //       modalTimeout: DEFAULT_IDLE_TIMEOUT,
-  //       sessionTimeout: DEFAULT_IDLE_TIMEOUT,
-  //       windowObj: window as unknown as IWindowWithCerebralExposed,
-  //     });
-  //   });
+    cy.window().then((window: Window) => {
+      overrideIdleTimeouts({
+        modalTimeout: DEFAULT_IDLE_TIMEOUT,
+        sessionTimeout: DEFAULT_IDLE_TIMEOUT,
+        windowObj: window as unknown as IWindowWithCerebralExposed,
+      });
+    });
 
-  //   retry(() => {
-  //     return cy.get('body').then(body => {
-  //       return body.find('[data-testid="idle-logout-login-button"]').length > 0;
-  //     });
-  //   });
+    retry(() => {
+      return cy.get('body').then(body => {
+        return body.find('[data-testid="idle-logout-login-button"]').length > 0;
+      });
+    });
 
-  //   cy.get('[data-testid="idle-logout-login-button"]').click();
-  //   cy.get('[data-testid="login-button"]').should('exist');
-  // });
+    cy.get('[data-testid="idle-logout-login-button"]').click();
+    cy.get('[data-testid="login-button"]').should('exist');
+  });
 
   it('should sign out of all tabs after idle', () => {
     // Note that throughout this test, we interact with the first tab via cypress
