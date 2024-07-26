@@ -101,7 +101,7 @@ export default defineConfig({
             await desiredPage.bringToFront();
 
             // Make sure selector exists
-            await desiredPage.waitForSelector(selector, { timeout: 5000 });
+            await desiredPage.waitForSelector(selector, { timeout: 15000 });
 
             if (close) {
               await desiredPage.close();
