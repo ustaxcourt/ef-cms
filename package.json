@@ -180,6 +180,7 @@
     "maintenance:engage:local": ". ./setup-local-env.sh && npx ts-node --transpile-only scripts/set-maintenance-mode-locally.ts true",
     "migrate:local": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SOURCE_TABLE=efcms-local DESTINATION_TABLE=efcms-local-1 ts-node --transpile-only ./web-api/run-local-migration.ts",
     "migration:cleanup": "./scripts/migration/update-deploy-table-after-migration.sh",
+    "migration:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrate.ts",
     "pending-color-switch": "./web-client/pending-color-switch.sh",
     "postinstall": "husky install",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
