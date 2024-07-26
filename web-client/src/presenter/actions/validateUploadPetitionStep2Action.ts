@@ -25,13 +25,15 @@ export const validateUploadPetitionStep2Action = ({
   );
   store.set(state.form.petitionFacts, createPetitionStep2Data.petitionFacts);
 
-  let errors = new UploadPetitionStep2(
+  const errors = new UploadPetitionStep2(
     createPetitionStep2Data,
   ).getFormattedValidationErrors();
+
   if (errors) {
     return path.error({
       errors,
     });
   }
+
   return path.success();
 };
