@@ -588,6 +588,12 @@ export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
     .map(x => x.eventCode),
 );
 
+export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .map(x => x.eventCode),
+);
+
 export const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
   EXTERNAL_DOCUMENTS_ARRAY.filter(
     doc =>
