@@ -77,7 +77,7 @@ export const PublicSearch = connect(
     function OpinionRender() {
       return (
         <>
-          <SearchBoilerplateText formTypeText="an opinion" isOpinion="true" />
+          <SearchBoilerplateText formTypeText="an opinion" isOpinion={true} />
           <OpinionSearchForm
             submitAdvancedSearchSequence={
               submitPublicOpinionAdvancedSearchSequence
