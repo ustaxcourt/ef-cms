@@ -7,6 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatPetitionAction = ({
   applicationContext,
+  get,
   props,
   store,
 }: ActionProps) => {
@@ -40,7 +41,7 @@ export const formatPetitionAction = ({
 
   const { contactPrimary, irsNotices } = petitionInfo;
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   contactPrimary.email = user.email;
 
   let noticeIssuedDate;
