@@ -133,4 +133,34 @@ describe('Petition clerk creates a paper filing', function () {
       });
     });
   });
+
+  describe('Select a scanner', () => {
+    it('should display scanner selection menu', () => {
+      navigateToDocumentQC('petitionsclerk');
+
+      getCreateACaseButton().click();
+      cy.get('[data-testid="change-scanner-button"]').click();
+      cy.get('[data-testid="modal-confirm"]').should('not.exist');
+      cy.get('[data-testid="start-scan-button"]').should('not.exist');
+
+      const selectLastOption = (selector: string) => {
+        cy.get(selector)
+          .should('be.visible')
+          .find('option')
+          .last()
+          .then(option => {
+            cy.wrap(option)
+              .parent()
+              .select(option.val() as string);
+          });
+      };
+
+      selectLastOption('[data-testid="scanner-select"]');
+      selectLastOption('[data-testid="scanner-duplex-select"]');
+
+      cy.get('[data-testid="modal-confirm"]').should('exist').click();
+      cy.get('[data-testid="start-scan-button"]').should('exist').click();
+      cy.get('div#preview-container').should('be.visible');
+    });
+  });
 });

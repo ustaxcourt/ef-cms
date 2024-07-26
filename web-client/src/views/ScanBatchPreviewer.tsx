@@ -251,6 +251,8 @@ export const ScanBatchPreviewer = connect(
             {scanBatchPreviewerHelper.uploadMode === 'scan' &&
               scanBatchPreviewerHelper.scannerSource && (
                 <Button
+                  data-testid="start-scan-button"
+                  id="start-scan"
                   onClick={e => {
                     e.preventDefault();
                     startScanSequence();
@@ -501,6 +503,8 @@ export const ScanBatchPreviewer = connect(
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
                   className="change-scanner-button padding-0"
+                  data-testid="change-scanner-button"
+                  id="change-scanner-button"
                   onClick={e => {
                     e.preventDefault();
                     openChangeScannerSourceModalSequence();
@@ -530,7 +534,9 @@ export const ScanBatchPreviewer = connect(
 
         {scanBatchPreviewerHelper.uploadMode === 'scan' &&
           scanBatchPreviewerHelper.selectedPageImage && (
-            <div className="preview-container">{renderPreviewSection()}</div>
+            <div className="preview-container" id="preview-container">
+              {renderPreviewSection()}
+            </div>
           )}
       </>
     );
