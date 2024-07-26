@@ -4,17 +4,26 @@ import {
 } from '../entities/IrsPractitioner';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
-import { PrivatePractitioner } from '../entities/PrivatePractitioner';
+import {
+  PrivatePractitioner,
+  RawPrivatePractitioner,
+} from '../entities/PrivatePractitioner';
 import { RawUser, User } from '../entities/User';
 import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 
+export type GetUserResponse =
+  | RawUser
+  | RawPractitioner
+  | RawIrsPractitioner
+  | RawPrivatePractitioner;
+
 export const getUserInteractor = async (
   applicationContext: IApplicationContext,
   authorizedUser: UnknownAuthUser,
-): Promise<RawUser | RawPractitioner | RawIrsPractitioner> => {
+): Promise<GetUserResponse> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError('Not authorized to get user');
   }
