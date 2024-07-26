@@ -76,6 +76,36 @@ export const irsPractitionerUser: RawIrsPractitioner = {
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
+export const dojPractitionerUser: RawPractitioner = {
+  admissionsDate: '',
+  admissionsStatus: '',
+  barNumber: 'BN2345',
+  birthYear: '',
+  contact: {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: COUNTRY_TYPES.DOMESTIC,
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  },
+  email: 'dojPractitioner@example.com',
+  entityName: 'Practitioner',
+  firstName: '',
+  lastName: '',
+  name: 'DOJ Practitioner',
+  originalBarState: '',
+  practiceType: 'DOJ',
+  practitionerType: '',
+  role: ROLES.irsPractitioner,
+  section: ROLES.irsPractitioner,
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+};
+
 export const irsSuperuserUser = {
   name: 'IRS Superuser',
   role: ROLES.irsSuperuser,

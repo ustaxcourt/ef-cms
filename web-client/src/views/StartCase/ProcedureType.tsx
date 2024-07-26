@@ -20,7 +20,10 @@ export const ProcedureType = connect(
     value,
   }) {
     return (
-      <FormGroup errorText={validationErrors.procedureType}>
+      <FormGroup
+        errorMessageId="procedure-type-error-message"
+        errorText={validationErrors.procedureType}
+      >
         <fieldset
           className="usa-fieldset margin-bottom-0"
           id="procedure-type-radios"

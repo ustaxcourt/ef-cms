@@ -479,6 +479,20 @@ describe('paperPetition entity', () => {
     });
   });
 
+  describe('contactSecondary', () => {
+    it('should default the secondary contact phone number to "N/A" is it is not provided', () => {
+      const paperPetition = new PaperPetition(
+        {
+          contactPrimary: {},
+          contactSecondary: {},
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        },
+        { applicationContext },
+      );
+      expect(paperPetition.petitioners[1].phone).toEqual('N/A');
+    });
+  });
+
   it('should populate archivedCorrespondences', () => {
     const mockGuid = getUniqueId();
     const mockCorrespondence = new Correspondence({

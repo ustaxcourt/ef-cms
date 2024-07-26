@@ -24,7 +24,10 @@ describe('uploadExternalDocumentsInteractor', () => {
           },
           documentMetadata: {},
           fileUploadProgressMap: {
-            primary: () => {},
+            primary: {
+              file: undefined,
+              uploadProgress: () => {},
+            },
           },
         },
         mockPetitionsClerkUser,
@@ -43,7 +46,10 @@ describe('uploadExternalDocumentsInteractor', () => {
           primaryDocumentFile: {},
         },
         fileUploadProgressMap: {
-          primary: () => {},
+          primary: {
+            file: undefined,
+            uploadProgress: () => {},
+          },
         },
       },
       mockIrsPractitionerUser,
@@ -74,10 +80,22 @@ describe('uploadExternalDocumentsInteractor', () => {
             supportingDocuments: [{ supportingDocument: 'something' }],
           },
           fileUploadProgressMap: {
-            primary: () => 'something',
-            primarySupporting0: () => 'something3',
-            secondary: () => 'something2',
-            secondarySupporting0: () => 'something4',
+            primary: {
+              file: undefined,
+              uploadProgress: () => 'something',
+            },
+            primarySupporting0: {
+              file: undefined,
+              uploadProgress: () => 'something3',
+            },
+            secondary: {
+              file: undefined,
+              uploadProgress: () => 'something2',
+            },
+            secondarySupporting0: {
+              file: undefined,
+              uploadProgress: () => 'something4',
+            },
           },
         },
         mockIrsPractitionerUser,
@@ -96,15 +114,28 @@ describe('uploadExternalDocumentsInteractor', () => {
             secondary: 'something2',
             secondarySupporting0: 'something4',
           },
+
           documentMetadata: {
             primaryDocumentFile: {},
             secondaryDocument: {},
           },
           fileUploadProgressMap: {
-            primary: 'something',
-            primarySupporting0: 'something3',
-            secondary: 'something2',
-            secondarySupporting0: 'something4',
+            primary: {
+              file: undefined,
+              uploadProgress: () => 'something',
+            },
+            primarySupporting0: {
+              file: undefined,
+              uploadProgress: () => 'something3',
+            },
+            secondary: {
+              file: undefined,
+              uploadProgress: () => 'something2',
+            },
+            secondarySupporting0: {
+              file: undefined,
+              uploadProgress: () => 'something4',
+            },
           },
         },
         mockIrsPractitionerUser,

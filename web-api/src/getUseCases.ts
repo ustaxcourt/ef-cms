@@ -64,6 +64,7 @@ import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trial
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePdfFromHtmlInteractor } from './business/useCases/pdf/generatePdfFromHtmlInteractor';
+import { generatePetitionPdfInteractor } from '../../shared/src/business/useCases/generatePetitionPdfInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor';
 import { generatePrintableCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor';
 import { generatePrintableFilingReceiptInteractor } from './business/useCases/docketEntry/generatePrintableFilingReceiptInteractor';
@@ -277,6 +278,7 @@ const useCases = {
   generateNoticesForCaseTrialSessionCalendarInteractor,
   generatePDFFromJPGDataInteractor,
   generatePdfFromHtmlInteractor,
+  generatePetitionPdfInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,

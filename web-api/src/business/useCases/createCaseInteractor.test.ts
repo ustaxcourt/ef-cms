@@ -302,7 +302,44 @@ describe('createCaseInteractor', () => {
     const result = await createCaseInteractor(
       applicationContext,
       {
-        attachmentToPetitionFileId: 'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
+        attachmentToPetitionFileIds: ['f09116b1-6a8c-4198-b661-0f06e9c6cbdc'],
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseType: CASE_TYPES_MAP.other,
+          contactPrimary: {
+            address1: '99 South Oak Lane',
+            address2: 'Culpa numquam saepe ',
+            address3: 'Eaque voluptates com',
+            city: 'Dignissimos voluptat',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'petitioner1@example.com',
+            name: 'Diana Prince',
+            phone: '+1 (215) 128-6587',
+            postalCode: '69580',
+            state: 'AR',
+          },
+        },
+        stinFileId: '96759830-8970-486f-916b-23439a8ebb70',
+      },
+      user,
+    );
+
+    const atpDocketEntry = result.docketEntries.find(
+      d =>
+        d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+    );
+
+    expect(atpDocketEntry).toBeDefined();
+  });
+
+  it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
+    const result = await createCaseInteractor(
+      applicationContext,
+      {
+        attachmentToPetitionFileIds: [
+          'f09116b1-6a8c-4198-b661-0f06e9c6cbdc',
+          '550e8400-e29b-41d4-a716-446655440000',
+        ],
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseType: CASE_TYPES_MAP.other,
@@ -335,12 +372,11 @@ describe('createCaseInteractor', () => {
       user,
     );
 
-    const atpDocketEntry = result.docketEntries.find(
+    const atpDocketEntries = result.docketEntries.filter(
       d =>
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
-
-    expect(atpDocketEntry).toBeDefined();
+    expect(atpDocketEntries).toHaveLength(2);
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {

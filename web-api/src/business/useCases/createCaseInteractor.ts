@@ -59,13 +59,13 @@ const addPetitionDocketEntryToCase = ({
 export const createCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    attachmentToPetitionFileId,
+    attachmentToPetitionFileIds,
     corporateDisclosureFileId,
     petitionFileId,
     petitionMetadata,
     stinFileId,
   }: {
-    attachmentToPetitionFileId?: string;
+    attachmentToPetitionFileIds?: string[];
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
@@ -238,27 +238,40 @@ export const createCaseInteractor = async (
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
-  if (attachmentToPetitionFileId) {
-    const atpDocketEntryEntity = new DocketEntry(
-      {
-        contactPrimary: caseToAdd.getContactPrimary(),
-        contactSecondary: caseToAdd.getContactSecondary(),
-        docketEntryId: attachmentToPetitionFileId,
-        documentTitle: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-        documentType: INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
-        filers,
-        filingDate: caseToAdd.createdAt,
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        privatePractitioners,
-      },
-      { authorizedUser, petitioners: caseToAdd.petitioners },
-    );
+  if (attachmentToPetitionFileIds?.length) {
+    attachmentToPetitionFileIds.forEach((atpFileId, index) => {
+      const atpDocketEntryEntity = new DocketEntry(
+        {
+          caseType:
+            petitionMetadata.hasIrsNotice &&
+            petitionMetadata.irsNotices?.[index]?.caseType,
+          contactPrimary: caseToAdd.getContactPrimary(),
+          contactSecondary: caseToAdd.getContactSecondary(),
+          docketEntryId: atpFileId,
+          documentTitle:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          documentType:
+            INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
+          filers,
+          filingDate: caseToAdd.createdAt,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          noticeIssuedDate:
+            petitionMetadata.hasIrsNotice &&
+            petitionMetadata.irsNotices?.[index]?.noticeIssuedDate,
+          privatePractitioners,
+          taxYear:
+            petitionMetadata.hasIrsNotice &&
+            petitionMetadata.irsNotices?.[index]?.taxYear,
+        },
+        { authorizedUser, petitioners: caseToAdd.petitioners },
+      );
 
-    atpDocketEntryEntity.setFiledBy(user);
+      atpDocketEntryEntity.setFiledBy(user);
 
-    caseToAdd.addDocketEntry(atpDocketEntryEntity);
+      caseToAdd.addDocketEntry(atpDocketEntryEntity);
+    });
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({

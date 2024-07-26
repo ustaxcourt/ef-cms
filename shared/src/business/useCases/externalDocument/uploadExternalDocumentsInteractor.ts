@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -26,7 +26,7 @@ export const uploadExternalDocumentsInteractor = async (
   }: {
     documentFiles: Record<string, any>;
     documentMetadata: any;
-    fileUploadProgressMap: FileUploadProgressMapType;
+    fileUploadProgressMap: Record<string, FileUploadProgressType>;
   },
   authorizedUser: UnknownAuthUser,
 ) => {

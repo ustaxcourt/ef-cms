@@ -15,6 +15,7 @@ export class PublicCase extends JoiValidationEntity {
   public entityName: string;
   public canAllowDocumentService?: string;
   public canAllowPrintableDocketRecord?: string;
+  public canDojPractitionersRepresentParty?: boolean;
   public caseCaption: string;
   public createdAt?: string;
   public leadDocketNumber?: string;
@@ -47,6 +48,8 @@ export class PublicCase extends JoiValidationEntity {
     this.entityName = 'PublicCase';
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
+    this.canDojPractitionersRepresentParty =
+      rawCase.canDojPractitionersRepresentParty;
     this.caseCaption = rawCase.caseCaption;
     this.createdAt = rawCase.createdAt;
     this.docketNumber = rawCase.docketNumber;
@@ -98,6 +101,7 @@ export class PublicCase extends JoiValidationEntity {
   static VALIDATION_RULES = {
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
+    canDojPractitionersRepresentParty: joi.boolean().optional(),
     caseCaption: joi
       .when('isSealed', {
         is: true,

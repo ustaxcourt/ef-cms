@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   clerkOfCourtUser,
   docketClerkUser,
