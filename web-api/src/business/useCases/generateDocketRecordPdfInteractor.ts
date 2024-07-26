@@ -26,15 +26,12 @@ export const generateDocketRecordPdfInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  if (!authorizedUser) {
-    throw new UnauthorizedError('Unauthorized to generate docket record.');
-  }
   const isDirectlyAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
       docketNumber,
-      userId: authorizedUser.userId,
+      userId: authorizedUser?.userId,
     });
 
   const caseSource = await applicationContext
@@ -51,7 +48,7 @@ export const generateDocketRecordPdfInteractor = async (
     .isSealedCase(caseSource);
 
   if (isSealedCase) {
-    if (authorizedUser.userId) {
+    if (authorizedUser?.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
         authorizedUser,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
