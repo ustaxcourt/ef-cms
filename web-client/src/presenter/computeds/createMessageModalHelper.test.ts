@@ -9,7 +9,7 @@ describe('createMessageModalHelper', () => {
     applicationContext,
   );
 
-  it('formats the name field for judge users to include their title', () => {
+  it('should format the name field for judge users to include their title', () => {
     const { formattedUsers } = runCompute(createMessageModalHelper, {
       state: {
         users: [
@@ -46,5 +46,12 @@ describe('createMessageModalHelper', () => {
         role: 'docketClerk',
       },
     ]);
+  });
+
+  it('should return an empty array if state.users is undefined', () => {
+    const { formattedUsers } = runCompute(createMessageModalHelper, {
+      state: {},
+    });
+    expect(formattedUsers).toMatchObject([]);
   });
 });

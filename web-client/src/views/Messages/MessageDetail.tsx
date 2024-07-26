@@ -108,8 +108,8 @@ export const MessageDetail = connect(
           {formattedMessageDetail.isCompleted && (
             <div
               aria-live="polite"
-              className="usa-alert usa-alert--warning"
-              data-testid="message-detail-warning-alert"
+              className="usa-alert usa-alert--success"
+              data-testid="message-detail-success-alert"
               role="alert"
             >
               <div className="usa-alert__body">

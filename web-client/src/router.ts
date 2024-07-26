@@ -1207,6 +1207,14 @@ const router = {
     );
 
     registerRoute(
+      '/file-a-petition/new',
+      ifHasAccess({ app }, () => {
+        setPageTitle('File a petition');
+        return app.getSequence('gotoUpdatedPetitionFlowSequence')();
+      }),
+    );
+
+    registerRoute(
       '/file-a-petition/success',
       ifHasAccess({ app }, () => {
         setPageTitle('Petition Filed Successfully');

@@ -9,7 +9,7 @@ export const dashboardExternalHelper = (
   showFileACase: boolean;
   showFilingFee: boolean;
   showStartButton: boolean;
-  showWhatToExpect: boolean;
+  showPetitionWelcomePage: boolean;
 } => {
   const { USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
@@ -38,7 +38,7 @@ export const dashboardExternalHelper = (
   return {
     showFileACase,
     showFilingFee,
+    showPetitionWelcomePage: cases.length === 0,
     showStartButton,
-    showWhatToExpect: cases.length === 0,
   };
 };
