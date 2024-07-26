@@ -1,33 +1,34 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  count: number;
+type PetitionFormResponseProps = {
+  factOrReasonCount: number;
   id: string;
   textName: string;
 };
 
-export const PetitionFormResponse = connect(
-  {
-    count: props.count,
-    deleteValidationErrorMessageSequence:
-      sequences.deleteValidationErrorMessageSequence,
-    form: state.form,
-    id: props.id,
-    removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
-    textName: props.textName,
-    updatePetitionFormValueSequence: sequences.updatePetitionFormValueSequence,
-    validationErrors: state.validationErrors,
-  },
+const petitionFormResponseDependencies = {
+  deleteValidationErrorMessageSequence:
+    sequences.deleteValidationErrorMessageSequence,
+  form: state.form,
+  removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
+  updatePetitionFormValueSequence: sequences.updatePetitionFormValueSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const PetitionFormResponse = connect<
+  PetitionFormResponseProps,
+  typeof petitionFormResponseDependencies
+>(
+  petitionFormResponseDependencies,
   function PetitionFormResponse({
-    count,
     deleteValidationErrorMessageSequence,
+    factOrReasonCount,
     form,
     id,
     removeFactOrReasonSequence,
@@ -35,7 +36,7 @@ export const PetitionFormResponse = connect(
     updatePetitionFormValueSequence,
     validationErrors,
   }) {
-    const KEY = `${textName}[${count}]`;
+    const KEY = `${textName}[${factOrReasonCount}]`;
     const ERROR_KEY_ID = `error_message_${KEY}`;
 
     return (
@@ -62,10 +63,10 @@ export const PetitionFormResponse = connect(
                     id={id}
                     name={textName}
                     style={{ marginTop: '0px' }}
-                    value={form[textName][count] || ''}
+                    value={form[textName][factOrReasonCount] || ''}
                     onChange={e => {
                       updatePetitionFormValueSequence({
-                        index: count,
+                        index: factOrReasonCount,
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -75,14 +76,14 @@ export const PetitionFormResponse = connect(
                     }}
                   />
                 </div>
-                {count > 0 && (
+                {factOrReasonCount > 0 && (
                   <Button
                     link
                     className="reason-button remove-fact-reason-button"
                     icon="times"
                     onClick={() =>
                       removeFactOrReasonSequence({
-                        index: count,
+                        index: factOrReasonCount,
                         key: textName,
                       })
                     }
@@ -102,10 +103,10 @@ export const PetitionFormResponse = connect(
                   id={id}
                   name={textName}
                   style={{ marginTop: '0px', width: '100%' }}
-                  value={form[textName][count] || ''}
+                  value={form[textName][factOrReasonCount] || ''}
                   onChange={e => {
                     updatePetitionFormValueSequence({
-                      index: count,
+                      index: factOrReasonCount,
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -115,14 +116,14 @@ export const PetitionFormResponse = connect(
                   }}
                 />
               </div>
-              {count > 0 && (
+              {factOrReasonCount > 0 && (
                 <Button
                   link
                   className="reason-button remove-fact-reason-button"
                   icon="times"
                   onClick={() =>
                     removeFactOrReasonSequence({
-                      index: count,
+                      index: factOrReasonCount,
                       key: textName,
                     })
                   }
