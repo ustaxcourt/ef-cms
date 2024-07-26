@@ -78,7 +78,8 @@ resource "terraform_data" "locals" {
     STAGE                              = var.environment
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
-    POSTGRES_USERNAME                  = var.postgres_user
+    POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
+    POSTGRES_USER                      = var.postgres_user
     POSTGRES_PASSWORD                  = var.postgres_password
   }
 }
