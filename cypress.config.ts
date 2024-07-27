@@ -14,10 +14,7 @@ import {
   getNewAccountVerificationCode,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
-import {
-  overrideIdleTimeouts,
-  setRenderInstanceManagement,
-} from './cypress/local-only/support/idleLogoutHelpers';
+import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
@@ -123,13 +120,9 @@ export default defineConfig({
             location: string,
             sessionModalTimeout: number,
             sessionTimeout: number,
-            renderInstanceManagement: boolean,
           ) {
             const page = await browser.newPage();
             await page.goto(location);
-            await page.evaluate(setRenderInstanceManagement, {
-              value: renderInstanceManagement,
-            });
 
             await page.evaluate(overrideIdleTimeouts, {
               sessionModalTimeout,

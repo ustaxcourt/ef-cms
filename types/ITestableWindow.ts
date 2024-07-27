@@ -3,5 +3,4 @@ export interface ITestableWindow {
     getState: () => any;
     getModel: () => any;
   };
-  setRenderInstanceManagement: any;
 }
