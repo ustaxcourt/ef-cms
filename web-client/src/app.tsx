@@ -277,13 +277,13 @@ const app = {
 
     root.render(
       <Container app={cerebralApp}>
-        {!process.env.CI && (
+        {
           <>
             <IdleActivityMonitor />
             <AppInstanceManager />
             <GlobalModalWrapper />
           </>
-        )}
+        }
         <AppComponent />
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
