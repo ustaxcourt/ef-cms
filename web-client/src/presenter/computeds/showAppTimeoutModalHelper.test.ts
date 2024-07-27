@@ -19,6 +19,9 @@ describe('showAppTimeoutModalHelper', () => {
   it('does not show the modal due to no user', () => {
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
+        idleLogoutState: {
+          state: IDLE_LOGOUT_STATES.COUNTDOWN,
+        },
         modal: {
           showModal: 'AppTimeoutModal',
         },

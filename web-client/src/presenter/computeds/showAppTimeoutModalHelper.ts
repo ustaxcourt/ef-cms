@@ -8,6 +8,6 @@ export const showAppTimeoutModalHelper = (get: Get): any => {
 
   return {
     currentUser,
-    showModal: currentUser && modalState === IDLE_LOGOUT_STATES.COUNTDOWN,
+    showModal: !!currentUser && modalState === IDLE_LOGOUT_STATES.COUNTDOWN,
   };
 };

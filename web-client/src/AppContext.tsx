@@ -17,9 +17,8 @@ const AppContext = createContext({} as IAppContext);
 export const useAppContext = () => useContext(AppContext);
 
 export const AppContextProvider = ({ children }) => {
-  const [renderInstanceManagement, setRenderInstanceManagement] = useState(
-    !process.env.CI,
-  );
+  const [renderInstanceManagement, setRenderInstanceManagement] =
+    useState(true);
 
   // The following code allows us to set whether or not instance management components
   // (components for tracking idle behavior, broadcasting across windows, etc.)
