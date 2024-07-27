@@ -1,15 +1,13 @@
 /* eslint-disable jest/no-commented-out-tests */
-import { IWindowWithCerebralExposed } from '../../../../../types/IWindow';
+import { ITestableWindow } from '../../../../../types/ITestableWindow';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
-import { overrideIdleTimeouts } from '../../../support/idleLogoutHelpers';
+import {
+  overrideIdleTimeouts,
+  setRenderInstanceManagement,
+} from '../../../support/idleLogoutHelpers';
 import { retry } from '../../../../helpers/retry';
 
 describe('Idle Logout Behavior', () => {
-  beforeEach(() => {
-    cy.window().then((window: Window) => {
-      window.renderInstanceManagement = true;
-    });
-  });
   const DEFAULT_IDLE_TIMEOUT = 500;
   it('should automatically log user out after refresh with option to log back in', () => {
     loginAsColvin();
@@ -17,10 +15,14 @@ describe('Idle Logout Behavior', () => {
     cy.get('[data-testid="header-text"]');
 
     cy.window().then((window: Window) => {
+      setRenderInstanceManagement({
+        value: true,
+        windowObj: window as unknown as ITestableWindow,
+      });
       overrideIdleTimeouts({
         modalTimeout: DEFAULT_IDLE_TIMEOUT,
         sessionTimeout: DEFAULT_IDLE_TIMEOUT,
-        windowObj: window as unknown as IWindowWithCerebralExposed,
+        windowObj: window as unknown as ITestableWindow,
       });
     });
 
@@ -50,13 +52,18 @@ describe('Idle Logout Behavior', () => {
         url,
         DEFAULT_IDLE_TIMEOUT,
         DEFAULT_IDLE_TIMEOUT,
+        true,
       ),
     );
     cy.window().then((window: Window) => {
+      setRenderInstanceManagement({
+        value: true,
+        windowObj: window as unknown as ITestableWindow,
+      });
       overrideIdleTimeouts({
         modalTimeout: DEFAULT_IDLE_TIMEOUT,
         sessionTimeout: DEFAULT_IDLE_TIMEOUT,
-        windowObj: window as unknown as IWindowWithCerebralExposed,
+        windowObj: window as unknown as ITestableWindow,
       });
     });
 

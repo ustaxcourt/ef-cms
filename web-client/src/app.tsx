@@ -3,6 +3,7 @@ import './index.scss';
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponent } from './views/AppComponent';
+import { AppContextProvider } from './AppContext';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
@@ -31,7 +32,8 @@ import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
-import { IWindowWithCerebralExposed } from 'types/IWindow';
+import { AppInstanceManagerWrapper } from '@web-client/AppInstanceManagerWrapper';
+import { ITestableWindow } from 'types/IWindow';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
@@ -265,7 +267,7 @@ const app = {
 
     // Expose Cerebral for testing
     if (process.env.NODE_ENV !== 'production') {
-      (window as unknown as IWindowWithCerebralExposed).cerebral = cerebralApp;
+      (window as unknown as ITestableWindow).cerebral = cerebralApp;
     }
 
     applicationContext.setForceRefreshCallback(async () => {
@@ -275,20 +277,15 @@ const app = {
     const container = window.document.querySelector('#app');
     const root = createRoot(container);
 
-    window.renderInstanceManagement = false;
-
-    const renderInstanceManagement =
-      !process.env.CI || window.renderInstanceManagement;
-
     root.render(
       <Container app={cerebralApp}>
-        {renderInstanceManagement && (
-          <>
+        <AppContextProvider>
+          <AppInstanceManagerWrapper>
             <IdleActivityMonitor />
             <AppInstanceManager />
             <GlobalModalWrapper />
-          </>
-        )}
+          </AppInstanceManagerWrapper>
+        </AppContextProvider>
         <AppComponent />
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
