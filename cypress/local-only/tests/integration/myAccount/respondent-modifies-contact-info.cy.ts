@@ -1,7 +1,7 @@
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { petitionsClerkAddsRespondentToCase } from '../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { petitionsclerkAddsRespondentToCase } from '../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { respondentModifiesContactInfo } from '../../../../helpers/myAccount/respondent-modifies-contact-info';
 
 const BAR_NUMBER = 'WN7777';
@@ -12,7 +12,7 @@ describe('a repondent modifies their address', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
-      petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
+      petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER).then(newAddress => {
         cy.login(USER, `case-detail/${docketNumber}`);
         cy.get('[data-testid="document-download-link-NCA"]').should('exist');
@@ -29,7 +29,7 @@ describe('a repondent modifies their address', () => {
   it('should not generate a notice of change address for any cases with unserved petitions', function () {
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
-      petitionsclerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
+      petitionsClerkAddsRespondentToCase(docketNumber, BAR_NUMBER);
       respondentModifiesContactInfo(USER);
       cy.login(USER, `case-detail/${docketNumber}`);
       cy.get('[data-testid="document-download-link-NCA"]').should('not.exist');

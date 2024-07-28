@@ -40,6 +40,7 @@ export const AddressDisplay = connect<
           'no-margin',
           contact.isAddressSealed && 'sealed-address',
         )}
+        data-testid="contact-address-information"
       >
         <span className="address-line" data-testid="address1-line">
           {contact.address1}
@@ -68,7 +69,7 @@ export const AddressDisplay = connect<
         )}
         {contact.email && showEmail && (
           <span className="address-line">
-            {contact.email}
+            <span data-testid="contact-info-email">{contact.email}</span>
             {contact.showEAccessFlag && (
               <FontAwesomeIcon
                 aria-label="has e-access"
@@ -99,7 +100,7 @@ export const AddressDisplay = connect<
 
     return (
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
-        <p className="margin-top-0 margin-bottom-2 position-relative">
+        <div className="margin-top-0 position-relative">
           {contact.isAddressSealed && (
             <span
               aria-label="sealed address"
@@ -113,33 +114,39 @@ export const AddressDisplay = connect<
               />
             </span>
           )}
-          <span className={boldName && 'text-bold'}>
+          <span
+            className={boldName ? 'text-bold' : undefined}
+            data-testid="contact-name"
+          >
             {nameOverride || contact.name}{' '}
           </span>
           {contact.barNumber && (
-            <span className={boldName && 'text-bold'}>
+            <span className={boldName ? 'text-bold' : ''}>
               ({contact.barNumber})
               <br />
             </span>
           )}
           {contact.firmName && (
-            <>
+            <span data-testid="firm-name">
               {contact.firmName}
               <br />
-            </>
+            </span>
           )}
           {contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
               contactName && (
-                <span key={contactName}>
+                <span
+                  data-testid="contact-in-care-of-secondary-name"
+                  key={contactName}
+                >
                   c/o {contactName}
                   {contact.title && <span>, {contact.title}</span>}
                 </span>
               ),
           )}
-        </p>
-        {!contact.sealedAndUnavailable && contactDetails()}
+        </div>
+        <div>{!contact.sealedAndUnavailable && contactDetails()}</div>
         {contact.sealedAndUnavailable && (
           <div className="sealed-address">Address sealed</div>
         )}
