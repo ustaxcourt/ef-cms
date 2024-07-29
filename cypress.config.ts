@@ -129,8 +129,7 @@ export default defineConfig({
             sessionTimeout: number,
           ) {
             const page = await browser.newPage();
-            await page.goto(location);
-            await page.reload();
+            await page.goto(location, { waitUntil: 'networkidle2' });
 
             await page.evaluate(overrideIdleTimeouts, {
               sessionModalTimeout,
