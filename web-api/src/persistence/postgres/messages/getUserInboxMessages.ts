@@ -15,7 +15,7 @@ export const getUserInboxMessages = async ({
     .where('m.isCompleted', '=', false)
     .where('m.isRepliedTo', '=', false)
     .where('m.toUserId', '=', userId)
-    .selectAll('m')
+    .selectAll()
     .select('m.docketNumber')
     .execute();
 
