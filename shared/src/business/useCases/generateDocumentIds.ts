@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FileUploadProgressType } from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -7,7 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generateDocumentIds = async (
-  applicationContext: any,
+  applicationContext: ClientApplicationContext,
   {
     applicationForWaiverOfFilingFeeUploadProgress,
     attachmentToPetitionUploadProgress,
