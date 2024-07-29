@@ -46,6 +46,9 @@ export const IdleActivityMonitor = connect(
       // Also, dismiss modals in other, potentially unseen tabs to ensure
       // unseen tabs do not trigger a surprise logout in the current tab.
       broadcastIdleStatusActiveSequence({ closeModal: true });
+      console.log('Logging window stuff to see why puppeteer is failing');
+      console.log(window.location.href);
+      console.log(window.document.body.innerHTML);
     }, []);
 
     useEffect(() => {
