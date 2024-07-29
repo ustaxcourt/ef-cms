@@ -74,10 +74,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('should throw and error when requested document is a correspondence but the user is not internal', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.petitioner,
-      userId: 'b5724655-1791-4a99-b0f6-f9bbe99c1db5',
-    });
     const mockCorrespondenceId = applicationContext.getUniqueId();
     mockCase.correspondence = [
       {
@@ -86,10 +82,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ];
 
     await expect(
-      getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: mockCorrespondenceId,
-      }),
+      getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: mockCorrespondenceId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 

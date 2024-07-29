@@ -164,8 +164,6 @@ const setNoticesForCalendaredTrialSession = async (
   });
 
   if (trialNoticePdfsKeys.length) {
-    // TODO 10417 should we do direct import here as part of this story?
-    // if so, we need to change how we're mocking in the tests.
     await applicationContext
       .getUseCases()
       .generateTrialSessionPaperServicePdfInteractor(

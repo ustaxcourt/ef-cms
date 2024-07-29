@@ -350,6 +350,7 @@ describe('startCaseHelper', () => {
             },
             {},
           ],
+          user: petitionerUser,
         },
       });
 
@@ -361,6 +362,7 @@ describe('startCaseHelper', () => {
         state: {
           form: {},
           irsNoticeUploadFormInfo: [{}, {}],
+          user: petitionerUser,
         },
       });
 
