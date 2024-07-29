@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../../applicationContext';
 import { sealInLowerEnvironment } from '@web-api/business/useCaseHelper/sealInLowerEnvironment';
 
@@ -8,7 +9,12 @@ import { sealInLowerEnvironment } from '@web-api/business/useCaseHelper/sealInLo
  * @returns {Promise<*>|undefined} the response to the topic
  */
 export const sealInLowerEnvironmentLambda = async event => {
-  const user = { role: 'docketclerk' };
+  const user: AuthUser = {
+    email: 'system@ustc.gov',
+    name: 'ustc automated system',
+    role: 'docketclerk',
+    userId: 'N/A',
+  };
 
   const applicationContext = createApplicationContext(user);
 

@@ -98,7 +98,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   // disable logging by mimicking CI for this test
   beforeAll(() => {
     ({ CI } = process.env);
-    process.env.CI = true;
+    process.env.CI = 'true';
   });
 
   afterAll(() => (process.env.CI = CI));
@@ -112,7 +112,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: false,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -129,7 +129,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: false,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
     expect(response.statusCode).toBe('200');
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -152,11 +152,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: false,
     });
 
-    const response = await getCaseLambda(
-      REQUEST_EVENT,
-      mockDocketClerkUser,
-      {},
-    );
+    const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -173,11 +169,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       shouldThrowError: true,
     });
 
-    const response = await getCaseLambda(
-      REQUEST_EVENT,
-      mockDocketClerkUser,
-      {},
-    );
+    const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
     expect(response.statusCode).toBe(500);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -197,11 +189,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
         shouldThrowError: false,
       });
 
-      const response = await getCaseLambda(
-        REQUEST_EVENT,
-        mockDocketClerkUser,
-        {},
-      );
+      const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
       expect(response.statusCode).toBe('200');
       expect(response.headers['Content-Type']).toBe('application/json');

@@ -1,10 +1,9 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
 import { getPaperServicePdfUrlInteractor } from '@shared/business/useCases/getPaperServicePdfUrlInteractor';
 
 export const getPaperServicePdfUrlLambda = (
-  event: APIGatewayProxyEvent,
+  event,
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(
