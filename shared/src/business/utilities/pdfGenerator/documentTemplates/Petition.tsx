@@ -124,8 +124,8 @@ export const Petition = ({
             add each reason separately):
           </li>
           <ol className="petition-list-item">
-            {petitionReasons.map(reason => {
-              return <li key={reason}>{reason}</li>;
+            {petitionReasons.map((reason, index) => {
+              return <li key={`${reason.slice(0, 10)}-${index}`}>{reason}</li>;
             })}
           </ol>
           <li className="list-bold">
@@ -133,8 +133,8 @@ export const Petition = ({
             separately):
           </li>
           <ol className="petition-list-item">
-            {petitionFacts.map(fact => {
-              return <li key={fact}>{fact}</li>;
+            {petitionFacts.map((fact, index) => {
+              return <li key={`${fact.slice(0, 10)}-${index}`}>{fact}</li>;
             })}
           </ol>
         </ol>
