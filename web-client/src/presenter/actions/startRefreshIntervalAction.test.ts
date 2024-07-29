@@ -37,4 +37,18 @@ describe('startRefreshIntervalAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.state.refreshTokenInterval).toEqual('new-interval');
   });
+
+  it('should not renew id token if user is not logged in', async () => {
+    const result = await runAction(startRefreshIntervalAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+
+    expect(
+      applicationContext.getUseCases().renewIdTokenInteractor,
+    ).not.toHaveBeenCalled();
+    expect(result.state.token).toBeUndefined();
+  });
 });

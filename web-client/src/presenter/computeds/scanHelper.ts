@@ -20,6 +20,7 @@ export const scanHelper = (
   const formCaseDocuments = get(state.form.docketEntries);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
+  const sources = get(state.scanner.sources);
 
   const APWFileCompleted =
     !!get(state.form.applicationForWaiverOfFilingFeeFile) ||
@@ -72,6 +73,14 @@ export const scanHelper = (
     };
   });
 
+  const scanModeNotSelected = !get(state.modal.scanMode);
+  const scannerNotSelected = !get(state.modal.scanner);
+  const disableModalSelect =
+    scanModeNotSelected ||
+    scannerNotSelected ||
+    !sources ||
+    sources.length === 0;
+
   return {
     APWFileCompleted,
     ATPFileCompleted,
@@ -79,6 +88,7 @@ export const scanHelper = (
     PFileCompleted,
     RQTFileCompleted,
     STINFileCompleted,
+    disableModalSelect,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(
       user &&
@@ -86,9 +96,11 @@ export const scanHelper = (
       applicationContext.getUtilities().isInternalUser(user.role)
     ),
     scanFeatureEnabled,
+    scanModeNotSelected,
     scanModeOptions,
+    scannerNotSelected,
     showScannerSourceModal:
       get(state.modal.showModal) === 'SelectScannerSourceModal',
-    sources: get(state.scanner.sources),
+    sources,
   };
 };

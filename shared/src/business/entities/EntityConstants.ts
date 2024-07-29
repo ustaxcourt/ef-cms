@@ -89,6 +89,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
+  UPDATED_PETITION_FLOW: {
+    key: 'updated-petition-flow',
+  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
@@ -1008,7 +1011,9 @@ export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
 };
 
 export const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
-  [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
+  [CASE_TYPES_MAP.deficiency]: 'Deficiency',
+  [CASE_TYPES_MAP.cdp]: 'Collection (Lien/Levy)',
+  [CASE_TYPES_MAP.passport]: 'Passport',
   [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',
   [CASE_TYPES_MAP.whistleblower]: 'Whistleblower',
   [CASE_TYPES_MAP.workerClassification]: 'Worker Classification',
@@ -1134,6 +1139,12 @@ export const US_STATES_OTHER = {
   PW: 'Palau',
   VI: 'Virgin Islands',
 } as const;
+
+export const ALL_STATE_OPTIONS = {
+  ...US_STATES,
+  ...US_STATES_OTHER,
+  Other: 'Other',
+};
 
 export type AbbrevatedStates =
   | keyof typeof US_STATES
@@ -1468,7 +1479,17 @@ export const SCAN_MODE_LABELS = {
   FLATBED: 'Flatbed',
 };
 
-export const PRACTICE_TYPE_OPTIONS = ['IRS', 'DOJ', 'Private'];
+export const PRACTICE_TYPE = {
+  IRS: 'IRS',
+  DOJ: 'DOJ',
+  Private: 'Private',
+};
+
+export const PRACTICE_TYPE_OPTIONS = [
+  PRACTICE_TYPE.IRS,
+  PRACTICE_TYPE.DOJ,
+  PRACTICE_TYPE.Private,
+];
 
 export const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 
@@ -1607,12 +1628,14 @@ export const JUDGE_TITLES = [
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
 
-export type FileUploadProgressMapType = Record<string, FileUploadProgressType>;
-
 export type FileUploadProgressType = {
   file: any;
   uploadProgress: (progressEvent: any) => void;
 };
+
+export type FileUploadProgressValueType =
+  | FileUploadProgressType
+  | FileUploadProgressType[];
 
 export type CreatedCaseType = {
   contactPrimary: {
@@ -1643,6 +1666,8 @@ export type CreatedCaseType = {
   partyType: string;
   petitionFile: Blob;
   petitionFileSize: number;
+  petitionFileId?: string;
+  petitionType?: string;
   petitionPaymentStatus: string;
   procedureType: string;
   receivedAt: string;
