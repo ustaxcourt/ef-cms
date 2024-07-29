@@ -1473,7 +1473,17 @@ export const SCAN_MODE_LABELS = {
   FLATBED: 'Flatbed',
 };
 
-export const PRACTICE_TYPE_OPTIONS = ['IRS', 'DOJ', 'Private'];
+export const PRACTICE_TYPE = {
+  IRS: 'IRS',
+  DOJ: 'DOJ',
+  Private: 'Private',
+};
+
+export const PRACTICE_TYPE_OPTIONS = [
+  PRACTICE_TYPE.IRS,
+  PRACTICE_TYPE.DOJ,
+  PRACTICE_TYPE.Private,
+];
 
 export const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 

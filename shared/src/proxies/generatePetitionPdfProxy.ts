@@ -4,13 +4,13 @@ export const generatePetitionPdfInteractor = (
   applicationContext: IApplicationContext,
   {
     caseCaptionExtension,
+    caseDescription,
     caseTitle,
-    caseType,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
+    hasUploadedIrsNotice,
     irsNotices,
-    noticeIssuedDate,
     partyType,
     petitionFacts,
     petitionReasons,
@@ -18,8 +18,11 @@ export const generatePetitionPdfInteractor = (
     procedureType,
     taxYear,
   }: {
+    //TODO: Type remaining properties
     [key: string]: any;
+    caseDescription: string;
     hasIrsNotice: boolean;
+    hasUploadedIrsNotice: boolean;
   },
 ): Promise<{
   fileId: string;
@@ -28,13 +31,13 @@ export const generatePetitionPdfInteractor = (
     applicationContext,
     body: {
       caseCaptionExtension,
+      caseDescription,
       caseTitle,
-      caseType,
       contactPrimary,
       contactSecondary,
       hasIrsNotice,
+      hasUploadedIrsNotice,
       irsNotices,
-      noticeIssuedDate,
       partyType,
       petitionFacts,
       petitionReasons,

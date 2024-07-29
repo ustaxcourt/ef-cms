@@ -114,7 +114,12 @@ export function UpdatedFilePetitionStep7() {
         </Accordion>
       </div>
 
-      <Button secondary className="margin-top-205" href="/">
+      <Button
+        secondary
+        className="margin-top-205"
+        data-testid="button-back-to-dashboard"
+        href="/"
+      >
         Go to My Cases
       </Button>
     </>

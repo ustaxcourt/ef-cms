@@ -4,22 +4,6 @@ import { petitionerAttemptsToUploadCorruptPdf } from '../../../../helpers/fileAP
 let createdDocketNumber: string;
 
 describe('File a Petition', () => {
-  before(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: false,
-    });
-
-    cy.reload(true);
-  });
-
-  after(() => {
-    cy.task('toggleFeatureFlag', {
-      flag: 'updated-petition-flow',
-      flagValue: true,
-    });
-  });
-
   describe('File a petition', function () {
     it('finds footer element', () => {
       cy.login('petitioner');

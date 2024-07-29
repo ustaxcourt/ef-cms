@@ -52,6 +52,7 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
+      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -86,6 +87,7 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: '',
       caseCaptionExtension: '',
+      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: '',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -165,6 +167,7 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
+      caseDescription: 'Deficiency',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
