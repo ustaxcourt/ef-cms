@@ -5,6 +5,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from './caseDetailHeaderHelper';
 import {
   docketClerkUser,
+  dojPractitionerUser,
   generalUser,
   irsPractitionerUser,
   petitionerUser,
@@ -495,6 +496,26 @@ describe('caseDetailHeaderHelper', () => {
         });
 
         expect(result.showRepresentAPartyButton).toEqual(false);
+      });
+    });
+
+    describe('when the user is an doj practitioner', () => {
+      it('should be true when "canDojPractitionersRepresentParty" is true', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(dojPractitionerUser),
+            caseDetail: {
+              ...getBaseState(dojPractitionerUser).caseDetail,
+              canDojPractitionersRepresentParty: true,
+              hasIrsPractitioner: true,
+            },
+            screenMetadata: {
+              isDirectlyAssociated: false,
+            },
+          },
+        });
+
+        expect(result.showRepresentAPartyButton).toEqual(true);
       });
     });
 

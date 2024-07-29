@@ -1,29 +1,34 @@
 import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { sendNotificationToUser } from './sendNotificationToUser';
 
-describe('send websocket notification to browser', () => {
+describe('sendNotificationToUser', () => {
   const connections = [
     {
+      clientConnectionId: '0',
       endpoint: 'endpoint-01',
       pk: 'connections-01',
       sk: 'sk-01',
     },
     {
+      clientConnectionId: '1',
       endpoint: 'endpoint-02',
       pk: 'connections-02',
       sk: 'sk-02',
     },
     {
+      clientConnectionId: '2',
       endpoint: 'endpoint-03',
       pk: 'connections-03',
       sk: 'sk-03',
     },
     {
+      clientConnectionId: '3',
       endpoint: 'endpoint-04',
       pk: 'connections-04',
       sk: 'sk-04',
     },
   ];
+  const mockMessage = 'hello, computer';
 
   const send = jest.fn().mockResolvedValue('ok');
 
@@ -38,8 +43,6 @@ describe('send websocket notification to browser', () => {
   });
 
   it('should send notification to user', async () => {
-    const mockMessage = 'hello, computer';
-
     await sendNotificationToUser({
       applicationContext,
       message: mockMessage,
@@ -54,5 +57,19 @@ describe('send websocket notification to browser', () => {
       applicationContext.getNotificationGateway()
         .retrySendNotificationToConnections.mock.calls[0][0].messageStringified,
     ).toBe(JSON.stringify(mockMessage));
+  });
+
+  it('should filter for the correct clientConnectionId when it is passed in', async () => {
+    await sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: '1',
+      message: mockMessage,
+      userId: 'userId-000-000-0000',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].connections,
+    ).toEqual([connections[1]]);
   });
 });

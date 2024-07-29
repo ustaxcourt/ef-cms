@@ -1,6 +1,7 @@
 import {
   CreatedCaseType,
-  FileUploadProgressMapType,
+  FileUploadProgressType,
+  FileUploadProgressValueType,
 } from '@shared/business/entities/EntityConstants';
 import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCaseInteractor';
 import { omit } from 'lodash';
@@ -12,7 +13,7 @@ export const createCaseAction = async ({
   path,
   props,
 }: ActionProps<{
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: Record<string, FileUploadProgressValueType>;
 }>) => {
   const { fileUploadProgressMap } = props;
   const petitionMetadata: CreatedCaseType = get(state.form);
@@ -25,21 +26,29 @@ export const createCaseAction = async ({
   let caseDetail;
   let stinFile;
 
+  const attachmentToPetitionUploadProgress =
+    fileUploadProgressMap.attachmentToPetition
+      ? ([
+          fileUploadProgressMap.attachmentToPetition,
+        ] as FileUploadProgressType[])
+      : undefined;
+
   try {
     const {
-      attachmentToPetitionFileId,
+      attachmentToPetitionFileIds,
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
     } = await applicationContext
       .getUseCases()
       .generateDocumentIds(applicationContext, {
-        attachmentToPetitionUploadProgress:
-          fileUploadProgressMap.attachmentToPetition,
+        attachmentToPetitionUploadProgress,
         corporateDisclosureUploadProgress:
-          fileUploadProgressMap.corporateDisclosure,
-        petitionUploadProgress: fileUploadProgressMap.petition,
-        stinUploadProgress: fileUploadProgressMap.stin,
+          fileUploadProgressMap.corporateDisclosure as FileUploadProgressType,
+        petitionUploadProgress:
+          fileUploadProgressMap.petition as FileUploadProgressType,
+        stinUploadProgress:
+          fileUploadProgressMap.stin as FileUploadProgressType,
       });
 
     stinFile = stinFileId;
@@ -47,7 +56,7 @@ export const createCaseAction = async ({
     caseDetail = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
-        attachmentToPetitionFileId,
+        attachmentToPetitionFileIds,
         corporateDisclosureFileId,
         petitionFileId,
         petitionMetadata: form,
