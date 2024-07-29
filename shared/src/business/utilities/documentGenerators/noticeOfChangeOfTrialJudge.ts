@@ -19,7 +19,7 @@ export const noticeOfChangeOfTrialJudge = async ({
     titleOfClerk: string;
     trialInfo: FormattedTrialInfoType;
   };
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;
 
   const noticeOfChangeOfTrialJudgeTemplate = ReactDOM.renderToString(

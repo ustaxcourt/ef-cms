@@ -177,7 +177,7 @@ export class User extends JoiValidationEntity {
   }
 
   static isInternalUser(role?: Role): boolean {
-    const internalRoles: Role[] = [
+    const internalRoles: (Role | undefined)[] = [
       ROLES.adc,
       ROLES.admissionsClerk,
       ROLES.chambers,

@@ -91,7 +91,7 @@ export const ROLE_PERMISSIONS = {
 export type RolePermission =
   (typeof ROLE_PERMISSIONS)[keyof typeof ROLE_PERMISSIONS];
 
-const allInternalUserPermissions = [
+const allInternalUserPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION,
   ROLE_PERMISSIONS.ADVANCED_SEARCH,
   ROLE_PERMISSIONS.ARCHIVE_DOCUMENT,
@@ -124,21 +124,21 @@ const allInternalUserPermissions = [
   ROLE_PERMISSIONS.COLD_CASE_REPORT,
 ];
 
-const adcPermissions = [
+const adcPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.CREATE_TRIAL_SESSION,
   ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
   ROLE_PERMISSIONS.STAMP_MOTION,
 ];
 
-const adminPermissions = [
+const adminPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.ADD_EDIT_JUDGE_USER,
   ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
   ROLE_PERMISSIONS.CREATE_USER,
   ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS,
 ];
 
-const admissionsClerkPermissions = [
+const admissionsClerkPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
   ROLE_PERMISSIONS.ADD_USER_TO_CASE,
@@ -153,7 +153,7 @@ const admissionsClerkPermissions = [
   ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
 ];
 
-const chambersPermissions = [
+const chambersPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
   ROLE_PERMISSIONS.PENDING_MOTIONS_TABLE,
@@ -166,7 +166,7 @@ const chambersPermissions = [
   ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
 ];
 
-const docketClerkPermissions = [
+const docketClerkPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.ADD_EDIT_STATISTICS,
   ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE,
@@ -194,13 +194,13 @@ const docketClerkPermissions = [
   ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
 ];
 
-const generalUserPermissions = [
+const generalUserPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
   ROLE_PERMISSIONS.CREATE_TRIAL_SESSION,
 ];
 
-const petitionsClerkPermissions = [
+const petitionsClerkPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.ADD_EDIT_STATISTICS,
   ROLE_PERMISSIONS.ASSIGN_WORK_ITEM,
@@ -221,7 +221,7 @@ const petitionsClerkPermissions = [
   ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER,
 ];
 
-const irsPractitionerPermissions = [
+const irsPractitionerPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.ADVANCED_SEARCH,
   ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE,
   ROLE_PERMISSIONS.EMAIL_MANAGEMENT,
@@ -235,7 +235,7 @@ const irsPractitionerPermissions = [
   ROLE_PERMISSIONS.VIEW_DOCUMENTS,
 ];
 
-const irsSuperuserPermissions = [
+const irsSuperuserPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.ADVANCED_SEARCH,
   ROLE_PERMISSIONS.GET_CASE,
   ROLE_PERMISSIONS.GET_JUDGES,
@@ -245,7 +245,7 @@ const irsSuperuserPermissions = [
   ROLE_PERMISSIONS.VIEW_SEALED_CASE,
 ];
 
-const judgePermissions = [
+const judgePermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
   ROLE_PERMISSIONS.JUDGES_NOTES,
@@ -258,7 +258,7 @@ const judgePermissions = [
   ROLE_PERMISSIONS.DOCKET_ENTRY_WORKSHEET,
 ];
 
-const petitionerPermissions = [
+const petitionerPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.EMAIL_MANAGEMENT,
   ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT,
   ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL_STATUS,
@@ -269,7 +269,7 @@ const petitionerPermissions = [
   ROLE_PERMISSIONS.VIEW_CONSOLIDATED_CASES_CARD,
 ];
 
-const privatePractitionerPermissions = [
+const privatePractitionerPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL_STATUS,
   ROLE_PERMISSIONS.ADVANCED_SEARCH,
   ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE,
@@ -284,7 +284,7 @@ const privatePractitionerPermissions = [
   ROLE_PERMISSIONS.VIEW_DOCUMENTS,
 ];
 
-const trialClerkPermissions = [
+const trialClerkPermissions: RolePermission[] = [
   ...allInternalUserPermissions,
   ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
   ROLE_PERMISSIONS.CREATE_TRIAL_SESSION,
@@ -313,11 +313,11 @@ export const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
   ],
   general: generalUserPermissions,
-  inactivePractitioner: [],
+  inactivePractitioner: [] as RolePermission[],
   irsPractitioner: irsPractitionerPermissions,
   irsSuperuser: irsSuperuserPermissions,
   judge: judgePermissions,
-  legacyJudge: [],
+  legacyJudge: [] as RolePermission[],
   petitioner: petitionerPermissions,
   petitionsclerk: petitionsClerkPermissions,
   privatePractitioner: privatePractitionerPermissions,
@@ -326,7 +326,7 @@ export const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
   ],
   trialclerk: trialClerkPermissions,
-} as const;
+};
 
 export const isAuthorized = (
   user: UnknownAuthUser,

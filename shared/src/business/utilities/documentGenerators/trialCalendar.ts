@@ -49,7 +49,7 @@ export const trialCalendar = async ({
 }: {
   applicationContext: ServerApplicationContext;
   data: TrialCalendarType;
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { cases, sessionDetail } = data;
 
   const trialCalendarTemplate = ReactDOM.renderToString(

@@ -20,7 +20,7 @@ export const trialSessionPlanningReport = async ({
     previousTerms: PreviousTerm[];
     term: string;
   };
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { locationData, previousTerms, term } = data;
 
   const trialSessionPlanningReportTemplate = ReactDOM.renderToString(

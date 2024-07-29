@@ -1,11 +1,21 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 
 export const startPollingForResultsInteractor = async (
   applicationContext: ServerApplicationContext,
   { requestId }: { requestId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ response: any } | undefined> => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnauthorizedError(
+      'User attempting to poll for results is not an auth user',
+    );
+  }
+
   const records = await applicationContext
     .getPersistenceGateway()
     .getRequestResults({

@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { startPollingForResultsInteractor } from '@web-api/business/useCases/polling/startPollingForResultsInteractor';
@@ -64,6 +65,26 @@ describe('startPollingForResultsInteractor', () => {
     expect(getRequestResultsCalls[0][0].userId).toEqual(TEST_USER_ID);
 
     expect(results).toEqual(undefined);
+  });
+
+  it('should throw an error when the user is not an auth user', async () => {
+    applicationContext.getPersistenceGateway().getRequestResults = jest
+      .fn()
+      .mockResolvedValue([]);
+
+    await expect(
+      startPollingForResultsInteractor(
+        applicationContext,
+        {
+          requestId: TEST_REQUEST_ID,
+        },
+        undefined,
+      ),
+    ).rejects.toThrow(
+      new UnauthorizedError(
+        'User attempting to poll for results is not an auth user',
+      ),
+    );
   });
 
   it('should returned undefined if all the records are not yet saved in the database', async () => {
