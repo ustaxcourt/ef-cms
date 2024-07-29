@@ -46,13 +46,7 @@ export const PetitionFormResponse = connect<
         errorText={validationErrors[KEY]}
       >
         <div className="fact-or-reason">
-          {/* TODO: move to scss */}
-          <li
-            style={{
-              fontWeight: 600,
-              listStyleType: 'lower-alpha',
-            }}
-          >
+          <li className="alpha-list text-semibold">
             <NonMobile>
               <div style={{ display: 'flex' }}>
                 <div>
