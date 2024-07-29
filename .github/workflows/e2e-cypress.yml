@@ -42,7 +42,7 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration/logoutBehavior)
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
           npm run cypress:integration:file $TESTFILES
       - name: Store Cypress Videos
         if: always()
