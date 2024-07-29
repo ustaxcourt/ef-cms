@@ -85,15 +85,19 @@ describe('createCaseAction', () => {
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
-    expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
-      attachmentToPetitionUploadProgress: [
-        fileUploadProgressMap.attachmentToPetition,
-      ],
-      corporateDisclosureUploadProgress:
-        fileUploadProgressMap.corporateDisclosure,
-      petitionUploadProgress: fileUploadProgressMap.petition,
-      stinUploadProgress: fileUploadProgressMap.stin,
-    });
+    expect(generateDocumentIds).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        attachmentToPetitionUploadProgress: [
+          fileUploadProgressMap.attachmentToPetition,
+        ],
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
+      },
+      { email: 'petitioner1@example.com' },
+    );
 
     expect(createCaseInteractor).toHaveBeenCalled();
 
@@ -126,18 +130,24 @@ describe('createCaseAction', () => {
           ...fileUploadProgressMap,
           attachmentToPetition: undefined,
         },
+      },
+      state: {
+        form: mockPetitionMetadata,
         user: { email: 'petitioner1@example.com' },
       },
-      state: { form: mockPetitionMetadata },
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
-    expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
-      corporateDisclosureUploadProgress:
-        fileUploadProgressMap.corporateDisclosure,
-      petitionUploadProgress: fileUploadProgressMap.petition,
-      stinUploadProgress: fileUploadProgressMap.stin,
-    });
+    expect(generateDocumentIds).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
+      },
+      { email: 'petitioner1@example.com' },
+    );
 
     expect(createCaseInteractor).toHaveBeenCalled();
     expect(createCaseInteractor).toHaveBeenCalledWith(expect.anything(), {
