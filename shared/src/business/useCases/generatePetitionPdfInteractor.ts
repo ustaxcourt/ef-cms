@@ -2,7 +2,7 @@ import {
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
 } from '@shared/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { CreateCaseIrsForm } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,7 +10,52 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-// TODO type for props
+type IrsNotices = CreateCaseIrsForm & {
+  noticeIssuedDateFormatted: string;
+  originalCaseType: string;
+};
+
+interface Contact {
+  countryType: string;
+  name: string;
+  country: string;
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  postalCode: string;
+  phone: string;
+  state: string;
+  placeOfLegalResidence?: string;
+  contactType: 'primary' | 'secondary';
+  email: string;
+}
+
+type ContactSecondary = Contact & {
+  hasConsentedToEService?: boolean;
+  inCareOf?: string;
+  secondaryName?: string;
+  title?: string;
+  phone?: string;
+  paperPetitionEmail?: string;
+};
+
+export interface PetitionPdf {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  contactPrimary: Contact;
+  contactSecondary?: ContactSecondary;
+  hasIrsNotice: boolean;
+  hasUploadedIrsNotice: boolean;
+  irsNotices: IrsNotices[];
+  originalCaseType: string;
+  partyType: string;
+  petitionFacts: string[];
+  petitionReasons: string[];
+  preferredTrialCity: string;
+  procedureType: string;
+  taxYear?: string;
+}
 
 export const generatePetitionPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -29,7 +74,7 @@ export const generatePetitionPdfInteractor = async (
     preferredTrialCity,
     procedureType,
     taxYear,
-  }: any,
+  }: PetitionPdf,
 ): Promise<{ fileId: string }> => {
   const user = applicationContext.getCurrentUser();
 
@@ -53,9 +98,6 @@ export const generatePetitionPdfInteractor = async (
           hasIrsNotice,
           irsNotice.originalCaseType,
         ),
-        noticeIssuedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
       })),
       partyType,
       petitionFacts,

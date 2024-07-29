@@ -1,3 +1,4 @@
+import { PetitionPdf } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { post } from '@shared/proxies/requests';
 
 export const generatePetitionPdfInteractor = (
@@ -17,13 +18,7 @@ export const generatePetitionPdfInteractor = (
     preferredTrialCity,
     procedureType,
     taxYear,
-  }: {
-    //TODO: Type remaining properties
-    [key: string]: any;
-    hasIrsNotice: boolean;
-    hasUploadedIrsNotice: boolean;
-    originalCaseType: string;
-  },
+  }: PetitionPdf,
 ): Promise<{
   fileId: string;
 }> => {
