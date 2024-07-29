@@ -110,6 +110,10 @@ export default defineConfig({
             // Activate it
             await desiredPage.bringToFront();
 
+            const pageContent = await desiredPage.content();
+            console.log('Puppeteer existing tab page content');
+            console.log(pageContent);
+
             // Make sure selector exists
             await desiredPage.waitForSelector(selector, { timeout: 15000 });
 
@@ -134,6 +138,8 @@ export default defineConfig({
             });
 
             const pageContent = await page.content();
+            console.log('Puppeteer new tab page content');
+            console.log(pageContent);
             return pageContent;
           },
         },

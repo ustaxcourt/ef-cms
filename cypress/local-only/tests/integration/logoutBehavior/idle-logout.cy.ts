@@ -39,16 +39,14 @@ describe('Idle Logout Behavior', () => {
       '/document-qc/section/inbox',
       '/trial-sessions',
     ];
-    urls.forEach(url =>
-      console.log(
-        cy.puppeteer(
-          'openNewTab',
-          Cypress.config('baseUrl') + url,
-          DEFAULT_IDLE_TIMEOUT,
-          DEFAULT_IDLE_TIMEOUT,
-        ),
-      ),
-    );
+    urls.forEach(url => {
+      cy.puppeteer(
+        'openNewTab',
+        Cypress.config('baseUrl') + url,
+        DEFAULT_IDLE_TIMEOUT,
+        DEFAULT_IDLE_TIMEOUT,
+      );
+    });
     cy.window().then((window: Window) => {
       overrideIdleTimeouts({
         modalTimeout: DEFAULT_IDLE_TIMEOUT,
