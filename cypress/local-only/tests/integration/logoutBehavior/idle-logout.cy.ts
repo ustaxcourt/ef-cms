@@ -9,7 +9,6 @@ describe('Idle Logout Behavior', () => {
     loginAsColvin();
     cy.reload(); // Refresh ensures we track idle time even without interaction on the page
     cy.get('[data-testid="header-text"]');
-
     cy.window().then((window: Window) => {
       overrideIdleTimeouts({
         modalTimeout: DEFAULT_IDLE_TIMEOUT,
@@ -26,6 +25,28 @@ describe('Idle Logout Behavior', () => {
 
     cy.get('[data-testid="idle-logout-login-button"]').click();
     cy.get('[data-testid="login-button"]').should('exist');
+  });
+
+  it('should close modal in other tab when loading new tab', () => {
+    loginAsColvin();
+    cy.get('[data-testid="header-text"]');
+    cy.window().then((window: Window) => {
+      overrideIdleTimeouts({
+        modalTimeout: 30000, // We want the modal to appear relatively quickly, but we do not want to sign out
+        sessionTimeout: 1000,
+        windowObj: window as unknown as ITestableWindow,
+      });
+    });
+
+    // Wait until modal is there
+    cy.get('[data-testid="are-you-still-there-modal"]').should('exist');
+
+    const newTabUrl = Cypress.config('baseUrl') + '/messages/my/inbox';
+    cy.puppeteer('openNewTab', newTabUrl);
+
+    // Then confirm opening a new tab closed the modal
+    cy.get('[data-testid="are-you-still-there-modal"]').should('not.exist');
+    cy.puppeteer('closeTab', newTabUrl);
   });
 
   it('should sign out of all tabs after idle', () => {
