@@ -76,7 +76,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   // disable logging by mimicking CI for this test
   beforeAll(() => {
     ({ CI } = process.env);
-    process.env.CI = true;
+    process.env.CI = 'true';
   });
 
   afterAll(() => (process.env.CI = CI));
@@ -90,7 +90,10 @@ describe('getDocumentDownloadUrlLambda', () => {
       shouldThrowError: false,
     });
 
-    const response = await getDocumentDownloadUrlLambda(REQUEST_EVENT, {});
+    const response = await getDocumentDownloadUrlLambda(
+      REQUEST_EVENT,
+      undefined,
+    );
 
     expect(response.statusCode).toBe(403);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -114,7 +117,6 @@ describe('getDocumentDownloadUrlLambda', () => {
     const response = await getDocumentDownloadUrlLambda(
       request,
       mockPetitionerUser,
-      {},
     );
 
     expect(response.statusCode).toBe(404);
@@ -157,7 +159,6 @@ describe('getDocumentDownloadUrlLambda', () => {
     const response = await getDocumentDownloadUrlLambda(
       request,
       mockPetitionerUser,
-      {},
     );
 
     expect(response.statusCode).toBe(404);
@@ -185,7 +186,6 @@ describe('getDocumentDownloadUrlLambda', () => {
     const response = await getDocumentDownloadUrlLambda(
       request,
       mockDocketClerkUser,
-      {},
     );
 
     expect(response.statusCode).toBe(500);
@@ -229,7 +229,6 @@ describe('getDocumentDownloadUrlLambda', () => {
       const response = await getDocumentDownloadUrlLambda(
         request,
         mockDocketClerkUser,
-        {},
       );
 
       expect(response.statusCode).toBe('200');
