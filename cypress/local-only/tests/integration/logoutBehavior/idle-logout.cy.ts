@@ -60,6 +60,8 @@ describe('Idle Logout Behavior', () => {
     cy.get('body').click();
 
     cy.get('[data-testid="idle-logout-login-button"]').should('exist');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
     urls.forEach(url =>
       cy.puppeteer(
         'openExistingTabAndCheckSelectorExists',
