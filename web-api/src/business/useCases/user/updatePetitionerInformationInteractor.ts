@@ -245,6 +245,7 @@ export const updatePetitionerInformation = async (
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         documentType: documentTypeToGenerate,
         newData,

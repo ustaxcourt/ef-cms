@@ -32,21 +32,23 @@ export const batchDownloadTrialSessionInteractor = async (
       authorizedUser,
     );
   } catch (error: any) {
-    const { userId } = authorizedUser;
+    const userId = authorizedUser?.userId;
 
     const erMsg = error.message || 'unknown error';
     applicationContext.logger.error(
       `Error when batch downloading trial session with id ${trialSessionId} - ${erMsg}`,
       { error },
     );
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId,
-    });
+    if (userId) {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: 'batch_download_error',
+          error,
+        },
+        userId,
+      });
+    }
   }
 };
 

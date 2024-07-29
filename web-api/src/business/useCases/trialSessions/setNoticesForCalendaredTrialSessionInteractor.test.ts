@@ -9,6 +9,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCa
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
+  const clientConnectionId = '334304ba-79e6-4a1d-bd36-1e61f657a7ff';
 
   beforeEach(() => {
     applicationContext
@@ -54,7 +55,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .mockImplementation((cb): ReturnType<typeof setTimeout> => {
         // eslint-disable-next-line promise/no-callback-in-promise
         (cb() as any).then(cb);
-        return undefined;
+        return undefined as any;
       });
   });
 
@@ -65,6 +66,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         {
+          clientConnectionId,
           trialSessionId,
         },
         mockPetitionerUser,
@@ -84,6 +86,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
       {
+        clientConnectionId,
         trialSessionId,
       },
       mockPetitionsClerkUser,
@@ -105,6 +108,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
       {
+        clientConnectionId,
         trialSessionId,
       },
       mockPetitionsClerkUser,
@@ -123,6 +127,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
       {
+        clientConnectionId,
         trialSessionId,
       },
       mockPetitionsClerkUser,
@@ -139,6 +144,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
       {
+        clientConnectionId,
         trialSessionId,
       },
       mockPetitionsClerkUser,
@@ -164,6 +170,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
       {
+        clientConnectionId,
         trialSessionId,
       },
       mockPetitionsClerkUser,
@@ -187,6 +194,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
       {
+        clientConnectionId,
         trialSessionId,
       },
       mockPetitionsClerkUser,
