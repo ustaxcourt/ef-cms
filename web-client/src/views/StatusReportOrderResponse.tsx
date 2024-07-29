@@ -260,7 +260,7 @@ export const StatusReportOrderResponse = connect(
                         htmlFor="stricken-from-trial-sessions"
                         id="stricken-from-trial-sessions-label"
                       >
-                        Case is stricken from the trial sessions
+                        Case is stricken from the trial session
                       </label>
                     </div>
                   </FormGroup>
