@@ -35,14 +35,14 @@ describe('Idle Logout Behavior', () => {
 
     loginAsColvin();
     const urls = [
-      'http://localhost:1234/messages/my/inbox',
-      'http://localhost:1234/document-qc/section/inbox',
-      'http://localhost:1234/trial-sessions',
+      '/messages/my/inbox',
+      '/document-qc/section/inbox',
+      '/trial-sessions',
     ];
     urls.forEach(url =>
       cy.puppeteer(
         'openNewTab',
-        url,
+        Cypress.config('baseUrl') + url,
         DEFAULT_IDLE_TIMEOUT,
         DEFAULT_IDLE_TIMEOUT,
       ),
