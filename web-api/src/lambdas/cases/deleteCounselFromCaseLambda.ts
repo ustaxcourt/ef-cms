@@ -1,4 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteCounselFromCaseInteractor } from '@web-api/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -11,18 +12,12 @@ export const deleteCounselFromCaseLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .deleteCounselFromCaseInteractor(
-          applicationContext,
-          {
-            ...event.pathParameters,
-          },
-          authorizedUser,
-        );
-    },
-    authorizedUser,
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
+  });

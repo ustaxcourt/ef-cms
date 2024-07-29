@@ -74,7 +74,6 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       isTerminalUser,
       rawCase: caseToCheck,
       user: {
-        name: '',
         role: ROLES.petitioner,
         userId: '',
       },

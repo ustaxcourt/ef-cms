@@ -9,8 +9,9 @@ describe('worker', () => {
   it('should use the messaging service to send the provided message to the environment`s message queue', async () => {
     const mockMessage: WorkerMessage = {
       authorizedUser: {
+        email: 'person@hello.com',
         name: 'ignored',
-        role: 'ignored',
+        role: 'adc',
         userId: 'ignored',
       },
       payload: {
