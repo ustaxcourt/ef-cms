@@ -25,8 +25,8 @@ describe('alertHelper', () => {
     const result = runCompute(alertHelper, {
       state: {
         alertError: { title: 'hello' },
+        user,
       },
-      user,
     });
     expect(result).toMatchObject({
       showErrorAlert: true,
