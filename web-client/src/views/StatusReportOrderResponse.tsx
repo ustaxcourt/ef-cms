@@ -67,7 +67,7 @@ export const StatusReportOrderResponse = connect(
                           className="usa-label"
                           htmlFor="issue-order-radios"
                         >
-                          This is the lead case in a consolidateed group. Issue
+                          This is the lead case in a consolidated group. Issue
                           this order in:
                         </label>
                         <div className="usa-radio usa-radio">
@@ -260,7 +260,7 @@ export const StatusReportOrderResponse = connect(
                         htmlFor="stricken-from-trial-sessions"
                         id="stricken-from-trial-sessions-label"
                       >
-                        Case is striken from the trial sessions
+                        Case is stricken from the trial sessions
                       </label>
                     </div>
                   </FormGroup>
