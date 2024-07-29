@@ -40,11 +40,13 @@ describe('Idle Logout Behavior', () => {
       '/trial-sessions',
     ];
     urls.forEach(url =>
-      cy.puppeteer(
-        'openNewTab',
-        Cypress.config('baseUrl') + url,
-        DEFAULT_IDLE_TIMEOUT,
-        DEFAULT_IDLE_TIMEOUT,
+      console.log(
+        cy.puppeteer(
+          'openNewTab',
+          Cypress.config('baseUrl') + url,
+          DEFAULT_IDLE_TIMEOUT,
+          DEFAULT_IDLE_TIMEOUT,
+        ),
       ),
     );
     cy.window().then((window: Window) => {
