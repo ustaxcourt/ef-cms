@@ -2,6 +2,7 @@ import { ContactFactory } from '../contacts/ContactFactory';
 import { ElectronicPetition } from './ElectronicPetition';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
@@ -31,6 +32,7 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
   public stinFile?: object;
   public stinFileSize?: number;
   public wizardStep: number;
+  public petitionType: string;
 
   constructor(rawCase, { applicationContext }) {
     super('ElectronicPetitionInformationFactory');
@@ -46,6 +48,7 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
     this.hasIrsNotice = rawCase.hasIrsNotice;
     this.partyType = rawCase.partyType;
     this.petitionFile = rawCase.petitionFile;
+    this.petitionType = rawCase.petitionType || PETITION_TYPES.userUploaded;
     this.petitionFileSize = rawCase.petitionFileSize;
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
@@ -124,6 +127,7 @@ export class ElectronicPetitionInformationFactory extends JoiValidationEntity {
       hasIrsNotice: ElectronicPetition.VALIDATION_RULES.hasIrsNotice,
       petitionFile: ElectronicPetition.VALIDATION_RULES.petitionFile,
       petitionFileSize: ElectronicPetition.VALIDATION_RULES.petitionFileSize,
+      petitionType: ElectronicPetition.VALIDATION_RULES.petitionType,
     });
   }
 

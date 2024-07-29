@@ -332,4 +332,33 @@ describe('startCaseHelper', () => {
       expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.deficiency);
     });
   });
+
+  describe('irsNoticeRequiresRedactionAcknowledgement', () => {
+    it('should be true when file is present in at least one notice in state.irsNoticeUploadFormInfo', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {},
+          irsNoticeUploadFormInfo: [
+            {
+              file: {},
+            },
+            {},
+          ],
+        },
+      });
+
+      expect(result.irsNoticeRequiresRedactionAcknowledgement).toEqual(true);
+    });
+
+    it('should be false when file is not present in any notice in state.irsNoticeUploadFormInfo', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {},
+          irsNoticeUploadFormInfo: [{}, {}],
+        },
+      });
+
+      expect(result.irsNoticeRequiresRedactionAcknowledgement).toEqual(false);
+    });
+  });
 });

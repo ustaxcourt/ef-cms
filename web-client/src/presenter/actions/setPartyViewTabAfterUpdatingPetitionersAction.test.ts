@@ -39,6 +39,9 @@ describe('setPartyViewTabAfterUpdatingPetitionersAction', () => {
       {
         modules: { presenter },
         props: {
+          contactType: CONTACT_TYPES.intervenor,
+        },
+        state: {
           caseDetail: {
             petitioners: [
               {
@@ -46,7 +49,6 @@ describe('setPartyViewTabAfterUpdatingPetitionersAction', () => {
               },
             ],
           },
-          contactType: CONTACT_TYPES.intervenor,
         },
       },
     );

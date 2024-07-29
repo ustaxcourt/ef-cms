@@ -36,6 +36,7 @@ function ScrollToTopButton() {
         bounceOutBtn ? 'bounce-out-down' : 'display-none',
       )}
       icon="chevron-up"
+      id="return-to-top-button"
       noMargin={true}
       overrideMargin="margin-right-0"
       size="xs"
@@ -46,7 +47,7 @@ function ScrollToTopButton() {
           top: 0,
         });
       }}
-    ></Button>
+    />
   );
 }
 
