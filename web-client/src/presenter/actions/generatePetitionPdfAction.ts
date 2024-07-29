@@ -1,5 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const generatePetitionPdfAction = async ({

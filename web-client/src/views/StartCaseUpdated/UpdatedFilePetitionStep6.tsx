@@ -4,7 +4,7 @@ import { FileUploadErrorModal } from '@web-client/views/FileUploadErrorModal';
 import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { IRSNoticeInformation } from './IRSNoticeInformation';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { PetitionInformation } from './PetitionInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { STINInformation } from './STINInformation';

@@ -6,6 +6,7 @@ import {
   MAX_FILE_SIZE_MB,
   NOT_AVAILABLE_OPTION,
   PARTY_TYPES,
+  PETITION_TYPES,
   PROCEDURE_TYPES,
   ROLES,
   TRIAL_CITY_STRINGS,
@@ -14,7 +15,6 @@ import {
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 

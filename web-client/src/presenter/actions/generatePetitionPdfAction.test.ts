@@ -1,5 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { generatePetitionPdfAction } from '@web-client/presenter/actions/generatePetitionPdfAction';
 import { presenter } from '../presenter-mock';
