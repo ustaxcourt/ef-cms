@@ -370,7 +370,6 @@ describe('PublicCase', () => {
       ],
     };
     const entity = new PublicCase(rawCase, {
-      applicationContext,
       authorizedUser: mockPrivatePractitionerUser,
     });
 
