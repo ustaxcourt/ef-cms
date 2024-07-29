@@ -87,6 +87,15 @@ export default defineConfig({
       setup({
         on,
         onMessage: {
+          async closeTab(browser: any, url: string) {
+            const desiredPage = await retry<Promise<Page>>(async () => {
+              const pages = await browser.pages();
+              const page = pages.find(p => p.url().includes(url));
+              if (!page) throw new Error('Could not find page');
+              return page;
+            });
+            await desiredPage.close();
+          },
           async openExistingTabAndCheckSelectorExists(
             browser: any,
             url: string,
@@ -117,12 +126,12 @@ export default defineConfig({
           },
           async openNewTab(
             browser: any,
-            location: string,
+            url: string,
             sessionModalTimeout: number,
             sessionTimeout: number,
           ) {
             const page = await browser.newPage();
-            await page.goto(location, { waitUntil: 'networkidle2' });
+            await page.goto(url, { waitUntil: 'networkidle2' });
 
             await page.evaluate(overrideIdleTimeouts, {
               sessionModalTimeout,
