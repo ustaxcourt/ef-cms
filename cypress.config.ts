@@ -14,14 +14,9 @@ import {
   getNewAccountVerificationCode,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
-import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
-
-import type { Page } from 'puppeteer-core';
-
-import { retry, setup } from '@cypress/puppeteer';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -80,67 +75,6 @@ export default defineConfig({
             docketNumber,
             practitionerEmail,
           });
-        },
-      });
-      require('cypress-terminal-report/src/installLogsPrinter')(on, {
-        printLogsToConsole: 'always',
-      });
-      // Setup for puppeteer, which supports multi-tab tests
-      // Define your function in onMessage, and call it like cy.puppeteer('yourFunctionName', arg1, arg2 ...)
-      setup({
-        on,
-        onMessage: {
-          async openExistingTabAndCheckSelectorExists(
-            browser: any,
-            url: string,
-            selector: string,
-            close: boolean = true,
-          ) {
-            // Note that browser.pages is *not* sorted in any particular order.
-            // Therefore we pass in the URL we want to find rather than an index.
-
-            // Wait until the new tab loads
-            const desiredPage = await retry<Promise<Page>>(async () => {
-              const pages = await browser.pages();
-              const page = pages.find(p => p.url().includes(url));
-              if (!page) throw new Error('Could not find page');
-              return page;
-            });
-
-            // Activate it
-            await desiredPage.bringToFront();
-
-            const pageContent = await desiredPage.content();
-            console.log('Puppeteer existing tab page content');
-            console.log(pageContent);
-
-            // Make sure selector exists
-            await desiredPage.waitForSelector(selector, { timeout: 30000 });
-
-            if (close) {
-              await desiredPage.close();
-            }
-            return true;
-          },
-          async openNewTab(
-            browser: any,
-            location: string,
-            sessionModalTimeout: number,
-            sessionTimeout: number,
-          ) {
-            const page = await browser.newPage();
-            await page.goto(location, { waitUntil: 'networkidle2' });
-
-            await page.evaluate(overrideIdleTimeouts, {
-              sessionModalTimeout,
-              sessionTimeout,
-            });
-
-            const pageContent = await page.content();
-            console.log('Puppeteer new tab page content');
-            console.log(pageContent);
-            return pageContent;
-          },
         },
       });
     },
