@@ -7,10 +7,13 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('broadcastIdleStatusActiveAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should invoke postMessage with the expected arguments', async () => {
+  it('should invoke postMessage idleStatusActive message when props.closeModal is false', async () => {
     await runAction(broadcastIdleStatusActiveAction, {
       modules: {
         presenter,
+      },
+      props: {
+        closeModal: false,
       },
     });
 
@@ -21,6 +24,26 @@ describe('broadcastIdleStatusActiveAction', () => {
       applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
     ).toMatchObject({
       subject: LOGOUT_BROADCAST_MESSAGES.idleStatusActive,
+    });
+  });
+
+  it('should invoke postMessage stayLoggedIn message when props.closeModal is true', async () => {
+    await runAction(broadcastIdleStatusActiveAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        closeModal: true,
+      },
+    });
+
+    expect(
+      applicationContext.getBroadcastGateway().postMessage,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
+    ).toMatchObject({
+      subject: LOGOUT_BROADCAST_MESSAGES.stayLoggedIn,
     });
   });
 });

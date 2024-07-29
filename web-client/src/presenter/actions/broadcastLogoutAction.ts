@@ -11,7 +11,6 @@ export const broadcastLogoutAction = async ({
   get,
   props,
 }: ActionProps) => {
-  // for some reason this causes jest integration tests to never finish, so don't run in CI
   if (!props.skipBroadcast) {
     const broadcastChannel = applicationContext.getBroadcastGateway();
     await broadcastChannel.postMessage({
