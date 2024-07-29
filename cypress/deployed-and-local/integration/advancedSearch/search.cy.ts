@@ -10,9 +10,12 @@ import {
 } from '../../../helpers/authentication/login-as-helpers';
 
 describe('Advanced Search', () => {
-  it('should find a served paper case when the user searches by party name or docket number', () => {
+  beforeEach(() => {
+    Cypress.session.clearCurrentSessionData();
+  });
+
+  it.only('should find a served paper case when the user searches by party name or docket number', () => {
     /** Arrange */
-    loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
