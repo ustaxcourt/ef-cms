@@ -10,26 +10,26 @@ export const validateUploadPetitionStep1Action = ({
     createPetitionStep1Data,
   ).getFormattedValidationErrors();
 
-  if (!errors) {
-    return path.success();
+  if (errors) {
+    const errorDisplayOrder = [
+      'name',
+      'secondaryName',
+      'inCareOf',
+      'title',
+      'address1',
+      'city',
+      'state',
+      'postalCode',
+      'placeOfLegalResidence',
+      'phone',
+      'paperPetitionEmail',
+    ];
+
+    return path.error({
+      errorDisplayOrder,
+      errors,
+    });
   }
 
-  const errorDisplayOrder = [
-    'name',
-    'secondaryName',
-    'inCareOf',
-    'title',
-    'address1',
-    'city',
-    'state',
-    'postalCode',
-    'placeOfLegalResidence',
-    'phone',
-    'paperPetitionEmail',
-  ];
-
-  return path.error({
-    errorDisplayOrder,
-    errors,
-  });
+  return path.success();
 };

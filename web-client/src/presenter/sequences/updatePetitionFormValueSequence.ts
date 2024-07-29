@@ -1,5 +1,5 @@
-import { setPetitionFormValueAction } from '@web-client/presenter/actions/setPetitionFormValueAction';
+import { setFormValueAction } from '@web-client/presenter/actions/setFormValueAction';
 
 export const updatePetitionFormValueSequence = [
-  setPetitionFormValueAction,
+  setFormValueAction,
 ] as unknown as (props: { index: number; key: string; value: any }) => void;
