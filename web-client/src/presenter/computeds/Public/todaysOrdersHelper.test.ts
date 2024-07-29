@@ -62,7 +62,7 @@ describe('todaysOrdersHelper', () => {
       {
         caseCaption: 'Sauceboss, Petitioner',
         formattedFilingDate: '06/11/20',
-        formattedJudgeName: 'Fieri',
+        formattedJudgeName: 'Angelino',
       },
     ]);
   });
