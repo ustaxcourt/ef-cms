@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
 import { InvalidEntityError, NotFoundError } from '@web-api/errors/errors';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
@@ -73,7 +74,7 @@ export const changePasswordInteractor = async (
           .getWorkerGateway()
           .queueWork(applicationContext, {
             message: {
-              authorizedUser: updatedUser,
+              authorizedUser: updatedUser as AuthUser, // In this context, we know for certain that the user has an email address, and is assignable to AuthUser.
               payload: { user: updatedUser },
               type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
             },

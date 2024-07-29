@@ -16,7 +16,7 @@ export const pendingReport = async ({
     pendingItems: PendingItemFormatted[];
     subtitle: string;
   };
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { pendingItems, subtitle } = data;
 
   const pendingReportTemplate = ReactDOM.renderToString(

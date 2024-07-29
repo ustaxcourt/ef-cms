@@ -19,7 +19,7 @@ export const noticeOfChangeToRemoteProceeding = async ({
     docketNumberWithSuffix: string;
     trialInfo: TrialInfoType;
   };
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;
 
   const noticeOfChangeToRemoteProceedingTemplate = ReactDOM.renderToString(

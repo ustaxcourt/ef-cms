@@ -548,7 +548,6 @@ describe('DocketEntry entity', () => {
       };
 
       const docketEntryEntity = new DocketEntry(docketEntry, {
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         filtered: true,
         petitioners: MOCK_PETITIONERS,
@@ -584,7 +583,7 @@ describe('DocketEntry entity', () => {
       );
       expect(docketEntryEntity.userId).toEqual(docketEntry.userId);
       expect(docketEntryEntity.workItem).toEqual(
-        new WorkItem(docketEntry.workItem, { applicationContext }),
+        new WorkItem(docketEntry.workItem),
       );
     });
 
@@ -616,7 +615,6 @@ describe('DocketEntry entity', () => {
       };
 
       const docketEntryEntity = new DocketEntry(docketEntry, {
-        applicationContext,
         authorizedUser: mockPetitionerUser,
         filtered: true,
         petitioners: MOCK_PETITIONERS,

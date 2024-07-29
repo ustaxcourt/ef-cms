@@ -153,7 +153,7 @@ describe('serveCaseDocument', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     await serveCaseDocument({
