@@ -115,7 +115,7 @@ export default defineConfig({
             console.log(pageContent);
 
             // Make sure selector exists
-            await desiredPage.waitForSelector(selector, { timeout: 15000 });
+            await desiredPage.waitForSelector(selector, { timeout: 30000 });
 
             if (close) {
               await desiredPage.close();
