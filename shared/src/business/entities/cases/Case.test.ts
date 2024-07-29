@@ -80,6 +80,29 @@ describe('Case entity', () => {
       });
     });
 
+    it('should add case status information including the petitioners ROLE to the `caseStatusHistory` when a new case is created by an authorized petitioner', () => {
+      const mockCreateIsoDateString = createISODateString as jest.Mock;
+      mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
+
+      const expectedCaseStatus = {
+        changedBy: 'Petitioner',
+        date: createISODateString(),
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      };
+      const myCase = new Case(
+        { ...MOCK_CASE, isPaper: false, status: undefined },
+        {
+          applicationContext,
+          authorizedUser: mockPetitionerUser,
+          isNewCase: true,
+        },
+      );
+
+      expect(myCase).toMatchObject({
+        caseStatusHistory: [expectedCaseStatus],
+      });
+    });
+
     it('should add case status information including a private practitioners ROLE to the `caseStatusHistory` if a new case is created by an private practitioners', () => {
       const mockCreateIsoDateString = createISODateString as jest.Mock;
       mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
