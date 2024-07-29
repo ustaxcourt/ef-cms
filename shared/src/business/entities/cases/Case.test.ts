@@ -92,7 +92,6 @@ describe('Case entity', () => {
       const myCase = new Case(
         { ...MOCK_CASE, isPaper: false, status: undefined },
         {
-          applicationContext,
           authorizedUser: mockPetitionerUser,
           isNewCase: true,
         },
