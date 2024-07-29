@@ -7,7 +7,7 @@ export const upsertMessage = async ({ message }: { message: RawMessage }) => {
     .insertInto('message')
     .values(toKyselyNewMessage(message))
     .onConflict(oc =>
-      oc.column('docketNumber').doUpdateSet(toKyselyUpdateMessage(message)),
+      oc.column('messageId').doUpdateSet(toKyselyUpdateMessage(message)),
     )
     .execute();
 };
