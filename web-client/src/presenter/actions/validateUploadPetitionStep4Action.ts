@@ -10,9 +10,11 @@ export const validateUploadPetitionStep4Action = ({
     createPetitionStep4Data,
   ).getFormattedValidationErrors();
 
-  return errors
-    ? path.error({
-        errors,
-      })
-    : path.success();
+  if (errors) {
+    return path.error({
+      errors,
+    });
+  }
+
+  return path.success();
 };
