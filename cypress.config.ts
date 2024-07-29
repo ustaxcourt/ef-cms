@@ -82,9 +82,6 @@ export default defineConfig({
           });
         },
       });
-      require('cypress-terminal-report/src/installLogsPrinter')(on, {
-        printLogsToConsole: 'always',
-      });
       // Setup for puppeteer, which supports multi-tab tests
       // Define your function in onMessage, and call it like cy.puppeteer('yourFunctionName', arg1, arg2 ...)
       setup({
@@ -110,10 +107,6 @@ export default defineConfig({
             // Activate it
             await desiredPage.bringToFront();
 
-            const pageContent = await desiredPage.content();
-            console.log('Puppeteer existing tab page content');
-            console.log(pageContent);
-
             // Make sure selector exists
             await desiredPage.waitForSelector(selector, { timeout: 30000 });
 
@@ -136,10 +129,7 @@ export default defineConfig({
               sessionTimeout,
             });
 
-            const pageContent = await page.content();
-            console.log('Puppeteer new tab page content');
-            console.log(pageContent);
-            return pageContent;
+            return page;
           },
         },
       });
