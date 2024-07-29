@@ -10,7 +10,7 @@ const caseTypeDescriptionHelper = withAppContextDecorator(
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('caseTypeDescriptionHelper', () => {
-  it('should return case types with proper descriptions for hasIrsNotice true', () => {
+  it('should return case types with proper descriptions and ordered correctly for hasIrsNotice true', () => {
     const result = runCompute(caseTypeDescriptionHelper, {
       state: {
         form: { hasIrsNotice: true },
@@ -19,12 +19,30 @@ describe('caseTypeDescriptionHelper', () => {
     expect(result).toMatchObject({
       caseTypes: [
         {
+          description: 'Notice of Deficiency',
+          type: CASE_TYPES_MAP.deficiency,
+        },
+        {
           description: 'Notice of Determination Concerning Collection Action',
           type: CASE_TYPES_MAP.cdp,
         },
         {
-          description: 'Notice of Deficiency',
-          type: CASE_TYPES_MAP.deficiency,
+          description: 'Other',
+          type: CASE_TYPES_MAP.other,
+        },
+        {
+          description: 'Adjustment of Partnership Items Code Section 6228',
+          type: CASE_TYPES_MAP.partnershipSection6228,
+        },
+        {
+          description:
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          type: 'Disclosure2',
+        },
+        {
+          description:
+            'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State',
+          type: CASE_TYPES_MAP.passport,
         },
         {
           description:
@@ -32,13 +50,22 @@ describe('caseTypeDescriptionHelper', () => {
           type: CASE_TYPES_MAP.innocentSpouse,
         },
         {
+          description: 'Notice of Determination of Worker Classification',
+          type: CASE_TYPES_MAP.workerClassification,
+        },
+        {
+          description:
+            'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
+          type: CASE_TYPES_MAP.whistleblower,
+        },
+        {
           description:
             'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
           type: CASE_TYPES_MAP.interestAbatement,
         },
         {
-          description: 'Other',
-          type: CASE_TYPES_MAP.other,
+          description: 'Notice of Intention to Disclose',
+          type: 'Disclosure1',
         },
         {
           description: 'Partnership Action Under BBA Section 1101',
@@ -48,49 +75,30 @@ describe('caseTypeDescriptionHelper', () => {
           description: 'Readjustment of Partnership Items Code Section 6226',
           type: CASE_TYPES_MAP.partnershipSection6226,
         },
-        {
-          description: 'Adjustment of Partnership Items Code Section 6228',
-          type: CASE_TYPES_MAP.partnershipSection6228,
-        },
-        {
-          description:
-            'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State',
-          type: CASE_TYPES_MAP.passport,
-        },
-        {
-          description:
-            'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
-          type: CASE_TYPES_MAP.whistleblower,
-        },
-        {
-          description: 'Notice of Determination of Worker Classification',
-          type: CASE_TYPES_MAP.workerClassification,
-        },
-        {
-          description: 'Notice of Intention to Disclose',
-          type: 'Disclosure1',
-        },
-
-        {
-          description:
-            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
-          type: 'Disclosure2',
-        },
       ],
     });
   });
 
-  it('should return case types with proper descriptions for hasIrsNotice false', () => {
+  it('should return case types with proper descriptions and ordered correctly for hasIrsNotice false', () => {
     const result = runCompute(caseTypeDescriptionHelper, {
       state: {
         form: { hasIrsNotice: false },
       },
     });
+
     expect(result).toMatchObject({
       caseTypes: [
         {
-          description: 'CDP (Lien/Levy)',
+          description: 'Deficiency',
+          type: CASE_TYPES_MAP.deficiency,
+        },
+        {
+          description: 'Collection (Lien/Levy)',
           type: CASE_TYPES_MAP.cdp,
+        },
+        {
+          description: 'Other',
+          type: CASE_TYPES_MAP.other,
         },
         {
           description: 'Declaratory Judgment (Exempt Organization)',
@@ -113,9 +121,10 @@ describe('caseTypeDescriptionHelper', () => {
             'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement',
           type: CASE_TYPES_MAP.interestAbatement,
         },
+
         {
-          description: 'Other',
-          type: CASE_TYPES_MAP.other,
+          description: 'Passport',
+          type: CASE_TYPES_MAP.passport,
         },
         {
           description: 'Whistleblower',

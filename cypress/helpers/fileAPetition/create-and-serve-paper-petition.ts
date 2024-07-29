@@ -142,3 +142,73 @@ export function createAndServePaperPetition(
       });
     });
 }
+
+export function createAndServePaperPetitionMyselfAndSpouse() {
+  cy.login('petitionsclerk1');
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+  cy.get('[data-testid="document-qc-nav-item"]').click();
+  cy.get('[data-testid="start-a-petition"]').click();
+
+  cy.get('#party-type').select('Petitioner & spouse');
+  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AK');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('09876');
+  cy.get('[data-testid="phone"]').type('3232323232');
+  cy.get('[data-testid="contact-secondary-name"]').type('John Spouse');
+  cy.get('[data-testid="contactSecondary.address1"]').type('address1');
+  cy.get('[data-testid="contactSecondary.city"]').type('jackson');
+  cy.get('[data-testid="contactSecondary.state"]').select('AL');
+  cy.get('[data-testid="contactSecondary.postalCode"]').type('09876');
+  cy.get('[data-testid="tab-case-info"] > .button-text').click();
+
+  cy.get('#date-received-picker').type('07/16/2024');
+  cy.get('#mailing-date').type('07/16/2024');
+  cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
+  cy.get('[data-testid="payment-status-paid-radio"]').click();
+
+  cy.get('[data-testid="payment-date-picker"]').eq(1).type('07/16/2024');
+  cy.get('#petition-payment-method').type('paid');
+  cy.get('[data-testid="tab-irs-notice"] > .button-text').click();
+  cy.get('[data-testid="case-type-select"]').select('Deficiency');
+
+  cy.get('#upload-mode-upload').click();
+  cy.get('#petitionFile-file').attachFile('../../helpers/file/sample.pdf');
+
+  cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
+  cy.get('#upload-mode-upload').click();
+  cy.get('#requestForPlaceOfTrialFile-file').attachFile(
+    '../../helpers/file/sample.pdf',
+  );
+
+  cy.get('[data-testid="tabButton-stinFile"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
+  cy.get('input#stinFile-file').attachFile('../../helpers/file/sample.pdf');
+
+  cy.get('[data-testid="submit-paper-petition"]').click();
+
+  return cy
+    .get('.docket-number-header a')
+    .invoke('attr', 'href')
+    .then(href => {
+      const docketNumber = href!.split('/').pop();
+      cy.get('[data-testid="serve-case-to-irs"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
+      cy.get(
+        '[data-testid="done-viewing-paper-petition-receipt-button"]',
+      ).click();
+
+      cy.get('[data-testid="success-alert"]').contains(
+        'Petition served to IRS.',
+      );
+
+      cy.get('[data-testid="docket-number-search-input"]').type(
+        `${docketNumber}`,
+      );
+
+      cy.get('[data-testid="search-docket-number"]').click();
+
+      return cy.wrap(docketNumber);
+    });
+}

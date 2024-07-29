@@ -51262,6 +51262,16 @@
     "pk": "updated-trial-status-types"
   },
   {
+    "sk": "use-external-pdf-generation",
+    "current": false,
+    "pk": "use-external-pdf-generation"
+  },
+  {
+    "sk": "updated-petition-flow",
+    "current": true,
+    "pk": "updated-petition-flow"
+  },
+  {
     "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "user-email|petitioner@example.com"
@@ -57713,6 +57723,37 @@
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "originalBarState": "MD",
     "email": "irspractitioner@example.com"
+  },
+  {
+    "admissionsStatus": "Active",
+    "lastName": "DOJ_Practitioner",
+    "role": "irsPractitioner",
+    "admissionsDate": "2019-03-01",
+    "section": "irsPractitioner",
+    "practitionerType": "Attorney",
+    "userId": "867e7564-1d7f-44fb-b463-5e56479bc9e4",
+    "practiceType": "DOJ",
+    "firstName": "DOJ_Test",
+    "serviceIndicator": "Electronic",
+    "barNumber": "DT1111",
+    "birthYear": "1950",
+    "entityName": "Practitioner",
+    "contact": {
+      "address3": "",
+      "address2": "",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "123 Street St",
+      "postalCode": "85246",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "sk": "user|867e7564-1d7f-44fb-b463-5e56479bc9e4",
+    "name": "Test IRS Practitioner",
+    "middleName": "DOJ",
+    "pk": "user|867e7564-1d7f-44fb-b463-5e56479bc9e4",
+    "originalBarState": "MD",
+    "email": "dojpractitioner1@example.com"
   },
   {
     "admissionsStatus": "Active",
