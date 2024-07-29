@@ -14,7 +14,7 @@ describe('Advanced Search', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  it.only('should find a served paper case when the user searches by party name or docket number', () => {
+  it('should find a served paper case when the user searches by party name or docket number', () => {
     /** Arrange */
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       /** Act */
