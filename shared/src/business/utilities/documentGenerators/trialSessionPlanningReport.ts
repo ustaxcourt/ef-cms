@@ -4,6 +4,7 @@ import {
   TrialLocationData,
 } from '@web-api/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSessionPlanningReport } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialSessionPlanningReport';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
@@ -13,7 +14,7 @@ export const trialSessionPlanningReport = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: {
     locationData: TrialLocationData[];
     previousTerms: PreviousTerm[];
