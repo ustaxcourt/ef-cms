@@ -1,4 +1,3 @@
-import { Focus } from '../ustc-ui/Focus/Focus';
 import React from 'react';
 
 export function ErrorBanner({
@@ -21,10 +20,8 @@ export function ErrorBanner({
       data-testid="error-alert"
       role="alert"
     >
-      <div className="usa-alert__body">
-        <Focus>
-          <h3 className="usa-alert__heading">{title}</h3>
-        </Focus>
+      <div className="usa-alert__body" style={{ paddingTop: '12px' }}>
+        <div style={{ fontSize: '21px', fontWeight: 'bold' }}>{title}</div>
         {showSingleMessage && (
           <p
             className="usa-alert__text"

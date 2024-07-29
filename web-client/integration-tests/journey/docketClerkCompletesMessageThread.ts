@@ -22,12 +22,12 @@ export const docketClerkCompletesMessageThread = cerebralTest => {
 
     expect(cerebralTest.getState('messageDetail').length).toEqual(3);
 
+    await refreshElasticsearchIndex();
+
     const messageDetailFormatted = runCompute(formattedMessageDetail, {
       state: cerebralTest.getState(),
     });
     expect(messageDetailFormatted.isCompleted).toEqual(true);
-
-    await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
     await cerebralTest.runSequence('gotoMessagesSequence', {

@@ -1,60 +1,141 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { SuccessNotification } from '../SuccessNotification';
 import { TableFilters } from '../../ustc-ui/Table/TableFilters';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   {
+    batchCompleteMessageSequence: sequences.batchCompleteMessageSequence,
     constants: state.constants,
     formattedMessages: state.formattedMessages,
+    messagesIndividualInboxHelper: state.messagesIndividualInboxHelper,
     screenMetadata: state.screenMetadata,
+    setSelectedMessagesSequence: sequences.setSelectedMessagesSequence,
     sortTableSequence: sequences.sortTableSequence,
     tableSort: state.tableSort,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+    updateMessageFilterSequence: sequences.updateMessageFilterSequence,
   },
   function MessagesIndividualInbox({
+    batchCompleteMessageSequence,
     constants,
     formattedMessages,
+    messagesIndividualInboxHelper,
     screenMetadata,
+    setSelectedMessagesSequence,
     sortTableSequence,
     tableSort,
-    updateScreenMetadataSequence,
+    updateMessageFilterSequence,
   }) {
+    const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (!selectAllCheckboxRef.current) return;
+
+      selectAllCheckboxRef.current.indeterminate =
+        messagesIndividualInboxHelper.someMessagesSelected &&
+        !messagesIndividualInboxHelper.allMessagesSelected;
+    }, [
+      selectAllCheckboxRef.current,
+      messagesIndividualInboxHelper.someMessagesSelected,
+      messagesIndividualInboxHelper.allMessagesSelected,
+    ]);
     return (
       <>
-        <TableFilters
-          filters={[
-            {
-              isSelected: screenMetadata.caseStatus,
-              key: 'caseStatus',
-              label: 'Case Status',
-              options: formattedMessages.caseStatuses,
-            },
-            {
-              isSelected: screenMetadata.fromUser,
-              key: 'fromUser',
-              label: 'From',
-              options: formattedMessages.fromUsers,
-            },
-            {
-              isSelected: screenMetadata.fromSection,
-              key: 'fromSection',
-              label: 'Section',
-              options: formattedMessages.fromSections,
-            },
-          ]}
-          onSelect={updateScreenMetadataSequence}
-        ></TableFilters>
+        <SuccessNotification />
+        <ErrorNotification />
+        {screenMetadata.completionSuccess && (
+          <div
+            aria-live="polite"
+            className="usa-alert usa-alert--success"
+            data-testid="message-detail-success-alert"
+            role="alert"
+          >
+            <div className="usa-alert__body">
+              Message(s) completed at{' '}
+              {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
+              {messagesIndividualInboxHelper.messagesCompletedBy}
+            </div>
+          </div>
+        )}
+        <div className="grid-row grid-gap">
+          <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
+            <TableFilters
+              filters={[
+                {
+                  isSelected: screenMetadata.caseStatus,
+                  key: 'caseStatus',
+                  label: 'Case Status',
+                  options: formattedMessages.caseStatuses,
+                },
+                {
+                  isSelected: screenMetadata.fromUser,
+                  key: 'fromUser',
+                  label: 'From',
+                  options: formattedMessages.fromUsers,
+                },
+                {
+                  isSelected: screenMetadata.fromSection,
+                  key: 'fromSection',
+                  label: 'Section',
+                  options: formattedMessages.fromSections,
+                },
+              ]}
+              onSelect={updateMessageFilterSequence}
+            ></TableFilters>
+          </div>
+
+          <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+            <Button
+              link
+              className="action-button"
+              data-testid="message-batch-mark-as-complete"
+              disabled={
+                !messagesIndividualInboxHelper.isCompletionButtonEnabled
+              }
+              icon="check-circle"
+              id="button-batch-complete"
+              onClick={() => {
+                batchCompleteMessageSequence();
+              }}
+            >
+              Complete
+            </Button>
+          </div>
+        </div>
 
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th>
+                <input
+                  aria-label="all-messages-checkbox"
+                  checked={messagesIndividualInboxHelper.allMessagesSelected}
+                  data-testid="all-messages-checkbox"
+                  disabled={
+                    !messagesIndividualInboxHelper.allMessagesCheckboxEnabled
+                  }
+                  id="all-messages-checkbox"
+                  ref={selectAllCheckboxRef}
+                  type="checkbox"
+                  onChange={() => {
+                    const selectAll = formattedMessages.messages.map(
+                      message => ({
+                        messageId: message.messageId,
+                        parentMessageId: message.parentMessageId,
+                      }),
+                    );
+                    setSelectedMessagesSequence({ messages: selectAll });
+                  }}
+                />
+              </th>
               <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small" colSpan={2}>
                 <SortableColumn
@@ -161,6 +242,24 @@ export const MessagesIndividualInbox = connect(
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
+                  <td>
+                    <input
+                      aria-label={`${message.caseTitle}-${message.subject}-checkbox`}
+                      checked={message.isSelected}
+                      id={`${message.caseTitle}-message-checkbox`}
+                      type="checkbox"
+                      onChange={() => {
+                        setSelectedMessagesSequence({
+                          messages: [
+                            {
+                              messageId: message.messageId,
+                              parentMessageId: message.parentMessageId,
+                            },
+                          ],
+                        });
+                      }}
+                    />
+                  </td>
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={

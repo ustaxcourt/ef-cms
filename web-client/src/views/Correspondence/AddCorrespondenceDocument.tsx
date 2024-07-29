@@ -89,7 +89,7 @@ export const AddCorrespondenceDocument = connect(
                         });
                       }}
                     >
-                      Finish
+                      Save
                     </Button>
                     <Button
                       link
