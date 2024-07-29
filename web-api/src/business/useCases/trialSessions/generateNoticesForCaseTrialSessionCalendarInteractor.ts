@@ -127,6 +127,14 @@ const setNoticeForCase = async ({
   trialSession,
   trialSessionEntity,
   user,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseRecord: any;
+  docketNumber: any;
+  jobId: any;
+  trialSession: any;
+  trialSessionEntity: any;
+  user: any;
 }) => {
   const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
