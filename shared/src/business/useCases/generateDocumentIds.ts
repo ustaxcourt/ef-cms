@@ -16,9 +16,9 @@ export const generateDocumentIds = async (
     stinUploadProgress,
   }: {
     applicationForWaiverOfFilingFeeUploadProgress?: FileUploadProgressType;
-    attachmentToPetitionUploadProgress?: FileUploadProgressType;
+    attachmentToPetitionUploadProgress?: FileUploadProgressType[];
     corporateDisclosureUploadProgress?: FileUploadProgressType;
-    petitionUploadProgress: FileUploadProgressType;
+    petitionUploadProgress?: FileUploadProgressType;
     requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
     stinUploadProgress: FileUploadProgressType;
   },
@@ -33,12 +33,15 @@ export const generateDocumentIds = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const petitionFileUpload = applicationContext
-    .getUseCases()
-    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-      document: petitionUploadProgress.file,
-      onUploadProgress: petitionUploadProgress.uploadProgress,
-    });
+  let petitionFileUpload;
+  if (petitionUploadProgress) {
+    petitionFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: petitionUploadProgress.file,
+        onUploadProgress: petitionUploadProgress.uploadProgress,
+      });
+  }
 
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeUploadProgress) {
@@ -70,7 +73,6 @@ export const generateDocumentIds = async (
         onUploadProgress: stinUploadProgress.uploadProgress,
       });
   }
-
   let requestForPlaceOfTrialFileUpload;
   if (requestForPlaceOfTrialUploadProgress) {
     requestForPlaceOfTrialFileUpload = applicationContext
@@ -81,14 +83,18 @@ export const generateDocumentIds = async (
       });
   }
 
-  let attachmentToPetitionUpload;
+  let attachmentToPetitionUploadPromises: Promise<string>[] = [];
+
   if (attachmentToPetitionUploadProgress) {
-    attachmentToPetitionUpload = applicationContext
-      .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
-        document: attachmentToPetitionUploadProgress.file,
-        onUploadProgress: attachmentToPetitionUploadProgress.uploadProgress,
-      });
+    attachmentToPetitionUploadProgress.forEach(progress => {
+      const uploadPromise = applicationContext
+        .getUseCases()
+        .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+          document: progress.file,
+          onUploadProgress: progress.uploadProgress,
+        });
+      attachmentToPetitionUploadPromises.push(uploadPromise);
+    });
   }
 
   try {
@@ -98,19 +104,19 @@ export const generateDocumentIds = async (
       petitionFileId,
       requestForPlaceOfTrialFileId,
       stinFileId,
-      attachmentToPetitionFileId,
+      ...attachmentToPetitionFileIds
     ]: string[] = await Promise.all([
       applicationForWaiverOfFilingFeeUpload,
       corporateDisclosureFileUpload,
       petitionFileUpload,
       requestForPlaceOfTrialFileUpload,
       stinFileUpload,
-      attachmentToPetitionUpload,
+      ...attachmentToPetitionUploadPromises,
     ]);
 
     return {
       applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId,
+      attachmentToPetitionFileIds,
       corporateDisclosureFileId,
       petitionFileId,
       requestForPlaceOfTrialFileId,
