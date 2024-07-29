@@ -69,4 +69,17 @@ describe('primeScannerSourceAction', () => {
 
     expect(result.output.scanMode).toEqual(SCAN_MODES.FEEDER);
   });
+
+  it('should convert scanner.modal.index to a number if it is a string before returning it', async () => {
+    const result = await runAction(primeScannerSourceAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        modal: { index: '0' },
+      },
+    });
+
+    expect(result.output.scannerSourceIndex).toEqual(0);
+  });
 });
