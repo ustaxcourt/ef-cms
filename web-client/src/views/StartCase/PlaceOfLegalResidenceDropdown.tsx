@@ -45,7 +45,6 @@ export const PlaceOfLegalResidenceDropdown = connect<
             errorText={validationErrors?.[type]?.placeOfLegalResidence}
           >
             <label
-              aria-hidden
               className="usa-label"
               htmlFor={`${type}-placeOfLegalResidence`}
             >
@@ -71,7 +70,6 @@ export const PlaceOfLegalResidenceDropdown = connect<
             errorText={validationErrors?.[type]?.placeOfLegalResidence}
           >
             <label
-              aria-hidden
               className="usa-label"
               htmlFor={`${type}-placeOfLegalResidence`}
             >
