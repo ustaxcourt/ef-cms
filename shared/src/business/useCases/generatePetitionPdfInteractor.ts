@@ -7,17 +7,23 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-type IrsNotices = CreateCaseIrsForm & {
+export type IrsNotice = CreateCaseIrsForm & {
   noticeIssuedDateFormatted: string;
   originalCaseType: string;
+};
+
+export type IrsNoticesWithCaseDescription = IrsNotice & {
+  caseDescription: string;
 };
 
 interface Contact {
   countryType: string;
   name: string;
+  inCareOf?: string;
+  secondaryName?: string;
+  title?: string;
   country: string;
   address1: string;
   address2?: string;
@@ -33,22 +39,16 @@ interface Contact {
 
 type ContactSecondary = Contact & {
   hasConsentedToEService?: boolean;
-  inCareOf?: string;
-  secondaryName?: string;
-  title?: string;
   phone?: string;
   paperPetitionEmail?: string;
 };
 
-export interface PetitionPdf {
+export interface PetitionPdfBase {
   caseCaptionExtension: string;
   caseTitle: string;
   contactPrimary: Contact;
   contactSecondary?: ContactSecondary;
-  hasIrsNotice: boolean;
   hasUploadedIrsNotice: boolean;
-  irsNotices: IrsNotices[];
-  originalCaseType: string;
   partyType: string;
   petitionFacts: string[];
   petitionReasons: string[];
@@ -58,7 +58,7 @@ export interface PetitionPdf {
 }
 
 export const generatePetitionPdfInteractor = async (
-  applicationContext: ServerApplicationContext,
+  applicationContext,
   {
     caseCaptionExtension,
     caseTitle,
@@ -74,7 +74,11 @@ export const generatePetitionPdfInteractor = async (
     preferredTrialCity,
     procedureType,
     taxYear,
-  }: PetitionPdf,
+  }: PetitionPdfBase & {
+    hasIrsNotice: boolean;
+    originalCaseType: string;
+    irsNotices: IrsNotice[];
+  },
 ): Promise<{ fileId: string }> => {
   const user = applicationContext.getCurrentUser();
 
