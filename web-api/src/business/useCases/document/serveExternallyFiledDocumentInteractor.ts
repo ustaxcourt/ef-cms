@@ -223,16 +223,18 @@ export const handleLockError = async (
   originalRequest: any,
   authorizedUser: UnknownAuthUser,
 ) => {
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'serve_externally_filed_document',
-    },
-    userId: authorizedUser!.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'serve_externally_filed_document',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const serveExternallyFiledDocumentInteractor = withLocking(

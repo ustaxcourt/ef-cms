@@ -386,15 +386,17 @@ export const handleLockError = async (
   originalRequest: any,
   authorizedUser: UnknownAuthUser,
 ) => {
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'update_trial_session',
-    },
-    userId: authorizedUser?.userId || '',
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'update_trial_session',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const updateTrialSessionInteractor = withLocking(
