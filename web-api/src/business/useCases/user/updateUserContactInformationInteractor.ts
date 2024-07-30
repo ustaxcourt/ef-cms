@@ -181,15 +181,17 @@ export const handleLockError = async (
   originalRequest: any,
   authorizedUser: UnknownAuthUser,
 ) => {
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'update_user_contact_information',
-    },
-    userId: authorizedUser?.userId || '',
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'update_user_contact_information',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const determineEntitiesToLock = async (

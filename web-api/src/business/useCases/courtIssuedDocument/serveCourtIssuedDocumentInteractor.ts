@@ -218,16 +218,18 @@ export const handleLockError = async (
   originalRequest,
   authorizedUser: UnknownAuthUser,
 ) => {
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'serve_court_issued_document',
-    },
-    userId: authorizedUser?.userId || '',
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'serve_court_issued_document',
+      },
+      userId: authorizedUser?.userId,
+    });
+  }
 };
 
 export const serveCourtIssuedDocumentInteractor = withLocking(
