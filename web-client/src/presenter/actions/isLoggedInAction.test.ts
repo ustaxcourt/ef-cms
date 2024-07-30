@@ -23,7 +23,7 @@ describe('isLoggedInAction', () => {
         presenter,
       },
       state: {
-        user: docketClerk1User,
+        token: '1234',
       },
     });
 

@@ -1,4 +1,4 @@
-import { ITestableWindow } from '../../../types/ITestableWindow';
+import { ITestableWindow } from '../../helpers/ITestableWindow';
 
 // This is a hack, but I do not know a better way.
 export const overrideIdleTimeouts = ({

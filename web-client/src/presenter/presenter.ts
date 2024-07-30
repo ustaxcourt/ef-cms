@@ -1291,7 +1291,7 @@ export const presenterSequences = {
     showThirtyDayNoticeModalSequence as unknown as Function,
   showViewPetitionerCounselModalSequence:
     showViewPetitionerCounselModalSequence as unknown as Function,
-  signOutIdleSequence: signOutIdleSequence as unknown as Function,
+  signOutIdleSequence,
   signOutSequence: signOutSequence as unknown as Function,
   signOutUserInitiatedSequence:
     signOutUserInitiatedSequence as unknown as Function,
