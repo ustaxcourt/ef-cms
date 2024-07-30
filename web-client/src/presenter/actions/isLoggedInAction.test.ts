@@ -1,4 +1,3 @@
-import { docketClerk1User } from '@shared/test/mockUsers';
 import { isLoggedInAction } from './isLoggedInAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
