@@ -18,7 +18,7 @@ export type IrsNoticesWithCaseDescription = IrsNotice & {
   caseDescription: string;
 };
 
-interface Contact {
+export interface Contact {
   countryType: string;
   name: string;
   inCareOf?: string;
@@ -37,7 +37,7 @@ interface Contact {
   email: string;
 }
 
-type ContactSecondary = Contact & {
+export type ContactSecondary = Contact & {
   hasConsentedToEService?: boolean;
   phone?: string;
   paperPetitionEmail?: string;
