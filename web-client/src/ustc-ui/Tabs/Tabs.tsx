@@ -43,6 +43,7 @@ const renderTabFactory = ({
       return null;
     }
 
+    // We use headings purely for semantic reasons
     const HeadingElement = ({ children, level }) => {
       return React.createElement(
         `h${level}`,
@@ -67,20 +68,18 @@ const renderTabFactory = ({
       type: 'button',
     };
 
+    const tabButton = (
+      <button {...buttonProps} data-testid={child.props['data-testid']}>
+        <span className="button-text">{title}</span> {icon}
+      </button>
+    );
+
     return (
       <li {...tabProps}>
         {headingLevel && (
-          <HeadingElement level={headingLevel}>
-            <button {...buttonProps} data-testid={child.props['data-testid']}>
-              <span className="button-text">{title}</span> {icon}
-            </button>
-          </HeadingElement>
+          <HeadingElement level={headingLevel}>{tabButton}</HeadingElement>
         )}
-        {!headingLevel && (
-          <button {...buttonProps} data-testid={child.props['data-testid']}>
-            <span className="button-text">{title}</span> {icon}
-          </button>
-        )}
+        {!headingLevel && tabButton}
       </li>
     );
   };

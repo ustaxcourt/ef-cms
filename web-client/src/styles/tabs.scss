@@ -23,10 +23,6 @@
     right: 0;
   }
 
-  .tab-header {
-    display: inline;
-  }
-
   ul.ustc-ui-tabs {
     padding-left: 0;
     border-bottom: 1px solid color($theme-color-base-lighter);
@@ -38,10 +34,15 @@
     li {
       display: inline-block;
 
+      .tab-header {
+        display: inline;
+      }
+
       button {
         position: relative;
         top: 2px;
         padding: 0;
+        padding-bottom: 5px;
         border: none;
         margin-right: 45px;
         background: none;
@@ -49,7 +50,6 @@
         cursor: pointer;
 
         .button-text {
-          display: inline;
           font-family: $font-serif;
           font-size: 32px;
           font-weight: bold;
