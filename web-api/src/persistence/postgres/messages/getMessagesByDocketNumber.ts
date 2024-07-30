@@ -13,14 +13,13 @@ export const getMessagesByDocketNumber = async ({
     .selectFrom('message as m')
     .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
     .where('m.docketNumber', '=', docketNumber)
-    .selectAll('m')
-    .select(['m.docketNumber'])
+    .selectAll()
+    .select('m.docketNumber')
     .execute();
 
-  return messages.map(
-    message =>
-      new MessageResult(transformNullToUndefined(message), {
-        applicationContext,
-      }),
+  return messages.map(message =>
+    new MessageResult(transformNullToUndefined(message), {
+      applicationContext,
+    }).validate(),
   );
 };

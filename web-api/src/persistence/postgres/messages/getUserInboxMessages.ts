@@ -8,22 +8,16 @@ export const getUserInboxMessages = async ({
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) => {
-  applicationContext.logger.info('getUserInboxMessages start');
-
+}): Promise<MessageResult[]> => {
   const messages = await db
     .selectFrom('message as m')
     .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
     .where('m.isCompleted', '=', false)
     .where('m.isRepliedTo', '=', false)
     .where('m.toUserId', '=', userId)
-    .selectAll('m')
+    .selectAll()
     .select('m.docketNumber')
     .execute();
-
-  console.log('**** getUserInboxMessages', messages);
-
-  applicationContext.logger.info('getUserInboxMessages end');
 
   return messages.map(message =>
     new MessageResult(transformNullToUndefined(message), {
