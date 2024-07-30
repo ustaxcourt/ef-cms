@@ -80,7 +80,5 @@ export const orderAdvancedSearchInteractor = async (
     MAX_SEARCH_RESULTS,
   );
 
-  return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
-    applicationContext,
-  });
+  return InternalDocumentSearchResult.validateRawCollection(filteredResults);
 };
