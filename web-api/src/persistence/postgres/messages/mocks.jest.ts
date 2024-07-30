@@ -1,73 +1,60 @@
-jest.mock('@web-api/persistence/postgres/messages/createMessage', () => ({
-  createMessage: jest.fn(),
-}));
+import { mockFactory } from '@shared/test/mockFactory';
+
+jest.mock('@web-api/persistence/postgres/messages/createMessage', () =>
+  mockFactory('createMessage'),
+);
 
 jest.mock(
   '@web-api/persistence/postgres/messages/getCompletedSectionInboxMessages',
-  () => ({
-    getCompletedSectionInboxMessages: jest.fn(),
-  }),
+  () => mockFactory('getCompletedSectionInboxMessages'),
 );
 
 jest.mock(
   '@web-api/persistence/postgres/messages/getCompletedUserInboxMessages',
-  () => ({
-    getCompletedUserInboxMessages: jest.fn(),
-  }),
+  () => mockFactory('getCompletedUserInboxMessages'),
 );
 
-jest.mock('@web-api/persistence/postgres/messages/getMessageById', () => ({
-  getMessageById: jest.fn(),
-}));
+jest.mock('@web-api/persistence/postgres/messages/getMessageById', () =>
+  mockFactory('getMessageById'),
+);
 
-jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
+jest.mock(
+  '@web-api/persistence/postgres/messages/getMessagesByDocketNumber',
+  () => mockFactory('getMessagesByDocketNumber'),
+);
 
-// jest.mock(
-//   '@web-api/persistence/postgres/messages/getMessageThreadByParentId',
-//   () => ({
-//     getMessageThreadByParentId: jest.fn(() => console.error('not implemented')),
-//   }),
-// );
-
-jest.mock('@web-api/persistence/postgres/messages/getMessageThreadByParentId');
+jest.mock(
+  '@web-api/persistence/postgres/messages/getMessageThreadByParentId',
+  () => mockFactory('getMessageThreadByParentId'),
+);
 
 jest.mock(
   '@web-api/persistence/postgres/messages/getSectionInboxMessages',
-  () => ({
-    getSectionInboxMessages: jest.fn(),
-  }),
+  () => mockFactory('getSectionInboxMessages'),
 );
 
 jest.mock(
   '@web-api/persistence/postgres/messages/getSectionOutboxMessages',
-  () => ({
-    getSectionOutboxMessages: jest.fn(),
-  }),
+  () => mockFactory('getSectionOutboxMessages'),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/messages/getUserInboxMessages',
-  () => ({
-    getUserInboxMessages: jest.fn(),
-  }),
+jest.mock('@web-api/persistence/postgres/messages/getUserInboxMessages', () =>
+  mockFactory('getUserInboxMessages'),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/messages/getUserOutboxMessages',
-  () => ({
-    getUserOutboxMessages: jest.fn(),
-  }),
+jest.mock('@web-api/persistence/postgres/messages/getUserOutboxMessages', () =>
+  mockFactory('getUserOutboxMessages'),
 );
 
 jest.mock(
   '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo',
-  () => ({
-    markMessageThreadRepliedTo: jest.fn(),
-  }),
+  () => mockFactory('markMessageThreadRepliedTo'),
 );
 
-jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () => ({
-  setMessageAsRead: jest.fn(),
-}));
+jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () =>
+  mockFactory('setMessageAsRead'),
+);
 
-jest.mock('@web-api/persistence/postgres/messages/updateMessage');
+jest.mock('@web-api/persistence/postgres/messages/updateMessage', () =>
+  mockFactory('updateMessage'),
+);
