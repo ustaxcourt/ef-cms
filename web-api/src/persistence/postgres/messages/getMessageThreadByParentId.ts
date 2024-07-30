@@ -11,23 +11,19 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
  * @returns {object} the created message
  */
 export const getMessageThreadByParentId = async ({
-  applicationContext,
   parentMessageId,
 }: {
-  applicationContext: IApplicationContext;
   parentMessageId: string;
-}) => {
+}): Promise<Message[]> => {
   const messages = await db
     .selectFrom('message')
     .where('parentMessageId', '=', parentMessageId)
     .selectAll()
     .execute();
 
-  return messages.map(
-    result =>
-      new Message(
-        transformNullToUndefined({ ...result, createdAt: result.createdAt }),
-        { applicationContext },
-      ),
+  return messages.map(result =>
+    new Message(
+      transformNullToUndefined({ ...result, createdAt: result.createdAt }),
+    ).validate(),
   );
 };

@@ -4,12 +4,10 @@ import { db } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCompletedSectionInboxMessages = async ({
-  applicationContext,
   section,
 }: {
-  applicationContext: IApplicationContext;
   section: string;
-}) => {
+}): Promise<Message[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
   const messages = await db
@@ -21,8 +19,7 @@ export const getCompletedSectionInboxMessages = async ({
     .limit(5000)
     .execute();
 
-  return messages.map(
-    message =>
-      new Message(transformNullToUndefined(message), { applicationContext }),
+  return messages.map(message =>
+    new Message(transformNullToUndefined(message)).validate(),
   );
 };

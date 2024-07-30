@@ -1,29 +1,23 @@
-import { RawMessage } from '@shared/business/entities/Message';
+import { Message, RawMessage } from '@shared/business/entities/Message';
 import { db } from '@web-api/database';
-import { getMessageById } from '@web-api/persistence/postgres/messages/getMessageById';
-import { omit } from 'lodash';
+import { toKyselyUpdateMessage } from './mapper';
+import { transformNullToUndefined } from '../utils/transformNullToUndefined';
 
-export const updateMessage = async ({ message }: { message: RawMessage }) => {
-  const existingMessage = await getMessageById({
-    messageId: message.messageId,
-  });
+export const updateMessage = async ({
+  message,
+}: {
+  message: RawMessage;
+}): Promise<Message> => {
+  const updatedMessage = await db
+    .updateTable('message')
+    .set(toKyselyUpdateMessage(message))
+    .where('messageId', '=', message.messageId)
+    .returningAll()
+    .executeTakeFirst();
 
-  if (existingMessage) {
-    const updatedMessage = {
-      ...existingMessage,
-      ...message,
-    };
-
-    return await db
-      .updateTable('message')
-      .set({
-        ...omit(updatedMessage, 'entityName'),
-        attachments: JSON.stringify(updatedMessage.attachments),
-      })
-      .where('messageId', '=', message.messageId)
-      .returningAll()
-      .executeTakeFirst();
-  } else {
-    throw new Error(`Message with id ${message.messageId} not found`);
+  if (!updatedMessage) {
+    throw new Error('could not update the message');
   }
+
+  return new Message(transformNullToUndefined(message)).validate();
 };

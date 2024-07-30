@@ -32,7 +32,6 @@ export const replyToMessage = async (
   }
 
   await markMessageThreadRepliedTo({
-    applicationContext,
     parentMessageId,
   });
 
@@ -49,25 +48,22 @@ export const replyToMessage = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage = new Message(
-    {
-      attachments,
-      caseStatus: status,
-      caseTitle: Case.getCaseTitle(caseCaption),
-      docketNumber,
-      docketNumberWithSuffix,
-      from: fromUser.name,
-      fromSection: fromUser.section,
-      fromUserId: fromUser.userId,
-      message,
-      parentMessageId,
-      subject,
-      to: toUser.name,
-      toSection,
-      toUserId,
-    },
-    { applicationContext },
-  )
+  const validatedRawMessage = new Message({
+    attachments,
+    caseStatus: status,
+    caseTitle: Case.getCaseTitle(caseCaption),
+    docketNumber,
+    docketNumberWithSuffix,
+    from: fromUser.name,
+    fromSection: fromUser.section,
+    fromUserId: fromUser.userId,
+    message,
+    parentMessageId,
+    subject,
+    to: toUser.name,
+    toSection,
+    toUserId,
+  })
     .validate()
     .toRawObject();
 

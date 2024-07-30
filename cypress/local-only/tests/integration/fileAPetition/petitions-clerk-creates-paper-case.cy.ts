@@ -11,7 +11,10 @@ import {
 
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import {
+  createAndServePaperPetition,
+  createAndServePaperPetitionMyselfAndSpouse,
+} from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
 
 describe('Petition clerk creates a paper filing', function () {
@@ -130,6 +133,15 @@ describe('Petition clerk creates a paper filing', function () {
               }
             });
           });
+      });
+    });
+
+    it('should submit case when secondary contact phone number is not provided', () => {
+      createAndServePaperPetitionMyselfAndSpouse().then(docketNumber => {
+        cy.get('[data-testid="case-link"]').should(
+          'have.text',
+          `Docket Number: ${docketNumber}`,
+        );
       });
     });
   });
