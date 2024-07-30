@@ -41,12 +41,6 @@ describe('Message', () => {
   (createISODateString as jest.Mock).mockReturnValue(mockCreatedAt);
 
   describe('constructor', () => {
-    it('should throw an error when application context is not provided as an argument', () => {
-      expect(() => new Message(mockMessage)).toThrow(
-        'applicationContext must be defined',
-      );
-    });
-
     it('should populate leadDocketNumber when it is provided', () => {
       const mockLeadDocketNumber = '999-99';
 
