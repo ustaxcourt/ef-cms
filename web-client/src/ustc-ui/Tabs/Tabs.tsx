@@ -43,7 +43,10 @@ const renderTabFactory = ({
       return null;
     }
 
-    const HeadingElement = headingLevel ? `h${headingLevel}` : 'span';
+    const HeadingElement = ({ children, level }) => {
+      return React.createElement(`h${level}`, null, children);
+    };
+
     const tabProps = {
       className: liClass,
       role: 'presentation',
@@ -62,10 +65,18 @@ const renderTabFactory = ({
 
     return (
       <li {...tabProps}>
-        <button {...buttonProps} data-testid={child.props['data-testid']}>
-          <HeadingElement className="button-text">{title}</HeadingElement>{' '}
-          {icon}
-        </button>
+        {headingLevel && (
+          <HeadingElement level={headingLevel}>
+            <button {...buttonProps} data-testid={child.props['data-testid']}>
+              <span className="button-text">{title}</span> {icon}
+            </button>
+          </HeadingElement>
+        )}
+        {!headingLevel && (
+          <button {...buttonProps} data-testid={child.props['data-testid']}>
+            <span className="button-text">{title}</span> {icon}
+          </button>
+        )}
       </li>
     );
   };
