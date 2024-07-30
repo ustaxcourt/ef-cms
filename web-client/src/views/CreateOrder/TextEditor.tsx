@@ -19,20 +19,6 @@ const ReactQuill = React.lazy(async () => {
   return { default: reactQuill };
 });
 
-// reactQuill removes tabs around HTML tags. This function is a
-// very imperfect workaround using a zero-width space to force reactQuill
-// to maintain any initial tab. See https://github.com/slab/quill/issues/3580.
-const formatTextToMaintainInitialTab = (text: string) => {
-  if (text) {
-    // This will render an "invisible" space at the beginning of an initial tabbed line,
-    // which is not ideal, but which is better than not rendering the tab.
-    // eslint-disable-next-line no-control-regex
-    text = text.replace(/^<p>(?<!\u200B)\t/, '<p>&#x200B;\t');
-  }
-  console.log('defaultValue after applying', text);
-  return text;
-};
-
 export const TextEditor = ({
   defaultValue,
   editorDelta,
@@ -41,7 +27,6 @@ export const TextEditor = ({
 }) => {
   const quillEscapeRef = useRef(null);
   console.log('defaultValue', defaultValue);
-  defaultValue = formatTextToMaintainInitialTab(defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
@@ -99,11 +84,15 @@ export const TextEditor = ({
             const documentContents = editor.getText();
             console.log('TextEditor documentContents', documentContents);
             const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
+              customCssStyles: () => {
+                return 'white-space: pre-wrap !important;';
+              },
               inlineStyles: {
                 size: inlineStylesFontSizes,
               },
             });
             const html = converter.convert();
+            console.log('html', html);
             updateFormValueSequence({
               key: 'richText',
               value: html,
