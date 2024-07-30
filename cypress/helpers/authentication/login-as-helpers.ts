@@ -126,7 +126,7 @@ export function loginAsIrsSuperUser() {
 // waiting for the account menu button, resulting in visiting a route before the page was fully loaded.
 // We need to deprecate usage of cy.login and have all tests login through helper functions so we properly await
 function login({ email }: { email: string }) {
-  Cypress.session.clearCurrentSessionData();
+  cy.clearAllCookies();
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(email);
   cy.get('[data-testid="password-input"]').type(
