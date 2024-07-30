@@ -13,8 +13,13 @@ export const primeScannerSourceAction = ({
   const { SCAN_MODES } = applicationContext.getConstants();
 
   const scannerSourceName = get(state.modal.scanner);
-  const scannerSourceIndex = get(state.modal.index);
   const scanMode = get(state.modal.scanMode) || SCAN_MODES.FEEDER;
+
+  let scannerSourceIndex = get(state.modal.index);
+  scannerSourceIndex =
+    typeof scannerSourceIndex === 'string'
+      ? parseInt(scannerSourceIndex, 10)
+      : scannerSourceIndex;
 
   return { scanMode, scannerSourceIndex, scannerSourceName };
 };
