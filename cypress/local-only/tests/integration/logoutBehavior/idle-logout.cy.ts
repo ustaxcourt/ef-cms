@@ -1,4 +1,4 @@
-import { ITestableWindow } from '../../../../../types/ITestableWindow';
+import { ITestableWindow } from '../../../../helpers/ITestableWindow';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 import { overrideIdleTimeouts } from '../../../support/idleLogoutHelpers';
 import { retry } from '../../../../helpers/retry';

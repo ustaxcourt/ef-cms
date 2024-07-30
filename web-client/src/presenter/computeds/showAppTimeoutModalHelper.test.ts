@@ -9,7 +9,7 @@ describe('showAppTimeoutModalHelper', () => {
         idleLogoutState: {
           state: IDLE_LOGOUT_STATES.COUNTDOWN,
         },
-        user: {},
+        user: { userId: '123' },
       },
     });
 
@@ -25,7 +25,7 @@ describe('showAppTimeoutModalHelper', () => {
         modal: {
           showModal: 'AppTimeoutModal',
         },
-        user: undefined,
+        user: {},
       },
     });
 
