@@ -22,12 +22,14 @@ jest.mock('@web-api/persistence/postgres/messages/getMessageById', () => ({
 
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
 
-jest.mock(
-  '@web-api/persistence/postgres/messages/getMessageThreadByParentId',
-  () => ({
-    getMessageThreadByParentId: jest.fn(() => console.error('not implemented')),
-  }),
-);
+// jest.mock(
+//   '@web-api/persistence/postgres/messages/getMessageThreadByParentId',
+//   () => ({
+//     getMessageThreadByParentId: jest.fn(() => console.error('not implemented')),
+//   }),
+// );
+
+jest.mock('@web-api/persistence/postgres/messages/getMessageThreadByParentId');
 
 jest.mock(
   '@web-api/persistence/postgres/messages/getSectionInboxMessages',
@@ -68,6 +70,4 @@ jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () => ({
   setMessageAsRead: jest.fn(),
 }));
 
-jest.mock('@web-api/persistence/postgres/messages/updateMessage', () => ({
-  updateMessage: jest.fn(),
-}));
+jest.mock('@web-api/persistence/postgres/messages/updateMessage');

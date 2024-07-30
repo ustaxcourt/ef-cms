@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PETITIONS_SECTION,
@@ -6,7 +7,9 @@ import {
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { getMessageThreadByParentId as getMessageThreadByParentIdMock } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
+import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
@@ -31,27 +34,27 @@ describe('saveSignedDocumentInteractor', () => {
       mockDocumentIdBeforeSignature,
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getMessageThreadByParentId.mockReturnValue([
-        {
-          caseStatus: mockCase.status,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-03-01T21:40:46.415Z',
-          docketNumber: mockCase.docketNumber,
-          docketNumberWithSuffix: mockCase.docketNumber,
-          from: 'Test Petitionsclerk',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
-          message: 'hey there',
-          messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
-          parentMessageId: mockParentMessageId,
-          subject: 'hello',
-          to: 'Test Petitionsclerk2',
-          toSection: PETITIONS_SECTION,
-          toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
-        },
-      ]);
+    const getMessageThreadByParentId =
+      getMessageThreadByParentIdMock as jest.Mock;
+    getMessageThreadByParentId.mockReturnValue([
+      {
+        caseStatus: mockCase.status,
+        caseTitle: 'Test Petitioner',
+        createdAt: '2019-03-01T21:40:46.415Z',
+        docketNumber: mockCase.docketNumber,
+        docketNumberWithSuffix: mockCase.docketNumber,
+        from: 'Test Petitionsclerk',
+        fromSection: PETITIONS_SECTION,
+        fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
+        message: 'hey there',
+        messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+        parentMessageId: mockParentMessageId,
+        subject: 'hello',
+        to: 'Test Petitionsclerk2',
+        toSection: PETITIONS_SECTION,
+        toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
+      },
+    ]);
   });
 
   it('should save the original, unsigned document to S3 with a new id', async () => {
@@ -160,6 +163,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
+    const updateMessage = updateMessageMock as jest.Mock;
     await saveSignedDocumentInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
@@ -168,13 +172,8 @@ describe('saveSignedDocumentInteractor', () => {
       signedDocketEntryId: mockSignedDocketEntryId,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
-        .message,
-    ).toMatchObject({
+    expect(updateMessage).toHaveBeenCalled();
+    expect(updateMessage.mock.calls[0][0].message).toMatchObject({
       attachments: [
         {
           documentId: mockSignedDocketEntryId,
