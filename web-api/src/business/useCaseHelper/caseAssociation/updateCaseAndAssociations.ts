@@ -149,15 +149,12 @@ const updateCorrespondence = ({
     'correspondenceId',
   );
 
-  const validCorrespondence = Correspondence.validateRawCollection(
-    [
-      ...addedCorrespondences,
-      ...updatedCorrespondences,
-      ...addedArchivedCorrespondences,
-      ...updatedArchivedCorrespondences,
-    ],
-    { applicationContext },
-  );
+  const validCorrespondence = Correspondence.validateRawCollection([
+    ...addedCorrespondences,
+    ...updatedCorrespondences,
+    ...addedArchivedCorrespondences,
+    ...updatedArchivedCorrespondences,
+  ]);
 
   return validCorrespondence.map(
     correspondence =>
@@ -235,7 +232,6 @@ const updateIrsPractitioners = ({
 
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     currentIrsPractitioners,
-    { applicationContext },
   );
 
   const deletePractitionerFunctions = deletedIrsPractitioners.map(
@@ -305,7 +301,6 @@ const updatePrivatePractitioners = ({
 
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
     currentPrivatePractitioners,
-    { applicationContext },
   );
 
   const deletePractitionerFunctions = deletedPrivatePractitioners.map(

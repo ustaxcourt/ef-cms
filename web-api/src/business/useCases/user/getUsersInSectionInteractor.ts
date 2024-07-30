@@ -34,5 +34,5 @@ export const getUsersInSectionInteractor = async (
       section,
     });
 
-  return User.validateRawCollection(rawUsers, { applicationContext });
+  return User.validateRawCollection(rawUsers);
 };

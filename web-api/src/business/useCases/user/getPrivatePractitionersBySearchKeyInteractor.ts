@@ -34,7 +34,5 @@ export const getPrivatePractitionersBySearchKeyInteractor = async (
       type: 'privatePractitioner',
     });
 
-  return PrivatePractitioner.validateRawCollection(users, {
-    applicationContext,
-  });
+  return PrivatePractitioner.validateRawCollection(users);
 };
