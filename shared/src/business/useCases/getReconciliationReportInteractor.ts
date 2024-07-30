@@ -78,10 +78,8 @@ export const getReconciliationReportInteractor = async (
   await assignCaseCaptionFromPersistence(applicationContext, docketEntries);
 
   const report = {
-    docketEntries: ReconciliationReportEntry.validateRawCollection(
-      docketEntries,
-      { applicationContext },
-    ),
+    docketEntries:
+      ReconciliationReportEntry.validateRawCollection(docketEntries),
     reconciliationDate,
     reconciliationDateEnd: isoEnd,
     reportTitle: 'Reconciliation Report',

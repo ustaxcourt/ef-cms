@@ -20,8 +20,14 @@ import diff from 'diff-arrays-of-objects';
  */
 const updateCaseDocketEntries = ({
   applicationContext,
+  authorizedUser,
   caseToUpdate,
   oldCase,
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: UnknownAuthUser;
+  caseToUpdate: any;
+  oldCase: any;
 }) => {
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries,
@@ -45,7 +51,7 @@ const updateCaseDocketEntries = ({
       ...addedArchivedDocketEntries,
       ...updatedArchivedDocketEntries,
     ],
-    { applicationContext, petitioners: caseToUpdate.petitioners },
+    { authorizedUser, petitioners: caseToUpdate.petitioners },
   );
 
   return validDocketEntries.map(
@@ -485,6 +491,7 @@ export const updateCaseAndAssociations = async ({
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
     fn({
       applicationContext,
+      authorizedUser,
       caseToUpdate: validRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),

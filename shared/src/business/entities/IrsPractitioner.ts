@@ -8,8 +8,8 @@ export class IrsPractitioner extends User {
   public barNumber: string;
   public serviceIndicator: string;
 
-  constructor(rawUser, options?) {
-    super(rawUser, options);
+  constructor(rawUser, { filtered = false } = {}) {
+    super(rawUser, { filtered });
 
     this.entityName = IrsPractitioner.ENTITY_NAME;
 
