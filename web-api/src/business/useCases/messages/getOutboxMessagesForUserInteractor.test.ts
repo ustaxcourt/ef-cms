@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
@@ -6,6 +7,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
+import { getUserOutboxMessages } from '@web-api/persistence/postgres/messages/getUserOutboxMessages';
 import { omit } from 'lodash';
 
 describe('getOutboxMessagesForUserInteractor', () => {
@@ -29,7 +31,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
-      docketNumberWithSuffix: '123-45S',
+      docketNumberWithSuffix: '123-45',
       entityName: 'MessageResult',
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
@@ -51,9 +53,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     });
-    applicationContext
-      .getPersistenceGateway()
-      .getUserOutboxMessages.mockReturnValue([messageData]);
+    (getUserOutboxMessages as jest.Mock).mockReturnValue([messageData]);
 
     const returnedMessages = await getOutboxMessagesForUserInteractor(
       applicationContext,
@@ -62,9 +62,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
       },
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserOutboxMessages,
-    ).toHaveBeenCalled();
+    expect(getUserOutboxMessages).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });
