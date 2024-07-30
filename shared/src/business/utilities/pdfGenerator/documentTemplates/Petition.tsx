@@ -7,6 +7,10 @@ import {
   PARTY_TYPES,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
+import {
+  IrsNoticesWithCaseDescription,
+  PetitionPdfBase,
+} from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { PetitionDocketHeader } from '../components/PetitionDocketHeader';
 import { PetitionPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PetitionPrimaryHeader';
 import React from 'react';
@@ -25,20 +29,9 @@ export const Petition = ({
   preferredTrialCity,
   procedureType,
   taxYear,
-}: {
-  caseCaptionExtension: string;
+}: PetitionPdfBase & {
   caseDescription: string;
-  caseTitle: string;
-  procedureType: string;
-  hasUploadedIrsNotice: boolean;
-  taxYear: string;
-  irsNotices: any[];
-  partyType: string;
-  petitionFacts: string[];
-  preferredTrialCity: string;
-  petitionReasons: string[];
-  contactPrimary: { [key: string]: string };
-  contactSecondary?: { [key: string]: string };
+  irsNotices: IrsNoticesWithCaseDescription[];
 }) => {
   const BUSINESS_TYPE_VALUES: string[] = Object.values(BUSINESS_TYPES);
 
@@ -124,8 +117,8 @@ export const Petition = ({
             add each reason separately):
           </li>
           <ol className="petition-list-item">
-            {petitionReasons.map((reason, index) => {
-              return <li key={`${reason.slice(0, 10)}-${index}`}>{reason}</li>;
+            {petitionReasons.map(reason => {
+              return <li key={`${reason.slice(0, 10)}`}>{reason}</li>;
             })}
           </ol>
           <li className="list-bold">
@@ -133,8 +126,8 @@ export const Petition = ({
             separately):
           </li>
           <ol className="petition-list-item">
-            {petitionFacts.map((fact, index) => {
-              return <li key={`${fact.slice(0, 10)}-${index}`}>{fact}</li>;
+            {petitionFacts.map(fact => {
+              return <li key={`${fact.slice(0, 10)}`}>{fact}</li>;
             })}
           </ol>
         </ol>

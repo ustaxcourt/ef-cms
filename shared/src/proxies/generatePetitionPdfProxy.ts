@@ -1,8 +1,11 @@
-import { PetitionPdf } from '@shared/business/useCases/generatePetitionPdfInteractor';
+import {
+  IrsNotice,
+  PetitionPdfBase,
+} from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { post } from '@shared/proxies/requests';
 
 export const generatePetitionPdfInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext,
   {
     caseCaptionExtension,
     caseTitle,
@@ -18,7 +21,11 @@ export const generatePetitionPdfInteractor = (
     preferredTrialCity,
     procedureType,
     taxYear,
-  }: PetitionPdf,
+  }: PetitionPdfBase & {
+    hasIrsNotice: boolean;
+    originalCaseType: string;
+    irsNotices: IrsNotice[];
+  },
 ): Promise<{
   fileId: string;
 }> => {
