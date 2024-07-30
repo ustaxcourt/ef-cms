@@ -1,14 +1,12 @@
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
-import { fillPrimaryContact } from '../../integration/fileAPetitionUpdated/petition-helper';
+import { fillPetitionerInformation } from '../../integration/fileAPetitionUpdated/petition-helper';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Petition generation - step 2', () => {
   beforeEach(() => {
     loginAsPetitioner();
     cy.visit('/file-a-petition/new');
-    cy.get('[data-testid="filing-type-0"').click();
-    fillPrimaryContact();
-    cy.get('[data-testid="step-1-next-button"]').click();
+    fillPetitionerInformation();
   });
 
   it('Auto generate Petition: should be free of a11y issues', () => {
