@@ -378,7 +378,7 @@ const updateCaseWorkItems = async ({
     trialLocation: caseToUpdate.trialLocation || null,
   }));
 
-  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems); // TODO: 10417, go look at validateRawCollection as a whole.
+  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
 
   return validWorkItems.map(
     validWorkItem =>
