@@ -27,5 +27,5 @@ export const getInternalUsersInteractor = async (
       applicationContext,
     });
 
-  return User.validateRawCollection(rawUsers, { applicationContext });
+  return User.validateRawCollection(rawUsers);
 };
