@@ -44,7 +44,11 @@ const renderTabFactory = ({
     }
 
     const HeadingElement = ({ children, level }) => {
-      return React.createElement(`h${level}`, null, children);
+      return React.createElement(
+        `h${level}`,
+        { className: 'tab-header' },
+        children,
+      );
     };
 
     const tabProps = {
