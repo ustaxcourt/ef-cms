@@ -148,6 +148,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         applicationContext.getNotificationGateway().sendNotificationToUser,
       ).toHaveBeenCalledWith({
         applicationContext,
+        clientConnectionId: mockRequest.clientConnectionId,
         message: {
           action: 'retry_async_request',
           originalRequest: mockRequest,
