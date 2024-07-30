@@ -71,19 +71,23 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
     const iterationData: GetCustomCaseReportResponse = await applicationContext
       .getUseCases()
-      .getCustomCaseReportInteractor(applicationContext, {
-        caseStatuses,
-        caseTypes,
-        endDate,
-        filingMethod,
-        highPriority,
-        judges,
-        pageSize,
-        preferredTrialCities,
-        procedureType,
-        searchAfter,
-        startDate,
-      });
+      .getCustomCaseReportInteractor(
+        applicationContext,
+        {
+          caseStatuses,
+          caseTypes,
+          endDate,
+          filingMethod,
+          highPriority,
+          judges,
+          pageSize,
+          preferredTrialCities,
+          procedureType,
+          searchAfter,
+          startDate,
+        },
+        authorizedUser,
+      );
 
     cases.push(...iterationData.foundCases);
     searchAfter = iterationData.lastCaseId;
