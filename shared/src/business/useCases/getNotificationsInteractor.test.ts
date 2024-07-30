@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CHIEF_JUDGE,
   DOCKET_SECTION,
@@ -7,6 +8,11 @@ import {
 import { applicationContext } from '../test/createTestApplicationContext';
 import { caseServicesSupervisorUser } from '../../test/mockUsers';
 import { getNotificationsInteractor } from './getNotificationsInteractor';
+import { getSectionInboxMessages as getSectionInboxMessagesMock } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
+import { getUserInboxMessages as getUserInboxMessagesMock } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
+
+const getUserInboxMessages = getUserInboxMessagesMock as jest.Mock;
+const getSectionInboxMessages = getSectionInboxMessagesMock as jest.Mock;
 
 const workItems = [
   {
@@ -68,25 +74,21 @@ const workItems = [
 
 describe('getNotificationsInteractor', () => {
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserInboxMessages.mockReturnValue([
-        {
-          isRead: true,
-          messageId: 'message-id-1',
-        },
-      ]);
+    getUserInboxMessages.mockReturnValue([
+      {
+        isRead: true,
+        messageId: 'message-id-1',
+      },
+    ]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getSectionInboxMessages.mockReturnValue([
-        {
-          messageId: 'message-id-1',
-        },
-        {
-          messageId: 'message-id-2',
-        },
-      ]);
+    getSectionInboxMessages.mockReturnValue([
+      {
+        messageId: 'message-id-1',
+      },
+      {
+        messageId: 'message-id-2',
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
@@ -386,18 +388,16 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an accurate unread count for my messages', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserInboxMessages.mockReturnValue([
-        {
-          isRead: false,
-          messageId: 'message-id-1',
-        },
-        {
-          isRead: true,
-          messageId: 'message-id-2',
-        },
-      ]);
+    getUserInboxMessages.mockReturnValue([
+      {
+        isRead: false,
+        messageId: 'message-id-1',
+      },
+      {
+        isRead: true,
+        messageId: 'message-id-2',
+      },
+    ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
       caseServicesSupervisorData: undefined,
@@ -484,14 +484,12 @@ describe('getNotificationsInteractor', () => {
       judgeUserId: undefined,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserInboxMessages.mock
-        .calls[0][0].userId,
-    ).toEqual(caseServicesSupervisorUser.userId);
-    expect(
-      applicationContext.getPersistenceGateway().getSectionInboxMessages.mock
-        .calls[0][0].section,
-    ).toEqual(PETITIONS_SECTION);
+    expect(getUserInboxMessages.mock.calls[0][0].userId).toEqual(
+      caseServicesSupervisorUser.userId,
+    );
+    expect(getSectionInboxMessages.mock.calls[0][0].section).toEqual(
+      PETITIONS_SECTION,
+    );
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
         .mock.calls[0][0].section,
