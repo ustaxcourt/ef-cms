@@ -15,7 +15,9 @@ export const generatePetitionPdfAction = async ({
 
   const generatePetitionPdfEntity = new GeneratePetitionPdf(petition);
   const errors = generatePetitionPdfEntity.getFormattedValidationErrors();
-  if (errors) throw Error('DATA IS WRONG');
+  if (errors) {
+    throw Error('Petition PDF generation failed due to invalid data.');
+  }
 
   const generatePetitionPdfData = generatePetitionPdfEntity.toRawObject();
   const { fileId } = await applicationContext
