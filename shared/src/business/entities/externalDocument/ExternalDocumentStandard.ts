@@ -7,7 +7,6 @@ export class ExternalDocumentStandard extends ExternalDocumentBase {
 
   constructor(rawProps) {
     super(rawProps, 'ExternalDocumentStandard');
-
     this.selectedCases = rawProps.selectedCases;
   }
 

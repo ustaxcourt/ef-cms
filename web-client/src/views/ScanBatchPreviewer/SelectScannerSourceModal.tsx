@@ -8,24 +8,22 @@ export const SelectScannerSourceModal = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
     modal: state.modal,
-    scanModeOptions: state.scanHelper.scanModeOptions,
+    scanHelper: state.scanHelper,
     selectScannerSequence: sequences.selectScannerSequence,
-    sources: state.scanHelper.sources,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function SelectScannerSourceModal({
     clearModalSequence,
     modal,
-    scanModeOptions,
+    scanHelper,
     selectScannerSequence,
-    sources,
     updateModalValueSequence,
   }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Select"
-        noConfirm={sources.length === 0}
+        noConfirm={scanHelper.disableModalSelect}
         title="Select a Scanner"
         onCancelSequence={clearModalSequence}
         onConfirmSequence={selectScannerSequence}
@@ -39,17 +37,23 @@ export const SelectScannerSourceModal = connect(
             defaultValue={modal.scanner}
             id="scanner-select"
             onChange={e => {
+              const selectedOption = e.target.options[e.target.selectedIndex];
+              const dataIndex = selectedOption.getAttribute('data-index');
+
               updateModalValueSequence({
                 key: 'scanner',
                 value: e.target.value,
               });
               updateModalValueSequence({
                 key: 'index',
-                value: e.target.selectedIndex,
+                value: dataIndex,
               });
             }}
           >
-            {sources.map((source, index) => {
+            {scanHelper.scannerNotSelected && (
+              <option value="">- Select -</option>
+            )}
+            {scanHelper.sources.map((source, index) => {
               return (
                 <option
                   data-index={index}
@@ -79,7 +83,10 @@ export const SelectScannerSourceModal = connect(
               });
             }}
           >
-            {scanModeOptions.map(scanMode => {
+            {scanHelper.scanModeNotSelected && (
+              <option value="">- Select -</option>
+            )}
+            {scanHelper.scanModeOptions.map(scanMode => {
               return (
                 <option key={scanMode.value} value={scanMode.value}>
                   - {scanMode.label} -
@@ -88,7 +95,7 @@ export const SelectScannerSourceModal = connect(
             })}
           </select>
         </div>
-        {sources.length === 0 && (
+        {scanHelper.sources.length === 0 && (
           <p>There are currently no scanner sources available.</p>
         )}
       </ConfirmModal>

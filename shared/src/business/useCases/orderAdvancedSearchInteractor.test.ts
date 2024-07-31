@@ -25,7 +25,7 @@ describe('orderAdvancedSearchInteractor', () => {
               'Everyone knows that Reeses Outrageous bars are the best candy',
             documentTitle: 'Order for More Candy',
             eventCode: 'ODD',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
           {
             caseCaption: 'Samson Workman, Petitioner',
@@ -35,7 +35,7 @@ describe('orderAdvancedSearchInteractor', () => {
             documentContents: 'KitKats are inferior candies',
             documentTitle: 'Order for KitKats',
             eventCode: 'ODD',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
         ],
         totalCount: 2,
@@ -73,7 +73,7 @@ describe('orderAdvancedSearchInteractor', () => {
       documentTitle: 'T.C. Opinion for More Candy',
       documentType: 'T.C. Opinion',
       eventCode: 'TCOP',
-      signedJudgeName: 'Guy Fieri',
+      signedJudgeName: 'Roslindis Angelino',
     });
     applicationContext
       .getPersistenceGateway()
