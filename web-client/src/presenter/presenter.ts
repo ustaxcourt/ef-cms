@@ -322,6 +322,8 @@ import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeC
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
+import { performanceMeasurementEndAction } from '@web-client/presenter/actions/performanceMeasurementEndAction';
+import { performanceMeasurementStartAction } from '@web-client/presenter/actions/performanceMeasurementStartAction';
 import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
@@ -1650,7 +1652,25 @@ export const presenter = {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
-  sequences: presenterSequences,
+  sequences: Object.entries(presenterSequences).reduce(
+    (acc, [sequenceName, sequence]) => {
+      if (Array.isArray(sequence)) {
+        const updatedSequence = [
+          function (...args) {
+            args[0].props['sequenceName'] = sequenceName;
+            return performanceMeasurementStartAction(...args);
+          },
+          ...sequence,
+          performanceMeasurementEndAction,
+        ];
+        acc[sequenceName] = updatedSequence;
+        return acc;
+      }
+      acc[sequenceName] = sequence;
+      return acc;
+    },
+    {},
+  ),
   state: initialState,
 };
 
