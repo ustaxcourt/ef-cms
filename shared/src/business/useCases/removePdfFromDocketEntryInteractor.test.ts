@@ -53,7 +53,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
         contactType: CONTACT_TYPES.primary,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
         phone: '1234567890',
         postalCode: '12345',
         state: 'CA',

@@ -66,7 +66,7 @@ describe('replyToMessageInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Guy Fieri, Petitioner',
+        caseCaption: 'Roslindis Angelino, Petitioner',
         docketNumber: '123-45',
         docketNumberWithSuffix: '123-45S',
         status: CASE_STATUS_TYPES.generalDocket,
@@ -91,7 +91,7 @@ describe('replyToMessageInteractor', () => {
       ...messageData,
       attachments: mockAttachments,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
-      caseTitle: 'Guy Fieri',
+      caseTitle: 'Roslindis Angelino',
       docketNumber: '101-20',
       docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
