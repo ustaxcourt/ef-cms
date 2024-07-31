@@ -2,18 +2,63 @@ import {
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
 } from '@shared/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { CreateCaseIrsForm } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-// TODO type for props
+export type IrsNotice = CreateCaseIrsForm & {
+  noticeIssuedDateFormatted: string;
+  originalCaseType: string;
+};
+
+export type IrsNoticesWithCaseDescription = IrsNotice & {
+  caseDescription: string;
+};
+
+export interface Contact {
+  countryType: string;
+  name: string;
+  inCareOf?: string;
+  secondaryName?: string;
+  title?: string;
+  country: string;
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  postalCode: string;
+  phone: string;
+  state: string;
+  placeOfLegalResidence?: string;
+  contactType: 'primary' | 'secondary';
+  email: string;
+}
+
+export type ContactSecondary = Contact & {
+  hasConsentedToEService?: boolean;
+  phone?: string;
+  paperPetitionEmail?: string;
+};
+
+export interface PetitionPdfBase {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  contactPrimary: Contact;
+  contactSecondary?: ContactSecondary;
+  hasUploadedIrsNotice: boolean;
+  partyType: string;
+  petitionFacts: string[];
+  petitionReasons: string[];
+  preferredTrialCity: string;
+  procedureType: string;
+  taxYear?: string;
+}
 
 export const generatePetitionPdfInteractor = async (
-  applicationContext: ServerApplicationContext,
+  applicationContext,
   {
     caseCaptionExtension,
     caseTitle,
@@ -29,7 +74,11 @@ export const generatePetitionPdfInteractor = async (
     preferredTrialCity,
     procedureType,
     taxYear,
-  }: any,
+  }: PetitionPdfBase & {
+    hasIrsNotice: boolean;
+    originalCaseType: string;
+    irsNotices: IrsNotice[];
+  },
 ): Promise<{ fileId: string }> => {
   const user = applicationContext.getCurrentUser();
 
@@ -53,9 +102,6 @@ export const generatePetitionPdfInteractor = async (
           hasIrsNotice,
           irsNotice.originalCaseType,
         ),
-        noticeIssuedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
       })),
       partyType,
       petitionFacts,
