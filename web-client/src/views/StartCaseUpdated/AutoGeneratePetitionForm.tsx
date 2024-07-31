@@ -27,16 +27,16 @@ export const AutoGeneratePetitionForm = connect(
 
           <div className="margin-bottom-2-rem">
             {form.petitionReasons &&
-              form.petitionReasons.map((reason, index) => {
+              form.petitionReasons.map((_reason, index) => {
+                const key = `petition-reason-${index - 1}`;
                 return (
-                  <div className="display-flex" key={reason.slice(0, 10)}>
+                  <div className="display-flex" key={key}>
                     <div className="text-semibold margin-right-05">
                       {getCharacter(index)}
                     </div>
                     <PetitionFormResponse
                       factOrReasonCount={index}
                       id={`petition-reason-${index - 1}`}
-                      key={`petition-reason-${index - 1}`}
                       labelId="petition-reason-label"
                       textName="petitionReasons"
                     />
@@ -66,16 +66,16 @@ export const AutoGeneratePetitionForm = connect(
           </label>
           <div>
             {form.petitionFacts &&
-              form.petitionFacts.map((fact, index) => {
+              form.petitionFacts.map((_fact, index) => {
+                const key = `petition-fact-${index - 1}`;
                 return (
-                  <div className="display-flex" key={fact.slice(0, 10)}>
+                  <div className="display-flex" key={key}>
                     <div className="text-semibold margin-right-05">
                       {getCharacter(index)}
                     </div>
                     <PetitionFormResponse
                       factOrReasonCount={index}
                       id={`petition-fact-${index - 1}`}
-                      key={`petition-fact-${index - 1}`}
                       labelId="petition-fact-label"
                       textName="petitionFacts"
                     />
