@@ -26,6 +26,7 @@ import {
   petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../test/mockUsers';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 jest.mock('../../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../../utilities/DateHandler');
@@ -75,6 +76,29 @@ describe('Case entity', () => {
         { ...MOCK_CASE, isPaper: false, status: undefined },
         {
           applicationContext,
+          isNewCase: true,
+        },
+      );
+
+      expect(myCase).toMatchObject({
+        caseStatusHistory: [expectedCaseStatus],
+      });
+    });
+
+    it('should add case status information including the petitioners ROLE to the `caseStatusHistory` when a new case is created by an authorized petitioner', () => {
+      const mockCreateIsoDateString = createISODateString as jest.Mock;
+      mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
+
+      const expectedCaseStatus = {
+        changedBy: 'Petitioner',
+        date: createISODateString(),
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      };
+      const myCase = new Case(
+        { ...MOCK_CASE, isPaper: false, status: undefined },
+        {
+          applicationContext,
+          authorizedUser: mockPetitionerUser,
           isNewCase: true,
         },
       );
@@ -1052,7 +1076,6 @@ describe('Case entity', () => {
             countryType: 'Enter country type',
             index: 1,
             name: 'Enter name',
-            phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
           },

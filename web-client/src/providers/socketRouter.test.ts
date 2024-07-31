@@ -137,6 +137,24 @@ describe('socketRouter', () => {
       message: { action: 'download_csv_file' },
       sequence: 'downloadCsvFileSequence',
     },
+    {
+      message: { action: 'set_trial_session_calendar_complete' },
+      sequence: 'completeTrialSessionCalendarSequence',
+    },
+    {
+      args: {
+        alertError: {
+          message:
+            'We could not set the trial session calendar. Please contact support.',
+          title: 'Error setting trial session calendar.',
+        },
+      },
+      message: {
+        action: 'set_trial_session_calendar_error',
+        message: 'I broke :(',
+      },
+      sequence: 'setTrialSessionCalendarErrorSequence',
+    },
   ];
 
   it.each(mockSocketRouterCalls)(
