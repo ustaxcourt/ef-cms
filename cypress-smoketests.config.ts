@@ -13,7 +13,9 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
+  getFeatureFlagValue,
   getNewAccountVerificationCode,
+  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
@@ -69,6 +71,9 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
+        getFeatureFlagValue({ flag }) {
+          return getFeatureFlagValue({ flag });
+        },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({
             password,
@@ -86,6 +91,9 @@ export default defineConfig({
           retries: number;
         }) {
           return readAllItemsInBucket({ bucketName, retries });
+        },
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });

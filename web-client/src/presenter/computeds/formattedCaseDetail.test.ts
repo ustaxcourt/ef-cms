@@ -85,7 +85,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         consolidatedCases: [
           {
-            associatedJudge: 'Guy Fieri',
+            associatedJudge: 'Roslindis Angelino',
             correspondence: [],
             docketEntries: [],
             status: STATUS_TYPES.calendared,

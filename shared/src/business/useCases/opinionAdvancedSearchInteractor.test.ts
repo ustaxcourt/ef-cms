@@ -22,7 +22,7 @@ describe('opinionAdvancedSearchInteractor', () => {
             documentTitle: 'T.C. Opinion for More Candy',
             documentType: 'T.C. Opinion',
             eventCode: 'TCOP',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
           {
             caseCaption: 'Samson Workman, Petitioner',
@@ -31,7 +31,7 @@ describe('opinionAdvancedSearchInteractor', () => {
             documentTitle: 'Summary Opinion for KitKats',
             documentType: 'Summary Opinion',
             eventCode: 'SOP',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
         ],
       });
@@ -60,7 +60,7 @@ describe('opinionAdvancedSearchInteractor', () => {
         documentTitle: 'T.C. Opinion for More Candy',
         documentType: 'T.C. Opinion',
         eventCode: 'TCOP',
-        signedJudgeName: 'Guy Fieri',
+        signedJudgeName: 'Roslindis Angelino',
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
@@ -69,7 +69,7 @@ describe('opinionAdvancedSearchInteractor', () => {
         documentTitle: 'Summary Opinion for KitKats',
         documentType: 'Summary Opinion',
         eventCode: 'SOP',
-        signedJudgeName: 'Guy Fieri',
+        signedJudgeName: 'Roslindis Angelino',
       },
     ]);
   });
@@ -82,7 +82,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       documentTitle: 'T.C. Opinion for More Candy',
       documentType: 'T.C. Opinion',
       eventCode: 'TCOP',
-      signedJudgeName: 'Guy Fieri',
+      signedJudgeName: 'Roslindis Angelino',
     });
     applicationContext
       .getPersistenceGateway()
