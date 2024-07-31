@@ -18,7 +18,7 @@ const petitionFormResponseDependencies = {
     sequences.deleteValidationErrorMessageSequence,
   form: state.form,
   removeFactOrReasonSequence: sequences.removeFactOrReasonSequence,
-  updatePetitionFormValueSequence: sequences.updatePetitionFormValueSequence,
+  updateFormValueSequence: sequences.updateFormValueSequence,
   validationErrors: state.validationErrors,
 };
 
@@ -35,7 +35,7 @@ export const PetitionFormResponse = connect<
     labelId,
     removeFactOrReasonSequence,
     textName,
-    updatePetitionFormValueSequence,
+    updateFormValueSequence,
     validationErrors,
   }) {
     const KEY = `${textName}[${factOrReasonCount}]`;
@@ -60,7 +60,7 @@ export const PetitionFormResponse = connect<
                   style={{ marginTop: '0px' }}
                   value={form[textName][factOrReasonCount] || ''}
                   onChange={e => {
-                    updatePetitionFormValueSequence({
+                    updateFormValueSequence({
                       allowEmptyString: true,
                       index: factOrReasonCount,
                       key: e.target.name,
@@ -101,7 +101,7 @@ export const PetitionFormResponse = connect<
                 style={{ marginTop: '0px', width: '100%' }}
                 value={form[textName][factOrReasonCount] || ''}
                 onChange={e => {
-                  updatePetitionFormValueSequence({
+                  updateFormValueSequence({
                     allowEmptyString: true,
                     index: factOrReasonCount,
                     key: e.target.name,
