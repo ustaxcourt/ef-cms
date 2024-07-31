@@ -26,7 +26,6 @@ export const TextEditor = ({
   updateScreenMetadataSequence,
 }) => {
   const quillEscapeRef = useRef(null);
-  console.log('defaultValue', defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
@@ -82,8 +81,10 @@ export const TextEditor = ({
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();
             const documentContents = editor.getText();
-            console.log('TextEditor documentContents', documentContents);
             const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
+              // We add custom CSS styles to maintain tabbing across save and reload.
+              // (Note that preserveWhitespace does not work: https://github.com/ustaxcourt/ef-cms/pull/1408.)
+              // TODO: preserve toolbar-generated indentation across save and reload.
               customCssStyles: () => {
                 return 'white-space: pre-wrap !important;';
               },
@@ -92,7 +93,6 @@ export const TextEditor = ({
               },
             });
             const html = converter.convert();
-            console.log('html', html);
             updateFormValueSequence({
               key: 'richText',
               value: html,
