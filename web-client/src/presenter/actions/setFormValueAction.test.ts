@@ -55,6 +55,18 @@ describe('setFormValueAction', () => {
     expect(result.state.form.appleType).toEqual(undefined);
   });
 
+  it('sets the state.form[props.key] if the passed in props.value is empty string and allowEmptyString is set to true', async () => {
+    const result = await runAction(setFormValueAction, {
+      props: {
+        allowEmptyString: true,
+        key: 'appleType',
+        value: '',
+      },
+      state: { form: { appleType: 'Fuji' } },
+    });
+    expect(result.state.form.appleType).toEqual('');
+  });
+
   it('unsets the state.form[props.key] if the passed in props.value is null', async () => {
     const result = await runAction(setFormValueAction, {
       props: {

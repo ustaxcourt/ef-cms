@@ -61,6 +61,7 @@ export const PetitionFormResponse = connect<
                   value={form[textName][factOrReasonCount] || ''}
                   onChange={e => {
                     updatePetitionFormValueSequence({
+                      allowEmptyString: true,
                       index: factOrReasonCount,
                       key: e.target.name,
                       value: e.target.value,
@@ -101,6 +102,7 @@ export const PetitionFormResponse = connect<
                 value={form[textName][factOrReasonCount] || ''}
                 onChange={e => {
                   updatePetitionFormValueSequence({
+                    allowEmptyString: true,
                     index: factOrReasonCount,
                     key: e.target.name,
                     value: e.target.value,
