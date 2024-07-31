@@ -378,7 +378,7 @@ describe('paperPetition entity', () => {
     it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
       const paperPetition = new PaperPetition(
         {
-          caseCaption: 'Dr. Guy Fieri, Petitioner',
+          caseCaption: 'Dr. Roslindis Angelino, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
           receivedAt: createISODateString(),
         },
