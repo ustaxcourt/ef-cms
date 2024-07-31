@@ -62,7 +62,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         contactType: CONTACT_TYPES.primary,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
         phone: '1234567890',
         postalCode: '12345',
         state: 'CA',
@@ -84,7 +84,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
     mockCurrentUser = new User({
-      name: 'Olivia Jade',
+      name: 'Naveen Jaron',
       role: ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
