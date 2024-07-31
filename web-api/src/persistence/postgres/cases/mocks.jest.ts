@@ -1,3 +1,5 @@
-jest.mock('@web-api/persistence/postgres/cases/upsertCase', () => ({
-  upsertCase: jest.fn(),
-}));
+import { mockFactory } from '@shared/test/mockFactory';
+
+jest.mock('@web-api/persistence/postgres/cases/upsertCase', () =>
+  mockFactory('upsertCase'),
+);
