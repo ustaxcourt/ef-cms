@@ -5,6 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('case')
     .addColumn('docketNumber', 'varchar', col => col.primaryKey())
     .addColumn('trialLocation', 'varchar')
+    .addColumn('leadDocketNumber', 'varchar')
     .addColumn('trialDate', 'varchar')
     .addColumn('docketNumberSuffix', 'varchar')
     .execute();
@@ -28,7 +29,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('isCompleted', 'boolean')
     .addColumn('isRead', 'boolean')
     .addColumn('isRepliedTo', 'boolean')
-    .addColumn('leadDocketNumber', 'varchar')
     .addColumn('message', 'varchar', col => col.notNull())
     .addColumn('parentMessageId', 'varchar', col => col.notNull())
     .addColumn('subject', 'varchar', col => col.notNull())

@@ -4,6 +4,7 @@ export const upsertCase = async ({ rawCase }: { rawCase: RawCase }) => {
   const caseToUpsert = {
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix,
+    leadDocketNumber: rawCase.leadDocketNumber,
     trialDate: rawCase.trialDate,
     trialLocation: rawCase.trialLocation,
   };

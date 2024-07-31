@@ -835,9 +835,7 @@ describe('updateCaseAndAssociations', () => {
   describe('user case messages', () => {
     beforeAll(() => {
       const mockMessages = [{ messageId: 'abc' }];
-      applicationContext
-        .getPersistenceGateway()
-        .updateMessage.mockResolvedValue(true);
+      updateMessage.mockResolvedValue(true);
       getMessagesByDocketNumber.mockResolvedValue(mockMessages);
     });
     it('completes without altering message records if no message updates are necessary', async () => {
