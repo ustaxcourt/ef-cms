@@ -33,7 +33,7 @@ describe('handleIdleLogoutAction', () => {
           state: 'INITIAL',
         },
         lastIdleAction: 0,
-        user: undefined,
+        token: undefined,
       },
     });
 
@@ -61,7 +61,7 @@ describe('handleIdleLogoutAction', () => {
           state: 'INITIAL',
         },
         lastIdleAction: 0,
-        user: {},
+        token: '92c17761-d382-4231-b497-bc8c9e3ffea1',
       },
     });
 
@@ -89,7 +89,7 @@ describe('handleIdleLogoutAction', () => {
           state: 'INITIAL',
         },
         lastIdleAction: 0,
-        user: {},
+        token: '9dfbf86d-d4e7-41da-a85a-1b57910a5eaa',
       },
     });
 
@@ -118,7 +118,7 @@ describe('handleIdleLogoutAction', () => {
           state: 'MONITORING',
         },
         lastIdleAction: 0,
-        user: {},
+        token: '0e4d3b74-89bc-44a0-a9b9-59f5eece40a5',
       },
     });
 
@@ -147,7 +147,7 @@ describe('handleIdleLogoutAction', () => {
           state: 'COUNTDOWN',
         },
         lastIdleAction: 0,
-        user: {},
+        token: 'd53d2132-860e-41a0-9f42-f73c7285721b',
       },
     });
 

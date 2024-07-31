@@ -484,6 +484,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
@@ -500,6 +501,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
@@ -516,6 +518,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
@@ -532,6 +535,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -545,6 +549,7 @@ describe('scanHelper', () => {
             scanMode: 'someScanMode',
             scanner: 'someScanner',
           },
+          user: petitionerUser,
         },
       });
 
@@ -561,6 +566,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
