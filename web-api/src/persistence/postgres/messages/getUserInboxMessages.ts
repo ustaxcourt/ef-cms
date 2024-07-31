@@ -3,7 +3,6 @@ import { db } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getUserInboxMessages = async ({
-  applicationContext,
   userId,
 }: {
   applicationContext: IApplicationContext;
@@ -20,8 +19,6 @@ export const getUserInboxMessages = async ({
     .execute();
 
   return messages.map(message =>
-    new MessageResult(transformNullToUndefined(message), {
-      applicationContext,
-    }).validate(),
+    new MessageResult(transformNullToUndefined(message)).validate(),
   );
 };

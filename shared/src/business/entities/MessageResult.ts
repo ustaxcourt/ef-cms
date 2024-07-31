@@ -8,8 +8,8 @@ export class MessageResult extends Message {
   public trialLocation: string;
   public docketNumberSuffix?: string;
 
-  constructor(rawMessage, { applicationContext }) {
-    super(rawMessage, { applicationContext });
+  constructor(rawMessage) {
+    super(rawMessage);
 
     this.entityName = 'MessageResult';
     this.trialDate = rawMessage.trialDate;
