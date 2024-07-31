@@ -11,7 +11,7 @@ const DEFAULT_ALERT_ERROR = {
 
 export const alertHelper = (get: Get): any => {
   const alertError = get(state.alertError) || DEFAULT_ALERT_ERROR;
-  const userIsIdentified = get(state.user) || false;
+  const userIsIdentified = get(state.token) || false;
 
   return {
     messagesDeduped: uniq(alertError.messages).filter(Boolean),

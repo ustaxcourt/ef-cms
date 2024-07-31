@@ -90,11 +90,9 @@ export const scanHelper = (
     STINFileCompleted,
     disableModalSelect,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
-    hasScanFeature: !!(
-      user &&
-      user.role &&
-      applicationContext.getUtilities().isInternalUser(user.role)
-    ),
+    hasScanFeature: !!applicationContext
+      .getUtilities()
+      .isInternalUser(user.role),
     scanFeatureEnabled,
     scanModeNotSelected,
     scanModeOptions,
