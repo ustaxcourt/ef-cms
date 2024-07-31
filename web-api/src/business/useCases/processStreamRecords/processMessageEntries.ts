@@ -1,3 +1,4 @@
+import { RawMessage } from '@shared/business/entities/Message';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertMessage } from '@web-api/persistence/postgres/messages/upsertMessage';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
@@ -18,8 +19,8 @@ export const processMessageEntries = async ({
   await Promise.all(
     messageRecords.map(async messageRecord => {
       const messageNewImage = messageRecord.dynamodb.NewImage;
-      const rawMessage = unmarshall(messageNewImage);
-      await upsertMessage(rawMessage as any);
+      const rawMessage = unmarshall(messageNewImage) as RawMessage;
+      await upsertMessage({ message: rawMessage });
     }),
   );
 };
