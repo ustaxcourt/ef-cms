@@ -1513,7 +1513,7 @@ hr.lighter {
   }
 }
 
-.statusReportOrderResponsePdfPreview {
+.statusReportOrderPdfPreview {
   .pdf-preview-viewer {
     height: 846px;
   }
@@ -2292,7 +2292,7 @@ button.change-scanner-button {
 }
 
 .before-case-button {
-	margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .before-case-follow-up-button {
@@ -2302,7 +2302,7 @@ button.change-scanner-button {
 }
 
 .create-petition-navigation-buttons {
-	margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .create-petition-navigation-follow-up-buttons {
@@ -2349,7 +2349,6 @@ button.change-scanner-button {
   }
 }
 
-
 .petition-review-case-information-section {
   display: grid;
   column-gap: 20px;
@@ -2362,10 +2361,9 @@ button.change-scanner-button {
   }
 }
 
-
 @media only screen and (max-width: $medium-screen) {
   .petition-review-spacing {
-    margin-top: 1.5rem
+    margin-top: 1.5rem;
   }
 }
 

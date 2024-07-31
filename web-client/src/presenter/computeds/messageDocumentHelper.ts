@@ -24,9 +24,9 @@ export const messageDocumentHelper = (
     GENERIC_ORDER_EVENT_CODE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
-    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
@@ -164,10 +164,10 @@ export const messageDocumentHelper = (
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
-  const showOrderResponseButton =
-    permissions.ORDER_RESPONSE &&
-    (ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
+  const showStatusReportOrderButton =
+    permissions.STATUS_REPORT_ORDER &&
+    (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
         formattedDocument?.eventCode,
       ));
 
@@ -183,7 +183,6 @@ export const messageDocumentHelper = (
     formattedDocument,
     index,
     messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
-    orderResponseFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/order-response-create`,
     servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
     showAddDocketEntryButton,
     showApplySignatureButton:
@@ -196,10 +195,9 @@ export const messageDocumentHelper = (
       showEditButtonForDocument &&
       (!documentIsSigned || isNotice),
     showEditButtonSigned,
-
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    showOrderResponseButton,
+
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showRemoveSignatureButtonForDocument &&
@@ -209,6 +207,8 @@ export const messageDocumentHelper = (
     showServePetitionButton,
     showServiceWarning,
     showSignStipulatedDecisionButton,
+    showStatusReportOrderButton,
     signOrderLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentIdToDisplay}/sign/${parentMessageId}`,
+    statusReportOrderFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/status-report-order-create`,
   };
 };

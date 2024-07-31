@@ -1,9 +1,9 @@
 import { checkDocumentTypeAction } from '@web-client/presenter/actions/checkDocumentTypeAction';
-import { isStatusReportOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrderResponse/isStatusReportOrderResponseAction';
+import { isStatusReportOrderAction } from '@web-client/presenter/actions/StatusReportOrder/isStatusReportOrderAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
-import { setEditStatusReportOrderResponseFormAction } from '@web-client/presenter/actions/StatusReportOrderResponse/setEditStatusReportOrderResponseFormAction';
-import { statusReportOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrderResponse/statusReportOrderResponsePdfPreviewSequence';
+import { setEditStatusReportOrderFormAction } from '@web-client/presenter/actions/StatusReportOrder/setEditStatusReportOrderFormAction';
+import { statusReportOrderPdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrder/statusReportOrderPdfPreviewSequence';
 
 export const editUnsignedDraftDocumentSequence = [
   checkDocumentTypeAction,
@@ -11,13 +11,13 @@ export const editUnsignedDraftDocumentSequence = [
     documentTypeMiscellaneous: [navigateToPathAction],
     documentTypeOrder: [
       setDocumentToEditAction,
-      isStatusReportOrderResponseAction,
+      isStatusReportOrderAction,
       {
-        isNotStatusReportOrderResponse: [navigateToPathAction],
-        isStatusReportOrderResponse: [
-          setEditStatusReportOrderResponseFormAction,
+        isNotStatusReportOrder: [navigateToPathAction],
+        isStatusReportOrder: [
+          setEditStatusReportOrderFormAction,
           navigateToPathAction,
-          statusReportOrderResponsePdfPreviewSequence,
+          statusReportOrderPdfPreviewSequence,
         ],
       },
     ],
