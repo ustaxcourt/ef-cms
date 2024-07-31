@@ -33,14 +33,14 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
       state: {
         form: {
           contactPrimary: {
-            name: 'Guy Fieri',
+            name: 'Roslindis Angelino',
           },
           partyType: PARTY_TYPES.petitioner,
         },
       },
     });
 
-    expect(result.output.caseCaption).toBe('Guy Fieri, Petitioner');
+    expect(result.output.caseCaption).toBe('Roslindis Angelino, Petitioner');
     expect(
       result.output.caseCaption.includes(CASE_CAPTION_POSTFIX),
     ).toBeFalsy();
