@@ -19,7 +19,6 @@ function pickFields(message) {
     isCompleted: message.isCompleted,
     isRead: message.isRead,
     isRepliedTo: message.isRepliedTo,
-    leadDocketNumber: message.leadDocketNumber,
     message: message.message,
     messageId: message.messageId,
     parentMessageId: message.parentMessageId,
