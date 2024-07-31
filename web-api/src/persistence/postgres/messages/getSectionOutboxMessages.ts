@@ -1,4 +1,4 @@
-import { Message } from '@shared/business/entities/Message';
+import { MessageResult } from '@shared/business/entities/MessageResult';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { db } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
@@ -8,18 +8,19 @@ export const getSectionOutboxMessages = async ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-}): Promise<Message[]> => {
+}): Promise<MessageResult[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
   const messages = await db
-    .selectFrom('message')
-    .where('fromSection', '=', section)
-    .where('createdAt', '>=', filterDate)
+    .selectFrom('message as m')
+    .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+    .where('m.fromSection', '=', section)
+    .where('m.createdAt', '>=', filterDate)
     .selectAll()
-    .limit(5000)
+    .select('m.docketNumber')
     .execute();
 
   return messages.map(message =>
-    new Message(transformNullToUndefined(message)).validate(),
+    new MessageResult(transformNullToUndefined(message)).validate(),
   );
 };

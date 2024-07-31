@@ -47,7 +47,7 @@ export const createMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseCaption, leadDocketNumber, status } = await applicationContext
+  const { caseCaption, status } = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
@@ -67,7 +67,6 @@ export const createMessageInteractor = async (
     from: fromUser.name,
     fromSection: fromUser.section,
     fromUserId: fromUser.userId,
-    leadDocketNumber,
     message,
     subject,
     to: toUser.name,

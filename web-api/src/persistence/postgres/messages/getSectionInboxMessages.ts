@@ -1,4 +1,4 @@
-import { Message } from '@shared/business/entities/Message';
+import { MessageResult } from '@shared/business/entities/MessageResult';
 import { db } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
@@ -7,17 +7,19 @@ export const getSectionInboxMessages = async ({
 }: {
   applicationContext: IApplicationContext;
   section: string;
-}): Promise<Message[]> => {
+}): Promise<MessageResult[]> => {
   const messages = await db
-    .selectFrom('message')
-    .where('toSection', '=', section)
-    .where('isRepliedTo', '=', false)
-    .where('isCompleted', '=', false)
+    .selectFrom('message as m')
+    .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
+    .where('m.toSection', '=', section)
+    .where('m.isRepliedTo', '=', false)
+    .where('m.isCompleted', '=', false)
     .selectAll()
+    .select('m.docketNumber')
     .limit(5000)
     .execute();
 
   return messages.map(message =>
-    new Message(transformNullToUndefined(message)).validate(),
+    new MessageResult(transformNullToUndefined(message)).validate(),
   );
 };
