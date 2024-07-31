@@ -2,4 +2,9 @@ import { setFormValueAction } from '@web-client/presenter/actions/setFormValueAc
 
 export const updatePetitionFormValueSequence = [
   setFormValueAction,
-] as unknown as (props: { index: number; key: string; value: any }) => void;
+] as unknown as (props: {
+  index: number;
+  key: string;
+  value: any;
+  allowEmptyString?: boolean;
+}) => void;
