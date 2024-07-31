@@ -13,7 +13,7 @@ describe('generateSignedDocument', () => {
   let rotationReturnValue;
   let saveMock;
 
-  const mockSignatureName = '(Signed) Dr. Guy Fieri';
+  const mockSignatureName = '(Signed) Dr. Roslindis Angelino';
   const mockTitle = 'Chief Judge';
 
   beforeEach(() => {
