@@ -12,9 +12,9 @@ export const documentViewerHelper = (
 ): any => {
   const {
     COURT_ISSUED_EVENT_CODES,
-    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
 
@@ -99,9 +99,9 @@ export const documentViewerHelper = (
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
-  const showOrderResponseButton =
-    permissions.ORDER_RESPONSE &&
-    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
+  const showStatusReportOrderButton =
+    permissions.STATUS_REPORT_ORDER &&
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
       formattedDocumentToDisplay.eventCode,
     );
 
@@ -112,12 +112,12 @@ export const documentViewerHelper = (
     showApplyStampButton,
     showCompleteQcButton,
     showNotServed,
-    showOrderResponseButton,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
+    showStatusReportOrderButton,
     showStricken: !!formattedDocumentToDisplay.isStricken,
     showUnservedPetitionWarning,
   };

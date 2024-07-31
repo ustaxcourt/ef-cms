@@ -588,9 +588,9 @@ export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
     .map(x => x.eventCode),
 );
 
-export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+export const STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
-    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .filter((doc: Record<string, any>) => doc.allowStatusReportOrder)
     .map(x => x.eventCode),
 );
 
@@ -1680,7 +1680,7 @@ export type CreatedCaseType = {
   };
 };
 
-export const STATUS_REPORT_ORDER_RESPONSE_OPTIONS = {
+export const STATUS_REPORT_ORDER_OPTIONS = {
   issueOrderOptions: {
     justThisCase: 'justThisCase',
     allCasesInGroup: 'allCasesInGroup',

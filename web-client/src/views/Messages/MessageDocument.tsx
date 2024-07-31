@@ -16,8 +16,8 @@ export const MessageDocument = connect(
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    navigateToStatusReportOrderResponseSequence:
-      sequences.navigateToStatusReportOrderResponseSequence,
+    navigateToStatusReportOrderSequence:
+      sequences.navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -40,7 +40,7 @@ export const MessageDocument = connect(
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
     navigateToPathSequence,
-    navigateToStatusReportOrderResponseSequence,
+    navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -191,20 +191,20 @@ export const MessageDocument = connect(
             Apply Stamp
           </Button>
         )}
-        {messageDocumentHelper.showOrderResponseButton && (
+        {messageDocumentHelper.showStatusReportOrderButton && (
           <Button
             link
-            data-testid="order-response-button"
+            data-testid="status-report-order-button"
             icon="edit"
             onClick={() => {
-              navigateToStatusReportOrderResponseSequence({
-                path: messageDocumentHelper.orderResponseFromMessagesLink,
+              navigateToStatusReportOrderSequence({
+                path: messageDocumentHelper.statusReportOrderFromMessagesLink,
                 statusReportFilingDate: messageDocumentHelper.filingDate,
                 statusReportIndex: messageDocumentHelper.index,
               });
             }}
           >
-            Order Response
+            Order Report
           </Button>
         )}
 

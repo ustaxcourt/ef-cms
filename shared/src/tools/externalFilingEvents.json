@@ -396,7 +396,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": "",
-      "allowOrderResponse": true
+      "allowStatusReportOrder": true
     }
   ],
   "Motion": [
