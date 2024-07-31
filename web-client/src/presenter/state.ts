@@ -1,13 +1,11 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
-import { GetUserResponse } from '@shared/business/useCases/getUserInteractor';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
-import { Role } from '@shared/business/entities/EntityConstants';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -60,6 +58,7 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -828,15 +827,7 @@ export const baseState = {
   } as {
     selectedFilingOption?: string;
   },
-  user: {
-    email: '',
-    name: '',
-    role: '' as Role,
-    section: '',
-    userId: '',
-  } as GetUserResponse & {
-    email: string;
-  }, // We know that the logged in user has an email otherwise they could not login.
+  user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
