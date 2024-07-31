@@ -1,7 +1,11 @@
+/* eslint-disable complexity */
+
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+
 export const draftDocumentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -74,12 +78,21 @@ export const draftDocumentViewerHelper = (
     formattedDocumentToDisplay.eventCode === GENERIC_ORDER_EVENT_CODE &&
     formattedDocumentToDisplay.stampData?.disposition;
 
-  const showEditButtonSigned =
-    showEditButtonForRole &&
-    documentIsSigned &&
-    !isNotice &&
-    !isStipulatedDecision &&
-    !isDraftStampOrder;
+  const isStatusReportOrder = Object.values(
+    STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
+  ).includes(formattedDocumentToDisplay?.draftOrderState?.orderType);
+
+  const showEditButtonSigned = isStatusReportOrder
+    ? permissions.STATUS_REPORT_ORDER && documentIsSigned
+    : showEditButtonForRole &&
+      documentIsSigned &&
+      !isNotice &&
+      !isStipulatedDecision &&
+      !isDraftStampOrder;
+
+  const showEditButtonNotSigned = isStatusReportOrder
+    ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
+    : showEditButtonForRole && (!documentIsSigned || isNotice);
 
   const showAddDocketEntryButtonForDocument =
     documentIsSigned ||
@@ -105,8 +118,7 @@ export const draftDocumentViewerHelper = (
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
-    showEditButtonNotSigned:
-      showEditButtonForRole && (!documentIsSigned || isNotice),
+    showEditButtonNotSigned,
     showEditButtonSigned,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&

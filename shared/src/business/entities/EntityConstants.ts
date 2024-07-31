@@ -1687,7 +1687,7 @@ export const STATUS_REPORT_ORDER_OPTIONS = {
   },
   orderTypeOptions: {
     statusReport: 'statusReport',
-    stipulatedDecision: 'orStipulatedDecision',
+    stipulatedDecision: 'statusReportStipulatedDecision',
   },
   jurisdictionOptions: {
     retained: 'retained',
