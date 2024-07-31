@@ -18,13 +18,12 @@ describe('check permissions for status report order', () => {
     cy.get('[data-testid="order-button"]').should('not.exist');
   });
 
-  it('should not be able to edit a status report order in the status report order form', () => {
+  it('docket clerk should not be able to edit a status report order in the status report order form', () => {
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-drafts').click();
     cy.contains('button', messages.testStatusReportOrderUnsigned.name).click();
-    cy.get('#draft-edit-button-not-signed').click();
 
-    cy.get('[data-testid="save-order-button"]').should('exist');
+    cy.get('#draft-edit-button-not-signed').should('not.exist');
   });
 
   it('docket clerk should not be able to view status report order route', () => {
