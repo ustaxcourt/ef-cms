@@ -45,8 +45,8 @@ variable "use_source_maps" {
   default = true
 }
 
-variable "subnet_id" {
-  type = string
+variable "subnet_ids" {
+  type = list(string)
 }
 
 variable "vpc_id" {

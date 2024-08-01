@@ -3,6 +3,10 @@ variable "environment" {
   type = string
 }
 
-variable "zones" { 
+variable "zone_a" { 
+  type = string 
+}
+
+variable "zone_b" { 
   type = string 
 }
