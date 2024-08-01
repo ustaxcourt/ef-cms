@@ -48,8 +48,6 @@ export const messageDocumentHelper = (
       useArchived: true,
     }) || {};
 
-  console.log('caseDocument', caseDocument);
-
   const isCorrespondence = !!caseDocument.correspondenceId;
 
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
@@ -108,8 +106,6 @@ export const messageDocumentHelper = (
   const isStatusReportOrder = Object.values(
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   ).includes(caseDocument?.draftOrderState?.orderType);
-
-  console.log('WTF', isStatusReportOrder);
 
   const showEditButtonSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && documentIsSigned
