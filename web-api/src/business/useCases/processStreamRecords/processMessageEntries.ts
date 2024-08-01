@@ -20,7 +20,7 @@ export const processMessageEntries = async ({
     messageRecords.map(async messageRecord => {
       const messageNewImage = messageRecord.dynamodb.NewImage;
       const rawMessage = unmarshall(messageNewImage) as RawMessage;
-      await upsertMessage({ message: rawMessage });
+      await upsertMessage(rawMessage);
     }),
   );
 };
