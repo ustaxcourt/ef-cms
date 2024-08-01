@@ -486,7 +486,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
-  it('should return showEditSigned true if document is signed and is a status report order and the user has permission', () => {
+  it('should return showEditSigned true and showEditNotSigned false when document is signed and is a status report order and the user has permission', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(judgeUser),
@@ -505,11 +505,12 @@ describe('draftDocumentViewerHelper', () => {
         },
       },
     });
-    expect(result.showEditButtonNotSigned).toEqual(false);
+
     expect(result.showEditButtonSigned).toEqual(true);
+    expect(result.showEditButtonNotSigned).toEqual(false);
   });
 
-  it('should return showEditSigned false if document is not signed and is a status report order and the user has permission', () => {
+  it('should return showEditSigned false and showNotEditSigned true when document is not signed and is a status report order and the user has permission', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(judgeUser),
@@ -526,11 +527,12 @@ describe('draftDocumentViewerHelper', () => {
         },
       },
     });
-    expect(result.showEditButtonNotSigned).toEqual(true);
+
     expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(true);
   });
 
-  it('should return showEditSigned false if document is signed and is a status report order and the user does not have permission', () => {
+  it('should return showEditSigned false and showEditNotSigned false when document is signed and is a status report order and the user does not have permission', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -556,55 +558,12 @@ describe('draftDocumentViewerHelper', () => {
         },
       },
     });
-    expect(result.showEditButtonNotSigned).toEqual(false);
+
     expect(result.showEditButtonSigned).toEqual(false);
-  });
-
-  it('should return showEditButtonNotSigned true if document is not signed and is a status report order and the user has permission', () => {
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(judgeUser),
-        caseDetail: {
-          docketEntries: [baseDraftDocketEntry],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: mockDocketEntryId,
-          draftOrderState: {
-            orderType:
-              STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
-          },
-          eventCode: 'O',
-        },
-      },
-    });
-    expect(result.showEditButtonNotSigned).toEqual(true);
-    expect(result.showEditButtonSigned).toEqual(false);
-  });
-
-  it('should return showEditNotSigned false if document is signed and is a status report order and the user has permission', () => {
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(judgeUser),
-        caseDetail: {
-          docketEntries: [
-            { ...baseDraftDocketEntry, signedAt: '2020-06-25T20:49:28.192Z' },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: mockDocketEntryId,
-          draftOrderState: {
-            orderType:
-              STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
-          },
-          eventCode: 'O',
-        },
-      },
-    });
     expect(result.showEditButtonNotSigned).toEqual(false);
-    expect(result.showEditButtonSigned).toEqual(true);
   });
 
-  it('should return showEditSigned false if document is not signed and is a status report order and the user does not have permission', () => {
+  it('should return showEditSigned false and showEditNotSigned false when document is not signed and is a status report order and the user does not have permission', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -629,8 +588,9 @@ describe('draftDocumentViewerHelper', () => {
         },
       },
     });
-    expect(result.showEditButtonNotSigned).toEqual(false);
+
     expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
   });
 
   it('should return showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
