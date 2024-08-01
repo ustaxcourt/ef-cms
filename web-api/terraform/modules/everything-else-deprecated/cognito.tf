@@ -162,7 +162,7 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows_user_pool_client = false
 
   token_validity_units {
     access_token  = "hours"
@@ -173,9 +173,6 @@ resource "aws_cognito_user_pool_client" "client" {
   access_token_validity  = 1
   id_token_validity      = 1
 
-  allowed_oauth_flows          = ["code", "implicit"]
-  allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
-  supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.pool.id
 
@@ -336,7 +333,7 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows_user_pool_client = false
   token_validity_units {
     access_token  = "hours"
     id_token      = "hours"
@@ -345,10 +342,6 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   refresh_token_validity = 30 # irs app expects 30 days
   access_token_validity  = 1
   id_token_validity      = 1
-
-  allowed_oauth_flows          = ["code", "implicit"]
-  allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
-  supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.irs_pool.id
 
