@@ -42,7 +42,7 @@ resource "aws_lambda_function" "lambda_function" {
 
   # vpc_config {
   #   security_group_ids = [var.vpc_id]
-  #   subnet_ids         = [var.subnet_id]
+  #   subnet_ids         = var.subnet_ids
   # }
 }
 

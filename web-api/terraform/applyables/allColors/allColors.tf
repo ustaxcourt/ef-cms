@@ -77,7 +77,7 @@ module "dynamsoft_us_east" {
   dns_domain             = var.dns_domain
   zone_name              = var.zone_name
   ami                    = "ami-0a313d6098716f372"
-  availability_zones     = ["us-east-1a", "us-east-1b"]
+  availability_zones     = ["us-east-1a"]
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys
@@ -130,7 +130,8 @@ module "vpc_east" {
   providers = {
     aws = aws.us-east-1
   }
-  zones = "us-east-1a"
+  zone_a = "us-east-1a"
+  zone_b = "us-east-1b"
 }
 
 # resource "aws_vpc_peering_connection" "peer" {
