@@ -17,4 +17,7 @@ export const signOutIdleSequence = [
       setupCurrentPageAction('IdleLogout'),
     ],
   },
-] as unknown as (props: { skipBroadcast?: boolean }) => void;
+] as unknown as (props: {
+  skipBroadcast?: boolean;
+  fromModal?: boolean;
+}) => void;

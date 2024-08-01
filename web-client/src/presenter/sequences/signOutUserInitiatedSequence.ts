@@ -8,4 +8,7 @@ export const signOutUserInitiatedSequence = [
   setLogoutTypeAction(LOGOUT_BROADCAST_MESSAGES.userLogout),
   signOutSequence,
   navigateToLoginSequence,
-];
+] as unknown as (props: {
+  skipBroadcast?: boolean;
+  fromModal?: boolean;
+}) => void;
