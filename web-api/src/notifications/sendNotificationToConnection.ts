@@ -1,20 +1,18 @@
+import {
+  type ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
+} from '@aws-sdk/client-apigatewaymanagementapi';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type Connection = {
+  clientConnectionId: string;
   connectionId: string;
   endpoint: string;
   pk: string;
   sk: string;
+  userId: string;
 };
 
-/**
- * sendNotificationToConnection
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.connection the connection to send the message to
- * @param {string} providers.messageStringified the message
- */
 export const sendNotificationToConnection = async ({
   applicationContext,
   connection,
@@ -26,14 +24,14 @@ export const sendNotificationToConnection = async ({
 }) => {
   const { connectionId, endpoint } = connection;
 
-  const notificationClient = applicationContext.getNotificationClient({
-    endpoint,
+  const notificationClient: ApiGatewayManagementApiClient =
+    applicationContext.getNotificationClient({
+      endpoint,
+    });
+  const postToConnectionCommand = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: messageStringified,
   });
 
-  await notificationClient
-    .postToConnection({
-      ConnectionId: connectionId,
-      Data: messageStringified,
-    })
-    .promise();
+  await notificationClient.send(postToConnectionCommand);
 };

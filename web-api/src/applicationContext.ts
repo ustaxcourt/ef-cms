@@ -51,6 +51,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
 import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
@@ -72,7 +73,6 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS from 'aws-sdk';
 
 import axios from 'axios';
 import pug from 'pug';
@@ -231,17 +231,7 @@ export const createApplicationContext = (
     getNodeSass: () => {
       return sass;
     },
-    getNotificationClient: ({ endpoint }) => {
-      if (endpoint.includes('localhost')) {
-        endpoint = 'http://localhost:3011';
-      }
-      return new AWS.ApiGatewayManagementApi({
-        endpoint,
-        httpOptions: {
-          timeout: 900000, // 15 minutes
-        },
-      });
-    },
+    getNotificationClient,
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
       saveRequestResponse,
