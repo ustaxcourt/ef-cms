@@ -6,6 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
 export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -46,6 +47,8 @@ export const messageDocumentHelper = (
       documentId: viewerDocumentIdToDisplay,
       useArchived: true,
     }) || {};
+
+  console.log('caseDocument', caseDocument);
 
   const isCorrespondence = !!caseDocument.correspondenceId;
 
@@ -102,12 +105,26 @@ export const messageDocumentHelper = (
     caseDocument.eventCode === GENERIC_ORDER_EVENT_CODE &&
     caseDocument.stampData?.disposition;
 
-  const showEditButtonSigned =
-    showEditButtonForRole &&
-    showEditButtonForDocument &&
-    documentIsSigned &&
-    !isNotice &&
-    !isDraftStampOrder;
+  const isStatusReportOrder = Object.values(
+    STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
+  ).includes(caseDocument?.draftOrderState?.orderType);
+
+  console.log('WTF', isStatusReportOrder);
+
+  const showEditButtonSigned = isStatusReportOrder
+    ? permissions.STATUS_REPORT_ORDER && documentIsSigned
+    : showEditButtonForRole &&
+      showEditButtonForDocument &&
+      documentIsSigned &&
+      !isNotice &&
+      !isDraftStampOrder;
+
+  const showEditButtonNotSigned = isStatusReportOrder
+    ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
+    : showEditButtonForRole &&
+      showEditButtonForDocument &&
+      (!documentIsSigned || isNotice);
+
   const showRemoveSignatureButtonForDocument =
     documentIsSigned &&
     caseDocument.isDraft &&
@@ -190,10 +207,7 @@ export const messageDocumentHelper = (
       showApplySignatureButtonForDocument,
     showApplyStampButton,
     showDocumentNotSignedAlert,
-    showEditButtonNotSigned:
-      showEditButtonForRole &&
-      showEditButtonForDocument &&
-      (!documentIsSigned || isNotice),
+    showEditButtonNotSigned,
     showEditButtonSigned,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
