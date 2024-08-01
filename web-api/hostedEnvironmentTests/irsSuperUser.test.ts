@@ -152,6 +152,10 @@ async function createUserInIrsPool({
         Value: ROLES.irsSuperuser,
       },
       {
+        Name: 'custom:userId',
+        Value: '14de78aa-b148-4a55-a2a1-875253e414f3',
+      },
+      {
         Name: 'email',
         Value: userName,
       },
@@ -163,6 +167,7 @@ async function createUserInIrsPool({
     UserPoolId: irsUserPoolId,
     Username: userName,
   });
+
   await cognito.adminSetUserPassword({
     Password: password,
     Permanent: true,
