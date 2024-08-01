@@ -19,9 +19,7 @@ function usage(warning: string | undefined) {
   if (warning) {
     console.log(warning);
   }
-  console.log(
-    `npx ts-node --transpile-only ${process.argv[1]} M071,M074 2021-2022 [includeStricken]`,
-  );
+  console.log(`npx ts-node --transpile-only ${process.argv[1]} M071,m074`);
 }
 
 const config = {
@@ -43,6 +41,7 @@ const config = {
       default: `${DateTime.now().toObject().year}`,
       description:
         'comma-delimited list of years, or a hyphen-separated range of years',
+      short: 'y',
       type: 'string',
     },
   },
@@ -160,5 +159,8 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
     onlyNonStricken: !includeStricken,
     years,
   });
+  if (values.verbose) {
+    console.log(JSON.stringify(config, null, 4));
+  }
   console.log(ret);
 })();
