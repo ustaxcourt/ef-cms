@@ -1656,7 +1656,9 @@ export const presenter = {
     (acc, [sequenceName, sequence]) => {
       if (Array.isArray(sequence)) {
         const updatedSequence = [
-          function (...args) {
+          function (
+            ...args: Parameters<typeof performanceMeasurementStartAction>
+          ) {
             args[0].props['sequenceName'] = sequenceName;
             return performanceMeasurementStartAction(...args);
           },
