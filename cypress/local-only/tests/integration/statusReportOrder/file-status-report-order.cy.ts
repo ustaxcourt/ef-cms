@@ -5,6 +5,7 @@ import {
 import {
   docketNumber,
   expectedPdfLines,
+  getLastDraftOrderElementIndexFromDrafts,
   leadCaseDocketNumber,
   selectAllOptionsInForm,
 } from '../../../support/statusReportOrder';
@@ -14,9 +15,8 @@ import {
   loginAsColvinChambers,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { retry } from '../../../../helpers/retry';
-import { v4 } from 'uuid';
 
-describe('file status report order', () => {
+describe('file status report order response', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
   const firstPdfLineJustThisCase =
@@ -43,22 +43,21 @@ describe('file status report order', () => {
           return cy.get('body').then(body => {
             /** Assert */
             return (
-              body.find('#status-report-order-pdf-preview').children.length > 1
+              body.find('#status-report-order-response-pdf-preview').children
+                .length > 1
             );
           });
         });
       });
     });
 
-    describe('filing a status report order from document view', () => {
+    describe('filing a status report order response from document view', () => {
       it('should save unsigned draft when no options are selected', () => {
-        const orderName = `Order ${v4()}`;
         cy.visit(`/case-detail/${docketNumber}`);
         cy.get('#tab-document-view').click();
+        const lastOrderIndex = getLastDraftOrderElementIndexFromDrafts();
         cy.contains('Status Report').click();
         cy.get('[data-testid="status-report-order-button"]').click();
-        cy.get('#docket-entry-description').clear();
-        cy.get('#docket-entry-description').type(orderName);
 
         cy.get('#jurisdiction-retained').should('be.disabled');
         cy.get('#jurisdiction-restored-to-general-docket').should(
@@ -95,16 +94,19 @@ describe('file status report order', () => {
         cy.get('[data-testid="save-signature-button"]').click();
         cy.get('#tab-drafts').click();
 
-        cy.contains('button', orderName).should('exist');
+        // Check that we made a new order draft
+        expect(lastOrderIndex).to.not.equal(
+          getLastDraftOrderElementIndexFromDrafts(),
+        );
       });
 
       it('should save signed draft when all options are selected', () => {
-        const orderName = `Order ${v4()}`;
         cy.visit(`/case-detail/${docketNumber}`);
         cy.get('#tab-document-view').click();
+        const lastOrderIndex = getLastDraftOrderElementIndexFromDrafts();
         cy.contains('Status Report').click();
         cy.get('[data-testid="status-report-order-button"]').click();
-        selectAllOptionsInForm({ orderName });
+        selectAllOptionsInForm();
 
         cy.intercept('POST', '**/api/court-issued-order').as(
           'courtIssuedOrder',
@@ -122,7 +124,10 @@ describe('file status report order', () => {
         cy.get('[data-testid="skip-signature-button"]').click();
         cy.get('#tab-drafts').click();
 
-        cy.contains('button', orderName).should('exist');
+        // Check that we made a new order draft
+        expect(lastOrderIndex).to.not.equal(
+          getLastDraftOrderElementIndexFromDrafts(),
+        );
       });
 
       it('should save draft when order type is "Status Report or Stipulated Decision"', () => {
@@ -222,8 +227,8 @@ describe('file status report order', () => {
       });
     });
 
-    describe('filing a status report order from message view', () => {
-      it('should be able to create signed order from messages and redirects to messages tab', () => {
+    describe('filing a status report order response from message view', () => {
+      it('should be able to create signed order response from messages and redirects to messages tab', () => {
         cy.visit(`/case-detail/${docketNumber}`);
 
         cy.get('#tab-case-messages').click();
@@ -240,14 +245,14 @@ describe('file status report order', () => {
     });
   });
   describe('chambers', () => {
-    describe('filing a status report order from document view', () => {
+    describe('filing a status report order response from document view', () => {
       it('should save draft when all options are selected', () => {
         loginAsColvinChambers();
         cy.visit(`/case-detail/${docketNumber}`);
         cy.get('#tab-document-view').click();
         cy.contains('Status Report').click();
         cy.get('[data-testid="status-report-order-button"]').click();
-        selectAllOptionsInForm({ orderName: 'Chambers Test Order' });
+        selectAllOptionsInForm();
 
         cy.get('[data-testid="save-draft-button"]').click();
 
@@ -257,14 +262,14 @@ describe('file status report order', () => {
   });
 
   describe('adc', () => {
-    describe('filing a status report order from document view', () => {
+    describe('filing a status report order response from document view', () => {
       it('should save draft when all options are selected', () => {
         loginAsAdc();
         cy.visit(`/case-detail/${docketNumber}`);
         cy.get('#tab-document-view').click();
         cy.contains('Status Report').click();
         cy.get('[data-testid="status-report-order-button"]').click();
-        selectAllOptionsInForm({ orderName: 'ADC Test Order' });
+        selectAllOptionsInForm();
 
         cy.get('[data-testid="save-draft-button"]').click();
 

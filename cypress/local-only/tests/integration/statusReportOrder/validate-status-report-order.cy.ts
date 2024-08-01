@@ -8,23 +8,6 @@ describe('validate status report order', () => {
   });
 
   describe('form validation', () => {
-    it('should have a docket entry description', () => {
-      cy.get('#tab-document-view').click();
-      cy.contains('Status Report').click();
-      cy.get('[data-testid="status-report-order-button"]').click();
-      cy.get('#docket-entry-description').clear();
-      cy.get('[data-testid="save-draft-button"]').click();
-
-      cy.get('[data-testid="error-alert"]').should(
-        'contain.text',
-        'Enter a docket entry description',
-      );
-      cy.get('#docket-entry-description-form-group').should(
-        'contain.text',
-        'Enter a docket entry description',
-      );
-    });
-
     it('should have a valid due date', () => {
       cy.get('#tab-document-view').click();
       cy.contains('Status Report').click();

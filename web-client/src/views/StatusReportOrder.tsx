@@ -373,44 +373,6 @@ export const StatusReportOrder = connect(
                       />
                     </div>
                   </FormGroup>
-
-                  <hr className="border-top-2px border-base-lighter" />
-
-                  <FormGroup
-                    className="status-report-order-form-group"
-                    errorText={validationErrors.docketEntryDescription}
-                    id="docket-entry-description-form-group"
-                  >
-                    <div>
-                      <label
-                        className="usa-label"
-                        htmlFor="docket-entry-description"
-                        id="docket-entry-description-label"
-                      >
-                        Docket entry description
-                      </label>
-                      <textarea
-                        aria-describedby="docket-entry-description-label"
-                        aria-label="docket entry description"
-                        autoCapitalize="none"
-                        className="usa-textarea maxw-none height-8 usa-character-count__field"
-                        id="docket-entry-description"
-                        maxLength={80}
-                        name="docketEntryDescription"
-                        value={form.docketEntryDescription}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      ></textarea>
-                      <CharactersRemainingHint
-                        maxCharacters={80}
-                        stringToCount={form.docketEntryDescription}
-                      />
-                    </div>
-                  </FormGroup>
                 </div>
               </div>
               <Button

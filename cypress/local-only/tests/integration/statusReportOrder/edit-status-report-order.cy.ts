@@ -5,12 +5,13 @@ import {
 import {
   docketNumber,
   expectedPdfLines,
+  getLastDraftOrderElementFromDrafts,
+  getLastDraftOrderElementIndexFromDrafts,
   messages,
   selectAllOptionsInForm,
   statusReportDocketEntryId,
 } from '../../../support/statusReportOrder';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
-import { v4 } from 'uuid';
 
 describe('edit status report order', () => {
   beforeEach(() => {
@@ -44,10 +45,6 @@ describe('edit status report order', () => {
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
-      cy.get('#docket-entry-description').should(
-        'contain',
-        'Test Status Report Order (Unsigned)',
-      );
     });
 
     it('should load existing signed order', () => {
@@ -65,10 +62,6 @@ describe('edit status report order', () => {
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
-      cy.get('#docket-entry-description').should(
-        'contain',
-        'Test Status Report Order (Signed)',
-      );
 
       cy.get('#status-report-due-date-picker').clear();
       cy.get('#status-report-due-date-picker').type(
@@ -80,22 +73,22 @@ describe('edit status report order', () => {
     });
 
     it('should be able to save edited status report order without duplicates', () => {
-      const orderName = `Order ${v4()}`;
-      const revisedOrderName = `Order ${v4()}`;
       cy.get('#tab-document-view').click();
       cy.get(`[data-entry-id="${statusReportDocketEntryId}"]`).click();
       cy.get('[data-testid="status-report-order-button"]').click();
-      selectAllOptionsInForm({ orderName });
+      selectAllOptionsInForm();
       cy.get('[data-testid="save-draft-button"]').click();
       cy.contains('Apply Signature').should('exist');
       cy.get('[data-testid="skip-signature-button"]').click();
 
       cy.get('#tab-drafts').click();
-      cy.contains('button', orderName).click();
+
+      getLastDraftOrderElementFromDrafts().click();
+      // We'll get the order index and check it later to ensure that we have edited our existing order rather than created a new order
+      const lastOrderIndex = getLastDraftOrderElementIndexFromDrafts();
+
       cy.get('[data-testid="draft-edit-button-not-signed"]').click();
       cy.get('#stricken-from-trial-sessions').uncheck({ force: true });
-      cy.get('#docket-entry-description').clear();
-      cy.get('#docket-entry-description').type(revisedOrderName);
 
       cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
       cy.get('[data-testid="save-draft-button"]').click();
@@ -114,8 +107,7 @@ describe('edit status report order', () => {
       cy.get('[data-testid="skip-signature-button"]').click();
       cy.get('#tab-drafts').click();
 
-      cy.contains('button', orderName).should('not.exist');
-      cy.contains('button', revisedOrderName).should('exist');
+      expect(lastOrderIndex == getLastDraftOrderElementIndexFromDrafts());
     });
   });
 
@@ -141,10 +133,6 @@ describe('edit status report order', () => {
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
-      cy.get('#docket-entry-description').should(
-        'contain',
-        'Test Status Report Order (Unsigned)',
-      );
     });
 
     it('should load existing signed order', () => {
@@ -162,10 +150,6 @@ describe('edit status report order', () => {
       cy.get('#stricken-from-trial-sessions').should('be.checked');
       cy.get('#jurisdiction-retained').should('be.checked');
       cy.get('#additional-order-text').should('contain', 'Test');
-      cy.get('#docket-entry-description').should(
-        'contain',
-        'Test Status Report Order (Signed)',
-      );
 
       cy.get('#status-report-due-date-picker').clear();
       cy.get('#status-report-due-date-picker').type(

@@ -1,4 +1,7 @@
-import { docketNumber } from '../../../support/statusReportOrder';
+import {
+  docketNumber,
+  getLastDraftOrderElementFromDrafts,
+} from '../../../support/statusReportOrder';
 import {
   loginAsColvin,
   loginAsDocketClerk,
@@ -9,13 +12,10 @@ describe('serve status report order', () => {
   it('should serve status report order', () => {
     // Create a Status Report Order as a judge
     loginAsColvin();
-    const orderName = 'Serve Status Report Order Test';
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-document-view').click();
     cy.contains('Status Report').click();
     cy.get('[data-testid="status-report-order-button"]').click();
-    cy.get('#docket-entry-description').clear();
-    cy.get('#docket-entry-description').type(orderName);
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
@@ -25,12 +25,12 @@ describe('serve status report order', () => {
     loginAsDocketClerk();
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-drafts').click();
-    cy.contains('button', orderName).click();
+    getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
     cy.get('[data-testid="service-stamp-Served"]').click({ force: true });
     cy.get('[data-testid="serve-to-parties-btn"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
     cy.contains('Document served.').should('exist');
-    cy.contains('button', orderName).should('exist');
+    getLastDraftOrderElementFromDrafts().should('exist');
   });
 });
