@@ -9,7 +9,6 @@ export type InitialPetitionFormState = {
 };
 
 export const setupPetitionStateAction = ({ store }: ActionProps) => {
-  // should this live in state?
   const initialPetitionForm: InitialPetitionFormState = {
     filingType: undefined,
     petitionFacts: [''],

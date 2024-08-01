@@ -50,8 +50,11 @@ export class IrsNoticeForm extends JoiValidationEntity {
       .messages({
         '*': 'Select a case type',
       }),
-    cityAndStateIssuingOffice:
-      JoiValidationConstants.STRING.max(200).optional(),
+    cityAndStateIssuingOffice: JoiValidationConstants.STRING.max(200)
+      .optional()
+      .messages({
+        'string.max': 'Limit is 200 characters. Enter 200 or fewer characters.',
+      }),
     file: joi.optional(),
     key: joi.string().required(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.max('now').messages({
