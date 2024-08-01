@@ -1679,3 +1679,23 @@ export type CreatedCaseType = {
     name: string;
   };
 };
+
+export const LOGOUT_BROADCAST_MESSAGES = {
+  userLogout: 'userLogout',
+  idleLogout: 'idleLogout',
+  idleStatusActive: 'idleStatusActive',
+  stayLoggedIn: 'stayLoggedIn',
+};
+
+export const IDLE_LOGOUT_STATES = {
+  INITIAL: 'INITIAL',
+  MONITORING: 'MONITORING',
+  COUNTDOWN: 'COUNTDOWN',
+};
+
+export type IdleLogoutStateType =
+  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
+
+export type IdleLogoutType =
+  | (typeof LOGOUT_BROADCAST_MESSAGES)['idleLogout']
+  | (typeof LOGOUT_BROADCAST_MESSAGES)['userLogout'];

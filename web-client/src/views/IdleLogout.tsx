@@ -4,7 +4,9 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const IdleLogout = connect(
-  { navigateToLoginSequence: sequences.navigateToLoginSequence },
+  {
+    navigateToLoginSequence: sequences.navigateToLoginSequence,
+  },
   function IdleLogout({ navigateToLoginSequence }) {
     return (
       <section className="usa-section grid-container">
@@ -16,7 +18,14 @@ export const IdleLogout = connect(
           United States Tax Court website for information on court services and
           contact information.
         </p>
-        <Button onClick={() => navigateToLoginSequence()}>Log In</Button>
+        <Button
+          data-testid="idle-logout-login-button"
+          onClick={() => {
+            navigateToLoginSequence();
+          }}
+        >
+          Log In
+        </Button>
         <Button link href="https://www.ustaxcourt.gov/">
           Go to the U.S. Tax Court Website
         </Button>
