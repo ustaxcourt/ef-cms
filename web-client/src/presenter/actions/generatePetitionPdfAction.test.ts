@@ -5,19 +5,13 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generatePetitionPdfAction', () => {
-  let generatePetitionPdfInteractorCalls;
   beforeEach(() => {
-    generatePetitionPdfInteractorCalls = [];
     applicationContext
       .getUseCases()
-      .generatePetitionPdfInteractor.mockImplementation((_, params) => {
-        generatePetitionPdfInteractorCalls.push(
-          JSON.parse(JSON.stringify(params)),
-        );
+      .generatePetitionPdfInteractor.mockImplementation(() => {
         return new Promise(resolve =>
           resolve({
             fileId: 'TEST_FILE_ID',
-            url: 'TEST_URL',
           }),
         );
       });
@@ -36,6 +30,8 @@ describe('generatePetitionPdfAction', () => {
         },
       },
     });
+    const generatePetitionPdfInteractorCalls =
+      applicationContext.getUseCases().generatePetitionPdfInteractor.mock.calls;
 
     expect(generatePetitionPdfInteractorCalls.length).toEqual(0);
 
@@ -82,8 +78,11 @@ describe('generatePetitionPdfAction', () => {
       },
     });
 
+    const generatePetitionPdfInteractorCalls =
+      applicationContext.getUseCases().generatePetitionPdfInteractor.mock.calls;
+
     expect(generatePetitionPdfInteractorCalls.length).toEqual(1);
-    expect(generatePetitionPdfInteractorCalls[0]).toEqual({
+    expect(generatePetitionPdfInteractorCalls[0][1]).toEqual({
       caseCaptionExtension: 'TEST_caseCaptionExtension',
       caseTitle: 'TEST_caseTitle',
       contactPrimary: {},
