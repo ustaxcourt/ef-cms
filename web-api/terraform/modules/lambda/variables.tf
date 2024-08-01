@@ -44,3 +44,11 @@ variable "use_source_maps" {
   type = bool
   default = true
 }
+
+variable "subnet_id" {
+  type = string
+}
+
+variable "vpc_id" {
+  type = string
+}
