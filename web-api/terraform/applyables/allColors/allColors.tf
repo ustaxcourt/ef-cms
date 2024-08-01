@@ -77,7 +77,7 @@ module "dynamsoft_us_east" {
   dns_domain             = var.dns_domain
   zone_name              = var.zone_name
   ami                    = "ami-0a313d6098716f372"
-  availability_zones     = ["us-east-1a"]
+  availability_zones     = ["us-east-1a", "us-east-1b"]
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys
@@ -115,10 +115,39 @@ module "ui-healthcheck" {
   dns_domain = "app.${var.dns_domain}"
 }
 
+
+# module "vpc_west" {
+#   source            = "../../modules/vpc"
+#   environment       = var.environment
+#   providers = {
+#     aws = aws.us-west-1
+#   }
+# }
+
+module "vpc_east" {
+  source            = "../../modules/vpc"
+  environment       = var.environment
+  providers = {
+    aws = aws.us-east-1
+  }
+  zones = "us-east-1a"
+}
+
+# resource "aws_vpc_peering_connection" "peer" {
+#   peer_vpc_id = module.vpc_west.vpc_id
+#   vpc_id      = module.vpc_east.vpc_id
+#   peer_region = "us-east-1"
+
+#   tags = {
+#     Name = "${var.environment}-cross-region-peering"
+#   }
+# }
+
 module "rds" {
   source            = "../../modules/rds"
   environment       = var.environment
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
+  # vpc_id = module.vpc_east.vpc_id
+  # security_group_id = ""
 }
-
