@@ -95,7 +95,7 @@ describe('editDocketEntryMetaHelper', () => {
             documentType: 'Answer',
             isStricken: true,
             strickenAt: '2019-03-01T21:40:46.415Z',
-            strickenBy: 'Guy Fieri',
+            strickenBy: 'Roslindis Angelino',
           },
         },
       });
