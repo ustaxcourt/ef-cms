@@ -1,16 +1,53 @@
-// usage: npx ts-node --transpile-only scripts/reports/count-non-stricken-event-codes-by-year.ts M071,M074 2021-2022 [includeStricken]
+#!/usr/bin/env npx ts-node --transpile-only
 
+import { DateTime } from 'luxon';
 import {
   ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { count } from '@web-api/persistence/elasticsearch/searchClient';
+import { parseArgs } from 'node:util';
+import { parseIntsArg } from './reportUtils';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 requireEnvVars(['ENV', 'REGION']);
 
-const includeStricken = !!(process.argv.length > 4);
+let positionals, values;
+
+function usage(warning: string | undefined) {
+  if (warning) {
+    console.log(warning);
+  }
+  console.log(
+    `npx ts-node --transpile-only ${process.argv[1]} M071,M074 2021-2022 [includeStricken]`,
+  );
+}
+
+const config = {
+  allowPositionals: true,
+  args: process.argv,
+  options: {
+    stricken: {
+      default: false,
+      description: 'include stricken docket entries when computing the results',
+      short: 's',
+      type: 'boolean',
+    },
+    verbose: {
+      default: false,
+      short: 'v',
+      type: 'boolean',
+    },
+    years: {
+      default: `${DateTime.now().toObject().year}`,
+      description:
+        'comma-delimited list of years, or a hyphen-separated range of years',
+      type: 'string',
+    },
+  },
+  strict: true,
+} as const;
 
 const getCountDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
@@ -107,25 +144,18 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
-  const eventCodes = process.argv[2].split(',');
-  const years: number[] = [];
-  const yearArg = process.argv[3];
-  if (yearArg.includes('-')) {
-    const [lower, upper] = yearArg.split('-');
-    for (let i = Number(lower); i <= Number(upper); i++) {
-      years.push(Number(i));
-    }
-  } else {
-    const yearStrings = yearArg.split(',');
-    for (const year of yearStrings) {
-      years.push(Number(year));
-    }
+  try {
+    ({ positionals, values } = parseArgs(config));
+  } catch (ex) {
+    usage(`Error: ${ex}`);
+    process.exit(1);
   }
 
+  const eventCodes = positionals.map(s => s.toUpperCase());
+  const years: number[] = parseIntsArg(values.years);
+  const includeStricken = values.stricken;
   const ret = await getCountDocketEntriesByEventCodesAndYears({
-    applicationContext,
+    applicationContext: createApplicationContext({}),
     eventCodes,
     onlyNonStricken: !includeStricken,
     years,
