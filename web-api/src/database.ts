@@ -8,7 +8,7 @@ const dialect = new PostgresDialect({
     database: 'postgres',
     host: process.env.POSTGRES_HOST || 'localhost',
     idleTimeoutMillis: 1000,
-    max: 10,
+    max: 1,
     password: process.env.POSTGRES_PASSWORD || 'example',
     port: 5432,
     ssl:
