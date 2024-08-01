@@ -7,8 +7,10 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 import { createMessageInteractor } from './createMessageInteractor';
+import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
+
+const createMessage = createMessageMock as jest.Mock;
 
 describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -69,7 +71,7 @@ describe('createMessageInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Guy Fieri, Petitioner',
+        caseCaption: 'Roslindis Angelino, Petitioner',
         docketNumberWithSuffix: '123-45S',
         status: CASE_STATUS_TYPES.generalDocket,
       });
@@ -80,18 +82,16 @@ describe('createMessageInteractor', () => {
     });
 
     expect(createMessage).toHaveBeenCalled();
-    expect((createMessage as jest.Mock).mock.calls[0][0].message).toMatchObject(
-      {
-        ...messageData,
-        attachments: mockAttachments,
-        caseStatus: CASE_STATUS_TYPES.generalDocket,
-        caseTitle: 'Guy Fieri',
-        docketNumber: '101-20',
-        from: 'Test Petitionsclerk',
-        fromSection: PETITIONS_SECTION,
-        fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-        to: 'Test Petitionsclerk2',
-      },
-    );
+    expect(createMessage.mock.calls[0][0].message).toMatchObject({
+      ...messageData,
+      attachments: mockAttachments,
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
+      caseTitle: 'Roslindis Angelino',
+      docketNumber: '101-20',
+      from: 'Test Petitionsclerk',
+      fromSection: PETITIONS_SECTION,
+      fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+      to: 'Test Petitionsclerk2',
+    });
   });
 });

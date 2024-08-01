@@ -1,39 +1,49 @@
-import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { GoneException } from '@aws-sdk/client-apigatewaymanagementapi';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { retrySendNotificationToConnections } from './retrySendNotificationToConnections';
 
 const mockConnections = [
   {
+    clientConnectionId: 'aaaa',
     connectionId: '1111',
     endpoint: 'endpoint-01',
     pk: 'connections-01',
     sk: 'sk-01',
+    userId: 'f911636b-2d69-4dd2-a01a-2622878d070c',
   },
   {
+    clientConnectionId: 'bbbb',
     connectionId: '2222',
     endpoint: 'endpoint-02',
     pk: 'connections-02',
     sk: 'sk-02',
+    userId: '324cd0c7-1d82-4916-a0fa-965255f7e087',
   },
   {
+    clientConnectionId: 'cccc',
     connectionId: '3333',
     endpoint: 'endpoint-03',
     pk: 'connections-03',
     sk: 'sk-03',
+    userId: '029c5833-9a79-4a3e-91ae-7eb9c7dd0f84',
   },
   {
+    clientConnectionId: 'dddd',
     connectionId: '4444',
     endpoint: 'endpoint-04',
     pk: 'connections-04',
     sk: 'sk-04',
+    userId: '1dca6ea7-66e8-473b-9790-c2cb1b822464',
   },
 ];
 
 const mockMessageStringified = JSON.stringify('hello, computer');
 
-const notificationError: NotificationError = new Error(
-  'could not get notification client',
-);
-notificationError.statusCode = 410;
+const mockErrorMessage = 'ws connection is gone';
+const notificationError = new GoneException({
+  $metadata: { httpStatusCode: 410 },
+  message: mockErrorMessage,
+});
 
 describe('retrySendNotificationToConnections', () => {
   it('should send notification to connections', async () => {
@@ -68,7 +78,7 @@ describe('retrySendNotificationToConnections', () => {
   it('does not call client.delete if deleteGoneConnections is false', async () => {
     await applicationContext
       .getNotificationGateway()
-      .sendNotificationToConnection.mockRejectedValueOnce(notificationError);
+      .sendNotificationToConnection.mockRejectedValue(notificationError);
 
     await retrySendNotificationToConnections({
       applicationContext,
@@ -83,7 +93,7 @@ describe('retrySendNotificationToConnections', () => {
   });
 
   it('rethrows and logs exception for statusCode not 410', async () => {
-    notificationError.statusCode = 400;
+    notificationError['$metadata'].httpStatusCode = 400;
     await applicationContext
       .getNotificationGateway()
       .sendNotificationToConnection.mockRejectedValue(notificationError);
@@ -94,7 +104,7 @@ describe('retrySendNotificationToConnections', () => {
         connections: mockConnections,
         messageStringified: mockMessageStringified,
       }),
-    ).rejects.toThrow('could not get notification client');
+    ).rejects.toThrow(mockErrorMessage);
 
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });

@@ -14,7 +14,7 @@ import { updateMessage as updateMessageMock } from '@web-api/persistence/postgre
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
 
-  const mockSigningName = 'Guy Fieri';
+  const mockSigningName = 'Roslindis Angelino';
   const mockDocumentIdBeforeSignature = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3857';
   const mockSignedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
