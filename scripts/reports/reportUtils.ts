@@ -1,10 +1,16 @@
 export function parseInts(ints: string, delimiter = ','): number[] {
-  let nums = ints.split(delimiter).map(parseInt);
+  let nums = ints
+    .split(delimiter)
+    .filter(s => s.length)
+    .map(s => parseInt(s));
   return nums;
 }
 
 export function parseIntRange(intRange: string): number[] {
-  const ints = intRange.split('-').map(parseInt);
+  const ints = intRange
+    .split('-')
+    .filter(s => s.length)
+    .map(s => parseInt(s));
   const min = Math.min(...ints);
   const max = Math.max(...ints);
   let rangeNums: number[] = [];
@@ -13,6 +19,7 @@ export function parseIntRange(intRange: string): number[] {
   }
   return rangeNums;
 }
+
 // eslint-disable-next-line spellcheck/spell-checker
 /**
  *
@@ -20,7 +27,7 @@ export function parseIntRange(intRange: string): number[] {
  * @returns an array of one or more integers
  */
 export function parseIntsArg(intstr: string): number[] {
-  if (intstr.indexOf('-')) {
+  if (intstr.indexOf('-') > 0) {
     return parseIntRange(intstr);
   } else {
     return parseInts(intstr);
