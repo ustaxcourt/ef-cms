@@ -6,9 +6,12 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
-import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
+import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
+import { markMessageThreadRepliedTo as markMessageThreadRepliedToMock } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { replyToMessageInteractor } from './replyToMessageInteractor';
+
+const createMessage = createMessageMock as jest.Mock;
+const markMessageThreadRepliedTo = markMessageThreadRepliedToMock as jest.Mock;
 
 describe('replyToMessageInteractor', () => {
   const mockAttachments = [
@@ -70,7 +73,7 @@ describe('replyToMessageInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Guy Fieri, Petitioner',
+        caseCaption: 'Roslindis Angelino, Petitioner',
         docketNumber: '123-45',
         docketNumberWithSuffix: '123-45S',
         status: CASE_STATUS_TYPES.generalDocket,
@@ -87,7 +90,7 @@ describe('replyToMessageInteractor', () => {
         ...messageData,
         attachments: mockAttachments,
         caseStatus: CASE_STATUS_TYPES.generalDocket,
-        caseTitle: 'Guy Fieri',
+        caseTitle: 'Roslindis Angelino',
         docketNumber: '101-20',
         from: 'Test Petitionsclerk',
         fromSection: PETITIONS_SECTION,
@@ -96,9 +99,20 @@ describe('replyToMessageInteractor', () => {
       },
     );
     expect(markMessageThreadRepliedTo).toHaveBeenCalled();
-    expect(
-      (markMessageThreadRepliedTo as jest.Mock).mock.calls[0][0],
-    ).toMatchObject({
+    expect(createMessage).toHaveBeenCalled();
+    expect(createMessage.mock.calls[0][0].message).toMatchObject({
+      ...messageData,
+      attachments: mockAttachments,
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
+      caseTitle: 'Roslindis Angelino',
+      docketNumber: '101-20',
+      from: 'Test Petitionsclerk',
+      fromSection: PETITIONS_SECTION,
+      fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+      to: 'Test Petitionsclerk2',
+    });
+    expect(markMessageThreadRepliedTo).toHaveBeenCalled();
+    expect(markMessageThreadRepliedTo.mock.calls[0][0]).toMatchObject({
       parentMessageId: messageData.parentMessageId,
     });
   });
