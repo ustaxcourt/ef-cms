@@ -16,7 +16,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 import { retry } from '../../../../helpers/retry';
 
-describe('file status report order response', () => {
+describe('file status report order', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
   const firstPdfLineJustThisCase =
@@ -43,15 +43,14 @@ describe('file status report order response', () => {
           return cy.get('body').then(body => {
             /** Assert */
             return (
-              body.find('#status-report-order-response-pdf-preview').children
-                .length > 1
+              body.find('#status-report-order-pdf-preview').children.length > 1
             );
           });
         });
       });
     });
 
-    describe('filing a status report order response from document view', () => {
+    describe('filing a status report order from document view', () => {
       it('should save unsigned draft when no options are selected', () => {
         cy.visit(`/case-detail/${docketNumber}`);
         cy.get('#tab-document-view').click();
@@ -227,8 +226,8 @@ describe('file status report order response', () => {
       });
     });
 
-    describe('filing a status report order response from message view', () => {
-      it('should be able to create signed order response from messages and redirects to messages tab', () => {
+    describe('filing a status report order from message view', () => {
+      it('should be able to create signed order from messages and redirects to messages tab', () => {
         cy.visit(`/case-detail/${docketNumber}`);
 
         cy.get('#tab-case-messages').click();
@@ -245,7 +244,7 @@ describe('file status report order response', () => {
     });
   });
   describe('chambers', () => {
-    describe('filing a status report order response from document view', () => {
+    describe('filing a status report order from document view', () => {
       it('should save draft when all options are selected', () => {
         loginAsColvinChambers();
         cy.visit(`/case-detail/${docketNumber}`);
@@ -262,7 +261,7 @@ describe('file status report order response', () => {
   });
 
   describe('adc', () => {
-    describe('filing a status report order response from document view', () => {
+    describe('filing a status report order from document view', () => {
       it('should save draft when all options are selected', () => {
         loginAsAdc();
         cy.visit(`/case-detail/${docketNumber}`);
