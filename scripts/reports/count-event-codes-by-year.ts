@@ -1,5 +1,7 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
+//usage: count-event-codes-by-year m01 m02 feew -y 2000-2020
+
 import { DateTime } from 'luxon';
 import {
   ServerApplicationContext,
@@ -19,16 +21,13 @@ function usage(warning: string | undefined) {
   if (warning) {
     console.log(warning);
   }
-  console.log(`npx ts-node --transpile-only ${process.argv[1]} M071,m074`);
+  console.log(`npx ts-node --transpile-only ${process.argv[1]} M071,m074 `);
 }
-
 const config = {
   allowPositionals: true,
-  args: process.argv,
   options: {
     stricken: {
       default: false,
-      description: 'include stricken docket entries when computing the results',
       short: 's',
       type: 'boolean',
     },
@@ -39,8 +38,6 @@ const config = {
     },
     years: {
       default: `${DateTime.now().toObject().year}`,
-      description:
-        'comma-delimited list of years, or a hyphen-separated range of years',
       short: 'y',
       type: 'string',
     },
@@ -149,8 +146,12 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
     usage(`Error: ${ex}`);
     process.exit(1);
   }
-
-  const eventCodes = positionals.map(s => s.toUpperCase());
+  if (positionals.length === 0) {
+    usage('invalid input: expected event codes');
+    process.exit(1);
+  }
+  console.log('positionals', positionals);
+  const eventCodes = positionals[0].split(',').map(s => s.toUpperCase());
   const years: number[] = parseIntsArg(values.years);
   const includeStricken = values.stricken;
   const ret = await getCountDocketEntriesByEventCodesAndYears({
