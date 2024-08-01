@@ -1,6 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 //import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { emptyUserState } from '@web-client/presenter/state/userState';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -18,6 +19,7 @@ const getBaseState = user => {
       unreadCount: 0,
     },
     permissions: getUserPermissions(user),
+    token: '283490',
     user,
   };
 };
@@ -373,8 +375,9 @@ describe('headerHelper', () => {
     it('should be the public site url when the current user is not logged in', () => {
       const result = runCompute(headerHelper, {
         state: {
-          ...getBaseState(undefined),
+          ...getBaseState(emptyUserState),
           currentPage: 'Messages',
+          token: undefined,
         },
       });
 

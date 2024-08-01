@@ -7,8 +7,8 @@ export const headerHelper = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const user = get(state.user);
-  const userRole = user && user.role;
-  const isLoggedIn = !!user;
+  const userRole = user.role;
+  const isLoggedIn = !!get(state.token);
   const currentPage = get(state.currentPage) || '';
   const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
