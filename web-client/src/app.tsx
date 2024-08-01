@@ -264,7 +264,7 @@ const app = {
     });
 
     // Expose Cerebral for testing
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.ENV === 'local' || process.env.ENV === 'test') {
       (window as unknown as ITestableWindow).cerebral = cerebralApp;
     }
 

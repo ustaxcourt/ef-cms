@@ -1323,8 +1323,7 @@ export const presenterSequences = {
     showViewPetitionerCounselModalSequence as unknown as Function,
   signOutIdleSequence,
   signOutSequence: signOutSequence as unknown as Function,
-  signOutUserInitiatedSequence:
-    signOutUserInitiatedSequence as unknown as Function,
+  signOutUserInitiatedSequence,
   skipSigningOrderSequence: skipSigningOrderSequence as unknown as Function,
   sortTableSequence,
   startRefreshIntervalSequence:

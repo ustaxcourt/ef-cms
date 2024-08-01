@@ -71,7 +71,7 @@ export const AccountMenu = connect(
                     className="account-menu-item usa-button usa-button--unstyled"
                     data-testid="logout-button-desktop"
                     id="log-out"
-                    onClick={() => signOutUserInitiatedSequence()}
+                    onClick={() => signOutUserInitiatedSequence({})}
                   >
                     Log Out
                   </button>
