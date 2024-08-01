@@ -20,7 +20,7 @@ describe('todaysOrdersHelper', () => {
             docketNumber: '123-20',
             documentType: 'Order',
             filingDate: '2020-06-11T20:17:10.646Z',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
         ],
       },
@@ -40,7 +40,7 @@ describe('todaysOrdersHelper', () => {
               eventCode: 'SPOS',
               filingDate: '2020-06-11T20:17:10.646Z',
               judge: 'Cohen',
-              signedJudgeName: 'Guy Fieri',
+              signedJudgeName: 'Roslindis Angelino',
             },
           ],
         },
@@ -62,7 +62,7 @@ describe('todaysOrdersHelper', () => {
       {
         caseCaption: 'Sauceboss, Petitioner',
         formattedFilingDate: '06/11/20',
-        formattedJudgeName: 'Fieri',
+        formattedJudgeName: 'Angelino',
       },
     ]);
   });
