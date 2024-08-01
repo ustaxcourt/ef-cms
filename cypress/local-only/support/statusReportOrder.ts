@@ -27,16 +27,20 @@ export const expectedPdfLines = [
   'ORDERED that jurisdiction is retained by the undersigned. It is further',
   'ORDERED that Here is my additional order text.',
 ];
-export const selectAllOptionsInForm = ({
-  orderName,
-}: {
-  orderName: string;
-}) => {
+export const selectAllOptionsInForm = () => {
   cy.get('#order-type-status-report').check({ force: true });
   cy.get('#status-report-due-date-picker').type(formatNow(FORMATS.MMDDYYYY));
   cy.get('#stricken-from-trial-sessions').check({ force: true });
   cy.get('#jurisdiction-retained').check({ force: true });
   cy.get('#additional-order-text').type('Here is my additional order text.');
-  cy.get('#docket-entry-description').clear();
-  cy.get('#docket-entry-description').type(orderName);
+};
+
+export const getLastDraftOrderElementFromDrafts = () => {
+  return cy.get('button:contains(Order)').last();
+};
+
+export const getLastDraftOrderElementIndexFromDrafts = () => {
+  return getLastDraftOrderElementFromDrafts().then(lastOrderButton => {
+    return lastOrderButton.index();
+  });
 };
