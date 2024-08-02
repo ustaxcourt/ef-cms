@@ -35,6 +35,7 @@ import {
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { RawUser, User } from './User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
@@ -168,9 +169,11 @@ export class DocketEntry extends JoiValidationEntity {
     rawDocketEntry,
     {
       applicationContext,
+      authorizedUser,
       filtered = false,
       petitioners = [],
     }: {
+      authorizedUser?: UnknownAuthUser;
       applicationContext: IApplicationContext;
       petitioners?: any[];
       filtered?: boolean;
@@ -181,10 +184,8 @@ export class DocketEntry extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    if (
-      !filtered ||
-      User.isInternalUser(applicationContext.getCurrentUser().role)
-    ) {
+    const currentUser = authorizedUser || applicationContext.getCurrentUser();
+    if (!filtered || User.isInternalUser(currentUser.role)) {
       this.initForUnfilteredForInternalUsers(rawDocketEntry, {
         applicationContext,
       });
@@ -256,7 +257,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
     // only share the userId with an external user if it is the logged in user
-    if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
+    if (currentUser.userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
     }
 
