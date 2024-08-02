@@ -11,13 +11,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
-const renderTabFactory = ({
-  activeKey,
-  asSwitch,
-  boxed,
-  headingLevel,
-  setTab,
-}) =>
+const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
   function TabComponent(child) {
     const {
       children: tabChildren,
@@ -43,15 +37,6 @@ const renderTabFactory = ({
       return null;
     }
 
-    // We use headings purely for semantic reasons
-    const HeadingElement = ({ children, level }) => {
-      return React.createElement(
-        `h${level}`,
-        { className: 'tab-header' },
-        children,
-      );
-    };
-
     const tabProps = {
       className: liClass,
       role: 'presentation',
@@ -68,18 +53,12 @@ const renderTabFactory = ({
       type: 'button',
     };
 
-    const tabButton = (
-      <button {...buttonProps} data-testid={child.props['data-testid']}>
-        <span className="button-text">{title}</span> {icon}
-      </button>
-    );
-
     return (
       <li {...tabProps}>
-        {headingLevel && (
-          <HeadingElement level={headingLevel}>{tabButton}</HeadingElement>
-        )}
-        {!headingLevel && tabButton}
+        {' '}
+        <button {...buttonProps} data-testid={child.props['data-testid']}>
+          <span className="button-text">{title}</span> {icon}
+        </button>
       </li>
     );
   };
@@ -98,6 +77,19 @@ export function Tab(properties: {
 }) {
   return <></>;
 }
+
+// Tabs convey the document headings implicitly, but we also add an invisible header for accessibility reasons
+const HeadingElement = ({ children, level }) => {
+  return React.createElement(
+    `h${level}`,
+    { ariaHidden: 'false', className: 'sr-only' },
+    children,
+  );
+};
+
+const getTabHeadingTitle = word => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};
 
 /**
  * TabsComponent
@@ -166,7 +158,16 @@ export function TabsComponent({
     }
 
     if (tabName && isActiveTab && tabChildren) {
-      return <div {...contentProps}>{tabChildren}</div>;
+      return (
+        <div {...contentProps}>
+          {headingLevel && (
+            <HeadingElement level={headingLevel}>
+              {getTabHeadingTitle(tabName)}
+            </HeadingElement>
+          )}
+          {tabChildren}
+        </div>
+      );
     }
 
     return null;

@@ -2252,3 +2252,15 @@ button.change-scanner-button {
   font-family: $font-source-sans;
   text-wrap: balance;
 }
+
+// For content that should be visually hidden but present in the accessibility tree
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
