@@ -143,21 +143,6 @@ export const messageDocumentHelper = (
     draftDocuments,
   });
 
-  console.log('caseDocument.eventCode', caseDocument.eventCode);
-  console.log('formattedDocument.eventCode', formattedDocument?.eventCode);
-
-  console.log('caseDocument.docketEntryId', caseDocument.docketEntryId);
-  console.log(
-    'formattedDocument.docketEntryId',
-    formattedDocument?.docketEntryId,
-  );
-
-  console.log('caseDocument.documentType', caseDocument.documentType);
-  console.log(
-    'formattedDocument.documentType',
-    formattedDocument?.documentType,
-  );
-
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
