@@ -33,20 +33,26 @@ export default defineConfig({
           return confirmUser({ email });
         },
         createAccount({
-          irsEnv,
+          isIrsEnv,
+          name,
           password,
           role,
+          userId,
           userName,
         }: {
-          irsEnv: boolean;
+          userName: string;
           password: string;
           role: string;
-          userName: string;
+          isIrsEnv: boolean;
+          name: string;
+          userId: string;
         }) {
           return createAccount({
-            isIrsEnv: irsEnv,
+            isIrsEnv,
+            name,
             password,
             role,
+            userId,
             userName,
           });
         },
