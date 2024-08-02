@@ -43,8 +43,6 @@ export const messageDocumentHelper = (
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
 
-  const { docketEntries } = caseDetail;
-
   const caseDocument =
     applicationContext.getUtilities().getAttachmentDocumentById({
       caseDetail,
@@ -119,16 +117,49 @@ export const messageDocumentHelper = (
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
 
+  const showApplySignatureButton =
+    showApplyRemoveSignatureButtonForRole &&
+    showApplySignatureButtonForDocument;
+
   const showRemoveSignatureButtonForDocument =
     documentIsSigned &&
     caseDocument.isDraft &&
     !isNotice &&
     !isStipulatedDecision;
 
+  const showRemoveSignatureButton =
+    showApplyRemoveSignatureButtonForRole &&
+    showRemoveSignatureButtonForDocument &&
+    !isDraftStampOrder;
+
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned && !documentIsArchived;
 
-  // Deriving message-specific button state
+  // Derive message-specific button state
+
+  // Begin formattedDocument retrieval
+  const { draftDocuments } = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, caseDetail);
+
+  // TODO: Why do we need formattedDocument if we have caseDocument??
+  const formattedDocument = draftDocuments.find(
+    doc => doc.docketEntryId === viewerDocumentIdToDisplay,
+  );
+  // End formattedDocument retrieval
+
+  const showApplyStampButton =
+    permissions.STAMP_MOTION &&
+    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+
+  const showStatusReportOrderButton =
+    permissions.STATUS_REPORT_ORDER &&
+    (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
+        formattedDocument?.eventCode,
+      ));
+
   const showNotServed = getShowNotServedForDocument({
     caseDetail,
     docketEntryId: caseDocument.docketEntryId,
@@ -165,30 +196,12 @@ export const messageDocumentHelper = (
     isInternalUser &&
     caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
     DocketEntry.isServed(caseDocument) &&
-    !docketEntries.find(
+    !caseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
-  const { draftDocuments } = applicationContext
-    .getUtilities()
-    .formatCase(applicationContext, caseDetail);
-
-  // TODO: Why do we need formattedDocument if we have caseDocument??
-  const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentIdToDisplay,
-  );
-
-  const showApplyStampButton =
-    permissions.STAMP_MOTION &&
-    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
-
-  const showStatusReportOrderButton =
-    permissions.STATUS_REPORT_ORDER &&
-    (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
-        formattedDocument?.eventCode,
-      ));
+  const showEditCorrespondenceButton =
+    showEditButtonForRole && showEditButtonForCorrespondenceDocument;
 
   // Links definition
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`;
@@ -211,20 +224,13 @@ export const messageDocumentHelper = (
     messageDetailLink,
     servePetitionLink,
     showAddDocketEntryButton,
-    showApplySignatureButton:
-      showApplyRemoveSignatureButtonForRole &&
-      showApplySignatureButtonForDocument,
+    showApplySignatureButton,
     showApplyStampButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned,
     showEditButtonSigned,
-    showEditCorrespondenceButton:
-      showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-
-    showRemoveSignatureButton:
-      showApplyRemoveSignatureButtonForRole &&
-      showRemoveSignatureButtonForDocument &&
-      !isDraftStampOrder,
+    showEditCorrespondenceButton,
+    showRemoveSignatureButton,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,

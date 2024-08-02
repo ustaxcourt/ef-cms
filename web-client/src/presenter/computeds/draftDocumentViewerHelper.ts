@@ -110,8 +110,17 @@ export const draftDocumentViewerHelper = (
 
   const showApplySignatureButtonForDocument = !documentIsSigned;
 
+  const showApplySignatureButton =
+    showApplyRemoveSignatureButtonForRole &&
+    showApplySignatureButtonForDocument;
+
   const showRemoveSignatureButtonForDocument =
     documentIsSigned && !isNotice && !isStipulatedDecision;
+
+  const showRemoveSignatureButton =
+    showApplyRemoveSignatureButtonForRole &&
+    showRemoveSignatureButtonForDocument &&
+    !isDraftStampOrder;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
@@ -127,15 +136,10 @@ export const draftDocumentViewerHelper = (
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
     showAddDocketEntryButton,
-    showApplySignatureButton:
-      showApplyRemoveSignatureButtonForRole &&
-      showApplySignatureButtonForDocument,
+    showApplySignatureButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned,
     showEditButtonSigned,
-    showRemoveSignatureButton:
-      showApplyRemoveSignatureButtonForRole &&
-      showRemoveSignatureButtonForDocument &&
-      !isDraftStampOrder,
+    showRemoveSignatureButton,
   };
 };
