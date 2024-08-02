@@ -181,6 +181,7 @@ describe('messageDocumentHelper', () => {
               {
                 correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
+                isDraft: true,
               },
             ],
           },
@@ -407,6 +408,7 @@ describe('messageDocumentHelper', () => {
               {
                 correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
+                isDraft: true,
               },
             ],
           },

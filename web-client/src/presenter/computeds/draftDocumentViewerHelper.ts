@@ -86,8 +86,8 @@ export const draftDocumentViewerHelper = (
     : showEditButtonForRole &&
       documentIsSigned &&
       !isNotice &&
-      !isStipulatedDecision &&
-      !isDraftStampOrder;
+      !isDraftStampOrder &&
+      !isStipulatedDecision;
   const showEditButtonNotSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
     : showEditButtonForRole && (!documentIsSigned || isNotice);
