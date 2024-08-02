@@ -21,7 +21,6 @@ export const draftDocumentViewerHelper = (
   const caseDetail = get(state.caseDetail);
 
   // Get the document from which the following business logic is derived
-  // TODO consistently rename variable below
   const viewerDraftDocumentToDisplayDocketEntryId = get(
     state.viewerDraftDocumentToDisplay.docketEntryId,
   );
@@ -50,28 +49,9 @@ export const draftDocumentViewerHelper = (
   }
 
   // Business logic
-  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
-    formattedDocumentToDisplay.eventCode,
-  );
-
-  const isNotice = NOTICE_EVENT_CODES.includes(
-    formattedDocumentToDisplay.eventCode,
-  );
-
-  const isStipulatedDecision =
-    formattedDocumentToDisplay.eventCode === STIPULATED_DECISION_EVENT_CODE;
-
-  const documentIsSigned = !!formattedDocumentToDisplay.signedAt;
-
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
-
-  const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
-
-  const showEditButtonForRole = isInternalUser;
-
-  const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const isDraftStampOrder =
     formattedDocumentToDisplay.eventCode === GENERIC_ORDER_EVENT_CODE &&
@@ -81,14 +61,26 @@ export const draftDocumentViewerHelper = (
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   ).includes(formattedDocumentToDisplay?.draftOrderState?.orderType);
 
+  const isNotice = NOTICE_EVENT_CODES.includes(
+    formattedDocumentToDisplay.eventCode,
+  );
+
+  const isStipulatedDecision =
+    formattedDocumentToDisplay.eventCode === STIPULATED_DECISION_EVENT_CODE;
+
+  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+    formattedDocumentToDisplay.eventCode,
+  );
+  const documentIsSigned = !!formattedDocumentToDisplay.signedAt;
+
   // begin draft document-specific variables
   const createdByLabel = formattedDocumentToDisplay.filedBy
     ? `Created by ${formattedDocumentToDisplay.filedBy}`
     : '';
-  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   // end draft document-specific variables
 
   // Derive button state
+  const showEditButtonForRole = isInternalUser;
   const showEditButtonSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && documentIsSigned
     : showEditButtonForRole &&
@@ -96,27 +88,24 @@ export const draftDocumentViewerHelper = (
       !isNotice &&
       !isStipulatedDecision &&
       !isDraftStampOrder;
-
   const showEditButtonNotSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
     : showEditButtonForRole && (!documentIsSigned || isNotice);
 
-  // TODO: rename this variable to match messageDocumentHelper.ts
   const showAddDocketEntryButtonForDocument =
     documentIsSigned || !documentRequiresSignature;
-
   const showAddDocketEntryButton =
-    showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument;
+    permissions.CREATE_ORDER_DOCKET_ENTRY &&
+    showAddDocketEntryButtonForDocument;
 
+  const showApplySignatureButtonForRole = isInternalUser;
   const showApplySignatureButtonForDocument = !documentIsSigned;
-
   const showApplySignatureButton =
-    showApplyRemoveSignatureButtonForRole &&
-    showApplySignatureButtonForDocument;
+    showApplySignatureButtonForRole && showApplySignatureButtonForDocument;
 
+  const showApplyRemoveSignatureButtonForRole = isInternalUser;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned && !isNotice && !isStipulatedDecision;
-
   const showRemoveSignatureButton =
     showApplyRemoveSignatureButtonForRole &&
     showRemoveSignatureButtonForDocument &&
@@ -127,7 +116,6 @@ export const draftDocumentViewerHelper = (
 
   // Links definition
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplayDocketEntryId}/add-court-issued-docket-entry`;
-  // TODO: rename applySignatureLink so that its name corresponds to whatever the final name of the applySignatureLink is in messageDocumentHelper.ts
   const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`;
 
   return {
