@@ -32,13 +32,6 @@ export const formatPetitionAction = ({
   const user = applicationContext.getCurrentUser();
   contactPrimary.email = user.email;
 
-  let noticeIssuedDate;
-  let taxYear;
-
-  if (irsNotices[0]) {
-    ({ noticeIssuedDate, taxYear } = irsNotices[0]);
-  }
-
   const irsNoticesWithCaseTypes = irsNotices.map(irsNotice => {
     return {
       ...irsNotice,
@@ -54,8 +47,6 @@ export const formatPetitionAction = ({
     caseTitle,
     contactPrimary,
     irsNotices: irsNoticesWithCaseTypes,
-    noticeIssuedDate,
-    taxYear,
   });
 };
 

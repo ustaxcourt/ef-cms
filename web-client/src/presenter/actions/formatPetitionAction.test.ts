@@ -66,9 +66,7 @@ describe('formatPetitionAction', () => {
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
       originalCaseType: CASE_TYPES_MAP.cdp,
-      taxYear: 'TEST_taxYear',
     });
   });
 
@@ -103,9 +101,7 @@ describe('formatPetitionAction', () => {
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
       originalCaseType: CASE_TYPES_MAP.cdp,
-      taxYear: 'TEST_taxYear',
     });
   });
 
@@ -149,9 +145,7 @@ describe('formatPetitionAction', () => {
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
       originalCaseType: 'Disclosure1',
-      taxYear: 'TEST_taxYear',
     });
   });
 
@@ -182,9 +176,7 @@ describe('formatPetitionAction', () => {
         email: 'TEST_EMAIL',
       },
       irsNotices: [],
-      noticeIssuedDate: undefined,
       originalCaseType: CASE_TYPES_MAP.deficiency,
-      taxYear: undefined,
     });
   });
 });
