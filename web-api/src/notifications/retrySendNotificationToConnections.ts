@@ -29,7 +29,9 @@ export const retrySendNotificationToConnections = async ({
         if (retryCount >= maxRetries && deleteGoneConnections) {
           const AWSWebSocketConnectionGone = 410;
 
-          if (err['$metadata'].httpStatusCode === AWSWebSocketConnectionGone) {
+          if (
+            err?.['$metadata']?.httpStatusCode === AWSWebSocketConnectionGone
+          ) {
             try {
               await applicationContext
                 .getPersistenceGateway()
