@@ -1039,52 +1039,6 @@ describe('messageDocumentHelper', () => {
     });
   });
 
-  describe('editUrl', () => {
-    it('should return an editUrl for draft documents', () => {
-      const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Miscellaneous',
-                eventCode: 'MISC',
-                isDraft: true,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.editUrl).toBeTruthy();
-    });
-
-    it('should return an editUrl as an empty string if the document is not found', () => {
-      const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Miscellaneous',
-                eventCode: 'MISC',
-              },
-            ],
-          },
-          messageViewerDocumentToDisplay: {
-            documentId: '234',
-          },
-        },
-      });
-
-      expect(result.editUrl).toEqual('');
-    });
-  });
-
   describe('showSignStipulatedDecisionButton', () => {
     it('should be true if the user is an internal user, the eventCode is PSDE, the PSDE is served, and the SDEC eventCode is not in the documents', () => {
       const result = runCompute(messageDocumentHelper, {
