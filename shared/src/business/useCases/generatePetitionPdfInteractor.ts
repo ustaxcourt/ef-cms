@@ -54,7 +54,6 @@ export interface PetitionPdfBase {
   petitionReasons: string[];
   preferredTrialCity: string;
   procedureType: string;
-  taxYear?: string;
 }
 
 export const generatePetitionPdfInteractor = async (

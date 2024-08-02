@@ -28,7 +28,6 @@ export const Petition = ({
   petitionReasons,
   preferredTrialCity,
   procedureType,
-  taxYear,
 }: PetitionPdfBase & {
   caseDescription: string;
   irsNotices: IrsNoticesWithCaseDescription[];
@@ -97,7 +96,7 @@ export const Petition = ({
               ))}
             </ol>
           ) : (
-            <p>{taxYear || NOT_AVAILABLE_OPTION}</p>
+            <p>{irsNotices[0].taxYear || NOT_AVAILABLE_OPTION}</p>
           )}
 
           <li className="list-bold">
