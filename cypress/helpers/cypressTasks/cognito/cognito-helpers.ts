@@ -88,14 +88,18 @@ const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
 
 export const createAccount = async ({
   isIrsEnv,
+  name,
   password,
   role,
+  userId,
   userName,
 }: {
   userName: string;
   password: string;
   role: string;
   isIrsEnv: boolean;
+  name: string;
+  userId: string;
 }): Promise<null> => {
   const userPoolId = await getUserPoolId(isIrsEnv);
   await getCognito().adminCreateUser({
@@ -103,11 +107,11 @@ export const createAccount = async ({
     UserAttributes: [
       {
         Name: 'name',
-        Value: 'Cypress Created Account',
+        Value: name,
       },
       {
         Name: 'custom:userId',
-        Value: '7f7f4c76-c697-4095-a294-dd9d1c16c735',
+        Value: userId,
       },
       {
         Name: 'custom:role',
