@@ -78,7 +78,7 @@ describe('caseFilter', () => {
     const unsealedDocketEntryId = '1f1aa3f7-e2e3-43e6-885d-4ce341588c79';
     const documentSearchResults = [
       {
-        caseCaption: 'Hanan Al Hroub, Petitioner',
+        caseCaption: 'Luksa Lucia, Petitioner',
         docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
         docketNumber: '104-17',
         docketNumberWithSuffix: '104-17R',
@@ -95,7 +95,7 @@ describe('caseFilter', () => {
         signedJudgeName: 'Maurice B. Foley',
       },
       {
-        caseCaption: 'Hanan Al Hroub, Petitioner',
+        caseCaption: 'Luksa Lucia, Petitioner',
         docketEntryId: unsealedDocketEntryId,
         docketNumber: '104-17',
         docketNumberWithSuffix: '104-17R',
