@@ -101,7 +101,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showApplySignatureButton && (
           <Button
             link
-            href={messageDocumentHelper.signOrderLink}
+            href={messageDocumentHelper.applySignatureLink}
             icon="pencil-alt"
           >
             Apply Signature
@@ -172,7 +172,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showSignStipulatedDecisionButton && (
           <Button
             link
-            href={messageDocumentHelper.signOrderLink}
+            href={messageDocumentHelper.applySignatureLink}
             icon="pencil-alt"
           >
             Sign Stipulated Decision

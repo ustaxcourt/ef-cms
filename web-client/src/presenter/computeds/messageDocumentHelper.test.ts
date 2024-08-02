@@ -1307,7 +1307,7 @@ describe('messageDocumentHelper', () => {
     expect(result.servePetitionLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/petition-qc/${mockParentMessageId}`,
     );
-    expect(result.signOrderLink).toEqual(
+    expect(result.applySignatureLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/edit-order/${mockDocumentId}/sign/${mockParentMessageId}`,
     );
   });
