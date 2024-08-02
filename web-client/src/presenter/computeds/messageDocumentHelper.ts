@@ -11,14 +11,7 @@ export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const viewerDocumentIdToDisplay = get(
-    state.messageViewerDocumentToDisplay.documentId,
-  );
-
-  if (!viewerDocumentIdToDisplay) {
-    return {};
-  }
-
+  // Get constants and details from state
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
@@ -35,6 +28,16 @@ export const messageDocumentHelper = (
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
 
+  // Get the document from which the following business logic is derived
+  // TODO consistently rename variable below
+  const viewerDocumentIdToDisplay = get(
+    state.messageViewerDocumentToDisplay.documentId,
+  );
+
+  if (!viewerDocumentIdToDisplay) {
+    return {};
+  }
+
   const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
@@ -48,57 +51,28 @@ export const messageDocumentHelper = (
       useArchived: true,
     }) || {};
 
-  const isCorrespondence = !!caseDocument.correspondenceId;
-
+  // Business logic
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     caseDocument.eventCode,
   );
 
-  const documentIsSigned = !!caseDocument.signedAt;
-
-  const documentIsArchived = !!caseDocument.archived;
-
-  const { draftDocuments } = applicationContext
-    .getUtilities()
-    .formatCase(applicationContext, caseDetail);
-
-  let editUrl = '';
-  const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentIdToDisplay,
-  );
-
-  if (formattedDocument) {
-    ({ editUrl } = formattedDocument);
-    editUrl += `/${parentMessageId}`;
-  }
-
   const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
-
-  const isPetitionDocument =
-    caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
 
   const isStipulatedDecision =
     caseDocument.eventCode === STIPULATED_DECISION_EVENT_CODE;
+
+  const documentIsSigned = !!caseDocument.signedAt;
 
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
 
   const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
-  const hasEditCorrespondencePermission = permissions.CASE_CORRESPONDENCE;
 
   const showEditButtonForRole = isInternalUser;
+
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
-  const showAddDocketEntryButton =
-    hasDocketEntryPermission &&
-    !isCorrespondence &&
-    caseDocument.isDraft &&
-    (documentIsSigned || !documentRequiresSignature);
-  const showApplySignatureButtonForDocument =
-    !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
-  const showEditButtonForDocument =
-    caseDocument.isDraft && !isCorrespondence && !isStipulatedDecision;
   const isDraftStampOrder =
     caseDocument.eventCode === GENERIC_ORDER_EVENT_CODE &&
     caseDocument.stampData?.disposition;
@@ -107,6 +81,19 @@ export const messageDocumentHelper = (
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   ).includes(caseDocument?.draftOrderState?.orderType);
 
+  // begin message-specific variables
+  const isCorrespondence = !!caseDocument.correspondenceId;
+  const documentIsArchived = !!caseDocument.archived;
+  const isPetitionDocument =
+    caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
+  const hasEditCorrespondencePermission = permissions.CASE_CORRESPONDENCE;
+  const showEditButtonForDocument =
+    caseDocument.isDraft && !isCorrespondence && !isStipulatedDecision;
+  const showEditButtonForCorrespondenceDocument =
+    isCorrespondence && hasEditCorrespondencePermission;
+  // end message-specific variables
+
+  // Derive button state
   const showEditButtonSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && documentIsSigned
     : showEditButtonForRole &&
@@ -121,17 +108,26 @@ export const messageDocumentHelper = (
       showEditButtonForDocument &&
       (!documentIsSigned || isNotice);
 
+  // TODO: rename this variable to match draftDocumentViewerHelper.ts
+  const showAddDocketEntryButton =
+    hasDocketEntryPermission &&
+    !isCorrespondence &&
+    caseDocument.isDraft &&
+    (documentIsSigned || !documentRequiresSignature);
+
+  const showApplySignatureButtonForDocument =
+    !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
+
   const showRemoveSignatureButtonForDocument =
     documentIsSigned &&
     caseDocument.isDraft &&
     !isNotice &&
     !isStipulatedDecision;
-  const showEditButtonForCorrespondenceDocument =
-    isCorrespondence && hasEditCorrespondencePermission;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned && !documentIsArchived;
 
+  // Deriving message-specific button state
   const showNotServed = getShowNotServedForDocument({
     caseDetail,
     docketEntryId: caseDocument.docketEntryId,
@@ -172,6 +168,15 @@ export const messageDocumentHelper = (
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const { draftDocuments } = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, caseDetail);
+
+  // TODO: Why do we need formattedDocument if we have caseDocument??
+  const formattedDocument = draftDocuments.find(
+    doc => doc.docketEntryId === viewerDocumentIdToDisplay,
+  );
+
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
@@ -184,19 +189,26 @@ export const messageDocumentHelper = (
         formattedDocument?.eventCode,
       ));
 
-  const { filingDate, index } = caseDocument;
+  // Links definition
+  const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`;
+  // TODO: rename signOrderLink so that its name corresponds to whatever the final name of the applySignatureLink is in draftDocumentViewerHelper.ts
+  const signOrderLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentIdToDisplay}/sign/${parentMessageId}`;
+  const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`;
+  const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`;
+  const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
+  const servePetitionLink = `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`;
+  const statusReportOrderFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/status-report-order-create`;
 
   return {
-    addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
-    applyStampFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`,
+    addDocketEntryLink,
+    applyStampFromMessagesLink,
     archived: documentIsArchived,
-    editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
-    editUrl,
-    filingDate,
+    editCorrespondenceLink,
+    filingDate: caseDocument.filingDate,
     formattedDocument,
-    index,
-    messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
-    servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
+    index: caseDocument.index,
+    messageDetailLink,
+    servePetitionLink,
     showAddDocketEntryButton,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
@@ -218,7 +230,7 @@ export const messageDocumentHelper = (
     showServiceWarning,
     showSignStipulatedDecisionButton,
     showStatusReportOrderButton,
-    signOrderLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentIdToDisplay}/sign/${parentMessageId}`,
-    statusReportOrderFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/status-report-order-create`,
+    signOrderLink,
+    statusReportOrderFromMessagesLink,
   };
 };

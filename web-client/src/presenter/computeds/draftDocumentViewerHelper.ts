@@ -10,6 +10,7 @@ export const draftDocumentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
+  // Get constants and details from state
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
@@ -20,16 +21,18 @@ export const draftDocumentViewerHelper = (
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
 
+  // Get the document from which the following business logic is derived
+  // TODO consistently rename variable below
+  const viewerDraftDocumentToDisplayDocketEntryId = get(
+    state.viewerDraftDocumentToDisplay.docketEntryId,
+  );
+
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
       applicationContext,
       caseDetail,
     });
-
-  const viewerDraftDocumentToDisplayDocketEntryId = get(
-    state.viewerDraftDocumentToDisplay.docketEntryId,
-  );
 
   const formattedDocumentToDisplay =
     viewerDraftDocumentToDisplayDocketEntryId &&
@@ -47,6 +50,7 @@ export const draftDocumentViewerHelper = (
     };
   }
 
+  // Business logic
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     formattedDocumentToDisplay.eventCode,
   );
@@ -60,18 +64,14 @@ export const draftDocumentViewerHelper = (
 
   const documentIsSigned = !!formattedDocumentToDisplay.signedAt;
 
-  const createdByLabel = formattedDocumentToDisplay.filedBy
-    ? `Created by ${formattedDocumentToDisplay.filedBy}`
-    : '';
-
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
 
   const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
 
-  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
+
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const isDraftStampOrder =
@@ -82,6 +82,14 @@ export const draftDocumentViewerHelper = (
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   ).includes(formattedDocumentToDisplay?.draftOrderState?.orderType);
 
+  // begin draft document-specific variables
+  const createdByLabel = formattedDocumentToDisplay.filedBy
+    ? `Created by ${formattedDocumentToDisplay.filedBy}`
+    : '';
+  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
+  // end draft document-specific variables
+
+  // Derive button state
   const showEditButtonSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && documentIsSigned
     : showEditButtonForRole &&
@@ -94,26 +102,32 @@ export const draftDocumentViewerHelper = (
     ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
     : showEditButtonForRole && (!documentIsSigned || isNotice);
 
+  // TODO: rename this variable to match messageDocumentHelper.ts
   const showAddDocketEntryButtonForDocument =
-    documentIsSigned ||
-    !EVENT_CODES_REQUIRING_SIGNATURE.includes(
-      formattedDocumentToDisplay.eventCode,
-    );
+    documentIsSigned || !documentRequiresSignature;
+
+  const showAddDocketEntryButton =
+    showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument;
 
   const showApplySignatureButtonForDocument = !documentIsSigned;
+
   const showRemoveSignatureButtonForDocument =
     documentIsSigned && !isNotice && !isStipulatedDecision;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
 
+  // Links definition
+  const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplayDocketEntryId}/add-court-issued-docket-entry`;
+  // TODO: rename applySignatureLink so that its name corresponds to whatever the final name of the applySignatureLink is in messageDocumentHelper.ts
+  const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`;
+
   return {
-    addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplayDocketEntryId}/add-court-issued-docket-entry`,
-    applySignatureLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`,
+    addDocketEntryLink,
+    applySignatureLink,
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
-    showAddDocketEntryButton:
-      showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
+    showAddDocketEntryButton,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
