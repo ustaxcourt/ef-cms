@@ -99,7 +99,7 @@ const entitiesByName = {
 };
 
 export const createApplicationContext = (
-  appContextUser,
+  appContextUser = {},
   logger = createLogger(),
 ) => {
   let user;
