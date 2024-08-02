@@ -9,7 +9,6 @@ export const draftDocumentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  // Get constants and details from state
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
@@ -20,7 +19,6 @@ export const draftDocumentViewerHelper = (
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
 
-  // Get the document from which the following business logic is derived
   const viewerDraftDocumentToDisplayDocketEntryId = get(
     state.viewerDraftDocumentToDisplay.docketEntryId,
   );
@@ -48,7 +46,6 @@ export const draftDocumentViewerHelper = (
     };
   }
 
-  // Business logic
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
@@ -68,10 +65,11 @@ export const draftDocumentViewerHelper = (
   const isStipulatedDecision =
     formattedDocumentToDisplay.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+  const requiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     formattedDocumentToDisplay.eventCode,
   );
-  const documentIsSigned = !!formattedDocumentToDisplay.signedAt;
+
+  const isSigned = !!formattedDocumentToDisplay.signedAt;
 
   // begin draft document-specific variables
   const createdByLabel = formattedDocumentToDisplay.filedBy
@@ -79,42 +77,38 @@ export const draftDocumentViewerHelper = (
     : '';
   // end draft document-specific variables
 
-  // Derive button state
   const showEditButtonForRole = isInternalUser;
   const showEditButtonSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && documentIsSigned
+    ? permissions.STATUS_REPORT_ORDER && isSigned
     : showEditButtonForRole &&
-      documentIsSigned &&
+      isSigned &&
       !isNotice &&
       !isDraftStampOrder &&
       !isStipulatedDecision;
   const showEditButtonNotSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
-    : showEditButtonForRole && (!documentIsSigned || isNotice);
+    ? permissions.STATUS_REPORT_ORDER && !isSigned
+    : showEditButtonForRole && (!isSigned || isNotice);
 
-  const showAddDocketEntryButtonForDocument =
-    documentIsSigned || !documentRequiresSignature;
+  const showAddDocketEntryButtonForDocument = isSigned || !requiresSignature;
   const showAddDocketEntryButton =
     permissions.CREATE_ORDER_DOCKET_ENTRY &&
     showAddDocketEntryButtonForDocument;
 
   const showApplySignatureButtonForRole = isInternalUser;
-  const showApplySignatureButtonForDocument = !documentIsSigned;
+  const showApplySignatureButtonForDocument = !isSigned;
   const showApplySignatureButton =
     showApplySignatureButtonForRole && showApplySignatureButtonForDocument;
 
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
   const showRemoveSignatureButtonForDocument =
-    documentIsSigned && !isNotice && !isStipulatedDecision;
+    isSigned && !isNotice && !isStipulatedDecision;
   const showRemoveSignatureButton =
     showApplyRemoveSignatureButtonForRole &&
     showRemoveSignatureButtonForDocument &&
     !isDraftStampOrder;
 
-  const showDocumentNotSignedAlert =
-    documentRequiresSignature && !documentIsSigned;
+  const showDocumentNotSignedAlert = requiresSignature && !isSigned;
 
-  // Links definition
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplayDocketEntryId}/add-court-issued-docket-entry`;
   const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`;
 

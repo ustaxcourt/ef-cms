@@ -62,9 +62,8 @@ export const MessageDocument = connect(
               editUnsignedDraftDocumentSequence({
                 caseDetail,
                 docketEntryIdToEdit:
-                  messageDocumentHelper.formattedDocument.docketEntryId,
-                documentType:
-                  messageDocumentHelper.formattedDocument.documentType,
+                  messageDocumentHelper.caseDocument.docketEntryId,
+                documentType: messageDocumentHelper.caseDocument.documentType,
                 parentMessageId,
               })
             }

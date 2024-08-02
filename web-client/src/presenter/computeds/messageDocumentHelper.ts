@@ -12,7 +12,6 @@ export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  // Get constants and details from state
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
@@ -29,7 +28,6 @@ export const messageDocumentHelper = (
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
 
-  // Get the document from which the following business logic is derived
   const viewerDocumentToDisplayDocumentId = get(
     state.messageViewerDocumentToDisplay.documentId,
   );
@@ -49,7 +47,6 @@ export const messageDocumentHelper = (
       useArchived: true,
     }) || {};
 
-  // Business logic
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
@@ -67,64 +64,60 @@ export const messageDocumentHelper = (
   const isStipulatedDecision =
     caseDocument.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+  const requiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     caseDocument.eventCode,
   );
-  const documentIsSigned = !!caseDocument.signedAt;
+
+  const isSigned = !!caseDocument.signedAt;
 
   // begin message-specific variables
   const isCorrespondence = !!caseDocument.correspondenceId;
   const isNonCorrespondenceDraft = caseDocument.isDraft && !isCorrespondence;
-  const documentIsArchived = !!caseDocument.archived;
+  const isArchived = !!caseDocument.archived;
   const isPetitionDocument =
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
   // end message-specific variables
 
-  // Derive button state
   const showEditButtonForRole = isInternalUser;
   const showEditButtonForDocument =
     isNonCorrespondenceDraft && !isStipulatedDecision;
   const showEditButtonSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && documentIsSigned
+    ? permissions.STATUS_REPORT_ORDER && isSigned
     : showEditButtonForRole &&
       showEditButtonForDocument &&
-      documentIsSigned &&
+      isSigned &&
       !isNotice &&
       !isDraftStampOrder;
   const showEditButtonNotSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && !documentIsSigned
+    ? permissions.STATUS_REPORT_ORDER && !isSigned
     : showEditButtonForRole &&
       showEditButtonForDocument &&
-      (!documentIsSigned || isNotice);
+      (!isSigned || isNotice);
 
-  const showAddDocketEntryButtonForDocument =
-    documentIsSigned || !documentRequiresSignature;
+  const showAddDocumentEntryButtonForRole =
+    permissions.CREATE_ORDER_DOCKET_ENTRY;
+  const showAddDocketEntryButtonForDocument = isSigned || !requiresSignature;
   const showAddDocketEntryButton =
-    permissions.CREATE_ORDER_DOCKET_ENTRY &&
+    showAddDocumentEntryButtonForRole &&
     showAddDocketEntryButtonForDocument &&
     isNonCorrespondenceDraft;
 
   const showApplySignatureButtonForRole = isInternalUser;
   const showApplySignatureButtonForDocument =
-    !documentIsSigned && isNonCorrespondenceDraft;
+    !isSigned && isNonCorrespondenceDraft;
   const showApplySignatureButton =
     showApplySignatureButtonForRole && showApplySignatureButtonForDocument;
 
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
   const showRemoveSignatureButtonForDocument =
-    documentIsSigned &&
-    !isNotice &&
-    !isStipulatedDecision &&
-    caseDocument.isDraft;
+    isSigned && !isNotice && !isStipulatedDecision && caseDocument.isDraft;
   const showRemoveSignatureButton =
     showApplyRemoveSignatureButtonForRole &&
     showRemoveSignatureButtonForDocument &&
     !isDraftStampOrder;
 
   const showDocumentNotSignedAlert =
-    documentRequiresSignature && !documentIsSigned && !documentIsArchived;
-
-  // Derive message-specific button state
+    requiresSignature && !isSigned && !isArchived;
 
   // Begin formattedDocument retrieval
   const { draftDocuments } = applicationContext
@@ -132,9 +125,9 @@ export const messageDocumentHelper = (
     .formatCase(applicationContext, caseDetail);
 
   // TODO: Why do we need formattedDocument if we have caseDocument??
-  const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
-  );
+  // const formattedDocument = draftDocuments.find(
+  //   doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
+  // );
   // End formattedDocument retrieval
   // Using the two variables from the formattedDocument retrieval above
   const showNotServed = getShowNotServedForDocument({
@@ -143,17 +136,20 @@ export const messageDocumentHelper = (
     draftDocuments,
   });
 
+  // TODO: Temporary change to see if CI checks fail anywhere without formattedDocument
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
-    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+    STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
+  // (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+  //   STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
-    (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-      STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
-        formattedDocument?.eventCode,
-      ));
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
+  // (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+  //   STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
+  //     formattedDocument?.eventCode,
+  //   ));
 
   const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
     ({ eventCode }) => eventCode,
@@ -173,9 +169,9 @@ export const messageDocumentHelper = (
     permissions.SERVE_DOCUMENT;
 
   const showServiceWarning =
-    !isPetitionDocument &&
     !canAllowDocumentServiceForCase &&
     showNotServed &&
+    !isPetitionDocument &&
     permissions.SERVE_DOCUMENT;
 
   const showServePetitionButton =
@@ -194,7 +190,6 @@ export const messageDocumentHelper = (
   const showEditCorrespondenceButton =
     showEditButtonForRole && showEditButtonForCorrespondenceDocument;
 
-  // Links definition
   const addDocketEntryLink = `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplayDocumentId}/add-court-issued-docket-entry/${parentMessageId}`;
   const applySignatureLink = `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplayDocumentId}/sign/${parentMessageId}`;
   const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
@@ -207,10 +202,11 @@ export const messageDocumentHelper = (
     addDocketEntryLink,
     applySignatureLink,
     applyStampFromMessagesLink,
-    archived: documentIsArchived,
+    archived: isArchived,
+    // formattedDocument,
+    caseDocument,
     editCorrespondenceLink,
     filingDate: caseDocument.filingDate,
-    formattedDocument,
     index: caseDocument.index,
     messageDetailLink,
     servePetitionLink,
