@@ -57,8 +57,8 @@ const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
       <li {...tabProps}>
         {' '}
         <button {...buttonProps} data-testid={child.props['data-testid']}>
-          {icon}
           <span className="button-text">{title}</span> {icon}
+          {icon}
         </button>
       </li>
     );
