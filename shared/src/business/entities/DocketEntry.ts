@@ -35,12 +35,15 @@ import {
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { RawUser, User } from './User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
 } from '../utilities/DateHandler';
+
+type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
 /* eslint-disable max-lines */
 const canDownloadSTIN = (
@@ -77,6 +80,9 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
+  public caseType?: string;
+  public taxYear?: string;
+  public noticeIssuedDate?: string;
   public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
@@ -163,9 +169,11 @@ export class DocketEntry extends JoiValidationEntity {
     rawDocketEntry,
     {
       applicationContext,
+      authorizedUser,
       filtered = false,
       petitioners = [],
     }: {
+      authorizedUser?: UnknownAuthUser;
       applicationContext: IApplicationContext;
       petitioners?: any[];
       filtered?: boolean;
@@ -176,10 +184,8 @@ export class DocketEntry extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
-    if (
-      !filtered ||
-      User.isInternalUser(applicationContext.getCurrentUser().role)
-    ) {
+    const currentUser = authorizedUser || applicationContext.getCurrentUser();
+    if (!filtered || User.isInternalUser(currentUser.role)) {
       this.initForUnfilteredForInternalUsers(rawDocketEntry, {
         applicationContext,
       });
@@ -191,6 +197,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
     this.archived = rawDocketEntry.archived;
     this.attachments = rawDocketEntry.attachments;
+    this.caseType = rawDocketEntry.caseType;
+    this.taxYear = rawDocketEntry.taxYear;
+    this.noticeIssuedDate = rawDocketEntry.noticeIssuedDate;
     this.certificateOfService = rawDocketEntry.certificateOfService;
     this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
     this.createdAt = rawDocketEntry.createdAt || createISODateString();
@@ -248,7 +257,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
     // only share the userId with an external user if it is the logged in user
-    if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
+    if (currentUser.userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
     }
 
@@ -614,7 +623,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isFiledByPractitioner(filedByRole?: string): boolean {
     return (
       !!filedByRole &&
-      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(filedByRole)
+      [ROLES.privatePractitioner, ROLES.irsPractitioner].includes(
+        filedByRole as PractitionerRole,
+      )
     );
   }
 

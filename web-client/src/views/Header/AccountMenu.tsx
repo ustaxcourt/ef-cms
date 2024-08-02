@@ -10,14 +10,14 @@ export const AccountMenu = connect(
   {
     headerHelper: state.headerHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    signOutSequence: sequences.signOutSequence,
+    signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   function AccountMenu({
     headerHelper,
     isExpanded,
     navigateToPathSequence,
-    signOutSequence,
+    signOutUserInitiatedSequence,
     toggleMenuSequence,
   }) {
     return (
@@ -71,7 +71,7 @@ export const AccountMenu = connect(
                     className="account-menu-item usa-button usa-button--unstyled"
                     data-testid="logout-button-desktop"
                     id="log-out"
-                    onClick={() => signOutSequence()}
+                    onClick={() => signOutUserInitiatedSequence({})}
                   >
                     Log Out
                   </button>

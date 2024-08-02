@@ -411,6 +411,42 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/order-response-create..',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/case-detail/*/docket-entry/*/edit-meta',
       ifHasAccess({ app }, (docketNumber, docketRecordIndex) => {
         setPageTitle(
@@ -1125,7 +1161,14 @@ const router = {
     );
 
     registerRoute('/idle-logout', () => {
-      return app.getSequence('gotoIdleLogoutSequence')();
+      if (app.getState('token')) {
+        return app.getSequence('signOutIdleSequence')();
+      } else {
+        // If not signed in, saying "we logged you off" doesn't make sense
+        return app.getSequence('navigateToPathSequence')({
+          path: BASE_ROUTE,
+        });
+      }
     });
 
     registerRoute('/login', () => {
@@ -1196,6 +1239,14 @@ const router = {
             }
           }
         }
+      }),
+    );
+
+    registerRoute(
+      '/file-a-petition/new',
+      ifHasAccess({ app }, () => {
+        setPageTitle('File a petition');
+        return app.getSequence('gotoUpdatedPetitionFlowSequence')();
       }),
     );
 
@@ -1311,6 +1362,46 @@ const router = {
           parentMessageId,
         });
       }),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/order-response-create..',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(

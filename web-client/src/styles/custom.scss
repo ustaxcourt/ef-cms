@@ -56,6 +56,14 @@ hr {
   max-width: 150px;
 }
 
+.max-width-180 {
+  max-width: 180px;
+}
+
+.max-width-900 {
+  max-width: 900px;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -161,6 +169,7 @@ hr {
 
 .address-line {
   display: block;
+  word-break: break-all;
 }
 
 .word-wrap-break-word {
@@ -1504,6 +1513,12 @@ hr.lighter {
   }
 }
 
+.statusReportOrderResponsePdfPreview {
+  .pdf-preview-viewer {
+    height: 846px;
+  }
+}
+
 .ustc-ui-tabs.container-tabs {
   border-bottom: 0;
   background-color: white;
@@ -2248,6 +2263,63 @@ button.change-scanner-button {
   }
 }
 
+.address-info {
+  max-width: 30rem;
+}
+
+.info-alert {
+  max-width: 42rem !important;
+}
+
+.max-width-fit-content {
+  max-width: fit-content;
+}
+
+.list-style-disc {
+  list-style-type: disc;
+}
+
+.alpha-list {
+  padding-left: 20px;
+  margin-top: 5px;
+  list-style-type: lower-alpha;
+}
+
+.alpha-list-items {
+  padding-bottom: 3px;
+  font-weight: 400;
+  line-height: 21px;
+}
+
+.before-case-button {
+  margin-top: 2.5rem;
+}
+
+.before-case-follow-up-button {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    margin-top: 1.25rem;
+  }
+}
+
+.create-petition-navigation-buttons {
+  margin-top: 2.5rem;
+}
+
+.create-petition-navigation-follow-up-buttons {
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    margin-top: 1.25rem;
+  }
+}
+
+.create-petition-review-step-title {
+  display: flex;
+  align-items: center;
+
+  @media only screen and (max-width: ($medium-screen - 1)) {
+    justify-content: space-between;
+  }
+}
+
 .preformatted-text {
   font-family: $font-source-sans;
   text-wrap: balance;
@@ -2263,4 +2335,59 @@ button.change-scanner-button {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+.petition-review-petitioner-section {
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .petition-review-petitioner-section {
+    grid-template-columns: auto;
+  }
+}
+
+.petition-review-irs-notice-section {
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .petition-review-irs-notice-section {
+    grid-template-columns: auto;
+  }
+}
+
+.petition-review-case-information-section {
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .petition-review-case-information-section {
+    grid-template-columns: auto;
+  }
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .petition-review-spacing {
+    margin-top: 1.5rem;
+  }
+}
+
+.petitioner-review-list {
+  padding-left: 20px;
+  margin: 0;
+
+  li {
+    margin-bottom: 0.5em;
+  }
+}
+
+.no-wrap-white-space {
+  white-space: normal;
 }

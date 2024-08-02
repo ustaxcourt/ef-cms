@@ -10,11 +10,7 @@ The mission of the DAWSON Product Team is to continue to add and improve functio
 
 ### Team Members:
 
-Jenna Hansen - Delivery Manager
-
-Jason Fu - Software Engineer
-
-Rachel Rogers - Software Engineer
+Jennilee Bertrand - Delivery Manager
 
 Sui Wong - User Experience Design and Research 
 
@@ -22,10 +18,13 @@ Katie Cissell - User Experience - Lean
 
 Cody Seibert - Software Engineer
 
-Joshua Abu - Software Engineer
+Chris Bisom - Software Engineer
+
+Javis Sullivan - Software Engineer
 
 Tom Elliott- Software Engineer
 
+Andy Kuny - Software Engineer
 Jonathan Cruz - Software Engineer
 
 Zach Rogers - Software Engineer
@@ -62,7 +61,7 @@ Chris Holly (USTC)- Product Owner
 
 **Embrace and drive change**. We recognize that this work requires constant learning on the part of all participants, and embrace the state of not-knowing that must precede learning.
 
-**Feedback**: Feedback is a function of respect whether you are the giver or the receiver. We maintain a list of how people prefer to receive feedback and try to default to that style when possible and make room to formally offer and receive feedback.
+**Feedback**: Feedback is a function of respect whether you are the giver or the receiver. We have a monthly direct feedback meeting and attendance is optional.
 
 ### Working Agreements:
 
@@ -74,15 +73,13 @@ Chris Holly (USTC)- Product Owner
 
 **Time Away**:
 
-- If you step away from your desk for more than a few minutes, update your status in Slack.
-
 - If you plan to be gone for a half-day or longer, add the time away to the team calendar, block off your calendar, and decline meetings.
 
 - Before your planned absence, update Slack and your calendar with OOO notifications.
 
 **Methods of Communication**
 
-- We use the **Clarion zoom room** to start all collaborative and informal meetings.
+- We use the **Gather Town** to start all collaborative and informal meetings, as well as use **Clarion** as a back up in case **Gather Town** is unavailable. 
 
 - We use **Slack** to update our whereabouts, ask questions and post general announcements. Slack should be on and checked regularly throughout the day.
 
@@ -90,7 +87,7 @@ Chris Holly (USTC)- Product Owner
 
 - **Stand up** We meet daily to communicate our goals and/or blockers for the day. We demonstrate work in progress and strive to understand our team priorities.
 
-- We track our work on **GitHub** and **Trello**; updating daily as we complete tasks.
+- We track our work on **GitHub** for updating daily as we complete tasks.
 
 **Meetings**
 
@@ -133,7 +130,7 @@ As a team we use multiple methods of voting for decision making within the team.
 
 - We Identify and fix technical risk within the system.
 
-- Default to open. We build secure, open source software, creating and maintaining it in public repositories, where it may be inspected by the public who places their trust in it, and where it is available for use by other courts.
+- Default to open. We build secure, open source software, creating and maintaining it in public repositories and where it may be inspected by the public who places their trust in it.
 
 - Own and manage our data. We ensure that all Court data remains in the Court's care, custody, and control.
 

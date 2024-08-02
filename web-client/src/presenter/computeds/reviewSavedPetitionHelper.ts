@@ -94,7 +94,10 @@ export const reviewSavedPetitionHelper = (
   const documentsByType = (docketEntries || [])
     .filter(d => !DocketEntry.isMinuteEntry(d))
     .reduce((acc, docketEntry) => {
-      acc[docketEntry.documentType] = docketEntry;
+      if (!acc[docketEntry.documentType]) {
+        acc[docketEntry.documentType] = [];
+      }
+      acc[docketEntry.documentType].push(docketEntry);
       return acc;
     }, {});
 
@@ -122,17 +125,22 @@ export const reviewSavedPetitionHelper = (
   }
 
   const petitionFile =
-    documentsByType[INITIAL_DOCUMENT_TYPES.petition.documentType];
+    documentsByType[INITIAL_DOCUMENT_TYPES.petition.documentType]?.[0];
   const requestForPlaceOfTrialFile =
-    documentsByType[INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType];
+    documentsByType[
+      INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType
+    ]?.[0];
   const corporateDisclosureFile =
-    documentsByType[INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType];
-  const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
+    documentsByType[
+      INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType
+    ]?.[0];
+  const stinFile =
+    documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType]?.[0];
   const applicationForWaiverOfFilingFeeFile =
     documentsByType[
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
-    ];
-  const attachmentToPetitionFile =
+    ]?.[0];
+  const attachmentToPetitionFiles =
     documentsByType[INITIAL_DOCUMENT_TYPES.attachmentToPetition.documentType];
 
   const showStatistics = statistics && statistics.length > 0;
@@ -172,7 +180,7 @@ export const reviewSavedPetitionHelper = (
 
   return {
     applicationForWaiverOfFilingFeeFile,
-    attachmentToPetitionFile,
+    attachmentToPetitionFiles,
     corporateDisclosureFile,
     eConsentFieldsEnabledFeatureFlag,
     eServiceConsentTextForPrimaryContact,
