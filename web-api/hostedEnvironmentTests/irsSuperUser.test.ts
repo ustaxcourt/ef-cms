@@ -140,6 +140,14 @@ async function createUserInIrsPool({
     TemporaryPassword: password,
     UserAttributes: [
       {
+        Name: 'name',
+        Value: 'irsSuperUser CI/CD',
+      },
+      {
+        Name: 'custom:userId',
+        Value: '37808c8c-e658-4ff9-a57e-bbb64f0e6065',
+      },
+      {
         Name: 'custom:role',
         Value: ROLES.irsSuperuser,
       },
