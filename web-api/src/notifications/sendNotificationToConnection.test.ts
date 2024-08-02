@@ -10,13 +10,11 @@ const mockConnection = {
 
 const mockMessage = 'hello, computer';
 
-const postToConnection = jest
-  .fn()
-  .mockReturnValue({ promise: () => Promise.resolve('ok') });
+const send = jest.fn().mockResolvedValue('ok');
 
 beforeEach(() => {
   applicationContext.getNotificationClient.mockImplementation(() => {
-    return { postToConnection };
+    return { send };
   });
 
   applicationContext
@@ -31,7 +29,7 @@ it('should send notification to connection', async () => {
     messageStringified: mockMessage,
   });
 
-  expect(postToConnection.mock.calls[0][0]).toMatchObject({
+  expect(send.mock.calls[0][0].input).toMatchObject({
     ConnectionId: mockConnection.connectionId,
     Data: mockMessage,
   });
