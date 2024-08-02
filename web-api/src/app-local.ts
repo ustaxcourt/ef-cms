@@ -1,3 +1,8 @@
+import {
+  DescribeStreamCommand,
+  DynamoDBStreamsClient,
+} from '@aws-sdk/client-dynamodb-streams';
+import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { server as WebSocketServer } from 'websocket';
 import { Writable } from 'stream';
 import { connectLambda } from './lambdas/notifications/connectLambda';
@@ -6,7 +11,6 @@ import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
 import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
 import { v4 as uuid } from 'uuid';
-import AWS from 'aws-sdk';
 import DynamoDBReadable from 'dynamodb-streams-readable';
 import express from 'express';
 import http from 'http';
@@ -33,9 +37,9 @@ const config = {
 };
 
 const localStreamsApp = express();
-const dynamodbClient = new AWS.DynamoDB(config);
-const dynamodbStreamsClient = new AWS.DynamoDBStreams(config);
-const tableName = 'efcms-local';
+const dynamodbClient = new DynamoDBClient(config);
+const dynamodbStreamsClient = new DynamoDBStreamsClient(config);
+const TableName = 'efcms-local';
 
 let chunks: any[] = [];
 
@@ -49,21 +53,17 @@ localStreamsApp.get('/isDone', (req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const streamARN = await dynamodbClient
-    .describeTable({
-      TableName: tableName,
-    })
-    .promise()
-    .then(results => results?.Table?.LatestStreamArn!);
+  const describeTableResults = await dynamodbClient.send(
+    new DescribeTableCommand({ TableName }),
+  );
+  const StreamArn = describeTableResults?.Table?.LatestStreamArn!;
 
-  const { StreamDescription } = await dynamodbStreamsClient
-    .describeStream({
-      StreamArn: streamARN,
-    })
-    .promise();
+  const { StreamDescription } = await dynamodbStreamsClient.send(
+    new DescribeStreamCommand({ StreamArn }),
+  );
 
   const processShard = shard => {
-    const readable = DynamoDBReadable(dynamodbStreamsClient, streamARN, {
+    const readable = DynamoDBReadable(dynamodbStreamsClient, StreamArn, {
       ...config,
       iterator: 'TRIM_HORIZON',
       limit: 100,
