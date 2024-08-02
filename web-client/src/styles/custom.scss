@@ -2328,13 +2328,13 @@ button.change-scanner-button {
 // For content that should be visually hidden but present in the accessibility tree
 .sr-only {
   position: absolute;
+  overflow: hidden;
   width: 1px;
   height: 1px;
   padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
   border: 0;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
 }
 
 .petition-review-petitioner-section {
