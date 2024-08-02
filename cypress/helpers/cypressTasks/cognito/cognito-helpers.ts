@@ -102,6 +102,14 @@ export const createAccount = async ({
     TemporaryPassword: password,
     UserAttributes: [
       {
+        Name: 'name',
+        Value: 'Cypress Created Account',
+      },
+      {
+        Name: 'custom:userId',
+        Value: '7f7f4c76-c697-4095-a294-dd9d1c16c735',
+      },
+      {
         Name: 'custom:role',
         Value: role,
       },
