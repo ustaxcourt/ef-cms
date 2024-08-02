@@ -39,7 +39,7 @@ describe('getUsersPendingEmailInteractor', () => {
   it("should return user's pending email", async () => {
     applicationContext.getPersistenceGateway().getUsersById.mockResolvedValue([
       {
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
         pendingEmail: PENDING_EMAIL,
         role: ROLES.petitioner,
         userId: USER_IDS[0],
@@ -65,7 +65,7 @@ describe('getUsersPendingEmailInteractor', () => {
   it('should return undefined for each user if user does not have a pending email', async () => {
     applicationContext.getPersistenceGateway().getUsersById.mockResolvedValue([
       {
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
         role: ROLES.petitioner,
         userId: USER_IDS[0],
       },
