@@ -74,15 +74,16 @@ export const messageDocumentHelper = (
 
   // begin message-specific variables
   const isCorrespondence = !!caseDocument.correspondenceId;
+  const isNonCorrespondenceDraft = caseDocument.isDraft && !isCorrespondence;
   const documentIsArchived = !!caseDocument.archived;
   const isPetitionDocument =
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
   // end message-specific variables
 
   // Derive button state
-  const showEditButtonForDocument =
-    caseDocument.isDraft && !isCorrespondence && !isStipulatedDecision;
   const showEditButtonForRole = isInternalUser;
+  const showEditButtonForDocument =
+    isNonCorrespondenceDraft && !isStipulatedDecision;
   const showEditButtonSigned = isStatusReportOrder
     ? permissions.STATUS_REPORT_ORDER && documentIsSigned
     : showEditButtonForRole &&
@@ -100,22 +101,21 @@ export const messageDocumentHelper = (
     documentIsSigned || !documentRequiresSignature;
   const showAddDocketEntryButton =
     permissions.CREATE_ORDER_DOCKET_ENTRY &&
-    !isCorrespondence &&
-    caseDocument.isDraft &&
-    showAddDocketEntryButtonForDocument;
+    showAddDocketEntryButtonForDocument &&
+    isNonCorrespondenceDraft;
 
   const showApplySignatureButtonForRole = isInternalUser;
   const showApplySignatureButtonForDocument =
-    !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
+    !documentIsSigned && isNonCorrespondenceDraft;
   const showApplySignatureButton =
     showApplySignatureButtonForRole && showApplySignatureButtonForDocument;
 
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned &&
-    caseDocument.isDraft &&
     !isNotice &&
-    !isStipulatedDecision;
+    !isStipulatedDecision &&
+    caseDocument.isDraft;
   const showRemoveSignatureButton =
     showApplyRemoveSignatureButtonForRole &&
     showRemoveSignatureButtonForDocument &&
@@ -142,6 +142,21 @@ export const messageDocumentHelper = (
     docketEntryId: caseDocument.docketEntryId,
     draftDocuments,
   });
+
+  console.log('caseDocument.eventCode', caseDocument.eventCode);
+  console.log('formattedDocument.eventCode', formattedDocument?.eventCode);
+
+  console.log('caseDocument.docketEntryId', caseDocument.docketEntryId);
+  console.log(
+    'formattedDocument.docketEntryId',
+    formattedDocument?.docketEntryId,
+  );
+
+  console.log('caseDocument.documentType', caseDocument.documentType);
+  console.log(
+    'formattedDocument.documentType',
+    formattedDocument?.documentType,
+  );
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
