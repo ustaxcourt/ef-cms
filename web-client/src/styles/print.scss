@@ -13,11 +13,5 @@
     background-color: color($theme-color-primary-darker);
     color: $color-white;
     text-decoration: none;
-
-    *,
-    a {
-      color: color($theme-color-base-ink);
-      text-decoration: none;
-    }
   }
 }
