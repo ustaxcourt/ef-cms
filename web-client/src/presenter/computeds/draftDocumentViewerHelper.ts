@@ -1,10 +1,9 @@
 /* eslint-disable complexity */
 
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const draftDocumentViewerHelper = (
   get: Get,
