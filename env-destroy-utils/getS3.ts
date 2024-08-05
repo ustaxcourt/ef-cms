@@ -1,10 +1,16 @@
-const { S3 } = require('aws-sdk');
+import { S3 } from '@aws-sdk/client-s3';
 
-exports.getS3 = ({ environment }) => {
-  const s3 = new S3({
-    apiVersion: 'latest',
-    region: environment.region,
-  });
+let s3ClientCache: S3;
 
-  return s3;
+export const getS3 = ({
+  environment,
+}: {
+  environment: { name: string; region: string };
+}): S3 => {
+  if (!s3ClientCache) {
+    s3ClientCache = new S3({
+      region: environment.region,
+    });
+  }
+  return s3ClientCache;
 };
