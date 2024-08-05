@@ -18,6 +18,5 @@ export const sendMaintenanceNotificationsLambda = event =>
     },
     {
       bypassMaintenanceCheck: true,
-      user: {},
     },
   );
