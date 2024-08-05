@@ -1,102 +1,94 @@
-const { clearS3Buckets } = require('./clearS3Buckets');
-const { getS3Buckets } = require('./getS3Buckets');
+import { clearS3Buckets } from './clearS3Buckets';
+import { getS3 } from './getS3';
+import { getS3Buckets } from './getS3Buckets';
 jest.mock('./getS3Buckets', () => ({
-  getS3Buckets: jest.fn(),
+  getS3Buckets: jest.fn().mockResolvedValue([]),
 }));
-const { getS3 } = require('./getS3');
 jest.mock('./getS3', () => ({
-  getS3: jest.fn(),
+  getS3: jest.fn().mockResolvedValue({
+    deleteObjects: jest.fn(),
+    listObjectVersions: jest.fn(),
+    listObjectsV2: jest.fn(),
+  }),
 }));
 
 describe('clearS3Buckets', () => {
-  const mockEnv = { region: 'test' };
+  const mockEnv = { name: 'jest', region: 'test' };
 
   it('should retrieve all s3 buckets for the specified env', async () => {
-    getS3Buckets.mockResolvedValue([]);
+    (getS3Buckets as jest.Mock).mockResolvedValue([]);
 
     await clearS3Buckets({ environment: mockEnv });
 
-    expect(getS3Buckets.mock.calls[0][0]).toMatchObject({
+    expect((getS3Buckets as jest.Mock).mock.calls[0][0]).toMatchObject({
       environment: mockEnv,
     });
   });
 
   it('should delete all items from each s3 bucket when there is a bucket that has more than 1000 keys', async () => {
-    const mockDeleteObjects = jest.fn().mockReturnValue({ promise: () => {} });
+    const mockDeleteObjects = jest.fn().mockResolvedValue({});
     const mockListObjects = jest
       .fn()
-      .mockReturnValueOnce({
-        promise: () => ({
-          Contents: [...Array(1000).keys()],
-        }),
+      .mockResolvedValueOnce({
+        Contents: [...Array(1000).keys()],
       })
-      .mockReturnValueOnce({
-        promise: () => ({
-          Contents: [...Array(1000).keys()],
-        }),
+      .mockResolvedValueOnce({
+        Contents: [...Array(1000).keys()],
       })
-      .mockReturnValueOnce({
-        promise: () => ({
-          Contents: [...Array(100).keys()],
-        }),
+      .mockResolvedValueOnce({
+        Contents: [...Array(100).keys()],
       })
-      .mockReturnValueOnce({
-        promise: () => ({
-          Contents: [],
-        }),
+      .mockResolvedValueOnce({
+        Contents: [],
       });
-    const mockListObjectVersions = jest.fn().mockReturnValueOnce({
-      promise: () => ({
+    const mockListObjectVersions = jest
+      .fn()
+      .mockResolvedValueOnce({
         Versions: [],
-      }),
-    });
-    getS3.mockReturnValueOnce({
+      })
+      .mockResolvedValueOnce({
+        DeleteMarkers: [],
+      });
+    (getS3 as jest.Mock).mockReturnValueOnce({
       deleteObjects: mockDeleteObjects,
       listObjectVersions: mockListObjectVersions,
-      listObjects: mockListObjects,
+      listObjectsV2: mockListObjects,
     });
-    getS3Buckets.mockResolvedValue([{ Name: 'First Bucket' }]);
+    (getS3Buckets as jest.Mock).mockResolvedValue([{ Name: 'First Bucket' }]);
 
     await clearS3Buckets({ environment: mockEnv });
 
     expect(mockDeleteObjects).toHaveBeenCalledTimes(3);
   });
 
-  it('should delete all object versions from each s3 bucket when there is a bucket that has more than object version 1000 keys', async () => {
-    const mockDeleteObjects = jest.fn().mockReturnValue({ promise: () => {} });
-    const mockListObjects = jest.fn().mockReturnValueOnce({
-      promise: () => ({
-        Contents: [],
-      }),
+  it('should delete all object versions from each s3 bucket when there is a bucket that has more than 1000 object versions', async () => {
+    const mockDeleteObjects = jest.fn().mockResolvedValue({});
+    const mockListObjects = jest.fn().mockResolvedValueOnce({
+      Contents: [],
     });
     const mockListObjectVersions = jest
       .fn()
-      .mockReturnValueOnce({
-        promise: () => ({
-          Versions: [...Array(1000).keys()],
-        }),
+      .mockResolvedValueOnce({
+        Versions: [...Array(1000).keys()],
       })
-      .mockReturnValueOnce({
-        promise: () => ({
-          Versions: [...Array(1000).keys()],
-        }),
+      .mockResolvedValueOnce({
+        Versions: [...Array(1000).keys()],
       })
-      .mockReturnValueOnce({
-        promise: () => ({
-          Versions: [...Array(100).keys()],
-        }),
+      .mockResolvedValueOnce({
+        Versions: [...Array(100).keys()],
       })
-      .mockReturnValueOnce({
-        promise: () => ({
-          Versions: [],
-        }),
+      .mockResolvedValueOnce({
+        Versions: [],
+      })
+      .mockResolvedValueOnce({
+        DeleteMarkers: [],
       });
-    getS3.mockReturnValueOnce({
+    (getS3 as jest.Mock).mockReturnValueOnce({
       deleteObjects: mockDeleteObjects,
       listObjectVersions: mockListObjectVersions,
-      listObjects: mockListObjects,
+      listObjectsV2: mockListObjects,
     });
-    getS3Buckets.mockResolvedValue([{ Name: 'First Bucket' }]);
+    (getS3Buckets as jest.Mock).mockResolvedValue([{ Name: 'First Bucket' }]);
 
     await clearS3Buckets({ environment: mockEnv });
 
@@ -104,23 +96,24 @@ describe('clearS3Buckets', () => {
   });
 
   it('should not throw an error when a s3 bucket does not have any objects or versions', async () => {
-    const mockDeleteObjects = jest.fn().mockReturnValue({ promise: () => {} });
-    const mockListObjects = jest.fn().mockReturnValueOnce({
-      promise: () => ({
-        Contents: [],
-      }),
+    const mockDeleteObjects = jest.fn().mockResolvedValue({});
+    const mockListObjects = jest.fn().mockResolvedValueOnce({
+      Contents: [],
     });
-    const mockListObjectVersions = jest.fn().mockReturnValueOnce({
-      promise: () => ({
+    const mockListObjectVersions = jest
+      .fn()
+      .mockResolvedValueOnce({
         Versions: [],
-      }),
-    });
-    getS3.mockReturnValueOnce({
+      })
+      .mockResolvedValueOnce({
+        DeleteMarkers: [],
+      });
+    (getS3 as jest.Mock).mockReturnValueOnce({
       deleteObjects: mockDeleteObjects,
       listObjectVersions: mockListObjectVersions,
-      listObjects: mockListObjects,
+      listObjectsV2: mockListObjects,
     });
-    getS3Buckets.mockResolvedValue([{ Name: 'First Bucket' }]);
+    (getS3Buckets as jest.Mock).mockResolvedValue([{ Name: 'First Bucket' }]);
 
     await clearS3Buckets({ environment: mockEnv });
 
