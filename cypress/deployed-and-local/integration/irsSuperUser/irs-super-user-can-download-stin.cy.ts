@@ -21,7 +21,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
     it('should let an irs superuser view the reconciliation report and download a STIN', () => {
       cy.task('createAccount', {
-        irsEnv: true,
+        isIrsEnv: true,
         name: 'irsSuperUser CI/CD',
         password,
         role: ROLES.irsSuperuser,
