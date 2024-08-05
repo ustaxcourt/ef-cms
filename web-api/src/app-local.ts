@@ -1,6 +1,6 @@
 import {
   DescribeStreamCommand,
-  DynamoDBStreamsClient,
+  DynamoDBStreams,
 } from '@aws-sdk/client-dynamodb-streams';
 import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { server as WebSocketServer } from 'websocket';
@@ -38,7 +38,7 @@ const config = {
 
 const localStreamsApp = express();
 const dynamodbClient = new DynamoDBClient(config);
-const dynamodbStreamsClient = new DynamoDBStreamsClient(config);
+const dynamodbStreamsClient = new DynamoDBStreams(config);
 const TableName = 'efcms-local';
 
 let chunks: any[] = [];
