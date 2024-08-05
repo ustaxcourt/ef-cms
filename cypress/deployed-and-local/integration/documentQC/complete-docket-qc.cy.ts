@@ -1,3 +1,4 @@
+/* eslint-disable promise/no-nesting */
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { assertExists, retry } from '../../../helpers/retry';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
@@ -10,8 +11,8 @@ import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petiti
 import { uploadFile } from '../../../helpers/file/upload-file';
 
 describe('Document QC Complete', () => {
-  let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
-    undefined as unknown as { userId: string; name: string };
+  // let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
+  //   undefined as unknown as { userId: string; name: string };
   let DOCKET_CLERK_INFO: { userId: string; name: string } =
     undefined as unknown as { userId: string; name: string };
 
@@ -21,8 +22,10 @@ describe('Document QC Complete', () => {
   before(() => {
     cy.intercept('GET', '**/users', req => {
       req.on('before:response', res => {
+        console.log('********************** this is our log', res.body);
         if (res.body.role === ROLES.caseServicesSupervisor) {
-          CASE_SERVICE_SUPERVISOR_INFO = res.body;
+          cy.wrap(res.body).as('CASE_SERVICE_SUPERVISOR_INFO');
+          // CASE_SERVICE_SUPERVISOR_INFO = res.body;
         }
         if (res.body.role === ROLES.docketClerk) {
           DOCKET_CLERK_INFO = res.body;
@@ -54,18 +57,21 @@ describe('Document QC Complete', () => {
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       loginAsAdmissionsClerk();
       goToCase(docketNumber);
+      cy.get<{ userId: string; name: string }>(
+        '@CASE_SERVICE_SUPERVISOR_INFO',
+      ).then(caseServiceSupervisorInfo => {
+        sendMessages(
+          caseServiceSupervisorInfo.userId,
+          docketSectionMessage,
+          'docket',
+        );
 
-      sendMessages(
-        CASE_SERVICE_SUPERVISOR_INFO.userId,
-        docketSectionMessage,
-        'docket',
-      );
-
-      sendMessages(
-        CASE_SERVICE_SUPERVISOR_INFO.userId,
-        petitionsSectionMessage,
-        'petitions',
-      );
+        sendMessages(
+          caseServiceSupervisorInfo.userId,
+          petitionsSectionMessage,
+          'petitions',
+        );
+      });
 
       retry(() => {
         cy.login('caseServicesSupervisor1', '/messages/my/inbox');
