@@ -40,6 +40,8 @@ export const messageDocumentHelper = (
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
 
+  // We use getAttachmentDocumentById instead of filtering based on getFormattedCaseDetail
+  // (as we do in draftDocumentViewerHelper) to ensure we search over archived documents as well.
   const caseDocument =
     applicationContext.getUtilities().getAttachmentDocumentById({
       caseDetail,
@@ -70,13 +72,11 @@ export const messageDocumentHelper = (
 
   const isSigned = !!caseDocument.signedAt;
 
-  // begin message-specific variables
   const isCorrespondence = !!caseDocument.correspondenceId;
   const isNonCorrespondenceDraft = caseDocument.isDraft && !isCorrespondence;
   const isArchived = !!caseDocument.archived;
   const isPetitionDocument =
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
-  // end message-specific variables
 
   const showEditButtonForRole = isInternalUser;
   const showEditButtonForDocument =
@@ -119,37 +119,33 @@ export const messageDocumentHelper = (
   const showDocumentNotSignedAlert =
     requiresSignature && !isSigned && !isArchived;
 
-  // Begin formattedDocument retrieval
+  // It seems like we should be able to get formattedDocumentToDisplay like we do in draftDocumentViewerHelper
+  // to avoid the duplication with caseDocument and formattedDocument in this file. However, we are using
+  // slightly different properties to pull up caseDocument and formattedDocument. This may be unnecessary.
+  // The variables affected by formattedDocument are showApplyStampButton and showStatusReportOrderButton.
   const { draftDocuments } = applicationContext
     .getUtilities()
     .formatCase(applicationContext, caseDetail);
-
-  // TODO: Why do we need formattedDocument if we have caseDocument??
-  // const formattedDocument = draftDocuments.find(
-  //   doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
-  // );
-  // End formattedDocument retrieval
-  // Using the two variables from the formattedDocument retrieval above
+  const formattedDocument = draftDocuments.find(
+    doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
+  );
   const showNotServed = getShowNotServedForDocument({
     caseDetail,
     docketEntryId: caseDocument.docketEntryId,
     draftDocuments,
   });
 
-  // TODO: Temporary change to see if CI checks fail anywhere without formattedDocument
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
-    STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
-  // (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-  //   STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
-    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
-  // (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
-  //   STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
-  //     formattedDocument?.eventCode,
-  //   ));
+    (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
+        formattedDocument?.eventCode,
+      ));
 
   const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
     ({ eventCode }) => eventCode,
@@ -203,8 +199,8 @@ export const messageDocumentHelper = (
     applySignatureLink,
     applyStampFromMessagesLink,
     archived: isArchived,
-    // formattedDocument,
-    caseDocument,
+    docketEntryId: caseDocument.docketEntryId,
+    documentType: caseDocument.documentType,
     editCorrespondenceLink,
     filingDate: caseDocument.filingDate,
     index: caseDocument.index,

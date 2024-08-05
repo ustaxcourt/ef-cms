@@ -61,9 +61,8 @@ export const MessageDocument = connect(
             onClick={() =>
               editUnsignedDraftDocumentSequence({
                 caseDetail,
-                docketEntryIdToEdit:
-                  messageDocumentHelper.caseDocument.docketEntryId,
-                documentType: messageDocumentHelper.caseDocument.documentType,
+                docketEntryIdToEdit: messageDocumentHelper.docketEntryId,
+                documentType: messageDocumentHelper.documentType,
                 parentMessageId,
               })
             }
