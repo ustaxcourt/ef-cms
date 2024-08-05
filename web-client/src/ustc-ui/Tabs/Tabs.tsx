@@ -45,17 +45,18 @@ const renderTabFactory = ({
 
     const HeadingElement = headingLevel ? `h${headingLevel}` : 'span';
     const tabProps = {
-      'aria-controls': tabContentId,
-      'aria-selected': isActiveTab,
       className: liClass,
-      role: 'tab',
+      role: 'presentation',
     };
 
     const buttonProps = {
+      'aria-controls': tabContentId,
+      'aria-selected': isActiveTab,
       className: childClassName,
       disabled,
       id: buttonId,
       onClick: () => setTab(tabName),
+      role: 'tab',
       type: 'button',
     };
 

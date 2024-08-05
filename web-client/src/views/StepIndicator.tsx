@@ -1,10 +1,8 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
-
-let PREVIOUS_STEP = 0;
 
 export const StepIndicator = connect(
   {
@@ -14,10 +12,9 @@ export const StepIndicator = connect(
   function StepIndicator({ stepIndicatorInfo, updateStepIndicatorSequence }) {
     const { currentStep, steps } = stepIndicatorInfo;
 
-    if (PREVIOUS_STEP !== currentStep) {
-      PREVIOUS_STEP = currentStep;
+    useEffect(() => {
       window.scrollTo(0, 0);
-    }
+    }, [currentStep]);
 
     return (
       <>

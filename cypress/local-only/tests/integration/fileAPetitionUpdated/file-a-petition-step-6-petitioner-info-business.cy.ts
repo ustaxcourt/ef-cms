@@ -24,7 +24,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       fillBusinessandOtherContact({
         fillInCareOf: true,
       });
-      cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+      cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
         contactInfo.placeOfLegalResidence,
       );
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
@@ -64,7 +64,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       fillBusinessandOtherContact({
         fillSecondaryName: true,
       });
-      cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+      cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
         contactInfo.placeOfLegalResidence,
       );
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
@@ -118,7 +118,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       fillBusinessandOtherContact({
         fillSecondaryName: true,
       });
-      cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+      cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
         contactInfo.placeOfLegalResidence,
       );
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);
@@ -172,7 +172,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       fillBusinessandOtherContact({
         fillSecondaryName: true,
       });
-      cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+      cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
         contactInfo.placeOfLegalResidence,
       );
       cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);

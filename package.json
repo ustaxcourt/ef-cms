@@ -11,6 +11,7 @@
   "dependencies": {
     "@18f/us-federal-holidays": "4.0.0",
     "@aws-crypto/sha256-browser": "5.2.0",
+    "@aws-sdk/client-apigatewaymanagementapi": "3.616.0",
     "@aws-sdk/client-api-gateway": "3.616.0",
     "@aws-sdk/client-apigatewayv2": "3.616.0",
     "@aws-sdk/client-cloudfront": "3.616.0",
@@ -253,6 +254,7 @@
     "@babel/preset-react": "7.24.7",
     "@babel/preset-typescript": "7.24.7",
     "@babel/register": "7.24.6",
+    "@cypress/puppeteer": "^0.1.5",
     "@faker-js/faker": "8.4.1",
     "@miovision/eslint-plugin-disallow-date": "2.0.0",
     "@types/aws-lambda": "8.10.142",

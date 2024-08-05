@@ -60,7 +60,7 @@ describe('Document Search entity', () => {
 
   it('should pass validation when judge is provided', () => {
     const documentSearch = new DocumentSearch({
-      judge: 'Guy Fieri',
+      judge: 'Roslindis Angelino',
     });
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
