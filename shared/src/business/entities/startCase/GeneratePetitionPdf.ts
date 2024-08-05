@@ -19,7 +19,6 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
   public petitionReasons: string[];
   public preferredTrialCity: string;
   public procedureType: string;
-  public taxYear?: string;
   public hasIrsNotice: boolean;
   public originalCaseType: string;
   public irsNotices: IrsNotice[];
@@ -37,7 +36,6 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
     this.petitionReasons = rawProps.petitionReasons;
     this.preferredTrialCity = rawProps.preferredTrialCity;
     this.procedureType = rawProps.procedureType;
-    this.taxYear = rawProps.taxYear;
     this.hasIrsNotice = rawProps.hasIrsNotice;
     this.originalCaseType = rawProps.originalCaseType;
     this.irsNotices = rawProps.irsNotices;
