@@ -1,3 +1,4 @@
+import { UserType } from '@aws-sdk/client-cognito-identity-provider';
 import { createApplicationContext } from '../../web-api/src/applicationContext';
 import { environment } from '../../web-api/src/environment';
 
@@ -6,6 +7,14 @@ async function main() {
   const cognito = applicationContext.getCognito();
 
   const expectedAttributes = ['custom:userId', 'name', 'email', 'custom:role'];
+  const piiFields: (string | undefined)[] = ['name', 'email'];
+  const usersMissingAttributes: UserType[] = [];
+  const missingFieldSummary = {
+    ['custom:userId']: 0,
+    name: 0,
+    email: 0,
+    ['custom:role']: 0,
+  };
 
   let PaginationToken: string | undefined;
   let usersCompleted = 0;
@@ -20,19 +29,41 @@ async function main() {
     PaginationToken = response.PaginationToken;
     response.Users?.forEach(user => {
       const userHasAllAttributes = expectedAttributes.every(
-        expctedAttribute =>
-          !!user.Attributes?.find(
-            cognitoAttribute => cognitoAttribute.Name === expctedAttribute,
-          ),
+        expectedAttribute => {
+          const theField = user.Attributes?.find(
+            cognitoAttribute => cognitoAttribute.Name === expectedAttribute,
+          );
+
+          if (!theField) {
+            missingFieldSummary[expectedAttribute]++;
+          }
+          return !!theField;
+        },
       );
 
       if (!userHasAllAttributes) {
-        console.log('User does not have required attributes', user);
+        user.Attributes?.forEach(cogAttribute => {
+          if (piiFields.includes(cogAttribute.Name) && cogAttribute.Value) {
+            cogAttribute.Value = '*******';
+          }
+        });
+        usersMissingAttributes.push(user);
       }
     });
+
     usersCompleted = usersCompleted + 60;
     console.log('Users Completed: ', usersCompleted);
   } while (PaginationToken);
+
+  console.log(
+    'Users missing attributes: ',
+    JSON.stringify(usersMissingAttributes, null, 2),
+  );
+  console.log(
+    'Users missing attributes (count): ',
+    usersMissingAttributes.length,
+  );
+  console.log(missingFieldSummary);
 }
 
 void main();
