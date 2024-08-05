@@ -66,7 +66,7 @@ export const getUserByEmail = async (
   )?.Value!;
 
   const name = foundUser.UserAttributes?.find(
-    element => element.Name === 'name',
+    element => element.Name === 'name' || element.Name === 'custom:name', // custom:name is only used locally for cognito-local
   )?.Value!;
 
   const userEmail = foundUser.UserAttributes?.find(
