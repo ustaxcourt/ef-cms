@@ -7,13 +7,10 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getPublicCaseLambda = event =>
-  genericHandler(
-    event,
-    ({ applicationContext }) =>
-      applicationContext
-        .getUseCases()
-        .getPublicCaseInteractor(applicationContext, {
-          docketNumber: event.pathParameters.docketNumber,
-        }),
-    { user: {} },
+  genericHandler(event, ({ applicationContext }) =>
+    applicationContext
+      .getUseCases()
+      .getPublicCaseInteractor(applicationContext, {
+        docketNumber: event.pathParameters.docketNumber,
+      }),
   );
