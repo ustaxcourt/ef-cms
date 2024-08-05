@@ -1,5 +1,4 @@
 /* eslint-disable promise/no-nesting */
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { assertExists, retry } from '../../../helpers/retry';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
@@ -11,31 +10,10 @@ import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petiti
 import { uploadFile } from '../../../helpers/file/upload-file';
 
 describe('Document QC Complete', () => {
-  // let CASE_SERVICE_SUPERVISOR_INFO: { userId: string; name: string } =
-  //   undefined as unknown as { userId: string; name: string };
-  let DOCKET_CLERK_INFO: { userId: string; name: string } =
-    undefined as unknown as { userId: string; name: string };
-
   const docketSectionMessage = 'To CSS under Docket Section';
   const petitionsSectionMessage = 'To CSS under Petitions Section';
 
   before(() => {
-    cy.intercept('GET', '**/users', req => {
-      req.on('before:response', res => {
-        console.log('********************** this is our log', res.body);
-        if (res.body.role === ROLES.caseServicesSupervisor) {
-          cy.wrap(res.body).as('CASE_SERVICE_SUPERVISOR_INFO');
-          // CASE_SERVICE_SUPERVISOR_INFO = res.body;
-        }
-        if (res.body.role === ROLES.docketClerk) {
-          DOCKET_CLERK_INFO = res.body;
-        }
-      });
-    });
-
-    cy.login('caseServicesSupervisor1');
-    cy.login('docketclerk1');
-
     loginAsPetitioner();
     petitionerCreatesElectronicCase().then(docketNumber => {
       cy.wrap(docketNumber).as('DOCKET_NUMBER');
@@ -57,8 +35,9 @@ describe('Document QC Complete', () => {
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       loginAsAdmissionsClerk();
       goToCase(docketNumber);
-      cy.get<{ userId: string; name: string }>(
-        '@CASE_SERVICE_SUPERVISOR_INFO',
+      cy.task<{ userId: string; name: string; email: string; role: string }>(
+        'getUserByEmail',
+        'caseServicesSupervisor1@example.com',
       ).then(caseServiceSupervisorInfo => {
         sendMessages(
           caseServiceSupervisorInfo.userId,
@@ -131,42 +110,49 @@ describe('Document QC Complete', () => {
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
-
-      cy.get('[data-testid="dropdown-select-assignee"]').select(
-        DOCKET_CLERK_INFO.name,
-      );
-
-      retry(() => {
-        cy.login(
-          'caseServicesSupervisor1',
-          '/document-qc/section/inbox/selectedSection?section=docket',
+      cy.task<{ userId: string; name: string; email: string; role: string }>(
+        'getUserByEmail',
+        'docketclerk1@example.com',
+      ).then(docketClerkInfo => {
+        cy.get('[data-testid="dropdown-select-assignee"]').select(
+          docketClerkInfo.name,
         );
-        cy.get('table.usa-table');
-        return cy.get('body').then(body => {
-          const workItem = body.find(
-            `[data-testid="work-item-${docketNumber}"]`,
+
+        retry(() => {
+          cy.login(
+            'caseServicesSupervisor1',
+            '/document-qc/section/inbox/selectedSection?section=docket',
           );
-          const assigneeName = workItem.find(
-            '[data-testid="table-column-work-item-assigned-to"]',
-          );
-          const text = assigneeName.text();
-          return cy.wrap(text.includes(DOCKET_CLERK_INFO.name));
+          cy.get('table.usa-table');
+          return cy.get('body').then(body => {
+            const workItem = body.find(
+              `[data-testid="work-item-${docketNumber}"]`,
+            );
+            const assigneeName = workItem.find(
+              '[data-testid="table-column-work-item-assigned-to"]',
+            );
+            const text = assigneeName.text();
+            return cy.wrap(text.includes(docketClerkInfo.name));
+          });
         });
+
+        cy.get(`[data-testid="work-item-${docketNumber}"]`)
+          .find('.message-document-title')
+          .find('a')
+          .click();
+
+        cy.get('#save-and-finish').click();
+
+        cy.get('[data-testid="success-alert"]').should(
+          'contain',
+          'QC Completed',
+        );
+
+        cy.visit('/document-qc/my/outbox');
+        cy.get(
+          `[data-testid="section-work-item-outbox-${docketNumber}"]`,
+        ).should('exist');
       });
-
-      cy.get(`[data-testid="work-item-${docketNumber}"]`)
-        .find('.message-document-title')
-        .find('a')
-        .click();
-
-      cy.get('#save-and-finish').click();
-
-      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
-
-      cy.visit('/document-qc/my/outbox');
-      cy.get(`[data-testid="section-work-item-outbox-${docketNumber}"]`).should(
-        'exist',
-      );
     });
   });
 
@@ -187,9 +173,14 @@ describe('Document QC Complete', () => {
         .find('[data-testid="checkbox-assign-work-item"]')
         .click();
 
-      cy.get('[data-testid="dropdown-select-assignee"]').select(
-        CASE_SERVICE_SUPERVISOR_INFO.name,
-      );
+      cy.task<{ userId: string; name: string; email: string; role: string }>(
+        'getUserByEmail',
+        'caseServicesSupervisor1@example.com',
+      ).then(caseServiceSupervisorInfo => {
+        cy.get('[data-testid="dropdown-select-assignee"]').select(
+          caseServiceSupervisorInfo.name,
+        );
+      });
 
       cy.visit('/document-qc/my/inbox');
       cy.get(

@@ -4,6 +4,7 @@ import {
   deleteAllCypressTestAccounts,
   deleteAllIrsCypressTestAccounts,
   getIrsBearerToken,
+  getUserByEmail,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
@@ -88,6 +89,9 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        getUserByEmail(email: string) {
+          return getUserByEmail(email);
         },
         readAllItemsInBucket({
           bucketName,
