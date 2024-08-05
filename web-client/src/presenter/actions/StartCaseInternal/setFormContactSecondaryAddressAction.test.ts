@@ -8,7 +8,7 @@ describe('setFormContactSecondaryAddressAction', () => {
         contact: {
           city: 'Flavortown',
           hasConsentedToEService: true,
-          name: 'Guy Fieri',
+          name: 'Roslindis Angelino',
           paperPetitionEmail: 'petitioner@example.com',
         },
       },
@@ -18,7 +18,7 @@ describe('setFormContactSecondaryAddressAction', () => {
             city: 'Flavortown',
             contactId: '123abc',
             hasConsentedToEService: true,
-            name: 'Guy Fieri',
+            name: 'Roslindis Angelino',
             paperPetitionEmail: 'petitioner@example.com',
           },
           contactSecondary: {
@@ -37,7 +37,7 @@ describe('setFormContactSecondaryAddressAction', () => {
       city: 'Flavortown',
       contactId: '123abc',
       hasConsentedToEService: true,
-      name: 'Guy Fieri',
+      name: 'Roslindis Angelino',
       paperPetitionEmail: 'petitioner@example.com',
     });
     expect(result.state.form.contactSecondary).toMatchObject({
