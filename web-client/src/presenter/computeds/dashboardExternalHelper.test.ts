@@ -2,7 +2,11 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { dashboardExternalHelper as dashboardExternalHelperComputed } from './dashboardExternalHelper';
-import { docketClerk1User } from '@shared/test/mockUsers';
+import {
+  docketClerk1User,
+  petitionerUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -139,5 +143,34 @@ describe('dashboardExternalHelper', () => {
     });
 
     expect(result.showFilingFee).toEqual(false);
+  });
+
+  it('should set the return welcome message for private practitioner', () => {
+    applicationContext.getCurrentUser = () => privatePractitionerUser;
+
+    const result = runCompute(dashboardExternalHelper, { state: {} });
+
+    expect(result.welcomeMessageTitle).toEqual(
+      'Do you need access to an existing case?',
+    );
+    expect(result.welcomeMessage).toEqual(
+      'Search for the case docket number to file the appropriate document.',
+    );
+  });
+
+  it('should set the return welcome message for petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
+
+    const result = runCompute(dashboardExternalHelper, { state: {} });
+
+    expect(result.welcomeMessageTitle).toEqual(
+      'Have you already filed a petition by mail or do you want electronic access to your existing case?',
+    );
+    expect(result.welcomeMessage).toEqual(
+      `Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov">
+        dawson.support@ustaxcourt.gov
+        </a> with your case's docket number (e.g. 12345-67) to get access to
+        your existing case.`,
+    );
   });
 });

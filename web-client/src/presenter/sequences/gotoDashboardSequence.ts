@@ -115,7 +115,7 @@ export const gotoDashboardSequence = [
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesForUserAction,
           setCasesAction,
-          setupCurrentPageAction('DashboardPractitioner'),
+          setupCurrentPageAction('DashboardPetitioner'),
         ],
       },
     ],

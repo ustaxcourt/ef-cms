@@ -138,15 +138,16 @@ export const judgeColvin: RawUser = {
   userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
 };
 
-export const petitionerUser = {
+export const petitionerUser: RawUser = {
+  entityName: 'User',
   name: 'Tax Payer',
   role: ROLES.petitioner,
   section: 'petitioner',
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const privatePractitionerUser = {
-  barNumber: 'BN1234',
+export const privatePractitionerUser: RawUser = {
+  entityName: 'User',
   name: 'Private Practitioner',
   role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
