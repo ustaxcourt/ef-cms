@@ -54,7 +54,7 @@ export const TextEditor = ({
   updateScreenMetadataSequence,
 }) => {
   const quillEscapeRef = useRef(null);
-  defaultValue = addQuillIndentationClasses(defaultValue);
+  const defaultValueWithIndentation = addQuillIndentationClasses(defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
@@ -80,7 +80,7 @@ export const TextEditor = ({
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <ReactQuill
-          defaultValue={editorDelta || defaultValue}
+          defaultValue={editorDelta || defaultValueWithIndentation}
           formats={[
             'size',
             'bold',
