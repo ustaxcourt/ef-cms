@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IBusinessFields {
@@ -21,6 +22,9 @@ interface IOtherContactNameLabel {
 
 type UpdatedFilePetitionHelper = {
   filingOptions: string[];
+  customPhoneMessage?: string;
+  isPetitioner: boolean;
+  isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
   showContactInformationForOtherPartyType: boolean;
@@ -43,9 +47,23 @@ export const updatedFilePetitionHelper = (
     PARTY_TYPES,
   );
 
+  const isPetitioner = user.role === ROLES.petitioner;
+  const isPractitioner = user.role === ROLES.privatePractitioner;
+
+  const customPhoneMessage = isPractitioner
+    ? 'If they do not have a current phone number, enter N/A.'
+    : undefined;
+
+  console.log({
+    isPetitioner,
+    isPractitioner,
+  });
   return {
     businessFieldNames,
+    customPhoneMessage,
     filingOptions,
+    isPetitioner,
+    isPractitioner,
     otherContactNameLabel,
     showContactInformationForOtherPartyType:
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),

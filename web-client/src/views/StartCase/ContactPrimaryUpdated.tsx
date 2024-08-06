@@ -17,6 +17,7 @@ import React from 'react';
 
 type ContactPrimaryUpdate = {
   addressInfo: AddressType;
+  customPhoneMessage?: string;
   nameLabel: string;
   handleBlur: OnBlurHandler;
   handleChange: OnChangeHandler;
@@ -44,6 +45,7 @@ export const ContactPrimaryUpdated = connect<
   function ContactPrimaryUpdated({
     addressInfo,
     constants,
+    customPhoneMessage,
     handleBlur,
     handleChange,
     handleChangeCountryType,
@@ -240,7 +242,8 @@ export const ContactPrimaryUpdated = connect<
               Phone number
             </label>
             <span className="usa-hint">
-              If you do not have a current phone number, enter N/A.
+              {customPhoneMessage ||
+                'If you do not have a current phone number, enter N/A.'}
             </span>
             <input
               autoCapitalize="none"
