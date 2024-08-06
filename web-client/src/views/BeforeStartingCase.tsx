@@ -29,9 +29,12 @@ export const BeforeStartingCase = connect(
     user,
   }) {
     const redirectUrl =
-      petitionFlowUpdated && ROLES.petitioner === user.role
+      petitionFlowUpdated &&
+      [ROLES.petitioner, ROLES.privatePractitioner].includes(user.role)
         ? '/file-a-petition/new'
         : '/file-a-petition/step-1';
+
+    const isPetitioner = user.role === ROLES.petitioner;
     return (
       <>
         <style>
@@ -131,7 +134,10 @@ export const BeforeStartingCase = connect(
                 className="petitioner-flow-text"
                 style={{ marginBottom: '5px' }}
               >
-                If you received one or more Notices from the IRS:
+                {isPetitioner
+                  ? 'If you received'
+                  : 'If the petitioner received'}{' '}
+                one or more Notices from the IRS:
               </div>
               <ul className="margin-top-0">
                 <li>Submit a PDF of the Notice(s) you received.</li>
