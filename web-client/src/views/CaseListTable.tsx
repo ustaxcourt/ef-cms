@@ -49,9 +49,7 @@ export const CaseListTable = connect(
         icon="file"
         id="file-a-petition"
       >
-        {dashboardExternalHelper.showFileACase
-          ? 'File a Case'
-          : 'Create a Case'}
+        Create a Case
       </Button>
     );
 
