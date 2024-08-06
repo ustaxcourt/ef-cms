@@ -127,6 +127,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logUserPerformanceDataLambda } from '@web-api/lambdas/system/logUserPerformanceDataLambda';
 import { logger } from './logger';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
@@ -1076,6 +1077,10 @@ app.delete(
  * system
  */
 {
+  app.post(
+    '/system/log/performance-data',
+    lambdaWrapper(logUserPerformanceDataLambda),
+  );
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 }

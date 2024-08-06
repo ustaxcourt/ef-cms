@@ -2,6 +2,7 @@ import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstan
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const performanceMeasurementEndAction = ({
+  applicationContext,
   get,
   props,
 }: ActionProps<{
@@ -45,5 +46,8 @@ export const performanceMeasurementEndAction = ({
     };
 
     console.log('RESULTS', RESULTS);
+    applicationContext
+      .getUseCases()
+      .logUserPerformanceDataInteractor(applicationContext, RESULTS);
   }
 };
