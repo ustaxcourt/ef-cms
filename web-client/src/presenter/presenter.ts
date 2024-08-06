@@ -1637,6 +1637,40 @@ export const presenterSequences = {
     validateUserContactSequence as unknown as Function,
 };
 
+function wrapActionsWithPerformanceLogic(structure) {
+  if (Array.isArray(structure)) {
+    structure.forEach((item, index: number) => {
+      structure[index] = wrapActionsWithPerformanceLogic(item);
+    });
+    return structure;
+  } else if (typeof structure === 'object' && structure !== null) {
+    for (const key in structure) {
+      structure[key] = wrapActionsWithPerformanceLogic(structure[key]);
+    }
+    return structure;
+  } else if (typeof structure === 'function') {
+    return async function (...args) {
+      if (!args[0].props['actionPerformanceArray']) {
+        args[0].props['actionPerformanceArray'] = [];
+      }
+
+      const startTime = Date.now();
+      const result = await structure(...args);
+      const endTime = Date.now();
+
+      if (structure?.name)
+        args[0].props['actionPerformanceArray'].push({
+          actionName: structure?.name,
+          duration: (endTime - startTime) / 1000,
+        });
+
+      return result;
+    };
+  } else {
+    return structure;
+  }
+}
+
 /**
  * Main Cerebral module
  */
@@ -1662,7 +1696,7 @@ export const presenter = {
             args[0].props['sequenceName'] = sequenceName;
             return performanceMeasurementStartAction(...args);
           },
-          ...sequence,
+          ...wrapActionsWithPerformanceLogic(sequence),
           performanceMeasurementEndAction,
         ];
         acc[sequenceName] = updatedSequence;
@@ -1671,7 +1705,7 @@ export const presenter = {
       acc[sequenceName] = sequence;
       return acc;
     },
-    {},
+    presenterSequences,
   ),
   state: initialState,
 };
