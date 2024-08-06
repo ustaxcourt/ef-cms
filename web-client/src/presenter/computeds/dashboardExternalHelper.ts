@@ -7,7 +7,6 @@ export const dashboardExternalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  showFileACase: boolean;
   showFilingFee: boolean;
   showStartButton: boolean;
   showPetitionWelcomePage: boolean;
@@ -21,13 +20,8 @@ export const dashboardExternalHelper = (
 
   const cases = [...openCases, ...closedCases];
 
-  let showFileACase = false;
   let showStartButton = false;
   let showFilingFee = false;
-
-  if (user.role === ROLES.privatePractitioner) {
-    showFileACase = true;
-  }
 
   if (
     user.role === ROLES.privatePractitioner ||
@@ -40,7 +34,6 @@ export const dashboardExternalHelper = (
   const welcomeMessageTitle = messages[user.role]?.welcomeMessageTitle;
 
   return {
-    showFileACase,
     showFilingFee,
     showPetitionWelcomePage: cases.length === 0,
     showStartButton,
