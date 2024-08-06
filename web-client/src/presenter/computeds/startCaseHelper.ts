@@ -89,7 +89,7 @@ export const startCaseHelper = (
     noticeLegend:
       user.role === USER_ROLES.petitioner
         ? 'Did you receive a notice from the IRS?'
-        : 'Do you have a notice from the IRS?',
+        : 'Did the petitioner receive a notice from the IRS?',
     showAttachmentToPetitionFileValid: form.attachmentToPetitionFile,
     showBusinessFilingTypeOptions: form.filingType === 'A business',
     showCorporateDisclosure: form.partyType && form.filingType === 'A business',
