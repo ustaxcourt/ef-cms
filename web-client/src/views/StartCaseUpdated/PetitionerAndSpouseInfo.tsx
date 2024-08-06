@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 export function PetitionerAndSpouseInfo({
   form,
+  isPetitioner,
   petitionGenerationLiveValidationSequence,
   registerRef,
   resetSecondaryAddressSequence,
@@ -28,9 +29,12 @@ export function PetitionerAndSpouseInfo({
         validationErrors.isSpouseDeceased && 'usa-form-group--error',
       )}
     >
-      <h2>Your spouse&#39;s information</h2>
       <fieldset className="usa-fieldset usa-sans" id="deceased-spouse-radios">
-        <legend id="deceased-spouse-legend">Is your spouse deceased?</legend>
+        <legend id="deceased-spouse-legend">
+          {isPetitioner
+            ? 'Is your spouse deceased?'
+            : 'Is the spouse deceased?'}
+        </legend>
         {['Yes', 'No'].map((isSpouseDeceased, idx) => (
           <div className="usa-radio usa-radio__inline" key={isSpouseDeceased}>
             <input
@@ -86,6 +90,7 @@ export function PetitionerAndSpouseInfo({
         <Spouse
           contactSecondary={contactSecondary}
           hasSpouseConsent={hasSpouseConsent}
+          isPetitioner={isPetitioner}
           petitionGenerationLiveValidationSequence={
             petitionGenerationLiveValidationSequence
           }

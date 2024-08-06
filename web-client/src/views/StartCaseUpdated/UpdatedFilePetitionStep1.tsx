@@ -35,7 +35,7 @@ export const UpdatedFilePetitionStep1 = connect(
     validationErrors,
   }) {
     const { registerRef, resetFocus } = useValidationFocus(validationErrors);
-
+    const { isPetitioner, isPractitioner } = updatedFilePetitionHelper;
     return (
       <>
         <p className="margin-top-0 required-statement">
@@ -84,28 +84,35 @@ export const UpdatedFilePetitionStep1 = connect(
           </fieldset>
         </FormGroup>
 
-        {form.filingType === 'Myself' && (
+        {(form.filingType === 'Myself' ||
+          form.filingType === 'Individual petitioner') && (
           <ContactPrimaryUpdated
             addressInfo={form.contactPrimary}
+            customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
-            nameLabel="Full Name"
+            nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
             registerRef={registerRef}
           />
         )}
-        {form.filingType === 'Myself and my spouse' && (
+        {(form.filingType === 'Myself and my spouse' ||
+          form.filingType === 'Petitioner and spouse') && (
           <>
+            {isPractitioner && <h2>Petitioner&#39;s information</h2>}
             <ContactPrimaryUpdated
               addressInfo={form.contactPrimary}
+              customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
               handleBlur={petitionGenerationLiveValidationSequence}
               handleChange={updateFormValueUpdatedSequence}
               handleChangeCountryType={updateFormValueCountryTypeSequence}
-              nameLabel="Full Name"
+              nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
               registerRef={registerRef}
             />
+            <h2>{isPetitioner ? "Your spouse's" : "Spouse's"} information</h2>
             <PetitionerAndSpouseInfo
               form={form}
+              isPetitioner={isPetitioner}
               petitionGenerationLiveValidationSequence={
                 petitionGenerationLiveValidationSequence
               }
@@ -134,12 +141,14 @@ export const UpdatedFilePetitionStep1 = connect(
               updateFormValueCountryTypeSequence
             }
             updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
+            updatedFilePetitionHelper={updatedFilePetitionHelper}
             validationErrors={validationErrors}
           />
         )}
         {form.filingType === 'Other' && (
           <OtherInfo
             form={form}
+            isPetitioner={isPetitioner}
             otherContactNameLabel={
               updatedFilePetitionHelper.otherContactNameLabel
             }
@@ -155,6 +164,7 @@ export const UpdatedFilePetitionStep1 = connect(
               updateFormValueCountryTypeSequence
             }
             updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
+            updatedFilePetitionHelper={updatedFilePetitionHelper}
             validationErrors={validationErrors}
           />
         )}
