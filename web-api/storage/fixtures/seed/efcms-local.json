@@ -39931,6 +39931,11 @@
     "pk": "document-visibility-policy-change-date"
   },
   {
+    "sk": "sequence-performance-minimum-time",
+    "current": "5",
+    "pk": "sequence-performance-minimum-time"
+  },
+  {
     "sk": "e-consent-fields-enabled-feature-flag",
     "current": true,
     "pk": "e-consent-fields-enabled-feature-flag"

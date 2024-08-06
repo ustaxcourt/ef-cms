@@ -89,6 +89,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
+  SEQUENCE_PERFORMANCE_MINIMUM_TIME: {
+    key: 'sequence-performance-minimum-time',
+  },
   UPDATED_PETITION_FLOW: {
     key: 'updated-petition-flow',
   },
