@@ -13,7 +13,13 @@ export const performanceMeasurementEndAction = ({
   const { actionPerformanceArray, performanceMeasurementStart, sequenceName } =
     props;
 
-  if (!sequenceName || !performanceMeasurementStart || !email) return;
+  if (
+    !sequenceName ||
+    !performanceMeasurementStart ||
+    !email ||
+    !actionPerformanceArray
+  )
+    return;
 
   const performanceMeasurementEnd = Date.now();
   const durationInSeconds =
@@ -26,7 +32,12 @@ export const performanceMeasurementEndAction = ({
     ] || 5;
 
   if (durationInSeconds > MINIMUM_TIME_LIMIT_IN_SECONDS) {
-    const RESULTS = {
+    const RESULTS: {
+      sequenceName: string;
+      duration: number;
+      actionPerformanceArray: { actionName: string; duration: number }[];
+      email: string;
+    } = {
       actionPerformanceArray,
       duration: durationInSeconds,
       email,
