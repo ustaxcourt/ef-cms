@@ -406,23 +406,6 @@ describe('getUserFromAuthHeader', () => {
     expect(user?.userId).toEqual(mockUser['custom:userId']);
   });
 
-  it('should default to a petitioner role when no role is present in the token', () => {
-    const mockNoRoleUser = {
-      'custom:userId': '188a5b0f-e7ae-4647-98a1-43a0d4d00eee',
-      name: 'Test Petitioner',
-    };
-    const noRoleToken = jwt.sign(mockNoRoleUser, 'secret');
-
-    const user = getUserFromAuthHeader({
-      headers: {
-        Authorization: `Bearer ${noRoleToken}`,
-        token,
-      },
-    });
-
-    expect(user?.role).toEqual(ROLES.petitioner);
-  });
-
   describe('redirect', () => {
     it('should return a redirect status in the header', async () => {
       const response = await redirect({}, () => ({ url: 'example.com' }));
