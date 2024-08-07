@@ -3,7 +3,6 @@ import {
   UnauthorizedError,
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
@@ -178,7 +177,7 @@ export const getUserFromAuthHeader = (event): UnknownAuthUser => {
     return {
       email: decoded.email,
       name: decoded.name || decoded['custom:name'], // custom:name only exists locally. This is a workaround for cognito-local.
-      role: decoded['custom:role'] || ROLES.petitioner,
+      role: decoded['custom:role'],
       userId: decoded['custom:userId'],
     };
   } else {
