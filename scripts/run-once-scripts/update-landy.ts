@@ -1,13 +1,4 @@
-// Delete. Terrible.
-
-// Update email in Cognito
-// Update Dynamo records
-// - User record with judge title and new email
-// - User email record
-//
-
 import { createApplicationContext } from '@web-api/applicationContext';
-import { createOrUpdateUser } from '@shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import {
   getDestinationTableInfo,
@@ -15,14 +6,16 @@ import {
   requireEnvVars,
 } from '../../shared/admin-tools/util';
 import { User } from '../../shared/src/business/entities/User';
-import { raw } from 'express';
 
-requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
+requireEnvVars(['ENV']);
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const CURRENT_EMAIL = 'stjudge.landy@ustaxcourt.gov';
-  const UPDATED_EMAIL = 'judge.landy@ustaxcourt.gov';
+  // 'stjudge.landy@ustaxcourt.gov'; // OLD
+  // 'judge.landy@ustaxcourt.gov'; // NEW
+
+  const oldEmail = process.argv[2];
+  const newEmail = process.argv[3];
 
   const applicationContext = createApplicationContext();
   const userPoolId = await getUserPoolId();
@@ -31,21 +24,29 @@ requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
   const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
 
-  const dynamoLandyUserInfo = applicationContext
-    .getPersistenceGateway()
+  const { userId } = await applicationContext
+    .getUserGateway()
     .getUserByEmail(applicationContext, {
-      email: CURRENT_EMAIL,
       poolId: userPoolId,
+      email: oldEmail,
     });
-  dynamoLandyUserInfo.email = UPDATED_EMAIL;
+
+  const dynamoLandyUserInfo = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({
+      applicationContext,
+      userId,
+    });
+
+  dynamoLandyUserInfo.email = newEmail;
   dynamoLandyUserInfo.judgeTitle = 'Judge';
   const rawUser = new User(dynamoLandyUserInfo).validate().toRawObject();
 
   await applicationContext.getUserGateway().updateUser(applicationContext, {
     attributesToUpdate: {
-      email: UPDATED_EMAIL,
+      email: newEmail,
     },
-    email: CURRENT_EMAIL,
+    email: oldEmail,
     poolId: userPoolId,
   });
 
@@ -55,5 +56,3 @@ requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
     userId: rawUser.userId,
   });
 })();
-
-// Merge code w/ UI based updates
