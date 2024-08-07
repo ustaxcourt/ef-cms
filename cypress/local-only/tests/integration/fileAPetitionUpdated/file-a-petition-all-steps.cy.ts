@@ -1,4 +1,3 @@
-import { CASE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   fillCaseProcedureInformation,
   fillGeneratePetitionFileInformation,
@@ -12,7 +11,22 @@ describe('File a petition', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
 
   describe('File a petition', () => {
-    const caseTypes = [...CASE_TYPES, 'Disclosure1', 'Disclosure2'];
+    const caseTypes = [
+      'Deficiency',
+      'CDP (Lien/Levy)',
+      'Other',
+      'Partnership (Section 6228)',
+      'Disclosure2',
+      'Passport',
+      'Innocent Spouse',
+      'Worker Classification',
+      'Whistleblower',
+      'Interest Abatement',
+      'Disclosure1',
+      'Partnership (BBA Section 1101)',
+      'Partnership (Section 6226)',
+    ];
+
     caseTypes.forEach(caseType => {
       it(`should file a petition for case type: ${caseType}`, () => {
         loginAsPetitioner();
