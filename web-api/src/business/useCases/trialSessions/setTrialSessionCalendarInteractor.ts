@@ -8,7 +8,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { chunk, flatten, partition, uniq } from 'lodash';
+import { flatten, partition, uniq } from 'lodash';
+import PQueue from 'p-queue';
 
 const CHUNK_SIZE = 50;
 
@@ -108,7 +109,7 @@ export const setTrialSessionCalendarInteractor = async (
             applicationContext,
             caseRecord,
             trialSessionEntity,
-          }),
+          }) as unknown as Promise<void>,
       ),
       ...manuallyAddedQcCompleteCases.map(
         aCase => () =>
@@ -122,7 +123,7 @@ export const setTrialSessionCalendarInteractor = async (
         aCase => () =>
           setTrialSessionCalendarForEligibleCase({
             applicationContext,
-            caseRecord: aCase,
+            caseRecord: aCase as RawCase,
             trialSessionEntity,
           }),
       ),
@@ -131,10 +132,8 @@ export const setTrialSessionCalendarInteractor = async (
     // Story: 10422
     // We chunk this array of functions so that we don't fire all of them at once.
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
-    const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
-    for (let singleChunk of chunkedFunctions) {
-      await Promise.all(singleChunk.map(func => func()));
-    }
+    const queue = new PQueue({ concurrency: CHUNK_SIZE });
+    await queue.addAll(funcs);
 
     await Promise.all(
       allDocketNumbers.map(docketNumber =>
