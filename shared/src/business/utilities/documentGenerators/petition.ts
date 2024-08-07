@@ -30,7 +30,6 @@ export const petition = async ({
     petitionReasons,
     preferredTrialCity,
     procedureType,
-    taxYear,
   } = data;
 
   const PetitionTemplate = ReactDOM.renderToString(
@@ -47,7 +46,6 @@ export const petition = async ({
       petitionReasons,
       preferredTrialCity,
       procedureType,
-      taxYear,
     }),
   );
 
