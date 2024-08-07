@@ -16,8 +16,8 @@ export const MessageDocument = connect(
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    navigateToStatusReportOrderResponseSequence:
-      sequences.navigateToStatusReportOrderResponseSequence,
+    navigateToStatusReportOrderSequence:
+      sequences.navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -40,7 +40,7 @@ export const MessageDocument = connect(
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
     navigateToPathSequence,
-    navigateToStatusReportOrderResponseSequence,
+    navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -61,10 +61,8 @@ export const MessageDocument = connect(
             onClick={() =>
               editUnsignedDraftDocumentSequence({
                 caseDetail,
-                docketEntryIdToEdit:
-                  messageDocumentHelper.formattedDocument.docketEntryId,
-                documentType:
-                  messageDocumentHelper.formattedDocument.documentType,
+                docketEntryIdToEdit: messageDocumentHelper.docketEntryId,
+                documentType: messageDocumentHelper.documentType,
                 parentMessageId,
               })
             }
@@ -101,7 +99,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showApplySignatureButton && (
           <Button
             link
-            href={messageDocumentHelper.signOrderLink}
+            href={messageDocumentHelper.applySignatureLink}
             icon="pencil-alt"
           >
             Apply Signature
@@ -172,7 +170,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showSignStipulatedDecisionButton && (
           <Button
             link
-            href={messageDocumentHelper.signOrderLink}
+            href={messageDocumentHelper.applySignatureLink}
             icon="pencil-alt"
           >
             Sign Stipulated Decision
@@ -191,20 +189,20 @@ export const MessageDocument = connect(
             Apply Stamp
           </Button>
         )}
-        {messageDocumentHelper.showOrderResponseButton && (
+        {messageDocumentHelper.showStatusReportOrderButton && (
           <Button
             link
-            data-testid="order-response-button"
+            data-testid="status-report-order-button"
             icon="edit"
             onClick={() => {
-              navigateToStatusReportOrderResponseSequence({
-                path: messageDocumentHelper.orderResponseFromMessagesLink,
+              navigateToStatusReportOrderSequence({
+                path: messageDocumentHelper.statusReportOrderFromMessagesLink,
                 statusReportFilingDate: messageDocumentHelper.filingDate,
                 statusReportIndex: messageDocumentHelper.index,
               });
             }}
           >
-            Order Response
+            Order Report
           </Button>
         )}
 

@@ -21,8 +21,8 @@ export const DocumentViewerDocument = connect(
     iframeSrc: state.iframeSrc,
     navigateToPathAndSetRedirectUrlSequence:
       sequences.navigateToPathAndSetRedirectUrlSequence,
-    navigateToStatusReportOrderResponseSequence:
-      sequences.navigateToStatusReportOrderResponseSequence,
+    navigateToStatusReportOrderSequence:
+      sequences.navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence:
@@ -43,7 +43,7 @@ export const DocumentViewerDocument = connect(
     gotoCompleteDocketEntryQCSequence,
     iframeSrc,
     navigateToPathAndSetRedirectUrlSequence,
-    navigateToStatusReportOrderResponseSequence,
+    navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
@@ -186,21 +186,21 @@ export const DocumentViewerDocument = connect(
                   Apply Stamp
                 </Button>
               )}
-              {documentViewerHelper.showOrderResponseButton && (
+              {documentViewerHelper.showStatusReportOrderButton && (
                 <Button
                   link
-                  data-testid="order-response-button"
+                  data-testid="status-report-order-button"
                   icon="edit"
                   onClick={() => {
-                    navigateToStatusReportOrderResponseSequence({
-                      path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
+                    navigateToStatusReportOrderSequence({
+                      path: documentViewerLinksHelper.statusReportOrderFromCaseDetailsLink,
                       statusReportFilingDate:
                         viewerDocumentToDisplay.filingDate,
                       statusReportIndex: viewerDocumentToDisplay.index,
                     });
                   }}
                 >
-                  Order Response
+                  Order Report
                 </Button>
               )}
               <Button

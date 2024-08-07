@@ -588,9 +588,9 @@ export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
     .map(x => x.eventCode),
 );
 
-export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+export const STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
-    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .filter((doc: Record<string, any>) => doc.allowStatusReportOrder)
     .map(x => x.eventCode),
 );
 
@@ -1705,3 +1705,18 @@ export type IdleLogoutStateType =
 export type IdleLogoutType =
   | (typeof LOGOUT_BROADCAST_MESSAGES)['idleLogout']
   | (typeof LOGOUT_BROADCAST_MESSAGES)['userLogout'];
+
+export const STATUS_REPORT_ORDER_OPTIONS = {
+  issueOrderOptions: {
+    justThisCase: 'justThisCase',
+    allCasesInGroup: 'allCasesInGroup',
+  },
+  orderTypeOptions: {
+    statusReport: 'statusReport',
+    stipulatedDecision: 'statusReportStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
+};
