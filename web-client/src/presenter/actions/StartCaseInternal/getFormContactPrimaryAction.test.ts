@@ -8,7 +8,7 @@ describe('getFormContactPrimaryAction', () => {
         form: {
           contactPrimary: {
             city: 'Flavortown',
-            name: 'Guy Fieri',
+            name: 'Roslindis Angelino',
           },
         },
       },
@@ -17,7 +17,7 @@ describe('getFormContactPrimaryAction', () => {
     expect(result.output).toMatchObject({
       contact: {
         city: 'Flavortown',
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
       },
     });
   });
