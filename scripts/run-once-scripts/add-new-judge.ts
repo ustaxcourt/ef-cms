@@ -14,10 +14,8 @@ requireEnvVars(['ENV']);
 (async () => {
   const applicationContext = createApplicationContext();
 
+  // used to set testable email on lower envs
   // const email = process.argv[2];
-  // const judgeFullName = process.argv[3];
-  // const name = process.argv[4];
-  // const section = process.argv[5];
 
   const email = 'judge.way@ustaxcourt.gov';
   const judgeFullName = 'Kashi Way';
