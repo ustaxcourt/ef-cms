@@ -411,15 +411,15 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/order-response-create..',
+      '/case-detail/*/documents/*/status-report-order-create..',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
         (docketNumber, docketEntryId) => {
           const { statusReportFilingDate, statusReportIndex } = route.query();
           setPageTitle(
-            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
           );
-          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+          return app.getSequence('gotoStatusReportOrderSequence')({
             docketEntryId,
             docketNumber,
             statusReportFilingDate,
@@ -430,14 +430,14 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/order-response-edit',
+      '/case-detail/*/documents/*/status-report-order-edit',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
         (docketNumber, docketEntryId) => {
           setPageTitle(
-            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
           );
-          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+          return app.getSequence('gotoStatusReportOrderSequence')({
             docketEntryId,
             docketNumber,
             isEditing: true,
@@ -1365,15 +1365,15 @@ const router = {
     );
 
     registerRoute(
-      '/messages/*/message-detail/*/*/order-response-create..',
+      '/messages/*/message-detail/*/*/status-report-order-create..',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
         (docketNumber, parentMessageId, docketEntryId) => {
           const { statusReportFilingDate, statusReportIndex } = route.query();
           setPageTitle(
-            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
           );
-          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+          return app.getSequence('gotoStatusReportOrderSequence')({
             docketEntryId,
             docketNumber,
             parentMessageId,
@@ -1386,14 +1386,14 @@ const router = {
     );
 
     registerRoute(
-      '/messages/*/message-detail/*/*/order-response-edit',
+      '/messages/*/message-detail/*/*/status-report-order-edit',
       ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.ORDER_RESPONSE },
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
         (docketNumber, parentMessageId, docketEntryId) => {
           setPageTitle(
-            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
           );
-          return app.getSequence('gotoStatusReportOrderResponseSequence')({
+          return app.getSequence('gotoStatusReportOrderSequence')({
             docketEntryId,
             docketNumber,
             isEditing: true,

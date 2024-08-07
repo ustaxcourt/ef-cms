@@ -13,9 +13,9 @@ export const documentViewerLinksHelper = (get: Get): any => {
     applyStampFromCaseDetailsLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/apply-stamp`,
     completeQcLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/edit`,
     documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
-    orderResponseFromCaseDetailsLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/order-response-create`,
     redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     reviewAndServePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`,
     signStipulatedDecisionLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.docketEntryId}/sign`,
+    statusReportOrderFromCaseDetailsLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/status-report-order-create`,
   };
 };

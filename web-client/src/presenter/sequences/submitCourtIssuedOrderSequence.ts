@@ -8,7 +8,7 @@ import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocume
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
 import { isDocumentRequiringAppendedFormAction } from '../actions/CourtIssuedOrder/isDocumentRequiringAppendedFormAction';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
-import { isStatusReportOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrderResponse/isStatusReportOrderResponseAction';
+import { isStatusReportOrderAction } from '@web-client/presenter/actions/StatusReportOrder/isStatusReportOrderAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -81,9 +81,9 @@ const submitCourtIssuedOrder = showProgressSequenceDecorator([
 ]);
 
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
-  isStatusReportOrderResponseAction,
+  isStatusReportOrderAction,
   {
-    isNotStatusReportOrderResponse: [
+    isNotStatusReportOrder: [
       clearAlertsAction,
       startShowValidationAction,
       validateCourtOrderAction,
@@ -92,6 +92,6 @@ export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
         success: submitCourtIssuedOrder,
       },
     ],
-    isStatusReportOrderResponse: [submitCourtIssuedOrder],
+    isStatusReportOrder: [submitCourtIssuedOrder],
   },
 ]);

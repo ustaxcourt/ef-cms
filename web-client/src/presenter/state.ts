@@ -134,7 +134,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
-import { statusReportOrderResponseHelper } from './computeds/statusReportOrderResponseHelper';
+import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -518,10 +518,9 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
-  statusReportOrderResponseHelper:
-    statusReportOrderResponseHelper as unknown as ReturnType<
-      typeof statusReportOrderResponseHelper
-    >,
+  statusReportOrderHelper: statusReportOrderHelper as unknown as ReturnType<
+    typeof statusReportOrderHelper
+  >,
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
   >,
@@ -817,7 +816,7 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
-  statusReportOrderResponse: {
+  statusReportOrder: {
     docketNumbersToDisplay: [],
     statusReportFilingDate: '',
     statusReportIndex: 1,

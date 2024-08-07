@@ -66,7 +66,7 @@ import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalF
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearSelectedWorkItemsSequence } from './sequences/clearSelectedWorkItemsSequence';
-import { clearStatusReportOrderResponseFormSequence } from './sequences/StatusReportOrderResponse/clearStatusReportOrderResponseFormSequence';
+import { clearStatusReportOrderFormSequence } from './sequences/StatusReportOrder/clearStatusReportOrderFormSequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
@@ -208,7 +208,7 @@ import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
-import { gotoStatusReportOrderResponseSequence } from './sequences/StatusReportOrderResponse/gotoStatusReportOrderResponseSequence';
+import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
@@ -243,7 +243,7 @@ import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToP
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
-import { navigateToStatusReportOrderResponseSequence } from './sequences/StatusReportOrderResponse/navigateToStatusReportOrderResponseSequence';
+import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
@@ -424,7 +424,7 @@ import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { sortTableSequence } from './sequences/sortTableSequence';
 import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
-import { statusReportOrderResponsePdfPreviewSequence } from './sequences/StatusReportOrderResponse/statusReportOrderResponsePdfPreviewSequence';
+import { statusReportOrderPdfPreviewSequence } from './sequences/StatusReportOrder/statusReportOrderPdfPreviewSequence';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
@@ -467,7 +467,7 @@ import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPra
 import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitStampMotionSequence } from './sequences/submitStampMotionSequence';
-import { submitStatusReportOrderResponseSequence } from './sequences/StatusReportOrderResponse/submitStatusReportOrderResponseSequence';
+import { submitStatusReportOrderSequence } from './sequences/StatusReportOrder/submitStatusReportOrderSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateAddDocketNumbersToOrderSequence } from './sequences/submitUpdateAddDocketNumbersToOrderSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
@@ -545,7 +545,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
-import { updateStatusReportOrderResponseFormValueSequence } from './sequences/StatusReportOrderResponse/updateStatusReportOrderResponseFormValueSequence';
+import { updateStatusReportOrderFormValueSequence } from './sequences/StatusReportOrder/updateStatusReportOrderFormValueSequence';
 import { updateStepIndicatorSequence } from '@web-client/presenter/sequences/updateStepIndicatorSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
@@ -709,7 +709,7 @@ export const presenterSequences = {
     clearPreferredTrialCitySequence as unknown as Function,
   clearSelectedWorkItemsSequence:
     clearSelectedWorkItemsSequence as unknown as Function,
-  clearStatusReportOrderResponseFormSequence,
+  clearStatusReportOrderFormSequence,
   clearViewerDocumentToDisplaySequence:
     clearViewerDocumentToDisplaySequence as unknown as Function,
   closeModalAndNavigateBackSequence:
@@ -910,62 +910,42 @@ export const presenterSequences = {
   gotoMessageDetailSequence: gotoMessageDetailSequence as unknown as Function,
   gotoMessagesSequence: gotoMessagesSequence as unknown as Function,
   gotoMyAccountSequence: gotoMyAccountSequence as unknown as Function,
-
   gotoPdfPreviewSequence: gotoPdfPreviewSequence as unknown as Function,
-
   gotoPendingReportSequence: gotoPendingReportSequence as unknown as Function,
-
   gotoPetitionQcSequence: gotoPetitionQcSequence as unknown as Function,
-
   gotoPractitionerAddDocumentSequence:
     gotoPractitionerAddDocumentSequence as unknown as Function,
-
   gotoPractitionerDetailSequence:
     gotoPractitionerDetailSequence as unknown as Function,
-
   gotoPractitionerDocumentationSequence:
     gotoPractitionerDocumentationSequence as unknown as Function,
-
   gotoPractitionerEditDocumentSequence:
     gotoPractitionerEditDocumentSequence as unknown as Function,
-
   gotoPrintPaperServiceSequence:
     gotoPrintPaperServiceSequence as unknown as Function,
-
   gotoPrintPaperTrialNoticesSequence:
     gotoPrintPaperTrialNoticesSequence as unknown as Function,
-
   gotoPrintPractitionerCasesSequence:
     gotoPrintPractitionerCasesSequence as unknown as Function,
-
   gotoPrintableCaseConfirmationSequence:
     gotoPrintableCaseConfirmationSequence as unknown as Function,
-
   gotoPrintableCaseInventoryReportSequence:
     gotoPrintableCaseInventoryReportSequence as unknown as Function,
-
   gotoPrintableDocketRecordSequence:
     gotoPrintableDocketRecordSequence as unknown as Function,
-
   gotoPrintablePendingReportForCaseSequence:
     gotoPrintablePendingReportForCaseSequence as unknown as Function,
-
   gotoPrintablePendingReportSequence:
     gotoPrintablePendingReportSequence as unknown as Function,
-
   gotoPrintableTrialSessionWorkingCopySequence:
     gotoPrintableTrialSessionWorkingCopySequence as unknown as Function,
-
   gotoPrivacySequence: gotoPrivacySequence as unknown as Function,
-
   gotoReviewSavedPetitionSequence:
     gotoReviewSavedPetitionSequence as unknown as Function,
-
   gotoSignOrderSequence: gotoSignOrderSequence as unknown as Function,
-
   gotoStartCaseWizardSequence:
     gotoStartCaseWizardSequence as unknown as Function,
-  gotoStatusReportOrderResponseSequence,
+  gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
   gotoTrialSessionDetailSequence:
     gotoTrialSessionDetailSequence as unknown as Function,
@@ -1019,7 +999,7 @@ export const presenterSequences = {
     navigateToPrintPaperServiceSequence as unknown as Function,
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
-  navigateToStatusReportOrderResponseSequence,
+  navigateToStatusReportOrderSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
     noticeGenerationCompleteSequence as unknown as Function,
@@ -1328,7 +1308,7 @@ export const presenterSequences = {
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
-  statusReportOrderResponsePdfPreviewSequence,
+  statusReportOrderPdfPreviewSequence,
   strikeDocketEntrySequence: strikeDocketEntrySequence as unknown as Function,
   submitAddConsolidatedCaseSequence:
     submitAddConsolidatedCaseSequence as unknown as Function,
@@ -1404,7 +1384,7 @@ export const presenterSequences = {
   submitRemoveConsolidatedCasesSequence:
     submitRemoveConsolidatedCasesSequence as unknown as Function,
   submitStampMotionSequence: submitStampMotionSequence as unknown as Function,
-  submitStatusReportOrderResponseSequence,
+  submitStatusReportOrderSequence,
   submitTrialSessionSequence: submitTrialSessionSequence as unknown as Function,
   submitUpdateAddDocketNumbersToOrderSequence:
     submitUpdateAddDocketNumbersToOrderSequence as unknown as Function,
@@ -1531,7 +1511,7 @@ export const presenterSequences = {
     updateStartCaseInternalPartyTypeSequence as unknown as Function,
   updateStatisticsFormValueSequence:
     updateStatisticsFormValueSequence as unknown as Function,
-  updateStatusReportOrderResponseFormValueSequence,
+  updateStatusReportOrderFormValueSequence,
   updateStepIndicatorSequence:
     updateStepIndicatorSequence as unknown as Function,
   updateTrialSessionCompleteSequence:
