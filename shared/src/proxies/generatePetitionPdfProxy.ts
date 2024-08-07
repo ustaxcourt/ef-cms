@@ -20,7 +20,6 @@ export const generatePetitionPdfInteractor = (
     petitionReasons,
     preferredTrialCity,
     procedureType,
-    taxYear,
   }: PetitionPdfBase & {
     hasIrsNotice: boolean;
     originalCaseType: string;
@@ -45,7 +44,6 @@ export const generatePetitionPdfInteractor = (
       petitionReasons,
       preferredTrialCity,
       procedureType,
-      taxYear,
     },
     endpoint: '/cases/generate-petition',
   });
