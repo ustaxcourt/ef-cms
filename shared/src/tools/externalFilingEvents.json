@@ -395,7 +395,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStatusReportOrder": true
     }
   ],
   "Motion": [
