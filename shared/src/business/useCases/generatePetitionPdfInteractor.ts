@@ -72,7 +72,6 @@ export const generatePetitionPdfInteractor = async (
     petitionReasons,
     preferredTrialCity,
     procedureType,
-    taxYear,
   }: PetitionPdfBase & {
     hasIrsNotice: boolean;
     originalCaseType: string;
@@ -107,7 +106,6 @@ export const generatePetitionPdfInteractor = async (
       petitionReasons,
       preferredTrialCity,
       procedureType,
-      taxYear,
     },
   });
 
