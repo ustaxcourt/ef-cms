@@ -22,7 +22,7 @@ import { updateMessage } from '@web-api/persistence/postgres/messages/updateMess
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   let mockLock;
-  const mockSigningName = 'Guy Fieri';
+  const mockSigningName = 'Roslindis Angelino';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockParentMessageId = 'b3bc3773-6ddd-439d-a3c9-60d6beceff99';

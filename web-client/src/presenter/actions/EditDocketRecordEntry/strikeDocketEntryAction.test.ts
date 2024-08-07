@@ -42,7 +42,7 @@ describe('strikeDocketEntryAction', () => {
     applicationContext
       .getUseCases()
       .strikeDocketEntryInteractor.mockImplementation(() => {
-        throw new Error('Guy Fieri has connected to the server.');
+        throw new Error('Roslindis Angelino has connected to the server.');
       });
 
     await runAction(strikeDocketEntryAction, {
