@@ -23,10 +23,14 @@ variable "instance_size" {
 #   type = string
 # }
 
-# variable "vpc_id" {
+variable "vpc_id" {
+  type = string
+}
+
+# variable "lambdas_security_group_id" {
 #   type = string
 # }
 
-# variable "security_group_id" {
-#   type = string
-# }
+variable "subnet_group_name" {
+  type = string
+}
