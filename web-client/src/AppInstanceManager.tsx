@@ -1,3 +1,4 @@
+import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -18,26 +19,33 @@ export const AppInstanceManager = connect(
     appInstanceManagerHelper: state.appInstanceManagerHelper,
     confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
-    signOutSequence: sequences.signOutSequence,
+    signOutIdleSequence: sequences.signOutIdleSequence,
+    signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
   },
   function AppInstanceManager({
     appInstanceManagerHelper,
     confirmStayLoggedInSequence,
     resetIdleTimerSequence,
-    signOutSequence,
+    signOutIdleSequence,
+    signOutUserInitiatedSequence,
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
     channelHandle.onmessage = msg => {
       switch (msg.subject) {
-        case 'idleStatusActive':
+        case LOGOUT_BROADCAST_MESSAGES.idleStatusActive:
           resetIdleTimerSequence();
           break;
-        case 'stayLoggedIn':
+        case LOGOUT_BROADCAST_MESSAGES.stayLoggedIn:
           confirmStayLoggedInSequence();
           break;
-        case 'logout':
-          signOutSequence({
+        case LOGOUT_BROADCAST_MESSAGES.idleLogout:
+          signOutIdleSequence({
+            skipBroadcast: true,
+          });
+          break;
+        case LOGOUT_BROADCAST_MESSAGES.userLogout:
+          signOutUserInitiatedSequence({
             skipBroadcast: true,
           });
           break;

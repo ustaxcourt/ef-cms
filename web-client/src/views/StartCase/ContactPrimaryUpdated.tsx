@@ -68,7 +68,7 @@ export const ContactPrimaryUpdated = connect<
               validationErrors.contactPrimary.name
             }
           >
-            <label className="usa-label" htmlFor="name">
+            <label className="usa-label" htmlFor="contactPrimary.name">
               {nameLabel}
             </label>
             <input
