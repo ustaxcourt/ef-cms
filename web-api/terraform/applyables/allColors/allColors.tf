@@ -200,3 +200,13 @@ module "rds" {
     aws_security_group.east_security_group.id, 
   ]
 }
+
+
+module "tunnel" {
+  source            = "../../modules/tunnel"
+  environment       = var.environment
+  vpc_id = module.vpc_east.vpc_id
+  subnet_id = module.vpc_east.public_subnet
+  public_key_name = var.tunnel_key_name
+}
+
