@@ -199,7 +199,7 @@ export const practitionerCreatesNewCase = (
 
     await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(cerebralTest.getState('currentPage')).toBe('DashboardPractitioner');
+    expect(cerebralTest.getState('currentPage')).toBe('DashboardPetitioner');
 
     cerebralTest.docketNumber = cerebralTest.getState(
       'openCases.0.docketNumber',
