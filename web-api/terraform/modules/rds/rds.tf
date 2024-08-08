@@ -31,8 +31,7 @@ resource "aws_security_group" "postgres" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    # This assumes your Lambda functions are using this security group (or you replace it with the correct security group for your Lambda functions).
-    # security_groups = [var.security_group_ids]
+    security_groups = var.security_group_ids
   }
 
   egress {
