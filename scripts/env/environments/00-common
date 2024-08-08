@@ -51,6 +51,7 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "DAWSON_ENV='${ENV}'"
   echo "DYNAMODB_TABLE_NAME='${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
+  echo "ELASTICSEARCH_INFO_ENDPOINT='${ELASTICSEARCH_INFO_ENDPOINT}'"
   echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
   echo "EMAIL_DOCUMENT_SERVED_TEMPLATE='document_served_${ENV}'"
   echo "EMAIL_SERVED_PETITION_TEMPLATE='petition_served_${ENV}'"
