@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { ActionError } from './errors/ActionError';
 import { ClientApplicationContext } from '../applicationContext';
+import { DateTime } from 'luxon';
 import { GatewayTimeoutError } from './errors/GatewayTimeoutError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -1654,9 +1655,9 @@ function wrapActionsWithPerformanceLogic(structure) {
         args[0].props['actionPerformanceArray'] = [];
       }
 
-      const startTime = Date.now();
+      const startTime: number = DateTime.now().toMillis();
       const result = await structure(...args);
-      const endTime = Date.now();
+      const endTime: number = DateTime.now().toMillis();
 
       if (structure?.name)
         args[0].props['actionPerformanceArray'].push({

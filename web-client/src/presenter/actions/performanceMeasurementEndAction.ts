@@ -1,4 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { DateTime } from 'luxon';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const performanceMeasurementEndAction = ({
@@ -22,7 +23,7 @@ export const performanceMeasurementEndAction = ({
   )
     return;
 
-  const performanceMeasurementEnd = Date.now();
+  const performanceMeasurementEnd = DateTime.now().toMillis();
   const durationInSeconds =
     (performanceMeasurementEnd - performanceMeasurementStart) / 1000;
 
