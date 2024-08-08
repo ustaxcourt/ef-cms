@@ -21,6 +21,7 @@ export const petition = async ({
     caseCaptionExtension,
     caseDescription,
     caseTitle,
+    contactCounsel,
     contactPrimary,
     contactSecondary,
     hasUploadedIrsNotice,
@@ -32,12 +33,12 @@ export const petition = async ({
     procedureType,
     taxYear,
   } = data;
-
   const PetitionTemplate = ReactDOM.renderToString(
     React.createElement(Petition, {
       caseCaptionExtension,
       caseDescription,
       caseTitle,
+      contactCounsel,
       contactPrimary,
       contactSecondary,
       hasUploadedIrsNotice,
