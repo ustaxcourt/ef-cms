@@ -27,11 +27,11 @@ export const performanceMeasurementEndAction = ({
   const durationInSeconds =
     (performanceMeasurementEnd - performanceMeasurementStart) / 1000;
 
-  const featureFlags = get(state.featureFlags);
+  const featureFlags = get(state.featureFlags) || {};
   const MINIMUM_TIME_LIMIT_IN_SECONDS =
     +featureFlags[
       ALLOWLIST_FEATURE_FLAGS.SEQUENCE_PERFORMANCE_MINIMUM_TIME.key
-    ] || 5;
+    ] || 10;
 
   if (durationInSeconds > MINIMUM_TIME_LIMIT_IN_SECONDS) {
     const RESULTS: {
