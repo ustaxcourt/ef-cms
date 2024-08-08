@@ -1,9 +1,9 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCsvCustomCaseReportFileInteractor } from '@web-api/business/useCases/customCaseReport/createCsvCustomCaseReportFileInteractor';
 import {
-  docketClerkUser,
-  privatePractitionerUser,
-} from '@shared/test/mockUsers';
+  mockDocketClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('createCsvCustomCaseReportFileInteractor', () => {
   const DEFAULT_PARAMS = {
@@ -21,10 +21,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   } as any;
 
   beforeEach(() => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(docketClerkUser);
-
     applicationContext.getNotificationGateway().sendNotificationToUser = jest
       .fn()
       .mockReturnValue(null);
@@ -63,6 +59,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     await createCsvCustomCaseReportFileInteractor(
       applicationContext,
       DEFAULT_PARAMS,
+      mockDocketClerkUser,
     );
 
     const sendNotificationCalls =
@@ -105,14 +102,11 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
   });
 
   it('should throw an error if a user is not authorized', async () => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(privatePractitionerUser);
-
     await expect(
       createCsvCustomCaseReportFileInteractor(
         applicationContext,
         DEFAULT_PARAMS,
+        mockPrivatePractitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
@@ -122,10 +116,14 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       .fn()
       .mockImplementation(callback => callback());
 
-    await createCsvCustomCaseReportFileInteractor(applicationContext, {
-      ...DEFAULT_PARAMS,
-      totalCount: 100000,
-    });
+    await createCsvCustomCaseReportFileInteractor(
+      applicationContext,
+      {
+        ...DEFAULT_PARAMS,
+        totalCount: 100000,
+      },
+      mockDocketClerkUser,
+    );
     expect(applicationContext.setTimeout).toHaveBeenCalledTimes(1);
   });
 
@@ -151,6 +149,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     await createCsvCustomCaseReportFileInteractor(
       applicationContext,
       DEFAULT_PARAMS,
+      mockDocketClerkUser,
     );
 
     const saveFileAndGenerateUrlCalls =
@@ -188,6 +187,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     await createCsvCustomCaseReportFileInteractor(
       applicationContext,
       DEFAULT_PARAMS,
+      mockDocketClerkUser,
     );
 
     const saveFileAndGenerateUrlCalls =

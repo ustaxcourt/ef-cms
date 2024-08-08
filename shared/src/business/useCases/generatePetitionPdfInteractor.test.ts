@@ -4,14 +4,12 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePetitionPdfInteractor } from '@shared/business/useCases/generatePetitionPdfInteractor';
-import { petitionerUser } from '@shared/test/mockUsers';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('generatePetitionPdfInteractor', () => {
   const mockFileId = '9085265b-e8ad-4bab-9e7c-f82e847b41f9';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => petitionerUser);
-
     applicationContext
       .getDocumentGenerators()
       .petition.mockImplementation(
@@ -31,29 +29,31 @@ describe('generatePetitionPdfInteractor', () => {
   });
 
   it('should throw an Unauthorized user error when user does not have the correct permissions', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => ({}));
-
     await expect(
-      generatePetitionPdfInteractor(applicationContext, {}),
+      generatePetitionPdfInteractor(applicationContext, {}, undefined),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should generate petition and call save document', async () => {
-    const results = await generatePetitionPdfInteractor(applicationContext, {
-      caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseTitle: 'TEST_caseTitle',
-      contactPrimary: 'TEST_contactPrimary' as any,
-      contactSecondary: 'TEST_contactSecondary' as any,
-      hasIrsNotice: false,
-      hasUploadedIrsNotice: true,
-      irsNotices: [],
-      originalCaseType: CASE_TYPES_MAP.deficiency,
-      partyType: 'TEST_partyType',
-      petitionFacts: ['TEST_petitionFacts'],
-      petitionReasons: ['TEST_petitionReasons'],
-      preferredTrialCity: 'TEST_preferredTrialCity',
-      procedureType: 'TEST_procedureType',
-    });
+    const results = await generatePetitionPdfInteractor(
+      applicationContext,
+      {
+        caseCaptionExtension: 'TEST_caseCaptionExtension',
+        caseTitle: 'TEST_caseTitle',
+        contactPrimary: 'TEST_contactPrimary' as any,
+        contactSecondary: 'TEST_contactSecondary' as any,
+        hasIrsNotice: false,
+        hasUploadedIrsNotice: true,
+        irsNotices: [],
+        originalCaseType: CASE_TYPES_MAP.deficiency,
+        partyType: 'TEST_partyType',
+        petitionFacts: ['TEST_petitionFacts'],
+        petitionReasons: ['TEST_petitionReasons'],
+        preferredTrialCity: 'TEST_preferredTrialCity',
+        procedureType: 'TEST_procedureType',
+      },
+      mockPetitionerUser,
+    );
 
     const petitionCalls =
       applicationContext.getDocumentGenerators().petition.mock.calls;
@@ -96,21 +96,25 @@ describe('generatePetitionPdfInteractor', () => {
       },
     ];
 
-    const results = await generatePetitionPdfInteractor(applicationContext, {
-      caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseTitle: 'TEST_caseTitle',
-      contactPrimary: 'TEST_contactPrimary' as any,
-      contactSecondary: 'TEST_contactSecondary' as any,
-      hasIrsNotice: true,
-      hasUploadedIrsNotice: true,
-      irsNotices,
-      originalCaseType: CASE_TYPES_MAP.deficiency,
-      partyType: 'TEST_partyType',
-      petitionFacts: ['TEST_petitionFacts'],
-      petitionReasons: ['TEST_petitionReasons'],
-      preferredTrialCity: 'TEST_preferredTrialCity',
-      procedureType: 'TEST_procedureType',
-    });
+    const results = await generatePetitionPdfInteractor(
+      applicationContext,
+      {
+        caseCaptionExtension: 'TEST_caseCaptionExtension',
+        caseTitle: 'TEST_caseTitle',
+        contactPrimary: 'TEST_contactPrimary' as any,
+        contactSecondary: 'TEST_contactSecondary' as any,
+        hasIrsNotice: true,
+        hasUploadedIrsNotice: true,
+        irsNotices,
+        originalCaseType: CASE_TYPES_MAP.deficiency,
+        partyType: 'TEST_partyType',
+        petitionFacts: ['TEST_petitionFacts'],
+        petitionReasons: ['TEST_petitionReasons'],
+        preferredTrialCity: 'TEST_preferredTrialCity',
+        procedureType: 'TEST_procedureType',
+      },
+      mockPetitionerUser,
+    );
 
     const petitionCalls =
       applicationContext.getDocumentGenerators().petition.mock.calls;
@@ -140,21 +144,25 @@ describe('generatePetitionPdfInteractor', () => {
       },
     ];
 
-    const results = await generatePetitionPdfInteractor(applicationContext, {
-      caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseTitle: 'TEST_caseTitle',
-      contactPrimary: 'TEST_contactPrimary' as any,
-      contactSecondary: 'TEST_contactSecondary' as any,
-      hasIrsNotice: true,
-      hasUploadedIrsNotice: true,
-      irsNotices,
-      originalCaseType: 'Disclosure1',
-      partyType: 'TEST_partyType',
-      petitionFacts: ['TEST_petitionFacts'],
-      petitionReasons: ['TEST_petitionReasons'],
-      preferredTrialCity: 'TEST_preferredTrialCity',
-      procedureType: 'TEST_procedureType',
-    });
+    const results = await generatePetitionPdfInteractor(
+      applicationContext,
+      {
+        caseCaptionExtension: 'TEST_caseCaptionExtension',
+        caseTitle: 'TEST_caseTitle',
+        contactPrimary: 'TEST_contactPrimary' as any,
+        contactSecondary: 'TEST_contactSecondary' as any,
+        hasIrsNotice: true,
+        hasUploadedIrsNotice: true,
+        irsNotices,
+        originalCaseType: 'Disclosure1',
+        partyType: 'TEST_partyType',
+        petitionFacts: ['TEST_petitionFacts'],
+        petitionReasons: ['TEST_petitionReasons'],
+        preferredTrialCity: 'TEST_preferredTrialCity',
+        procedureType: 'TEST_procedureType',
+      },
+      mockPetitionerUser,
+    );
 
     const petitionCalls =
       applicationContext.getDocumentGenerators().petition.mock.calls;

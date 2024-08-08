@@ -60,7 +60,5 @@ export const opinionPublicSearchInteractor = async (
 
   const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
-    applicationContext,
-  });
+  return PublicDocumentSearchResult.validateRawCollection(filteredResults);
 };
