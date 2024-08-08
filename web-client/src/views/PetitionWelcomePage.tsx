@@ -25,7 +25,7 @@ export const PetitionWelcomePage = ({
         scrollToTop={false}
       />
     )}
-    <h2>Welcome to DAWSON!</h2>
+    <h2 data-testid="petition-welcome-text">Welcome to DAWSON!</h2>
     <div className="petitioner-flow-text">
       {`DAWSON (Docket Access Within a Secure Online Network) is the U.S. Tax
       Court's electronic filing and case management system. The Court encourages all petitioners to file documents electronically.`}
