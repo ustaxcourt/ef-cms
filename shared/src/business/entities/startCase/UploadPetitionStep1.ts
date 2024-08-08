@@ -109,6 +109,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
       .messages({ '*': 'Select a type of estate or trust' }),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
     )
       .required()
       .messages({ '*': 'Select on whose behalf you are filing' }),
