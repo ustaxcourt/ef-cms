@@ -80,6 +80,7 @@ import sass from 'sass';
 
 let sqsCache: SQSClient;
 let searchClientCache: Client;
+let searchInfoClientCache: Client;
 
 const entitiesByName = {
   Case,
@@ -188,6 +189,30 @@ export const createApplicationContext = (
     },
     getEnvironment,
     getHttpClient: () => axios,
+    getInfoSearchClient: () => {
+      if (searchInfoClientCache) return searchInfoClientCache;
+      if (
+        environment.stage === 'local' ||
+        !environment.elasticsearchInfoEndpoint
+      ) {
+        searchInfoClientCache = {
+          index: console.log,
+        } as Client;
+      } else {
+        searchInfoClientCache = new Client({
+          ...AwsSigv4Signer({
+            getCredentials: () => {
+              const credentialsProvider = defaultProvider();
+              return credentialsProvider();
+            },
+            region: 'us-east-1',
+          }),
+          node: `https://${environment.elasticsearchInfoEndpoint}:443`,
+        });
+      }
+
+      return searchInfoClientCache;
+    },
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
       sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
