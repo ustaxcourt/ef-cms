@@ -162,23 +162,6 @@ describe('formatPetitionAction', () => {
   });
 
   it('should set counsel contact if user is a private practitioner', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => ({
-      barNumber: 'TEST_barNumber',
-      contact: {
-        address1: 'TEST_address1',
-        address2: 'TEST_address2',
-        address3: 'TEST_address3',
-        city: 'TEST_city',
-        phone: 'TEST_phone',
-        postalCode: 'TEST_postalCode',
-        state: 'TEST_state',
-      },
-      email: TEST_EMAIL,
-      firmName: 'TEST_firmName',
-      name: 'TEST_Name',
-      role: ROLES.privatePractitioner,
-    }));
-
     const results = await runAction(formatPetitionAction, {
       modules: {
         presenter,
@@ -187,8 +170,20 @@ describe('formatPetitionAction', () => {
       state: {
         petitionFormatted: undefined,
         user: {
-          ...mockPetitionerUser,
+          barNumber: 'TEST_barNumber',
+          contact: {
+            address1: 'TEST_address1',
+            address2: 'TEST_address2',
+            address3: 'TEST_address3',
+            city: 'TEST_city',
+            phone: 'TEST_phone',
+            postalCode: 'TEST_postalCode',
+            state: 'TEST_state',
+          },
           email: TEST_EMAIL,
+          firmName: 'TEST_firmName',
+          name: 'TEST_Name',
+          role: ROLES.privatePractitioner,
         },
       },
     });
