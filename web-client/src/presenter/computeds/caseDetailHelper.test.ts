@@ -15,17 +15,21 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseDetailHelper = withAppContextDecorator(
-  caseDetailHelperComputed,
-  applicationContext,
-);
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {
+  ...applicationContext,
+  getCurrentUser: () => {
+    return globalUser;
+  },
+});
+
+let globalUser;
 
 const getBaseState = user => {
+  globalUser = user;
   return {
     currentPage: 'CaseDetail',
     form: {},
     permissions: getUserPermissions(user),
-    user,
   };
 };
 
@@ -445,7 +449,23 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should show petition processing alert if user is an external user and the case does not allow service', () => {
+  it('should not show petition processing alert if user is not associated with the case', () => {
+    const user = petitionerUser;
+
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [{ documentType: 'Petition' }],
+          screenMetadata: { isAssociated: false },
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      },
+    });
+    expect(result.showPetitionProcessingAlert).toEqual(false);
+  });
+
+  it('should show petition processing alert if user is an external user and the case does not allow service and user is associated with the case', () => {
     const user = petitionerUser;
 
     const result = runCompute(caseDetailHelper, {
@@ -455,6 +475,7 @@ describe('case detail computed', () => {
           docketEntries: [{ documentType: 'Petition' }],
           status: CASE_STATUS_TYPES.new,
         },
+        screenMetadata: { isAssociated: true },
       },
     });
     expect(result.showPetitionProcessingAlert).toEqual(true);
