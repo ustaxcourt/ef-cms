@@ -745,6 +745,7 @@ export const baseState = {
     caseCaptionExtension: undefined,
     caseTitle: undefined,
     caseType: undefined,
+    contactCounsel: undefined,
     contactPrimary: undefined,
     contactSecondary: undefined,
     corporateDisclosureFile: undefined,

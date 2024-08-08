@@ -46,19 +46,21 @@ export const formatPetitionAction = ({
     };
   });
 
-  const contactCounsel = isRawPractitioner(user) && {
-    address1: user.contact?.address1,
-    address2: user.contact?.address2,
-    address3: user.contact?.address3,
-    barNumber: user.barNumber,
-    city: user.contact?.city,
-    email: user.email,
-    firmName: user.firmName,
-    name: user.name,
-    phone: user.contact?.phone,
-    postalCode: user.contact?.postalCode,
-    state: user.contact?.state,
-  };
+  const contactCounsel = isRawPractitioner(user)
+    ? {
+        address1: user.contact?.address1,
+        address2: user.contact?.address2,
+        address3: user.contact?.address3,
+        barNumber: user.barNumber,
+        city: user.contact?.city,
+        email: user.email,
+        firmName: user.firmName,
+        name: user.name,
+        phone: user.contact?.phone,
+        postalCode: user.contact?.postalCode,
+        state: user.contact?.state,
+      }
+    : undefined;
 
   store.set(state.petitionFormatted, {
     ...petitionInfo,
