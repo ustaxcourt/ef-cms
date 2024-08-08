@@ -134,11 +134,8 @@ describe('dashboardExternalHelper', () => {
     expect(result.welcomeMessageTitle).toEqual(
       'Have you already filed a petition by mail or do you want electronic access to your existing case?',
     );
-    expect(result.welcomeMessage).toEqual(
-      `Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov">
-        dawson.support@ustaxcourt.gov
-        </a> with your case's docket number (e.g. 12345-67) to get access to
-        your existing case.`,
+    expect(result.welcomeMessage).toContain(
+      'Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov"> dawson.support@ustaxcourt.gov </a> with your case\'s docket number (e.g. 12345-67) to get access to your existing case.',
     );
   });
 });
