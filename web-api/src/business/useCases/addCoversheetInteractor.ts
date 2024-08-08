@@ -1,6 +1,7 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
@@ -31,6 +32,7 @@ export const addCoversheetInteractor = async (
     replaceCoversheet?: boolean;
     useInitialData?: boolean;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
   if (!caseEntity) {
     const caseRecord = await applicationContext
@@ -40,7 +42,9 @@ export const addCoversheetInteractor = async (
         docketNumber,
       });
 
-    caseEntity = new Case(caseRecord, { applicationContext });
+    caseEntity = new Case(caseRecord, {
+      authorizedUser,
+    });
   }
 
   const pdfData = await applicationContext.getPersistenceGateway().getDocument({
@@ -92,7 +96,7 @@ export const addCoversheetInteractor = async (
             docketNumber: caseDocketNumber,
           });
         consolidatedCaseEntity = new Case(caseRecord, {
-          applicationContext,
+          authorizedUser,
         });
       }
 

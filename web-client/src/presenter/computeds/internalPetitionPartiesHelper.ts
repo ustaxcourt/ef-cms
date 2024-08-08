@@ -211,7 +211,7 @@ export const internalPetitionPartiesHelper = (
 ): any => {
   const { ALLOWLIST_FEATURE_FLAGS, PARTY_TYPES } =
     applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const { filingType, isPaper, partyType } = get(state.form);
   const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(

@@ -1,10 +1,13 @@
+import { cloneDeep } from 'lodash';
+import { emptyUserState } from '@web-client/presenter/state/userState';
+import { setCurrentUserToken } from '@shared/proxies/requests';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const clearUserAction = async ({
   applicationContext,
   store,
 }: ActionProps) => {
-  store.unset(state.user);
+  store.set(state.user, cloneDeep(emptyUserState));
   store.unset(state.token);
   store.unset(state.permissions);
 
@@ -19,6 +22,5 @@ export const clearUserAction = async ({
       key: 'token',
     });
 
-  applicationContext.setCurrentUser(null);
-  applicationContext.setCurrentUserToken(null);
+  setCurrentUserToken('');
 };
