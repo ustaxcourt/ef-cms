@@ -5,6 +5,11 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 }
 
+# Internet Gateway for the VPC
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
+}
+
 # Private Subnet A (No Public IPs)
 resource "aws_subnet" "subnet_a" {
   vpc_id                  = aws_vpc.vpc.id 
@@ -21,6 +26,14 @@ resource "aws_subnet" "subnet_b" {
   map_public_ip_on_launch = false
 }
 
+# Public Subnet for NAT
+resource "aws_subnet" "nat_subnet" {
+  vpc_id                  = aws_vpc.vpc.id 
+  cidr_block              = var.nat_subnet_block
+  availability_zone       = var.nat_zone
+  map_public_ip_on_launch = true
+}
+
 # Elastic IP for NAT Gateway
 resource "aws_eip" "nat_eip" {
   vpc = true
@@ -28,17 +41,26 @@ resource "aws_eip" "nat_eip" {
 
 # NAT Gateway in Subnet B
 resource "aws_nat_gateway" "nat" {
-  subnet_id     = aws_subnet.subnet_b.id
+  subnet_id     = aws_subnet.nat_subnet.id
   allocation_id = aws_eip.nat_eip.id
 }
 
-# Route Table for Private Subnets
+# Route Table for Private Subnets (with NAT Gateway)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat.id
+  }
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
   }
 }
 
@@ -52,4 +74,9 @@ resource "aws_route_table_association" "private_a" {
 resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.subnet_b.id
   route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.nat_subnet.id
+  route_table_id = aws_route_table.public.id
 }

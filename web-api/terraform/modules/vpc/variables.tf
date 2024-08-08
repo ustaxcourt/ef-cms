@@ -22,3 +22,11 @@ variable "subnet_a_block" {
 variable "subnet_b_block" {
   type = string
 }
+
+variable "nat_subnet_block" {
+  type = string
+}
+
+variable "nat_zone" {
+  type = string
+}

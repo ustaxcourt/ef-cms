@@ -126,6 +126,8 @@ module "vpc_west" {
   cidr_block = "10.1.0.0/16"
   subnet_a_block = "10.1.4.0/24"
   subnet_b_block = "10.1.5.0/24"
+  nat_subnet_block = "10.1.6.0/24"
+  nat_zone = "us-west-1a"
 }
 
 module "vpc_east" {
@@ -139,6 +141,8 @@ module "vpc_east" {
   cidr_block = "10.0.0.0/16"
   subnet_a_block = "10.0.4.0/24"
   subnet_b_block = "10.0.5.0/24"
+  nat_subnet_block = "10.0.6.0/24"
+  nat_zone = "us-east-1a"
 }
 
 resource "aws_security_group" "east_security_group" {
@@ -192,4 +196,7 @@ module "rds" {
   postgres_password = var.postgres_password
   vpc_id = module.vpc_east.vpc_id
   subnet_group_name = aws_db_subnet_group.group.name
+  security_group_ids = [
+    aws_security_group.east_security_group.id, 
+  ]
 }
