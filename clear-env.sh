@@ -77,8 +77,15 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --query 'DomainStatus.Endpoint' \
   --output text)
 
+ELASTICSEARCH_INFO_ENDPOINT=$(aws es describe-elasticsearch-domain \
+  --domain-name "info" \
+  --region us-east-1 \
+  --query 'DomainStatus.Endpoint' \
+  --output text)
+
 export SOURCE_TABLE_VERSION
 export ELASTICSEARCH_ENDPOINT
+export ELASTICSEARCH_INFO_ENDPOINT
 export DEPLOYING_COLOR
 
 echo "clearing elasticsearch"
