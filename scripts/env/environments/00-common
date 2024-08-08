@@ -12,6 +12,11 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --region "us-east-1" \
   --query 'DomainStatus.Endpoint' \
   --output text)
+ELASTICSEARCH_INFO_ENDPOINT=$(aws es describe-elasticsearch-domain \
+  --domain-name "info" \
+  --region "us-east-1" \
+  --query 'DomainStatus.Endpoint' \
+  --output text)
 COGNITO_USER_POOL=$(aws cognito-idp list-user-pools \
   --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" \
   --max-results 30 \
