@@ -53,7 +53,6 @@ describe('generatePetitionPdfInteractor', () => {
       petitionReasons: ['TEST_petitionReasons'],
       preferredTrialCity: 'TEST_preferredTrialCity',
       procedureType: 'TEST_procedureType',
-      taxYear: 'TEST_taxYear',
     });
 
     const petitionCalls =
@@ -72,7 +71,6 @@ describe('generatePetitionPdfInteractor', () => {
       petitionReasons: ['TEST_petitionReasons'],
       preferredTrialCity: 'TEST_preferredTrialCity',
       procedureType: 'TEST_procedureType',
-      taxYear: 'TEST_taxYear',
     });
 
     const saveFileAndGenerateUrlCalls =
@@ -112,7 +110,6 @@ describe('generatePetitionPdfInteractor', () => {
       petitionReasons: ['TEST_petitionReasons'],
       preferredTrialCity: 'TEST_preferredTrialCity',
       procedureType: 'TEST_procedureType',
-      taxYear: 'TEST_taxYear',
     });
 
     const petitionCalls =
@@ -157,7 +154,6 @@ describe('generatePetitionPdfInteractor', () => {
       petitionReasons: ['TEST_petitionReasons'],
       preferredTrialCity: 'TEST_preferredTrialCity',
       procedureType: 'TEST_procedureType',
-      taxYear: 'TEST_taxYear',
     });
 
     const petitionCalls =

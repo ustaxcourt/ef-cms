@@ -16,10 +16,13 @@ export const generatePetitionPdfAction = async ({
   const generatePetitionPdfEntity = new GeneratePetitionPdf(petition);
   const errors = generatePetitionPdfEntity.getFormattedValidationErrors();
   if (errors) {
-    throw Error('Petition PDF generation failed due to invalid data.');
+    throw Error(
+      `Petition PDF generation failed due to invalid data. ${JSON.stringify(errors)}`,
+    );
   }
 
   const generatePetitionPdfData = generatePetitionPdfEntity.toRawObject();
+
   const { fileId } = await applicationContext
     .getUseCases()
     .generatePetitionPdfInteractor(applicationContext, generatePetitionPdfData);

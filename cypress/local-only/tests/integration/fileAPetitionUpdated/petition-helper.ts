@@ -145,10 +145,13 @@ export function fillPetitionerInformation() {
   cy.get('[data-testid="step-1-next-button"]').click();
 }
 
-export function fillIrsNoticeInformation(filePath: string) {
+export function fillIrsNoticeInformation(
+  filePath: string,
+  caseType: string = 'Deficiency',
+) {
   cy.get('[data-testid="irs-notice-Yes"]').click();
   cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
-  cy.get('[data-testid="case-type-select"]').select('Deficiency');
+  cy.get('[data-testid="case-type-select"]').select(caseType);
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 }

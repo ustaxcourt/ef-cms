@@ -55,6 +55,8 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
     irsNotices: joi.array(),
     originalCaseType: JoiValidationConstants.STRING.valid(
       ...CASE_TYPES,
+      'Disclosure1',
+      'Disclosure2',
     ).required(),
     partyType: JoiValidationConstants.STRING.valid(
       ...Object.values(PARTY_TYPES),
@@ -65,7 +67,6 @@ export class GeneratePetitionPdf extends JoiValidationEntity {
     procedureType: JoiValidationConstants.STRING.valid(
       ...PROCEDURE_TYPES,
     ).required(),
-    taxYear: joi.string().optional(),
   };
 
   getValidationRules() {
