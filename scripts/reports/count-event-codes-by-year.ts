@@ -17,12 +17,6 @@ requireEnvVars(['ENV', 'REGION']);
 
 let positionals, values;
 
-function usage(warning: string | undefined) {
-  if (warning) {
-    console.log(warning);
-  }
-  console.log(`npx ts-node --transpile-only ${process.argv[1]} M071,m074 `);
-}
 const config = {
   allowPositionals: true,
   options: {
@@ -44,6 +38,16 @@ const config = {
   },
   strict: true,
 } as const;
+
+function usage(warning: string | undefined) {
+  if (warning) {
+    console.log(warning);
+  }
+  console.log(
+    `Usage: npx ts-node --transpile-only ${process.argv[1]} M071,m074 `,
+  );
+  console.log('Options:', JSON.stringify(config, null, 4));
+}
 
 const getCountDocketEntriesByEventCodesAndYears = async ({
   applicationContext,
@@ -150,7 +154,6 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
     usage('invalid input: expected event codes');
     process.exit(1);
   }
-  console.log('positionals', positionals);
   const eventCodes = positionals[0].split(',').map(s => s.toUpperCase());
   const years: number[] = parseIntsArg(values.years);
   const includeStricken = values.stricken;
@@ -161,7 +164,9 @@ const getCountDocketEntriesByEventCodesAndYears = async ({
     years,
   });
   if (values.verbose) {
-    console.log(JSON.stringify(config, null, 4));
+    usage('Verbose output enabled');
+    console.log(`positionals: ${positionals}`);
+    console.log(`option values: ${values}`);
   }
   console.log(ret);
 })();
