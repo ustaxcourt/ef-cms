@@ -196,7 +196,8 @@ export const createApplicationContext = (
         !environment.elasticsearchInfoEndpoint
       ) {
         searchInfoClientCache = {
-          index: console.log,
+          index: (...args) =>
+            console.log('** SYSTEM PERFORMANCE LOGS', ...args),
         } as Client;
       } else {
         searchInfoClientCache = new Client({
