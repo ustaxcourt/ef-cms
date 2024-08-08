@@ -588,6 +588,12 @@ export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
     .map(x => x.eventCode),
 );
 
+export const STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter((doc: Record<string, any>) => doc.allowStatusReportOrder)
+    .map(x => x.eventCode),
+);
+
 export const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES =
   EXTERNAL_DOCUMENTS_ARRAY.filter(
     doc =>
@@ -1678,4 +1684,39 @@ export type CreatedCaseType = {
   contactSecondary?: {
     name: string;
   };
+};
+
+export const LOGOUT_BROADCAST_MESSAGES = {
+  userLogout: 'userLogout',
+  idleLogout: 'idleLogout',
+  idleStatusActive: 'idleStatusActive',
+  stayLoggedIn: 'stayLoggedIn',
+};
+
+export const IDLE_LOGOUT_STATES = {
+  INITIAL: 'INITIAL',
+  MONITORING: 'MONITORING',
+  COUNTDOWN: 'COUNTDOWN',
+};
+
+export type IdleLogoutStateType =
+  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
+
+export type IdleLogoutType =
+  | (typeof LOGOUT_BROADCAST_MESSAGES)['idleLogout']
+  | (typeof LOGOUT_BROADCAST_MESSAGES)['userLogout'];
+
+export const STATUS_REPORT_ORDER_OPTIONS = {
+  issueOrderOptions: {
+    justThisCase: 'justThisCase',
+    allCasesInGroup: 'allCasesInGroup',
+  },
+  orderTypeOptions: {
+    statusReport: 'statusReport',
+    stipulatedDecision: 'statusReportStipulatedDecision',
+  },
+  jurisdictionOptions: {
+    retained: 'retained',
+    restored: 'restoredToGeneralDocket',
+  },
 };

@@ -1,3 +1,4 @@
+import { IDLE_LOGOUT_STATES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
@@ -7,29 +8,33 @@ export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
   const isUploading = get(state.fileUploadProgress.isUploading);
   const user = get(state.user);
 
-  if (user && !isUploading && idleLogoutState.state === 'INITIAL') {
+  if (
+    user &&
+    !isUploading &&
+    idleLogoutState.state === IDLE_LOGOUT_STATES.INITIAL
+  ) {
     store.set(state.idleLogoutState, {
       logoutAt:
         Date.now() +
         constants.SESSION_MODAL_TIMEOUT +
         constants.SESSION_TIMEOUT,
-      state: 'MONITORING',
+      state: IDLE_LOGOUT_STATES.MONITORING,
     });
-  } else if (idleLogoutState.state === 'MONITORING') {
+  } else if (idleLogoutState.state === IDLE_LOGOUT_STATES.MONITORING) {
     if (Date.now() > lastIdleAction + constants.SESSION_TIMEOUT) {
       store.set(state.idleLogoutState, {
         logoutAt:
           lastIdleAction +
           constants.SESSION_MODAL_TIMEOUT +
           constants.SESSION_TIMEOUT,
-        state: 'COUNTDOWN',
+        state: IDLE_LOGOUT_STATES.COUNTDOWN,
       });
     }
-  } else if (idleLogoutState.state === 'COUNTDOWN') {
+  } else if (idleLogoutState.state === IDLE_LOGOUT_STATES.COUNTDOWN) {
     if (Date.now() > idleLogoutState.logoutAt) {
       store.set(state.idleLogoutState, {
         logoutAt: undefined,
-        state: 'INITIAL',
+        state: IDLE_LOGOUT_STATES.INITIAL,
       });
       return path.logout();
     }
