@@ -9,5 +9,7 @@ export const logUserPerformanceDataInteractor = async (
     email: string;
   },
 ): Promise<void> => {
-  console.log('performanceData', performanceData);
+  await applicationContext
+    .getPersistenceGateway()
+    .saveSystemPerformanceData({ applicationContext, performanceData });
 };
