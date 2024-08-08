@@ -1650,15 +1650,27 @@ function wrapActionsWithPerformanceLogic(structure) {
     }
     return structure;
   } else if (typeof structure === 'function') {
-    return async function (...args) {
+    return function (...args) {
       if (!args[0].props['actionPerformanceArray']) {
         args[0].props['actionPerformanceArray'] = [];
       }
 
       const startTime: number = DateTime.now().toMillis();
-      const result = await structure(...args);
-      const endTime: number = DateTime.now().toMillis();
+      const result = structure(...args);
+      if (result instanceof Promise) {
+        return result.then(actionResults => {
+          const endTime: number = DateTime.now().toMillis();
+          if (structure?.name)
+            args[0].props['actionPerformanceArray'].push({
+              actionName: structure?.name,
+              duration: (endTime - startTime) / 1000,
+            });
 
+          return actionResults;
+        });
+      }
+
+      const endTime: number = DateTime.now().toMillis();
       if (structure?.name)
         args[0].props['actionPerformanceArray'].push({
           actionName: structure?.name,
