@@ -149,6 +149,7 @@ import {
 } from './persistence/dynamo/cases/removePractitionerOnCase';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
+import { saveSystemPerformanceData } from '@web-api/persistence/elasticsearch/system/saveSystemPerformanceData';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
 import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
@@ -388,6 +389,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removeLock,
   removePrivatePractitionerOnCase,
+  saveSystemPerformanceData,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   uploadDocument,
