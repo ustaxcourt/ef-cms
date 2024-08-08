@@ -41,10 +41,6 @@ describe('getDocumentQCServedForSection', () => {
   });
 
   it('invokes the persistence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: DOCKET_SECTION,
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    });
     applicationContext.getDocumentClient.mockReturnValue({
       query: queryStub,
     });

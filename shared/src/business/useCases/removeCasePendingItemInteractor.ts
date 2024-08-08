@@ -3,7 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -15,12 +17,11 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const removeCasePendingItem = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
@@ -34,7 +35,9 @@ export const removeCasePendingItem = async (
     }
   });
 
-  let updatedCaseEntity = new Case(caseToUpdate, { applicationContext });
+  let updatedCaseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
 
   updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -45,6 +48,7 @@ export const removeCasePendingItem = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: updatedCaseEntity,
   });
 

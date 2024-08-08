@@ -4,12 +4,13 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const deleteDocketEntryWorksheetInteractor = async (
   applicationContext: ServerApplicationContext,
   docketEntryId: string,
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
   if (
     !isAuthorized(
       authorizedUser,
