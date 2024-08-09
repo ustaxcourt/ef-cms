@@ -5,26 +5,18 @@ import {
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * archiveDraftDocumentInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case on which a document will be archived
- * @param {string} providers.docketEntryId the id of the docket entry which will be archived
- * @returns {object} the updated case note returned from persistence
- */
 export const archiveDraftDocument = async (
   applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
-) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {
+  authorizedUser: UnknownAuthUser,
+): Promise<RawCase> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -35,7 +27,7 @@ export const archiveDraftDocument = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryToArchive = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -56,10 +48,11 @@ export const archiveDraftDocument = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const archiveDraftDocumentInteractor = withLocking(

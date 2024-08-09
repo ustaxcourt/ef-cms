@@ -9,6 +9,7 @@ import {
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
@@ -32,8 +33,8 @@ export const caseAdvancedSearchInteractor = async (
     petitionerState,
     startDate,
   }: CaseAdvancedSearchParamsRequestType,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
   let searchStartDate;
   let searchEndDate;
 

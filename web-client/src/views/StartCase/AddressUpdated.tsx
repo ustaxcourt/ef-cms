@@ -5,8 +5,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
-
-// TODO: update name;
 export interface AddressType {
   country?: string;
   name?: string;

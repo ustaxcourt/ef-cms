@@ -8,6 +8,7 @@ import {
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
@@ -22,9 +23,11 @@ export const updateTrialSessionWorkingCopyInteractor = async (
   {
     trialSessionWorkingCopyToUpdate,
   }: { trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

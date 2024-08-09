@@ -6,10 +6,10 @@ export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
   const lastIdleAction = get(state.lastIdleAction);
   const idleLogoutState = get(state.idleLogoutState);
   const isUploading = get(state.fileUploadProgress.isUploading);
-  const user = get(state.user);
+  const userIsLoggedIn = !!get(state.token);
 
   if (
-    user &&
+    userIsLoggedIn &&
     !isUploading &&
     idleLogoutState.state === IDLE_LOGOUT_STATES.INITIAL
   ) {

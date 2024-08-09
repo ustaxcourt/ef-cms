@@ -1,11 +1,13 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('deleteTrialSessionInteractor', () => {
   let mockTrialSession;
@@ -25,25 +27,17 @@ describe('deleteTrialSessionInteractor', () => {
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'Docket Clerk',
-        role: ROLES.docketClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
   });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    });
-
     await expect(
-      deleteTrialSessionInteractor(applicationContext, {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -51,9 +45,13 @@ describe('deleteTrialSessionInteractor', () => {
     mockTrialSession = null;
 
     await expect(
-      deleteTrialSessionInteractor(applicationContext, {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       'Trial session c54ba5a9-b37b-479d-9201-067ec6e335bb was not found.',
     );
@@ -65,9 +63,13 @@ describe('deleteTrialSessionInteractor', () => {
     };
 
     await expect(
-      deleteTrialSessionInteractor(applicationContext, {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Trial session cannot be updated after its start date');
   });
 
@@ -79,9 +81,13 @@ describe('deleteTrialSessionInteractor', () => {
     };
 
     await expect(
-      deleteTrialSessionInteractor(applicationContext, {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Trial session cannot be deleted after it is calendared');
   });
 
@@ -95,9 +101,13 @@ describe('deleteTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await deleteTrialSessionInteractor(applicationContext, {
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
@@ -125,9 +135,13 @@ describe('deleteTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await deleteTrialSessionInteractor(applicationContext, {
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
@@ -147,9 +161,13 @@ describe('deleteTrialSessionInteractor', () => {
         preferredTrialCity: null,
       });
 
-    await deleteTrialSessionInteractor(applicationContext, {
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -170,9 +188,13 @@ describe('deleteTrialSessionInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      deleteTrialSessionInteractor(applicationContext, {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      deleteTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -190,9 +212,13 @@ describe('deleteTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await deleteTrialSessionInteractor(applicationContext, {
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    await deleteTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledTimes(mockTrialSession.caseOrder.length);

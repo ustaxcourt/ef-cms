@@ -2,7 +2,6 @@ import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReport } from './getCaseInventoryReport';
 import { marshall } from '@aws-sdk/util-dynamodb';
@@ -35,9 +34,6 @@ describe('getCaseInventoryReport', () => {
     applicationContext.getConstants.mockReturnValue({
       CASE_INVENTORY_MAX_PAGE_SIZE,
     });
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
     applicationContext.getSearchClient.mockReturnValue({
       search: searchSpy,
     });
