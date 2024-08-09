@@ -80,6 +80,20 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
+                "ec2:DescribeInstances",
+                "ec2:CreateNetworkInterface",
+                "ec2:AttachNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "autoscaling:CompleteLifecycleAction",
+                "ec2:DeleteNetworkInterface"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
                 "s3:DeleteObject",
                 "s3:GetObject",
                 "s3:ListBucket",

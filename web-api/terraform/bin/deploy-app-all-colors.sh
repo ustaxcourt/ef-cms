@@ -23,6 +23,7 @@ fi
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
+[ -z "${TUNNEL_KEY_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
@@ -38,6 +39,7 @@ echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
+echo "  - TUNNEL_KEY_NAME=${TUNNEL_KEY_NAME}"
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -100,7 +102,7 @@ export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
 export TF_VAR_postgres_user=$POSTGRES_USER
 export TF_VAR_postgres_password=$POSTGRES_PASSWORD
-
+export TF_VAR_tunnel_key_name=$TUNNEL_KEY_NAME
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then

@@ -115,14 +115,20 @@ module "ui-healthcheck" {
   dns_domain = "app.${var.dns_domain}"
 }
 
-
-# module "vpc_west" {
-#   source            = "../../modules/vpc"
-#   environment       = var.environment
-#   providers = {
-#     aws = aws.us-west-1
-#   }
-# }
+module "vpc_west" {
+  source            = "../../modules/vpc"
+  environment       = var.environment
+  providers = {
+    aws = aws.us-west-1
+  }
+  zone_a = "us-west-1a"
+  zone_b = "us-west-1c"
+  cidr_block = "10.1.0.0/16"
+  subnet_a_block = "10.1.4.0/24"
+  subnet_b_block = "10.1.5.0/24"
+  nat_subnet_block = "10.1.6.0/24"
+  nat_zone = "us-west-1a"
+}
 
 module "vpc_east" {
   source            = "../../modules/vpc"
@@ -132,23 +138,75 @@ module "vpc_east" {
   }
   zone_a = "us-east-1a"
   zone_b = "us-east-1b"
+  cidr_block = "10.0.0.0/16"
+  subnet_a_block = "10.0.4.0/24"
+  subnet_b_block = "10.0.5.0/24"
+  nat_subnet_block = "10.0.6.0/24"
+  nat_zone = "us-east-1a"
 }
 
-# resource "aws_vpc_peering_connection" "peer" {
-#   peer_vpc_id = module.vpc_west.vpc_id
-#   vpc_id      = module.vpc_east.vpc_id
-#   peer_region = "us-east-1"
+resource "aws_security_group" "east_security_group" {
+  name        = "${var.environment}-east-security-group"
+  vpc_id      = module.vpc_east.vpc_id
 
-#   tags = {
-#     Name = "${var.environment}-cross-region-peering"
-#   }
-# }
+  egress {
+    description      = "Allow all outbound traffic"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"  # -1 means all protocols
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "west_security_group" {
+  name        = "${var.environment}-west-security-group"
+  vpc_id      = module.vpc_west.vpc_id
+  provider = aws.us-west-1
+
+  egress {
+    description      = "Allow all outbound traffic"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"  # -1 means all protocols
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_vpc_peering_connection" "peer" {
+  peer_vpc_id = module.vpc_west.vpc_id
+  vpc_id      = module.vpc_east.vpc_id
+  peer_region = "us-west-1"
+}
+
+resource "aws_vpc_peering_connection_accepter" "peer_accepter" {
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+  auto_accept               = true
+  provider = aws.us-west-1
+}
+
+resource "aws_db_subnet_group" "group" {
+  name       = "${var.environment}-group"
+  subnet_ids = [module.vpc_east.subnet_a_id, module.vpc_east.subnet_b_id]
+}
 
 module "rds" {
   source            = "../../modules/rds"
   environment       = var.environment
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
-  # vpc_id = module.vpc_east.vpc_id
-  # security_group_id = ""
+  vpc_id = module.vpc_east.vpc_id
+  subnet_group_name = aws_db_subnet_group.group.name
+  security_group_ids = [
+    aws_security_group.east_security_group.id, 
+  ]
 }
+
+
+module "tunnel" {
+  source            = "../../modules/tunnel"
+  environment       = var.environment
+  vpc_id = module.vpc_east.vpc_id
+  subnet_id = module.vpc_east.public_subnet
+  public_key_name = var.tunnel_key_name
+}
+
