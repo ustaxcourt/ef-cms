@@ -46,7 +46,6 @@ export const performanceMeasurementEndAction = ({
       sequenceName,
     };
 
-    console.log('RESULTS', RESULTS);
     applicationContext
       .getUseCases()
       .logUserPerformanceDataInteractor(applicationContext, RESULTS);
