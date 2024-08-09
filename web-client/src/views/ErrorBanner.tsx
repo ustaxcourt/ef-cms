@@ -21,7 +21,7 @@ export function ErrorBanner({
       role="alert"
     >
       <div className="usa-alert__body" style={{ paddingTop: '12px' }}>
-        <div className="banner-title">{title}</div>
+        <p className="usa-alert__heading padding-top-0">{title}</p>
         {showSingleMessage && (
           <p
             className="usa-alert__text"
