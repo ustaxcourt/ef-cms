@@ -100,6 +100,7 @@ const checkParams = params => {
           'torosChambers',
           'urdasChambers',
           'vasquezsChambers',
+          'waysChambers',
           'weilersChambers',
           'wellsChambers',
           'carluzzosChambers',

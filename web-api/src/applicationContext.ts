@@ -3,7 +3,7 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -99,7 +99,7 @@ const entitiesByName = {
 };
 
 export const createApplicationContext = (
-  appContextUser,
+  appContextUser = {},
   logger = createLogger(),
 ) => {
   let user;
