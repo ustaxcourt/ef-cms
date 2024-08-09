@@ -10,6 +10,7 @@ export const IdleActivityMonitor = connect(
     broadcastIdleStatusActiveSequence:
       sequences.broadcastIdleStatusActiveSequence,
     constants: state.constants,
+    dawsonHasUpdated: state.dawsonHasUpdated,
     handleIdleLogoutSequence: sequences.handleIdleLogoutSequence,
     lastIdleAction: state.lastIdleAction,
     showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
@@ -18,6 +19,7 @@ export const IdleActivityMonitor = connect(
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
     constants,
+    dawsonHasUpdated,
     handleIdleLogoutSequence,
     lastIdleAction,
     showAppTimeoutModalHelper,
@@ -49,6 +51,11 @@ export const IdleActivityMonitor = connect(
     }, []);
 
     useEffect(() => {
+      // The user needs to refresh, so stop tracking idle timeout
+      if (dawsonHasUpdated) {
+        return;
+      }
+
       const interval = setInterval(() => {
         handleIdleLogoutSequence();
       }, 1000);
