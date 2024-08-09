@@ -7,7 +7,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CardHeader } from './CardHeader';
 import React from 'react';
 
-export function PetitionerInformation({ petitionFormatted }) {
+export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
   return (
     <div className="border-top-1px padding-top-2 padding-bottom-2 height-full margin-bottom-0">
       <div className="content-wrapper">
@@ -82,15 +82,16 @@ export function PetitionerInformation({ petitionFormatted }) {
                       </span>
                     </div>
                   )}
-
-                  <div className="margin-top-3">
-                    <span className="usa-label usa-label-display">
-                      Service email
-                    </span>
-                    <span data-testid="contact-primary-email">
-                      {petitionFormatted.contactPrimary.email}
-                    </span>
-                  </div>
+                  {isPetitioner && (
+                    <div className="margin-top-3">
+                      <span className="usa-label usa-label-display">
+                        Service email
+                      </span>
+                      <span data-testid="contact-primary-email">
+                        {petitionFormatted.contactPrimary.email}
+                      </span>
+                    </div>
+                  )}
                 </address>
               )}
             </div>
@@ -107,24 +108,26 @@ export function PetitionerInformation({ petitionFormatted }) {
                 <address aria-labelledby="filing-contact-secondary">
                   <AddressDisplay
                     noMargin
-                    showEmail
                     contact={{
                       ...petitionFormatted.contactSecondary,
                       email:
                         petitionFormatted.contactSecondary.paperPetitionEmail,
                     }}
+                    showEmail={isPetitioner}
                   />
                 </address>
-                <div className="margin-top-1">
-                  <span className="text-semibold">
-                    Register for eService/filing:
-                  </span>
-                  <span className="margin-left-05">
-                    {petitionFormatted.contactSecondary.hasConsentedToEService
-                      ? 'Yes'
-                      : 'No'}
-                  </span>
-                </div>
+                {isPetitioner && (
+                  <div className="margin-top-1">
+                    <span className="text-semibold">
+                      Register for eService/filing:
+                    </span>
+                    <span className="margin-left-05">
+                      {petitionFormatted.contactSecondary.hasConsentedToEService
+                        ? 'Yes'
+                        : 'No'}
+                    </span>
+                  </div>
+                )}
                 {petitionFormatted.contactSecondary.placeOfLegalResidence && (
                   <div className="margin-top-1">
                     <span className="text-semibold">
