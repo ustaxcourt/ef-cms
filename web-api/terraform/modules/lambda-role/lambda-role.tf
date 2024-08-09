@@ -160,7 +160,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "es:ESHttpPut"
             ],
             "Resource": [
-                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*"
+                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*",
+                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/info"
             ],
             "Effect": "Allow"
         },
