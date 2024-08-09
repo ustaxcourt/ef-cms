@@ -16,6 +16,7 @@ export const AddressDisplay = connect<
   {
     boldName?: boolean;
     contact: any;
+    displayFirmNameOnNewLine?: boolean;
     nameOverride?: string;
     noMargin?: boolean;
     showEmail?: boolean;
@@ -27,6 +28,7 @@ export const AddressDisplay = connect<
   function AddressDisplay({
     boldName,
     contact,
+    displayFirmNameOnNewLine = false,
     nameOverride,
     noMargin,
     openSealAddressModalSequence,
@@ -61,12 +63,17 @@ export const AddressDisplay = connect<
               <br />
             </span>
           )}
-          {contact.firmName && (
-            <span data-testid="firm-name">
-              {contact.firmName}
-              <br />
-            </span>
-          )}
+          {contact.firmName &&
+            (displayFirmNameOnNewLine ? (
+              <div className="line-height-body-5" data-testid="firm-name">
+                {contact.firmName}
+              </div>
+            ) : (
+              <span data-testid="firm-name">
+                {contact.firmName}
+                <br />
+              </span>
+            ))}
           {contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
