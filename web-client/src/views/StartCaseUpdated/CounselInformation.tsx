@@ -16,6 +16,7 @@ export function CounselInformation({ userInfo }) {
             <div>
               <address aria-labelledby="filing-contact-primary">
                 <AddressDisplay
+                  displayFirmNameOnNewLine
                   showEmail
                   contact={{
                     ...userInfo.contact,
