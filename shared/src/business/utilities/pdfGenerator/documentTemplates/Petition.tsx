@@ -273,7 +273,7 @@ export const Petition = ({
               <div>{contactCounsel.email}</div>
 
               <div>
-                <b>U.S. tax court bar no.: </b>
+                <b>Tax Court Bar No.: </b>
                 {contactCounsel.barNumber}
               </div>
             </div>
