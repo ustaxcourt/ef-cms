@@ -8,6 +8,8 @@ type JudgeInfo = {
   isLegacy?: boolean;
 };
 
+// TODO: It would be better to have this list outside of the code so we could
+// update judges in production without deploying code changes.
 const JUDGES_CHAMBERS: Record<string, JudgeInfo> = omitBy(
   {
     ASHFORDS_CHAMBERS_SECTION: {
@@ -202,6 +204,12 @@ const JUDGES_CHAMBERS: Record<string, JudgeInfo> = omitBy(
       label: 'Vasquez’s Chambers',
       phoneNumber: '(202) 521-0778',
       section: 'vasquezsChambers',
+    },
+    WAYS_CHAMBERS_SECTION: {
+      judgeFullName: 'Kashi Way',
+      label: 'Way’s Chambers',
+      phoneNumber: '', // TODO
+      section: 'waysChambers',
     },
     WEILERS_CHAMBERS_SECTION: {
       judgeFullName: 'Christian N. Weiler',

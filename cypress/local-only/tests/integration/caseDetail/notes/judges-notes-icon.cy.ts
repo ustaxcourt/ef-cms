@@ -20,7 +20,7 @@ describe('Notes Icon triggered by Judges Notes', () => {
     navigateToDocumentQC('petitionsclerk');
 
     getCreateACaseButton().click();
-    cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');
+    cy.get('#tab-parties').should('have.attr', 'aria-selected');
 
     fillInCreateCaseFromPaperForm();
 
