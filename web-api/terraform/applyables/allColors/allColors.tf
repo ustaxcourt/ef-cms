@@ -189,6 +189,14 @@ resource "aws_db_subnet_group" "group" {
   subnet_ids = [module.vpc_east.subnet_a_id, module.vpc_east.subnet_b_id]
 }
 
+module "tunnel" {
+  source            = "../../modules/tunnel"
+  environment       = var.environment
+  vpc_id = module.vpc_east.vpc_id
+  subnet_id = module.vpc_east.public_subnet
+  public_key_name = var.tunnel_key_name
+}
+
 module "rds" {
   source            = "../../modules/rds"
   environment       = var.environment
@@ -198,15 +206,6 @@ module "rds" {
   subnet_group_name = aws_db_subnet_group.group.name
   security_group_ids = [
     aws_security_group.east_security_group.id, 
+    module.tunnel.tunnel_security_group_id
   ]
 }
-
-
-module "tunnel" {
-  source            = "../../modules/tunnel"
-  environment       = var.environment
-  vpc_id = module.vpc_east.vpc_id
-  subnet_id = module.vpc_east.public_subnet
-  public_key_name = var.tunnel_key_name
-}
-

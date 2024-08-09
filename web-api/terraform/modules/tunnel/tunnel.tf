@@ -4,7 +4,7 @@ data "aws_key_pair" "existing_key" {
 
 # Define a security group for the EC2 instance
 resource "aws_security_group" "tunnel_sg" {
-  name        = "tunnel-security-group"
+  name        = "${var.environment}-tunnel-security-group"
   description = "Allow SSH access for tunneling"
   vpc_id      = var.vpc_id
 
