@@ -80,6 +80,12 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
   popd
 fi
 
+INFO_ELASTICSEARCH_DOMAIN=$(aws es describe-elasticsearch-domain \
+  --domain-name "info" \
+  --region us-east-1 \
+  --query 'DomainStatus.Endpoint' \
+  --output text)
+
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
   GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
@@ -115,6 +121,7 @@ export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
+export TF_VAR_info_elasticsearch_domain=$INFO_ELASTICSEARCH_DOMAIN
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP

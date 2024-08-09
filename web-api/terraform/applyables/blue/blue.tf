@@ -64,6 +64,7 @@ resource "terraform_data" "locals" {
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
     EFCMS_DOMAIN                       = var.dns_domain
+    ELASTICSEARCH_INFO_ENDPOINT        = var.info_elasticsearch_domain
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
     EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"

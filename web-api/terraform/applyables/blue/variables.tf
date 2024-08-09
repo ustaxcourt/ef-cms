@@ -26,6 +26,10 @@ variable "blue_elasticsearch_domain" {
   type = string
 }
 
+variable "info_elasticsearch_domain" {
+  type = string
+}
+
 variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
