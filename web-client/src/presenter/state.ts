@@ -650,6 +650,7 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
+  dawsonHasUpdated: false,
   docketEntryId: null,
   docketRecordIndex: 0,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],

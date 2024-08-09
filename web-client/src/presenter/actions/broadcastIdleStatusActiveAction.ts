@@ -1,4 +1,4 @@
-import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -15,8 +15,8 @@ export const broadcastIdleStatusActiveAction = async ({
   store.set(state.lastIdleAction, Date.now());
   const broadcastChannel = applicationContext.getBroadcastGateway();
   const message = props.closeModal
-    ? LOGOUT_BROADCAST_MESSAGES.stayLoggedIn
-    : LOGOUT_BROADCAST_MESSAGES.idleStatusActive;
+    ? BROADCAST_MESSAGES.stayLoggedIn
+    : BROADCAST_MESSAGES.idleStatusActive;
   await broadcastChannel.postMessage({
     subject: message,
   });
