@@ -23,6 +23,7 @@ type ContactSecondary = {
   handleChange: OnChangeHandler;
   handleChangeCountryType: OnChangeCountryTypeHandler;
   registerRef?: Function;
+  showEmailAndElectronicServiceConsent?: boolean;
   showSameAsPrimaryCheckbox: boolean;
   useSameAsPrimary: boolean;
 };
@@ -48,6 +49,7 @@ export const ContactSecondaryUpdated = connect<
     nameLabel,
     registerRef,
     resetSecondaryAddressSequence,
+    showEmailAndElectronicServiceConsent = true,
     showSameAsPrimaryCheckbox,
     useSameAsPrimary,
     validationErrors = {} as {
@@ -184,54 +186,58 @@ export const ContactSecondaryUpdated = connect<
               }}
             />
           </FormGroup>
-          <FormGroup
-            errorMessageId="email-error-message"
-            errorText={
-              validationErrors.contactSecondary &&
-              validationErrors.contactSecondary.paperPetitionEmail
-            }
-          >
-            <label className="usa-label" htmlFor="paperPetitionEmail">
-              Email address <span className="usa-hint">(Optional)</span>
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              data-testid="contact-secondary-email"
-              id="paperPetitionEmail"
-              name="contactSecondary.paperPetitionEmail"
-              ref={
-                registerRef &&
-                registerRef('contactSecondary.paperPetitionEmail')
-              }
-              type="text"
-              value={addressInfo.paperPetitionEmail || ''}
-              onBlur={() => {
-                handleBlur({
-                  validationKey: ['contactSecondary', 'paperPetitionEmail'],
-                });
-              }}
-              onChange={e => {
-                handleChange({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
-          <ElectronicServiceConsentCheckbox
-            bind="form"
-            contactType="contactSecondary"
-          />
-          {addressInfo.hasConsentedToEService && (
-            <WarningNotificationComponent
-              alertWarning={{
-                message:
-                  'No paper service will be made to the mailing address after the Court verifies the email address.',
-              }}
-              dismissible={false}
-              scrollToTop={false}
-            />
+          {showEmailAndElectronicServiceConsent && (
+            <>
+              <FormGroup
+                errorMessageId="email-error-message"
+                errorText={
+                  validationErrors.contactSecondary &&
+                  validationErrors.contactSecondary.paperPetitionEmail
+                }
+              >
+                <label className="usa-label" htmlFor="paperPetitionEmail">
+                  Email address <span className="usa-hint">(Optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-secondary-email"
+                  id="paperPetitionEmail"
+                  name="contactSecondary.paperPetitionEmail"
+                  ref={
+                    registerRef &&
+                    registerRef('contactSecondary.paperPetitionEmail')
+                  }
+                  type="text"
+                  value={addressInfo.paperPetitionEmail || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: ['contactSecondary', 'paperPetitionEmail'],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+              <ElectronicServiceConsentCheckbox
+                bind="form"
+                contactType="contactSecondary"
+              />
+              {addressInfo.hasConsentedToEService && (
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'No paper service will be made to the mailing address after the Court verifies the email address.',
+                  }}
+                  dismissible={false}
+                  scrollToTop={false}
+                />
+              )}
+            </>
           )}
         </div>
       </>

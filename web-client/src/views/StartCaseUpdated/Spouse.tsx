@@ -72,6 +72,7 @@ export function Spouse({
           handleChangeCountryType={updateFormValueCountryTypeSequence}
           nameLabel="Full name of spouse"
           registerRef={registerRef}
+          showEmailAndElectronicServiceConsent={isPetitioner}
           showSameAsPrimaryCheckbox={true}
           useSameAsPrimary={useSameAsPrimary}
         />
