@@ -26,7 +26,7 @@ export function CounselInformation({ userInfo }) {
                   }}
                 />
                 <div className="margin-top-1">
-                  <span className="semi-bold">U.S. tax court bar no.: </span>
+                  <span className="semi-bold">Tax Court Bar No.: </span>
                   {userInfo.barNumber}
                 </div>
               </address>
