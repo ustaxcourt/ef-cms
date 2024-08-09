@@ -18,7 +18,7 @@ describe('sendBulkTemplatedEmail', () => {
       {
         email: 'test.email@example.com',
         templateData: {
-          name: 'Guy Fieri',
+          name: 'Roslindis Angelino',
           welcomeMessage: 'Welcome to Flavortown',
           whoAmI: 'The Sauce Boss',
         },
@@ -41,7 +41,7 @@ describe('sendBulkTemplatedEmail', () => {
             ToAddresses: ['test.email@example.com'],
           },
           ReplacementTemplateData: JSON.stringify({
-            name: 'Guy Fieri',
+            name: 'Roslindis Angelino',
             welcomeMessage: 'Welcome to Flavortown',
             whoAmI: 'The Sauce Boss',
           }),
@@ -56,7 +56,7 @@ describe('sendBulkTemplatedEmail', () => {
       {
         email: 'test.email@example.com',
         templateData: {
-          name: 'Guy Fieri',
+          name: 'Roslindis Angelino',
           welcomeMessage: 'Welcome to Flavortown',
           whoAmI: 'The Sauce Boss',
         },
@@ -136,7 +136,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email@example.com'],
             },
             ReplacementTemplateData: JSON.stringify({
-              name: 'Guy Fieri',
+              name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
             }),
@@ -146,7 +146,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email2@example.com'],
             },
             ReplacementTemplateData: JSON.stringify({
-              name: 'Guy Fieri',
+              name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
             }),
@@ -156,7 +156,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email3@example.com'],
             },
             ReplacementTemplateData: JSON.stringify({
-              name: 'Guy Fieri',
+              name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
             }),

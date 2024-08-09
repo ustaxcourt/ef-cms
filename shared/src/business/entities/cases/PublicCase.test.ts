@@ -14,6 +14,7 @@ import { MOCK_USERS } from '../../../test/mockUsers';
 import { PublicCase } from './PublicCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactSecondary } from './Case';
+import { mockPrivatePractitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('PublicCase', () => {
   const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
@@ -342,6 +343,45 @@ describe('PublicCase', () => {
     expect(entity.leadDocketNumber).toBeUndefined();
   });
 
+  it('should not show leadDocketNumber when authorizedUser does not have IRS Practitioner role', () => {
+    const rawCase = {
+      ...MOCK_CASE,
+      irsPractitioners: [
+        {
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isSealed: false,
+      leadDocketNumber: 'number',
+      otherFilers: [
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary },
+        {
+          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.otherPetitioner,
+        },
+      ],
+      privatePractitioners: [
+        {
+          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+    const entity = new PublicCase(rawCase, {
+      applicationContext,
+      authorizedUser: mockPrivatePractitionerUser,
+    });
+
+    expect(entity.irsPractitioners).toBeUndefined();
+    expect(entity.privatePractitioners).toBeUndefined();
+    expect(entity.leadDocketNumber).toBeUndefined();
+  });
+
   describe('irsPractitioner', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(
@@ -357,7 +397,7 @@ describe('PublicCase', () => {
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
+        name: 'Saturnino Nao',
         phone: '1234567890',
         postalCode: '05198',
         state: 'AK',
@@ -370,7 +410,7 @@ describe('PublicCase', () => {
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
+        name: 'Saturnino Nao',
         phone: '1234567890',
         postalCode: '05198',
         state: 'AK',

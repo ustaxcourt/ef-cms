@@ -382,18 +382,18 @@ describe('getUserFromAuthHeader', () => {
     expect(user.name).toEqual(mockUser.name);
   });
 
-  it('should return null if the user token is not a valid jwt token', () => {
+  it('should return undefined if the user token is not a valid jwt token', () => {
     const user = getUserFromAuthHeader({
       headers: {
         Authorization: 'Bearer 123',
       },
     });
-    expect(user).toEqual(null);
+    expect(user).toEqual(undefined);
   });
 
-  it('should return null if there is no token', () => {
+  it('should return undefined if there is no token', () => {
     const user = getUserFromAuthHeader({});
-    expect(user).toEqual(null);
+    expect(user).toEqual(undefined);
   });
 
   it('returns custom:userId when it is present in the token', () => {

@@ -20,10 +20,10 @@ describe('documentServiceEmail', () => {
           documentDetail: {
             documentTitle: 'Answer',
             eventCode: 'A',
-            filedBy: 'Petr. Guy Fieri',
+            filedBy: 'Petr. Roslindis Angelino',
             servedAtFormatted: '02/03/2020 12:00am EST',
           },
-          name: 'Guy Fieri',
+          name: 'Roslindis Angelino',
           taxCourtLoginUrl: 'http://example.com/login',
         },
       });
