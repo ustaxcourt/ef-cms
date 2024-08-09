@@ -612,6 +612,7 @@ export const baseState = {
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   clientConnectionId: '',
+  clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
   coldCaseReport: {
@@ -650,7 +651,6 @@ export const baseState = {
     },
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
-  dawsonHasUpdated: false,
   docketEntryId: null,
   docketRecordIndex: 0,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],

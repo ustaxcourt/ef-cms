@@ -127,7 +127,7 @@ const appPublic = {
     const cerebralApp = App(presenter, debugTools);
 
     applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
     });
 
     router.initialize(cerebralApp);

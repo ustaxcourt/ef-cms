@@ -19,7 +19,7 @@ export const AppInstanceManager = connect(
   {
     appInstanceManagerHelper: state.appInstanceManagerHelper,
     confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
-    openAppUpdatedModalSequence: sequences.openAppUpdatedModalSequence,
+    handleAppHasUpdatedSequence: sequences.handleAppHasUpdatedSequence,
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
     signOutIdleSequence: sequences.signOutIdleSequence,
     signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
@@ -27,7 +27,7 @@ export const AppInstanceManager = connect(
   function AppInstanceManager({
     appInstanceManagerHelper,
     confirmStayLoggedInSequence,
-    openAppUpdatedModalSequence,
+    handleAppHasUpdatedSequence,
     resetIdleTimerSequence,
     signOutIdleSequence,
     signOutUserInitiatedSequence,
@@ -52,8 +52,8 @@ export const AppInstanceManager = connect(
             skipBroadcast: true,
           });
           break;
-        case BROADCAST_MESSAGES.dawsonHasUpdated:
-          openAppUpdatedModalSequence({ skipBroadcast: true });
+        case BROADCAST_MESSAGES.appHasUpdated:
+          handleAppHasUpdatedSequence({ skipBroadcast: true });
           break;
         default:
           console.warn('unhandled broadcast event', msg);

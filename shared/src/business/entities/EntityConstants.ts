@@ -1675,7 +1675,7 @@ export type CreatedCaseType = {
 };
 
 export const BROADCAST_MESSAGES = {
-  dawsonHasUpdated: 'dawsonHasUpdated',
+  appHasUpdated: 'appHasUpdated',
   userLogout: 'userLogout',
   idleLogout: 'idleLogout',
   idleStatusActive: 'idleStatusActive',
