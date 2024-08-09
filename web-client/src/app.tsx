@@ -269,7 +269,7 @@ const app = {
     }
 
     applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
     });
 
     const container = window.document.querySelector('#app');
