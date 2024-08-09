@@ -126,6 +126,9 @@ module "api-east-green" {
   create_seal_in_lower = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
   prod_env_account_id  = var.prod_env_account_id
 
+  security_group_ids = [data.terraform_remote_state.remote.outputs.east_security_group_id]
+  subnet_ids = data.terraform_remote_state.remote.outputs.subnet_east_ids
+
   # lambda to handle bounced service email notifications
   create_bounce_handler = 1
 }
@@ -165,6 +168,9 @@ module "api-west-green" {
   # lambda to seal cases in lower environment (only deployed to lower environments)
   create_seal_in_lower = 0
   prod_env_account_id  = var.prod_env_account_id
+
+  security_group_ids = [data.terraform_remote_state.remote.outputs.east_security_group_id]
+  subnet_ids = data.terraform_remote_state.remote.outputs.subnet_east_ids
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 0
