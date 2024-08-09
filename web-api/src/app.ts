@@ -1074,13 +1074,19 @@ app.delete(
 }
 
 /**
- * system
+ * logging
  */
 {
   app.post(
-    '/system/log/performance-data',
+    '/log/performance-data',
     lambdaWrapper(logUserPerformanceDataLambda),
   );
+}
+
+/**
+ * system
+ */
+{
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 }

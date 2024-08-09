@@ -12,6 +12,6 @@ export const logUserPerformanceDataInteractor = (
   return post({
     applicationContext,
     body: { performanceData },
-    endpoint: '/system/log/performance-data',
+    endpoint: '/log/performance-data',
   });
 };
