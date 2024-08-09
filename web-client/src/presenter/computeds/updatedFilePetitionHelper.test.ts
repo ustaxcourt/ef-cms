@@ -3,7 +3,10 @@ import {
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { petitionerUser } from '@shared/test/mockUsers';
+import {
+  petitionerUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { updatedFilePetitionHelper as updatedFilePetitionHelperComputed } from './updatedFilePetitionHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -89,10 +92,21 @@ describe('updatedFilePetitionHelper', () => {
         state: { form: {}, user: petitionerUser },
       });
       expect(result.filingOptions).toEqual([
-        'Myself',
-        'Myself and my spouse',
-        'A business',
-        'Other',
+        { label: 'Myself', value: 'Myself' },
+        { label: 'Myself and my spouse', value: 'Myself and my spouse' },
+        { label: 'A business', value: 'A business' },
+        { label: 'Other', value: 'Other' },
+      ]);
+    });
+    it('should return filing options for practitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: { form: {}, user: privatePractitionerUser },
+      });
+      expect(result.filingOptions).toEqual([
+        { label: 'Petitioner', value: 'Individual petitioner' },
+        { label: 'Petitioner and spouse', value: 'Petitioner and spouse' },
+        { label: 'A business', value: 'A business' },
+        { label: 'Other', value: 'Other' },
       ]);
     });
   });

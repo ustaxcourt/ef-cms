@@ -52,16 +52,16 @@ export const UpdatedFilePetitionStep1 = connect(
                 return (
                   <div
                     className="usa-radio margin-bottom-2 filing-type-radio-option max-width-fit-content"
-                    key={filingType}
+                    key={filingType.value}
                   >
                     <input
                       aria-describedby="filing-type-legend"
-                      checked={form.filingType === filingType}
+                      checked={form.filingType === filingType.value}
                       className="usa-radio__input"
-                      id={filingType}
+                      id={filingType.value}
                       name="filingType"
                       type="radio"
-                      value={filingType}
+                      value={filingType.value}
                       onChange={e => {
                         updateFilingTypeSequence({
                           key: e.target.name,
@@ -72,10 +72,10 @@ export const UpdatedFilePetitionStep1 = connect(
                     <label
                       className="usa-radio__label"
                       data-testid={`filing-type-${index}`}
-                      htmlFor={filingType}
-                      id={`${filingType}-radio-option-label`}
+                      htmlFor={filingType.value}
+                      id={`${filingType.value}-radio-option-label`}
                     >
-                      {filingType}
+                      {filingType.label}
                     </label>
                   </div>
                 );

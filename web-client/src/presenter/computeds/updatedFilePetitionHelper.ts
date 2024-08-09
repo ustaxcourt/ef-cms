@@ -21,7 +21,7 @@ interface IOtherContactNameLabel {
 }
 
 type UpdatedFilePetitionHelper = {
-  filingOptions: string[];
+  filingOptions: { label: string; value: string }[];
   customPhoneMessage?: string;
   isPetitioner: boolean;
   isPractitioner: boolean;
@@ -40,7 +40,7 @@ export const updatedFilePetitionHelper = (
   const businessType = get(state.form.businessType);
   const partyType = get(state.form.partyType);
 
-  const filingOptions = FILING_TYPES[user.role];
+  const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
   const businessFieldNames = getBusinessFieldLabels(businessType);
   const otherContactNameLabel = getOtherContactNameLabel(
     partyType,
@@ -54,10 +54,6 @@ export const updatedFilePetitionHelper = (
     ? 'If they do not have a current phone number, enter N/A.'
     : undefined;
 
-  console.log({
-    isPetitioner,
-    isPractitioner,
-  });
   return {
     businessFieldNames,
     customPhoneMessage,
@@ -69,6 +65,16 @@ export const updatedFilePetitionHelper = (
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),
   };
 };
+
+function formatFilingTypes(filingOptions) {
+  return filingOptions.map(option => {
+    const isIndividualPetitioner = option === 'Individual petitioner';
+    return {
+      label: isIndividualPetitioner ? 'Petitioner' : option,
+      value: option,
+    };
+  });
+}
 
 function getBusinessFieldLabels(businessType): IBusinessFields | {} {
   switch (businessType) {
