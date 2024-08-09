@@ -169,8 +169,8 @@ module "api-west-green" {
   create_seal_in_lower = 0
   prod_env_account_id  = var.prod_env_account_id
 
-  security_group_ids = [data.terraform_remote_state.remote.outputs.east_security_group_id]
-  subnet_ids = data.terraform_remote_state.remote.outputs.subnet_east_ids
+  security_group_ids = [data.terraform_remote_state.remote.outputs.west_security_group_id]
+  subnet_ids = data.terraform_remote_state.remote.outputs.subnet_west_ids
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 0
