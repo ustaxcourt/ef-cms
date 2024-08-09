@@ -73,3 +73,7 @@ output west_security_group_id {
 output east_security_group_id {
   value = aws_security_group.east_security_group.id
 }
+
+output tunnel_ip {
+  value = module.tunnel.tunnel_ip
+}
