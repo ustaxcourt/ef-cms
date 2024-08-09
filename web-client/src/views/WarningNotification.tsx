@@ -63,9 +63,9 @@ export const WarningNotificationComponent =
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
                     {alertWarning.title && (
-                      <div className="banner-title margin-top-0 margin-bottom-1px text-bold">
+                      <p className="usa-alert__heading padding-top-0">
                         {alertWarning.title}
-                      </div>
+                      </p>
                     )}
                     <p
                       className={classNames(
