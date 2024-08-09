@@ -186,9 +186,14 @@ describe('Document QC Complete', () => {
       );
 
       cy.visit('/document-qc/my/inbox');
-      cy.get(
-        `[data-testid="message-queue-docket-number-${unservedDocketNumber}"]`,
-      ).should('be.visible');
+
+      retry(() => {
+        cy.reload(true);
+        cy.get('[data-testid="my-work-queue-inbox"]').should('be.visible');
+        return assertExists(
+          `[data-testid="message-queue-docket-number-${unservedDocketNumber}"]`,
+        );
+      });
     });
   });
 });

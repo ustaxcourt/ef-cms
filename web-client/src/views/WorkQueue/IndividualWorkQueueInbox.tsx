@@ -16,6 +16,7 @@ export const IndividualWorkQueueInbox = connect(
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"
+          data-testid="my-work-queue-inbox"
           id="my-work-queue"
         >
           <thead>
