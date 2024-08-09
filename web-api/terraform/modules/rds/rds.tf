@@ -7,10 +7,11 @@ resource "aws_db_instance" "postgres" {
   username             = var.postgres_user
   password             = var.postgres_password
   parameter_group_name = aws_db_parameter_group.postgres.name
-  # vpc_security_group_ids = [aws_security_group.db.id]
-  # db_subnet_group_name   = var.group_name
+  vpc_security_group_ids = [aws_security_group.postgres.id]
+  db_subnet_group_name   = var.subnet_group_name
   skip_final_snapshot = true
   publicly_accessible = false
+  apply_immediately = true
 }
 
 resource "aws_db_parameter_group" "postgres" {
@@ -23,27 +24,24 @@ resource "aws_db_parameter_group" "postgres" {
   }
 }
 
+resource "aws_security_group" "postgres" {
+  vpc_id = var.vpc_id
 
-# resource "aws_security_group" "postgres" {
-#   vpc_id = var.vpc_id
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    security_groups = var.security_group_ids
+  }
 
-#   ingress {
-#     from_port   = 5432
-#     to_port     = 5432
-#     protocol    = "tcp"
-#     # This assumes your Lambda functions are using this security group (or you replace it with the correct security group for your Lambda functions).
-#     security_groups = [var.security_group_id]
-#   }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-#   egress {
-#     from_port   = 0
-#     to_port     = 0
-#     protocol    = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   tags = {
-#     Name = "db-security-group"
-#   }
-# }
-
+  tags = {
+    Name = "db-security-group"
+  }
+}

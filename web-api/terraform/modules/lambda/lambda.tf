@@ -40,11 +40,14 @@ resource "aws_lambda_function" "lambda_function" {
     variables = var.use_source_maps ? merge(var.environment, { NODE_OPTIONS = "--enable-source-maps" }) : var.environment
   }
 
-  # vpc_config {
-  #   security_group_ids = [var.vpc_id]
-  #   subnet_ids         = var.subnet_ids
-  # }
+  dynamic "vpc_config" {
+    for_each = length(var.security_group_ids) > 0 && length(var.subnet_ids) > 0 ? [1] : []
+
+    content {
+      security_group_ids = var.security_group_ids
+      subnet_ids         = var.subnet_ids
+    }
+  }
 }
 
 
-// TODO: create a lambda security group and attach to the lambdas

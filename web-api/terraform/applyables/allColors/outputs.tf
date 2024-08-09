@@ -49,3 +49,27 @@ output "aws_cognito_user_pool_irs_id" {
 output "rds_host_name" {
   value = module.rds.address
 }
+
+output vpc_east_id {
+  value = module.vpc_east.vpc_id
+}
+
+output vpc_west_id {
+  value = module.vpc_west.vpc_id
+}
+
+output subnet_east_ids {
+  value =[module.vpc_east.subnet_a_id, module.vpc_east.subnet_b_id]
+}
+
+output subnet_west_ids {
+  value = [module.vpc_west.subnet_a_id, module.vpc_west.subnet_b_id]
+}
+
+output west_security_group_id {
+  value = aws_security_group.west_security_group.id
+}
+
+output east_security_group_id {
+  value = aws_security_group.east_security_group.id
+}
