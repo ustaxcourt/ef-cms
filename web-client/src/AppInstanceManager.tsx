@@ -12,7 +12,8 @@ import React from 'react';
  * or tabs also open to the same domain/path) and takes appropriate
  * action according to the message subject received. Currently
  * it monitors idle time activity and coordinates "I am active" messages
- * and "I am still here" messages.
+ * and "I am still here" messages, as well as "DAWSON has been updated,
+ * please refresh" messages.
  */
 export const AppInstanceManager = connect(
   {
