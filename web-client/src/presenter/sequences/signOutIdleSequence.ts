@@ -1,4 +1,5 @@
-import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { checkDawsonHasUpdatedAction } from '@web-client/presenter/actions/checkDawsonHasUpdatedAction';
 import { isLoggedInAction } from '@web-client/presenter/actions/isLoggedInAction';
 import { setLogoutTypeAction } from '@web-client/presenter/actions/setLogoutTypeAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -12,9 +13,17 @@ export const signOutIdleSequence = [
     // multiple tabs broadcast the idle sign out event.
     no: [],
     yes: [
-      setLogoutTypeAction(LOGOUT_BROADCAST_MESSAGES.idleLogout),
-      signOutSequence,
-      setupCurrentPageAction('IdleLogout'),
+      checkDawsonHasUpdatedAction,
+      {
+        dawsonHasNotUpdated: [
+          setLogoutTypeAction(BROADCAST_MESSAGES.idleLogout),
+          signOutSequence,
+          setupCurrentPageAction('IdleLogout'),
+        ],
+        // If DAWSON has been updated, then we do not want to attempt to sign the user out.
+        // The sign-out will fail, and this can lead to inconsistent front-end behavior (e.g., clearing modals).
+        dawsonHasUpdated: [],
+      },
     ],
   },
 ] as unknown as (props: {

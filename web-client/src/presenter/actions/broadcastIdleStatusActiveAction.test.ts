@@ -1,4 +1,4 @@
-import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { broadcastIdleStatusActiveAction } from './broadcastIdleStatusActiveAction';
 import { presenter } from '../presenter-mock';
@@ -23,7 +23,7 @@ describe('broadcastIdleStatusActiveAction', () => {
     expect(
       applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
     ).toMatchObject({
-      subject: LOGOUT_BROADCAST_MESSAGES.idleStatusActive,
+      subject: BROADCAST_MESSAGES.idleStatusActive,
     });
   });
 
@@ -43,7 +43,7 @@ describe('broadcastIdleStatusActiveAction', () => {
     expect(
       applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
     ).toMatchObject({
-      subject: LOGOUT_BROADCAST_MESSAGES.stayLoggedIn,
+      subject: BROADCAST_MESSAGES.stayLoggedIn,
     });
   });
 });

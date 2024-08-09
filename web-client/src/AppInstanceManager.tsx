@@ -1,4 +1,4 @@
-import { LOGOUT_BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -18,6 +18,7 @@ export const AppInstanceManager = connect(
   {
     appInstanceManagerHelper: state.appInstanceManagerHelper,
     confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
+    openAppUpdatedModalSequence: sequences.openAppUpdatedModalSequence,
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
     signOutIdleSequence: sequences.signOutIdleSequence,
     signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
@@ -25,6 +26,7 @@ export const AppInstanceManager = connect(
   function AppInstanceManager({
     appInstanceManagerHelper,
     confirmStayLoggedInSequence,
+    openAppUpdatedModalSequence,
     resetIdleTimerSequence,
     signOutIdleSequence,
     signOutUserInitiatedSequence,
@@ -33,21 +35,24 @@ export const AppInstanceManager = connect(
 
     channelHandle.onmessage = msg => {
       switch (msg.subject) {
-        case LOGOUT_BROADCAST_MESSAGES.idleStatusActive:
+        case BROADCAST_MESSAGES.idleStatusActive:
           resetIdleTimerSequence();
           break;
-        case LOGOUT_BROADCAST_MESSAGES.stayLoggedIn:
+        case BROADCAST_MESSAGES.stayLoggedIn:
           confirmStayLoggedInSequence();
           break;
-        case LOGOUT_BROADCAST_MESSAGES.idleLogout:
+        case BROADCAST_MESSAGES.idleLogout:
           signOutIdleSequence({
             skipBroadcast: true,
           });
           break;
-        case LOGOUT_BROADCAST_MESSAGES.userLogout:
+        case BROADCAST_MESSAGES.userLogout:
           signOutUserInitiatedSequence({
             skipBroadcast: true,
           });
+          break;
+        case BROADCAST_MESSAGES.dawsonHasUpdated:
+          openAppUpdatedModalSequence({ skipBroadcast: true });
           break;
         default:
           console.warn('unhandled broadcast event', msg);
