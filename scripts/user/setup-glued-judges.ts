@@ -5,7 +5,7 @@ requireEnvVars([
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
 ]);
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';

@@ -20,7 +20,7 @@ describe('todaysOpinionsHelper', () => {
           docketNumber: '123-20',
           documentType: 'MOP - Memorandum Opinion',
           filingDate: '2020-06-11T20:17:10.646Z',
-          judge: 'Guy Fieri',
+          judge: 'Roslindis Angelino',
         },
       ],
     };
@@ -33,7 +33,7 @@ describe('todaysOpinionsHelper', () => {
       {
         caseCaption: 'Sauceboss, Petitioner',
         formattedFilingDate: '06/11/20',
-        formattedJudgeName: 'Fieri',
+        formattedJudgeName: 'Angelino',
       },
     ]);
   });
@@ -74,7 +74,9 @@ describe('todaysOpinionsHelper', () => {
     it('should be set to opinion.judge when it is defined', () => {
       const result = runCompute(todaysOpinionsHelper, { state });
 
-      expect(result.formattedOpinions[0].formattedJudgeName).toEqual('Fieri');
+      expect(result.formattedOpinions[0].formattedJudgeName).toEqual(
+        'Angelino',
+      );
     });
 
     it('should be set to opinion.signedJudgeName when opinion.judge is undefined', () => {

@@ -7,15 +7,11 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getPublicDocumentDownloadUrlLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getPublicDownloadPolicyUrlInteractor(applicationContext, {
-          ...event.pathParameters,
-          isTerminalUser: event.isTerminalUser,
-        });
-    },
-    { user: {} },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .getPublicDownloadPolicyUrlInteractor(applicationContext, {
+        ...event.pathParameters,
+        isTerminalUser: event.isTerminalUser,
+      });
+  });

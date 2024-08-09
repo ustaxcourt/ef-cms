@@ -122,14 +122,14 @@ describe('advancedDocumentSearch', () => {
   it('does a search for case title or petitioner name', async () => {
     await advancedDocumentSearch({
       applicationContext,
-      caseTitleOrPetitioner: 'Guy Fieri',
+      caseTitleOrPetitioner: 'Roslindis Angelino',
       documentEventCodes: opinionEventCodes,
     });
 
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toEqual([
-      getCaseMappingQueryParams('Guy Fieri'), // match parents with caseTitleOrPetitioner
+      getCaseMappingQueryParams('Roslindis Angelino'), // match parents with caseTitleOrPetitioner
     ]);
   });
 
@@ -137,13 +137,13 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
-      keyword: 'Guy Fieri',
+      keyword: 'Roslindis Angelino',
     });
 
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toEqual([
-      getKeywordQueryParams('Guy Fieri'),
+      getKeywordQueryParams('Roslindis Angelino'),
       getCaseMappingQueryParams(), // match all parents
     ]);
   });
@@ -153,7 +153,7 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       documentEventCodes: [],
       isOpinionSearch: true,
-      judge: 'Judge Guy Fieri',
+      judge: 'Judge Roslindis Angelino',
     });
 
     expect(
@@ -167,13 +167,13 @@ describe('advancedDocumentSearch', () => {
                 match: {
                   'signedJudgeName.S': {
                     operator: 'and',
-                    query: 'Guy Fieri',
+                    query: 'Roslindis Angelino',
                   },
                 },
               },
               {
                 match: {
-                  'judge.S': 'Guy Fieri',
+                  'judge.S': 'Roslindis Angelino',
                 },
               },
             ],
@@ -240,7 +240,7 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       documentEventCodes: [BENCH_OPINION_EVENT_CODE],
       isOpinionSearch: true,
-      judge: 'Judge Guy Fieri',
+      judge: 'Judge Roslindis Angelino',
     });
 
     expect(
@@ -431,14 +431,14 @@ describe('advancedDocumentSearch', () => {
         applicationContext,
         documentEventCodes: opinionEventCodes,
         isOpinionSearch: true,
-        judge: 'Chief Legacy Judge Guy Fieri',
+        judge: 'Chief Legacy Judge Roslindis Angelino',
       });
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.filter[4].bool
           .should[1].match,
       ).toMatchObject({
-        'judge.S': 'Guy Fieri',
+        'judge.S': 'Roslindis Angelino',
       });
     });
   });
