@@ -2,11 +2,10 @@ import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   PARTY_TYPES,
-  ROLES,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('setAdditionalNameOnPetitioners', () => {
   const mockSecondaryName = 'Test Secondary Name';
@@ -24,12 +23,6 @@ describe('setAdditionalNameOnPetitioners', () => {
     PARTY_TYPES.trust,
   ];
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
-  });
-
   partyTypesWithSecondaryName.forEach(partyType => {
     it(`should set additionalName as secondaryName when party type is ${partyType}`, () => {
       const myCase = new Case(
@@ -45,7 +38,7 @@ describe('setAdditionalNameOnPetitioners', () => {
           ],
           status: CASE_STATUS_TYPES.generalDocket,
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
@@ -67,7 +60,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(
@@ -90,7 +83,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
@@ -111,7 +104,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toEqual('');
@@ -131,7 +124,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
@@ -151,7 +144,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
@@ -171,7 +164,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
@@ -191,7 +184,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
@@ -211,7 +204,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
@@ -234,7 +227,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBe(

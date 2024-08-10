@@ -7,15 +7,11 @@ export const updatedValidatePetitionAction = ({
 }: ActionProps) => {
   const petition = get(state.petitionFormatted);
 
-  const errors = applicationContext
-    .getUseCases()
-    .validatePetitionInteractor(applicationContext, {
-      petition,
-    });
+  const errors = applicationContext.getUseCases().validatePetitionInteractor({
+    petition,
+  });
 
-  if (!errors) {
-    return path.success();
-  } else {
+  if (errors) {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
@@ -23,4 +19,6 @@ export const updatedValidatePetitionAction = ({
       errors,
     });
   }
+
+  return path.success();
 };

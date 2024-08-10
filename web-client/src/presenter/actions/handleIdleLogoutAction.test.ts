@@ -1,3 +1,4 @@
+import { IDLE_LOGOUT_STATES } from '@shared/business/entities/EntityConstants';
 import { handleIdleLogoutAction } from './handleIdleLogoutAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -30,16 +31,16 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'INITIAL',
+          state: IDLE_LOGOUT_STATES.INITIAL,
         },
         lastIdleAction: 0,
-        user: undefined,
+        token: undefined,
       },
     });
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: IDLE_LOGOUT_STATES.INITIAL,
     });
   });
 
@@ -58,16 +59,16 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'INITIAL',
+          state: IDLE_LOGOUT_STATES.INITIAL,
         },
         lastIdleAction: 0,
-        user: {},
+        token: '92c17761-d382-4231-b497-bc8c9e3ffea1',
       },
     });
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: IDLE_LOGOUT_STATES.INITIAL,
     });
   });
 
@@ -86,20 +87,20 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'INITIAL',
+          state: IDLE_LOGOUT_STATES.INITIAL,
         },
         lastIdleAction: 0,
-        user: {},
+        token: '9dfbf86d-d4e7-41da-a85a-1b57910a5eaa',
       },
     });
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: expect.any(Number),
-      state: 'MONITORING',
+      state: IDLE_LOGOUT_STATES.MONITORING,
     });
   });
 
-  it('should move into the COUNTDOWN if the current time is passed the session timeout limits', async () => {
+  it('should move into the COUNTDOWN if the current time is past the session timeout limits', async () => {
     jest.spyOn(Date, 'now').mockReturnValue(11000);
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
@@ -115,20 +116,20 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: undefined,
-          state: 'MONITORING',
+          state: IDLE_LOGOUT_STATES.MONITORING,
         },
         lastIdleAction: 0,
-        user: {},
+        token: '0e4d3b74-89bc-44a0-a9b9-59f5eece40a5',
       },
     });
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: expect.any(Number),
-      state: 'COUNTDOWN',
+      state: IDLE_LOGOUT_STATES.COUNTDOWN,
     });
   });
 
-  it('should logout if in COUNTDOWN and the total time has elasped the total elasped time', async () => {
+  it('should logout if in COUNTDOWN and the total time has elapsed the total elapsed time', async () => {
     jest.spyOn(Date, 'now').mockReturnValue(16000);
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
@@ -144,16 +145,16 @@ describe('handleIdleLogoutAction', () => {
         },
         idleLogoutState: {
           logoutAt: 15000,
-          state: 'COUNTDOWN',
+          state: IDLE_LOGOUT_STATES.COUNTDOWN,
         },
         lastIdleAction: 0,
-        user: {},
+        token: 'd53d2132-860e-41a0-9f42-f73c7285721b',
       },
     });
 
     expect(result.state.idleLogoutState).toEqual({
       logoutAt: undefined,
-      state: 'INITIAL',
+      state: IDLE_LOGOUT_STATES.INITIAL,
     });
     expect(presenter.providers.path.logout).toHaveBeenCalled();
   });

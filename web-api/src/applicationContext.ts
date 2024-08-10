@@ -3,7 +3,7 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -12,7 +12,6 @@ import {
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   ORDER_TYPES,
-  Role,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -102,20 +101,7 @@ export const createApplicationContext = (
   appContextUser = {},
   logger = createLogger(),
 ) => {
-  let user;
-
-  if (appContextUser) {
-    user = new User(appContextUser);
-  }
-
-  const getCurrentUser = (): {
-    role: Role;
-    userId: string;
-    email: string;
-    name: string;
-  } => {
-    return user;
-  };
+  const user = new User(appContextUser);
 
   if (process.env.NODE_ENV === 'production') {
     const authenticated = user && Object.keys(user).length;
@@ -170,7 +156,6 @@ export const createApplicationContext = (
       STATUS_TYPES: CASE_STATUS_TYPES,
       TRIAL_SESSION_SCOPE_TYPES,
     }),
-    getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
       sendNotificationOfSealing:
