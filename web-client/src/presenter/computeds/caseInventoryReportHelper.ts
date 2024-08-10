@@ -35,10 +35,11 @@ export const caseInventoryReportHelper = (
   }
 
   const reportData = get(state.caseInventoryReportData.foundCases) || [];
+  const user = get(state.user);
 
   const formattedReportData = reportData
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-    .map(item => formatCase(applicationContext, item));
+    .map(item => formatCase(applicationContext, item, user));
 
   let displayedCount =
     resultCount < CASE_INVENTORY_PAGE_SIZE

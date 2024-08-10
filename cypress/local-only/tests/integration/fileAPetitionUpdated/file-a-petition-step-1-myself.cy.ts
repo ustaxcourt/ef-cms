@@ -39,7 +39,7 @@ describe('File a petition', () => {
       });
 
       it('should display an input for "place of legal residence"', () => {
-        cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').should(
+        cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').should(
           'exist',
         );
       });

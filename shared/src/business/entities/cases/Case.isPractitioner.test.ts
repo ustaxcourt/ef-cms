@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('isPractitioner', () => {
   it('returns true if the contactId is a privatePractitioner on the case', () => {
@@ -9,7 +9,7 @@ describe('isPractitioner', () => {
         ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(
@@ -23,7 +23,7 @@ describe('isPractitioner', () => {
         ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(
@@ -37,7 +37,7 @@ describe('isPractitioner', () => {
         ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(

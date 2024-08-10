@@ -1,12 +1,13 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearUserAction } from './clearUserAction';
+import { emptyUserState } from '@web-client/presenter/state/userState';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearUserAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should unset state.user, state.token, and state.permissions', async () => {
+  it('should unset state.token and state.permissions and reset state.user', async () => {
     const result = await runAction(clearUserAction, {
       modules: {
         presenter,
@@ -18,7 +19,7 @@ describe('clearUserAction', () => {
       },
     });
 
-    expect(result.state.user).toBeUndefined();
+    expect(result.state.user).toEqual(emptyUserState);
     expect(result.state.token).toBeUndefined();
     expect(result.state.permissions).toBeUndefined();
   });
@@ -42,16 +43,5 @@ describe('clearUserAction', () => {
       applicationContext.getUseCases().removeItemInteractor.mock.calls[1][1]
         .key,
     ).toBe('token');
-  });
-
-  it('should make a call to set currentUser to null', async () => {
-    await runAction(clearUserAction, {
-      modules: {
-        presenter,
-      },
-      state: {},
-    });
-
-    expect(applicationContext.setCurrentUser).toHaveBeenCalled();
   });
 });

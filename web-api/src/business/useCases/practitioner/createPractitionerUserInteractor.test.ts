@@ -4,9 +4,12 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { admissionsClerkUser, petitionerUser } from '@shared/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createPractitionerUserInteractor } from './createPractitionerUserInteractor';
+import {
+  mockAdmissionsClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('createPractitionerUserInteractor', () => {
   const mockUser: RawPractitioner = {
@@ -28,19 +31,20 @@ describe('createPractitionerUserInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     applicationContext
       .getPersistenceGateway()
       .createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
   });
 
   it('should throw an error when the user is unauthorized to create a practitioner user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      createPractitionerUserInteractor(applicationContext, {
-        user: mockUser,
-      }),
+      createPractitionerUserInteractor(
+        applicationContext,
+        {
+          user: mockUser,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -50,6 +54,7 @@ describe('createPractitionerUserInteractor', () => {
       {
         user: mockUser,
       },
+      mockAdmissionsClerkUser,
     );
 
     expect(barNumber).toEqual(mockUser.barNumber);
@@ -58,12 +63,16 @@ describe('createPractitionerUserInteractor', () => {
   it('should set practitioner.pendingEmail to practitioner.email and set practitioner.email to undefined', async () => {
     const mockEmail = 'testing@example.com';
 
-    await createPractitionerUserInteractor(applicationContext, {
-      user: {
-        ...mockUser,
-        email: mockEmail,
+    await createPractitionerUserInteractor(
+      applicationContext,
+      {
+        user: {
+          ...mockUser,
+          email: mockEmail,
+        },
       },
-    });
+      mockAdmissionsClerkUser,
+    );
 
     const mockUserCall =
       applicationContext.getPersistenceGateway().createOrUpdatePractitionerUser

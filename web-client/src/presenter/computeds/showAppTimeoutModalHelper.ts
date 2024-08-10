@@ -1,4 +1,5 @@
 import { Get } from 'cerebral';
+import { IDLE_LOGOUT_STATES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const showAppTimeoutModalHelper = (get: Get): any => {
@@ -7,6 +8,7 @@ export const showAppTimeoutModalHelper = (get: Get): any => {
 
   return {
     currentUser,
-    showModal: modalState === 'COUNTDOWN',
+    showModal:
+      !!currentUser?.userId && modalState === IDLE_LOGOUT_STATES.COUNTDOWN,
   };
 };

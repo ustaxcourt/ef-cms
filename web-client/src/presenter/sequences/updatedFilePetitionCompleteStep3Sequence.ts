@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getStep3DataAction } from '@web-client/presenter/actions/getStep3DataAction';
+import { getCreatePetitionStep3DataAction } from '@web-client/presenter/actions/getCreatePetitionStep3DataAction';
 import { incrementCurrentStepIndicatorAction } from '@web-client/presenter/actions/incrementCurrentStepIndicatorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -8,7 +8,7 @@ import { validateUploadPetitionStep3Action } from '@web-client/presenter/actions
 
 export const updatedFilePetitionCompleteStep3Sequence = [
   startShowValidationAction,
-  getStep3DataAction,
+  getCreatePetitionStep3DataAction,
   validateUploadPetitionStep3Action,
   {
     error: [setValidationErrorsAction],

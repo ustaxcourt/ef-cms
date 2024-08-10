@@ -44,7 +44,7 @@ const NavigationItems = (
     isDocumentQCMenuOpen,
     isMessagesMenuOpen,
     isReportsMenuOpen,
-    signOutSequence,
+    signOutUserInitiatedSequence,
     toggleMobileMenuSequence,
   },
 ) => {
@@ -205,7 +205,7 @@ const NavigationItems = (
           id="log-out"
           onClick={() => {
             toggleMobileMenuSequence();
-            signOutSequence();
+            signOutUserInitiatedSequence();
           }}
         >
           Log Out
@@ -221,7 +221,7 @@ export const Header = connect(
     menuHelper: state.menuHelper,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showMobileMenu: state.header.showMobileMenu,
-    signOutSequence: sequences.signOutSequence,
+    signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
     templateHelper: state.templateHelper,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
@@ -231,7 +231,7 @@ export const Header = connect(
     menuHelper,
     resetHeaderAccordionsSequence,
     showMobileMenu,
-    signOutSequence,
+    signOutUserInitiatedSequence,
     templateHelper,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
@@ -316,7 +316,7 @@ export const Header = connect(
                       isDocumentQCMenuOpen: menuHelper.isDocumentQCMenuOpen,
                       isMessagesMenuOpen: menuHelper.isMessagesMenuOpen,
                       isReportsMenuOpen: menuHelper.isReportsMenuOpen,
-                      signOutSequence,
+                      signOutUserInitiatedSequence,
                       toggleMobileMenuSequence,
                     })}
                   {headerHelper.showSearchInHeader && <SearchBox />}
