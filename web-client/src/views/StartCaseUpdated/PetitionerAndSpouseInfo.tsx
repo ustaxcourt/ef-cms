@@ -30,7 +30,10 @@ export function PetitionerAndSpouseInfo({
       )}
     >
       <fieldset className="usa-fieldset usa-sans" id="deceased-spouse-radios">
-        <legend id="deceased-spouse-legend">
+        <legend
+          data-testid="deceased-spouse-legend"
+          id="deceased-spouse-legend"
+        >
           {isPetitioner
             ? 'Is your spouse deceased?'
             : 'Is the spouse deceased?'}

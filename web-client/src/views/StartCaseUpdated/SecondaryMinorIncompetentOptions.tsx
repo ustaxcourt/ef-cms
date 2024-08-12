@@ -15,10 +15,9 @@ export function SecondaryMinorIncompetentOptions({
         errorText={validationErrors.minorIncompetentType}
       >
         <fieldset className="usa-fieldset usa-sans" id="estate-type-radios">
-          <legend id="estate-type-legend">
+          <legend data-testid="estate-type-legend" id="estate-type-legend">
             {isPetitioner
-              ? `What is your role in filing for this minor or legally incompetent
-            person?`
+              ? 'What is your role in filing for this minor or legally incompetent person?'
               : 'What is the petitioner’s role in filing for this minor or legally incompetent person?'}
           </legend>
           {[

@@ -70,7 +70,11 @@ export const ContactPrimaryUpdated = connect<
               validationErrors.contactPrimary.name
             }
           >
-            <label className="usa-label" htmlFor="contactPrimary.name">
+            <label
+              className="usa-label"
+              data-testid="contact-primary-name-label"
+              htmlFor="contactPrimary.name"
+            >
               {nameLabel}
             </label>
             <input
@@ -241,7 +245,10 @@ export const ContactPrimaryUpdated = connect<
             <label className="usa-label" htmlFor="primary-phone">
               Phone number
             </label>
-            <span className="usa-hint">
+            <span
+              className="usa-hint"
+              data-testid="contact-primary-phone-message"
+            >
               {customPhoneMessage ||
                 'If you do not have a current phone number, enter N/A.'}
             </span>
