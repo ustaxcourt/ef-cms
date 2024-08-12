@@ -16,7 +16,7 @@ describe('handleIdleLogoutAction', () => {
     };
   });
 
-  it('should stay in the INITIAL state if the user is not logged in', async () => {
+  it('should do nothing when the user is not logged in', async () => {
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
         presenter,
@@ -42,9 +42,40 @@ describe('handleIdleLogoutAction', () => {
       logoutAt: undefined,
       state: IDLE_LOGOUT_STATES.INITIAL,
     });
+    expect(presenter.providers.path.continue).toHaveBeenCalled();
   });
 
-  it('should stay in the INITIAL state if the user is uploading', async () => {
+  it('should do nothing when the client needs to be refreshed', async () => {
+    const result = await runAction(handleIdleLogoutAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        clientNeedsToRefresh: true,
+        constants: {
+          SESSION_MODAL_TIMEOUT: 5000,
+          SESSION_TIMEOUT: 10000,
+        },
+        fileUploadProgress: {
+          isUploading: false,
+        },
+        idleLogoutState: {
+          logoutAt: undefined,
+          state: IDLE_LOGOUT_STATES.INITIAL,
+        },
+        lastIdleAction: 0,
+        token: '92c17761-d382-4231-b497-bc8c9e3ffea1',
+      },
+    });
+
+    expect(result.state.idleLogoutState).toEqual({
+      logoutAt: undefined,
+      state: IDLE_LOGOUT_STATES.INITIAL,
+    });
+    expect(presenter.providers.path.continue).toHaveBeenCalled();
+  });
+
+  it('should stay in the INITIAL state when the user is uploading', async () => {
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
         presenter,
@@ -70,9 +101,10 @@ describe('handleIdleLogoutAction', () => {
       logoutAt: undefined,
       state: IDLE_LOGOUT_STATES.INITIAL,
     });
+    expect(presenter.providers.path.continue).toHaveBeenCalled();
   });
 
-  it('should stay move into the MONITORING state if the user is logged in and currently in initial state', async () => {
+  it('should move into the MONITORING state when the user is logged in and currently in initial state', async () => {
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
         presenter,
@@ -98,9 +130,10 @@ describe('handleIdleLogoutAction', () => {
       logoutAt: expect.any(Number),
       state: IDLE_LOGOUT_STATES.MONITORING,
     });
+    expect(presenter.providers.path.continue).toHaveBeenCalled();
   });
 
-  it('should move into the COUNTDOWN if the current time is past the session timeout limits', async () => {
+  it('should move into the COUNTDOWN when the current time is past the session timeout limits', async () => {
     jest.spyOn(Date, 'now').mockReturnValue(11000);
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
@@ -127,9 +160,10 @@ describe('handleIdleLogoutAction', () => {
       logoutAt: expect.any(Number),
       state: IDLE_LOGOUT_STATES.COUNTDOWN,
     });
+    expect(presenter.providers.path.continue).toHaveBeenCalled();
   });
 
-  it('should logout if in COUNTDOWN and the total time has elapsed the total elapsed time', async () => {
+  it('should logout when in COUNTDOWN and the total time has elapsed the total elapsed time', async () => {
     jest.spyOn(Date, 'now').mockReturnValue(16000);
     const result = await runAction(handleIdleLogoutAction, {
       modules: {
