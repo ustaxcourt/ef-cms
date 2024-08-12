@@ -39,9 +39,7 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
         );
       }
 
-      const trialSessionEntity = new TrialSession(trialSession, {
-        applicationContext,
-      });
+      const trialSessionEntity = new TrialSession(trialSession);
 
       if (trialSessionEntity.isCalendared) {
         trialSessionEntity.removeCaseFromCalendar({

@@ -34,13 +34,15 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { RawUser, User } from './User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
 } from '../utilities/DateHandler';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
@@ -167,27 +169,19 @@ export class DocketEntry extends JoiValidationEntity {
   constructor(
     rawDocketEntry,
     {
-      applicationContext,
+      authorizedUser,
       filtered = false,
       petitioners = [],
     }: {
-      applicationContext: IApplicationContext;
+      authorizedUser: UnknownAuthUser;
       petitioners?: any[];
       filtered?: boolean;
     },
   ) {
     super('DocketEntry');
 
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
-    if (
-      !filtered ||
-      User.isInternalUser(applicationContext.getCurrentUser().role)
-    ) {
-      this.initForUnfilteredForInternalUsers(rawDocketEntry, {
-        applicationContext,
-      });
+    if (!filtered || User.isInternalUser(authorizedUser?.role)) {
+      this.initForUnfilteredForInternalUsers(rawDocketEntry);
     }
 
     this.action = rawDocketEntry.action;
@@ -203,8 +197,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
     this.createdAt = rawDocketEntry.createdAt || createISODateString();
     this.date = rawDocketEntry.date;
-    this.docketEntryId =
-      rawDocketEntry.docketEntryId || applicationContext.getUniqueId();
+    this.docketEntryId = rawDocketEntry.docketEntryId || getUniqueId();
     this.docketNumber = rawDocketEntry.docketNumber;
     this.docketNumbers = rawDocketEntry.docketNumbers;
     this.documentContentsId = rawDocketEntry.documentContentsId;
@@ -256,7 +249,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
     // only share the userId with an external user if it is the logged in user
-    if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
+    if (authorizedUser?.userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
     }
 
@@ -291,7 +284,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.generateFiledBy(petitioners);
   }
 
-  initForUnfilteredForInternalUsers(rawDocketEntry, { applicationContext }) {
+  private initForUnfilteredForInternalUsers(rawDocketEntry) {
     this.editState = rawDocketEntry.editState;
     this.draftOrderState = rawDocketEntry.draftOrderState;
     this.stampData = rawDocketEntry.stampData || {};
@@ -319,7 +312,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
     this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
+      ? new WorkItem(rawDocketEntry.workItem)
       : undefined;
   }
 
@@ -791,7 +784,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.numberOfPages = numberOfPages;
   }
 
-  setFiledBy(user: RawUser) {
+  setFiledBy(user: { userId: string; role: Role }): void {
     this.userId = user.userId;
     this.filedByRole = user.role;
   }

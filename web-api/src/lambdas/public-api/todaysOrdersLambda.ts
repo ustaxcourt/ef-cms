@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getTodaysOrdersInteractor } from '@web-api/business/useCases/public/getTodaysOrdersInteractor';
 
 /**
  * used for fetching orders served on the current date
@@ -7,12 +8,9 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const todaysOrdersLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getTodaysOrdersInteractor(applicationContext, event.pathParameters);
-    },
-    { user: {} },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getTodaysOrdersInteractor(
+      applicationContext,
+      event.pathParameters,
+    );
+  });

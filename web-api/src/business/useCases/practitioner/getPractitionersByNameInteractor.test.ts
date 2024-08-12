@@ -1,26 +1,19 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionersByNameInteractor', () => {
   describe('Logged in User', () => {
-    beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsClerk',
-      });
-    });
-
     it('returns an unauthorized error on petitioner user role', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitioner,
-        userId: 'petitioner',
-      });
-
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
           {} as { name: string; searchAfter: string },
+          mockPetitionerUser,
         ),
       ).rejects.toThrow('Unauthorized for searching practitioners');
     });
@@ -30,6 +23,7 @@ describe('getPractitionersByNameInteractor', () => {
         getPractitionersByNameInteractor(
           applicationContext,
           {} as { name: string; searchAfter: string },
+          mockPetitionsClerkUser,
         ),
       ).rejects.toThrow('Name must be provided to search');
     });
@@ -64,6 +58,7 @@ describe('getPractitionersByNameInteractor', () => {
           name: 'Test Practitioner',
           searchAfter: undefined as unknown as string,
         },
+        mockPetitionsClerkUser,
       );
 
       expect(results).toMatchObject({
@@ -89,8 +84,6 @@ describe('getPractitionersByNameInteractor', () => {
 
   describe('Public User', () => {
     beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue(undefined);
-
       applicationContext
         .getPersistenceGateway()
         .getPractitionersByName.mockReturnValue({
@@ -124,6 +117,7 @@ describe('getPractitionersByNameInteractor', () => {
           name: 'Test Practitioner',
           searchAfter: undefined as unknown as string,
         },
+        mockPetitionsClerkUser,
       );
 
       expect(results).toBeDefined();
@@ -136,6 +130,7 @@ describe('getPractitionersByNameInteractor', () => {
           name: 'Test Practitioner',
           searchAfter: undefined as unknown as string,
         },
+        undefined,
       );
 
       expect(results).toMatchObject({

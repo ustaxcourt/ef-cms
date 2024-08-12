@@ -6,7 +6,7 @@ import {
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getOtherFilers', () => {
   it('sets a valid value of otherFilers on the case', () => {
@@ -18,7 +18,7 @@ describe('getOtherFilers', () => {
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
+        name: 'Saturnino Nao',
         phone: '123-456-7890',
         postalCode: '05198',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -31,7 +31,7 @@ describe('getOtherFilers', () => {
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'mayor@example.com',
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
         phone: '123-456-7890',
         postalCode: '05198',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -46,7 +46,7 @@ describe('getOtherFilers', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

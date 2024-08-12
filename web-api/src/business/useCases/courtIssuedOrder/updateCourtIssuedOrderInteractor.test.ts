@@ -8,14 +8,17 @@ import {
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
 
 describe('updateCourtIssuedOrderInteractor', () => {
-  let mockCurrentUser;
-  let mockUserById;
   const mockUserId = applicationContext.getUniqueId();
+  let mockUserById;
 
   let caseRecord = {
     caseCaption: 'Caption',
@@ -62,7 +65,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         contactType: CONTACT_TYPES.primary,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
-        name: 'Guy Fieri',
+        name: 'Roslindis Angelino',
         phone: '1234567890',
         postalCode: '12345',
         state: 'CA',
@@ -83,14 +86,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    mockCurrentUser = new User({
-      name: 'Olivia Jade',
-      role: ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
-
     mockUserById = {
       name: 'bob',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -106,18 +101,22 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if not authorized', async () => {
-    mockCurrentUser.role = ROLES.privatePractitioner;
+    // mockCurrentUser.role = ROLES.privatePractitioner;
     mockUserById = { name: 'bob' };
 
     await expect(
-      updateCourtIssuedOrderInteractor(applicationContext, {
-        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentType: 'Order to Show Cause',
-          eventCode: 'OSC',
+      updateCourtIssuedOrderInteractor(
+        applicationContext,
+        {
+          docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentType: 'Order to Show Cause',
+            eventCode: 'OSC',
+          },
         },
-      }),
+        mockPrivatePractitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -125,31 +124,39 @@ describe('updateCourtIssuedOrderInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockResolvedValue();
 
     await expect(
-      updateCourtIssuedOrderInteractor(applicationContext, {
-        docketEntryIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentType: 'Order to Show Cause',
-          eventCode: 'OSC',
+      updateCourtIssuedOrderInteractor(
+        applicationContext,
+        {
+          docketEntryIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentType: 'Order to Show Cause',
+            eventCode: 'OSC',
+          },
         },
-      }),
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Document not found');
   });
 
   it('update existing document within case', async () => {
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-        documentType: 'Notice',
-        draftOrderState: {
-          documentType: 'Order of Dismissal for Lack of Jurisdiction',
-          eventCode: 'ODJ',
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+          documentType: 'Notice',
+          draftOrderState: {
+            documentType: 'Order of Dismissal for Lack of Jurisdiction',
+            eventCode: 'ODJ',
+          },
+          eventCode: 'NOT',
         },
-        eventCode: 'NOT',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -178,19 +185,23 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('should not populate free text for OSCP', async () => {
     const mockDocumentTitle = 'Order to Show Cause Title';
 
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: mockDocumentTitle,
-        documentType: 'Notice',
-        draftOrderState: {
-          documentType: 'Order to Show Cause',
-          eventCode: 'OSCP',
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: mockDocumentTitle,
+          documentType: 'Notice',
+          draftOrderState: {
+            documentType: 'Order to Show Cause',
+            eventCode: 'OSCP',
+          },
+          eventCode: 'NOT',
         },
-        eventCode: 'NOT',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -217,19 +228,23 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('should not populate free text for OF', async () => {
     const mockDocumentTitle = 'Order for Filing Fee Title';
 
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: mockDocumentTitle,
-        documentType: 'Notice',
-        draftOrderState: {
-          documentType: 'Order for Filing Fee',
-          eventCode: 'OF',
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: mockDocumentTitle,
+          documentType: 'Notice',
+          draftOrderState: {
+            documentType: 'Order for Filing Fee',
+            eventCode: 'OF',
+          },
+          eventCode: 'NOT',
         },
-        eventCode: 'NOT',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -255,19 +270,23 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('should not populate free text for OAP', async () => {
     const mockDocumentTitle = 'Order for Amended Petition Title';
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: mockDocumentTitle,
-        documentType: 'Notice',
-        draftOrderState: {
-          documentType: 'Order for Amended Petition',
-          eventCode: 'OAP',
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: mockDocumentTitle,
+          documentType: 'Notice',
+          draftOrderState: {
+            documentType: 'Order for Amended Petition',
+            eventCode: 'OAP',
+          },
+          eventCode: 'NOT',
         },
-        eventCode: 'NOT',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -292,15 +311,19 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should not update freeText on existing document within case if not an order type', async () => {
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Notice Title',
-        documentType: 'Notice',
-        eventCode: 'A',
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Notice Title',
+          documentType: 'Notice',
+          eventCode: 'A',
+        },
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -327,23 +350,27 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('stores documentContents in S3 if present', async () => {
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: 'the contents!',
-        documentType: 'Order to Show Cause',
-        draftOrderState: {
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
           documentContents: 'the contents!',
+          documentType: 'Order to Show Cause',
+          draftOrderState: {
+            documentContents: 'the contents!',
+            richText: '<b>the contents!</b>',
+          },
+          eventCode: 'OSC',
           richText: '<b>the contents!</b>',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
         },
-        eventCode: 'OSC',
-        richText: '<b>the contents!</b>',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -362,31 +389,35 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('should still contain the case caption in documentContents when edited', async () => {
     let mockContents = 'the contents!';
 
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: mockContents,
-        documentType: 'Order to Show Cause',
-        draftOrderState: {
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
           documentContents: mockContents,
+          documentType: 'Order to Show Cause',
+          draftOrderState: {
+            documentContents: mockContents,
+            richText: '<b>the contents!</b>',
+          },
+          eventCode: 'OSC',
           richText: '<b>the contents!</b>',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
         },
-        eventCode: 'OSC',
-        richText: '<b>the contents!</b>',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
-    const newCaseEntity = new Case(caseRecord, { applicationContext });
+    const newCaseEntity = new Case(caseRecord, {
+      authorizedUser: mockPetitionerUser,
+    });
 
     const expectedDocumentContents =
       mockContents +
       ` ${newCaseEntity.docketNumberWithSuffix} ${newCaseEntity.caseCaption}`;
-
-    console.log('expectedDocumentContents', expectedDocumentContents);
 
     const expectedContentsToStore = {
       documentContents: expectedDocumentContents,
@@ -402,16 +433,20 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('does not update non-editable fields on document', async () => {
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentType: 'Order to Show Cause',
-        draftOrderState: undefined,
-        eventCode: 'OSC',
-        judge: 'Judge Judgy',
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentType: 'Order to Show Cause',
+          draftOrderState: undefined,
+          eventCode: 'OSC',
+          judge: 'Judge Judgy',
+        },
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -426,7 +461,34 @@ describe('updateCourtIssuedOrderInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      updateCourtIssuedOrderInteractor(applicationContext, {
+      updateCourtIssuedOrderInteractor(
+        applicationContext,
+        {
+          docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+            documentType: 'Notice',
+            draftOrderState: {
+              documentType: 'Order of Dismissal for Lack of Jurisdiction',
+              eventCode: 'ODJ',
+            },
+            eventCode: 'NOT',
+          },
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updateCourtIssuedOrderInteractor(
+      applicationContext,
+      {
         docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
@@ -438,28 +500,9 @@ describe('updateCourtIssuedOrderInteractor', () => {
           },
           eventCode: 'NOT',
         },
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should acquire and remove the lock on the case', async () => {
-    await updateCourtIssuedOrderInteractor(applicationContext, {
-      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-        documentType: 'Notice',
-        draftOrderState: {
-          documentType: 'Order of Dismissal for Lack of Jurisdiction',
-          eventCode: 'ODJ',
-        },
-        eventCode: 'NOT',
       },
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

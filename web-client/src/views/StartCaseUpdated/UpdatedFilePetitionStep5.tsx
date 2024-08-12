@@ -2,6 +2,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -12,9 +13,10 @@ import classNames from 'classnames';
 export const UpdatedFilePetitionStep5 = connect(
   {
     constants: state.constants,
+    user: state.user,
     validationErrors: state.validationErrors,
   },
-  function UpdatedFilePetitionStep5({ constants, validationErrors }) {
+  function UpdatedFilePetitionStep5({ constants, user, validationErrors }) {
     return (
       <>
         <div className="margin-bottom-5">
@@ -25,8 +27,9 @@ export const UpdatedFilePetitionStep5 = connect(
                   The Statement of Taxpayer Identification Number is the only
                   document that should include Social Security Numbers, Taxpayer
                   Identification Numbers, or Employer Identification Numbers.
-                  It&apos;s sent to the IRS to help identify you but is{' '}
-                  <b>never visible as part of the case record.</b>
+                  It&apos;s sent to the IRS to help identify{' '}
+                  {user.role === ROLES.petitioner ? 'you' : 'the petitioner'}{' '}
+                  but is <b>never visible as part of the case record.</b>
                 </>
               ),
             }}

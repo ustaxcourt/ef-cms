@@ -13,7 +13,7 @@ export const assignPetitionToAuthenticatedUserAction = async ({
 }: ActionProps) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { docketEntries } = get(state.caseDetail);
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const petitionDocument = docketEntries.find(
     document =>
