@@ -143,8 +143,9 @@ export const judgeColvin: RawUser = {
   userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
 };
 
-export const petitionerUser = {
+export const petitionerUser: RawUser = {
   email: 'petitioner@example.com',
+  entityName: 'User',
   name: 'Tax Payer',
   role: ROLES.petitioner,
   section: 'petitioner',
@@ -154,6 +155,7 @@ export const petitionerUser = {
 export const privatePractitionerUser = {
   barNumber: 'BN1234',
   email: 'privatePractitioner@example.com',
+  entityName: 'User',
   name: 'Private Practitioner',
   role: ROLES.privatePractitioner,
   section: 'privatePractitioner',

@@ -44,9 +44,24 @@ export type ContactSecondary = Contact & {
   paperPetitionEmail?: string;
 };
 
+export type ContactCounsel = {
+  name: string;
+  firmName: string;
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  phone: string;
+  email: string;
+  barNumber: string;
+};
+
 export interface PetitionPdfBase {
   caseCaptionExtension: string;
   caseTitle: string;
+  contactCounsel?: ContactCounsel;
   contactPrimary: Contact;
   contactSecondary?: ContactSecondary;
   hasUploadedIrsNotice: boolean;
@@ -62,6 +77,7 @@ export const generatePetitionPdfInteractor = async (
   {
     caseCaptionExtension,
     caseTitle,
+    contactCounsel,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
@@ -91,6 +107,7 @@ export const generatePetitionPdfInteractor = async (
       caseCaptionExtension,
       caseDescription,
       caseTitle,
+      contactCounsel,
       contactPrimary,
       contactSecondary,
       hasUploadedIrsNotice,

@@ -19,6 +19,7 @@ export const Petition = ({
   caseCaptionExtension,
   caseDescription,
   caseTitle,
+  contactCounsel,
   contactPrimary,
   contactSecondary,
   hasUploadedIrsNotice,
@@ -40,6 +41,8 @@ export const Petition = ({
   );
 
   const noticesDontHaveTaxYear = irsNotices.every(notice => !notice.taxYear);
+
+  const isPetitioner = !contactCounsel;
   return (
     <div id="petition-pdf">
       <PetitionPrimaryHeader />
@@ -164,8 +167,8 @@ export const Petition = ({
           Access to Case Files,&quot; available at{' '}
           <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>.
         </div>
-        <div>
-          <div className="address-label petitioner-info">
+        <div className="petition-contact">
+          <div className="petition-contact-info">
             <b>Petitioner&apos;s contact information:</b>
             <div>{contactPrimary.name}</div>
             {contactPrimary.secondaryName && (
@@ -203,56 +206,92 @@ export const Petition = ({
                 {ALL_STATE_OPTIONS[contactPrimary.placeOfLegalResidence]}
               </div>
             )}
-            <div>
-              <b>Service email: </b>
-              {contactPrimary.email}
-            </div>
+            {isPetitioner && (
+              <div>
+                <b>Service email: </b>
+                {contactPrimary.email}
+              </div>
+            )}
+          </div>
+          <div className="petition-contact-info">
+            {contactSecondary && (
+              <div>
+                <b>Spouse&apos;s contact information:</b>
+                <div>{contactSecondary.name}</div>
+                {contactSecondary.inCareOf && (
+                  <div>
+                    <span>c/o: </span>
+                    {contactSecondary.inCareOf}
+                  </div>
+                )}
+                <div>{contactSecondary.address1}</div>
+                {contactSecondary.address2 && (
+                  <div>{contactSecondary.address2}</div>
+                )}
+                {contactSecondary.address3 && (
+                  <div>{contactSecondary.address3}</div>
+                )}
+                <div>
+                  {contactSecondary.city}, {contactSecondary.state}{' '}
+                  {contactSecondary.postalCode}
+                </div>
+                {contactSecondary.countryType ===
+                  COUNTRY_TYPES.INTERNATIONAL && (
+                  <div>{contactSecondary.country}</div>
+                )}
+                <div>
+                  {contactSecondary.phone
+                    ? contactSecondary.phone
+                    : 'Phone number not provided'}
+                </div>
+                {isPetitioner && contactSecondary.paperPetitionEmail && (
+                  <div>{contactSecondary.paperPetitionEmail}</div>
+                )}
+                {isPetitioner && (
+                  <div>
+                    <b>Register for electronic filing and service: </b>
+                    {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}
+                  </div>
+                )}
+                {contactSecondary.placeOfLegalResidence && (
+                  <div>
+                    <b>Place of legal residence: </b>
+                    {ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
-        {contactSecondary && (
-          <div className="address-label petitioner-info">
-            <b>Spouse&apos;s contact information:</b>
-            <div>{contactSecondary.name}</div>
-            {contactSecondary.inCareOf && (
+        <div className="petition-contact">
+          <div className="petition-contact-info">
+            {contactCounsel && (
               <div>
-                <span>c/o: </span>
-                {contactSecondary.inCareOf}
-              </div>
-            )}
-            <div>{contactSecondary.address1}</div>
-            {contactSecondary.address2 && (
-              <div>{contactSecondary.address2}</div>
-            )}
-            {contactSecondary.address3 && (
-              <div>{contactSecondary.address3}</div>
-            )}
-            <div>
-              {contactSecondary.city}, {contactSecondary.state}{' '}
-              {contactSecondary.postalCode}
-            </div>
-            {contactSecondary.countryType === COUNTRY_TYPES.INTERNATIONAL && (
-              <div>{contactSecondary.country}</div>
-            )}
-            <div>
-              {contactSecondary.phone
-                ? contactSecondary.phone
-                : 'Phone number not provided'}
-            </div>
-            {contactSecondary.paperPetitionEmail && (
-              <div>{contactSecondary.paperPetitionEmail}</div>
-            )}
-            <div>
-              <b>Register for electronic filing and service: </b>
-              {contactSecondary.hasConsentedToEService ? 'Yes' : 'No'}
-            </div>
-            {contactSecondary.placeOfLegalResidence && (
-              <div>
-                <b>Place of legal residence: </b>
-                {ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]}
+                <b>Counsel&apos;s contact information:</b>
+                <div>{contactCounsel.name}</div>
+                <div>{contactCounsel.firmName}</div>
+                <div>{contactCounsel.address1}</div>
+                {contactCounsel.address2 && (
+                  <div>{contactCounsel.address2}</div>
+                )}
+                {contactCounsel.address3 && (
+                  <div>{contactCounsel.address3}</div>
+                )}
+                <div>
+                  {contactCounsel.city}, {contactCounsel.state}{' '}
+                  {contactCounsel.postalCode}
+                </div>
+                <div>{contactCounsel.phone}</div>
+                <div>{contactCounsel.email}</div>
+
+                <div>
+                  <b>Tax Court Bar No.: </b>
+                  {contactCounsel.barNumber}
+                </div>
               </div>
             )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
