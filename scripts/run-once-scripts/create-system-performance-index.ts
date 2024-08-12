@@ -1,18 +1,16 @@
 import { Client } from '@opensearch-project/opensearch';
-import { systemPerformanceLogsMappings, systemPerformanceLogsIndex } from '../../web-api/elasticsearch/system-performance-logs-mappings';
+import {
+  systemPerformanceLogsMappings,
+  systemPerformanceLogsIndex,
+} from '../../web-api/elasticsearch/system-performance-logs-mappings';
 import {
   esSettingsType,
   settings,
 } from '../../web-api/elasticsearch/elasticsearch-settings';
 import { getClient } from '../../web-api/elasticsearch/client';
-import {
-  requireEnvVars,
-} from '../../shared/admin-tools/util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars([
-	'ENV',
-	'ELASTICSEARCH_INFO_ENDPOINT',
-]);
+requireEnvVars(['ENV', 'ELASTICSEARCH_INFO_ENDPOINT']);
 
 const environmentName: string = process.env.ENV!;
 const elasticsearchEndpoint: string = process.env.ELASTICSEARCH_INFO_ENDPOINT!;
@@ -25,7 +23,10 @@ const esSettings: esSettingsType = settings({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const client: Client = await getClient({ elasticsearchEndpoint, environmentName });
+  const client: Client = await getClient({
+    elasticsearchEndpoint,
+    environmentName,
+  });
   const { body: indexExists } = await client.indices.exists({ index });
 
   if (indexExists) {
