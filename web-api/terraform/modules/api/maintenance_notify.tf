@@ -9,4 +9,7 @@ module "maintenance_notify_lambda" {
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
+
+  security_group_ids = var.security_group_ids
+  subnet_ids         = var.subnet_ids
 }

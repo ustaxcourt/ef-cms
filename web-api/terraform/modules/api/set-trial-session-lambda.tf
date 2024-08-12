@@ -8,6 +8,9 @@ module "set_trial_session_lambda" {
   environment    = var.lambda_environment
   timeout        = "30"
   memory_size    = "3008"
+
+  security_group_ids = var.security_group_ids
+  subnet_ids         = var.subnet_ids
 }
 
 resource "aws_lambda_event_source_mapping" "calendar_trial_session_mapping" {
