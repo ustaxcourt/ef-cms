@@ -6,13 +6,15 @@ export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
   const lastIdleAction = get(state.lastIdleAction);
   const idleLogoutState = get(state.idleLogoutState);
   const isUploading = get(state.fileUploadProgress.isUploading);
-  const user = get(state.user);
+  const userIsLoggedIn = !!get(state.token);
+  const clientNeedsToRefresh = get(state.clientNeedsToRefresh);
 
-  if (
-    user &&
-    !isUploading &&
-    idleLogoutState.state === IDLE_LOGOUT_STATES.INITIAL
-  ) {
+  // Short-circuit here to prevent showing the "Are you still there?" modal, etc. when inappropriate
+  if (!userIsLoggedIn || clientNeedsToRefresh) {
+    return path.continue();
+  }
+
+  if (!isUploading && idleLogoutState.state === IDLE_LOGOUT_STATES.INITIAL) {
     store.set(state.idleLogoutState, {
       logoutAt:
         Date.now() +
@@ -20,7 +22,10 @@ export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
         constants.SESSION_TIMEOUT,
       state: IDLE_LOGOUT_STATES.MONITORING,
     });
-  } else if (idleLogoutState.state === IDLE_LOGOUT_STATES.MONITORING) {
+    return path.continue();
+  }
+
+  if (idleLogoutState.state === IDLE_LOGOUT_STATES.MONITORING) {
     if (Date.now() > lastIdleAction + constants.SESSION_TIMEOUT) {
       store.set(state.idleLogoutState, {
         logoutAt:
@@ -30,7 +35,10 @@ export const handleIdleLogoutAction = ({ get, path, store }: ActionProps) => {
         state: IDLE_LOGOUT_STATES.COUNTDOWN,
       });
     }
-  } else if (idleLogoutState.state === IDLE_LOGOUT_STATES.COUNTDOWN) {
+    return path.continue();
+  }
+
+  if (idleLogoutState.state === IDLE_LOGOUT_STATES.COUNTDOWN) {
     if (Date.now() > idleLogoutState.logoutAt) {
       store.set(state.idleLogoutState, {
         logoutAt: undefined,
