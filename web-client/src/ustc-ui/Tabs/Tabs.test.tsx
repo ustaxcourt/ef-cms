@@ -104,7 +104,24 @@ describe('TabsComponent', () => {
     );
   });
 
-  it('should use a span tag for tab label if no headingLevel parameter is provided', () => {
+  it('should render tab heading when heading level is specified', () => {
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <TabsComponent headingLevel="2">
+          <Tab tabName="myTabName" title="Heading Level Two">
+            Some content
+          </Tab>
+        </TabsComponent>,
+      );
+    });
+
+    const testInstance = testRenderer.root;
+
+    expect(testInstance.findByType('h2')).toBeDefined();
+  });
+
+  it('should not render tab heading when heading level is unspecified', () => {
     let testRenderer;
     act(() => {
       testRenderer = TestRenderer.create(
@@ -115,23 +132,17 @@ describe('TabsComponent', () => {
     });
 
     const testInstance = testRenderer.root;
+    let hElement = null;
+    for (const h of ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
+      try {
+        hElement = testInstance.findByType(h);
+        break;
+      } catch (error) {
+        // Element not found
+      }
+    }
 
-    expect(testInstance.findByType('span')).toBeDefined();
-  });
-
-  it('should render tab label within the proper heading tag if headingLevel parameter is present', () => {
-    let testRenderer;
-    act(() => {
-      testRenderer = TestRenderer.create(
-        <TabsComponent headingLevel="2">
-          <Tab tabName="myTabName" title="Heading Level Two" />
-        </TabsComponent>,
-      );
-    });
-
-    const testInstance = testRenderer.root;
-
-    expect(testInstance.findByType('h2')).toBeDefined();
+    expect(hElement).toBeNull();
   });
 
   it('should create a default tab element id if one is not provided', () => {
@@ -170,7 +181,7 @@ describe('TabsComponent', () => {
     const testInstance = testRenderer.root;
 
     expect(
-      testInstance.findByProps({ id: 'tab-with-content' }).parent.props[
+      testInstance.findByProps({ id: 'tab-with-content' }).props[
         'aria-controls'
       ],
     ).toEqual('tabContent-withContent');
