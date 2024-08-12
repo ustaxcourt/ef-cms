@@ -72,7 +72,9 @@ export const UpdatedFilePetitionStep3 = connect(
       <>
         <div className="padding-bottom-0 margin-bottom-1">
           <div>
-            <h2>{startCaseHelper.noticeLegend}</h2>
+            <h2 data-testid="has-irs-notice-legend">
+              {startCaseHelper.noticeLegend}
+            </h2>
             <FormGroup
               className="irs-notice-form"
               errorText={validationErrors.hasIrsNotice}
