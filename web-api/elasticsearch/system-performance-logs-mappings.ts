@@ -2,25 +2,25 @@ export const systemPerformanceLogsMappings = {
   properties: {
     actionPerformanceArray: {
       properties: {
-        'actionName.S': {
+        actionName: {
           type: 'keyword',
         },
-        'duration.N': {
-          type: 'integer',
+        duration: {
+          type: 'float',
         },
       },
       type: 'nested',
     },
-    'date.S': {
+    date: {
       type: 'date',
     },
-    'duration.N': {
-      type: 'integer',
+    duration: {
+      type: 'float',
     },
-    'email.S': {
+    email: {
       type: 'text',
     },
-    'sequenceName.S': {
+    sequenceName: {
       type: 'keyword',
     },
   },
