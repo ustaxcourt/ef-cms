@@ -7,6 +7,9 @@ module "api_public_lambda" {
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
+
+  security_group_ids = var.security_group_ids
+  subnet_ids         = var.subnet_ids
 }
 
 module "public_api_authorizer_lambda" {
@@ -18,6 +21,9 @@ module "public_api_authorizer_lambda" {
   environment    = var.lambda_environment
   timeout        = "29"
   memory_size    = "3008"
+
+  security_group_ids = var.security_group_ids
+  subnet_ids         = var.subnet_ids
 }
 
 
