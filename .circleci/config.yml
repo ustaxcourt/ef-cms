@@ -236,10 +236,11 @@ jobs:
             OUTPUT_ONLY=true npm run deploy:allColors $ENV
             POSTGRES_HOST=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.rds_host_name.value')
             TUNNEL_IP=$(cat ./web-api/terraform/applyables/allColors/output.json | jq -r '.tunnel_ip.value')
-            echo $TUNNEL_KEY | base64 --decode > ~/.ssh/tunnel-private-key.pem
+            echo "${TUNNEL_KEY}" | base64 --decode > ~/.ssh/tunnel-private-key.pem
+            echo "127.0.0.1 ${POSTGRES_HOST}" >> /etc/hosts
             chmod 400 ~/.ssh/tunnel-private-key.pem
-            ssh -i ~/.ssh/tunnel-private-key.pem -L 5432:$POSTGRES_HOST:5432 ec2-user@$TUNNEL_IP &
-            NODE_ENV=production npm run migration:postgres
+            ssh -N -f -4 -i ~/.ssh/tunnel-private-key.pem -L 5432:$POSTGRES_HOST:5432 ec2-user@$TUNNEL_IP
+            POSTGRES_HOST=$POSTGRES_HOST POSTGRES_PASSWORD=$POSTGRES_PASSWORD POSTGRES_USER=$POSTGRES_USER CIRCLE_BRANCH=$CIRCLE_BRANCH npm run migration:postgres
       - run:
           name: Enable Check Migration Status Cron
           command: |
