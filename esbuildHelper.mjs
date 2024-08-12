@@ -66,6 +66,7 @@ export default async function ({
     entryNames: '[name].[hash]',
     entryPoints: [`web-client/src/${entryPoint}`],
     format: 'esm',
+    keepNames: true,
     loader: {
       '.html': 'text',
       '.pdf': 'file',
