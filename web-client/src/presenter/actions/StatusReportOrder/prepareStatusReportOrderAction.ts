@@ -37,8 +37,8 @@ export const prepareStatusReportOrderAction = ({
   const filedLine =
     isLeadCase &&
     issueOrder === STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup
-      ? `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in the lead case of the consolidated group (Index no. ${statusReportIndex}). For cause, it is</p>`
-      : `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed in this case (Index no. ${statusReportIndex}). For cause, it is</p>`;
+      ? `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Lead case index no. ${statusReportIndex}). For cause, it is</p>`
+      : `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Index no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType &&
