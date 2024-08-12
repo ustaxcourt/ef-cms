@@ -617,6 +617,7 @@ export const baseState = {
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   clientConnectionId: '',
+  clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
   coldCaseReport: {

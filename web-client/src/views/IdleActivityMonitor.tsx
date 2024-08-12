@@ -9,6 +9,7 @@ export const IdleActivityMonitor = connect(
   {
     broadcastIdleStatusActiveSequence:
       sequences.broadcastIdleStatusActiveSequence,
+    clientNeedsToRefresh: state.clientNeedsToRefresh,
     constants: state.constants,
     handleIdleLogoutSequence: sequences.handleIdleLogoutSequence,
     lastIdleAction: state.lastIdleAction,
@@ -17,6 +18,7 @@ export const IdleActivityMonitor = connect(
   },
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
+    clientNeedsToRefresh,
     constants,
     handleIdleLogoutSequence,
     lastIdleAction,
@@ -49,6 +51,11 @@ export const IdleActivityMonitor = connect(
     }, []);
 
     useEffect(() => {
+      // The user needs to refresh, so stop tracking idle timeout
+      if (clientNeedsToRefresh) {
+        return;
+      }
+
       const interval = setInterval(() => {
         handleIdleLogoutSequence();
       }, 1000);

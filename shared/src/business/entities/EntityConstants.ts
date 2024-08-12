@@ -1686,7 +1686,8 @@ export type CreatedCaseType = {
   };
 };
 
-export const LOGOUT_BROADCAST_MESSAGES = {
+export const BROADCAST_MESSAGES = {
+  appHasUpdated: 'appHasUpdated',
   userLogout: 'userLogout',
   idleLogout: 'idleLogout',
   idleStatusActive: 'idleStatusActive',
@@ -1703,8 +1704,8 @@ export type IdleLogoutStateType =
   (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
 
 export type IdleLogoutType =
-  | (typeof LOGOUT_BROADCAST_MESSAGES)['idleLogout']
-  | (typeof LOGOUT_BROADCAST_MESSAGES)['userLogout'];
+  | (typeof BROADCAST_MESSAGES)['idleLogout']
+  | (typeof BROADCAST_MESSAGES)['userLogout'];
 
 export const STATUS_REPORT_ORDER_OPTIONS = {
   issueOrderOptions: {
