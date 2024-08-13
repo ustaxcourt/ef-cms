@@ -16,7 +16,7 @@ terraform {
   backend "s3" {}
 
   required_providers {
-    aws = "5.57.0"
+    aws = "5.61.0"
     opensearch = {
       source  = "opensearch-project/opensearch"
       version = "2.2.0"
