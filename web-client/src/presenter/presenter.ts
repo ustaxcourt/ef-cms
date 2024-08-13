@@ -1655,27 +1655,17 @@ function wrapActionsWithPerformanceLogic(structure) {
         args[0].props['actionPerformanceArray'] = [];
       }
 
+      const actionName = structure?.name;
       const startTime: number = DateTime.now().toMillis();
       const result = structure(...args);
       if (result instanceof Promise) {
         return result.then(actionResults => {
-          const endTime: number = DateTime.now().toMillis();
-          if (structure?.name)
-            args[0].props['actionPerformanceArray'].push({
-              actionName: structure?.name,
-              duration: (endTime - startTime) / 1000,
-            });
-
+          logActionDuration({ actionName, args, startTime });
           return actionResults;
         });
       }
 
-      const endTime: number = DateTime.now().toMillis();
-      if (structure?.name)
-        args[0].props['actionPerformanceArray'].push({
-          actionName: structure?.name,
-          duration: (endTime - startTime) / 1000,
-        });
+      logActionDuration({ actionName, args, startTime });
 
       return result;
     };
@@ -1683,6 +1673,23 @@ function wrapActionsWithPerformanceLogic(structure) {
     return structure;
   }
 }
+
+const logActionDuration = ({
+  actionName,
+  args,
+  startTime,
+}: {
+  actionName: string;
+  args: any;
+  startTime: number;
+}) => {
+  const endTime: number = DateTime.now().toMillis();
+  if (actionName)
+    args[0].props['actionPerformanceArray'].push({
+      actionName,
+      duration: (endTime - startTime) / 1000,
+    });
+};
 
 /**
  * Main Cerebral module
@@ -1701,21 +1708,19 @@ export const presenter = {
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: Object.entries(presenterSequences).reduce(
     (acc, [sequenceName, sequence]) => {
-      if (Array.isArray(sequence)) {
-        const updatedSequence = [
-          function (
-            ...args: Parameters<typeof performanceMeasurementStartAction>
-          ) {
-            args[0].props['sequenceName'] = sequenceName;
-            return performanceMeasurementStartAction(...args);
-          },
-          ...wrapActionsWithPerformanceLogic(sequence),
-          performanceMeasurementEndAction,
-        ];
-        acc[sequenceName] = updatedSequence;
-        return acc;
-      }
-      acc[sequenceName] = sequence;
+      if (!Array.isArray(sequence))
+        throw new Error('Cerebral sequence is not an array');
+      const updatedSequence = [
+        function (
+          ...args: Parameters<typeof performanceMeasurementStartAction>
+        ) {
+          args[0].props['sequenceName'] = sequenceName;
+          return performanceMeasurementStartAction(...args);
+        },
+        ...wrapActionsWithPerformanceLogic(sequence),
+        performanceMeasurementEndAction,
+      ];
+      acc[sequenceName] = updatedSequence;
       return acc;
     },
     presenterSequences,
