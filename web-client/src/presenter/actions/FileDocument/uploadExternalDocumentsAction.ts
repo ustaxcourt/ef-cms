@@ -1,4 +1,4 @@
-import { FileUploadProgressMapType } from '@shared/business/entities/EntityConstants';
+import { FileUploadProgressType } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
@@ -16,7 +16,7 @@ export const uploadExternalDocumentsAction = async ({
   path,
   props,
 }: ActionProps<{
-  fileUploadProgressMap: FileUploadProgressMapType;
+  fileUploadProgressMap: Record<string, FileUploadProgressType>;
   files: File;
   documentMetadata: any;
 }>) => {

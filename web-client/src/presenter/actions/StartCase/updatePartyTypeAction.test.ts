@@ -143,6 +143,24 @@ describe('updatePartyTypeAction', () => {
     expect(state.form.minorIncompetentType).toBeUndefined();
   });
 
+  it('should unset the partyType when key is "otherType" and value is not a valid type', async () => {
+    const { state } = await runAction(
+      updatePartyTypeAction,
+      getFixtures(
+        {
+          key: 'otherType',
+          value: 'SOMETHING_RANDOM',
+        },
+        {
+          form: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+        },
+      ),
+    );
+    expect(state.form.partyType).toBeUndefined();
+  });
+
   it('sets the partyType to the props.value passed in when the key is "estateType" and set form.otherType to "An estate or trust"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,

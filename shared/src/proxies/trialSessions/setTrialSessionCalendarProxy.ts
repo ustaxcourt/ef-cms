@@ -10,10 +10,14 @@ import { post } from '../requests';
  */
 export const setTrialSessionCalendarInteractor = (
   applicationContext,
-  { trialSessionId },
-) => {
+  {
+    clientConnectionId,
+    trialSessionId,
+  }: { trialSessionId: string; clientConnectionId: string },
+): Promise<void> => {
   return post({
     applicationContext,
-    endpoint: `/trial-sessions/${trialSessionId}/set-calendar`,
+    body: { clientConnectionId },
+    endpoint: `/async/trial-sessions/${trialSessionId}/set-calendar`,
   });
 };

@@ -64,6 +64,7 @@ import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
@@ -131,6 +132,7 @@ export class Case extends JoiValidationEntity {
   public docketNumberWithSuffix?: string;
   public canAllowDocumentService?: boolean;
   public canAllowPrintableDocketRecord!: boolean;
+  public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed?: boolean;
@@ -148,10 +150,12 @@ export class Case extends JoiValidationEntity {
     rawCase: any,
     {
       applicationContext,
+      authorizedUser,
       filtered = false,
       isNewCase = false,
     }: {
       applicationContext: IApplicationContext;
+      authorizedUser?: UnknownAuthUser;
       filtered?: boolean;
       isNewCase?: boolean;
     },
@@ -164,7 +168,7 @@ export class Case extends JoiValidationEntity {
 
     this.petitioners = [];
     this.correspondence = [];
-    const currentUser = applicationContext.getCurrentUser();
+    const currentUser = authorizedUser || applicationContext.getCurrentUser();
 
     if (!filtered || User.isInternalUser(currentUser.role)) {
       this.assignFieldsForInternalUsers({
@@ -173,7 +177,7 @@ export class Case extends JoiValidationEntity {
       });
     }
 
-    const params = { applicationContext, filtered, rawCase };
+    const params = { applicationContext, authorizedUser, filtered, rawCase };
 
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
@@ -397,6 +401,7 @@ export class Case extends JoiValidationEntity {
       .meta({ tags: ['Restricted'] }),
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
+    canDojPractitionersRepresentParty: joi.boolean().optional(),
     caseCaption: CASE_CAPTION_RULE.messages({ '*': 'Enter a case caption' }),
     caseNote: JoiValidationConstants.STRING.max(9000)
       .optional()
@@ -777,7 +782,12 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  assignDocketEntries({ applicationContext, filtered, rawCase }) {
+  assignDocketEntries({
+    applicationContext,
+    authorizedUser,
+    filtered,
+    rawCase,
+  }) {
     if (Array.isArray(rawCase.docketEntries)) {
       this.docketEntries = rawCase.docketEntries
         .map(
@@ -792,12 +802,13 @@ export class Case extends JoiValidationEntity {
 
       this.isSealed = isSealedCase(rawCase);
 
+      const user = authorizedUser || applicationContext.getCurrentUser();
+
       if (
         filtered &&
-        applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
-        ((applicationContext.getCurrentUser().role !== ROLES.petitionsClerk &&
-          applicationContext.getCurrentUser().role !==
-            ROLES.caseServicesSupervisor) ||
+        user.role !== ROLES.irsSuperuser &&
+        ((user.role !== ROLES.petitionsClerk &&
+          user.role !== ROLES.caseServicesSupervisor) ||
           this.getIrsSendDate())
       ) {
         this.docketEntries = this.docketEntries.filter(
@@ -1106,7 +1117,13 @@ export class Case extends JoiValidationEntity {
    *
    * @returns {Case} the updated case entity
    */
-  updateCaseCaptionDocketRecord({ applicationContext }) {
+  updateCaseCaptionDocketRecord({
+    applicationContext,
+    authorizedUser,
+  }: {
+    applicationContext: any;
+    authorizedUser?: UnknownAuthUser;
+  }) {
     const caseCaptionRegex =
       /^Caption of case is amended from '(.*)' to '(.*)'/;
     let lastCaption = this.initialCaption;
@@ -1123,7 +1140,7 @@ export class Case extends JoiValidationEntity {
       this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
 
     if (needsCaptionChangedRecord) {
-      const user = applicationContext.getCurrentUser();
+      const user = authorizedUser || applicationContext.getCurrentUser();
 
       const mincDocketEntry = new DocketEntry(
         {
@@ -1150,7 +1167,13 @@ export class Case extends JoiValidationEntity {
    *
    * @returns {Case} the updated case entity
    */
-  updateDocketNumberRecord({ applicationContext }) {
+  updateDocketNumberRecord({
+    applicationContext,
+    authorizedUser,
+  }: {
+    applicationContext: any;
+    authorizedUser?: UnknownAuthUser;
+  }) {
     const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
     let lastDocketNumber =
@@ -1173,7 +1196,7 @@ export class Case extends JoiValidationEntity {
       lastDocketNumber !== newDocketNumber && !this.isPaper;
 
     if (needsDocketNumberChangeRecord) {
-      const user = applicationContext.getCurrentUser();
+      const user = authorizedUser || applicationContext.getCurrentUser();
 
       const mindDocketEntry = new DocketEntry(
         {
@@ -2127,6 +2150,10 @@ export const canAllowPrintableDocketRecord = rawCase => {
     return rawCase.canAllowPrintableDocketRecord;
   }
   return rawCase.status !== CASE_STATUS_TYPES.new;
+};
+
+export const canDojPractitionersRepresentPartyForCase = (rawCase: RawCase) => {
+  return rawCase.status === CASE_STATUS_TYPES.onAppeal;
 };
 
 /**

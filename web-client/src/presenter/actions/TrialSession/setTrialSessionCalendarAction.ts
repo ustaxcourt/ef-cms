@@ -12,12 +12,17 @@ export const setTrialSessionCalendarAction = async ({
   get,
 }: ActionProps) => {
   const trialSessionId = get(state.trialSession.trialSessionId);
+  const clientConnectionId = get(state.clientConnectionId);
+  if (!trialSessionId) {
+    throw new Error('Unable to set trial session without a trial sessionId');
+  }
 
-  const trialSession = await applicationContext
+  await applicationContext
     .getUseCases()
     .setTrialSessionCalendarInteractor(applicationContext, {
+      clientConnectionId,
       trialSessionId,
     });
 
-  return { trialSessionId: trialSession.trialSessionId };
+  return { trialSessionId };
 };

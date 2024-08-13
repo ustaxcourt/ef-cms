@@ -7,13 +7,9 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getPublicJudgesLambda = event => {
-  return genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getJudgesForPublicSearchInteractor(applicationContext);
-    },
-    { user: {} },
-  );
+  return genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .getJudgesForPublicSearchInteractor(applicationContext);
+  });
 };
