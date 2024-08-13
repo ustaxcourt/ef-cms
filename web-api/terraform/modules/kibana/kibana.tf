@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_cognito_user_pool" "log_viewers" {
   name = "log_viewers"
   password_policy {
@@ -87,25 +89,6 @@ resource "aws_opensearch_domain" "efcms-logs" {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_kibana_logs.arn
     log_type                 = "ES_APPLICATION_LOGS"
   }
-}
-
-resource "aws_elasticsearch_domain_policy" "kibana_access" {
-  domain_name     = aws_opensearch_domain.efcms-logs.domain_name
-  access_policies = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect":"Allow",
-      "Principal": {
-        "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
-      },
-      "Action": "es:ESHttp*",
-      "Resource":"${aws_opensearch_domain.efcms-logs.arn}/*"
-    }
-  ]
-}
-POLICY
 }
 
 resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs" {
