@@ -85,4 +85,5 @@ export const prepareStatusReportOrderAction = ({
   store.set(state.form.richText, richText);
   store.set(state.form.statusReportFilingDate, statusReportFilingDate);
   store.set(state.form.statusReportIndex, statusReportIndex);
+  store.set(state.form.parentMessageId, get(state.parentMessageId));
 };
