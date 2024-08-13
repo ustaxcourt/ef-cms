@@ -1,4 +1,4 @@
-name: Typescript Untouched File Check
+name: Typescript File Check
 
 on:
   pull_request:
@@ -40,4 +40,4 @@ jobs:
         run: npm ci
 
       - name: Check untouched files
-        run: npx ts-node scripts/checkUntouchedFiles.ts
+        run: npx ts-node scripts/checkAllFilesForTypeErrorCount.ts
