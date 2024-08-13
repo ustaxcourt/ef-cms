@@ -482,10 +482,7 @@ describe('ElectronicPetition entity', () => {
         },
         { applicationContext },
       );
-      console.log(
-        'electronicPetition.getFormattedValidationErrors()',
-        electronicPetition.getFormattedValidationErrors(),
-      );
+
       expect(
         electronicPetition.getFormattedValidationErrors()!
           .irsNoticesRedactionAcknowledgement,
