@@ -7,6 +7,8 @@ import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCase
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+// updated-petition-flow: can be removed when flag is removed
+
 export const createCaseAction = async ({
   applicationContext,
   get,
