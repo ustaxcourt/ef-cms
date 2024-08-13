@@ -1,9 +1,12 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addConsolidatedCaseInteractor } from './addConsolidatedCaseInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 let mockCases;
 let mockLock;
@@ -59,9 +62,6 @@ describe('addConsolidatedCaseInteractor', () => {
       },
     };
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
@@ -80,15 +80,15 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
-
     await expect(
-      addConsolidatedCaseInteractor(applicationContext, {
-        docketNumber: '519-19',
-        docketNumberToConsolidateWith: '319-19',
-      }),
+      addConsolidatedCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '519-19',
+          docketNumberToConsolidateWith: '319-19',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for case consolidation');
   });
 
@@ -96,10 +96,14 @@ describe('addConsolidatedCaseInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      addConsolidatedCaseInteractor(applicationContext, {
-        docketNumber: '519-19',
-        docketNumberToConsolidateWith: '319-19',
-      }),
+      addConsolidatedCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '519-19',
+          docketNumberToConsolidateWith: '319-19',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -108,10 +112,14 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the cases', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '519-19',
-      docketNumberToConsolidateWith: '319-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '319-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -126,10 +134,14 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should try to get the case by its docketNumber', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '519-19',
-      docketNumberToConsolidateWith: '319-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '319-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -138,27 +150,39 @@ describe('addConsolidatedCaseInteractor', () => {
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
     await expect(
-      addConsolidatedCaseInteractor(applicationContext, {
-        docketNumber: '111-11',
-        docketNumberToConsolidateWith: '319-19',
-      }),
+      addConsolidatedCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '111-11',
+          docketNumberToConsolidateWith: '319-19',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Case 111-11 was not found.');
   });
 
   it('Should return a Not Found error if the case to consolidate with cannot be found', async () => {
     await expect(
-      addConsolidatedCaseInteractor(applicationContext, {
-        docketNumber: '519-19',
-        docketNumberToConsolidateWith: '111-11',
-      }),
+      addConsolidatedCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '519-19',
+          docketNumberToConsolidateWith: '111-11',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Case to consolidate with (111-11) was not found.');
   });
 
   it('Should update the case to consolidate with if it does not already have the leadDocketNumber', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '519-19',
-      docketNumberToConsolidateWith: '320-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '320-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -166,10 +190,14 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should NOT update the case to consolidate with if it already has the leadDocketNumber and is the lead case', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '519-19',
-      docketNumberToConsolidateWith: '319-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '319-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -177,10 +205,14 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should update both cases with the leadDocketNumber if neither have one', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '519-19',
-      docketNumberToConsolidateWith: '319-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '519-19',
+        docketNumberToConsolidateWith: '319-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -192,10 +224,14 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should update all leadDocketNumber fields if the new case has the lower docket number', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '219-19',
-      docketNumberToConsolidateWith: '319-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '219-19',
+        docketNumberToConsolidateWith: '319-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -207,10 +243,14 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should combine all cases when both the case and case to consolidate with are in separate consolidated sets', async () => {
-    await addConsolidatedCaseInteractor(applicationContext, {
-      docketNumber: '119-19',
-      docketNumberToConsolidateWith: '419-19',
-    });
+    await addConsolidatedCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '119-19',
+        docketNumberToConsolidateWith: '419-19',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,

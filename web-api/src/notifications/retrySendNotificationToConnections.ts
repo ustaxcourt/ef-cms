@@ -1,15 +1,6 @@
-// eslint-disable-next-line spellcheck/spell-checker
 import { Connection } from '@web-api/notifications/sendNotificationToConnection';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * retrySendNotificationToConnections
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.connections the connections
- * @param {string} providers.messageStringified the messageStringified
- */
 export const retrySendNotificationToConnections = async ({
   applicationContext,
   connections,
@@ -34,10 +25,13 @@ export const retrySendNotificationToConnections = async ({
             messageStringified,
           });
         break;
-      } catch (err) {
+      } catch (err: any) {
         if (retryCount >= maxRetries && deleteGoneConnections) {
           const AWSWebSocketConnectionGone = 410;
-          if (err.statusCode === AWSWebSocketConnectionGone) {
+
+          if (
+            err?.['$metadata']?.httpStatusCode === AWSWebSocketConnectionGone
+          ) {
             try {
               await applicationContext
                 .getPersistenceGateway()

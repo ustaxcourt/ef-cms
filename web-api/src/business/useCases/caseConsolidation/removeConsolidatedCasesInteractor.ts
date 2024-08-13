@@ -5,6 +5,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -22,10 +23,9 @@ export const removeConsolidatedCases = async (
     docketNumber,
     docketNumbersToRemove,
   }: { docketNumber: string; docketNumbersToRemove: string[] },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
@@ -33,7 +33,7 @@ export const removeConsolidatedCases = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  if (!caseToUpdate) {
+  if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
@@ -61,13 +61,14 @@ export const removeConsolidatedCases = async (
 
     for (let newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
-        applicationContext,
+        authorizedUser,
       });
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         }),
       );
@@ -75,13 +76,14 @@ export const removeConsolidatedCases = async (
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
-      applicationContext,
+      authorizedUser,
     });
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );
@@ -101,12 +103,13 @@ export const removeConsolidatedCases = async (
       );
     }
 
-    const caseEntity = new Case(caseToRemove, { applicationContext });
+    const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );

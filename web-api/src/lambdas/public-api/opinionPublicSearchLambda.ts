@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { opinionPublicSearchInteractor } from '@web-api/business/useCases/public/opinionPublicSearchInteractor';
 
 /**
  * used for fetching opinions matching the given filters
@@ -7,18 +8,12 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const opinionPublicSearchLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const opinionTypes =
-        event.queryStringParameters.opinionTypes?.split(',') || [];
+  genericHandler(event, async ({ applicationContext }) => {
+    const opinionTypes =
+      event.queryStringParameters.opinionTypes?.split(',') || [];
 
-      return await applicationContext
-        .getUseCases()
-        .opinionPublicSearchInteractor(applicationContext, {
-          ...event.queryStringParameters,
-          opinionTypes,
-        });
-    },
-    { user: {} },
-  );
+    return await opinionPublicSearchInteractor(applicationContext, {
+      ...event.queryStringParameters,
+      opinionTypes,
+    });
+  });

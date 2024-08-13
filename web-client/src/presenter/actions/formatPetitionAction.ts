@@ -1,21 +1,25 @@
 import {
-  CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
-  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
+  CASE_TYPES_MAP,
+  ROLES,
 } from '@shared/business/entities/EntityConstants';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatPetitionAction = ({
   applicationContext,
+  get,
   props,
   store,
 }: ActionProps) => {
   const petitionInfo = {
-    ...props.step1Data,
-    ...props.step2Data,
-    ...props.step3Data,
-    ...props.step4Data,
-    ...props.step5Data,
+    ...props.createPetitionStep1Data,
+    ...props.createPetitionStep2Data,
+    ...props.createPetitionStep3Data,
+    ...props.createPetitionStep4Data,
+    ...props.createPetitionStep5Data,
   };
 
   const caseCaption =
@@ -27,37 +31,58 @@ export const formatPetitionAction = ({
     caseCaption,
   });
 
-  const caseDescription = petitionInfo.hasIrsNotice
-    ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[petitionInfo.caseType]
-    : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[petitionInfo.caseType];
-
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
-  const disclosureCaseTypes = ['Disclosure1', 'Disclosure2'];
-
-  if (disclosureCaseTypes.includes(petitionInfo.caseType)) {
-    petitionInfo.caseType = CASE_TYPES_MAP.disclosure;
-  }
+  petitionInfo.originalCaseType = petitionInfo.caseType;
+  petitionInfo.caseType = formatCaseType(petitionInfo.caseType);
 
   const { contactPrimary, irsNotices } = petitionInfo;
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   contactPrimary.email = user.email;
 
-  let noticeIssuedDate;
-  let taxYear;
+  const irsNoticesWithCaseTypes = irsNotices.map(irsNotice => {
+    return {
+      ...irsNotice,
+      caseType: formatCaseType(irsNotice.caseType),
+      originalCaseType: irsNotice.caseType,
+    };
+  });
 
-  if (irsNotices[0]) {
-    ({ noticeIssuedDate, taxYear } = irsNotices[0]);
-  }
+  const contactCounsel = isRawPractitioner(user)
+    ? {
+        address1: user.contact?.address1,
+        address2: user.contact?.address2,
+        address3: user.contact?.address3,
+        barNumber: user.barNumber,
+        city: user.contact?.city,
+        email: user.email,
+        firmName: user.firmName,
+        name: user.name,
+        phone: user.contact?.phone,
+        postalCode: user.contact?.postalCode,
+        state: user.contact?.state,
+      }
+    : undefined;
 
   store.set(state.petitionFormatted, {
     ...petitionInfo,
     caseCaption,
     caseCaptionExtension,
-    caseDescription,
     caseTitle,
+    contactCounsel,
     contactPrimary,
-    noticeIssuedDate,
-    taxYear,
+    irsNotices: irsNoticesWithCaseTypes,
   });
 };
+
+function formatCaseType(caseType: string) {
+  if (caseType === 'Disclosure1' || caseType === 'Disclosure2') {
+    return CASE_TYPES_MAP.disclosure;
+  }
+  return caseType;
+}
+
+function isRawPractitioner(
+  user: RawUser | RawPractitioner | RawIrsPractitioner,
+): user is RawPractitioner {
+  return user.role === ROLES.privatePractitioner;
+}

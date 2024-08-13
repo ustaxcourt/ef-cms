@@ -5,7 +5,9 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
 
 describe('strikeDocketEntryInteractor', () => {
@@ -41,7 +43,7 @@ describe('strikeDocketEntryInteractor', () => {
           contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'fieri@example.com',
-          name: 'Guy Fieri',
+          name: 'Roslindis Angelino',
           phone: '1234567890',
           postalCode: '12345',
           state: 'CA',
@@ -64,42 +66,40 @@ describe('strikeDocketEntryInteractor', () => {
   });
 
   it('should throw an error if not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      strikeDocketEntryInteractor(applicationContext, {
-        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
-        docketNumber: caseRecord.docketNumber,
-      }),
+      strikeDocketEntryInteractor(
+        applicationContext,
+        {
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
+          docketNumber: caseRecord.docketNumber,
+        },
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error if the docket record is not found on the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await expect(
-      strikeDocketEntryInteractor(applicationContext, {
-        docketEntryId: 'does-not-exist',
-        docketNumber: caseRecord.docketNumber,
-      }),
+      strikeDocketEntryInteractor(
+        applicationContext,
+        {
+          docketEntryId: 'does-not-exist',
+          docketNumber: caseRecord.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry not found');
   });
 
   it('should call getCaseByDocketNumber, getUserById, and updateDocketEntry', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    await strikeDocketEntryInteractor(applicationContext, {
-      docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
-      docketNumber: caseRecord.docketNumber,
-    });
+    await strikeDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
+        docketNumber: caseRecord.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -120,10 +120,14 @@ describe('strikeDocketEntryInteractor', () => {
     caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
-      strikeDocketEntryInteractor(applicationContext, {
-        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
-        docketNumber: caseRecord.docketNumber,
-      }),
+      strikeDocketEntryInteractor(
+        applicationContext,
+        {
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
+          docketNumber: caseRecord.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       'Cannot strike a document that is not on the docket record.',
     );

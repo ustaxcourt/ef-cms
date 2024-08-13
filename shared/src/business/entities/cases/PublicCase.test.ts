@@ -10,18 +10,16 @@ import {
 } from '../EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
-import { MOCK_USERS } from '../../../test/mockUsers';
 import { PublicCase } from './PublicCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactSecondary } from './Case';
+import {
+  mockIrsPractitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('PublicCase', () => {
   const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
   const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
-
-  it('should throw an error when applicationContext is not provided to the constructor', () => {
-    expect(() => new PublicCase({}, {} as any)).toThrow(TypeError);
-  });
 
   describe('validation', () => {
     it('should validate when all information is provided and case is not sealed', () => {
@@ -44,7 +42,7 @@ describe('PublicCase', () => {
           receivedAt: '2020-01-05T03:30:45.007Z',
           status: CASE_STATUS_TYPES.calendared,
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       );
 
       expect(entity.getFormattedValidationErrors()).toBe(null);
@@ -62,7 +60,7 @@ describe('PublicCase', () => {
           receivedAt: '2020-01-05T03:30:45.007Z',
           sealedDate: '2020-01-05T03:30:45.007Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       );
 
       expect(entity.getFormattedValidationErrors()).toMatchObject({
@@ -105,7 +103,7 @@ describe('PublicCase', () => {
         receivedAt: 'testing',
         status: CASE_STATUS_TYPES.new,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     expect(entity.toRawObject()).toEqual({
@@ -162,7 +160,7 @@ describe('PublicCase', () => {
         receivedAt: 'testing',
         status: CASE_STATUS_TYPES.calendared,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     expect(entity.toRawObject()).toEqual({
@@ -206,7 +204,7 @@ describe('PublicCase', () => {
           { docketEntryId: '987', eventCode: TRANSCRIPT_EVENT_CODE },
         ],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     expect(entity.toRawObject().docketEntries).toMatchObject([
@@ -242,7 +240,7 @@ describe('PublicCase', () => {
         ...MOCK_CASE,
         docketEntries: [docketEntry1, docketEntry2, docketEntry3],
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     expect(entity.docketEntries).toMatchObject([
@@ -260,7 +258,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
         docketNumberWithSuffix: null,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
     expect(entity.docketNumberWithSuffix).toBe('102-20SL');
   });
@@ -273,13 +271,15 @@ describe('PublicCase', () => {
         docketNumberSuffix: null,
         docketNumberWithSuffix: null,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
     expect(entity.docketNumberWithSuffix).toBe('102-20');
   });
 
   it('should correctly ingest a complex case', () => {
-    const entity = new PublicCase(MOCK_COMPLEX_CASE, { applicationContext });
+    const entity = new PublicCase(MOCK_COMPLEX_CASE, {
+      authorizedUser: undefined,
+    });
 
     expect(() => entity.validate()).not.toThrow();
     expect(() => entity.validateForMigration()).not.toThrow();
@@ -293,7 +293,7 @@ describe('PublicCase', () => {
         petitioners: [{ contactType: CONTACT_TYPES.primary }],
         sealedDate: 'some date',
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     expect(entity.isSealed).toBe(true);
@@ -303,10 +303,6 @@ describe('PublicCase', () => {
   });
 
   it('should not show leadDocketNumber if user is does not have IRS Practitioner role', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.privatePractitioner,
-    });
-
     const rawCase = {
       ...MOCK_CASE,
       irsPractitioners: [
@@ -335,7 +331,47 @@ describe('PublicCase', () => {
         },
       ],
     };
-    const entity = new PublicCase(rawCase, { applicationContext });
+    const entity = new PublicCase(rawCase, {
+      authorizedUser: mockPrivatePractitionerUser,
+    });
+
+    expect(entity.irsPractitioners).toBeUndefined();
+    expect(entity.privatePractitioners).toBeUndefined();
+    expect(entity.leadDocketNumber).toBeUndefined();
+  });
+
+  it('should not show leadDocketNumber when authorizedUser does not have IRS Practitioner role', () => {
+    const rawCase = {
+      ...MOCK_CASE,
+      irsPractitioners: [
+        {
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isSealed: false,
+      leadDocketNumber: 'number',
+      otherFilers: [
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary },
+        {
+          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.otherPetitioner,
+        },
+      ],
+      privatePractitioners: [
+        {
+          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+    const entity = new PublicCase(rawCase, {
+      authorizedUser: mockPrivatePractitionerUser,
+    });
 
     expect(entity.irsPractitioners).toBeUndefined();
     expect(entity.privatePractitioners).toBeUndefined();
@@ -343,12 +379,6 @@ describe('PublicCase', () => {
   });
 
   describe('irsPractitioner', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-    });
-
     it('an irsPractitioner should be able to see otherPetitioners and otherFilers', () => {
       const mockOtherFiler = {
         address1: '42 Lamb Sauce Blvd',
@@ -357,7 +387,7 @@ describe('PublicCase', () => {
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
+        name: 'Saturnino Nao',
         phone: '1234567890',
         postalCode: '05198',
         state: 'AK',
@@ -370,7 +400,7 @@ describe('PublicCase', () => {
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
-        name: 'Gordon Ramsay',
+        name: 'Saturnino Nao',
         phone: '1234567890',
         postalCode: '05198',
         state: 'AK',
@@ -386,7 +416,7 @@ describe('PublicCase', () => {
             mockOtherPetitioner,
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockIrsPractitionerUser },
       );
 
       expect(entity.petitioners).toEqual(
@@ -399,10 +429,6 @@ describe('PublicCase', () => {
     });
 
     it('should show all contact and practitioner information if user has IRS Practitioner role', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsPractitioner,
-      });
-
       const rawContactPrimary = {
         address1: '907 West Rocky Cowley Parkway',
         address2: '104 West 120th Street',
@@ -494,7 +520,9 @@ describe('PublicCase', () => {
         ],
         receivedAt: 'testing',
       };
-      const entity = new PublicCase(rawCase, { applicationContext });
+      const entity = new PublicCase(rawCase, {
+        authorizedUser: mockIrsPractitionerUser,
+      });
 
       expect(entity.toRawObject()).toMatchObject({
         caseCaption: 'testing',
@@ -511,10 +539,6 @@ describe('PublicCase', () => {
     });
 
     it('should not show practitioner and other filer information if user has IRS Practitioner role and the case is sealed', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsPractitioner,
-      });
-
       const rawCase = {
         ...MOCK_CASE,
         irsPractitioners: [
@@ -542,7 +566,9 @@ describe('PublicCase', () => {
           },
         ],
       };
-      const entity = new PublicCase(rawCase, { applicationContext });
+      const entity = new PublicCase(rawCase, {
+        authorizedUser: mockIrsPractitionerUser,
+      });
 
       expect(entity.irsPractitioners).toBeUndefined();
       expect(entity.privatePractitioners).toBeUndefined();
@@ -550,10 +576,6 @@ describe('PublicCase', () => {
   });
 
   it('should show leadDocketNumber if user is has IRS Practitioner role', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.irsPractitioner,
-    });
-
     const rawCase = {
       ...MOCK_CASE,
       irsPractitioners: [
@@ -582,7 +604,9 @@ describe('PublicCase', () => {
         },
       ],
     };
-    const entity = new PublicCase(rawCase, { applicationContext });
+    const entity = new PublicCase(rawCase, {
+      authorizedUser: mockIrsPractitionerUser,
+    });
 
     expect(entity.irsPractitioners).toBeDefined();
     expect(entity.privatePractitioners).toBeDefined();

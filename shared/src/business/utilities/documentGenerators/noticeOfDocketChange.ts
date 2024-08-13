@@ -1,4 +1,5 @@
 import { NoticeOfDocketChange } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfDocketChange';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -7,7 +8,7 @@ export const noticeOfDocketChange = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: {
     nameOfClerk: string;
     titleOfClerk: string;

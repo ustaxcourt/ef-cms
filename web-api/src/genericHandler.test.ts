@@ -1,9 +1,15 @@
-import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   checkMaintenanceMode,
   dataSecurityFilter,
   genericHandler,
 } from './genericHandler';
+import {
+  mockAdcUser,
+  mockDocketClerkUser,
+  mockIrsPractitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
+import { applicationContext as mockApplicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 
 const token =
   'eyJraWQiOiJ2U2pTa3FZVkJjVkJOWk5qZ1gzWFNzcERZSjU4QmQ3OGYrSzlDSXhtck44PSIsImFsZyI6IlJTMjU2In0.eyJhdF9oYXNoIjoic2dhcEEyWk1XcGxudnFaRHhGWUVzUSIsInN1YiI6ImE0NmFmZTYwLWFkM2EtNDdhZS1iZDQ5LTQzZDZkNjJhYTQ2OSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfN3VSa0YwQXhuIiwiY29nbml0bzp1c2VybmFtZSI6ImE0NmFmZTYwLWFkM2EtNDdhZS1iZDQ5LTQzZDZkNjJhYTQ2OSIsImF1ZCI6IjZ0dTZqMXN0djV1Z2N1dDdkcXNxZHVybjhxIiwiZXZlbnRfaWQiOiIzMGIwYjJiMi0zMDY0LTExZTktOTk0Yi03NTIwMGE2ZTQ3YTMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTU1MDE1NDI0OCwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImV4cCI6MTU1MDE1Nzg0OCwiY3VzdG9tOnJvbGUiOiJwZXRpdGlvbmVyIiwiaWF0IjoxNTUwMTU0MjQ4LCJlbWFpbCI6InBldGl0aW9uZXIxQGV4YW1wbGUuY29tIn0.KBEzAj84SV6Pulu9SEjGqbIPtL_iAeC-Tcc3fvphZ_nLHuIgN7LRv8pM-ClMM3Sua5YVQ7h70N1wRV0UZADxHiEDN5pYshcsjhZdnT9sWN9Nu5QT4l9e1zFsgu1S_p9M29i0__si674VT16hlXHCywrrqrofaJYZgMVXjvfEKYDmUo4XPCGN0GVFtt9sepxjAwd5rRIF9Ned3XGBQ2xrQd5qWlIMsvnhdlIL9FqvC47_ZsPh16IyREp7FDAEI5LxIkJOFE2Ryoe74cg_9nIaqP3rQsRrRMk7E_mQ9yGV4_2j4PEfoehm3wHbrGvhNFdDBDMosS3OfbUY411swAAh3Q';
@@ -14,12 +20,19 @@ const MOCK_EVENT = {
   },
 };
 
-const MOCK_USER = {
-  name: 'Test User',
-  userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
-};
+let logged: string[] = [];
 
-let logged = [];
+jest.mock('./applicationContext', () => ({
+  createApplicationContext: () => {
+    return mockApplicationContext;
+  },
+}));
+
+jest.mock('./applicationContext', () => ({
+  createApplicationContext: () => {
+    return mockApplicationContext;
+  },
+}));
 
 // Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
 console.error = () => null;
@@ -45,10 +58,10 @@ describe('genericHandler', () => {
   beforeEach(() => {
     logged = [];
 
-    applicationContext.logger.debug.mockImplementation(label => {
+    mockApplicationContext.logger.debug.mockImplementation(label => {
       logged.push(label);
     });
-    applicationContext.getEntityByName.mockImplementation(() => MockEntity);
+    mockApplicationContext.getEntityByName.mockImplementation(() => MockEntity);
   });
 
   it('returns an error if the callback throws', async () => {
@@ -56,23 +69,19 @@ describe('genericHandler', () => {
       return Promise.reject(new Error('Test Error'));
     };
 
-    const response = await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-    });
+    const response = await genericHandler(MOCK_EVENT, callback);
 
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
-    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(mockApplicationContext.logger.error).toHaveBeenCalled();
   });
 
   it('defaults the options param to an empty object if not provided', async () => {
     const callback = () => null;
 
-    await genericHandler({ ...MOCK_EVENT }, callback, {
-      applicationContext,
-    });
+    await genericHandler({ ...MOCK_EVENT }, callback);
 
-    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+    expect(mockApplicationContext.logger.error).not.toHaveBeenCalled();
   });
 
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
@@ -82,36 +91,17 @@ describe('genericHandler', () => {
       throw error;
     };
 
-    const response = await genericHandler({ ...MOCK_EVENT }, callback, {
-      applicationContext,
-    });
+    const response = await genericHandler({ ...MOCK_EVENT }, callback);
 
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
-    expect(applicationContext.logger.error).not.toHaveBeenCalled();
-  });
-
-  it('can take a user override in the options param', async () => {
-    let setUser;
-    const callback = ({ user }) => {
-      setUser = user;
-    };
-
-    await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      user: MOCK_USER,
-    });
-
-    expect(setUser).toEqual(MOCK_USER);
+    expect(mockApplicationContext.logger.error).not.toHaveBeenCalled();
   });
 
   it('should log `request` and `results` by default', async () => {
     const callback = () => null;
 
-    await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      user: MOCK_USER,
-    });
+    await genericHandler(MOCK_EVENT, callback);
 
     expect(logged).toContain('Request:');
     expect(logged).toContain('Results:');
@@ -121,9 +111,7 @@ describe('genericHandler', () => {
     const callback = () => null;
 
     await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
       logResults: false,
-      user: MOCK_USER,
     });
 
     expect(logged).toContain('Request:');
@@ -135,10 +123,7 @@ describe('genericHandler', () => {
       return Promise.resolve('some data');
     };
 
-    const result = await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      user: MOCK_USER,
-    });
+    const result = await genericHandler(MOCK_EVENT, callback);
 
     expect(JSON.parse(result.body)).toEqual('some data');
   });
@@ -152,10 +137,7 @@ describe('genericHandler', () => {
       });
     };
 
-    const result = await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      user: MOCK_USER,
-    });
+    const result = await genericHandler(MOCK_EVENT, callback);
 
     expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
   });
@@ -166,7 +148,10 @@ describe('genericHandler', () => {
         private: 'private',
         public: 'public',
       };
-      const result = dataSecurityFilter(data, { applicationContext });
+      const result = dataSecurityFilter(data, {
+        applicationContext: mockApplicationContext,
+        authorizedUser: mockDocketClerkUser,
+      });
       expect(result).toEqual(data);
     });
 
@@ -176,21 +161,27 @@ describe('genericHandler', () => {
         private: 'private',
         public: 'public',
       };
-      const result = dataSecurityFilter(data, { applicationContext });
+      const result = dataSecurityFilter(data, {
+        applicationContext: mockApplicationContext,
+        authorizedUser: mockIrsPractitionerUser,
+      });
       expect(result).toEqual({
         public: 'public',
       });
     });
 
     it('returns data without passing through entity constructor if entityName is not present in getEntityConstructors', () => {
-      applicationContext.getEntityByName.mockImplementation(() => null);
+      mockApplicationContext.getEntityByName.mockImplementation(() => null);
       const data = {
         entityName: 'MockEntity2',
         private: 'private',
         public: 'public',
       };
 
-      const result = dataSecurityFilter(data, { applicationContext });
+      const result = dataSecurityFilter(data, {
+        applicationContext: mockApplicationContext,
+        authorizedUser: mockAdcUser,
+      });
 
       expect(result).toEqual({
         entityName: 'MockEntity2',
@@ -213,13 +204,16 @@ describe('genericHandler', () => {
         },
       ];
 
-      const result = dataSecurityFilter(data, { applicationContext });
+      const result = dataSecurityFilter(data, {
+        applicationContext: mockApplicationContext,
+        authorizedUser: undefined,
+      });
 
       expect(result).toEqual([{ public: 'public' }, { public: 'public' }]);
     });
 
     it('returns array data without passing through entity constructor if entityName is present on array element but entity cannot be retrieved by name', () => {
-      applicationContext.getEntityByName.mockImplementation(() => null);
+      mockApplicationContext.getEntityByName.mockImplementation(() => null);
       const data = [
         {
           entityName: 'MockEntity2',
@@ -233,7 +227,10 @@ describe('genericHandler', () => {
         },
       ];
 
-      const result = dataSecurityFilter(data, { applicationContext });
+      const result = dataSecurityFilter(data, {
+        applicationContext: mockApplicationContext,
+        authorizedUser: mockPetitionsClerkUser,
+      });
 
       expect(result).toEqual([
         {
@@ -252,32 +249,32 @@ describe('genericHandler', () => {
 
   describe('checkMaintenanceMode', () => {
     it('should throw an error if maintenance mode is true', async () => {
-      applicationContext
+      mockApplicationContext
         .getPersistenceGateway()
         .getMaintenanceMode.mockReturnValue({ current: true });
 
       await expect(
-        checkMaintenanceMode({ applicationContext }),
+        checkMaintenanceMode({ applicationContext: mockApplicationContext }),
       ).rejects.toThrow('Maintenance mode is enabled');
     });
 
     it('should not throw an error if maintenance mode is false', async () => {
-      applicationContext
+      mockApplicationContext
         .getPersistenceGateway()
         .getMaintenanceMode.mockReturnValue({ current: false });
 
-      await expect(checkMaintenanceMode({ applicationContext })).resolves.toBe(
-        false,
-      );
+      await expect(
+        checkMaintenanceMode({ applicationContext: mockApplicationContext }),
+      ).resolves.toBe(false);
     });
 
     it('should NOT throw an error if maintenance mode is undefined', async () => {
-      applicationContext
+      mockApplicationContext
         .getPersistenceGateway()
         .getMaintenanceMode.mockReturnValue(undefined);
 
       await expect(
-        checkMaintenanceMode({ applicationContext }),
+        checkMaintenanceMode({ applicationContext: mockApplicationContext }),
       ).resolves.not.toThrow();
     });
   });

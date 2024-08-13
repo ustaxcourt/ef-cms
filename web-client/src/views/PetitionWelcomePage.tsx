@@ -1,20 +1,31 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorBanner } from '@web-client/views/ErrorBanner';
+import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import React from 'react';
 
-export const PetitionWelcomePage = () => (
+export const PetitionWelcomePage = ({
+  isPetitioner,
+  welcomeMessage,
+  welcomeMessageTitle,
+}) => (
   <>
-    <ErrorBanner
-      showSingleMessage
-      messages={[
-        `Do not start a new case. Email <a href="mailto:dawson.support@ustaxcourt.gov">
-        dawson.support@ustaxcourt.gov
-      </a> with your case's docket number (e.g. 12345-67) to get access to
-    your existing case.`,
-      ]}
-      title="Have you already filed a petition by mail or do you want electronic access to your existing case?"
-    />
-    <h2>Welcome to DAWSON!</h2>
+    {isPetitioner ? (
+      <ErrorBanner
+        showSingleMessage
+        messages={[welcomeMessage]}
+        title={welcomeMessageTitle}
+      />
+    ) : (
+      <WarningNotificationComponent
+        alertWarning={{
+          message: welcomeMessage,
+          title: welcomeMessageTitle,
+        }}
+        dismissible={false}
+        scrollToTop={false}
+      />
+    )}
+    <h2 data-testid="petition-welcome-text">Welcome to DAWSON!</h2>
     <div className="petitioner-flow-text">
       {`DAWSON (Docket Access Within a Secure Online Network) is the U.S. Tax
       Court's electronic filing and case management system. The Court encourages all petitioners to file documents electronically.`}

@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * getPractitionerByBarNumberInteractor
@@ -17,13 +18,13 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const getPractitionerByBarNumberInteractor = async (
   applicationContext: ServerApplicationContext,
   { barNumber }: { barNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const requestUser = applicationContext.getCurrentUser();
-  const isLoggedInUser = !!requestUser;
+  const isLoggedInUser = !!authorizedUser?.userId;
 
   if (
     isLoggedInUser &&
-    !isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
   ) {
     throw new UnauthorizedError('Unauthorized for getting attorney user');
   }

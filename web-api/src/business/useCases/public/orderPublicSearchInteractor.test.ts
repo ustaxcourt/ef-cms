@@ -18,7 +18,7 @@ describe('orderPublicSearchInteractor', () => {
             docketNumber: '103-19',
             documentTitle: 'Order for More Candy',
             eventCode: 'ODD',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
           {
             caseCaption: 'Samson Workman, Petitioner',
@@ -26,7 +26,7 @@ describe('orderPublicSearchInteractor', () => {
             docketNumber: '103-19',
             documentTitle: 'Order for KitKats',
             eventCode: 'ODD',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
         ],
       });
@@ -70,7 +70,7 @@ describe('orderPublicSearchInteractor', () => {
       documentTitle: 'Order for More Candy',
       documentType: 'Order',
       eventCode: 'O',
-      signedJudgeName: 'Guy Fieri',
+      signedJudgeName: 'Roslindis Angelino',
     });
     applicationContext
       .getPersistenceGateway()
@@ -97,7 +97,7 @@ describe('orderPublicSearchInteractor', () => {
             documentTitle: 'Order for KitKats',
             eventCode: 'ODD',
             numberOfPages: 'green',
-            signedJudgeName: 'Guy Fieri',
+            signedJudgeName: 'Roslindis Angelino',
           },
         ],
       });

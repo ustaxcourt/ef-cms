@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { onDisconnectInteractor } from '@web-api/business/useCases/notifications/onDisconnectInteractor';
 
 /**
  * remove the information about an existing websocket connection
@@ -10,11 +11,9 @@ export const disconnectLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const results = await applicationContext
-        .getUseCases()
-        .onDisconnectInteractor(applicationContext, {
-          connectionId: event.requestContext.connectionId,
-        });
+      const results = await onDisconnectInteractor(applicationContext, {
+        connectionId: event.requestContext.connectionId,
+      });
 
       applicationContext.logger.debug('Websocket disconnected', {
         requestId: {
@@ -24,5 +23,5 @@ export const disconnectLambda = event =>
 
       return results;
     },
-    { bypassMaintenanceCheck: true, user: {} },
+    { bypassMaintenanceCheck: true },
   );

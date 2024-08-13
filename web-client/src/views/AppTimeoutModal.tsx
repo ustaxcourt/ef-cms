@@ -14,7 +14,7 @@ export const AppTimeoutModal = connect(
         confirmLabel="Yes!"
         confirmSequence={confirmSequence}
       >
-        <div>Are you still there?</div>
+        <div data-testid="are-you-still-there-modal">Are you still there?</div>
       </ModalDialog>
     );
   },

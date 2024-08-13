@@ -7,23 +7,26 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      createMessageInteractor(applicationContext, {
-        attachments: [],
-        docketNumber: '101-20',
-        message: 'hello world',
-        subject: 'what is up',
-        toSection: DOCKET_SECTION,
-        toUserId: 'abc',
-      }),
+      createMessageInteractor(
+        applicationContext,
+        {
+          attachments: [],
+          docketNumber: '101-20',
+          message: 'hello world',
+          subject: 'what is up',
+          toSection: DOCKET_SECTION,
+          toUserId: 'abc',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -45,10 +48,6 @@ describe('createMessageInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValueOnce({
@@ -67,15 +66,19 @@ describe('createMessageInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Guy Fieri, Petitioner',
+        caseCaption: 'Roslindis Angelino, Petitioner',
         docketNumberWithSuffix: '123-45S',
         status: CASE_STATUS_TYPES.generalDocket,
       });
 
-    await createMessageInteractor(applicationContext, {
-      ...messageData,
-      attachments: mockAttachments,
-    });
+    await createMessageInteractor(
+      applicationContext,
+      {
+        ...messageData,
+        attachments: mockAttachments,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createMessage,
@@ -87,7 +90,7 @@ describe('createMessageInteractor', () => {
       ...messageData,
       attachments: mockAttachments,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
-      caseTitle: 'Guy Fieri',
+      caseTitle: 'Roslindis Angelino',
       docketNumber: '101-20',
       docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',

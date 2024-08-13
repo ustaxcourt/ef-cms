@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getCaseForPublicDocketSearchInteractor } from '@web-api/business/useCases/public/getCaseForPublicDocketSearchInteractor';
 
 /**
  * used for fetching a single case
@@ -7,14 +8,8 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getCaseForPublicDocketSearchLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getCaseForPublicDocketSearchInteractor(applicationContext, {
-          docketNumber: event.pathParameters.docketNumber,
-        });
-    },
-    { user: {} },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getCaseForPublicDocketSearchInteractor(applicationContext, {
+      docketNumber: event.pathParameters.docketNumber,
+    });
+  });

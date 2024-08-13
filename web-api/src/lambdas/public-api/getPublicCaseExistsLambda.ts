@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getCaseExistsInteractor } from '@shared/business/useCases/getCaseExistsInteractor';
 
 /**
  * used for fetching existence of a single case
@@ -7,13 +8,8 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getPublicCaseExistsLambda = event =>
-  genericHandler(
-    event,
-    ({ applicationContext }) =>
-      applicationContext
-        .getUseCases()
-        .getCaseExistsInteractor(applicationContext, {
-          docketNumber: event.pathParameters.docketNumber,
-        }),
-    { user: {} },
+  genericHandler(event, ({ applicationContext }) =>
+    getCaseExistsInteractor(applicationContext, {
+      docketNumber: event.pathParameters.docketNumber,
+    }),
   );

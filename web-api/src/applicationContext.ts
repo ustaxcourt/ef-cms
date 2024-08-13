@@ -3,7 +3,7 @@ import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerat
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import {
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
@@ -12,7 +12,6 @@ import {
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   ORDER_TYPES,
-  Role,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -51,6 +50,7 @@ import { getDocumentGenerators } from './getDocumentGenerators';
 import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
+import { getNotificationClient } from '@web-api/notifications/getNotificationClient';
 import { getNotificationService } from '@web-api/notifications/getNotificationService';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
@@ -72,7 +72,6 @@ import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSet
 import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
-import AWS from 'aws-sdk';
 
 import axios from 'axios';
 import pug from 'pug';
@@ -99,23 +98,10 @@ const entitiesByName = {
 };
 
 export const createApplicationContext = (
-  appContextUser,
+  appContextUser = {},
   logger = createLogger(),
 ) => {
-  let user;
-
-  if (appContextUser) {
-    user = new User(appContextUser);
-  }
-
-  const getCurrentUser = (): {
-    role: Role;
-    userId: string;
-    email: string;
-    name: string;
-  } => {
-    return user;
-  };
+  const user = new User(appContextUser);
 
   if (process.env.NODE_ENV === 'production') {
     const authenticated = user && Object.keys(user).length;
@@ -170,7 +156,6 @@ export const createApplicationContext = (
       STATUS_TYPES: CASE_STATUS_TYPES,
       TRIAL_SESSION_SCOPE_TYPES,
     }),
-    getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
       sendNotificationOfSealing:
@@ -231,17 +216,7 @@ export const createApplicationContext = (
     getNodeSass: () => {
       return sass;
     },
-    getNotificationClient: ({ endpoint }) => {
-      if (endpoint.includes('localhost')) {
-        endpoint = 'http://localhost:3011';
-      }
-      return new AWS.ApiGatewayManagementApi({
-        endpoint,
-        httpOptions: {
-          timeout: 900000, // 15 minutes
-        },
-      });
-    },
+    getNotificationClient,
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
       saveRequestResponse,

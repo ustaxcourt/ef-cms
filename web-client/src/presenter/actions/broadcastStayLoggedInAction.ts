@@ -1,3 +1,5 @@
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
+
 /**
  * broadcasts a stay logged in message to all app instances
  * @param {object} providers the providers object
@@ -9,5 +11,7 @@ export const broadcastStayLoggedInAction = async ({
 }: ActionProps) => {
   const broadcastChannel = applicationContext.getBroadcastGateway();
 
-  await broadcastChannel.postMessage({ subject: 'stayLoggedIn' });
+  await broadcastChannel.postMessage({
+    subject: BROADCAST_MESSAGES.stayLoggedIn,
+  });
 };

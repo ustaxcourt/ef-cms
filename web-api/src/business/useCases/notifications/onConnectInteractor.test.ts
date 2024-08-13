@@ -1,4 +1,8 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { onConnectInteractor } from './onConnectInteractor';
 
 describe('onConnectInteractor', () => {
@@ -7,11 +11,15 @@ describe('onConnectInteractor', () => {
   const mockEndpoint = 'www.example.com';
 
   it('should save the user connection', async () => {
-    await onConnectInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      connectionId: mockConnectionId,
-      endpoint: mockEndpoint,
-    });
+    await onConnectInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        connectionId: mockConnectionId,
+        endpoint: mockEndpoint,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
@@ -19,16 +27,64 @@ describe('onConnectInteractor', () => {
   });
 
   it('should NOT save the user connection when the current user is undefined', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(undefined);
-
-    await onConnectInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      connectionId: mockConnectionId,
-      endpoint: mockEndpoint,
-    });
+    await onConnectInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        connectionId: mockConnectionId,
+        endpoint: mockEndpoint,
+      },
+      undefined,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should add https protocol to the endpoint when the endpoint does not have a protocol', async () => {
+    let endpoint = 'somedomain.hello.org';
+    await onConnectInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        connectionId: mockConnectionId,
+        endpoint,
+      },
+      mockPetitionerUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveUserConnection,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      clientConnectionId: mockClientConnectionId,
+      connectionId: mockConnectionId,
+      endpoint: 'https://' + endpoint,
+      userId: mockPetitionerUser.userId,
+    });
+  });
+
+  it('should not add https protocol when endpoint already has a protocol', async () => {
+    let endpoint = 'https://somedomain.hello.org';
+    await onConnectInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        connectionId: mockConnectionId,
+        endpoint,
+      },
+      mockPetitionerUser,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().saveUserConnection,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      clientConnectionId: mockClientConnectionId,
+      connectionId: mockConnectionId,
+      endpoint,
+      userId: mockPetitionerUser.userId,
+    });
   });
 });

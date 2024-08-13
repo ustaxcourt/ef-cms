@@ -12,6 +12,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { stringify } from 'csv-stringify/sync';
 
 export type CustomCaseReportCsvRequest = CustomCaseReportFilters & {
@@ -34,9 +35,8 @@ export const createCsvCustomCaseReportFileInteractor = async (
     startDate,
     totalCount,
   }: CustomCaseReportCsvRequest,
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -71,19 +71,23 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
     const iterationData: GetCustomCaseReportResponse = await applicationContext
       .getUseCases()
-      .getCustomCaseReportInteractor(applicationContext, {
-        caseStatuses,
-        caseTypes,
-        endDate,
-        filingMethod,
-        highPriority,
-        judges,
-        pageSize,
-        preferredTrialCities,
-        procedureType,
-        searchAfter,
-        startDate,
-      });
+      .getCustomCaseReportInteractor(
+        applicationContext,
+        {
+          caseStatuses,
+          caseTypes,
+          endDate,
+          filingMethod,
+          highPriority,
+          judges,
+          pageSize,
+          preferredTrialCities,
+          procedureType,
+          searchAfter,
+          startDate,
+        },
+        authorizedUser,
+      );
 
     cases.push(...iterationData.foundCases);
     searchAfter = iterationData.lastCaseId;

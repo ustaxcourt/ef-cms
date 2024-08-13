@@ -6,7 +6,7 @@ import { CreateCaseIrsForm } from '@web-client/presenter/state';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { cloneDeep, omit } from 'lodash';
+import { cloneDeep } from 'lodash';
 import joi from 'joi';
 
 export class UploadPetitionStep3 extends JoiValidationEntity {
@@ -76,27 +76,6 @@ export class UploadPetitionStep3 extends JoiValidationEntity {
 
   getValidationRules() {
     return UploadPetitionStep3.VALIDATION_RULES;
-  }
-
-  getFormattedValidationErrors(): Record<string, any> | null {
-    const errors = super.getFormattedValidationErrors();
-
-    //TODO: dynamically get the properies from IrsNoticeForm entity
-    const filters = this.hasIrsNotice
-      ? [
-          'key',
-          'file',
-          'size',
-          'caseType',
-          'lastDateOfPeriod',
-          'taxYear',
-          'noticeIssuedDate',
-        ]
-      : [];
-
-    const filteredErrors = omit(errors, filters);
-
-    return Object.keys(filteredErrors).length === 0 ? null : filteredErrors;
   }
 }
 
