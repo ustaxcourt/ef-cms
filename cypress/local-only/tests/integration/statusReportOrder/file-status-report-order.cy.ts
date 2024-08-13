@@ -240,9 +240,11 @@ describe('file status report order', () => {
 
         cy.contains('Order updated.').should('exist');
         cy.url().should('include', `messages/${docketNumber}/message-detail/`);
+        cy.contains('.attachment-viewer-button', 'Order').should('exist');
       });
     });
   });
+
   describe('chambers', () => {
     describe('filing a status report order from document view', () => {
       it('should save draft when all options are selected', () => {
