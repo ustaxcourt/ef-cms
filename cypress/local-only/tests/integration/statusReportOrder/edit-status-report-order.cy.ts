@@ -165,6 +165,10 @@ describe('edit status report order', () => {
       cy.contains('a', messages.testStatusReportOrderSigned.name).click();
       cy.get('[data-testid="edit-signed-document-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('#status-report-due-date-picker').clear();
+      cy.get('#status-report-due-date-picker').type(
+        formatNow(FORMATS.MMDDYYYY),
+      );
 
       cy.get('[data-testid="save-draft-button"]').click();
 
@@ -174,6 +178,10 @@ describe('edit status report order', () => {
       cy.get('[data-testid="save-signature-button"]').click();
 
       cy.url().should('contain', `messages/${docketNumber}/message-detail`);
+      cy.contains(
+        '.attachment-viewer-button',
+        messages.testStatusReportOrderSigned.name,
+      ).should('exist');
     });
 
     it('should redirect to messages tab upon saving unsigned status report order', () => {

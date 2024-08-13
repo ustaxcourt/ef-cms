@@ -9,7 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { orderBy } from 'lodash';
+import { orderBy, some } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const fileCourtIssuedOrder = async (
@@ -114,10 +114,18 @@ export const fileCourtIssuedOrder = async (
     const messageEntity = new Message(mostRecentMessage, {
       applicationContext,
     }).validate();
-    messageEntity.addAttachment({
-      documentId: docketEntryEntity.docketEntryId,
-      documentTitle: docketEntryEntity.documentTitle,
-    });
+
+    const isAttached = some(
+      messageEntity.attachments,
+      attachment => attachment.documentId === docketEntryEntity.docketEntryId,
+    );
+
+    if (!isAttached) {
+      messageEntity.addAttachment({
+        documentId: docketEntryEntity.docketEntryId,
+        documentTitle: docketEntryEntity.documentTitle,
+      });
+    }
 
     await applicationContext.getPersistenceGateway().updateMessage({
       applicationContext,
