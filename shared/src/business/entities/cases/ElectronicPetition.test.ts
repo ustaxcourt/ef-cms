@@ -10,17 +10,21 @@ import { ElectronicPetition } from './ElectronicPetition';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ElectronicPetition entity', () => {
+  const validPetitionData = {
+    caseType: CASE_TYPES_MAP.other,
+    hasIrsNotice: false,
+    preferredTrialCity: 'Memphis, Tennessee',
+    procedureType: 'Small',
+  };
+
   describe('isValid', () => {
     it('requires corporate disclosure if filing type is a business', () => {
       const electronicPetition = new ElectronicPetition(
         {
+          ...validPetitionData,
           businessType: PARTY_TYPES.corporation,
-          caseType: CASE_TYPES_MAP.other,
           filingType: 'A business',
-          hasIrsNotice: false,
           petitionType: undefined,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
         },
         { applicationContext },
       );
@@ -34,10 +38,8 @@ describe('ElectronicPetition entity', () => {
     it('does not require corporate disclosure if filing type not set', () => {
       const petition = new ElectronicPetition(
         {
-          caseType: CASE_TYPES_MAP.other,
-          hasIrsNotice: false,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
+          ...validPetitionData,
+          filingType: undefined,
         },
         { applicationContext },
       );
@@ -50,11 +52,8 @@ describe('ElectronicPetition entity', () => {
     it('does not require corporate disclosure if filing type not a business', () => {
       const electronicPetition = new ElectronicPetition(
         {
-          caseType: CASE_TYPES_MAP.other,
+          ...validPetitionData,
           filingType: 'not a biz',
-          hasIrsNotice: false,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
         },
         { applicationContext },
       );
@@ -68,12 +67,9 @@ describe('ElectronicPetition entity', () => {
     it('requires stinFile', () => {
       const electronicPetition = new ElectronicPetition(
         {
+          ...validPetitionData,
           businessType: PARTY_TYPES.corporation,
-          caseType: CASE_TYPES_MAP.other,
           filingType: 'A business',
-          hasIrsNotice: false,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
         },
         { applicationContext },
       );
@@ -428,6 +424,7 @@ describe('ElectronicPetition entity', () => {
     it('should use secondary contact phone when provided', () => {
       const electronicPetition = new ElectronicPetition(
         {
+          ...validPetitionData,
           contactSecondary: {
             contactType: CONTACT_TYPES.secondary,
             phone: '123-234-3456',
@@ -445,6 +442,7 @@ describe('ElectronicPetition entity', () => {
     it('should use default secondary contact phone when no phone is provided', () => {
       const electronicPetition = new ElectronicPetition(
         {
+          ...validPetitionData,
           contactSecondary: {
             contactType: CONTACT_TYPES.secondary,
           },
@@ -456,6 +454,62 @@ describe('ElectronicPetition entity', () => {
         .toRawObject()
         .petitioners.find(p => p.contactType === CONTACT_TYPES.secondary);
       expect(secondaryContact.phone).toEqual('N/A');
+    });
+  });
+
+  describe('Redaction acknowledgements', () => {
+    it('should fail validation when petitionRedactionAcknowledgement is false', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          ...validPetitionData,
+          petitionRedactionAcknowledgement: false,
+        },
+        { applicationContext },
+      );
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .petitionRedactionAcknowledgement,
+      ).toBeDefined();
+    });
+
+    it('should fail validation when hasIrsNotice is true and irsNoticesRedactionAcknowledgement is false', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          ...validPetitionData,
+          hasIrsNotice: true,
+          irsNoticesRedactionAcknowledgement: false,
+        },
+        { applicationContext },
+      );
+      console.log(
+        'electronicPetition.getFormattedValidationErrors()',
+        electronicPetition.getFormattedValidationErrors(),
+      );
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .irsNoticesRedactionAcknowledgement,
+      ).toBeDefined();
+    });
+
+    it('should pass validation when petitionRedactionAcknowledgement and/or irsNoticesRedactionAcknowledgement are undefined or true', () => {
+      const electronicPetition = new ElectronicPetition(
+        {
+          ...validPetitionData,
+          irsNoticesRedactionAcknowledgement: undefined,
+          petitionRedactionAcknowledgement: true,
+        },
+        { applicationContext },
+      );
+
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .petitionRedactionAcknowledgement,
+      ).toBeUndefined();
+      expect(
+        electronicPetition.getFormattedValidationErrors()!
+          .irsNoticesRedactionAcknowledgement,
+      ).toBeUndefined();
     });
   });
 });
