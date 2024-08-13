@@ -7,8 +7,6 @@ import { transports } from 'winston';
 import axios from 'axios';
 import fs from 'fs';
 import jwk from 'jsonwebtoken';
-import jwkToPem from 'jwk-to-pem';
-jest.mock('jwk-to-pem', () => jest.fn());
 jest.mock('../../../src/createLogger', () => {
   return { createLogger: jest.fn() };
 });
@@ -16,6 +14,15 @@ jest.mock('jsonwebtoken', () => {
   return {
     decode: jest.fn(),
     verify: jest.fn(),
+  };
+});
+jest.mock('crypto', () => {
+  return {
+    createPublicKey: jest.fn().mockImplementation(() => ({
+      export: jest.fn().mockReturnValue({
+        toString: jest.fn().mockReturnValue('test-pem'),
+      }),
+    })),
   };
 });
 
@@ -28,14 +35,6 @@ describe('websocket-authorizer', () => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
-    });
-
-    jwkToPem.mockImplementation(key => {
-      if (key.kid !== 'key-identifier') {
-        throw new Error('wrong key was given');
-      }
-
-      return 'test-pem';
     });
 
     jwk.verify.mockImplementation((token, pem, options, callback) => {
@@ -166,14 +165,6 @@ describe('websocket-authorizer', () => {
       });
     });
 
-    jwkToPem.mockImplementation(key => {
-      if (key.kid !== 'key-identifier') {
-        throw new Error('wrong key was given');
-      }
-
-      return 'test-pem';
-    });
-
     jwk.verify.mockImplementation((token, pem, options, callback) => {
       if (token !== TOKEN_VALUE || pem !== 'test-pem') {
         throw new Error('wrong token or pem was passed to verification');
@@ -272,8 +263,6 @@ describe('websocket-authorizer', () => {
         data: { keys: [{ kid: 'identifier-to-cache' }] },
       });
     });
-
-    jwkToPem.mockImplementation(() => 'test-pem');
 
     jwk.verify.mockImplementation((token, pem, options, callback) => {
       callback(null, { 'custom:userId': 'test-custom:userId' });
