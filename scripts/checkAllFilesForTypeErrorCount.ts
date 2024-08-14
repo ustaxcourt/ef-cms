@@ -1,4 +1,4 @@
-import { execSync, spawnSync } from 'child_process';
+import { spawnSync } from 'child_process';
 
 function runTypescriptCommand(cwd: string): { stdout: string } {
   return spawnSync(
@@ -34,56 +34,9 @@ function getTypescriptErrorMap(cwd: string): { [fileName: string]: number } {
   return createTypescriptErrorMap(stdout);
 }
 
-function getHashForDirectory(cwd: string) {
-  return spawnSync('git', ['log', '-n', '1', '--pretty=format:"%H"'], {
-    cwd,
-    encoding: 'utf-8',
-  }).stdout;
-}
-
-function getDifferencesBetweenHashes(
-  branchDirPath: string,
-  currentBranchHash: string,
-  targetBranchHash: string,
-): { [fileName: string]: boolean } {
-  return execSync(
-    `git diff --name-only ${currentBranchHash} ${targetBranchHash}`,
-    {
-      cwd: branchDirPath,
-      encoding: 'utf-8',
-    },
-  )
-    .split('\n')
-    .map(line => line.trim())
-    .reduce(
-      (accumulator, fileName) => {
-        accumulator[fileName] = true;
-        return accumulator;
-      },
-      {} as { [fileName: string]: boolean },
-    );
-}
-
-function getModifiedFiles(
-  branchDirPath: string,
-  targetRepoPath: string,
-): {
-  [fileName: string]: boolean;
-} {
-  const currentBranchHash = getHashForDirectory(branchDirPath);
-  const targetBranchHash = getHashForDirectory(targetRepoPath);
-
-  return getDifferencesBetweenHashes(
-    branchDirPath,
-    currentBranchHash,
-    targetBranchHash,
-  );
-}
-
 function getFilesToCheck(
   branchTypescriptErrorMap: { [fileName: string]: number },
   targetTypescriptErrorMap: { [fileName: string]: number },
-  modifiedFiles: { [fileName: string]: boolean },
 ): {
   [fileName: string]: {
     targetCount: number;
@@ -98,7 +51,6 @@ function getFilesToCheck(
   } = {};
   Object.entries(branchTypescriptErrorMap).forEach(
     ([fileName, branchCount]) => {
-      if (modifiedFiles[fileName]) return;
       const targetCount = targetTypescriptErrorMap[fileName] || 0;
       if (targetCount < branchCount)
         fileToCheck[fileName] = { branchCount, targetCount };
@@ -111,12 +63,10 @@ const branchDirPath = './';
 const targetDirPath = './targetBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const targetTypescriptErrorMap = getTypescriptErrorMap(targetDirPath);
-const modifiedFiles = getModifiedFiles(branchDirPath, targetDirPath);
 
 const fileToCheck = getFilesToCheck(
   branchTypescriptErrorMap,
   targetTypescriptErrorMap,
-  modifiedFiles,
 );
 
 function logSmartTable(dataObject: {
