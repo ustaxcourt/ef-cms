@@ -18,5 +18,5 @@ export const gotoPublicPrintableDocketRecordSequence =
       setPdfPreviewUrlSequence,
       setShowModalFactoryAction('OpenPrintableDocketRecordModal'),
       setupCurrentPageAction('PublicCaseDetail'),
-    ]) as unknown as (props: { docketNumber: string }) => void,
-  );
+    ]),
+  ) as unknown as (props: { docketNumber: string }) => void;
