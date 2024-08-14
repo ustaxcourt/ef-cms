@@ -41,7 +41,7 @@ export const DashboardPetitioner = connect(
               {user.role === ROLES.petitioner && (
                 <div className="card">
                   <div className="content-wrapper gray">
-                    <h3>Taxpayer Tools</h3>
+                    <h3 data-testid="taxpayer-tools-section">Taxpayer Tools</h3>
                     <hr />
                     <p>
                       <a
@@ -70,7 +70,9 @@ export const DashboardPetitioner = connect(
               {user.role === ROLES.petitioner && (
                 <div className="card">
                   <div className="content-wrapper gray">
-                    <h3>Free Taxpayer Help</h3>
+                    <h3 data-testid="free-taxpayer-help-section">
+                      Free Taxpayer Help
+                    </h3>
                     <hr />
                     <p>
                       You may be eligible for additional assistance and advice
