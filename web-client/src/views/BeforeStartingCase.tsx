@@ -29,9 +29,12 @@ export const BeforeStartingCase = connect(
     user,
   }) {
     const redirectUrl =
-      petitionFlowUpdated && ROLES.petitioner === user.role
+      petitionFlowUpdated &&
+      [ROLES.petitioner, ROLES.privatePractitioner].includes(user.role)
         ? '/file-a-petition/new'
         : '/file-a-petition/step-1';
+
+    const isPetitioner = user.role === ROLES.petitioner;
     return (
       <>
         <style>
@@ -131,10 +134,16 @@ export const BeforeStartingCase = connect(
                 className="petitioner-flow-text"
                 style={{ marginBottom: '5px' }}
               >
-                If you received one or more Notices from the IRS:
+                {isPetitioner
+                  ? 'If you received'
+                  : 'If the petitioner received'}{' '}
+                one or more Notices from the IRS:
               </div>
               <ul className="margin-top-0">
-                <li>Submit a PDF of the Notice(s) you received.</li>
+                <li>
+                  Submit a PDF of the Notice(s) {isPetitioner ? 'you' : 'they'}{' '}
+                  received.
+                </li>
                 <li>
                   Remove or block out (redact) Social Security Numbers (SSN),
                   Taxpayer Identification Numbers (TIN), or Employer
@@ -151,9 +160,9 @@ export const BeforeStartingCase = connect(
                   <li>
                     {`You'll be asked to complete and upload a Statement of
                     Taxpayer Identification Number (STIN) form. This document is
-                    sent to the IRS to help them identify you, but it's never
+                    sent to the IRS to help them identify ${isPetitioner ? 'you' : 'the petitioner'}, but it's never
                     visible as part of the case record. This is the only
-                    document that should contain your SSN, TIN, or EIN.`}
+                    document that should contain ${isPetitioner ? 'your' : 'the petitioner’s'} SSN, TIN, or EIN.`}
                   </li>
                   <li>
                     {' '}
@@ -196,9 +205,9 @@ export const BeforeStartingCase = connect(
           <div>
             <h3>Deadline to File</h3>
             <div className="petitioner-flow-text margin-bottom-2">
-              If you received a notice in the mail from the IRS, it may show the
-              last date to file or the number of days you have to file a
-              Petition.{' '}
+              If {isPetitioner ? 'you' : 'the petitioner'} received a notice in
+              the mail from the IRS, it may show the last date to file or the
+              number of days you have to file a Petition.{' '}
               <b>
                 In most cases, the Court must receive your electronically filed
                 Petition no later than 11:59 pm Eastern Time on the last date to
@@ -213,40 +222,49 @@ export const BeforeStartingCase = connect(
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"
                 key="Are you filing jointly with a spouse?"
-                title="Are you filing jointly with a spouse?"
+                title={`${isPetitioner ? 'Are you' : 'Is the petitioner'} filing jointly with a spouse?`}
               >
                 <div>
-                  {`To file a joint Petition with your spouse, you must have the
+                  {isPetitioner
+                    ? `To file a joint Petition with your spouse, you must have the
                   spouse's consent. If you do not have your spouse's consent,
-                  select “Myself” as the person who is filing.`}
+                  select “Myself” as the person who is filing.`
+                    : `To file a joint Petition with a spouse, the petitioner must have the spouse’s consent. 
+                  If the petitioner does not have the spouse’s consent, 
+                  select “Petitioner” as the person you are filing on behalf of.`}
                 </div>
               </AccordionItem>
             </Accordion>
-            <Accordion className="petitioner-accordion-title" headingLevel="3">
-              <AccordionItem
-                customTitleClassName="petitioner-accordion-title"
-                key="Are you filing on behalf of someone else?"
-                title="Are you filing on behalf of someone else?"
+            {isPetitioner && (
+              <Accordion
+                className="petitioner-accordion-title"
+                headingLevel="3"
               >
-                <div>
-                  To file a case on behalf of someone else, you must be
-                  authorized to practice before this Court as provided by the{' '}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://ustaxcourt.gov/rules.html"
-                    overrideMargin="margin-right-0"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Tax Court Rules of Practice and Procedure (Rule 60)
-                  </Button>
-                  {
-                    '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
-                  }
-                </div>
-              </AccordionItem>
-            </Accordion>
+                <AccordionItem
+                  customTitleClassName="petitioner-accordion-title"
+                  key="Are you filing on behalf of someone else?"
+                  title="Are you filing on behalf of someone else?"
+                >
+                  <div>
+                    To file a case on behalf of someone else, you must be
+                    authorized to practice before this Court as provided by the{' '}
+                    <Button
+                      link
+                      className="usa-link--external text-left mobile-text-wrap"
+                      href="https://ustaxcourt.gov/rules.html"
+                      overrideMargin="margin-right-0"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Tax Court Rules of Practice and Procedure (Rule 60)
+                    </Button>
+                    {
+                      '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
+                    }
+                  </div>
+                </AccordionItem>
+              </Accordion>
+            )}
             <Accordion className="petitioner-accordion-title" headingLevel="3">
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"

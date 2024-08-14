@@ -14,21 +14,11 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.clientConnectionId the client connection Id
- * @param {string} providers.docketEntryId the id of the docket entry to add
- * @param {object} providers.consolidatedGroupDocketNumbers the docket numbers from the consolidated group
- * @param {object} providers.documentMetadata the document metadata
- * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
- * @returns {object} the updated case after the documents are added
- */
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
   {
@@ -44,9 +34,8 @@ export const addPaperFiling = async (
     isSavingForLater: boolean;
     docketEntryId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -92,7 +81,7 @@ export const addPaperFiling = async (
         docketNumber,
       });
 
-    let caseEntity = new Case(rawCase, { applicationContext });
+    let caseEntity = new Case(rawCase, { authorizedUser });
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -106,7 +95,7 @@ export const addPaperFiling = async (
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       },
-      { applicationContext, petitioners: caseEntity.petitioners },
+      { authorizedUser, petitioners: caseEntity.petitioners },
     );
 
     docketEntryEntity.setFiledBy(user);
@@ -144,8 +133,7 @@ export const addPaperFiling = async (
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
       },
-      { applicationContext },
-      caseEntity,
+      { caseEntity },
     );
 
     if (isReadyForService) {
@@ -188,6 +176,7 @@ export const addPaperFiling = async (
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
   }
@@ -297,19 +286,23 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (applicationContext, originalRequest) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'add_paper_filing',
-    },
-    userId: user.userId,
-  });
+export const handleLockError = async (
+  applicationContext,
+  originalRequest,
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'add_paper_filing',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const addPaperFilingInteractor = withLocking(

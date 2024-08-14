@@ -1,13 +1,28 @@
+import {
+  IrsNoticesWithCaseDescription,
+  PetitionPdfBase,
+} from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { Petition } from '@shared/business/utilities/pdfGenerator/documentTemplates/Petition';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-export const petition = async ({ applicationContext, data }) => {
+export const petition = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: ServerApplicationContext;
+  data: PetitionPdfBase & {
+    caseDescription: string;
+    irsNotices: IrsNoticesWithCaseDescription[];
+  };
+}) => {
   const {
     caseCaptionExtension,
     caseDescription,
     caseTitle,
+    contactCounsel,
     contactPrimary,
     contactSecondary,
     hasUploadedIrsNotice,
@@ -17,14 +32,13 @@ export const petition = async ({ applicationContext, data }) => {
     petitionReasons,
     preferredTrialCity,
     procedureType,
-    taxYear,
   } = data;
-
   const PetitionTemplate = ReactDOM.renderToString(
     React.createElement(Petition, {
       caseCaptionExtension,
       caseDescription,
       caseTitle,
+      contactCounsel,
       contactPrimary,
       contactSecondary,
       hasUploadedIrsNotice,
@@ -34,7 +48,6 @@ export const petition = async ({ applicationContext, data }) => {
       petitionReasons,
       preferredTrialCity,
       procedureType,
-      taxYear,
     }),
   );
 

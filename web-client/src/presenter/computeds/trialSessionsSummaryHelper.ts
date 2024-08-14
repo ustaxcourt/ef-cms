@@ -6,7 +6,7 @@ export const trialSessionsSummaryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { role, userId } = applicationContext.getCurrentUser();
+  const { role, userId } = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const chambersJudgeUser = get(state.judgeUser);
   const isChambersUser = role === USER_ROLES.chambers;

@@ -1,5 +1,5 @@
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('removeRepresentingFromPractitioners', () => {
   it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {
@@ -18,7 +18,7 @@ describe('removeRepresentingFromPractitioners', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockAdmissionsClerkUser,
       },
     );
 
