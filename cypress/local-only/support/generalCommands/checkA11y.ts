@@ -9,9 +9,6 @@ export function checkA11y(): void {
     {
       includedImpacts: impactLevel,
       retries: 3,
-      rules: {
-        'nested-interactive': { enabled: false }, // https://github.com/flexion/ef-cms/issues/10396
-      },
     },
     terminalLog,
   );

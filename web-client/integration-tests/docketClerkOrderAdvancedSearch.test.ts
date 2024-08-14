@@ -30,13 +30,13 @@ describe('Docket clerk advanced order search', () => {
   const cerebralTest = setupTest();
 
   const seedData = {
-    caseCaption: 'Hanan Al Hroub, Petitioner',
+    caseCaption: 'Luksa Lucia, Petitioner',
     contactPrimary: {
-      address1: '123 Teachers Way',
-      city: 'Haifa',
-      country: 'Palestine',
+      address1: '951 High Crescent',
+      city: 'Manaus',
+      country: 'Brazil',
       countryType: COUNTRY_TYPES.INTERNATIONAL,
-      name: 'Hanan Al Hroub',
+      name: 'Luksa Lucia',
       postalCode: '123456',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     },
