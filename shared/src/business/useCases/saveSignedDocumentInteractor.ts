@@ -5,6 +5,11 @@ import {
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
 import { Message } from '../entities/Message';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { orderBy } from 'lodash';
 
 const saveOriginalDocumentWithNewId = async ({
@@ -62,7 +67,7 @@ const replaceOriginalWithSignedDocument = async ({
  * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
 export const saveSignedDocumentInteractor = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     nameForSigning,
@@ -70,15 +75,20 @@ export const saveSignedDocumentInteractor = async (
     parentMessageId,
     signedDocketEntryId,
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
+  if (!isAuthUser(authorizedUser)) {
+    throw new Error(
+      'User attempting to save signed document is not an auth user',
+    );
+  }
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
@@ -103,12 +113,12 @@ export const saveSignedDocumentInteractor = async (
         isPaper: false,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext },
+      { authorizedUser },
     );
 
-    signedDocketEntryEntity.setFiledBy(user);
+    signedDocketEntryEntity.setFiledBy(authorizedUser);
 
-    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+    signedDocketEntryEntity.setSigned(authorizedUser?.userId, nameForSigning);
 
     caseEntity.addDocketEntry(signedDocketEntryEntity);
 
@@ -155,18 +165,19 @@ export const saveSignedDocumentInteractor = async (
         isFileAttached: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext },
+      { authorizedUser },
     );
 
-    signedDocketEntryEntity.setFiledBy(user);
+    signedDocketEntryEntity.setFiledBy(authorizedUser);
 
-    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+    signedDocketEntryEntity.setSigned(authorizedUser?.userId, nameForSigning);
 
     caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

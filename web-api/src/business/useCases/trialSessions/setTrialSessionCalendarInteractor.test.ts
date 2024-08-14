@@ -1,16 +1,14 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import {
-  PARTY_TYPES,
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 
 describe('setTrialSessionCalendarInteractor', () => {
-  let user;
   const MOCK_TRIAL = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',
@@ -37,16 +35,11 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   beforeEach(() => {
     mockLock = undefined;
-    user = new User({
-      name: 'petitionsClerk',
-      role: ROLES.petitionsClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
@@ -57,19 +50,18 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('throws an exception when there is a permissions issue', async () => {
-    user = new User({
-      name: PARTY_TYPES.petitioner,
-      role: ROLES.petitioner,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
     applicationContext
       .getPersistenceGateway()
       .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hellomom',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hellomom',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -104,10 +96,14 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .setPriorityOnAllWorkItems.mockReturnValue({});
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hellomom',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hellomom',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -145,10 +141,14 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hi',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -184,10 +184,14 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hi',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
@@ -217,10 +221,14 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([]);
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hi',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
@@ -243,10 +251,14 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hi',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
@@ -259,10 +271,14 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hi',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -274,10 +290,14 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await setTrialSessionCalendarInteractor(applicationContext, {
-      clientConnectionId: 'hi',
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

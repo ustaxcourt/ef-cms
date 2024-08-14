@@ -11506,6 +11506,52 @@
     "stampData": {},
     "servedParties": [
       {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.126Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.126Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 7,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|102-67",
+    "servedAt": "2024-06-28T19:55:09.127Z",
+    "docketNumber": "102-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
         "name": "IRS",
         "role": "irsSuperuser"
       }
@@ -11764,6 +11810,38 @@
     "docketNumber": "102-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-08-08T17:32:21.433Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|fe6a80d6-39f6-4a71-b649-36ccdb6788d6",
+    "caseTitle": "Dacey Cox",
+    "section": "docket",
+    "workItemId": "fe6a80d6-39f6-4a71-b649-36ccdb6788d6",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.127Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|fe6a80d6-39f6-4a71-b649-36ccdb6788d6",
+    "docketNumberWithSuffix": "102-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.126Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|102-67",
+    "docketNumber": "102-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.127Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -12780,6 +12858,55 @@
     "stampData": {},
     "servedParties": [
       {
+        "name": "Brett Osborne",
+        "email": "petitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      },
+      {
+        "name": "Britanney Wiley"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.130Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.130Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 7,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|103-67",
+    "servedAt": "2024-06-28T19:55:09.130Z",
+    "docketNumber": "103-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
         "name": "IRS",
         "role": "irsSuperuser"
       }
@@ -12980,6 +13107,38 @@
     "docketNumber": "103-67",
     "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2023-08-08T17:32:21.452Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|ea8e7abc-ead9-42ad-98e5-ddc963837b1e",
+    "caseTitle": "Britanney Wiley",
+    "section": "docket",
+    "workItemId": "ea8e7abc-ead9-42ad-98e5-ddc963837b1e",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.130Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|ea8e7abc-ead9-42ad-98e5-ddc963837b1e",
+    "docketNumberWithSuffix": "103-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.130Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|103-67",
+    "docketNumber": "103-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.130Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -14222,7 +14381,7 @@
     "procedureType": "Regular",
     "isPaper": true,
     "automaticBlocked": true,
-    "automaticBlockedDate": "2023-08-08T17:32:21.475Z",
+    "automaticBlockedDate": "2024-06-28T19:55:09.128Z",
     "qcCompleteForTrial": {},
     "gsi1pk": "leadCase|102-67",
     "orderForFilingFee": false,
@@ -14471,6 +14630,54 @@
     "stampData": {},
     "servedParties": [
       {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      },
+      {
+        "name": "Cassidy Mejia"
+      },
+      {
+        "name": "juvek@mailinator.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.120Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.120Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 7,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|104-67",
+    "servedAt": "2024-06-28T19:55:09.122Z",
+    "docketNumber": "104-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
         "name": "IRS",
         "role": "irsSuperuser"
       }
@@ -14644,6 +14851,38 @@
     "docketNumber": "104-67",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|4e692ade-3910-4bce-b835-d665c740ab3a",
+    "caseTitle": "Cassidy Mejia & juvek@mailinator.com, Deceased, Cassidy Mejia, Surviving Spouse",
+    "section": "docket",
+    "workItemId": "4e692ade-3910-4bce-b835-d665c740ab3a",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.121Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|4e692ade-3910-4bce-b835-d665c740ab3a",
+    "docketNumberWithSuffix": "104-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.120Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|104-67",
+    "docketNumber": "104-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.121Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -19170,6 +19409,52 @@
     "stampData": {},
     "servedParties": [
       {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:55:09.124Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:55:09.124Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "sk": "docket-entry|7be2dea1-4428-4917-a66d-0d474e57ee02",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 6,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|105-67",
+    "servedAt": "2024-06-28T19:55:09.125Z",
+    "docketNumber": "105-67"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
         "name": "Magee Schmidt"
       }
     ],
@@ -19348,6 +19633,38 @@
     "firmName": "GW Law Offices",
     "pk": "case|105-67",
     "email": "privatePractitioner@example.com"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|1158ead3-f46d-4013-9a5d-c36f6290ab68",
+    "caseTitle": "Magee Schmidt, Deceased, Magee Schmidt, Surviving Spouse",
+    "section": "docket",
+    "workItemId": "1158ead3-f46d-4013-9a5d-c36f6290ab68",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:55:09.125Z",
+    "highPriority": false,
+    "leadDocketNumber": "102-67",
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|1158ead3-f46d-4013-9a5d-c36f6290ab68",
+    "docketNumberWithSuffix": "105-67L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:55:09.124Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "7be2dea1-4428-4917-a66d-0d474e57ee02",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|105-67",
+    "docketNumber": "105-67",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:55:09.125Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -20074,13 +20391,20 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "isSealed": false,
     "procedureType": "Regular",
     "isPaper": false,
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2024-06-28T19:54:22.477Z",
+    "qcCompleteForTrial": {},
     "irsNoticeDate": null,
     "orderForFilingFee": false,
+    "petitionPaymentStatus": "Not paid",
     "partyType": "Partnership (as a partnership representative under BBA)",
     "receivedAt": "2019-08-16T17:29:10.132Z",
     "caseType": "CDP (Lien/Levy)",
+    "orderDesignatingPlaceOfTrial": false,
+    "automaticBlockedReason": "Due Date",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -20151,15 +20475,62 @@
     "caseStatusHistory": [],
     "sortableDocketNumber": 2019000107,
     "orderForCds": false,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Las Vegas, Nevada",
     "initialCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
+    "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|107-19",
     "docketNumber": "107-19",
+    "statistics": [],
     "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Status Report",
+    "filingDate": "2024-06-28T19:54:22.466Z",
+    "pending": false,
+    "redactionAcknowledgement": true,
+    "isDraft": false,
+    "receivedAt": "2024-06-28T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2024-06-28T19:54:22.466Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Resp.",
+    "docketEntryId": "178af2d2-fab1-445a-a729-d3da63517a0a",
+    "sk": "docket-entry|178af2d2-fab1-445a-a729-d3da63517a0a",
+    "certificateOfService": false,
+    "documentTitle": "Status Report",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "filedByRole": "irsPractitioner",
+    "partyIrsPractitioner": true,
+    "index": 5,
+    "isFileAttached": true,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RPT",
+    "processingStatus": "complete",
+    "filers": [],
+    "servedPartiesCode": "B",
+    "pk": "case|107-19",
+    "servedAt": "2024-06-28T19:54:22.468Z",
+    "docketNumber": "107-19"
   },
   {
     "date": null,
@@ -20283,6 +20654,49 @@
     "docketNumber": "107-19"
   },
   {
+    "stampData": {},
+    "isStricken": false,
+    "filingDate": "2024-07-10T21:36:34.809Z",
+    "pending": false,
+    "isDraft": true,
+    "receivedAt": "2024-07-10T04:00:00.000Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2024-07-10T21:36:34.809Z",
+    "entityName": "DocketEntry",
+    "filedBy": "Colvin",
+    "docketEntryId": "49acedbf-978d-476c-aae9-42bb75595dd3",
+    "sk": "docket-entry|49acedbf-978d-476c-aae9-42bb75595dd3",
+    "documentTitle": "Test Status Report Order (Unsigned)",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": {
+      "orderType": "statusReport",
+      "addedDocketNumbers": [],
+      "docketEntryDescription": "Test Status Report Order (Unsigned)",
+      "dueDate": "2024-07-11",
+      "jurisdiction": "retained",
+      "richText": "<p class=\"indent-paragraph\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\"indent-paragraph\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\"indent-paragraph\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\"indent-paragraph\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\"indent-paragraph\">ORDERED that Test</p>",
+      "issueOrder": "allCasesInGroup",
+      "eventCode": "O",
+      "additionalOrderText": "Test",
+      "strickenFromTrialSessions": true,
+      "freeText": "Test Status Report Order (Unsigned)",
+      "statusReportFilingDate": "2024-06-28",
+      "statusReportIndex": "5",
+      "documentTitle": "Test Status Report Order (Unsigned)",
+      "docketNumber": "107-19"
+    },
+    "filedByRole": "judge",
+    "isFileAttached": true,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "Test Status Report Order (Unsigned)",
+    "pk": "case|107-19",
+    "docketNumber": "107-19"
+  },
+  {
     "servedParties": [
       {
         "name": "Tatum Craig",
@@ -20312,6 +20726,53 @@
     "filers": [],
     "servedAt": "2019-08-16T17:30:10.526Z",
     "pk": "case|107-19",
+    "docketNumber": "107-19"
+  },
+  {
+    "stampData": {},
+    "isStricken": false,
+    "filingDate": "2024-07-10T21:37:05.678Z",
+    "pending": false,
+    "isDraft": true,
+    "receivedAt": "2024-07-10T04:00:00.000Z",
+    "isOnDocketRecord": false,
+    "signedJudgeName": "John O. Colvin",
+    "createdAt": "2024-07-10T21:37:10.438Z",
+    "entityName": "DocketEntry",
+    "filedBy": "Colvin",
+    "docketEntryId": "61967538-5261-4bb9-b3b6-8072a536d007",
+    "sk": "docket-entry|61967538-5261-4bb9-b3b6-8072a536d007",
+    "documentIdBeforeSignature": "edf69e60-f7e5-483e-9992-f80c05cf4eae",
+    "documentTitle": "Test Status Report Order (Signed)",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": {
+      "orderType": "statusReport",
+      "addedDocketNumbers": [],
+      "docketEntryDescription": "Test Status Report Order (Signed)",
+      "dueDate": "2024-07-11",
+      "jurisdiction": "retained",
+      "richText": "<p class=\"indent-paragraph\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\"indent-paragraph\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\"indent-paragraph\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\"indent-paragraph\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\"indent-paragraph\">ORDERED that Test</p>",
+      "issueOrder": "allCasesInGroup",
+      "eventCode": "O",
+      "additionalOrderText": "Test",
+      "strickenFromTrialSessions": true,
+      "freeText": "Test Status Report Order (Signed)",
+      "statusReportFilingDate": "2024-06-28",
+      "statusReportIndex": "5",
+      "documentTitle": "Test Status Report Order (Signed)",
+      "docketNumber": "107-19"
+    },
+    "filedByRole": "judge",
+    "isFileAttached": true,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "Test Status Report Order (Signed)",
+    "signedAt": "2024-07-10T21:37:10.438Z",
+    "pk": "case|107-19",
+    "signedByUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "docketNumber": "107-19"
   },
   {
@@ -20402,6 +20863,93 @@
     "email": "irspractitioner@example.com"
   },
   {
+    "attachments": [
+      {
+        "documentId": "61967538-5261-4bb9-b3b6-8072a536d007"
+      }
+    ],
+    "isRepliedTo": false,
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "fromUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "subject": "Test Status Report Order (Signed)",
+    "toSection": "colvinsChambers",
+    "gsi1pk": "message|32484c7f-4606-49fc-89f1-27ba1d5596be",
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "isRead": false,
+    "messageId": "32484c7f-4606-49fc-89f1-27ba1d5596be",
+    "message": "Test",
+    "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2024-07-10T21:38:18.175Z",
+    "entityName": "Message",
+    "parentMessageId": "32484c7f-4606-49fc-89f1-27ba1d5596be",
+    "sk": "message|32484c7f-4606-49fc-89f1-27ba1d5596be",
+    "docketNumberWithSuffix": "107-19L",
+    "from": "Colvin",
+    "to": "Colvin",
+    "pk": "case|107-19",
+    "fromSection": "colvinsChambers",
+    "docketNumber": "107-19",
+    "isCompleted": false
+  },
+  {
+    "attachments": [
+      {
+        "documentId": "49acedbf-978d-476c-aae9-42bb75595dd3"
+      }
+    ],
+    "isRepliedTo": false,
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "fromUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "subject": "Test Status Report Order (Unsigned)",
+    "toSection": "colvinsChambers",
+    "gsi1pk": "message|34483b5b-29de-4ad4-8caa-59f71ad6d906",
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "isRead": false,
+    "messageId": "34483b5b-29de-4ad4-8caa-59f71ad6d906",
+    "message": "Test",
+    "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2024-07-10T21:37:51.875Z",
+    "entityName": "Message",
+    "parentMessageId": "34483b5b-29de-4ad4-8caa-59f71ad6d906",
+    "sk": "message|34483b5b-29de-4ad4-8caa-59f71ad6d906",
+    "docketNumberWithSuffix": "107-19L",
+    "from": "Colvin",
+    "to": "Colvin",
+    "pk": "case|107-19",
+    "fromSection": "colvinsChambers",
+    "docketNumber": "107-19",
+    "isCompleted": false
+  },
+  {
+    "attachments": [
+      {
+        "documentId": "178af2d2-fab1-445a-a729-d3da63517a0a"
+      }
+    ],
+    "isRepliedTo": false,
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "fromUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "subject": "Status Report",
+    "toSection": "colvinsChambers",
+    "gsi1pk": "message|73d4365b-8b3a-4b01-9ca3-7087f7a6d4b5",
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "isRead": false,
+    "messageId": "73d4365b-8b3a-4b01-9ca3-7087f7a6d4b5",
+    "message": "Test",
+    "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2024-07-10T21:35:24.000Z",
+    "entityName": "Message",
+    "parentMessageId": "73d4365b-8b3a-4b01-9ca3-7087f7a6d4b5",
+    "sk": "message|73d4365b-8b3a-4b01-9ca3-7087f7a6d4b5",
+    "docketNumberWithSuffix": "107-19L",
+    "from": "Colvin",
+    "to": "Colvin",
+    "pk": "case|107-19",
+    "fromSection": "colvinsChambers",
+    "docketNumber": "107-19",
+    "isCompleted": false
+  },
+  {
     "role": "privatePractitioner",
     "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
@@ -20462,6 +21010,37 @@
     "docketNumber": "107-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|da5fbd31-b1a4-4c40-a935-b9aa81bdfec1",
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "section": "docket",
+    "workItemId": "da5fbd31-b1a4-4c40-a935-b9aa81bdfec1",
+    "assigneeId": null,
+    "sentBy": "Test IRS Practitioner",
+    "createdAt": "2024-06-28T19:54:22.467Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|da5fbd31-b1a4-4c40-a935-b9aa81bdfec1",
+    "docketNumberWithSuffix": "107-19L",
+    "docketEntry": {
+      "eventCode": "RPT",
+      "createdAt": "2024-06-28T19:54:22.466Z",
+      "documentType": "Status Report",
+      "filedBy": "Resp.",
+      "docketEntryId": "178af2d2-fab1-445a-a729-d3da63517a0a",
+      "documentTitle": "Status Report",
+      "isFileAttached": true,
+      "receivedAt": "2024-06-28T04:00:00.000Z",
+      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|107-19",
+    "docketNumber": "107-19",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2024-06-28T19:54:22.467Z"
   },
   {
     "associatedJudge": "Colvin",
@@ -39749,6 +40328,15 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "0c35831c-5034-4080-a206-da84f916ffd5",
+    "sk": "connection|6cd9ca37-0f0a-4c6e-81fb-cd735f21bd4e",
+    "connectionId": "6cd9ca37-0f0a-4c6e-81fb-cd735f21bd4e",
+    "pk": "connection|6cd9ca37-0f0a-4c6e-81fb-cd735f21bd4e",
+    "ttl": 1720733638,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
     "sk": "connection|755c1676-9f0a-40cd-9491-52df6a1e0026",
     "connectionId": "755c1676-9f0a-40cd-9491-52df6a1e0026",
@@ -39791,6 +40379,15 @@
     "pk": "connection|97ea305f-2998-4db7-b4c2-3ac05c3e3e12",
     "ttl": 1703188700,
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "39fdf0fe-bf77-4731-a8bf-12c2c46f6c7e",
+    "sk": "connection|9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "connectionId": "9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "pk": "connection|9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "ttl": 1719690823,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "endpoint": "ws://localhost:3011",
@@ -39975,18 +40572,6 @@
     "pk": "eligible-for-trial-case-catalog",
     "docketNumber": "102-67",
     "gsi1pk": "eligible-for-trial-case-catalog|102-67"
-  },
-  {
-    "sk": "LasVegasNevada-H-B-20190816132910-107-19",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "107-19",
-    "gsi1pk": "eligible-for-trial-case-catalog|107-19"
-  },
-  {
-    "sk": "LasVegasNevada-R-B-20190816132910-107-19",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "107-19",
-    "gsi1pk": "eligible-for-trial-case-catalog|107-19"
   },
   {
     "sk": "WashingtonDistrictofColumbia-H-D-20210216115509-150-12",
@@ -56686,6 +57271,52 @@
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
+    "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "39fdf0fe-bf77-4731-a8bf-12c2c46f6c7e",
+    "gsi1pk": "connection",
+    "sk": "connection|9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "connectionId": "9ec7e8db-e0b1-46f6-aa93-b86142446b8a",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719690823,
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "0849ee89-b403-4d68-80d6-3284a06a69b0",
+    "sk": "request|0849ee89-b403-4d68-80d6-3284a06a69b0-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605467
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "70a6454e-1f10-451f-a46e-8b11112bce12",
+    "sk": "request|70a6454e-1f10-451f-a46e-8b11112bce12-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605424
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "b6c1e53e-4d92-42da-a19d-f83cf4e9e71c",
+    "sk": "request|b6c1e53e-4d92-42da-a19d-f83cf4e9e71c-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605420
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "b7dc846b-3582-44ac-a5ab-371bca0bc8ca",
+    "sk": "request|b7dc846b-3582-44ac-a5ab-371bca0bc8ca-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1719605470
+  },
+  {
     "admissionsStatus": "Active",
     "lastName": "Practitioner",
     "role": "irsPractitioner",
@@ -57701,6 +58332,16 @@
   },
   {
     "endpoint": "ws://localhost:3011",
+    "clientConnectionId": "0c35831c-5034-4080-a206-da84f916ffd5",
+    "gsi1pk": "connection",
+    "sk": "connection|6cd9ca37-0f0a-4c6e-81fb-cd735f21bd4e",
+    "connectionId": "6cd9ca37-0f0a-4c6e-81fb-cd735f21bd4e",
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720733638,
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "endpoint": "ws://localhost:3011",
     "clientConnectionId": "9a0f1572-ffb4-4d7f-b534-226b1b6da9f3",
     "gsi1pk": "connection",
     "sk": "connection|755c1676-9f0a-40cd-9491-52df6a1e0026",
@@ -57778,6 +58419,141 @@
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "ttl": 1696968894,
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "44ec95b9-5c01-401c-86a8-f521ff629f50",
+    "sk": "request|44ec95b9-5c01-401c-86a8-f521ff629f50-0",
+    "chunk": "{\"body\":{\"entityName\":\"Case\",\"consolidatedCases\":[],\"petitioners\":[{\"entityName\":\"Petitioner\",\"additionalName\":\"Wayne Obrien\",\"address1\":\"343 Second Street\",\"address2\":\"Et et aliquip non si\",\"address3\":\"Veritatis vel tenetu\",\"city\":\"Rerum culpa consequ\",\"contactId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"contactType\":\"petitioner\",\"countryType\":\"domestic\",\"email\":\"petitioner@example.com\",\"isAddressSealed\":false,\"name\":\"Tatum Craig\",\"phone\":\"+1 (849) 773-8302\",\"postalCode\":\"82461\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"NM\"},{\"entityName\":\"Petitioner\",\"address1\":\"42 Lamb Sauce Blvd\",\"city\":\"Nashville\",\"contactId\":\"89d7d182-46da-4b96-b29b-260d15249c25\",\"contactType\":\"intervenor\",\"country\":\"USA\",\"countryType\":\"domestic\",\"email\":\"testuser@example.com\",\"isAddressSealed\":false,\"name\":\"Gordon Ramsay\",\"phone\":\"123-456-7890\",\"postalCode\":\"05198\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"AK\",\"title\":\"Intervenor\"},{\"entityName\":\"Petitioner\",\"address1\":\"1337 12th Ave\",\"city\":\"Flavortown\",\"contactId\":\"277ca24a-7be3-49e9-80d3-529a19a1a841\",\"contactType\":\"participant\",\"country\":\"USA\",\"countryType\":\"domestic\",\"email\":\"testuser@example.com\",\"isAddressSealed\":false,\"name\":\"Guy Fieri\",\"phone\":\"123-456-7890\",\"postalCode\":\"05198\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"AK\",\"title\":\"Partner Other Than Tax Matters Partner\"}],\"correspondence\":[],\"associatedJudge\":\"Chief Judge\",\"automaticBlocked\":true,\"automaticBlockedDate\":\"2024-06-28T19:54:22.477Z\",\"automaticBlockedReason\":\"Due Date\",\"caseStatusHistory\":[],\"qcCompleteForTrial\":{},\"noticeOfAttachments\":false,\"orderDesignatingPlaceOfTrial\":false,\"orderForAmendedPetition\":false,\"orderForAmendedPetitionAndFilingFee\":false,\"orderForFilingFee\":false,\"orderForCds\":false,\"orderForRatification\":false,\"orderToShowCause\":false,\"archivedDocketEntries\":[],\"statistics\":[],\"archivedCorrespondences\":[],\"docketEntries\":[{\"entityName\":\"DocketEntry\",\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-08-16T17:29:10.132Z\",\"docketEntryId\":\"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Petition\",\"documentType\":\"Petition\",\"eventCode\":\"P\",\"filedBy\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.132Z\",\"index\":1,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-08-16T04:00:00.000Z\",\"servedAt\":\"2019-08-16T17:30:10.526Z\",\"servedParties\":[{\"email\":\"petitioner@example.com\",\"name\":\"Tatum Craig\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-08-16T17:29:10.133Z\",\"docketEntryId\":\"35306555-83f2-4f61-9be6-438bd107e5eb\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Corporate Disclosure Statement\",\"documentType\":\"Corporate Disclosure Statement\",\"eventCode\":\"DISC\",\"filedBy\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.133Z\",\"index\":3,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":2,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-08-16T04:00:00.000Z\",\"servedAt\":\"2019-08-16T17:29:10.133Z\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"eventCode\":\"ODJ\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"richText\":\"<p>Testing</p>\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"docketNumber\":\"107-19\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"signedAt\":\"2019-10-07T14:29:30.288Z\",\"signedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"signedJudgeN",
+    "index": 0,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648354
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "44ec95b9-5c01-401c-86a8-f521ff629f50",
+    "sk": "request|44ec95b9-5c01-401c-86a8-f521ff629f50-1",
+    "chunk": "ame\":\"Ronald L. Buch\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-10-07T14:29:30.288Z\",\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"filedBy\":\"Test Docketclerk\",\"filingDate\":\"2019-10-07T14:29:30.288Z\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-10-07T04:00:00.000Z\",\"relationship\":\"primaryDocument\"},{\"entityName\":\"DocketEntry\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"signedAt\":\"2020-07-06T17:06:04.552Z\",\"signedByUserId\":\"7b69a8b5-bcc4-4449-8994-08fda8d342e7\",\"signedJudgeName\":\"Chief Judge\",\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2020-09-25T19:27:16.956Z\",\"docketEntryId\":\"ce6f0641-a0ba-4f7b-a330-fb81c873aec8\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Request for Place of Trial at Las Vegas, Nevada\",\"documentType\":\"Request for Place of Trial\",\"eventCode\":\"RQT\",\"filedBy\":\"Migrated\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.132Z\",\"index\":2,\"isFileAttached\":false,\"isOnDocketRecord\":true,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2020-09-25T04:00:00.000Z\",\"servedAt\":\"2020-09-25T19:27:16.956Z\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"editState\":\"{\\\"eventCode\\\":\\\"OST\\\",\\\"documentType\\\":\\\"Order of Service of Transcript (Bench Opinion)\\\",\\\"documentTitle\\\":\\\"Order of Service of Transcript (Bench Opinion) [Anything]\\\",\\\"scenario\\\":\\\"Type A\\\",\\\"attachments\\\":false,\\\"date\\\":null,\\\"generatedDocumentTitle\\\":\\\"Order of Service of Transcript (Bench Opinion) bench description\\\",\\\"searchText\\\":\\\"bench\\\",\\\"freeText\\\":\\\"bench description\\\",\\\"docketEntryId\\\":\\\"1a92894e-83a5-48ba-9994-3ada44235deb\\\",\\\"docketNumber\\\":\\\"107-19\\\"}\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"signedAt\":\"2021-12-15T21:25:12.139Z\",\"signedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"signedJudgeName\":\"Maurice B. Foley\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"workItem\":{\"entityName\":\"WorkItem\",\"assigneeId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"assigneeName\":\"Test Docketclerk\",\"associatedJudge\":\"Chief Judge\",\"caseStatus\":\"General Docket - At Issue (Ready for Trial)\",\"caseTitle\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"completedAt\":\"2021-12-15T21:25:25.326Z\",\"completedBy\":\"Test Docketclerk\",\"completedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"completedMessage\":\"completed\",\"createdAt\":\"2021-12-15T21:25:25.325Z\",\"docketEntry\":{\"createdAt\":\"2021-12-15T21:25:12.138Z\",\"docketEntryId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"documentType\":\"Order of Service of Transcript (Bench Opinion)\",\"eventCode\":\"OST\",\"isFileAttached\":true,\"receivedAt\":\"2021-12-15T05:00:00.000Z\",\"servedAt\":\"2021-12-15T21:25:25.320Z\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\"},\"docketNumber\":\"107-19\",\"docketNumberWithSuffix\":\"107-19L\",\"hideFromPendingMessages\":true,\"highPriority\":false,\"section\":\"docket\",\"sentBy\":\"Test Docketclerk\",\"sentBySection\":\"docket\",\"sentByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"updatedAt\":\"2021-12-15T21:25:25.325Z\",\"workItemId\":\"39b3ac72-0173-4851-829b-e0878def646c\"},\"addToCoversheet\":false,\"attachments\":false,\"createdAt\":\"2021-12-15T21:25:12.138Z\",\"date\":null,\"docketEntryId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"docketNumber\":\"107-19\",\"documentIdBeforeSignature\":\"5c201e01-8753-4e2a-a74c-3dd7920e903c\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"documentType\":\"Order of Service of Transcript (Bench Opi",
+    "index": 1,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648354
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "44ec95b9-5c01-401c-86a8-f521ff629f50",
+    "sk": "request|44ec95b9-5c01-401c-86a8-f521ff629f50-2",
+    "chunk": "nion)\",\"eventCode\":\"OST\",\"filedByRole\":\"docketclerk\",\"filingDate\":\"2021-12-15T21:25:25.320Z\",\"freeText\":\"bench description\",\"index\":4,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isPendingService\":false,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2021-12-15T05:00:00.000Z\",\"relationship\":\"primaryDocument\",\"scenario\":\"Type A\",\"servedAt\":\"2021-12-15T21:25:25.320Z\",\"servedPartiesCode\":\"B\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"workItem\":{\"entityName\":\"WorkItem\",\"assigneeId\":null,\"assigneeName\":null,\"associatedJudge\":\"Chief Judge\",\"caseStatus\":\"General Docket - At Issue (Ready for Trial)\",\"caseTitle\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"createdAt\":\"2024-06-28T19:54:22.467Z\",\"docketEntry\":{\"createdAt\":\"2024-06-28T19:54:22.466Z\",\"docketEntryId\":\"178af2d2-fab1-445a-a729-d3da63517a0a\",\"documentTitle\":\"Status Report\",\"documentType\":\"Status Report\",\"eventCode\":\"RPT\",\"filedBy\":\"Resp.\",\"isFileAttached\":true,\"receivedAt\":\"2024-06-28T04:00:00.000Z\",\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\"},\"docketNumber\":\"107-19\",\"docketNumberWithSuffix\":\"107-19L\",\"highPriority\":false,\"section\":\"docket\",\"sentBy\":\"Test IRS Practitioner\",\"sentByUserId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"updatedAt\":\"2024-06-28T19:54:22.467Z\",\"workItemId\":\"da5fbd31-b1a4-4c40-a935-b9aa81bdfec1\"},\"addToCoversheet\":false,\"attachments\":false,\"certificateOfService\":false,\"createdAt\":\"2024-06-28T19:54:22.466Z\",\"docketEntryId\":\"178af2d2-fab1-445a-a729-d3da63517a0a\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Status Report\",\"documentType\":\"Status Report\",\"eventCode\":\"RPT\",\"filedBy\":\"Resp.\",\"filedByRole\":\"irsPractitioner\",\"filingDate\":\"2024-06-28T19:54:22.466Z\",\"hasSupportingDocuments\":false,\"index\":5,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":2,\"redactionAcknowledgement\":true,\"filers\":[],\"partyIrsPractitioner\":true,\"processingStatus\":\"complete\",\"receivedAt\":\"2024-06-28T04:00:00.000Z\",\"relationship\":\"primaryDocument\",\"scenario\":\"Standard\",\"servedAt\":\"2024-06-28T19:54:22.468Z\",\"servedPartiesCode\":\"B\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"orderType\":\"statusReport\",\"addedDocketNumbers\":[],\"docketEntryDescription\":\"Test Order Response\",\"dueDate\":\"2024-07-11\",\"jurisdiction\":\"retained\",\"richText\":\"<p class=\\\"indent-paragraph\\\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\\\"indent-paragraph\\\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that Test</p>\",\"issueOrder\":\"allCasesInGroup\",\"eventCode\":\"O\",\"additionalOrderText\":\"Test\",\"strickenFromTrialSessions\":true,\"freeText\":\"Test Order Response\",\"statusReportFilingDate\":\"2024-06-28\",\"statusReportIndex\":\"5\",\"documentTitle\":\"Test Order Response\",\"docketNumber\":\"107-19\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"userId\":\"dabbad00-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2024-07-10T21:36:07.890Z\",\"docketEntryId\":\"49acedbf-978d-476c-aae9-42bb75595dd3\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Test Order Response\",\"eventCode\":\"O\",\"filedBy\":\"Colvin\",\"filedByRole\":\"judge\",\"filingDate\":\"2024-07-10T21:36:07.890Z\",\"freeText\":\"Test Order Response\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"",
+    "index": 2,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648354
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "44ec95b9-5c01-401c-86a8-f521ff629f50",
+    "sk": "request|44ec95b9-5c01-401c-86a8-f521ff629f50-3",
+    "chunk": "complete\",\"receivedAt\":\"2024-07-10T04:00:00.000Z\",\"relationship\":\"primaryDocument\"},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"additionalOrderText\":\"Test\",\"docketEntryDescription\":\"Test Status Report Order (Unsigned)\",\"dueDate\":\"2024-07-11\",\"issueOrder\":\"allCasesInGroup\",\"jurisdiction\":\"retained\",\"orderType\":\"statusReport\",\"strickenFromTrialSessions\":true,\"documentTitle\":\"Test Status Report Order (Unsigned)\",\"eventCode\":\"O\",\"richText\":\"<p class=\\\"indent-paragraph\\\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\\\"indent-paragraph\\\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that Test</p>\",\"statusReportFilingDate\":\"2024-06-28\",\"statusReportIndex\":\"5\",\"docketNumber\":\"107-19\",\"addedDocketNumbers\":[],\"freeText\":\"Test Status Report Order (Unsigned)\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"userId\":\"dabbad00-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2024-07-10T21:36:34.809Z\",\"docketEntryId\":\"49acedbf-978d-476c-aae9-42bb75595dd3\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Test Status Report Order (Unsigned)\",\"eventCode\":\"O\",\"filedBy\":\"Colvin\",\"filedByRole\":\"judge\",\"filingDate\":\"2024-07-10T21:36:34.809Z\",\"freeText\":\"Test Status Report Order (Unsigned)\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2024-07-10T04:00:00.000Z\",\"relationship\":\"primaryDocument\"}],\"isSealed\":false,\"hearings\":[],\"privatePractitioners\":[{\"entityName\":\"PrivatePractitioner\",\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\",\"role\":\"privatePractitioner\",\"userId\":\"9805d1ab-18d0-43ec-bafb-654e83405416\",\"contact\":{\"address1\":\"234 Main St\",\"address2\":\"Apartment 4\",\"address3\":\"Under the stairs\",\"city\":\"Chicago\",\"countryType\":\"domestic\",\"phone\":\"+1 (555) 555-5555\",\"postalCode\":\"61234\",\"state\":\"IL\"},\"section\":\"privatePractitioner\",\"barNumber\":\"PT1234\",\"representing\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"serviceIndicator\":\"Electronic\"}],\"irsPractitioners\":[{\"entityName\":\"IrsPractitioner\",\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\",\"role\":\"irsPractitioner\",\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"contact\":{\"address1\":\"234 Main St\",\"address2\":\"Apartment 4\",\"address3\":\"Under the stairs\",\"city\":\"Chicago\",\"countryType\":\"domestic\",\"phone\":\"+1 (555) 555-5555\",\"postalCode\":\"61234\",\"state\":\"IL\"},\"section\":\"irsPractitioner\",\"barNumber\":\"RT6789\",\"serviceIndicator\":\"Electronic\"}],\"caseCaption\":\"Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)\",\"caseType\":\"CDP (Lien/Levy)\",\"createdAt\":\"2019-08-16T17:29:10.132Z\",\"docketNumber\":\"107-19\",\"docketNumberSuffix\":\"L\",\"filingType\":\"A business\",\"irsNoticeDate\":null,\"isPaper\":false,\"partyType\":\"Partnership (as a partnership representative under BBA)\",\"petitionPaymentStatus\":\"Not paid\",\"preferredTrialCity\":\"Las Vegas, Nevada\",\"procedureType\":\"Regular\",\"receivedAt\":\"2019-08-16T17:29:10.132Z\",\"status\":\"General Docket - At Issue (Ready for Trial)\",\"sortableDocketNumber\":2019000107,\"initialDocketNumberSuffix\":\"L\",\"initialCaption\":\"Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)\",\"hasPendingItems\":false,\"docketNumberWithSuffix\":\"107-19L\"},\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 3,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648354
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "4e1a341a-17a3-48cc-9489-b3b3f64bdd36",
+    "sk": "request|4e1a341a-17a3-48cc-9489-b3b3f64bdd36-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648353
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "57a60dab-5faa-49dd-be69-1c9e34da8db5",
+    "sk": "request|57a60dab-5faa-49dd-be69-1c9e34da8db5-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648326
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "89e423e1-d582-4b00-9e07-3ad6139faa3d",
+    "sk": "request|89e423e1-d582-4b00-9e07-3ad6139faa3d-0",
+    "chunk": "{\"body\":{\"entityName\":\"Case\",\"consolidatedCases\":[],\"petitioners\":[{\"entityName\":\"Petitioner\",\"additionalName\":\"Wayne Obrien\",\"address1\":\"343 Second Street\",\"address2\":\"Et et aliquip non si\",\"address3\":\"Veritatis vel tenetu\",\"city\":\"Rerum culpa consequ\",\"contactId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"contactType\":\"petitioner\",\"countryType\":\"domestic\",\"email\":\"petitioner@example.com\",\"isAddressSealed\":false,\"name\":\"Tatum Craig\",\"phone\":\"+1 (849) 773-8302\",\"postalCode\":\"82461\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"NM\"},{\"entityName\":\"Petitioner\",\"address1\":\"42 Lamb Sauce Blvd\",\"city\":\"Nashville\",\"contactId\":\"89d7d182-46da-4b96-b29b-260d15249c25\",\"contactType\":\"intervenor\",\"country\":\"USA\",\"countryType\":\"domestic\",\"email\":\"testuser@example.com\",\"isAddressSealed\":false,\"name\":\"Gordon Ramsay\",\"phone\":\"123-456-7890\",\"postalCode\":\"05198\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"AK\",\"title\":\"Intervenor\"},{\"entityName\":\"Petitioner\",\"address1\":\"1337 12th Ave\",\"city\":\"Flavortown\",\"contactId\":\"277ca24a-7be3-49e9-80d3-529a19a1a841\",\"contactType\":\"participant\",\"country\":\"USA\",\"countryType\":\"domestic\",\"email\":\"testuser@example.com\",\"isAddressSealed\":false,\"name\":\"Guy Fieri\",\"phone\":\"123-456-7890\",\"postalCode\":\"05198\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"AK\",\"title\":\"Partner Other Than Tax Matters Partner\"}],\"correspondence\":[],\"associatedJudge\":\"Chief Judge\",\"automaticBlocked\":true,\"automaticBlockedDate\":\"2024-06-28T19:54:22.477Z\",\"automaticBlockedReason\":\"Due Date\",\"caseStatusHistory\":[],\"qcCompleteForTrial\":{},\"noticeOfAttachments\":false,\"orderDesignatingPlaceOfTrial\":false,\"orderForAmendedPetition\":false,\"orderForAmendedPetitionAndFilingFee\":false,\"orderForFilingFee\":false,\"orderForCds\":false,\"orderForRatification\":false,\"orderToShowCause\":false,\"archivedDocketEntries\":[],\"statistics\":[],\"archivedCorrespondences\":[],\"docketEntries\":[{\"entityName\":\"DocketEntry\",\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-08-16T17:29:10.132Z\",\"docketEntryId\":\"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Petition\",\"documentType\":\"Petition\",\"eventCode\":\"P\",\"filedBy\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.132Z\",\"index\":1,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-08-16T04:00:00.000Z\",\"servedAt\":\"2019-08-16T17:30:10.526Z\",\"servedParties\":[{\"email\":\"petitioner@example.com\",\"name\":\"Tatum Craig\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-08-16T17:29:10.133Z\",\"docketEntryId\":\"35306555-83f2-4f61-9be6-438bd107e5eb\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Corporate Disclosure Statement\",\"documentType\":\"Corporate Disclosure Statement\",\"eventCode\":\"DISC\",\"filedBy\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.133Z\",\"index\":3,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":2,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-08-16T04:00:00.000Z\",\"servedAt\":\"2019-08-16T17:29:10.133Z\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"eventCode\":\"ODJ\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"richText\":\"<p>Testing</p>\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"docketNumber\":\"107-19\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"signedAt\":\"2019-10-07T14:29:30.288Z\",\"signedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"signedJudgeN",
+    "index": 0,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648327
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "89e423e1-d582-4b00-9e07-3ad6139faa3d",
+    "sk": "request|89e423e1-d582-4b00-9e07-3ad6139faa3d-1",
+    "chunk": "ame\":\"Ronald L. Buch\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-10-07T14:29:30.288Z\",\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"filedBy\":\"Test Docketclerk\",\"filingDate\":\"2019-10-07T14:29:30.288Z\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-10-07T04:00:00.000Z\",\"relationship\":\"primaryDocument\"},{\"entityName\":\"DocketEntry\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"signedAt\":\"2020-07-06T17:06:04.552Z\",\"signedByUserId\":\"7b69a8b5-bcc4-4449-8994-08fda8d342e7\",\"signedJudgeName\":\"Chief Judge\",\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2020-09-25T19:27:16.956Z\",\"docketEntryId\":\"ce6f0641-a0ba-4f7b-a330-fb81c873aec8\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Request for Place of Trial at Las Vegas, Nevada\",\"documentType\":\"Request for Place of Trial\",\"eventCode\":\"RQT\",\"filedBy\":\"Migrated\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.132Z\",\"index\":2,\"isFileAttached\":false,\"isOnDocketRecord\":true,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2020-09-25T04:00:00.000Z\",\"servedAt\":\"2020-09-25T19:27:16.956Z\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"editState\":\"{\\\"eventCode\\\":\\\"OST\\\",\\\"documentType\\\":\\\"Order of Service of Transcript (Bench Opinion)\\\",\\\"documentTitle\\\":\\\"Order of Service of Transcript (Bench Opinion) [Anything]\\\",\\\"scenario\\\":\\\"Type A\\\",\\\"attachments\\\":false,\\\"date\\\":null,\\\"generatedDocumentTitle\\\":\\\"Order of Service of Transcript (Bench Opinion) bench description\\\",\\\"searchText\\\":\\\"bench\\\",\\\"freeText\\\":\\\"bench description\\\",\\\"docketEntryId\\\":\\\"1a92894e-83a5-48ba-9994-3ada44235deb\\\",\\\"docketNumber\\\":\\\"107-19\\\"}\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"signedAt\":\"2021-12-15T21:25:12.139Z\",\"signedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"signedJudgeName\":\"Maurice B. Foley\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"workItem\":{\"entityName\":\"WorkItem\",\"assigneeId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"assigneeName\":\"Test Docketclerk\",\"associatedJudge\":\"Chief Judge\",\"caseStatus\":\"General Docket - At Issue (Ready for Trial)\",\"caseTitle\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"completedAt\":\"2021-12-15T21:25:25.326Z\",\"completedBy\":\"Test Docketclerk\",\"completedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"completedMessage\":\"completed\",\"createdAt\":\"2021-12-15T21:25:25.325Z\",\"docketEntry\":{\"createdAt\":\"2021-12-15T21:25:12.138Z\",\"docketEntryId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"documentType\":\"Order of Service of Transcript (Bench Opinion)\",\"eventCode\":\"OST\",\"isFileAttached\":true,\"receivedAt\":\"2021-12-15T05:00:00.000Z\",\"servedAt\":\"2021-12-15T21:25:25.320Z\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\"},\"docketNumber\":\"107-19\",\"docketNumberWithSuffix\":\"107-19L\",\"hideFromPendingMessages\":true,\"highPriority\":false,\"section\":\"docket\",\"sentBy\":\"Test Docketclerk\",\"sentBySection\":\"docket\",\"sentByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"updatedAt\":\"2021-12-15T21:25:25.325Z\",\"workItemId\":\"39b3ac72-0173-4851-829b-e0878def646c\"},\"addToCoversheet\":false,\"attachments\":false,\"createdAt\":\"2021-12-15T21:25:12.138Z\",\"date\":null,\"docketEntryId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"docketNumber\":\"107-19\",\"documentIdBeforeSignature\":\"5c201e01-8753-4e2a-a74c-3dd7920e903c\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"documentType\":\"Order of Service of Transcript (Bench Opi",
+    "index": 1,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648327
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "89e423e1-d582-4b00-9e07-3ad6139faa3d",
+    "sk": "request|89e423e1-d582-4b00-9e07-3ad6139faa3d-2",
+    "chunk": "nion)\",\"eventCode\":\"OST\",\"filedByRole\":\"docketclerk\",\"filingDate\":\"2021-12-15T21:25:25.320Z\",\"freeText\":\"bench description\",\"index\":4,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isPendingService\":false,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2021-12-15T05:00:00.000Z\",\"relationship\":\"primaryDocument\",\"scenario\":\"Type A\",\"servedAt\":\"2021-12-15T21:25:25.320Z\",\"servedPartiesCode\":\"B\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"workItem\":{\"entityName\":\"WorkItem\",\"assigneeId\":null,\"assigneeName\":null,\"associatedJudge\":\"Chief Judge\",\"caseStatus\":\"General Docket - At Issue (Ready for Trial)\",\"caseTitle\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"createdAt\":\"2024-06-28T19:54:22.467Z\",\"docketEntry\":{\"createdAt\":\"2024-06-28T19:54:22.466Z\",\"docketEntryId\":\"178af2d2-fab1-445a-a729-d3da63517a0a\",\"documentTitle\":\"Status Report\",\"documentType\":\"Status Report\",\"eventCode\":\"RPT\",\"filedBy\":\"Resp.\",\"isFileAttached\":true,\"receivedAt\":\"2024-06-28T04:00:00.000Z\",\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\"},\"docketNumber\":\"107-19\",\"docketNumberWithSuffix\":\"107-19L\",\"highPriority\":false,\"section\":\"docket\",\"sentBy\":\"Test IRS Practitioner\",\"sentByUserId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"updatedAt\":\"2024-06-28T19:54:22.467Z\",\"workItemId\":\"da5fbd31-b1a4-4c40-a935-b9aa81bdfec1\"},\"addToCoversheet\":false,\"attachments\":false,\"certificateOfService\":false,\"createdAt\":\"2024-06-28T19:54:22.466Z\",\"docketEntryId\":\"178af2d2-fab1-445a-a729-d3da63517a0a\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Status Report\",\"documentType\":\"Status Report\",\"eventCode\":\"RPT\",\"filedBy\":\"Resp.\",\"filedByRole\":\"irsPractitioner\",\"filingDate\":\"2024-06-28T19:54:22.466Z\",\"hasSupportingDocuments\":false,\"index\":5,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":2,\"redactionAcknowledgement\":true,\"filers\":[],\"partyIrsPractitioner\":true,\"processingStatus\":\"complete\",\"receivedAt\":\"2024-06-28T04:00:00.000Z\",\"relationship\":\"primaryDocument\",\"scenario\":\"Standard\",\"servedAt\":\"2024-06-28T19:54:22.468Z\",\"servedPartiesCode\":\"B\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"additionalOrderText\":\"Test\",\"docketEntryDescription\":\"Test Order Response\",\"issueOrder\":\"allCasesInGroup\",\"orderType\":\"statusReport\",\"dueDate\":\"2024-07-11\",\"strickenFromTrialSessions\":true,\"jurisdiction\":\"retained\",\"documentTitle\":\"Test Order Response\",\"eventCode\":\"O\",\"richText\":\"<p class=\\\"indent-paragraph\\\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\\\"indent-paragraph\\\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that Test</p>\",\"statusReportFilingDate\":\"2024-06-28\",\"statusReportIndex\":\"5\",\"docketNumber\":\"107-19\",\"addedDocketNumbers\":[],\"freeText\":\"Test Order Response\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"userId\":\"dabbad00-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2024-07-10T21:36:07.890Z\",\"docketEntryId\":\"49acedbf-978d-476c-aae9-42bb75595dd3\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Test Order Response\",\"eventCode\":\"O\",\"filedBy\":\"Colvin\",\"filedByRole\":\"judge\",\"filingDate\":\"2024-07-10T21:36:07.890Z\",\"freeText\":\"Test Order Response\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"",
+    "index": 2,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648327
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "89e423e1-d582-4b00-9e07-3ad6139faa3d",
+    "sk": "request|89e423e1-d582-4b00-9e07-3ad6139faa3d-3",
+    "chunk": "complete\",\"receivedAt\":\"2024-07-10T04:00:00.000Z\",\"relationship\":\"primaryDocument\"}],\"isSealed\":false,\"hearings\":[],\"privatePractitioners\":[{\"entityName\":\"PrivatePractitioner\",\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\",\"role\":\"privatePractitioner\",\"userId\":\"9805d1ab-18d0-43ec-bafb-654e83405416\",\"contact\":{\"address1\":\"234 Main St\",\"address2\":\"Apartment 4\",\"address3\":\"Under the stairs\",\"city\":\"Chicago\",\"countryType\":\"domestic\",\"phone\":\"+1 (555) 555-5555\",\"postalCode\":\"61234\",\"state\":\"IL\"},\"section\":\"privatePractitioner\",\"barNumber\":\"PT1234\",\"representing\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"serviceIndicator\":\"Electronic\"}],\"irsPractitioners\":[{\"entityName\":\"IrsPractitioner\",\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\",\"role\":\"irsPractitioner\",\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"contact\":{\"address1\":\"234 Main St\",\"address2\":\"Apartment 4\",\"address3\":\"Under the stairs\",\"city\":\"Chicago\",\"countryType\":\"domestic\",\"phone\":\"+1 (555) 555-5555\",\"postalCode\":\"61234\",\"state\":\"IL\"},\"section\":\"irsPractitioner\",\"barNumber\":\"RT6789\",\"serviceIndicator\":\"Electronic\"}],\"caseCaption\":\"Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)\",\"caseType\":\"CDP (Lien/Levy)\",\"createdAt\":\"2019-08-16T17:29:10.132Z\",\"docketNumber\":\"107-19\",\"docketNumberSuffix\":\"L\",\"filingType\":\"A business\",\"irsNoticeDate\":null,\"isPaper\":false,\"partyType\":\"Partnership (as a partnership representative under BBA)\",\"petitionPaymentStatus\":\"Not paid\",\"preferredTrialCity\":\"Las Vegas, Nevada\",\"procedureType\":\"Regular\",\"receivedAt\":\"2019-08-16T17:29:10.132Z\",\"status\":\"General Docket - At Issue (Ready for Trial)\",\"sortableDocketNumber\":2019000107,\"initialDocketNumberSuffix\":\"L\",\"initialCaption\":\"Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)\",\"hasPendingItems\":false,\"docketNumberWithSuffix\":\"107-19L\"},\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 3,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648327
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "e76711a7-e964-470f-a41b-6be20c12e9e0",
+    "sk": "request|e76711a7-e964-470f-a41b-6be20c12e9e0-0",
+    "chunk": "{\"body\":{\"entityName\":\"Case\",\"consolidatedCases\":[],\"petitioners\":[{\"entityName\":\"Petitioner\",\"additionalName\":\"Wayne Obrien\",\"address1\":\"343 Second Street\",\"address2\":\"Et et aliquip non si\",\"address3\":\"Veritatis vel tenetu\",\"city\":\"Rerum culpa consequ\",\"contactId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"contactType\":\"petitioner\",\"countryType\":\"domestic\",\"email\":\"petitioner@example.com\",\"isAddressSealed\":false,\"name\":\"Tatum Craig\",\"phone\":\"+1 (849) 773-8302\",\"postalCode\":\"82461\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"NM\"},{\"entityName\":\"Petitioner\",\"address1\":\"42 Lamb Sauce Blvd\",\"city\":\"Nashville\",\"contactId\":\"89d7d182-46da-4b96-b29b-260d15249c25\",\"contactType\":\"intervenor\",\"country\":\"USA\",\"countryType\":\"domestic\",\"email\":\"testuser@example.com\",\"isAddressSealed\":false,\"name\":\"Gordon Ramsay\",\"phone\":\"123-456-7890\",\"postalCode\":\"05198\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"AK\",\"title\":\"Intervenor\"},{\"entityName\":\"Petitioner\",\"address1\":\"1337 12th Ave\",\"city\":\"Flavortown\",\"contactId\":\"277ca24a-7be3-49e9-80d3-529a19a1a841\",\"contactType\":\"participant\",\"country\":\"USA\",\"countryType\":\"domestic\",\"email\":\"testuser@example.com\",\"isAddressSealed\":false,\"name\":\"Guy Fieri\",\"phone\":\"123-456-7890\",\"postalCode\":\"05198\",\"sealedAndUnavailable\":false,\"serviceIndicator\":\"None\",\"state\":\"AK\",\"title\":\"Partner Other Than Tax Matters Partner\"}],\"correspondence\":[],\"associatedJudge\":\"Chief Judge\",\"automaticBlocked\":true,\"automaticBlockedDate\":\"2024-06-28T19:54:22.477Z\",\"automaticBlockedReason\":\"Due Date\",\"caseStatusHistory\":[],\"qcCompleteForTrial\":{},\"noticeOfAttachments\":false,\"orderDesignatingPlaceOfTrial\":false,\"orderForAmendedPetition\":false,\"orderForAmendedPetitionAndFilingFee\":false,\"orderForFilingFee\":false,\"orderForCds\":false,\"orderForRatification\":false,\"orderToShowCause\":false,\"archivedDocketEntries\":[],\"statistics\":[],\"archivedCorrespondences\":[],\"docketEntries\":[{\"entityName\":\"DocketEntry\",\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-08-16T17:29:10.132Z\",\"docketEntryId\":\"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Petition\",\"documentType\":\"Petition\",\"eventCode\":\"P\",\"filedBy\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.132Z\",\"index\":1,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-08-16T04:00:00.000Z\",\"servedAt\":\"2019-08-16T17:30:10.526Z\",\"servedParties\":[{\"email\":\"petitioner@example.com\",\"name\":\"Tatum Craig\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-08-16T17:29:10.133Z\",\"docketEntryId\":\"35306555-83f2-4f61-9be6-438bd107e5eb\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Corporate Disclosure Statement\",\"documentType\":\"Corporate Disclosure Statement\",\"eventCode\":\"DISC\",\"filedBy\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.133Z\",\"index\":3,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":2,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-08-16T04:00:00.000Z\",\"servedAt\":\"2019-08-16T17:29:10.133Z\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"eventCode\":\"ODJ\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"richText\":\"<p>Testing</p>\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"docketNumber\":\"107-19\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"signedAt\":\"2019-10-07T14:29:30.288Z\",\"signedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"signedJudgeN",
+    "index": 0,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648385
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "e76711a7-e964-470f-a41b-6be20c12e9e0",
+    "sk": "request|e76711a7-e964-470f-a41b-6be20c12e9e0-1",
+    "chunk": "ame\":\"Ronald L. Buch\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2019-10-07T14:29:30.288Z\",\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"filedBy\":\"Test Docketclerk\",\"filingDate\":\"2019-10-07T14:29:30.288Z\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2019-10-07T04:00:00.000Z\",\"relationship\":\"primaryDocument\"},{\"entityName\":\"DocketEntry\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"signedAt\":\"2020-07-06T17:06:04.552Z\",\"signedByUserId\":\"7b69a8b5-bcc4-4449-8994-08fda8d342e7\",\"signedJudgeName\":\"Chief Judge\",\"userId\":\"7805d1ab-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2020-09-25T19:27:16.956Z\",\"docketEntryId\":\"ce6f0641-a0ba-4f7b-a330-fb81c873aec8\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Request for Place of Trial at Las Vegas, Nevada\",\"documentType\":\"Request for Place of Trial\",\"eventCode\":\"RQT\",\"filedBy\":\"Migrated\",\"filedByRole\":\"petitioner\",\"filingDate\":\"2019-08-16T17:29:10.132Z\",\"index\":2,\"isFileAttached\":false,\"isOnDocketRecord\":true,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2020-09-25T04:00:00.000Z\",\"servedAt\":\"2020-09-25T19:27:16.956Z\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"editState\":\"{\\\"eventCode\\\":\\\"OST\\\",\\\"documentType\\\":\\\"Order of Service of Transcript (Bench Opinion)\\\",\\\"documentTitle\\\":\\\"Order of Service of Transcript (Bench Opinion) [Anything]\\\",\\\"scenario\\\":\\\"Type A\\\",\\\"attachments\\\":false,\\\"date\\\":null,\\\"generatedDocumentTitle\\\":\\\"Order of Service of Transcript (Bench Opinion) bench description\\\",\\\"searchText\\\":\\\"bench\\\",\\\"freeText\\\":\\\"bench description\\\",\\\"docketEntryId\\\":\\\"1a92894e-83a5-48ba-9994-3ada44235deb\\\",\\\"docketNumber\\\":\\\"107-19\\\"}\",\"draftOrderState\":null,\"stampData\":{},\"isDraft\":false,\"pending\":false,\"signedAt\":\"2021-12-15T21:25:12.139Z\",\"signedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"signedJudgeName\":\"Maurice B. Foley\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"workItem\":{\"entityName\":\"WorkItem\",\"assigneeId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"assigneeName\":\"Test Docketclerk\",\"associatedJudge\":\"Chief Judge\",\"caseStatus\":\"General Docket - At Issue (Ready for Trial)\",\"caseTitle\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"completedAt\":\"2021-12-15T21:25:25.326Z\",\"completedBy\":\"Test Docketclerk\",\"completedByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"completedMessage\":\"completed\",\"createdAt\":\"2021-12-15T21:25:25.325Z\",\"docketEntry\":{\"createdAt\":\"2021-12-15T21:25:12.138Z\",\"docketEntryId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"documentType\":\"Order of Service of Transcript (Bench Opinion)\",\"eventCode\":\"OST\",\"isFileAttached\":true,\"receivedAt\":\"2021-12-15T05:00:00.000Z\",\"servedAt\":\"2021-12-15T21:25:25.320Z\",\"userId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\"},\"docketNumber\":\"107-19\",\"docketNumberWithSuffix\":\"107-19L\",\"hideFromPendingMessages\":true,\"highPriority\":false,\"section\":\"docket\",\"sentBy\":\"Test Docketclerk\",\"sentBySection\":\"docket\",\"sentByUserId\":\"1805d1ab-18d0-43ec-bafb-654e83405416\",\"updatedAt\":\"2021-12-15T21:25:25.325Z\",\"workItemId\":\"39b3ac72-0173-4851-829b-e0878def646c\"},\"addToCoversheet\":false,\"attachments\":false,\"createdAt\":\"2021-12-15T21:25:12.138Z\",\"date\":null,\"docketEntryId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"docketNumber\":\"107-19\",\"documentIdBeforeSignature\":\"5c201e01-8753-4e2a-a74c-3dd7920e903c\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"documentType\":\"Order of Service of Transcript (Bench Opi",
+    "index": 1,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648385
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "e76711a7-e964-470f-a41b-6be20c12e9e0",
+    "sk": "request|e76711a7-e964-470f-a41b-6be20c12e9e0-2",
+    "chunk": "nion)\",\"eventCode\":\"OST\",\"filedByRole\":\"docketclerk\",\"filingDate\":\"2021-12-15T21:25:25.320Z\",\"freeText\":\"bench description\",\"index\":4,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isPendingService\":false,\"isStricken\":false,\"numberOfPages\":1,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2021-12-15T05:00:00.000Z\",\"relationship\":\"primaryDocument\",\"scenario\":\"Type A\",\"servedAt\":\"2021-12-15T21:25:25.320Z\",\"servedPartiesCode\":\"B\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"stampData\":{},\"isDraft\":false,\"pending\":false,\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"workItem\":{\"entityName\":\"WorkItem\",\"assigneeId\":null,\"assigneeName\":null,\"associatedJudge\":\"Chief Judge\",\"caseStatus\":\"General Docket - At Issue (Ready for Trial)\",\"caseTitle\":\"Tatum Craig, Wayne Obrien, Partnership Representative\",\"createdAt\":\"2024-06-28T19:54:22.467Z\",\"docketEntry\":{\"createdAt\":\"2024-06-28T19:54:22.466Z\",\"docketEntryId\":\"178af2d2-fab1-445a-a729-d3da63517a0a\",\"documentTitle\":\"Status Report\",\"documentType\":\"Status Report\",\"eventCode\":\"RPT\",\"filedBy\":\"Resp.\",\"isFileAttached\":true,\"receivedAt\":\"2024-06-28T04:00:00.000Z\",\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\"},\"docketNumber\":\"107-19\",\"docketNumberWithSuffix\":\"107-19L\",\"highPriority\":false,\"section\":\"docket\",\"sentBy\":\"Test IRS Practitioner\",\"sentByUserId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"updatedAt\":\"2024-06-28T19:54:22.467Z\",\"workItemId\":\"da5fbd31-b1a4-4c40-a935-b9aa81bdfec1\"},\"addToCoversheet\":false,\"attachments\":false,\"certificateOfService\":false,\"createdAt\":\"2024-06-28T19:54:22.466Z\",\"docketEntryId\":\"178af2d2-fab1-445a-a729-d3da63517a0a\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Status Report\",\"documentType\":\"Status Report\",\"eventCode\":\"RPT\",\"filedBy\":\"Resp.\",\"filedByRole\":\"irsPractitioner\",\"filingDate\":\"2024-06-28T19:54:22.466Z\",\"hasSupportingDocuments\":false,\"index\":5,\"isFileAttached\":true,\"isOnDocketRecord\":true,\"isStricken\":false,\"numberOfPages\":2,\"redactionAcknowledgement\":true,\"filers\":[],\"partyIrsPractitioner\":true,\"processingStatus\":\"complete\",\"receivedAt\":\"2024-06-28T04:00:00.000Z\",\"relationship\":\"primaryDocument\",\"scenario\":\"Standard\",\"servedAt\":\"2024-06-28T19:54:22.468Z\",\"servedPartiesCode\":\"B\",\"servedParties\":[{\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\"},{\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\"}]},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"orderType\":\"statusReport\",\"addedDocketNumbers\":[],\"docketEntryDescription\":\"Test Status Report Order (Unsigned)\",\"dueDate\":\"2024-07-11\",\"jurisdiction\":\"retained\",\"richText\":\"<p class=\\\"indent-paragraph\\\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\\\"indent-paragraph\\\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that Test</p>\",\"issueOrder\":\"allCasesInGroup\",\"eventCode\":\"O\",\"additionalOrderText\":\"Test\",\"strickenFromTrialSessions\":true,\"freeText\":\"Test Status Report Order (Unsigned)\",\"statusReportFilingDate\":\"2024-06-28\",\"statusReportIndex\":\"5\",\"documentTitle\":\"Test Status Report Order (Unsigned)\",\"docketNumber\":\"107-19\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"userId\":\"dabbad00-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2024-07-10T21:36:34.809Z\",\"docketEntryId\":\"49acedbf-978d-476c-aae9-42bb75595dd3\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Test Status Report Order (Unsigned)\",\"eventCode\":\"O\",\"filedBy\":\"Colvin\",\"filedByRole\":\"judge\",\"filingDate\":\"2024-07-10T21:36:34.809Z\",\"freeText\":\"Test Status Report Order (Unsigned)\",\"isFileAttached\":true,\"isOnDocketRecord\":fa",
+    "index": 2,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648385
+  },
+  {
+    "totalNumberOfChunks": 4,
+    "requestId": "e76711a7-e964-470f-a41b-6be20c12e9e0",
+    "sk": "request|e76711a7-e964-470f-a41b-6be20c12e9e0-3",
+    "chunk": "lse,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2024-07-10T04:00:00.000Z\",\"relationship\":\"primaryDocument\"},{\"entityName\":\"DocketEntry\",\"draftOrderState\":{\"additionalOrderText\":\"Test\",\"docketEntryDescription\":\"Test Status Report Order (Signed)\",\"issueOrder\":\"allCasesInGroup\",\"orderType\":\"statusReport\",\"dueDate\":\"2024-07-11\",\"strickenFromTrialSessions\":true,\"jurisdiction\":\"retained\",\"documentTitle\":\"Test Status Report Order (Signed)\",\"eventCode\":\"O\",\"richText\":\"<p class=\\\"indent-paragraph\\\">On June 28, 2024, a status report was filed in this case (Index no. 5). For cause, it is</p><p class=\\\"indent-paragraph\\\">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that this case is stricken from the trial session. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class=\\\"indent-paragraph\\\">ORDERED that Test</p>\",\"statusReportFilingDate\":\"2024-06-28\",\"statusReportIndex\":\"5\",\"docketNumber\":\"107-19\",\"addedDocketNumbers\":[],\"freeText\":\"Test Status Report Order (Signed)\"},\"stampData\":{},\"isDraft\":true,\"pending\":false,\"userId\":\"dabbad00-18d0-43ec-bafb-654e83405416\",\"addToCoversheet\":false,\"createdAt\":\"2024-07-10T21:37:05.678Z\",\"docketEntryId\":\"61967538-5261-4bb9-b3b6-8072a536d007\",\"docketNumber\":\"107-19\",\"documentTitle\":\"Test Status Report Order (Signed)\",\"eventCode\":\"O\",\"filedBy\":\"Colvin\",\"filedByRole\":\"judge\",\"filingDate\":\"2024-07-10T21:37:05.678Z\",\"freeText\":\"Test Status Report Order (Signed)\",\"isFileAttached\":true,\"isOnDocketRecord\":false,\"isStricken\":false,\"filers\":[],\"processingStatus\":\"complete\",\"receivedAt\":\"2024-07-10T04:00:00.000Z\",\"relationship\":\"primaryDocument\"}],\"isSealed\":false,\"hearings\":[],\"privatePractitioners\":[{\"entityName\":\"PrivatePractitioner\",\"email\":\"privatePractitioner@example.com\",\"name\":\"Test Private Practitioner\",\"role\":\"privatePractitioner\",\"userId\":\"9805d1ab-18d0-43ec-bafb-654e83405416\",\"contact\":{\"address1\":\"234 Main St\",\"address2\":\"Apartment 4\",\"address3\":\"Under the stairs\",\"city\":\"Chicago\",\"countryType\":\"domestic\",\"phone\":\"+1 (555) 555-5555\",\"postalCode\":\"61234\",\"state\":\"IL\"},\"section\":\"privatePractitioner\",\"barNumber\":\"PT1234\",\"representing\":[\"7805d1ab-18d0-43ec-bafb-654e83405416\"],\"serviceIndicator\":\"Electronic\"}],\"irsPractitioners\":[{\"entityName\":\"IrsPractitioner\",\"email\":\"irspractitioner@example.com\",\"name\":\"Test IRS Practitioner\",\"role\":\"irsPractitioner\",\"userId\":\"5805d1ab-18d0-43ec-bafb-654e83405416\",\"contact\":{\"address1\":\"234 Main St\",\"address2\":\"Apartment 4\",\"address3\":\"Under the stairs\",\"city\":\"Chicago\",\"countryType\":\"domestic\",\"phone\":\"+1 (555) 555-5555\",\"postalCode\":\"61234\",\"state\":\"IL\"},\"section\":\"irsPractitioner\",\"barNumber\":\"RT6789\",\"serviceIndicator\":\"Electronic\"}],\"caseCaption\":\"Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)\",\"caseType\":\"CDP (Lien/Levy)\",\"createdAt\":\"2019-08-16T17:29:10.132Z\",\"docketNumber\":\"107-19\",\"docketNumberSuffix\":\"L\",\"filingType\":\"A business\",\"irsNoticeDate\":null,\"isPaper\":false,\"partyType\":\"Partnership (as a partnership representative under BBA)\",\"petitionPaymentStatus\":\"Not paid\",\"preferredTrialCity\":\"Las Vegas, Nevada\",\"procedureType\":\"Regular\",\"receivedAt\":\"2019-08-16T17:29:10.132Z\",\"status\":\"General Docket - At Issue (Ready for Trial)\",\"sortableDocketNumber\":2019000107,\"initialDocketNumberSuffix\":\"L\",\"initialCaption\":\"Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)\",\"hasPendingItems\":false,\"docketNumberWithSuffix\":\"107-19L\"},\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 3,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648385
+  },
+  {
+    "totalNumberOfChunks": 1,
+    "requestId": "f03c7d5e-9c13-4a3e-9dd6-13b50f737d0a",
+    "sk": "request|f03c7d5e-9c13-4a3e-9dd6-13b50f737d0a-0",
+    "chunk": "{\"headers\":{\"Access-Control-Expose-Headers\":\"X-Terminal-User\",\"Cache-Control\":\"max-age=0, private, no-cache, no-store, must-revalidate\",\"Content-Type\":\"application/json\",\"Pragma\":\"no-cache\",\"Vary\":\"Authorization\",\"X-Content-Type-Options\":\"nosniff\"},\"statusCode\":\"200\"}",
+    "index": 0,
+    "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "ttl": 1720648384
   },
   {
     "judgeTitle": "Judge",
