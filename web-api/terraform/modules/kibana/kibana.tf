@@ -89,6 +89,25 @@ resource "aws_opensearch_domain" "efcms-logs" {
   }
 }
 
+resource "aws_elasticsearch_domain_policy" "kibana_access" {
+  domain_name     = aws_opensearch_domain.efcms-logs.domain_name
+  access_policies = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect":"Allow",
+      "Principal": {
+        "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
+      },
+      "Action": "es:ESHttp*",
+      "Resource":"${aws_opensearch_domain.efcms-logs.arn}/*"
+    }
+  ]
+}
+POLICY
+}
+
 resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs" {
   policy_name = "allow_elasticsearch_to_write_logs"
 
