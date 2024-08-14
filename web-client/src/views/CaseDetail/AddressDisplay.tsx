@@ -20,6 +20,7 @@ export const AddressDisplay = connect<
     nameOverride?: string;
     noMargin?: boolean;
     showEmail?: boolean;
+    showPhoneLabel?: boolean;
     showSealAddressLink?: boolean;
   },
   typeof addessDisplayDeps
@@ -33,6 +34,7 @@ export const AddressDisplay = connect<
     noMargin,
     openSealAddressModalSequence,
     showEmail,
+    showPhoneLabel,
     showSealAddressLink,
   }) {
     return (
@@ -95,6 +97,7 @@ export const AddressDisplay = connect<
               noMargin={noMargin}
               openSealAddressModalSequence={openSealAddressModalSequence}
               showEmail={showEmail}
+              showPhoneLabel={showPhoneLabel}
               showSealAddressLink={showSealAddressLink}
             />
           )}
@@ -112,6 +115,7 @@ function ContactDetails({
   noMargin,
   openSealAddressModalSequence,
   showEmail,
+  showPhoneLabel,
   showSealAddressLink,
 }) {
   return (
@@ -144,6 +148,7 @@ function ContactDetails({
           )}
           data-testid="contact-info-phone-number"
         >
+          {showPhoneLabel && <span className="text-semibold">Phone: </span>}
           {contact.phone}
         </span>
       )}

@@ -55,6 +55,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                 <address aria-labelledby="filing-contact-primary">
                   <AddressDisplay
                     noMargin
+                    showPhoneLabel
                     contact={petitionFormatted.contactPrimary}
                   />
                   {petitionFormatted.contactPrimary.placeOfLegalResidence && (
@@ -111,6 +112,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                 <address aria-labelledby="filing-contact-secondary">
                   <AddressDisplay
                     noMargin
+                    showPhoneLabel
                     contact={{
                       ...petitionFormatted.contactSecondary,
                       email:
