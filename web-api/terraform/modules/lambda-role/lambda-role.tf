@@ -53,7 +53,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "cloudwatch:PutMetricData",
+                "cloudwatch:PutMetricData"
             ],
             "Resource": [
                 "*"
