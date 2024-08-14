@@ -19,6 +19,7 @@ import {
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
+import { CloudWatchClient } from '@aws-sdk/client-cloudwatch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
@@ -80,7 +81,7 @@ import sass from 'sass';
 
 let sqsCache: SQSClient;
 let searchClientCache: Client;
-let searchInfoClientCache: Client;
+let cloudWatchClientCache: CloudWatchClient;
 
 const entitiesByName = {
   Case,
@@ -140,6 +141,21 @@ export const createApplicationContext = (
         return await getChromiumBrowserAWS();
       }
     },
+    getCloudWatchClient: () => {
+      if (cloudWatchClientCache) return cloudWatchClientCache;
+
+      if (environment.stage === 'local') {
+        cloudWatchClientCache = {
+          send: (...args) => console.log('** SYSTEM PERFORMANCE LOGS', ...args),
+        } as CloudWatchClient;
+      } else {
+        cloudWatchClientCache = new CloudWatchClient({
+          region: environment.region,
+        });
+      }
+
+      return cloudWatchClientCache;
+    },
     getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();
@@ -189,31 +205,6 @@ export const createApplicationContext = (
     },
     getEnvironment,
     getHttpClient: () => axios,
-    getInfoSearchClient: () => {
-      if (searchInfoClientCache) return searchInfoClientCache;
-      if (
-        environment.stage === 'local' ||
-        !environment.elasticsearchInfoEndpoint
-      ) {
-        searchInfoClientCache = {
-          index: (...args) =>
-            console.log('** SYSTEM PERFORMANCE LOGS', ...args),
-        } as Client;
-      } else {
-        searchInfoClientCache = new Client({
-          ...AwsSigv4Signer({
-            getCredentials: () => {
-              const credentialsProvider = defaultProvider();
-              return credentialsProvider();
-            },
-            region: 'us-east-1',
-          }),
-          node: `https://${environment.elasticsearchInfoEndpoint}:443`,
-        });
-      }
-
-      return searchInfoClientCache;
-    },
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
       sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
