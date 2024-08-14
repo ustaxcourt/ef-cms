@@ -48,9 +48,11 @@ describe('createCaseInteractor', () => {
     contactSecondary: {},
     filingType: 'Myself',
     hasIrsNotice: true,
+    irsNoticesRedactionAcknowledgement: true,
     partyType: PARTY_TYPES.petitioner,
     petitionFile: new File([], 'test.pdf'),
     petitionFileSize: 1,
+    petitionRedactionAcknowledgement: true,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Small',
     signature: true,
@@ -115,6 +117,11 @@ describe('createCaseInteractor', () => {
     } as any);
 
     expect(result).toBeDefined();
+    const petitionDocketEntry = result.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+    );
+    expect(petitionDocketEntry).toBeDefined();
+    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
         .calls[0][0].caseToCreate,
@@ -247,9 +254,11 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
+        irsNoticesRedactionAcknowledgement: true,
         partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
+        petitionRedactionAcknowledgement: true,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         signature: true,
@@ -264,6 +273,12 @@ describe('createCaseInteractor', () => {
     expect(result.privatePractitioners![0].representing).toEqual([
       getContactPrimary(result).contactId,
     ]);
+    const petitionDocketEntry = result.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+    );
+
+    expect(petitionDocketEntry).toBeDefined();
+    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -293,9 +308,11 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
+        irsNoticesRedactionAcknowledgement: true,
         partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
+        petitionRedactionAcknowledgement: true,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         signature: true,
@@ -311,6 +328,7 @@ describe('createCaseInteractor', () => {
     );
 
     expect(atpDocketEntry).toBeDefined();
+    expect(atpDocketEntry.redactionAcknowledgement).toEqual(true);
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {
@@ -337,9 +355,11 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
+        irsNoticesRedactionAcknowledgement: true,
         partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
+        petitionRedactionAcknowledgement: true,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         signature: true,
@@ -354,6 +374,8 @@ describe('createCaseInteractor', () => {
         d.eventCode === INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode,
     );
     expect(atpDocketEntries).toHaveLength(2);
+    expect(atpDocketEntries[0].redactionAcknowledgement).toEqual(true);
+    expect(atpDocketEntries[1].redactionAcknowledgement).toEqual(true);
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
