@@ -195,7 +195,10 @@ export const Petition = ({
             {contactPrimary.countryType === COUNTRY_TYPES.INTERNATIONAL && (
               <div>{contactPrimary.country}</div>
             )}
-            <div>{contactPrimary.phone}</div>
+            <div>
+              <b>Phone: </b>
+              {contactPrimary.phone}
+            </div>
             {contactPrimary.placeOfLegalResidence && (
               <div>
                 {BUSINESS_TYPE_VALUES.includes(partyType) ? (
@@ -240,6 +243,7 @@ export const Petition = ({
                   <div>{contactSecondary.country}</div>
                 )}
                 <div>
+                  <b>Phone: </b>
                   {contactSecondary.phone
                     ? contactSecondary.phone
                     : 'Phone number not provided'}
