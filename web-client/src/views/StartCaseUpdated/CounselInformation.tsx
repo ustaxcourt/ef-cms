@@ -17,6 +17,7 @@ export function CounselInformation({ userInfo }) {
               <address aria-labelledby="filing-contact-primary">
                 <AddressDisplay
                   displayFirmNameOnNewLine
+                  noMargin
                   showEmail
                   contact={{
                     ...userInfo.contact,
