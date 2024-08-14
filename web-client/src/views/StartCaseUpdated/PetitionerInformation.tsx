@@ -84,7 +84,10 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                   )}
                   {isPetitioner && (
                     <div className="margin-top-3">
-                      <span className="usa-label usa-label-display">
+                      <span
+                        className="usa-label usa-label-display"
+                        data-testid="service-email-label"
+                      >
                         Service email
                       </span>
                       <span data-testid="contact-primary-email">
@@ -118,7 +121,10 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                 </address>
                 {isPetitioner && (
                   <div className="margin-top-1">
-                    <span className="text-semibold">
+                    <span
+                      className="text-semibold"
+                      data-testid="register-for-e-filing"
+                    >
                       Register for eService/filing:
                     </span>
                     <span className="margin-left-05">
