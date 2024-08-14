@@ -137,7 +137,7 @@ export default async function ({
       copy({
         assets: [
           {
-            from: ['web-client/src/favicons'],
+            from: ['web-client/src/favicons/**/*'],
             keepStructure: true,
             to: ['.'],
           },
