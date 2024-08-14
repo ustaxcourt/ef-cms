@@ -1,3 +1,4 @@
+import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { broadcastStayLoggedInAction } from './broadcastStayLoggedInAction';
 import { presenter } from '../presenter-mock';
@@ -19,7 +20,7 @@ describe('broadcastStayLoggedInAction', () => {
     expect(
       applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
     ).toMatchObject({
-      subject: 'stayLoggedIn',
+      subject: BROADCAST_MESSAGES.stayLoggedIn,
     });
   });
 });

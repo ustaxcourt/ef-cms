@@ -12,7 +12,6 @@ import { updatedFilePetitionHelper as updatedFilePetitionHelperComputed } from '
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('updatedFilePetitionHelper', () => {
-  let user;
   const updatedFilePetitionHelper = withAppContextDecorator(
     updatedFilePetitionHelperComputed,
     {
@@ -20,15 +19,8 @@ describe('updatedFilePetitionHelper', () => {
       getConstants: () => {
         return { FILING_TYPES, PARTY_TYPES };
       },
-      getCurrentUser: () => {
-        return user;
-      },
     },
   );
-
-  beforeEach(() => {
-    user = petitionerUser;
-  });
 
   describe('businessFieldNames', () => {
     it('should return business field names for the Corporation business type', () => {
@@ -37,6 +29,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             businessType: 'Corporation',
           },
+          user: petitionerUser,
         },
       });
       expect(result.businessFieldNames).toEqual({
@@ -52,6 +45,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             businessType: 'Partnership (as the Tax Matters Partner)',
           },
+          user: petitionerUser,
         },
       });
       expect(result.businessFieldNames).toEqual({
@@ -67,6 +61,7 @@ describe('updatedFilePetitionHelper', () => {
             businessType:
               'Partnership (as a partner other than Tax Matters Partner)',
           },
+          user: petitionerUser,
         },
       });
       expect(result.businessFieldNames).toEqual({
@@ -82,6 +77,7 @@ describe('updatedFilePetitionHelper', () => {
             businessType:
               'Partnership (as a partnership representative under BBA)',
           },
+          user: petitionerUser,
         },
       });
       expect(result.businessFieldNames).toEqual({
@@ -93,7 +89,7 @@ describe('updatedFilePetitionHelper', () => {
   describe('filingOptions', () => {
     it('should return the filing options for petitioner', () => {
       const result = runCompute(updatedFilePetitionHelper, {
-        state: { form: {} },
+        state: { form: {}, user: petitionerUser },
       });
       expect(result.filingOptions).toEqual([
         { label: 'Myself', value: 'Myself' },
@@ -137,6 +133,7 @@ describe('updatedFilePetitionHelper', () => {
             form: {
               partyType,
             },
+            user: petitionerUser,
           },
         });
         expect(result.showContactInformationForOtherPartyType).toBeTruthy();
@@ -149,6 +146,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.petitioner,
           },
+          user: petitionerUser,
         },
       });
       expect(result.showContactInformationForOtherPartyType).toBeFalsy();
@@ -162,6 +160,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.survivingSpouse,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -176,6 +175,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.estate,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -192,6 +192,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.estateWithoutExecutor,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -207,6 +208,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.trust,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -221,6 +223,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.conservator,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -235,6 +238,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.guardian,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -249,6 +253,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.custodian,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -263,6 +268,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.nextFriendForMinor,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -277,6 +283,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
@@ -291,6 +298,7 @@ describe('updatedFilePetitionHelper', () => {
           form: {
             partyType: 'unknown party',
           },
+          user: petitionerUser,
         },
       });
       expect(result.otherContactNameLabel).toEqual({
