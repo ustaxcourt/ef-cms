@@ -42,7 +42,7 @@ describe('updateDocketEntryMetaAction', () => {
     applicationContext
       .getUseCases()
       .updateDocketEntryMetaInteractor.mockImplementation(() => {
-        throw new Error('Guy Fieri has connected to the server.');
+        throw new Error('Roslindis Angelino has connected to the server.');
       });
 
     await runAction(updateDocketEntryMetaAction, {
