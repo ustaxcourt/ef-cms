@@ -63,7 +63,7 @@ resource "terraform_data" "locals" {
     COGNITO_CLIENT_ID                  = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_client_id
     DEFAULT_ACCOUNT_PASS               = var.default_account_pass
     DISABLE_EMAILS                     = var.disable_emails
-		ELASTICSEARCH_INFO_ENDPOINT        = var.info_elasticsearch_domain
+    ELASTICSEARCH_INFO_ENDPOINT        = var.info_elasticsearch_domain
     EFCMS_DOMAIN                       = var.dns_domain
     EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
