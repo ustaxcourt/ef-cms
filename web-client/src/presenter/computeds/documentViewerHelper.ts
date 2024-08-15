@@ -14,6 +14,7 @@ export const documentViewerHelper = (
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STAMPED_DOCUMENTS_ALLOWLIST,
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
 
@@ -98,6 +99,12 @@ export const documentViewerHelper = (
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
+  const showStatusReportOrderButton =
+    permissions.STATUS_REPORT_ORDER &&
+    STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
+      formattedDocumentToDisplay.eventCode,
+    );
+
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
@@ -110,6 +117,7 @@ export const documentViewerHelper = (
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
+    showStatusReportOrderButton,
     showStricken: !!formattedDocumentToDisplay.isStricken,
     showUnservedPetitionWarning,
   };
