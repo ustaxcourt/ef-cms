@@ -43,7 +43,6 @@ import { canEditContactInformationSequence } from './sequences/canEditContactInf
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequence';
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
-import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetitionerSequence';
 import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimaryTabChangeSequence';
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
@@ -666,7 +665,6 @@ export const presenterSequences = {
   cancelAddStatisticSequence: cancelAddStatisticSequence as unknown as Function,
   cancelAndNavigateToCorrespondenceSequence:
     cancelAndNavigateToCorrespondenceSequence as unknown as Function,
-  cancelFileUploadSequence: cancelFileUploadSequence as unknown as Function,
   cancelRemovePetitionerSequence:
     cancelRemovePetitionerSequence as unknown as Function,
   caseDetailPrimaryTabChangeSequence:
