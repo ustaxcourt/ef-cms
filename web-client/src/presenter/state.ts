@@ -872,6 +872,6 @@ export type CreateCaseIrsForm = {
 export type ViewerDocument = {
   docketEntryId: string;
   documentTitle?: string; // Should this be required?
-  filingDate?: Date;
+  filingDate?: string;
   index?: number;
 };
