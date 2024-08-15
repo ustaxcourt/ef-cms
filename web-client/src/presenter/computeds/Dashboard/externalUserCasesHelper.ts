@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';

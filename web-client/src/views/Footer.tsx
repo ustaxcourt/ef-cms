@@ -3,7 +3,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from 'cerebral';
+import { state } from '../utilities/cerebralWrapper';
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 const seal = require('../images/ustc_seal.svg') as string;

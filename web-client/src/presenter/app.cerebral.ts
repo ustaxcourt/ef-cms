@@ -1,7 +1,7 @@
 import {
   sequences as cerebralSequences,
   state as cerebralState,
-} from 'cerebral';
+} from '../utilities/cerebralWrapper';
 import type { ClientState } from '@web-client/presenter/state';
 import type { Sequences } from '@web-client/presenter/presenter';
 

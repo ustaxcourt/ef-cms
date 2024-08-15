@@ -1,5 +1,5 @@
 import { getPaperServicePdfUrlAction } from '@web-client/presenter/actions/TrialSession/getPaperServicePdfUrlAction';
-import { sequence } from 'cerebral';
+import { sequence } from '../../utilities/cerebralWrapper';
 import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWarningAction';
 import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setTrialSessionCalendarAlertWarningAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionCalendarAlertWarningAction';

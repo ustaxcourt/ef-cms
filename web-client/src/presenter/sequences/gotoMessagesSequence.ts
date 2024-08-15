@@ -9,7 +9,7 @@ import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesFor
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
-import { parallel } from 'cerebral';
+import { parallel } from '../../utilities/cerebralWrapper';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
 import { resetSelectedMessageAction } from '@web-client/presenter/actions/Messages/resetSelectedMessageAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';

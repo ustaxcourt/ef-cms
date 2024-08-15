@@ -9,7 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} object containing the view settings
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const editPetitionerInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

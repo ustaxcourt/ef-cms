@@ -1,7 +1,7 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
-import { props as cerebralProps } from 'cerebral';
+import { props as cerebralProps } from '../../utilities/cerebralWrapper';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';

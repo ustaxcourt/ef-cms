@@ -4,7 +4,7 @@ import { clearJudgeActivityReportStatisticsDataAction } from '@web-client/presen
 import { clearJudgeActivityReportStatisticsFiltersAction } from '@web-client/presenter/actions/JudgeActivityReport/clearJudgeActivityReportStatisticsFiltersAction';
 import { getPendingMotionDocketEntriesAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesAction';
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
-import { parallel } from 'cerebral';
+import { parallel } from '../../../utilities/cerebralWrapper';
 import { resetHasUserSubmittedFormAction } from '@web-client/presenter/actions/JudgeActivityReport/resetHasUserSubmittedFormAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';

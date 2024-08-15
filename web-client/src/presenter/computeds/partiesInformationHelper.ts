@@ -49,7 +49,7 @@ export const getCanEditPetitioner = ({
 };
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const partiesInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

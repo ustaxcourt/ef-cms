@@ -24,7 +24,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 };
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const formattedCaseDeadlines = (
   get: Get,
   applicationContext: ClientApplicationContext,

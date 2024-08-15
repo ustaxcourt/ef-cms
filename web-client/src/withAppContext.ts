@@ -1,4 +1,4 @@
-import { Get } from 'cerebral';
+import { Get } from './utilities/cerebralWrapper';
 import { applicationContext } from './applicationContext';
 
 export function withAppContextDecorator<T>(

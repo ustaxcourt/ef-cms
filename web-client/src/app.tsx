@@ -118,7 +118,7 @@ import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
-import App from 'cerebral';
+import App from './utilities/cerebralWrapper';
 import React from 'react';
 
 /**

@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import {

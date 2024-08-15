@@ -12,7 +12,7 @@ import {
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';

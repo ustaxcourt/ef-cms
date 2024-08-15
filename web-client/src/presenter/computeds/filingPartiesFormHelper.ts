@@ -2,7 +2,7 @@ import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntr
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const filingPartiesFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -2,7 +2,7 @@ import { getScanModeLabel } from '../../utilities/getScanModeLabel';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const scanBatchPreviewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

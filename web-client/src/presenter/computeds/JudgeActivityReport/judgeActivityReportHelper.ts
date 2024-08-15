@@ -2,7 +2,7 @@ import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 function calculateStatisticsTotal(

@@ -12,7 +12,7 @@ import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { UpdatedFilePetitionButtons } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionButtons';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
-import { props as cerebralProps } from 'cerebral';
+import { props as cerebralProps } from '../../utilities/cerebralWrapper';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';

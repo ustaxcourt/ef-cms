@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
 import { state } from '@web-client/presenter/app.cerebral';
 

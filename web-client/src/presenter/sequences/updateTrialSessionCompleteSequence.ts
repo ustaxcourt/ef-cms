@@ -4,7 +4,7 @@ import { getCompleteTrialSessionAlertSuccessAction } from '../actions/getComplet
 import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToPrintPaperTrialNoticesAction } from '@web-client/presenter/actions/TrialSession/navigateToPrintPaperTrialNoticesAction';
 import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
-import { sequence } from 'cerebral';
+import { sequence } from '../../utilities/cerebralWrapper';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';

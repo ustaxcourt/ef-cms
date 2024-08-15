@@ -1,6 +1,6 @@
 import { Container } from '@cerebral/react';
 import { TextView } from './TextView';
-import App from 'cerebral';
+import App from '../../utilities/cerebralWrapper';
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 

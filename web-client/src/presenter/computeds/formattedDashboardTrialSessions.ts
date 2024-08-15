@@ -9,7 +9,7 @@ export const formatSession = (session, applicationContext) => {
 };
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const formattedDashboardTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,

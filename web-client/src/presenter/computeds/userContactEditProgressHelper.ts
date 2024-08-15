@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const userContactEditProgressHelper = (get: Get): any => {
   const completedCases = get(state.userContactEditProgress.completedCases) || 0;
   const totalCases = get(state.userContactEditProgress.totalCases) || 0;

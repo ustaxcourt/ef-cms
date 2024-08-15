@@ -1,7 +1,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props } from '../utilities/cerebralWrapper';
 import React from 'react';
 import classNames from 'classnames';
 

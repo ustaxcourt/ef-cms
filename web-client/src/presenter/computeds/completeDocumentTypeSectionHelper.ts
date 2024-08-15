@@ -9,7 +9,7 @@ import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 
 export const completeDocumentTypeSectionHelper = (
   get: Get,

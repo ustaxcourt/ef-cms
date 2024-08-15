@@ -1,7 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { GENERATION_TYPES } from '@web-client/getConstants';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';

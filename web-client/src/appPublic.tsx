@@ -42,7 +42,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
-import App from 'cerebral';
+import App from './utilities/cerebralWrapper';
 import React from 'react';
 
 /**

@@ -1,4 +1,4 @@
-import { props } from 'cerebral';
+import { props } from '../../utilities/cerebralWrapper';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 

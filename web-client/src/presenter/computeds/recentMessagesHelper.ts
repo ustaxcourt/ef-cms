@@ -2,7 +2,7 @@ import { getFormattedMessages } from '../utilities/processFormattedMessages';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const recentMessagesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -129,7 +129,7 @@ export const trialSessionsModalHelper = ({
 };
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const addToTrialSessionModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

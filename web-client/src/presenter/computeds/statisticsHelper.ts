@@ -54,7 +54,7 @@ export const formatStatistic = ({
  * @returns {object} formatted statistics
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const statisticsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

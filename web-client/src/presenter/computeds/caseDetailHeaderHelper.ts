@@ -1,6 +1,6 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import {
   PRACTICE_TYPE,
   ROLES,

@@ -1,6 +1,6 @@
 import { FocusLock } from '../FocusLock/FocusLock';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props } from '../../utilities/cerebralWrapper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';

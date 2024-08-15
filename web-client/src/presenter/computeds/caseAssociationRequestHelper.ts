@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { getFilerParties } from './getFilerParties';
 import { showGenerationType } from '@web-client/presenter/actions/setDefaultGenerationTypeAction';

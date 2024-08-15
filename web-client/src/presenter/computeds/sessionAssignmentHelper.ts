@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const sessionAssignmentHelper = (get: Get): any => {
   let formattedTrialClerks = get(state.trialClerks);
   formattedTrialClerks = [

@@ -3,7 +3,7 @@ import {
   FormattedTrialSessionCase,
   compareCasesByDocketNumber,
 } from '@shared/business/utilities/getFormattedTrialSessionDetails';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';

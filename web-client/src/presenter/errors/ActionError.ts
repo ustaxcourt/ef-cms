@@ -1,4 +1,4 @@
-import { CerebralError } from 'cerebral';
+import { CerebralError } from '../../utilities/cerebralWrapper';
 export class ActionError extends CerebralError {
   public title: string;
   public message: string;

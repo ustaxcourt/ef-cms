@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem } from './Accordion';
 import { Container } from '@cerebral/react';
 import { cerebralBindSimpleSetStateSequence } from '../../presenter/sequences/cerebralBindSimpleSetStateSequence';
-import App from 'cerebral';
+import App from '../../utilities/cerebralWrapper';
 import React from 'react';
 import TestRenderer, { act } from 'react-test-renderer';
 

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '../../utilities/cerebralWrapper';
 
 /**
  * Gets the value of all feature flags used in the system and sets them on state

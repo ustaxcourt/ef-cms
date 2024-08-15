@@ -1,4 +1,4 @@
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 import {
   PASSWORD_RULE,

@@ -1,6 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 
 export const caseSearchByNameHelper = (
   get: Get,

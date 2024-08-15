@@ -4,7 +4,7 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
-import { props as cerebralProps } from 'cerebral';
+import { props as cerebralProps } from '../../utilities/cerebralWrapper';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';

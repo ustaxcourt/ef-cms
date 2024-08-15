@@ -12,7 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * showCorporateDisclosureStatement, and corporateDisclosureStatementDocumentId
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const caseDetailEditHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -1,4 +1,4 @@
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import { RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
 

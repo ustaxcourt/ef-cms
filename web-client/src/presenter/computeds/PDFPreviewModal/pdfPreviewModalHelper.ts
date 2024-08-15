@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 export const pdfPreviewModalHelper = (get: Get): any => {
   const currentPage = get(state.modal.pdfPreviewModal.currentPage);
   const error = get(state.modal.pdfPreviewModal.error);

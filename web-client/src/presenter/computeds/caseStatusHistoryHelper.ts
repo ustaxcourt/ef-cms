@@ -8,7 +8,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} array of case types with descriptions
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const caseStatusHistoryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -1,7 +1,7 @@
 import {
   sequences as cerebralSequences,
   state as cerebralState,
-} from 'cerebral';
+} from '../utilities/cerebralWrapper';
 import type { PublicClientState } from './state-public';
 import type { PublicSequences } from '@web-client/presenter/presenter-public';
 

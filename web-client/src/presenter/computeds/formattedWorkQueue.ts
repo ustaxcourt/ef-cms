@@ -1,6 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';

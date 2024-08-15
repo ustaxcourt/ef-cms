@@ -3,7 +3,7 @@ import {
   decorateWithPostCallback,
   useCerebralStateFactory,
 } from '../Utils/useCerebralState';
-import { props } from 'cerebral';
+import { props } from '../../utilities/cerebralWrapper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';

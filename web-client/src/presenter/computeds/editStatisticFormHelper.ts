@@ -8,7 +8,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} edit statistic form helper fields
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const editStatisticFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

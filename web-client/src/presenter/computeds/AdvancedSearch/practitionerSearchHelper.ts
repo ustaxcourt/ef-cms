@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '../../../applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import {
   PRACTITIONER_SEARCH_PAGE_SIZE,
   US_STATES,

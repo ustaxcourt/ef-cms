@@ -3,7 +3,7 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { parallel } from 'cerebral';
+import { parallel } from '../../utilities/cerebralWrapper';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';

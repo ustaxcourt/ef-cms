@@ -7,7 +7,7 @@ import {
 } from '../Utils/useCerebralState';
 import { map } from '../Utils/ElementChildren';
 import { pick, uniqueId } from 'lodash';
-import { props } from 'cerebral';
+import { props } from '../../utilities/cerebralWrapper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';

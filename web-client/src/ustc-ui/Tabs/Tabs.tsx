@@ -5,7 +5,7 @@ import {
   useCerebralStateFactory,
 } from '../Utils/useCerebralState';
 import { getDefaultAttribute, map } from '../Utils/ElementChildren';
-import { props } from 'cerebral';
+import { props } from '../../utilities/cerebralWrapper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { ReactNode, useState } from 'react';

@@ -4,7 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 const { DESCENDING } = getConstants();
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const practitionerDocumentationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

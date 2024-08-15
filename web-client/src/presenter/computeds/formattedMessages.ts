@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import {
   applyFiltersToCompletedMessages,

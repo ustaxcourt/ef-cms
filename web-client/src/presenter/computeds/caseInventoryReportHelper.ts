@@ -2,7 +2,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const caseInventoryReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

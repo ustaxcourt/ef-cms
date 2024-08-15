@@ -1,6 +1,6 @@
 import { BindedSelect } from '../../../ustc-ui/BindedSelect/BindedSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props } from '../../../utilities/cerebralWrapper';
 import React from 'react';
 
 export const JudgeSelect = connect(

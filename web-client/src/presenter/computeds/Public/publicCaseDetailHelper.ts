@@ -7,7 +7,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import {
   computeIsNotServedDocument,
   getFilingsAndProceedings,

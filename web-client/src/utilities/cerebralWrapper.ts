@@ -1,5 +1,5 @@
-import { Get, parallel, props, sequences } from 'cerebral';
-import App from 'cerebral';
+import { Get, parallel, props, sequences } from '../utilities/cerebralWrapper';
+import App from '../utilities/cerebralWrapper';
 
 // eslint-disable-next-line import/no-default-export
 export default App;

@@ -1,5 +1,5 @@
 import { ChangePasswordForm } from '@shared/business/entities/ChangePasswordForm';
-import { Get } from 'cerebral';
+import { Get } from '../../../utilities/cerebralWrapper';
 import {
   PASSWORD_RULE,
   PASSWORD_VALIDATION_ERROR_MESSAGES,

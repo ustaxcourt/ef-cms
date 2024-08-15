@@ -9,7 +9,7 @@ import { findIndex, sortBy } from 'lodash';
  * @returns {object} trialCitiesByState
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const trialCitiesHelper =
   (get: Get, applicationContext: ClientApplicationContext): any =>
   procedureType => {

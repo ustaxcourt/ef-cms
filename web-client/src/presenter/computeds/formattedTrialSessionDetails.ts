@@ -1,6 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/getFormattedTrialSessionDetails';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 

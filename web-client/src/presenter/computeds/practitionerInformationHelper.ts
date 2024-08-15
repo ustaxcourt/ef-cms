@@ -2,7 +2,7 @@
 
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const practitionerInformationHelper = (get: Get): any => {
   const permissions = get(state.permissions);
 

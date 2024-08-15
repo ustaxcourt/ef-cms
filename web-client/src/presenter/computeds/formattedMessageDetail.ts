@@ -26,7 +26,7 @@ const formatMessage = ({ applicationContext, caseDetail, message }) => {
 };
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const formattedMessageDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,

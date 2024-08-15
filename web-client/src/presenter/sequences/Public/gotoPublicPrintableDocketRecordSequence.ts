@@ -1,7 +1,7 @@
 import { clearModalStateAction } from '../../actions/clearModalStateAction';
 import { generatePublicDocketRecordPdfUrlAction } from '../../actions/Public/generatePublicDocketRecordPdfUrlAction';
 import { getPublicCaseAction } from '../../actions/Public/getPublicCaseAction';
-import { sequence } from 'cerebral';
+import { sequence } from '../../../utilities/cerebralWrapper';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setPdfPreviewUrlSequence } from '../setPdfPreviewUrlSequence';
 import { setShowModalFactoryAction } from '../../actions/setShowModalFactoryAction';

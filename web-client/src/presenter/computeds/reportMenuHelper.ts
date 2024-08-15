@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const reportMenuHelper = (get: Get): any => {
   const currentPage = get(state.currentPage);
   const permissions = get(state.permissions);

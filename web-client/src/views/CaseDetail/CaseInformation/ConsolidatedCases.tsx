@@ -1,7 +1,7 @@
 import { CaseLink } from '../../../ustc-ui/CaseLink/CaseLink';
 import { Mobile, NonMobile } from '../../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props } from '../../../utilities/cerebralWrapper';
 import React from 'react';
 
 export const ConsolidatedCases = connect(

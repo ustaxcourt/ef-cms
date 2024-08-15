@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 export const caseDetailPractitionerSearchHelper = (get: Get): any => {
   const caseDetail = get(state.caseDetail);
   const modalState = get(state.modal);

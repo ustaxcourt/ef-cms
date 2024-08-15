@@ -1,4 +1,4 @@
-import { Get } from 'cerebral';
+import { Get } from '../../utilities/cerebralWrapper';
 import { PendingItemFormatted } from '@shared/business/utilities/formatPendingItem';
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
