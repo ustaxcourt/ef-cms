@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -9,7 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const isEditingOrderAction = ({ get, path }: ActionProps) => {
   const documentToEdit = get(state.documentToEdit);
-  if (documentToEdit) {
+  if (!isEmpty(documentToEdit)) {
     return path.yes();
   } else {
     return path.no();
