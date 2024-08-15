@@ -58,7 +58,10 @@ module.exports = {
     {
       files: ['**/*.ts', '**/*.tsx'],
       rules: {
-        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { caughtErrors: 'none' },
+        ],
         'no-undef': 'off',
         'no-underscore-dangle': 'off',
         'no-unused-vars': 'off',

@@ -248,7 +248,7 @@ const formatTrialSessionScheduling = ({
   }
 };
 
-export const getEditUrl = ({
+const getEditUrl = ({
   docketEntryId,
   docketNumber,
   documentType,

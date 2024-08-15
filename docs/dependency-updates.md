@@ -6,7 +6,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 > After changes are made to any dependencies, deploy to an experimental environment to verify that all tests pass!
 
-## Library Update Steps 
+## Library Update Steps
 
 ### Do the following for all package.json files
 
@@ -31,9 +31,9 @@ note: we have 2 package.json files, be sure to update both
 
    To publish a new ECR docker image:
 
-   - Increment the docker image version being used in `.circleci/config.yml` in the docker variable: 
+   - Increment the docker image version being used in `.circleci/config.yml` in the docker variable:
    `efcms-docker-image: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.1.6` -> `ef-cms-us-east-1:3.1.7`
-   - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher). 
+   - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher).
      - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
 		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
      - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
@@ -77,7 +77,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on.
-- As of 07/12/2024, we cannot update puppeteer beyond 22.6.5 because @sparticuz/chromium only supports version 123 of chromium.
+- As of 8/7/2024, we cannot update puppeteer or puppeteer-core beyond 22.13.1 because the latest release of @sparticuz/chromium only supports version 126 of chromium.
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (We tried to upgrade puppeteer anyway, but unsurprisingly the PDF tests failed because there is no newer version of Chromium that supports puppeteer.)
 
 ### pdfjs-dist

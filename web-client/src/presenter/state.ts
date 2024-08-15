@@ -134,6 +134,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -517,6 +518,9 @@ export const computeds = {
   statisticsHelper: statisticsHelper as unknown as ReturnType<
     typeof statisticsHelper
   >,
+  statusReportOrderHelper: statusReportOrderHelper as unknown as ReturnType<
+    typeof statusReportOrderHelper
+  >,
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
   >,
@@ -653,6 +657,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
+  documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },
@@ -727,6 +732,7 @@ export const baseState = {
     pdfsAppended: 0,
     totalPdfs: 0,
   },
+  parentMessageId: undefined,
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
@@ -812,6 +818,11 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  statusReportOrder: {
+    docketNumbersToDisplay: [],
+    statusReportFilingDate: '',
+    statusReportIndex: 1,
+  },
   stepIndicatorInfo: { currentStep: 0, steps: ['no steps defined yet'] },
   submittedAndCavCases: {
     submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
@@ -836,7 +847,7 @@ export const baseState = {
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
-  viewerDocumentToDisplay: undefined,
+  viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -862,4 +873,11 @@ export type CreateCaseIrsForm = {
   taxYear?: number;
   irsNoticeFileUrl?: string;
   cityAndStateIssuingOffice?: string;
+};
+
+export type ViewerDocument = {
+  docketEntryId: string;
+  documentTitle?: string; // Should this be required?
+  filingDate?: string;
+  index?: number;
 };
