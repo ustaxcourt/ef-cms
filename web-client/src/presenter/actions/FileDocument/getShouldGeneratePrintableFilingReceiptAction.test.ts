@@ -25,7 +25,7 @@ describe('getShouldGeneratePrintableFilingReceiptAction', () => {
         documentsFiled: {},
       },
       state: {
-        documentToEdit: {},
+        documentToEdit: { docketEntryId: '1' },
       },
     });
 
@@ -38,6 +38,7 @@ describe('getShouldGeneratePrintableFilingReceiptAction', () => {
         presenter,
       },
       props: {},
+      state: { documentToEdit: {} },
     });
 
     expect(falseMock).toHaveBeenCalled();
