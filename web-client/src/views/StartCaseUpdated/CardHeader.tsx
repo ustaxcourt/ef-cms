@@ -1,20 +1,22 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
+type CardHeaderType = {
   step: number;
   title: string;
 };
 
-export const CardHeader = connect(
-  {
-    step: props.step,
-    title: props.title,
-    updateStepIndicatorSequence: sequences.updateStepIndicatorSequence,
-  },
+const cardHeaderDependencies = {
+  updateStepIndicatorSequence: sequences.updateStepIndicatorSequence,
+};
+
+export const CardHeader = connect<
+  CardHeaderType,
+  typeof cardHeaderDependencies
+>(
+  cardHeaderDependencies,
   function CardHeader({ step, title, updateStepIndicatorSequence }) {
     return (
       <h3 className="create-petition-review-step-title">
