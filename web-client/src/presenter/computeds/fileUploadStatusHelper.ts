@@ -15,9 +15,6 @@ export const fileUploadStatusHelper = (get: Get): any => {
   );
   const shouldThrottle = !get(state.fileUploadProgress.noThrottle); // results WILL be throttled unless explicitly set to false
 
-  const isCancelable = !!(
-    Number.isFinite(timeRemaining) && percentComplete < 100
-  );
   let statusMessage;
 
   if (percentComplete === 100) {
@@ -39,7 +36,6 @@ export const fileUploadStatusHelper = (get: Get): any => {
   }
 
   return {
-    isCancelable,
     isHavingSystemIssues,
     statusMessage: shouldThrottle
       ? throttledStatus(statusMessage)
