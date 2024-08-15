@@ -1,6 +1,9 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 
 export const logUserPerformanceDataInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -8,15 +11,19 @@ export const logUserPerformanceDataInteractor = async (
     sequenceName: string;
     duration: number;
     actionPerformanceArray: { actionName: string; duration: number }[];
-    email: string;
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  if (!authorizedUser || !authorizedUser.userId) {
+  if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError('Unauthorized to log performance data');
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveSystemPerformanceData({ applicationContext, performanceData });
+  const { email } = authorizedUser;
+  await applicationContext.getPersistenceGateway().saveSystemPerformanceData({
+    applicationContext,
+    performanceData: {
+      ...performanceData,
+      email,
+    },
+  });
 };
