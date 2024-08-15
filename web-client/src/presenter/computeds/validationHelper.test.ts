@@ -1,11 +1,12 @@
 import { collectInputElements } from '@web-client/presenter/computeds/validationHelper';
 
 describe('validationHelper', () => {
-  const element1 = (window.document.createElement('input').id = 'test-element');
+  const element1 = (window.document.createElement('input').id =
+    'test-element') as unknown as HTMLElement;
   const element2 = (window.document.createElement('input').id =
-    'test-element2');
+    'test-element2') as unknown as HTMLElement;
   const element3 = (window.document.createElement('input').id =
-    'test-element3');
+    'test-element3') as unknown as HTMLElement;
 
   it('should return an array of elements needing focus due to errors', () => {
     const errors = {
@@ -55,8 +56,11 @@ describe('validationHelper', () => {
       elementsToFocus,
       errorKey,
     ) => {
-      if (errorValue === 'Specific error' && refs[errorKey.slice(0, -1)]) {
-        elementsToFocus.push(refs[errorKey.slice(0, -1)]);
+      if (
+        errorValue === 'Specific error' &&
+        refs.current[errorKey.slice(0, -1)]
+      ) {
+        elementsToFocus.push(refs.current[errorKey.slice(0, -1)]);
       }
     };
 
@@ -67,9 +71,11 @@ describe('validationHelper', () => {
     };
 
     const refs = {
-      test1: element1,
-      test2: element2,
-      test3: element3,
+      current: {
+        test1: element1,
+        test2: element2,
+        test3: element3,
+      },
     };
 
     const elements = collectInputElements(errors, refs, specificCustomFunction);
