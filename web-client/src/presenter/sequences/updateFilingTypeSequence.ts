@@ -10,4 +10,10 @@ export const updateFilingTypeSequence = [
   setFormValueAction,
   updatePartyTypeActionUpdated,
   setDefaultContactStateAction,
-];
+] as unknown as (props: {
+  fromModal: boolean;
+  allowEmptyString?: boolean;
+  index?: number;
+  key: string;
+  value: any;
+}) => void;
