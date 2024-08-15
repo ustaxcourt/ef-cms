@@ -6,7 +6,6 @@ export const logUserPerformanceDataInteractor = (
     sequenceName: string;
     duration: number;
     actionPerformanceArray: { actionName: string; duration: number }[];
-    email: string;
   },
 ) => {
   return post({
