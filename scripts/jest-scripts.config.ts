@@ -7,7 +7,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,ts}',
-    '!checkUntouchedFiles.ts',
+    '!checkAllFilesForTypeErrorCount.ts',
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
     '!circleci/judge/bulkImportJudgeUsers.helpers.ts',

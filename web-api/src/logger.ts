@@ -12,11 +12,9 @@ const console = () =>
     handleRejections: true,
   }));
 
-export const logger =
-  (transport = console()) =>
-  (req, res, next) => {
-    const createdLogger = createLogger({ transports: [transport] });
-
+export const logger = (transport = console()) => {
+  const createdLogger = createLogger({ transports: [transport] });
+  return (req, res, next) => {
     if (process.env.NODE_ENV === 'production') {
       const requestBody = cloneDeep(req.body);
 
@@ -66,6 +64,7 @@ export const logger =
 
     return next();
   };
+};
 
 function redactPasswordFields(obj) {
   const passwordRegex = /password/i;

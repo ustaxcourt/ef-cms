@@ -3,6 +3,8 @@ import { createOrderAction } from '../actions/CourtIssuedOrder/createOrderAction
 import { getCaseAction } from '../actions/getCaseAction';
 import { getPdfFromUrlAction } from '../actions/CourtIssuedOrder/getPdfFromUrlAction';
 import { getPdfUrlAction } from '../actions/CourtIssuedOrder/getPdfUrlAction';
+import { getStatusReportOrderPdfUrlAction } from '../actions/StatusReportOrder/getStatusReportOrderPdfUrlAction';
+import { isStatusReportOrderAction } from '../actions/StatusReportOrder/isStatusReportOrderAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setMetadataAsPristineAction } from '../actions/setMetadataAsPristineAction';
 import { setPdfFileAction } from '../actions/CourtIssuedOrder/setPdfFileAction';
@@ -14,7 +16,11 @@ export const convertHtml2PdfSequence = showProgressSequenceDecorator([
   clearPdfPreviewUrlAction,
   getCaseAction,
   setCaseAction,
-  getPdfUrlAction,
+  isStatusReportOrderAction,
+  {
+    isNotStatusReportOrder: [getPdfUrlAction],
+    isStatusReportOrder: [getStatusReportOrderPdfUrlAction],
+  },
   getPdfFromUrlAction,
   setPdfFileAction,
   setPdfPreviewUrlAction,
