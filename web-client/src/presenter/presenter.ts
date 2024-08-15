@@ -610,8 +610,7 @@ import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateU
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
 export const presenterSequences = {
-  addAnotherIrsNoticeToFormSequence:
-    addAnotherIrsNoticeToFormSequence as unknown as Function,
+  addAnotherIrsNoticeToFormSequence,
   addCaseToTrialSessionSequence:
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
@@ -771,8 +770,7 @@ export const presenterSequences = {
   deleteUploadedPdfSequence: deleteUploadedPdfSequence as unknown as Function,
   deleteUserCaseNoteFromWorkingCopySequence:
     deleteUserCaseNoteFromWorkingCopySequence as unknown as Function,
-  deleteValidationErrorMessageSequence:
-    deleteValidationErrorMessageSequence as unknown as Function,
+  deleteValidationErrorMessageSequence,
   deleteWorkingCopySessionNoteSequence:
     deleteWorkingCopySessionNoteSequence as unknown as Function,
   disengageAppMaintenanceSequence:
@@ -944,8 +942,7 @@ export const presenterSequences = {
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence: gotoTrialSessionsSequence as unknown as Function,
-  gotoUpdatedPetitionFlowSequence:
-    gotoUpdatedPetitionFlowSequence as unknown as Function,
+  gotoUpdatedPetitionFlowSequence,
   gotoUploadCorrespondenceDocumentSequence:
     gotoUploadCorrespondenceDocumentSequence as unknown as Function,
   gotoUploadCourtIssuedDocumentSequence:
@@ -1163,8 +1160,7 @@ export const presenterSequences = {
   removeCaseFromTrialSequence:
     removeCaseFromTrialSequence as unknown as Function,
   removeFactOrReasonSequence,
-  removeIrsNoticeFromFormSequence:
-    removeIrsNoticeFromFormSequence as unknown as Function,
+  removeIrsNoticeFromFormSequence,
   removePetitionForReplacementSequence:
     removePetitionForReplacementSequence as unknown as Function,
   removePetitionerAndUpdateCaptionSequence:
@@ -1186,8 +1182,7 @@ export const presenterSequences = {
     resetHeaderAccordionsSequence as unknown as Function,
   resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
-  resetSecondaryAddressSequence:
-    resetSecondaryAddressSequence as unknown as Function,
+  resetSecondaryAddressSequence,
   retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
   reviewCaseAssociationRequestSequence:
     reviewCaseAssociationRequestSequence as unknown as Function,
@@ -1244,7 +1239,7 @@ export const presenterSequences = {
   setDocumentUploadModeSequence:
     setDocumentUploadModeSequence as unknown as Function,
   setForHearingSequence: setForHearingSequence as unknown as Function,
-  setHasIrsNoticeSequence: setHasIrsNoticeSequence as unknown as Function,
+  setHasIrsNoticeSequence,
   setIdleStatusActiveSequence:
     setIdleStatusActiveSequence as unknown as Function,
   setIrsNoticeFalseSequence: setIrsNoticeFalseSequence as unknown as Function,
@@ -1259,7 +1254,7 @@ export const presenterSequences = {
   setPdfPreviewUrlSequence,
   setPendingReportSelectedJudgeSequence:
     setPendingReportSelectedJudgeSequence as unknown as Function,
-  setPetitionTypeSequence: setPetitionTypeSequence as unknown as Function,
+  setPetitionTypeSequence,
   setSelectedAddressOnFormSequence:
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
@@ -1455,7 +1450,7 @@ export const presenterSequences = {
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
   updateFilePetitionSequence,
-  updateFilingTypeSequence: updateFilingTypeSequence as unknown as Function,
+  updateFilingTypeSequence,
   updateFormValueAndCaseCaptionSequence:
     updateFormValueAndCaseCaptionSequence as unknown as Function,
   updateFormValueAndSecondaryContactInfoSequence:
@@ -1466,8 +1461,7 @@ export const presenterSequences = {
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
   updateHearingNoteSequence: updateHearingNoteSequence as unknown as Function,
-  updateIrsNoticeIndexPropertySequence:
-    updateIrsNoticeIndexPropertySequence as unknown as Function,
+  updateIrsNoticeIndexPropertySequence,
   updateJudgesCaseNoteOnCaseDetailSequence:
     updateJudgesCaseNoteOnCaseDetailSequence as unknown as Function,
   updateMessageFilterSequence,
@@ -1481,8 +1475,7 @@ export const presenterSequences = {
   updatePaperServiceProgressSequence:
     updatePaperServiceProgressSequence as unknown as Function,
   updatePartyViewTabSequence: updatePartyViewTabSequence as unknown as Function,
-  updatePetitionPaymentFormValueSequence:
-    updatePetitionPaymentFormValueSequence as unknown as Function,
+  updatePetitionPaymentFormValueSequence,
   updateQcCompleteForTrialSequence:
     updateQcCompleteForTrialSequence as unknown as Function,
   updateScreenMetadataSequence:
@@ -1497,8 +1490,7 @@ export const presenterSequences = {
     updateStartCaseInternalPartyTypeSequence as unknown as Function,
   updateStatisticsFormValueSequence:
     updateStatisticsFormValueSequence as unknown as Function,
-  updateStepIndicatorSequence:
-    updateStepIndicatorSequence as unknown as Function,
+  updateStepIndicatorSequence,
   updateTrialSessionCompleteSequence:
     updateTrialSessionCompleteSequence as unknown as Function,
   updateTrialSessionFormDataSequence:
@@ -1508,20 +1500,13 @@ export const presenterSequences = {
     updateUserCaseNoteOnWorkingCopySequence as unknown as Function,
   updateWorkingCopySessionNoteSequence:
     updateWorkingCopySessionNoteSequence as unknown as Function,
-  updatedFilePetitionCompleteStep1Sequence:
-    updatedFilePetitionCompleteStep1Sequence as unknown as Function,
-  updatedFilePetitionCompleteStep2Sequence:
-    updatedFilePetitionCompleteStep2Sequence as unknown as Function,
-  updatedFilePetitionCompleteStep3Sequence:
-    updatedFilePetitionCompleteStep3Sequence as unknown as Function,
-  updatedFilePetitionCompleteStep4Sequence:
-    updatedFilePetitionCompleteStep4Sequence as unknown as Function,
-  updatedFilePetitionCompleteStep5Sequence:
-    updatedFilePetitionCompleteStep5Sequence as unknown as Function,
-  updatedFilePetitionCompleteStep6Sequence:
-    updatedFilePetitionCompleteStep6Sequence as unknown as Function,
-  updatedFilePetitionGoBackAStepSequence:
-    updatedFilePetitionGoBackAStepSequence as unknown as Function,
+  updatedFilePetitionCompleteStep1Sequence,
+  updatedFilePetitionCompleteStep2Sequence,
+  updatedFilePetitionCompleteStep3Sequence,
+  updatedFilePetitionCompleteStep4Sequence,
+  updatedFilePetitionCompleteStep5Sequence,
+  updatedFilePetitionCompleteStep6Sequence,
+  updatedFilePetitionGoBackAStepSequence,
   uploadCorrespondenceDocumentSequence:
     uploadCorrespondenceDocumentSequence as unknown as Function,
   uploadCourtIssuedDocumentSequence:
@@ -1620,10 +1605,8 @@ export const presenterSequences = {
     validateUpdateCaseModalSequence as unknown as Function,
   validateUpdatePractitionerSequence:
     validateUpdatePractitionerSequence as unknown as Function,
-  validateUpdatedFilePetitionStep2Sequence:
-    validateUpdatedFilePetitionStep2Sequence as unknown as Function,
-  validateUpdatedFilePetitionStep5Sequence:
-    validateUpdatedFilePetitionStep5Sequence as unknown as Function,
+  validateUpdatedFilePetitionStep2Sequence,
+  validateUpdatedFilePetitionStep5Sequence,
   validateUploadCorrespondenceDocumentSequence:
     validateUploadCorrespondenceDocumentSequence as unknown as Function,
   validateUploadCourtIssuedDocumentSequence:
