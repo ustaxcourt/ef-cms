@@ -1,3 +1,8 @@
+import {
+  COUNTRY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
@@ -21,13 +26,36 @@ describe('createUserRecords', () => {
       userId: mockPrivatePractitionerUser.userId,
     });
 
+    expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+      3,
+    );
+
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        ...mockPrivatePractitionerUser,
-        pk: `user|${mockPrivatePractitionerUser.userId}`,
-        sk: `user|${mockPrivatePractitionerUser.userId}`,
+        barNumber: 'pt1234',
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: COUNTRY_TYPES.DOMESTIC,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email: 'privatePractitionerPractitioner@example.com',
+        entityName: 'User',
+        name: 'Private Practitioner',
+        pk: `user|${privatePractitionerUser.userId}`,
+        practiceType: 'Private',
+        role: ROLES.privatePractitioner,
+        section: 'privatePractitioner',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        sk: `user|${privatePractitionerUser.userId}`,
+        userId: '330d4b65-620a-489d-8414-6623653ebc4f',
       },
     });
     expect(
@@ -166,46 +194,28 @@ describe('createUserRecords', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        ...privatePractitionerUserWithoutBarNumber,
+        barNumber: undefined,
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: COUNTRY_TYPES.DOMESTIC,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email: 'privatePractitionerPractitioner@example.com',
+        entityName: 'User',
+        name: 'Private Practitioner',
         pk: `user|${privatePractitionerUserWithoutBarNumber.userId}`,
+        practiceType: 'Private',
+        role: ROLES.privatePractitioner,
+        section: 'privatePractitioner',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         sk: `user|${privatePractitionerUserWithoutBarNumber.userId}`,
-      },
-    });
-  });
-
-  it('should persist a private practitioner user with name and barNumber mapping records', async () => {
-    await createUserRecords({
-      applicationContext,
-      user: mockPrivatePractitionerUser,
-      userId: mockPrivatePractitionerUser.userId,
-    });
-
-    expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
-      3,
-    );
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        ...mockPrivatePractitionerUser,
-        pk: `user|${mockPrivatePractitionerUser.userId}`,
-        sk: `user|${mockPrivatePractitionerUser.userId}`,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0],
-    ).toMatchObject({
-      Item: {
-        pk: 'privatePractitioner|PRIVATE PRACTITIONER',
-        sk: `user|${mockPrivatePractitionerUser.userId}`,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[2][0],
-    ).toMatchObject({
-      Item: {
-        pk: 'privatePractitioner|PT1234',
-        sk: `user|${mockPrivatePractitionerUser.userId}`,
+        userId: '330d4b65-620a-489d-8414-6623653ebc4f',
       },
     });
   });
