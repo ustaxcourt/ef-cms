@@ -4,7 +4,6 @@ import { CreateMessageModalDialog } from './Messages/CreateMessageModalDialog';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
-import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
@@ -125,7 +124,6 @@ export const DocketEntryQc = connect(
             onConfirmSequence={completeDocketEntryQCAndSendMessageSequence}
           />
         )}
-        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal
             confirmSequence={completeDocketEntryQCSequence}
