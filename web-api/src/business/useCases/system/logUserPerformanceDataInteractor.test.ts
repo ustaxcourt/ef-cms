@@ -36,7 +36,7 @@ describe('logUserPerformanceDataInteractor', () => {
       .saveSystemPerformanceData.mockImplementation(() => {});
   });
 
-  it('should call persistence method with correct data', async () => {
+  it('should not allow unauthorized call to log data', async () => {
     await expect(
       logUserPerformanceDataInteractor(
         applicationContext,
