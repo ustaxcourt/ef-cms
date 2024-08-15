@@ -11,7 +11,6 @@ export const updateFilingTypeSequence = [
   updatePartyTypeActionUpdated,
   setDefaultContactStateAction,
 ] as unknown as (props: {
-  fromModal: boolean;
   allowEmptyString?: boolean;
   index?: number;
   key: string;
