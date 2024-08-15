@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type EntryOfAppearanceProps = {
   caseCaptionExtension: string;
@@ -26,10 +27,11 @@ export const generateEntryOfAppearancePdfInteractor = async (
     filers,
     petitioners,
   }: EntryOfAppearanceProps,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -37,11 +39,11 @@ export const generateEntryOfAppearancePdfInteractor = async (
     .getPersistenceGateway()
     .getUserById({
       applicationContext,
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
 
   const filerNames: string[] =
-    user.role === ROLES.irsPractitioner
+    authorizedUser.role === ROLES.irsPractitioner
       ? ['Respondent']
       : (filers
           .map(filerId => {

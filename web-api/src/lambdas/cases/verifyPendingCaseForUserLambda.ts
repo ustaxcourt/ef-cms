@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { verifyPendingCaseForUserInteractor } from '@web-api/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
 
 /**
  * used for determining if a user has pending association with a case or not
@@ -8,9 +9,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const verifyPendingCaseForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor(applicationContext, {
-        ...event.pathParameters,
-      });
+    return await verifyPendingCaseForUserInteractor(applicationContext, {
+      ...event.pathParameters,
+    });
   });

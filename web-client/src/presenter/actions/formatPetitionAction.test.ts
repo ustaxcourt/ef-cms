@@ -1,26 +1,31 @@
-import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('formatPetitionAction', () => {
   const PROPS = {
-    step1Data: {
+    createPetitionStep1Data: {
       contactPrimary: {},
     },
-    step2Data: {},
-    step3Data: {
+    createPetitionStep2Data: {},
+    createPetitionStep3Data: {
       caseType: CASE_TYPES_MAP.cdp,
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
           taxYear: 'TEST_taxYear',
         },
       ],
     },
-    step4Data: {},
-    step5Data: {},
+    createPetitionStep4Data: {},
+    createPetitionStep5Data: {},
   };
 
   const TEST_CASE_CAPTION = 'TEST_CASE_CAPTION';
@@ -30,10 +35,6 @@ describe('formatPetitionAction', () => {
     applicationContext
       .getUtilities()
       .getCaseCaption.mockImplementation(() => TEST_CASE_CAPTION);
-
-    applicationContext.getCurrentUser.mockImplementation(() => ({
-      email: TEST_EMAIL,
-    }));
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -46,13 +47,16 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
-      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -60,12 +64,13 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: CASE_TYPES_MAP.cdp,
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      taxYear: 'TEST_taxYear',
+      originalCaseType: CASE_TYPES_MAP.cdp,
     });
   });
 
@@ -81,13 +86,16 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: '',
       caseCaptionExtension: '',
-      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: '',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -95,22 +103,24 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: CASE_TYPES_MAP.cdp,
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      taxYear: 'TEST_taxYear',
+      originalCaseType: CASE_TYPES_MAP.cdp,
     });
   });
 
   it('should update caseType if caseType is a disclosure', async () => {
     const propsWithDisclosure = {
       ...PROPS,
-      step3Data: {
+      createPetitionStep3Data: {
         caseType: 'Disclosure1',
         irsNotices: [
           {
+            caseType: 'Disclosure1',
             noticeIssuedDate: 'TEST_noticeIssuedDate',
             taxYear: 'TEST_taxYear',
           },
@@ -124,6 +134,10 @@ describe('formatPetitionAction', () => {
       props: propsWithDisclosure,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 
@@ -137,45 +151,55 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.disclosure,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: 'Disclosure1',
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      taxYear: 'TEST_taxYear',
+      originalCaseType: 'Disclosure1',
     });
   });
 
-  it('should set noticeIssuedDate and taxYear as undefined if there is no irsNotice', async () => {
-    const propsWithoutIrsNotice = {
-      ...PROPS,
-      step3Data: {
-        caseType: CASE_TYPES_MAP.deficiency,
-        irsNotices: [],
-      },
-    };
+  it('should set counsel contact if user is a private practitioner', async () => {
     const results = await runAction(formatPetitionAction, {
       modules: {
         presenter,
       },
-      props: propsWithoutIrsNotice,
+      props: PROPS,
       state: {
         petitionFormatted: undefined,
+        user: {
+          barNumber: 'TEST_barNumber',
+          contact: {
+            address1: 'TEST_address1',
+            address2: 'TEST_address2',
+            address3: 'TEST_address3',
+            city: 'TEST_city',
+            phone: 'TEST_phone',
+            postalCode: 'TEST_postalCode',
+            state: 'TEST_state',
+          },
+          email: TEST_EMAIL,
+          firmName: 'TEST_firmName',
+          name: 'TEST_Name',
+          role: ROLES.privatePractitioner,
+        },
       },
     });
 
-    expect(results.state.petitionFormatted).toEqual({
-      caseCaption: 'TEST_CASE_CAPTION',
-      caseCaptionExtension: '',
-      caseDescription: 'Deficiency',
-      caseTitle: 'TEST_CASE_CAPTION',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        email: 'TEST_EMAIL',
-      },
-      irsNotices: [],
-      noticeIssuedDate: undefined,
-      taxYear: undefined,
+    expect(results.state.petitionFormatted.contactCounsel).toEqual({
+      address1: 'TEST_address1',
+      address2: 'TEST_address2',
+      address3: 'TEST_address3',
+      barNumber: 'TEST_barNumber',
+      city: 'TEST_city',
+      email: 'TEST_EMAIL',
+      firmName: 'TEST_firmName',
+      name: 'TEST_Name',
+      phone: 'TEST_phone',
+      postalCode: 'TEST_postalCode',
+      state: 'TEST_state',
     });
   });
 });

@@ -9,7 +9,7 @@ import { UploadPetitionStep1 } from '@shared/business/entities/startCase/UploadP
 describe('UploadPetitionStep1', () => {
   const VALID_ENTITY = {
     filingType: FILING_TYPES[ROLES.petitioner][0],
-    partyType: FILING_TYPES[ROLES.petitioner][0],
+    partyType: PARTY_TYPES.petitioner,
   };
 
   it('should create a valid instance of "UploadPetitionStep1" entity', () => {
@@ -192,6 +192,39 @@ describe('UploadPetitionStep1', () => {
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors.contactPrimary).not.toBeDefined();
         expect(errors.partyType).not.toBeDefined();
+      });
+    });
+
+    describe('Filing types', () => {
+      it('should not return an error message for petitioner filing type', () => {
+        const entity = new UploadPetitionStep1(VALID_ENTITY);
+
+        expect(entity).toBeDefined();
+
+        const errors = entity.getFormattedValidationErrors();
+        expect(errors).toEqual(null);
+      });
+      it('should not return an error message for practitioner filing type', () => {
+        const entity = new UploadPetitionStep1({
+          filingType: FILING_TYPES[ROLES.privatePractitioner][0],
+          partyType: PARTY_TYPES.petitioner,
+        });
+        expect(entity).toBeDefined();
+
+        const errors = entity.getFormattedValidationErrors();
+        expect(errors).toEqual(null);
+      });
+      it('should return an error message for filing type other than petitioner and practitioner', () => {
+        const entity = new UploadPetitionStep1({
+          filingType: 'random filing type',
+          partyType: PARTY_TYPES.petitioner,
+        });
+        expect(entity).toBeDefined();
+
+        const errors = entity.getFormattedValidationErrors();
+        expect(errors).toEqual({
+          filingType: 'Select on whose behalf you are filing',
+        });
       });
     });
   });

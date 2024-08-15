@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -7,7 +8,6 @@ import {
   DocketEntry,
   getServedPartiesCode,
 } from '../../../../../shared/src/business/entities/DocketEntry';
-import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
@@ -21,7 +21,6 @@ export const createAndServeNoticeDocketEntry = async (
     newPdfDoc,
     noticePdf,
     onlyProSePetitioners,
-    user,
   }: {
     additionalDocketEntryInfo?: any;
     caseEntity: Case;
@@ -32,9 +31,9 @@ export const createAndServeNoticeDocketEntry = async (
     };
     newPdfDoc: any;
     noticePdf: Buffer;
-    user: RawUser;
     onlyProSePetitioners?: boolean;
   },
+  authorizedUser: AuthUser,
 ) => {
   const docketEntryId = applicationContext.getUniqueId();
 
@@ -73,10 +72,10 @@ export const createAndServeNoticeDocketEntry = async (
         : getServedPartiesCode(servedParties.all),
       ...additionalDocketEntryInfo,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
-  noticeDocketEntry.setFiledBy(user);
+  noticeDocketEntry.setFiledBy(authorizedUser);
 
   caseEntity.addDocketEntry(noticeDocketEntry);
 
