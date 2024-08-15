@@ -152,13 +152,33 @@ export const petitionerUser: RawUser = {
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const privatePractitionerUser = {
+export const privatePractitionerUser: RawPractitioner = {
+  admissionsDate: '',
+  admissionsStatus: '',
   barNumber: 'BN1234',
-  email: 'privatePractitioner@example.com',
+  birthYear: '',
+  contact: {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: COUNTRY_TYPES.DOMESTIC,
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  },
+  email: 'privatePractitionerPractitioner@example.com',
   entityName: 'User',
+  firstName: '',
+  lastName: '',
   name: 'Private Practitioner',
+  originalBarState: '',
+  practiceType: 'Private',
+  practitionerType: '',
   role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: '330d4b65-620a-489d-8414-6623653ebc4f',
 };
 

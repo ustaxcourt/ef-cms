@@ -99,6 +99,7 @@ describe('updatedFilePetitionHelper', () => {
       ]);
     });
     it('should return filing options for practitioner', () => {
+      user = privatePractitionerUser;
       const result = runCompute(updatedFilePetitionHelper, {
         state: { form: {}, user: privatePractitionerUser },
       });
