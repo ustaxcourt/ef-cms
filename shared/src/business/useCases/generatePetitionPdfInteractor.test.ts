@@ -34,7 +34,7 @@ describe('generatePetitionPdfInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => ({}));
 
     await expect(
-      generatePetitionPdfInteractor(applicationContext, {}),
+      generatePetitionPdfInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 

@@ -1,22 +1,23 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
+type CardHeaderType = {
   showEditButton?: boolean;
   step?: number;
   title: string;
 };
 
-export const CardHeader = connect(
-  {
-    showEditButton: props.showEditButton,
-    step: props.step,
-    title: props.title,
-    updateStepIndicatorSequence: sequences.updateStepIndicatorSequence,
-  },
+const cardHeaderDependencies = {
+  updateStepIndicatorSequence: sequences.updateStepIndicatorSequence,
+};
+
+export const CardHeader = connect<
+  CardHeaderType,
+  typeof cardHeaderDependencies
+>(
+  cardHeaderDependencies,
   function CardHeader({
     showEditButton = true,
     step,
@@ -29,7 +30,7 @@ export const CardHeader = connect(
           {step && <span>{step}. </span>}
           {title}
         </div>
-        {showEditButton && (
+        {showEditButton && step && (
           <div>
             <Button
               link
