@@ -1,7 +1,7 @@
 import {
   runAction as cerebralRunAction,
   runCompute as cerebralRunCompute,
-} from 'cerebral/test';
+} from '../utilities/cerebralWrapper/test';
 import type { ClientState } from '@web-client/presenter/state';
 
 type FakeRunComputeType = <T>(
