@@ -87,11 +87,37 @@ describe('Petitioner Account Creation', () => {
   });
 
   describe('Create Petitioner Account and login', () => {
-    const TEST_EMAIL = `cypress_test_account+success_${GUID}@example.com`;
     const TEST_NAME = 'Cypress Test';
     const TEST_PASSWORD = generatePassword(VALID_PASSWORD_CONFIG);
 
+    it('should prevent multiple submissions', () => {
+      const TEST_EMAIL = `cypress_test_account+no_multiple_submissions_${GUID}@example.com`;
+      cy.visit('/create-account/petitioner');
+      cy.get('[data-testid="petitioner-account-creation-email"]').type(
+        TEST_EMAIL,
+      );
+      cy.get('[data-testid="petitioner-account-creation-name"]').type(
+        TEST_NAME,
+      );
+      cy.get('[data-testid="petitioner-account-creation-password"]').type(
+        TEST_PASSWORD,
+      );
+      cy.get(
+        '[data-testid="petitioner-account-creation-confirm-password"]',
+      ).type(TEST_PASSWORD);
+      cy.intercept('POST', '/auth/account/create').as('accountCreationRequest');
+
+      // eslint-disable-next-line cypress/unsafe-to-chain-command
+      cy.get('[data-testid="petitioner-account-creation-submit-button"]')
+        .click({ force: true })
+        .click({ force: true });
+
+      cy.wait('@accountCreationRequest');
+      cy.get('@accountCreationRequest.all').should('have.length', 1);
+    });
+
     it('should create an account and verify it using the verification link, then login and create an eletronic case', () => {
+      const TEST_EMAIL = `cypress_test_account+success_${GUID}@example.com`;
       createAPetitioner({
         email: TEST_EMAIL,
         name: TEST_NAME,

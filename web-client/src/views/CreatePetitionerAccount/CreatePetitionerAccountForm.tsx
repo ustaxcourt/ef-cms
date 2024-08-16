@@ -33,10 +33,10 @@ export const CreatePetitionerAccountForm = connect(
     const [inFocusName, setInFocusName] = useState(true);
     const [submitDisabled, setSubmitDisabled] = useState(false);
 
-    const submitFunction = debounce(
-      () => submitCreatePetitionerAccountFormSequence(),
-      500,
-    );
+    const submitFunction = debounce(() => {
+      submitCreatePetitionerAccountFormSequence();
+      setSubmitDisabled(false);
+    }, 500);
 
     return (
       <>
