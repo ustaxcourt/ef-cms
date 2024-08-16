@@ -534,7 +534,6 @@ import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
 import { updatePaperServiceProgressSequence } from './sequences/updatePaperServiceProgressSequence';
 import { updatePartyViewTabSequence } from './sequences/updatePartyViewTabSequence';
-import { updatePetitionFormValueSequence } from '@web-client/presenter/sequences/updatePetitionFormValueSequence';
 import { updatePetitionPaymentFormValueSequence } from './sequences/updatePetitionPaymentFormValueSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
@@ -1492,8 +1491,6 @@ export const presenterSequences = {
   updatePaperServiceProgressSequence:
     updatePaperServiceProgressSequence as unknown as Function,
   updatePartyViewTabSequence: updatePartyViewTabSequence as unknown as Function,
-  updatePetitionFormValueSequence:
-    updatePetitionFormValueSequence as unknown as Function,
   updatePetitionPaymentFormValueSequence:
     updatePetitionPaymentFormValueSequence as unknown as Function,
   updateQcCompleteForTrialSequence:

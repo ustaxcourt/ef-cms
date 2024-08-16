@@ -832,11 +832,6 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
-  updatedFilePetitionStep2State: {
-    selectedFilingOption: undefined,
-  } as {
-    selectedFilingOption?: string;
-  },
   user: null as any,
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],

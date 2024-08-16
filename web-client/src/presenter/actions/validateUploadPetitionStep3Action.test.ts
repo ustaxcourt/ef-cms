@@ -23,7 +23,7 @@ describe('validateUploadPetitionStep3Action', () => {
         presenter,
       },
       props: {
-        step3Data: {
+        createPetitionStep3Data: {
           caseType: CASE_TYPES_MAP.cdp,
           hasIrsNotice: false,
           hasUploadedIrsNotice: false,
@@ -41,7 +41,7 @@ describe('validateUploadPetitionStep3Action', () => {
         presenter,
       },
       props: {
-        step3Data: {},
+        createPetitionStep3Data: {},
       },
     });
 

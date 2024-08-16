@@ -1,8 +1,8 @@
 import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
-import { getStep1DataAction } from '@web-client/presenter/actions/getStep1DataAction';
+import { getCreatePetitionStep1DataAction } from '@web-client/presenter/actions/getCreatePetitionStep1DataAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getStep1DataAction', () => {
+describe('getCreatePetitionStep1DataAction', () => {
   const STATE_FORM = {
     businessType: 'TEST_businessType',
     corporateDisclosureFile: 'TEST_corporateDisclosureFile',
@@ -19,7 +19,7 @@ describe('getStep1DataAction', () => {
   };
 
   it('should fetch step 2 related data from state.form when useSameAsPrimary is true', async () => {
-    const results = await runAction(getStep1DataAction, {
+    const results = await runAction(getCreatePetitionStep1DataAction, {
       state: {
         form: {
           ...STATE_FORM,
@@ -43,8 +43,8 @@ describe('getStep1DataAction', () => {
       },
     });
 
-    const { step1Data } = results.output;
-    expect(step1Data).toEqual({
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data).toEqual({
       businessType: 'TEST_businessType',
       contactPrimary: {
         address1: 'TEST_PRIMARY_address1',
@@ -87,7 +87,7 @@ describe('getStep1DataAction', () => {
   });
 
   it('should fetch step 2 related data from state.form when useSameAsPrimary is false', async () => {
-    const results = await runAction(getStep1DataAction, {
+    const results = await runAction(getCreatePetitionStep1DataAction, {
       state: {
         form: {
           ...STATE_FORM,
@@ -110,8 +110,8 @@ describe('getStep1DataAction', () => {
       },
     });
 
-    const { step1Data } = results.output;
-    expect(step1Data).toEqual({
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data).toEqual({
       businessType: 'TEST_businessType',
       contactPrimary: {
         address2: 'TEST_PRIMARY_address2',
@@ -145,7 +145,7 @@ describe('getStep1DataAction', () => {
   });
 
   it('should set contact type for secondary contact when a secondary contact is present', async () => {
-    const results = await runAction(getStep1DataAction, {
+    const results = await runAction(getCreatePetitionStep1DataAction, {
       state: {
         form: {
           ...STATE_FORM,
@@ -167,14 +167,14 @@ describe('getStep1DataAction', () => {
         },
       },
     });
-    const { step1Data } = results.output;
-    expect(step1Data.contactSecondary.contactType).toEqual(
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data.contactSecondary.contactType).toEqual(
       CONTACT_TYPES.secondary,
     );
   });
 
   it('should not set contact type for secondary contact when a secondary contact is not present', async () => {
-    const results = await runAction(getStep1DataAction, {
+    const results = await runAction(getCreatePetitionStep1DataAction, {
       state: {
         form: {
           ...STATE_FORM,
@@ -186,7 +186,7 @@ describe('getStep1DataAction', () => {
         },
       },
     });
-    const { step1Data } = results.output;
-    expect(step1Data.contactSecondary).toBeUndefined();
+    const { createPetitionStep1Data } = results.output;
+    expect(createPetitionStep1Data.contactSecondary).toBeUndefined();
   });
 });
