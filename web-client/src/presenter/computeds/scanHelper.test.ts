@@ -1,7 +1,12 @@
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import {
-  INITIAL_DOCUMENT_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+  adcUser,
+  docketClerkUser,
+  irsPractitionerUser,
+  petitionerUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { scanHelper as scanHelperComputed } from './scanHelper';
@@ -20,72 +25,51 @@ describe('scanHelper', () => {
   );
 
   it('sets hasScanFeature to true for petitionsclerk user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitionsClerk,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: petitionsClerkUser },
     });
 
     expect(result.hasScanFeature).toEqual(true);
   });
 
   it('sets hasScanFeature to true for docketclerk user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.docketClerk,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: docketClerkUser },
     });
 
     expect(result.hasScanFeature).toEqual(true);
   });
 
   it('sets hasScanFeature to true for adc user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.adc,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: adcUser },
     });
 
     expect(result.hasScanFeature).toEqual(true);
   });
 
   it('sets hasScanFeature to false for petitioner user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: petitionerUser },
     });
 
     expect(result.hasScanFeature).toEqual(false);
   });
 
   it('sets hasScanFeature to false for practitioner user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: {
+        ...stateWithEmptyFormDocuments,
+        user: privatePractitionerUser,
+      },
     });
 
     expect(result.hasScanFeature).toEqual(false);
   });
 
   it('sets hasScanFeature to false for respondent user roles', () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.irsPractitioner,
-    });
-
     const result = runCompute(scanHelper, {
-      state: stateWithEmptyFormDocuments,
+      state: { ...stateWithEmptyFormDocuments, user: irsPractitionerUser },
     });
 
     expect(result.hasScanFeature).toEqual(false);
@@ -98,6 +82,7 @@ describe('scanHelper', () => {
         modal: {
           showModal: 'SelectScannerSourceModal',
         },
+        user: petitionerUser,
       },
     });
     expect(result.showScannerSourceModal).toEqual(true);
@@ -111,6 +96,7 @@ describe('scanHelper', () => {
         scanner: {
           sources: mockSources,
         },
+        user: petitionerUser,
       },
     });
     expect(result.sources.length).toEqual(2);
@@ -123,6 +109,7 @@ describe('scanHelper', () => {
           form: {
             stinFile: {},
           },
+          user: petitionerUser,
         },
       });
 
@@ -136,6 +123,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             stinFile: {},
           },
+          user: petitionerUser,
         },
       });
 
@@ -149,6 +137,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             stinFile: null,
           },
+          user: petitionerUser,
         },
       });
       expect(result.STINFileCompleted).toEqual(false);
@@ -164,6 +153,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: petitionerUser,
         },
       });
 
@@ -176,6 +166,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -191,6 +182,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             requestForPlaceOfTrialFile: {},
           },
+          user: petitionerUser,
         },
       });
 
@@ -204,6 +196,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             requestForPlaceOfTrialFile: null,
           },
+          user: petitionerUser,
         },
       });
       expect(result.RQTFileCompleted).toEqual(false);
@@ -220,6 +213,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: petitionerUser,
         },
       });
 
@@ -232,6 +226,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -247,6 +242,7 @@ describe('scanHelper', () => {
             applicationForWaiverOfFilingFeeFile: {},
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -260,6 +256,7 @@ describe('scanHelper', () => {
             applicationForWaiverOfFilingFeeFile: null,
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
       expect(result.APWFileCompleted).toEqual(false);
@@ -277,6 +274,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: petitionerUser,
         },
       });
 
@@ -289,6 +287,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -304,6 +303,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             petitionFile: {},
           },
+          user: petitionerUser,
         },
       });
 
@@ -317,6 +317,7 @@ describe('scanHelper', () => {
             docketEntries: [],
             petitionFileCompleted: null,
           },
+          user: petitionerUser,
         },
       });
       expect(result.PFileCompleted).toEqual(false);
@@ -332,6 +333,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: petitionerUser,
         },
       });
 
@@ -344,6 +346,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -359,6 +362,7 @@ describe('scanHelper', () => {
             corporateDisclosureFile: {},
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -372,6 +376,7 @@ describe('scanHelper', () => {
             corporateDisclosureFile: null,
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
       expect(result.DISCFileCompleted).toEqual(false);
@@ -387,6 +392,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: petitionerUser,
         },
       });
 
@@ -399,6 +405,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -414,6 +421,7 @@ describe('scanHelper', () => {
             attachmentToPetitionFile: {},
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -427,6 +435,7 @@ describe('scanHelper', () => {
             attachmentToPetitionFile: null,
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
       expect(result.ATPFileCompleted).toEqual(false);
@@ -443,6 +452,7 @@ describe('scanHelper', () => {
               },
             ],
           },
+          user: petitionerUser,
         },
       });
 
@@ -455,6 +465,7 @@ describe('scanHelper', () => {
           form: {
             docketEntries: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -473,6 +484,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
@@ -489,6 +501,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
@@ -505,6 +518,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 
@@ -521,6 +535,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: [],
           },
+          user: petitionerUser,
         },
       });
 
@@ -534,6 +549,7 @@ describe('scanHelper', () => {
             scanMode: 'someScanMode',
             scanner: 'someScanner',
           },
+          user: petitionerUser,
         },
       });
 
@@ -550,6 +566,7 @@ describe('scanHelper', () => {
           scanner: {
             sources: ['sourceA, sourceB'],
           },
+          user: petitionerUser,
         },
       });
 

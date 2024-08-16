@@ -1,9 +1,9 @@
-import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseInteractor';
+import { ElectronicCreatedCaseType } from '@web-api/business/useCases/createCaseInteractor';
 import {
   FileUploadProgressType,
   FileUploadProgressValueType,
+  PETITION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveAndSubmitCaseAction = async ({
@@ -20,6 +20,8 @@ export const saveAndSubmitCaseAction = async ({
     state.petitionFormatted,
   );
 
+  const user = get(state.user);
+
   let caseDetail;
   let stinFile;
 
@@ -29,9 +31,9 @@ export const saveAndSubmitCaseAction = async ({
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
-    } = await applicationContext
-      .getUseCases()
-      .generateDocumentIds(applicationContext, {
+    } = await applicationContext.getUseCases().generateDocumentIds(
+      applicationContext,
+      {
         attachmentToPetitionUploadProgress:
           fileUploadProgressMap.attachmentToPetition as FileUploadProgressType[],
         corporateDisclosureUploadProgress:
@@ -40,7 +42,9 @@ export const saveAndSubmitCaseAction = async ({
           fileUploadProgressMap.petition as FileUploadProgressType,
         stinUploadProgress:
           fileUploadProgressMap.stin as FileUploadProgressType,
-      });
+      },
+      user,
+    );
 
     stinFile = stinFileId;
 

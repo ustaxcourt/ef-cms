@@ -8,7 +8,7 @@ import {
   handleLockError,
   updateTrialSessionInteractor,
 } from './updateTrialSessionInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -61,20 +61,15 @@ describe('determineEntitiesToLock', () => {
 });
 
 describe('handleLockError', () => {
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-  });
-
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
     const mockOriginalRequest = {
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -101,8 +96,6 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
   });
 
   describe('is locked', () => {
@@ -112,7 +105,11 @@ describe('updateTrialSessionInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        updateTrialSessionInteractor(applicationContext, mockRequest),
+        updateTrialSessionInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -122,7 +119,11 @@ describe('updateTrialSessionInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        updateTrialSessionInteractor(applicationContext, mockRequest),
+        updateTrialSessionInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -134,7 +135,7 @@ describe('updateTrialSessionInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'update_trial_session',
         },
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       });
 
       expect(
@@ -149,7 +150,11 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await updateTrialSessionInteractor(applicationContext, mockRequest);
+      await updateTrialSessionInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      );
 
       MOCK_TRIAL_INPERSON.caseOrder!.forEach(({ docketNumber }) => {
         expect(
@@ -163,7 +168,11 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     it('should remove the lock', async () => {
-      await updateTrialSessionInteractor(applicationContext, mockRequest);
+      await updateTrialSessionInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      );
 
       let expectedIdentifiers = MOCK_TRIAL_INPERSON.caseOrder!.map(
         ({ docketNumber }) => `case|${docketNumber}`,

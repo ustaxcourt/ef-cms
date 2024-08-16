@@ -10,6 +10,7 @@ import {
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { sum } from 'lodash';
 
 export type TrialSessionTypes = {
@@ -28,10 +29,9 @@ export type TrialSessionReturnType = {
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: ServerApplicationContext,
   { endDate, judges, startDate }: JudgeActivityStatisticsRequest,
+  authorizedUser: UnknownAuthUser,
 ): Promise<TrialSessionReturnType> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

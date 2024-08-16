@@ -34,7 +34,6 @@ import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
-import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
 import { DownloadDocketEntriesModal } from '@web-client/views/DownloadDocketEntriesModal';
@@ -87,6 +86,7 @@ import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
+import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
@@ -140,7 +140,6 @@ const pages = {
   DashboardIrsSuperuser,
   DashboardJudge,
   DashboardPetitioner,
-  DashboardPractitioner,
   DashboardRespondent,
   DocketEntryQc,
   EditCaseDetails,
@@ -187,6 +186,7 @@ const pages = {
   SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
+  StatusReportOrder,
   StyleGuide,
   TrialSessionDetail,
   TrialSessionPlanningReport,

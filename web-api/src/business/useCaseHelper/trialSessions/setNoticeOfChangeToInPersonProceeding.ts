@@ -1,19 +1,17 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { Case } from '@shared/business/entities/cases/Case';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
-/**
- * setNoticeOfChangeToInPersonProceeding
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseEntity the case data
- * @param {object} providers.newPdfDoc the new PDF contents to be appended
- * @param {object} providers.newTrialSessionEntity the new trial session data
- * @param {object} providers.userId the user ID
- */
 export const setNoticeOfChangeToInPersonProceeding = async (
-  applicationContext,
-  { caseEntity, newPdfDoc, newTrialSessionEntity, user },
-) => {
+  applicationContext: ServerApplicationContext,
+  {
+    caseEntity,
+    newPdfDoc,
+    newTrialSessionEntity,
+  }: { caseEntity: Case; newPdfDoc: any; newTrialSessionEntity: any },
+  authorizedUser: AuthUser,
+): Promise<void> => {
   const trialSessionInformation = {
     address1: newTrialSessionEntity.address1,
     address2: newTrialSessionEntity.address2,
@@ -41,15 +39,16 @@ export const setNoticeOfChangeToInPersonProceeding = async (
     trialLocation: newTrialSessionEntity.trialLocation,
   };
 
-  await applicationContext
-    .getUseCaseHelpers()
-    .createAndServeNoticeDocketEntry(applicationContext, {
+  await applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry(
+    applicationContext,
+    {
       additionalDocketEntryInfo,
       caseEntity,
       documentInfo:
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding,
       newPdfDoc,
       noticePdf,
-      user,
-    });
+    },
+    authorizedUser,
+  );
 };
