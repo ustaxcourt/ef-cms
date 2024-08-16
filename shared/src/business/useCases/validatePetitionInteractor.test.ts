@@ -1,5 +1,8 @@
-import { COUNTRY_TYPES, PARTY_TYPES } from '../entities/EntityConstants';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PETITION_TYPES,
+} from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validatePetitionInteractor } from './validatePetitionInteractor';
 

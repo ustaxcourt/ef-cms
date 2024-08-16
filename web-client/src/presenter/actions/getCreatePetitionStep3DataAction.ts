@@ -4,7 +4,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getStep3DataAction = ({
+export const getCreatePetitionStep3DataAction = ({
   get,
 }: ActionProps<{ selectedPage: number }>) => {
   const { caseType, hasIrsNotice, irsNoticesRedactionAcknowledgement } = get(
@@ -21,7 +21,7 @@ export const getStep3DataAction = ({
     };
   });
 
-  const step3Data = {
+  const createPetitionStep3Data = {
     caseType: hasIrsNotice ? irsNotices[0].caseType : caseType,
     hasIrsNotice,
     hasUploadedIrsNotice,
@@ -30,6 +30,6 @@ export const getStep3DataAction = ({
   };
 
   return {
-    step3Data,
+    createPetitionStep3Data,
   };
 };
