@@ -6,7 +6,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 presenter.providers.applicationContext = applicationContext;
 
 describe('broadcastLogoutAction', () => {
-  it('does not broadcast an event if skipBroadcast is true', async () => {
+  it('does not broadcast an event when skipBroadcast is true', async () => {
     await runAction(broadcastLogoutAction, {
       modules: {
         presenter,
@@ -21,7 +21,7 @@ describe('broadcastLogoutAction', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('does broadcast an event if skipBroadcast is false', async () => {
+  it('does broadcast an event when skipBroadcast is false', async () => {
     delete process.env.CI;
     await runAction(broadcastLogoutAction, {
       modules: {

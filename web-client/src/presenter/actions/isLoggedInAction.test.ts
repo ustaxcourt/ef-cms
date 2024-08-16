@@ -34,9 +34,7 @@ describe('isLoggedInAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        user: null,
-      },
+      state: {},
     });
 
     expect(pathNoStub).toHaveBeenCalled();
