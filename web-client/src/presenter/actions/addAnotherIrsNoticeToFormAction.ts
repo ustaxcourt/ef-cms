@@ -6,11 +6,14 @@ export const addAnotherIrsNoticeToFormAction = ({
   get,
   store,
 }: ActionProps) => {
-  const data = get(state.irsNoticeUploadFormInfo);
-  if (data.length >= 5) return;
-  data.push({
+  const irsNoticeUploadFormInfo = get(state.irsNoticeUploadFormInfo);
+
+  const MAX_NUMBER_OF_IRS_NOTICE = 5;
+  if (irsNoticeUploadFormInfo.length >= MAX_NUMBER_OF_IRS_NOTICE) return;
+
+  irsNoticeUploadFormInfo.push({
     key: applicationContext.getUniqueId(),
     todayDate: applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD),
   });
-  store.set(state.irsNoticeUploadFormInfo, data);
+  store.set(state.irsNoticeUploadFormInfo, irsNoticeUploadFormInfo);
 };
