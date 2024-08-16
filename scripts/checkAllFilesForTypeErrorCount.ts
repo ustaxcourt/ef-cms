@@ -98,7 +98,7 @@ const errorCount = Object.keys(fileToCheck);
 if (errorCount.length) {
   logSmartTable(fileToCheck);
   console.log(
-    '\nHere are the files that your PR did not touch but increased in Typescript error count: ',
+    '\nHere are the files that increased in Typescript error count as a result of your PR: ',
     errorCount.length,
   );
   process.exit(1);
