@@ -30,7 +30,7 @@ describe('generatePetitionPdfInteractor', () => {
 
   it('should throw an Unauthorized user error when user does not have the correct permissions', async () => {
     await expect(
-      generatePetitionPdfInteractor(applicationContext, {}, undefined),
+      generatePetitionPdfInteractor(applicationContext, {} as any, undefined),
     ).rejects.toThrow('Unauthorized');
   });
 

@@ -733,6 +733,7 @@ export const baseState = {
     pdfsAppended: 0,
     totalPdfs: 0,
   },
+  parentMessageId: undefined,
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
@@ -843,7 +844,7 @@ export const baseState = {
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
-  viewerDocumentToDisplay: undefined,
+  viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -869,4 +870,11 @@ export type CreateCaseIrsForm = {
   taxYear?: number;
   irsNoticeFileUrl?: string;
   cityAndStateIssuingOffice?: string;
+};
+
+export type ViewerDocument = {
+  docketEntryId: string;
+  documentTitle?: string; // Should this be required?
+  filingDate?: string;
+  index?: number;
 };
