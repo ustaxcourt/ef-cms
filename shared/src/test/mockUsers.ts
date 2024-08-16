@@ -155,6 +155,7 @@ export const petitionerUser: RawUser = {
 
 export const privatePractitionerUser: RawPrivatePractitioner = {
   barNumber: 'BN1234',
+  email: 'privatePractitioner@example.com',
   entityName: 'User',
   firmName: 'Law offices of Private Practitioner',
   name: 'Private Practitioner',
