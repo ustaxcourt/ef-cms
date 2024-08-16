@@ -3,6 +3,7 @@
 import {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  STATUS_REPORT_ORDER_OPTIONS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
@@ -180,6 +181,7 @@ describe('messageDocumentHelper', () => {
               {
                 correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
+                isDraft: true,
               },
             ],
           },
@@ -406,6 +408,7 @@ describe('messageDocumentHelper', () => {
               {
                 correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
+                isDraft: true,
               },
             ],
           },
@@ -562,6 +565,104 @@ describe('messageDocumentHelper', () => {
       expect(result.showEditButtonNotSigned).toEqual(true);
       expect(result.showEditButtonSigned).toEqual(false);
     });
+  });
+
+  it('should return showEditSigned true and showEditNotSigned false when document is signed and is a status report order and the user has permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(judgeUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType:
+                  STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              },
+              eventCode: 'O',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(true);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned true when document is not signed and is a status report order and the user has permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(judgeUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType:
+                  STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              },
+              eventCode: 'O',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(true);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned false when document is signed and is a status report order and the user does not have permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType:
+                  STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              },
+              eventCode: 'O',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
+  });
+
+  it('should return showEditSigned false and showEditNotSigned false when document is not signed and is a status report order and the user does not have permission', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          ...baseCaseDetail,
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              draftOrderState: {
+                orderType:
+                  STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
+              },
+              eventCode: 'O',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+    expect(result.showEditButtonNotSigned).toEqual(false);
   });
 
   describe('showEditCorrespondenceButton', () => {
@@ -940,52 +1041,6 @@ describe('messageDocumentHelper', () => {
     });
   });
 
-  describe('editUrl', () => {
-    it('should return an editUrl for draft documents', () => {
-      const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Miscellaneous',
-                eventCode: 'MISC',
-                isDraft: true,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.editUrl).toBeTruthy();
-    });
-
-    it('should return an editUrl as an empty string if the document is not found', () => {
-      const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Miscellaneous',
-                eventCode: 'MISC',
-              },
-            ],
-          },
-          messageViewerDocumentToDisplay: {
-            documentId: '234',
-          },
-        },
-      });
-
-      expect(result.editUrl).toEqual('');
-    });
-  });
-
   describe('showSignStipulatedDecisionButton', () => {
     it('should be true if the user is an internal user, the eventCode is PSDE, the PSDE is served, and the SDEC eventCode is not in the documents', () => {
       const result = runCompute(messageDocumentHelper, {
@@ -1254,7 +1309,7 @@ describe('messageDocumentHelper', () => {
     expect(result.servePetitionLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/petition-qc/${mockParentMessageId}`,
     );
-    expect(result.signOrderLink).toEqual(
+    expect(result.applySignatureLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/edit-order/${mockDocumentId}/sign/${mockParentMessageId}`,
     );
   });
