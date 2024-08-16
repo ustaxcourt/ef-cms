@@ -1,8 +1,8 @@
 import {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
+  PETITION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import {
   RawUploadPetitionStep2,
   UploadPetitionStep2,

@@ -3,9 +3,14 @@ import {
   ALL_STATE_OPTIONS,
   BUSINESS_TYPES,
   COUNTRY_TYPES,
+  NOT_AVAILABLE_OPTION,
   PARTY_TYPES,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
+import {
+  IrsNoticesWithCaseDescription,
+  PetitionPdfBase,
+} from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { PetitionDocketHeader } from '../components/PetitionDocketHeader';
 import { PetitionPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PetitionPrimaryHeader';
 import React from 'react';
@@ -23,21 +28,9 @@ export const Petition = ({
   petitionReasons,
   preferredTrialCity,
   procedureType,
-  taxYear,
-}: {
-  caseCaptionExtension: string;
+}: PetitionPdfBase & {
   caseDescription: string;
-  caseTitle: string;
-  procedureType: string;
-  hasUploadedIrsNotice: boolean;
-  taxYear: string;
-  irsNotices: any[];
-  partyType: string;
-  petitionFacts: string[];
-  preferredTrialCity: string;
-  petitionReasons: string[];
-  contactPrimary: { [key: string]: string };
-  contactSecondary?: { [key: string]: string };
+  irsNotices: IrsNoticesWithCaseDescription[];
 }) => {
   const BUSINESS_TYPE_VALUES: string[] = Object.values(BUSINESS_TYPES);
 
@@ -98,12 +91,12 @@ export const Petition = ({
             <ol className="list-disc">
               {irsNotices.map(irsNotice => (
                 <li key={irsNotice.taxYear}>
-                  <span>{irsNotice.taxYear || 'N/A'}</span>
+                  <span>{irsNotice.taxYear || NOT_AVAILABLE_OPTION}</span>
                 </li>
               ))}
             </ol>
           ) : (
-            <p>{taxYear || 'N/A'}</p>
+            <p>{irsNotices[0].taxYear || NOT_AVAILABLE_OPTION}</p>
           )}
 
           <li className="list-bold">
@@ -124,7 +117,7 @@ export const Petition = ({
           </li>
           <ol className="petition-list-item">
             {petitionReasons.map(reason => {
-              return <li key={reason}>{reason}</li>;
+              return <li key={`${reason.slice(0, 10)}`}>{reason}</li>;
             })}
           </ol>
           <li className="list-bold">
@@ -133,7 +126,7 @@ export const Petition = ({
           </li>
           <ol className="petition-list-item">
             {petitionFacts.map(fact => {
-              return <li key={fact}>{fact}</li>;
+              return <li key={`${fact.slice(0, 10)}`}>{fact}</li>;
             })}
           </ol>
         </ol>
@@ -274,7 +267,7 @@ const renderIrsNotice = irsNotice => {
   } else {
     return (
       <span>
-        {`${irsNotice.noticeIssuedDateFormatted || 'N/A'} - ${irsNotice.cityAndStateIssuingOffice || 'N/A'}`}
+        {`${irsNotice.noticeIssuedDateFormatted || NOT_AVAILABLE_OPTION} - ${irsNotice.cityAndStateIssuingOffice || NOT_AVAILABLE_OPTION}`}
       </span>
     );
   }

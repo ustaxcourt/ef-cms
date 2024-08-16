@@ -1,8 +1,6 @@
-import {
-  PETITION_TYPES,
-  setupPetitionStateAction,
-} from '@web-client/presenter/actions/setupPetitionStateAction';
+import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { setupPetitionStateAction } from '@web-client/presenter/actions/setupPetitionStateAction';
 
 describe('setupPetitionStateAction', () => {
   it('should setup state correctly', async () => {
