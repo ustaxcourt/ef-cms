@@ -21,7 +21,6 @@ export const parseAndScrapePdfContents = async ({
     view[i] = pdfBuffer[i];
   }
 
-  // TODO: Wait to hear from Jessica on what should happen for PDF scraping failures
   try {
     return await applicationContext
       .getUtilities()
