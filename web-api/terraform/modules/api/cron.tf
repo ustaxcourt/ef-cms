@@ -8,8 +8,8 @@ module "check_case_cron_lambda" {
   timeout        = "900"
   memory_size    = "3008"
 
-  security_group_ids = var.security_group_ids
-  subnet_ids         = var.subnet_ids
+  # security_group_ids = var.security_group_ids
+  # subnet_ids         = var.subnet_ids
 }
 
 
@@ -23,8 +23,8 @@ module "health_check_cron_lambda" {
   timeout        = "900"
   memory_size    = "3008"
 
-  security_group_ids = var.security_group_ids
-  subnet_ids         = var.subnet_ids
+  # security_group_ids = var.security_group_ids
+  # subnet_ids         = var.subnet_ids
 }
 
 resource "aws_cloudwatch_event_rule" "check_case_cron_rule" {

@@ -45,12 +45,12 @@ variable "use_source_maps" {
   default = true
 }
 
-variable "subnet_ids" {
-  type = list(string)
-  default = []
-}
+# variable "subnet_ids" {
+#   type = list(string)
+#   default = []
+# }
 
-variable "security_group_ids" {
-  type = list(string)
-  default = []
-}
+# variable "security_group_ids" {
+#   type = list(string)
+#   default = []
+# }

@@ -8,8 +8,8 @@ module "api_async_lambda" {
   timeout        = "900"
   memory_size    = "7000"
 
-  security_group_ids = var.security_group_ids
-  subnet_ids = var.subnet_ids
+  # security_group_ids = var.security_group_ids
+  # subnet_ids = var.subnet_ids
 }
 
 resource "aws_api_gateway_resource" "api_async_base_resource" {
