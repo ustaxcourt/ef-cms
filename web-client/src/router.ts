@@ -411,6 +411,42 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/status-report-order-create..',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
+        (docketNumber, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
+          );
+          return app.getSequence('gotoStatusReportOrderSequence')({
+            docketEntryId,
+            docketNumber,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/status-report-order-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
+          );
+          return app.getSequence('gotoStatusReportOrderSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/case-detail/*/docket-entry/*/edit-meta',
       ifHasAccess({ app }, (docketNumber, docketRecordIndex) => {
         setPageTitle(
@@ -1326,6 +1362,46 @@ const router = {
           parentMessageId,
         });
       }),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/status-report-order-create..',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          const { statusReportFilingDate, statusReportIndex } = route.query();
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
+          );
+          return app.getSequence('gotoStatusReportOrderSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+            statusReportFilingDate,
+            statusReportIndex,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/status-report-order-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Status Report Order`,
+          );
+          return app.getSequence('gotoStatusReportOrderSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(

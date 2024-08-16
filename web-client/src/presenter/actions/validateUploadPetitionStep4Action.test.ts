@@ -26,7 +26,7 @@ describe('validateUploadPetitionStep4Action', () => {
         presenter,
       },
       props: {
-        step4Data: {
+        createPetitionStep4Data: {
           preferredTrialCity: TRIAL_CITY_STRINGS[0],
           procedureType: PROCEDURE_TYPES_MAP.regular,
         },
@@ -43,7 +43,7 @@ describe('validateUploadPetitionStep4Action', () => {
         presenter,
       },
       props: {
-        step4Data: {},
+        createPetitionStep4Data: {},
       },
     });
 
