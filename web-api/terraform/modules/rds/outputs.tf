@@ -1,3 +1,3 @@
 output "address" {
-  value = aws_db_instance.postgres.address
+  value = aws_rds_cluster.postgres.endpoint
 }

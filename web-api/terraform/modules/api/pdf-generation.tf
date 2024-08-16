@@ -13,6 +13,6 @@ module "pdf_generation_lambda" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-  security_group_ids = var.security_group_ids
-  subnet_ids         = var.subnet_ids
+  # security_group_ids = var.security_group_ids
+  # subnet_ids         = var.subnet_ids
 }
