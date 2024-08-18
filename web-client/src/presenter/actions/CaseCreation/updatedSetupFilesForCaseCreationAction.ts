@@ -14,7 +14,7 @@ export const updatedSetupFilesForCaseCreationAction = ({
     requestForPlaceOfTrialFile,
     stinFile,
   } = petitionMetadata;
-  // need to do this elsewhere?
+
   const attachmentsToPetition: File[] | undefined = hasIrsNotice
     ? (irsNotices
         ?.map(irsNotice => irsNotice.file)
