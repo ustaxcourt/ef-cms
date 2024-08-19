@@ -97,6 +97,7 @@ import { getInboxMessagesForUserLambda } from './lambdas/messages/getInboxMessag
 import { getInternalUsersLambda } from './lambdas/users/getInternalUsersLambda';
 import { getIrsPractitionersBySearchKeyLambda } from './lambdas/users/getIrsPractitionersBySearchKeyLambda';
 import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda';
+import { getJudgesChambersLambda } from './lambdas/users/getJudgesChambersLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
@@ -879,6 +880,7 @@ app.delete(
     lambdaWrapper(getDocumentQCInboxForSectionLambda),
   );
   app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
+  app.get('/sections/chambers', lambdaWrapper(getJudgesChambersLambda));
 }
 
 /**

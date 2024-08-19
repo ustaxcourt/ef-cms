@@ -105,6 +105,7 @@ import { getInboxMessagesForUserInteractor } from './business/useCases/messages/
 import { getInternalUsersInteractor } from './business/useCases/user/getInternalUsersInteractor';
 import { getIrsPractitionersBySearchKeyInteractor } from './business/useCases/user/getIrsPractitionersBySearchKeyInteractor';
 import { getJudgeInSectionInteractor } from './business/useCases/user/getJudgeInSectionInteractor';
+import { getJudgesChambersInteractor } from '@web-api/business/useCases/user/getJudgesChambersInteractor';
 import { getJudgesForPublicSearchInteractor } from './business/useCases/public/getJudgesForPublicSearchInteractor';
 import { getMaintenanceModeInteractor } from '../../shared/src/business/useCases/getMaintenanceModeInteractor';
 import { getMessageThreadInteractor } from './business/useCases/messages/getMessageThreadInteractor';
@@ -319,6 +320,7 @@ const useCases = {
   getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
   getJudgeInSectionInteractor,
+  getJudgesChambersInteractor,
   getJudgesForPublicSearchInteractor,
   getMaintenanceModeInteractor,
   getMessageThreadInteractor,
