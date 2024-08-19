@@ -31,6 +31,7 @@ import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
+import { ITestableWindow } from '../../cypress/helpers/ITestableWindow';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
@@ -262,8 +263,13 @@ const app = {
       returnSequencePromise: true,
     });
 
+    // Expose Cerebral for testing
+    if (process.env.ENV === 'local' || process.env.ENV === 'test') {
+      (window as unknown as ITestableWindow).cerebral = cerebralApp;
+    }
+
     applicationContext.setForceRefreshCallback(async () => {
-      await cerebralApp.getSequence('openAppUpdatedModalSequence')();
+      await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
     });
 
     const container = window.document.querySelector('#app');
@@ -271,13 +277,11 @@ const app = {
 
     root.render(
       <Container app={cerebralApp}>
-        {!process.env.CI && (
-          <>
-            <IdleActivityMonitor />
-            <AppInstanceManager />
-            <GlobalModalWrapper />
-          </>
-        )}
+        <>
+          <IdleActivityMonitor />
+          <AppInstanceManager />
+          <GlobalModalWrapper />
+        </>
         <AppComponent />
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
