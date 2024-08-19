@@ -227,11 +227,11 @@ const JUDGES_CHAMBERS: Record<string, JudgeInfo> = omitBy(
   chambers => chambers.isLegacy,
 );
 
-export const getJudgesChambers = () => {
+export const getTestJudgesChambers = () => {
   return JUDGES_CHAMBERS;
 };
 
-export const getJudgesChambersWithLegacy = () => {
+export const getTestJudgesChambersWithLegacy = () => {
   return {
     ...JUDGES_CHAMBERS,
     LEGACY_JUDGES_CHAMBERS_SECTION: {
@@ -243,7 +243,7 @@ export const getJudgesChambersWithLegacy = () => {
 
 export const getChambersSectionsLabels = () => {
   const chambersSectionsLabels = [];
-  Object.keys(getJudgesChambers()).forEach(k => {
+  Object.keys(getTestJudgesChambers()).forEach(k => {
     const chambers = JUDGES_CHAMBERS[k];
     chambersSectionsLabels[chambers.section] = chambers.label;
   });
@@ -252,7 +252,7 @@ export const getChambersSectionsLabels = () => {
 
 export const getChambersSections = () => {
   const chambersSections = [];
-  Object.keys(getJudgesChambers()).forEach(k => {
+  Object.keys(getTestJudgesChambers()).forEach(k => {
     const chambers = JUDGES_CHAMBERS[k];
     chambersSections.push(chambers.section);
   });

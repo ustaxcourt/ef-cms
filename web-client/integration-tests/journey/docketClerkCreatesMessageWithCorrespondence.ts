@@ -4,6 +4,7 @@ import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
+// TODO: 10455
 const JUDGES_CHAMBERS = applicationContext
   .getPersistenceGateway()
   .getJudgesChambers();

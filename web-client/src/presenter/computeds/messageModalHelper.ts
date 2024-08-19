@@ -86,13 +86,7 @@ export const messageModalHelper = (
   });
 
   const chambersDisplay = key => {
-    return judgesChambers
-      ? judgesChambers
-          .filter(s => s.section === key)
-          .map(chambers => {
-            return chambers.label;
-          })
-      : [];
+    return judgesChambers?.filter(s => s.section === key)[0]?.label;
   };
 
   return {
