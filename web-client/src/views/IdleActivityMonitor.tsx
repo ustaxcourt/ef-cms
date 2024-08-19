@@ -9,6 +9,7 @@ export const IdleActivityMonitor = connect(
   {
     broadcastIdleStatusActiveSequence:
       sequences.broadcastIdleStatusActiveSequence,
+    clientNeedsToRefresh: state.clientNeedsToRefresh,
     constants: state.constants,
     handleIdleLogoutSequence: sequences.handleIdleLogoutSequence,
     lastIdleAction: state.lastIdleAction,
@@ -17,6 +18,7 @@ export const IdleActivityMonitor = connect(
   },
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
+    clientNeedsToRefresh,
     constants,
     handleIdleLogoutSequence,
     lastIdleAction,
@@ -42,6 +44,18 @@ export const IdleActivityMonitor = connect(
     });
 
     useEffect(() => {
+      // Broadcast activity as soon as a new tab loads to keep idle sign in times in sync across browser tabs.
+      // Also, dismiss modals in other, potentially unseen tabs to ensure
+      // unseen tabs do not trigger a surprise logout in the current tab.
+      broadcastIdleStatusActiveSequence({ closeModal: true });
+    }, []);
+
+    useEffect(() => {
+      // The user needs to refresh, so stop tracking idle timeout
+      if (clientNeedsToRefresh) {
+        return;
+      }
+
       const interval = setInterval(() => {
         handleIdleLogoutSequence();
       }, 1000);

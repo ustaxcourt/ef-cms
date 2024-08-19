@@ -253,6 +253,7 @@
     "@babel/preset-react": "7.24.7",
     "@babel/preset-typescript": "7.24.7",
     "@babel/register": "7.24.6",
+    "@cypress/puppeteer": "^0.1.5",
     "@faker-js/faker": "8.4.1",
     "@miovision/eslint-plugin-disallow-date": "2.0.0",
     "@types/aws-lambda": "8.10.143",
