@@ -18,7 +18,10 @@ export const DashboardPetitioner = connect(
   function DashboardPetitioner({ dashboardExternalHelper, user }) {
     return (
       <React.Fragment>
-        <BigHeader text={`Welcome, ${user.name}`} />
+        <BigHeader
+          className="petitioner-welcome-name"
+          text={`Welcome, ${user.name}`}
+        />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
