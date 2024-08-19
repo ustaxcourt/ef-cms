@@ -1,19 +1,16 @@
 import { BROADCAST_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { broadcastIdleStatusActiveAction } from './broadcastIdleStatusActiveAction';
+import { broadcastAppUpdatedAction } from '@web-client/presenter/actions/broadcastAppUpdatedAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('broadcastIdleStatusActiveAction', () => {
+describe('broadcastAppUpdatedAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should invoke postMessage idleStatusActive message when props.closeModal is false', async () => {
-    await runAction(broadcastIdleStatusActiveAction, {
+  it('should broadcast message when skipBroadcast is false (the default)', async () => {
+    await runAction(broadcastAppUpdatedAction, {
       modules: {
         presenter,
-      },
-      props: {
-        closeModal: false,
       },
     });
 
@@ -23,27 +20,22 @@ describe('broadcastIdleStatusActiveAction', () => {
     expect(
       applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
     ).toMatchObject({
-      subject: BROADCAST_MESSAGES.idleStatusActive,
+      subject: BROADCAST_MESSAGES.appHasUpdated,
     });
   });
 
-  it('should invoke postMessage stayLoggedIn message when props.closeModal is true', async () => {
-    await runAction(broadcastIdleStatusActiveAction, {
+  it('should not broadcast message when skipBroadcast is true', async () => {
+    await runAction(broadcastAppUpdatedAction, {
       modules: {
         presenter,
       },
       props: {
-        closeModal: true,
+        skipBroadcast: true,
       },
     });
 
     expect(
       applicationContext.getBroadcastGateway().postMessage,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getBroadcastGateway().postMessage.mock.calls[0][0],
-    ).toMatchObject({
-      subject: BROADCAST_MESSAGES.stayLoggedIn,
-    });
+    ).not.toHaveBeenCalled();
   });
 });
