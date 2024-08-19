@@ -4,9 +4,9 @@ import {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   PARTY_TYPES,
+  PETITION_TYPES,
 } from '../EntityConstants';
 import { ElectronicPetition } from './ElectronicPetition';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ElectronicPetition entity', () => {
