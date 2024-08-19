@@ -291,7 +291,7 @@
     "decimal.js": "10.4.3",
     "dynamodb-admin": "4.6.1",
     "dynamodb-streams-readable": "3.0.0",
-    "esbuild": "0.23.1",
+    "esbuild": "0.23.0",
     "esbuild-css-modules-plugin": "3.1.2",
     "esbuild-plugin-babel-cached": "0.2.3",
     "esbuild-plugin-clean": "1.0.1",
@@ -359,7 +359,7 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "typescript": "5.5.4",
+    "typescript": "5.4.5",
     "utf8": "3.0.0"
   }
 }
