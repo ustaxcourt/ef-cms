@@ -1161,7 +1161,14 @@ const router = {
     );
 
     registerRoute('/idle-logout', () => {
-      return app.getSequence('gotoIdleLogoutSequence')();
+      if (app.getState('token')) {
+        return app.getSequence('signOutIdleSequence')();
+      } else {
+        // If not signed in, saying "we logged you off" doesn't make sense
+        return app.getSequence('navigateToPathSequence')({
+          path: BASE_ROUTE,
+        });
+      }
     });
 
     registerRoute('/login', () => {
