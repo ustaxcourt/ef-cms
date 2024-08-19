@@ -30,10 +30,10 @@ export const CaseSearchBox = connect(
             <div className="card" data-testid="search-for-a-case-card">
               <div className="content-wrapper gray">
                 <div className="grid-row underlined display-flex align-items-center">
-                  <div className="grid-col-8">
+                  <div className="grid-col-7">
                     <h3>Search for a Case</h3>
                   </div>
-                  <div className="grid-col-4 margin-bottom-2">
+                  <div className="grid-col-5 margin-bottom-2">
                     {caseSearchBoxHelper.showAdvancedSearch && (
                       <a
                         className="usa-link float-right"
