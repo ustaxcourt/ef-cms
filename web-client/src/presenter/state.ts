@@ -836,7 +836,7 @@ export const baseState = {
   user: null as any,
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
-  validationErrors: {} as Record<string, string>,
+  validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
