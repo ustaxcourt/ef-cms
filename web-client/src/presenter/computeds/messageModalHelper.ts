@@ -21,6 +21,9 @@ export const messageModalHelper = (
   const attachments = get(state.modal.form.attachments);
   const draftAttachments = get(state.modal.form.draftAttachments);
   const currentAttachments = [...attachments, ...draftAttachments];
+  const judgesChambers = get(state.judgesChambers) || [];
+
+  console.log('judgesChambers', judgesChambers);
 
   const computeIsAlreadyAttached = doc =>
     currentAttachments.some(
@@ -62,10 +65,6 @@ export const messageModalHelper = (
   const shouldShowAddDocumentForm =
     currentAttachmentCount === 0 || screenMetadata.showAddDocumentForm;
 
-  const CHAMBERS_SECTIONS_LABELS = applicationContext
-    .getPersistenceGateway()
-    .getChambersSectionsLabels();
-
   const sectionDisplay = key => {
     return (
       {
@@ -82,13 +81,19 @@ export const messageModalHelper = (
     );
   };
 
-  const chambersDisplay = key => {
-    return CHAMBERS_SECTIONS_LABELS[key];
-  };
+  const chambersSections = judgesChambers.map(chambers => {
+    return chambers.section;
+  });
 
-  const chambersSections = applicationContext
-    .getPersistenceGateway()
-    .getChambersSections();
+  const chambersDisplay = key => {
+    return judgesChambers
+      ? judgesChambers
+          .filter(s => s.section === key)
+          .map(chambers => {
+            return chambers.label;
+          })
+      : [];
+  };
 
   return {
     chambersDisplay,

@@ -688,6 +688,7 @@ export const baseState = {
   } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
+  judgesChambers: [] as any, // TODO: Type this
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
