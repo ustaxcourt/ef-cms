@@ -1,7 +1,10 @@
 import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { judgeColvin, petitionsClerkUser } from '@shared/test/mockUsers';
+import {
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { updateDocketEntryWorksheetInteractor } from '@web-api/business/useCases/pendingMotion/updateDocketEntryWorksheetInteractor';
 
 describe('updateDocketEntryWorksheetInteractor', () => {
@@ -16,8 +19,6 @@ describe('updateDocketEntryWorksheetInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeColvin);
-
     applicationContext
       .getUseCaseHelpers()
       .getJudgeForUserHelper.mockReturnValue({ userId: TEST_JUDGE_USER_ID });
@@ -28,20 +29,26 @@ describe('updateDocketEntryWorksheetInteractor', () => {
   });
 
   it('should throw an error when the user does not have access to the case worksheet feature', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     await expect(
-      updateDocketEntryWorksheetInteractor(applicationContext, {
-        worksheet: VALID_WORKSHEET,
-      }),
+      updateDocketEntryWorksheetInteractor(
+        applicationContext,
+        {
+          worksheet: VALID_WORKSHEET,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should throw an error when the provided worksheet fails validation', async () => {
     await expect(
-      updateDocketEntryWorksheetInteractor(applicationContext, {
-        worksheet: { ...VALID_WORKSHEET, docketEntryId: 'NOT A UUID' },
-      }),
+      updateDocketEntryWorksheetInteractor(
+        applicationContext,
+        {
+          worksheet: { ...VALID_WORKSHEET, docketEntryId: 'NOT A UUID' },
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow(InvalidEntityError);
   });
 
@@ -51,6 +58,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
       {
         worksheet: VALID_WORKSHEET,
       },
+      mockJudgeUser,
     );
 
     const updateDocketEntryWorksheetCallCount =

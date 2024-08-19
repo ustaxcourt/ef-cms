@@ -4,7 +4,6 @@ import {
   EXTERNAL_DOCUMENT_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from './EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isAutoServed', () => {
   it('should return true if the documentType is an external document and the document is not a Simultaneous Document', () => {
@@ -14,7 +13,7 @@ describe('isAutoServed', () => {
         documentTitle: 'Answer to Second Amendment to Petition',
         documentType: 'Answer to Second Amendment to Petition',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     expect(docketEntry.isAutoServed()).toBeTruthy();
@@ -27,7 +26,7 @@ describe('isAutoServed', () => {
         documentTitle: 'Notice of Election to Participate',
         documentType: 'Notice of Election to Participate',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     expect(docketEntry.isAutoServed()).toBeTruthy();
@@ -57,7 +56,7 @@ describe('isAutoServed', () => {
         documentType: EXTERNAL_DOCUMENT_TYPES[0],
         eventCode: 'AMAT',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     expect(docketEntry.isAutoServed()).toBeFalsy();
@@ -70,7 +69,7 @@ describe('isAutoServed', () => {
         documentType: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
         eventCode: 'SIAB',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     expect(docketEntry.isAutoServed()).toBeFalsy();
@@ -83,7 +82,7 @@ describe('isAutoServed', () => {
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
     );
 
     expect(docketEntry.isAutoServed()).toBeFalsy();

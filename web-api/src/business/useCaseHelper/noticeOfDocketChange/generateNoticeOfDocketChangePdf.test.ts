@@ -1,21 +1,18 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  docketClerkUser,
-  irsSuperuserUser,
-} from '../../../../../shared/src/test/mockUsers';
 import { generateNoticeOfDocketChangePdf } from './generateNoticeOfDocketChangePdf';
+import {
+  mockDocketClerkUser,
+  mockIrsSuperuser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generateNoticeOfDocketChangePdf', () => {
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-  });
+  beforeEach(() => {});
 
   it('should throw an error when the user does not have permission to generate a notice of docket change', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser); // IRS Superuser does not have this permission
-
     await expect(
       generateNoticeOfDocketChangePdf({
         applicationContext,
+        authorizedUser: mockIrsSuperuser,
         docketChangeInfo: {
           caseCaptionExtension:
             'Bert & Ernie, Petitioners v. Commissioner of Internal Revenue, Respondent',
@@ -36,6 +33,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
 
     const result = await generateNoticeOfDocketChangePdf({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketChangeInfo: {
         caseCaptionExtension:
           'Bert & Ernie, Petitioners v. Commissioner of Internal Revenue, Respondent',

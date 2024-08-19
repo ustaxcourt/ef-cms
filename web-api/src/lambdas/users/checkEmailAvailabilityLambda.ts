@@ -1,3 +1,5 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { checkEmailAvailabilityInteractor } from '@web-api/business/useCases/user/checkEmailAvailabilityInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -6,13 +8,18 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const checkEmailAvailabilityLambda = event =>
+export const checkEmailAvailabilityLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
     const { email } = event.queryStringParameters;
 
-    return await applicationContext
-      .getUseCases()
-      .checkEmailAvailabilityInteractor(applicationContext, {
+    return await checkEmailAvailabilityInteractor(
+      applicationContext,
+      {
         email,
-      });
+      },
+      authorizedUser,
+    );
   });

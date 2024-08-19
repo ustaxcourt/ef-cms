@@ -1,6 +1,7 @@
 import { MOCK_CASE } from '../../test/mockCase';
 import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
 
 describe('removeSignatureFromDocumentInteractor', () => {
@@ -35,11 +36,30 @@ describe('removeSignatureFromDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
+  it('should throw an error when user is undefined', async () => {
+    await expect(
+      removeSignatureFromDocumentInteractor(
+        applicationContext,
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: mockCase.docketNumber,
+        },
+        undefined,
+      ),
+    ).rejects.toThrow(
+      'User attempting to remove signature from document is not an auth user',
+    );
+  });
+
   it('should retrieve the original, unsigned document from S3', async () => {
-    await removeSignatureFromDocumentInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockCase.docketNumber,
-    });
+    await removeSignatureFromDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
@@ -50,10 +70,14 @@ describe('removeSignatureFromDocumentInteractor', () => {
   });
 
   it('should overwrite the current, signed document in S3 with the original, unsigned document', async () => {
-    await removeSignatureFromDocumentInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockCase.docketNumber,
-    });
+    await removeSignatureFromDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -70,6 +94,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockCase.docketNumber,
       },
+      mockDocketClerkUser,
     );
 
     const unsignedDocument = updatedCase.docketEntries.find(
