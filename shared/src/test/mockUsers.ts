@@ -13,10 +13,11 @@ import {
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
+
 import {
-  getJudgesChambers,
-  getJudgesChambersWithLegacy,
-} from '../../../web-client/src/business/chambers/getJudgesChambers';
+  getTestJudgesChambers,
+  getTestJudgesChambersWithLegacy,
+} from './mockJudgesChambers';
 
 export const adminUser: RawUser = {
   entityName: 'User',
@@ -35,7 +36,7 @@ export const adcUser = {
 export const colvinsChambersUser = {
   name: 'Chandler Chambers',
   role: ROLES.chambers,
-  section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
+  section: getTestJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
   userId: '3d9fa032-ad00-475a-9183-8aa0229a31eb',
 };
 
@@ -123,7 +124,8 @@ export const legacyJudgeUser: RawUser = {
   entityName: 'User',
   name: 'Legacy Judge Ginsburg',
   role: ROLES.legacyJudge,
-  section: getJudgesChambersWithLegacy().LEGACY_JUDGES_CHAMBERS_SECTION.section,
+  section:
+    getTestJudgesChambersWithLegacy().LEGACY_JUDGES_CHAMBERS_SECTION.section,
   userId: 'dc67e189-cf3e-4ca3-a33f-91db111ec270',
 };
 
@@ -134,7 +136,7 @@ export const judgeColvin: RawUser = {
   judgeFullName: 'John O. Colvin',
   name: 'Colvin',
   role: ROLES.judge,
-  section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
+  section: getTestJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
   userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
 };
 

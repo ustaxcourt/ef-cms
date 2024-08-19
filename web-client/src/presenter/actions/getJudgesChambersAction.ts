@@ -10,12 +10,12 @@ export const getJudgesChambersAction = async ({
     return { judgesChambers: judgesChambersCached };
   }
 
-  const users = await applicationContext
+  const judgesChambers = await applicationContext
     .getUseCases()
     .getJudgesChambersInteractor(applicationContext);
 
-  console.log('Getting the chambers', users);
+  console.log('Getting the chambers', judgesChambers);
   return {
-    judgesChambers: sortBy(users, 'label'),
+    judgesChambers: sortBy(judgesChambers, 'label'),
   };
 };

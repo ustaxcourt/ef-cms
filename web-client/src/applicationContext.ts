@@ -165,11 +165,6 @@ import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/repor
 import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getCaseWorksheetsByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
-import {
-  getChambersSections,
-  getChambersSectionsLabels,
-  getJudgesChambers,
-} from './business/chambers/getJudgesChambers';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getColdCaseReportInteractor } from '../../shared/src/proxies/reports/getColdCaseReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
@@ -701,8 +696,6 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
-      getChambersSections,
-      getChambersSectionsLabels,
       getDocument,
       getItem,
       getPdfFromUrl,
@@ -781,7 +774,6 @@ const applicationContext = {
       getFormattedPartiesNameAndTitle,
       getFormattedTrialSessionDetails,
       getJudgeLastName,
-      getJudgesChambers,
       getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,
