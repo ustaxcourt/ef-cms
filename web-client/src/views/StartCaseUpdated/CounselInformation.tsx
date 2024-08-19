@@ -5,7 +5,7 @@ import React from 'react';
 
 export function CounselInformation({ userInfo }) {
   return (
-    <div className="border-top-1px padding-top-2 padding-bottom-2 height-full margin-bottom-0">
+    <div className="border-top-1px padding-top-2 height-full margin-bottom-0">
       <div className="content-wrapper">
         <CardHeader
           showEditButton={false}
@@ -34,16 +34,14 @@ export function CounselInformation({ userInfo }) {
             </div>
           </div>
         </div>
-        <div className="margin-top-4">
-          <InfoNotificationComponent
-            alertInfo={{
-              message:
-                'Any additional counsel representing a party will need to file an entry of appearance after the petition is processed by the Court.',
-            }}
-            dismissible={false}
-            scrollToTop={false}
-          />
-        </div>
+        <InfoNotificationComponent
+          alertInfo={{
+            message:
+              'Any additional counsel representing a party will need to file an entry of appearance after the petition is processed by the Court.',
+          }}
+          dismissible={false}
+          scrollToTop={false}
+        />
       </div>
     </div>
   );
