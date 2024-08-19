@@ -6,21 +6,22 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('formatPetitionAction', () => {
   const PROPS = {
-    step1Data: {
+    createPetitionStep1Data: {
       contactPrimary: {},
     },
-    step2Data: {},
-    step3Data: {
+    createPetitionStep2Data: {},
+    createPetitionStep3Data: {
       caseType: CASE_TYPES_MAP.cdp,
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
           taxYear: 'TEST_taxYear',
         },
       ],
     },
-    step4Data: {},
-    step5Data: {},
+    createPetitionStep4Data: {},
+    createPetitionStep5Data: {},
   };
 
   const TEST_CASE_CAPTION = 'TEST_CASE_CAPTION';
@@ -52,7 +53,6 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
-      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -60,12 +60,13 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: CASE_TYPES_MAP.cdp,
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      taxYear: 'TEST_taxYear',
+      originalCaseType: CASE_TYPES_MAP.cdp,
     });
   });
 
@@ -87,7 +88,6 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: '',
       caseCaptionExtension: '',
-      caseDescription: 'Collection (Lien/Levy)',
       caseTitle: '',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -95,22 +95,24 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.cdp,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: CASE_TYPES_MAP.cdp,
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      taxYear: 'TEST_taxYear',
+      originalCaseType: CASE_TYPES_MAP.cdp,
     });
   });
 
   it('should update caseType if caseType is a disclosure', async () => {
     const propsWithDisclosure = {
       ...PROPS,
-      step3Data: {
+      createPetitionStep3Data: {
         caseType: 'Disclosure1',
         irsNotices: [
           {
+            caseType: 'Disclosure1',
             noticeIssuedDate: 'TEST_noticeIssuedDate',
             taxYear: 'TEST_taxYear',
           },
@@ -137,19 +139,20 @@ describe('formatPetitionAction', () => {
       },
       irsNotices: [
         {
+          caseType: CASE_TYPES_MAP.disclosure,
           noticeIssuedDate: 'TEST_noticeIssuedDate',
+          originalCaseType: 'Disclosure1',
           taxYear: 'TEST_taxYear',
         },
       ],
-      noticeIssuedDate: 'TEST_noticeIssuedDate',
-      taxYear: 'TEST_taxYear',
+      originalCaseType: 'Disclosure1',
     });
   });
 
   it('should set noticeIssuedDate and taxYear as undefined if there is no irsNotice', async () => {
     const propsWithoutIrsNotice = {
       ...PROPS,
-      step3Data: {
+      createPetitionStep3Data: {
         caseType: CASE_TYPES_MAP.deficiency,
         irsNotices: [],
       },
@@ -167,15 +170,13 @@ describe('formatPetitionAction', () => {
     expect(results.state.petitionFormatted).toEqual({
       caseCaption: 'TEST_CASE_CAPTION',
       caseCaptionExtension: '',
-      caseDescription: 'Deficiency',
       caseTitle: 'TEST_CASE_CAPTION',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         email: 'TEST_EMAIL',
       },
       irsNotices: [],
-      noticeIssuedDate: undefined,
-      taxYear: undefined,
+      originalCaseType: CASE_TYPES_MAP.deficiency,
     });
   });
 });
