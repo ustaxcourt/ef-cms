@@ -3,9 +3,10 @@ import {
   MAX_TITLE_LENGTH,
   getOptionsForCategory,
   getOrdinalValuesForUploadIteration,
-  getPreviouslyFiledDocuments,
+  getValidPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 describe('selectDocumentTypeHelper', () => {
@@ -48,16 +49,28 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard A',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
-        caseDetail: MOCK_CASE,
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: mockDocuments,
+        },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         previousDocumentSelectLabel: 'Which document are you objecting to?',
-        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -92,17 +105,29 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard C',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
-        caseDetail: MOCK_CASE,
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: mockDocuments,
+        },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         previousDocumentSelectLabel:
           'Which document is this affidavit in support of?',
-        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -119,17 +144,29 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard D',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
-        caseDetail: MOCK_CASE,
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: mockDocuments,
+        },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         previousDocumentSelectLabel:
           'Which document is this Certificate of Service for?',
-        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showDateFields: true,
@@ -165,17 +202,29 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard F',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
-        caseDetail: MOCK_CASE,
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: mockDocuments,
+        },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
       });
 
-      expect(result).toEqual({
+      expect(result).toMatchObject({
         ordinalField: 'What iteration is this filing?',
         previousDocumentSelectLabel: 'Which document is this a supplement to?',
-        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -292,27 +341,32 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  describe('getPreviouslyFiledDocuments', () => {
+  describe('getValidPreviouslyFiledDocuments', () => {
     it('should return a list of docketEntries with STIN filtered out', () => {
       const mockCaseDetail = {
         docketEntries: [
           {
             docketEntryId: '',
             documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
           {
             docketEntryId: '',
             documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
         ],
       };
 
-      const result = getPreviouslyFiledDocuments(
+      const result = getValidPreviouslyFiledDocuments(
         applicationContext,
         mockCaseDetail,
         undefined,
       );
-
       expect(result.length).toEqual(1);
       expect(result[0].documentType).toEqual(
         INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -328,20 +382,25 @@ describe('selectDocumentTypeHelper', () => {
             documentType:
               INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
                 .documentType,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
           {
             docketEntryId: mockSelectedDocketEntryId,
             documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
         ],
       };
 
-      const result = getPreviouslyFiledDocuments(
+      const result = getValidPreviouslyFiledDocuments(
         applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
       );
-
       expect(result.length).toEqual(1);
       expect(result[0]).toMatchObject(mockCaseDetail.docketEntries[0]);
     });
@@ -354,6 +413,9 @@ describe('selectDocumentTypeHelper', () => {
         docketEntryId: '3913f8a9-891a-4c9c-827e-1a02b403fa63',
         documentTitle: 'Exhibit(s)',
         documentType: 'Exhibit(s)',
+        isOnDocketRecord: true,
+        isStricken: false,
+        servedAt: '2019-08-25T05:00:00.000Z',
       };
 
       const mockCaseDetail = {
@@ -361,23 +423,25 @@ describe('selectDocumentTypeHelper', () => {
           mockExhibit,
           {
             docketEntryId: mockSelectedDocketEntryId,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
         ],
       };
 
-      const result = getPreviouslyFiledDocuments(
+      const result = getValidPreviouslyFiledDocuments(
         applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
       );
-
       expect(
         applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
       ).toHaveBeenCalled();
       expect(
         applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
           .mock.calls[0][0],
-      ).toEqual({ docketEntry: mockExhibit });
+      ).toMatchObject({ docketEntry: mockExhibit });
       expect(result[0].documentTitle).toEqual('Exhibit(s) First');
     });
 
@@ -394,6 +458,9 @@ describe('selectDocumentTypeHelper', () => {
         docketEntryId: '3913f8a9-891a-4c9c-827e-1a02b403fa63',
         documentTitle: 'Exhibit(s)',
         documentType: 'Exhibit(s)',
+        isOnDocketRecord: true,
+        isStricken: false,
+        servedAt: '2019-08-25T05:00:00.000Z',
       };
 
       const mockCaseDetail = {
@@ -401,11 +468,14 @@ describe('selectDocumentTypeHelper', () => {
           mockExhibit,
           {
             docketEntryId: mockSelectedDocketEntryId,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
         ],
       };
 
-      const result = getPreviouslyFiledDocuments(
+      const result = getValidPreviouslyFiledDocuments(
         applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
@@ -417,7 +487,7 @@ describe('selectDocumentTypeHelper', () => {
       expect(
         applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
           .mock.calls[0][0],
-      ).toEqual({ docketEntry: mockExhibit });
+      ).toMatchObject({ docketEntry: mockExhibit });
       expect(result[0].documentTitle.length).toBe(MAX_TITLE_LENGTH);
       expect(result[0].documentTitle).toEqual(
         "MOTION FOR PROTECTIVE ORDER PURSUANT TO RULE 103 REGARDING RESPONDING TO RESP'S INTERROGATORIES & R…",
@@ -435,6 +505,9 @@ describe('selectDocumentTypeHelper', () => {
         docketEntryId: '3913f8a9-891a-4c9c-827e-1a02b403fa63',
         documentTitle: 'Exhibit(s)',
         documentType: 'Exhibit(s)',
+        isOnDocketRecord: true,
+        isStricken: false,
+        servedAt: '2019-08-25T05:00:00.000Z',
       };
 
       const mockCaseDetail = {
@@ -442,11 +515,14 @@ describe('selectDocumentTypeHelper', () => {
           mockExhibit,
           {
             docketEntryId: mockSelectedDocketEntryId,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
           },
         ],
       };
 
-      const result = getPreviouslyFiledDocuments(
+      const result = getValidPreviouslyFiledDocuments(
         applicationContext,
         mockCaseDetail,
         mockSelectedDocketEntryId,
@@ -458,8 +534,74 @@ describe('selectDocumentTypeHelper', () => {
       expect(
         applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
           .mock.calls[0][0],
-      ).toEqual({ docketEntry: mockExhibit });
+      ).toMatchObject({ docketEntry: mockExhibit });
       expect(result[0].documentTitle).toBeUndefined();
+    });
+
+    it('should not return unserved documents', () => {
+      const mockCaseDetail = {
+        docketEntries: [
+          {
+            docketEntryId: '',
+            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+            isOnDocketRecord: true,
+            isStricken: false,
+            servedAt: '',
+          },
+        ],
+      };
+
+      const result = getValidPreviouslyFiledDocuments(
+        applicationContext,
+        mockCaseDetail,
+        undefined,
+      );
+
+      expect(result.length).toEqual(0);
+    });
+
+    it('should not return stricken documents', () => {
+      const mockCaseDetail = {
+        docketEntries: [
+          {
+            docketEntryId: '',
+            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+            isOnDocketRecord: true,
+            isStricken: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+          },
+        ],
+      };
+
+      const result = getValidPreviouslyFiledDocuments(
+        applicationContext,
+        mockCaseDetail,
+        undefined,
+      );
+
+      expect(result.length).toEqual(0);
+    });
+
+    it('should not return documents that are not on the docket record', () => {
+      const mockCaseDetail = {
+        docketEntries: [
+          {
+            docketEntryId: '',
+            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+            isOnDocketRecord: false,
+            isStricken: false,
+            servedAt: '2019-08-25T05:00:00.000Z',
+          },
+        ],
+      };
+
+      const result = getValidPreviouslyFiledDocuments(
+        applicationContext,
+        mockCaseDetail,
+        undefined,
+      );
+
+      expect(result.length).toEqual(0);
     });
   });
 });
