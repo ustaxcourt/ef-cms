@@ -74,7 +74,7 @@ export const BeforeStartingCase = connect(
               {`Once you start this process, you won't be able to save your work and
               come back to it.`}
             </b>{' '}
-            {`After the petition has been processed, you'll be able to log in at any
+            {`After the Petition has been processed, you'll be able to log in at any
             time to view the status and take action in the case.`}
           </div>
           <div className="petitioner-flow-text">
