@@ -12,7 +12,7 @@ export function CounselInformation({ userInfo }) {
           title="Counsel’s Contact Information"
         />
         <div className="petition-review-petitioner-section">
-          <div className="petition-review-spacing">
+          <div>
             <div>
               <address aria-labelledby="filing-contact-primary">
                 <AddressDisplay
