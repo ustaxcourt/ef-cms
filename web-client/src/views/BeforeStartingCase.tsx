@@ -132,6 +132,7 @@ export const BeforeStartingCase = connect(
               <div className="petitioner-label">2. Upload IRS Notice(s)</div>
               <div
                 className="petitioner-flow-text"
+                data-testid="upload-irs-notice-title"
                 style={{ marginBottom: '5px' }}
               >
                 {isPetitioner
@@ -140,7 +141,7 @@ export const BeforeStartingCase = connect(
                 one or more Notices from the IRS:
               </div>
               <ul className="margin-top-0">
-                <li>
+                <li data-testid="upload-irs-notice-bullet-1">
                   Submit a PDF of the Notice(s) {isPetitioner ? 'you' : 'they'}{' '}
                   received.
                 </li>
@@ -157,7 +158,7 @@ export const BeforeStartingCase = connect(
               <div className="petitioner-label">3. Confirm your identity</div>
               <div className="petitioner-flow-text">
                 <ul className="margin-top-0">
-                  <li>
+                  <li data-testid="confirm-identity-bullet-1">
                     {`You'll be asked to complete and upload a Statement of
                     Taxpayer Identification Number (STIN) form. This document is
                     sent to the IRS to help them identify ${isPetitioner ? 'you' : 'the petitioner'}, but it's never
@@ -204,7 +205,10 @@ export const BeforeStartingCase = connect(
           />
           <div>
             <h3>Deadline to File</h3>
-            <div className="petitioner-flow-text margin-bottom-2">
+            <div
+              className="petitioner-flow-text margin-bottom-2"
+              data-testid="deadline-to-file"
+            >
               If {isPetitioner ? 'you' : 'the petitioner'} received a notice in
               the mail from the IRS, it may show the last date to file or the
               number of days you have to file a Petition.{' '}
@@ -224,14 +228,10 @@ export const BeforeStartingCase = connect(
                 key="Are you filing jointly with a spouse?"
                 title={`${isPetitioner ? 'Are you' : 'Is the petitioner'} filing jointly with a spouse?`}
               >
-                <div>
+                <div data-testid="filing-jointly-accordion-item">
                   {isPetitioner
-                    ? `To file a joint Petition with your spouse, you must have the
-                  spouse's consent. If you do not have your spouse's consent,
-                  select “Myself” as the person who is filing.`
-                    : `To file a joint Petition with a spouse, the petitioner must have the spouse’s consent. 
-                  If the petitioner does not have the spouse’s consent, 
-                  select “Petitioner” as the person you are filing on behalf of.`}
+                    ? "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
+                    : 'To file a joint Petition with a spouse, the petitioner must have the spouse’s consent. If the petitioner does not have the spouse’s consent, select “Petitioner” as the person you are filing on behalf of.'}
                 </div>
               </AccordionItem>
             </Accordion>
@@ -245,7 +245,7 @@ export const BeforeStartingCase = connect(
                   key="Are you filing on behalf of someone else?"
                   title="Are you filing on behalf of someone else?"
                 >
-                  <div>
+                  <div data-testid="filing-someone-else-accordion-item">
                     To file a case on behalf of someone else, you must be
                     authorized to practice before this Court as provided by the{' '}
                     <Button

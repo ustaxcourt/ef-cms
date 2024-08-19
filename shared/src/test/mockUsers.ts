@@ -12,6 +12,7 @@ import {
 } from '../business/entities/EntityConstants';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import {
   getJudgesChambers,
@@ -152,13 +153,15 @@ export const petitionerUser: RawUser = {
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const privatePractitionerUser = {
+export const privatePractitionerUser: RawPrivatePractitioner = {
   barNumber: 'BN1234',
   email: 'privatePractitioner@example.com',
   entityName: 'User',
+  firmName: 'Law offices of Private Practitioner',
   name: 'Private Practitioner',
+  representing: [],
   role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: '330d4b65-620a-489d-8414-6623653ebc4f',
 };
 

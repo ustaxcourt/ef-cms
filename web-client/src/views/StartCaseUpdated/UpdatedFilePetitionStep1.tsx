@@ -109,7 +109,9 @@ export const UpdatedFilePetitionStep1 = connect(
               nameLabel={isPetitioner ? 'Full Name' : 'Petitioner’s full name'}
               registerRef={registerRef}
             />
-            <h2>{isPetitioner ? "Your spouse's" : "Spouse's"} information</h2>
+            <h2 data-testid="spouse-header">
+              {isPetitioner ? "Your spouse's" : "Spouse's"} information
+            </h2>
             <PetitionerAndSpouseInfo
               form={form}
               isPetitioner={isPetitioner}

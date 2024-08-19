@@ -5,7 +5,7 @@ import React from 'react';
 
 type CardHeaderType = {
   showEditButton?: boolean;
-  step: number;
+  step?: number;
   title: string;
 };
 
@@ -30,7 +30,7 @@ export const CardHeader = connect<
           {step && <span>{step}. </span>}
           {title}
         </div>
-        {showEditButton && (
+        {showEditButton && step && (
           <div>
             <Button
               link
