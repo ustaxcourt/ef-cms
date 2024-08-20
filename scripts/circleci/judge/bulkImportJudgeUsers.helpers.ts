@@ -23,6 +23,10 @@ export const CSV_HEADERS = [
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;
 
+type BulkImportJudgeUser = Omit<RawUser, 'contact'> & {
+  phone: string;
+};
+
 export const init = async () => {
   const filePath = './scripts/circleci/judge/judge_users.csv';
   const csvOptions = getCsvOptions(CSV_HEADERS);
@@ -32,7 +36,7 @@ export const init = async () => {
   environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
-  const output: RawUser[] = [];
+  const output: BulkImportJudgeUser[] = [];
   const data = readCsvFile(filePath);
   const stream = parse(data, csvOptions);
 
@@ -45,10 +49,11 @@ export const init = async () => {
         await Promise.all(
           currentChunk.map(async row => {
             try {
+              const { phone, ...rest } = row;
               const { userId } = await createOrUpdateUser(applicationContext, {
                 password: DEFAULT_ACCOUNT_PASS!,
                 setPasswordAsPermanent: true,
-                user: row,
+                user: { ...rest, contact: { phone } },
               });
 
               console.log(`SUCCESS, ${row.name}, ${row.email}, ${userId}`);
