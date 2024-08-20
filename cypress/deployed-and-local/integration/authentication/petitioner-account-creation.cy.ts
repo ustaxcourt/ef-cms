@@ -116,7 +116,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('@accountCreationRequest.all').should('have.length', 1);
     });
 
-    it('should create an account and verify it using the verification link, then login and create an eletronic case', () => {
+    it('should create an account and verify it using the verification link, then login and create an electronic case', () => {
       const TEST_EMAIL = `cypress_test_account+success_${GUID}@example.com`;
       createAPetitioner({
         email: TEST_EMAIL,
