@@ -119,7 +119,21 @@ export class User extends JoiValidationEntity {
   };
 
   static VALIDATION_RULES = {
-    contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
+    // TODO 10455: The unknown check for judges is a hack
+    // It might be better to actually create a chambers entity,
+    // although that will require more than one DB query to get them.
+    contact: joi.object().when('role', {
+      is: ROLES.judge,
+      otherwise: joi
+        .object()
+        .keys(User.USER_CONTACT_VALIDATION_RULES)
+        .optional(),
+      then: joi
+        .object({
+          phone: User.USER_CONTACT_VALIDATION_RULES.phone,
+        })
+        .unknown(true),
+    }),
     email: JoiValidationConstants.EMAIL.optional(),
     entityName: JoiValidationConstants.STRING.valid('User').required(),
     isSeniorJudge: joi.when('role', {

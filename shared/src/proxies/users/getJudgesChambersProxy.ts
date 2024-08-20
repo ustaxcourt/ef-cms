@@ -1,12 +1,11 @@
 import { get } from '../requests';
 
-// TODO: Avoid duplicating and move somewhere sensible
-interface JudgeChambersInfo {
+export interface JudgeChambersInfo {
   label: string;
   judgeFullName: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   section: string;
-  isLegacy: boolean;
+  isLegacy?: boolean;
 }
 
 export const getJudgesChambersInteractor = (

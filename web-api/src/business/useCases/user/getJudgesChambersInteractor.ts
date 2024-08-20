@@ -1,3 +1,4 @@
+import { JudgeChambersInfo } from '../../../../../shared/src/proxies/users/getJudgesChambersProxy';
 import {
   RawUser,
   User,
@@ -5,36 +6,29 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getUsersInSectionInteractor } from '@web-api/business/useCases/user/getUsersInSectionInteractor';
 
-// TODO: Avoid duplicating and move somewhere sensible
-interface JudgeChambersInfo {
-  label: string;
-  judgeFullName: string;
-  phoneNumber: string;
-  section: string;
-  isLegacy: boolean;
-}
+const pluralizeChambersLabel = (judgeName: string) => {
+  return judgeName.endsWith('s')
+    ? judgeName + '’ Chambers'
+    : judgeName + '’s Chambers';
+};
 
 export const getJudgesChambersInteractor = async (
   applicationContext: ServerApplicationContext,
 ): Promise<JudgeChambersInfo[]> => {
-  const judgeUsers: RawUser[] = await getUsersInSectionInteractor(
+  const judgeRawUsers: RawUser[] = await getUsersInSectionInteractor(
     applicationContext,
     { section: 'judge' },
   );
 
-  User.validateRawCollection(judgeUsers, { applicationContext });
-
-  const pluralizeChambers = (judgeName: string) => {
-    if (judgeName.endsWith('s')) {
-      return judgeName + '’ Chambers';
-    }
-    return judgeName + '’s Chamber';
-  };
+  const judgeUsers = User.validateRawCollection(judgeRawUsers, {
+    applicationContext,
+  });
 
   const judgeChambers: JudgeChambersInfo[] = judgeUsers.map(u => {
     const phoneNumber = u.contact?.phone;
-    const label = pluralizeChambers(u.name);
+    const label = pluralizeChambersLabel(u.name);
     return {
+      // Allow legacy judges in test environments
       isLegacy:
         u.section === 'legacyChambers' && process.env.USTC_ENV === 'prod',
       judgeFullName: u.judgeFullName,
@@ -44,5 +38,5 @@ export const getJudgesChambersInteractor = async (
     } as JudgeChambersInfo;
   });
 
-  return judgeChambers;
+  return judgeChambers.filter(chambers => !chambers.isLegacy);
 };
