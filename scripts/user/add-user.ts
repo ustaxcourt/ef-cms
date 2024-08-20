@@ -1,3 +1,4 @@
+import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
@@ -9,6 +10,13 @@ import {
 import joi from 'joi';
 
 requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
+
+interface UserParamsInterface {
+  email: string;
+  name: string;
+  role: string;
+  section: string;
+}
 
 const usage = error => {
   if (error) {
@@ -40,7 +48,13 @@ const usage = error => {
 
 const applicationContext = createApplicationContext({});
 
-const checkParams = params => {
+const checkParams = ({
+  params,
+  validChambersSections,
+}: {
+  params: UserParamsInterface;
+  validChambersSections: string[];
+}) => {
   const schema = joi.object().keys({
     email: joi.string().email().required(),
     name: joi.string().required(),
@@ -60,7 +74,6 @@ const checkParams = params => {
           'chambers',
         ],
       ),
-    // TODO 10455: Get the chambers sections dynamically
     section: joi
       .string()
       .valid(
@@ -74,40 +87,7 @@ const checkParams = params => {
           'floater',
           'general',
           'reportersOffice',
-          'ashfordsChambers',
-          'buchsChambers',
-          'cohensChambers',
-          'copelandsChambers',
-          'foleysChambers',
-          'friedsChambers',
-          'galesChambers',
-          'goekesChambers',
-          'greavesChambers',
-          'gustafsonsChambers',
-          'halpernsChambers',
-          'holmesChambers',
-          'jonesChambers',
-          'kerrigansChambers',
-          'landysChambers',
-          'laubersChambers',
-          'marshallsChambers',
-          'marvelsChambers',
-          'morrisonsChambers',
-          'negasChambers',
-          'parisChambers',
-          'pughsChambers',
-          'siegelsChambers',
-          'thorntonsChambers',
-          'torosChambers',
-          'urdasChambers',
-          'vasquezsChambers',
-          'waysChambers',
-          'weilersChambers',
-          'wellsChambers',
-          'carluzzosChambers',
-          'guysChambers',
-          'leydensChambers',
-          'panuthosChambers',
+          ...validChambersSections,
         ],
       ),
   });
@@ -134,20 +114,27 @@ const sendWelcomeEmail = async ({ email }) => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const params = {
+  const { tableName } = await getDestinationTableInfo();
+  environment.dynamoDbTableName = tableName;
+
+  const judgesChambers: JudgeChambersInfo[] = await applicationContext
+    .getUseCases()
+    .getJudgesChambersInteractor(applicationContext);
+  const validChambersSections = judgesChambers.map(
+    chambers => chambers.section,
+  );
+  const params: UserParamsInterface = {
     email: process.argv[2],
     name: process.argv[3],
     role: process.argv[4],
     section: process.argv[5],
   };
-  checkParams(params);
+  checkParams({ params, validChambersSections });
   environment.userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableInfo();
-  environment.dynamoDbTableName = tableName;
   await createOrUpdateUser(applicationContext, {
     password: environment.defaultAccountPass,
     setPasswordAsPermanent: true,
-    user: params,
+    user: { ...params },
   });
   await sendWelcomeEmail({ email: params.email });
 })();
