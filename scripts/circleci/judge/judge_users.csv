@@ -42,7 +42,7 @@ Jones,Judge,Courtney D. Jones,judge.jones@example.com,judge,jonesChambers,false
 Kerrigan,Judge,Kathleen Kerrigan,judge.kerrigan@example.com,judge,kerrigansChambers,false
 Korner,Judge,Korner,legacy.judge.korner@example.com,legacyJudge,legacyJudgesChambers,false
 Kroupa,Judge,Kroupa,legacy.judge.kroupa@example.com,legacyJudge,legacyJudgesChambers,false
-Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@example.com,judge,landysChambers,false
+Landy,Judge,Adam B. Landy,judge.landy@example.com,judge,landysChambers,false
 Laro,Judge,Laro,legacy.judge.laro@example.com,legacyJudge,legacyJudgesChambers,false
 Lauber,Judge,Albert G. Lauber,judge.lauber@example.com,judge,laubersChambers,true
 Leyden,Special Trial Judge,Diana L. Leyden,stjudge.leyden@example.com,judge,leydensChambers,false
@@ -75,6 +75,7 @@ Toro,Judge,Emin Toro,judge.toro@example.com,judge,torosChambers,false
 Urda,Judge,Patrick J. Urda,judge.urda@example.com,judge,urdasChambers,false
 Vandervort,Special Trial Judge,Vandervort,legacy.judge.vandervort@example.com,legacyJudge,legacyJudgesChambers,false
 Vasquez,Judge,Juan F. Vasquez,judge.vasquez@example.com,judge,vasquezsChambers,true
+Way,Judge,Kashi Way,judge.way@example.com,judge,waysChambers,false
 Weiler,Judge,Christian N. Weiler,judge.weiler@example.com,judge,weilersChambers,false
 Wells,Judge,Thomas B. Wells,judge.wells@example.com,judge,wellsChambers,false
 Whalen,Judge,Whalen,legacy.judge.whalen@example.com,legacyJudge,legacyJudgesChambers,false

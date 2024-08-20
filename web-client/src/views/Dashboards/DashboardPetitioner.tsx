@@ -78,18 +78,7 @@ export const DashboardPetitioner = connect(
                   </p>
                 </div>
               </div>
-
-              {dashboardExternalHelper.showPetitionWelcomePage && (
-                <FilingFeeOptions />
-              )}
-              {/* are we 100% sure that it's ok to remove this even with the feature flag off? */}
-              {/* {dashboardExternalHelper.showPetitionWelcomePage && (
-                <OtherFilingOptions />
-              )} */}
-
-              {!dashboardExternalHelper.showPetitionWelcomePage && (
-                <FilingFeeOptions />
-              )}
+              <FilingFeeOptions />
             </div>
           </div>
         </section>

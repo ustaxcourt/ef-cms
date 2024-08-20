@@ -3,11 +3,11 @@ import {
   APIGatewayRequestAuthorizerEvent,
 } from 'aws-lambda';
 import { createLogger } from '../../createLogger';
+import { createPublicKey } from 'crypto';
 import { environment } from '@web-api/environment';
 import { transports } from 'winston';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
-import jwkToPem from 'jwk-to-pem';
 
 const transport = new transports.Console({
   handleExceptions: true,
@@ -50,7 +50,13 @@ const getKeysForIssuer = async iss => {
 
 const verify = (key, token) =>
   new Promise((resolve, reject) => {
-    const pem = jwkToPem(key);
+    const pem = createPublicKey({
+      format: 'jwk',
+      key,
+    })
+      .export({ format: 'pem', type: 'spki' })
+      .toString();
+
     const options = { issuer: [issMain, issIrs] };
 
     jwk.verify(token, pem, options, (err, payload) => {
