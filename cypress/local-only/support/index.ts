@@ -1,4 +1,5 @@
 import './commands';
+import '@cypress/puppeteer/support';
 import 'cypress-axe';
 
 before(() => {

@@ -12,7 +12,7 @@ export function petitionerCreatesElectronicCaseUpdated(
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
+  cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select('AL');
   cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
   cy.get('[data-testid="step-1-next-button"]').click();
 
@@ -105,7 +105,7 @@ export function petitionerAttemptsToUploadCorruptPdfUpdated() {
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select('AL');
+  cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select('AL');
   cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
   cy.get('[data-testid="step-1-next-button"]').click();
 

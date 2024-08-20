@@ -50,7 +50,7 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
 
         cy.visit('/document-qc');
         getCreateACaseButton().click();
-        cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');
+        cy.get('#tab-parties').should('have.attr', 'aria-selected');
         fillInCreateCaseFromPaperForm();
 
         cy.intercept('POST', '**/paper').as('postPaperCase');
