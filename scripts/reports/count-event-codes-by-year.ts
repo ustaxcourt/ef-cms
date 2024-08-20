@@ -43,9 +43,7 @@ function usage(warning: string | undefined) {
   if (warning) {
     console.log(warning);
   }
-  console.log(
-    `Usage: npx ts-node --transpile-only ${process.argv[1]} M071,m074 `,
-  );
+  console.log(`Usage: ${process.argv[1]} M071,m074 `);
   console.log('Options:', JSON.stringify(config, null, 4));
 }
 
