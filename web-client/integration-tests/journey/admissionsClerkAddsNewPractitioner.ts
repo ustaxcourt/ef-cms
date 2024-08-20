@@ -12,9 +12,10 @@ export const admissionsClerkAddsNewPractitioner = (
 
     await cerebralTest.runSequence('submitAddPractitionerSequence');
 
+    // TODO 10455: Does the order here matter?
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual([
-      'phone',
       'email',
+      'phone',
       'admissionsDate',
       'birthYear',
       'firstName',

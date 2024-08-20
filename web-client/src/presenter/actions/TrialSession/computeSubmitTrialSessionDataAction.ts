@@ -11,8 +11,6 @@ export const computeSubmitTrialSessionDataAction = ({
 }: ActionProps) => {
   const form = get(state.form);
 
-  console.log('WTF??');
-
   computeTermAndUpdateState(
     { startDate: form.startDate },
     store,
