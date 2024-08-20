@@ -1,5 +1,5 @@
 import { Get } from 'cerebral';
-import { RawUser } from '@shared/business/entities/User';
+import { NonJudgeContact, RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export type FormattedIrsCalendarAdminInfo = {
@@ -31,19 +31,25 @@ export const getAllIrsPractitionersForSelectHelper = (
 function getFormattedIrsPractitionerInfo(
   irsPrac: RawUser,
 ): FormattedIrsCalendarAdminInfo {
-  const addressLocation = [irsPrac.contact?.address1, irsPrac.contact?.address2]
+  const addressLocation = [
+    (irsPrac.contact as NonJudgeContact)?.address1,
+    (irsPrac.contact as NonJudgeContact)?.address2,
+  ]
     .filter(v => !!v)
     .join(', ');
 
-  const addressState = [irsPrac.contact?.city, irsPrac.contact?.state]
+  const addressState = [
+    (irsPrac.contact as NonJudgeContact)?.city,
+    (irsPrac.contact as NonJudgeContact)?.state,
+  ]
     .filter(v => !!v)
     .join(', ');
 
   const contactInfo = [
     irsPrac.name,
     addressLocation,
-    addressState || irsPrac.contact?.postalCode
-      ? `${addressState} ${irsPrac.contact?.postalCode || ''}`
+    addressState || (irsPrac.contact as NonJudgeContact)?.postalCode
+      ? `${addressState} ${(irsPrac.contact as NonJudgeContact)?.postalCode || ''}`
       : '',
   ].filter(v => !!v);
 
