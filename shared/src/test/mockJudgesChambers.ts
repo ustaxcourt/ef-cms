@@ -1,5 +1,4 @@
 import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
-import { sortBy } from 'lodash';
 
 const JUDGES_CHAMBERS: Record<string, JudgeChambersInfo> = {
   ASHFORDS_CHAMBERS_SECTION: {
@@ -236,13 +235,4 @@ export const getChambersSectionsLabels = () => {
     chambersSectionsLabels[chambers.section] = chambers.label;
   });
   return chambersSectionsLabels;
-};
-
-export const getChambersSections = () => {
-  const chambersSections = [];
-  Object.keys(getTestJudgesChambers()).forEach(k => {
-    const chambers = JUDGES_CHAMBERS[k];
-    chambersSections.push(chambers.section);
-  });
-  return sortBy(chambersSections);
 };
