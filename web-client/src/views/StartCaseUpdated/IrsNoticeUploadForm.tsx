@@ -22,6 +22,7 @@ const props = cerebralProps as unknown as {
     size?: string;
     noticeIssuedDate?: string;
     taxYear?: string;
+    cityAndStateIssuingOffice?: string;
   };
   caseType: string;
   file: File;
@@ -231,7 +232,10 @@ export const IrsNoticeUploadForm = connect(
                 }}
               />
             </FormGroup>
-            <FormGroup className="mobile:grid-col-12 desktop:grid-col-6">
+            <FormGroup
+              className="mobile:grid-col-12 desktop:grid-col-6"
+              errorText={validationError.cityAndStateIssuingOffice}
+            >
               <label className="usa-label" htmlFor="cityAndStateIssuingOffice">
                 City and state of issuing office
               </label>
