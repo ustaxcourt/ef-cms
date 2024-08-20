@@ -31,7 +31,7 @@ describe('Get users in section', () => {
     },
     {
       isSeniorJudge: false,
-      judgeFullName: 'Test Judge 1',
+      judgeFullName: 'Test Judge 2',
       judgeTitle: 'Judge',
       name: 'Test Judge 2',
       role: ROLES.judge,

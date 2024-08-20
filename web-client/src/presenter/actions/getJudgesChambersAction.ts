@@ -1,3 +1,4 @@
+import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
 import { isEmpty, sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -10,7 +11,7 @@ export const getJudgesChambersAction = async ({
     return { judgesChambers: judgesChambersCached };
   }
 
-  const judgesChambers = await applicationContext
+  const judgesChambers: JudgeChambersInfo[] = await applicationContext
     .getUseCases()
     .getJudgesChambersInteractor(applicationContext);
 
