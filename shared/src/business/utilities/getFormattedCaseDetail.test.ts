@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES, PAYMENT_STATUS } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatCase, getFormattedCaseDetail } from './getFormattedCaseDetail';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
