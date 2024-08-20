@@ -201,7 +201,7 @@ describe('IrsNoticeForm', () => {
         expect(entity).toBeDefined();
 
         const errors = entity.getFormattedValidationErrors();
-        expect(errors).toEqual({ taxYear: 'Limit is 100 characters' });
+        expect(errors).toEqual({ taxYear: 'Limit is 100 characters.' });
       });
     });
   });
