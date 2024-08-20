@@ -1,5 +1,5 @@
 import { Message, RawMessage } from '@shared/business/entities/Message';
-import { db } from '@web-api/database';
+import { dbWrite } from '@web-api/database';
 import { toKyselyUpdateMessage } from './mapper';
 import { transformNullToUndefined } from '../utils/transformNullToUndefined';
 
@@ -8,7 +8,7 @@ export const updateMessage = async ({
 }: {
   message: RawMessage;
 }): Promise<Message> => {
-  const updatedMessage = await db
+  const updatedMessage = await dbWrite
     .updateTable('message')
     .set(toKyselyUpdateMessage(message))
     .where('messageId', '=', message.messageId)
