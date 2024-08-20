@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-// usage: npx ts-node --transpile-only scripts/reports/event-codes-by-year.ts M071,M074 2021-2022 > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
+// usage: scripts/reports/event-codes-by-year.ts M071,M074 [-y 2021-2022] > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
 
 import { DateTime } from 'luxon';
 import { createApplicationContext } from '@web-api/applicationContext';

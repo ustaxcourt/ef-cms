@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node --transpile-only
 
-//usage: count-event-codes-by-year m01 m02 feew -y 2000-2020
+// usage: scripts/reports/count-event-codes-by-year.ts  m01,m02 feew [-y 2000-2020]
 
 import { DateTime } from 'luxon';
 import {
