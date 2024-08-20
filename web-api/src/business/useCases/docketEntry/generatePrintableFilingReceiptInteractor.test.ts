@@ -143,10 +143,10 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     expect(receiptMockCall.secondaryDocument).toBeDefined();
   });
 
-  it(
-    'formats certificateOfServiceDate',
-    async () => {
-      await generatePrintableFilingReceiptInteractor(applicationContext, {
+  it('formats certificateOfServiceDate', async () => {
+    await generatePrintableFilingReceiptInteractor(
+      applicationContext,
+      {
         docketNumber: mockCase.docketNumber,
         documentsFiled: {
           certificateOfService: true,
@@ -154,17 +154,17 @@ describe('generatePrintableFilingReceiptInteractor', () => {
           primaryDocumentId: mockPrimaryDocketEntryId,
         },
         fileAcrossConsolidatedGroup: false,
-      });
+      },
+      mockDocketClerkUser,
+    );
 
-      const receiptMockCall =
-        applicationContext.getDocumentGenerators().receiptOfFiling.mock
-          .calls[0][0].data;
-      expect(
-        receiptMockCall.document.formattedCertificateOfServiceDate,
-      ).toEqual('08/25/19');
-    },
-    mockDocketClerkUser,
-  );
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data;
+    expect(receiptMockCall.document.formattedCertificateOfServiceDate).toEqual(
+      '08/25/19',
+    );
+  });
 
   it('should call the Receipt of Filing document generator with consolidatedCases array populated when fileAcrossConsolidatedGroup is true', async () => {
     await generatePrintableFilingReceiptInteractor(

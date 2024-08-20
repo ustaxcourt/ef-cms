@@ -30,7 +30,7 @@ export const createAndServeNoticeDocketEntry = async (
       eventCode: string;
     };
     newPdfDoc: any;
-    noticePdf: Buffer;
+    noticePdf: Uint8Array;
     onlyProSePetitioners?: boolean;
   },
   authorizedUser: AuthUser,
