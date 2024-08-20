@@ -9,3 +9,8 @@ variable "postgres_password" {
 variable "environment" {
   type = string
 }
+
+variable "engine_version" {
+  type = string 
+  default = "15.4"
+}

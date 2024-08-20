@@ -41,7 +41,7 @@ await esbuild.build({
           to: [getPathFromRoot(`dist-lambdas/${fileName}/out`)],
         },
         {
-          from: [getPathFromRoot('./us-east-1-bundle.pem')],
+          from: [getPathFromRoot('./global-bundle.pem')],
           to: [getPathFromRoot(`dist-lambdas/${fileName}/out`)],
         },
       ],

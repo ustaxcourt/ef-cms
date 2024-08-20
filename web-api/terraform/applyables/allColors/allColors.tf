@@ -202,4 +202,9 @@ module "rds" {
   environment       = var.environment
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
+  
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
 }
