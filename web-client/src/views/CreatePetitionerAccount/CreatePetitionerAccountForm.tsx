@@ -244,3 +244,5 @@ export const CreatePetitionerAccountForm = connect(
     );
   },
 );
+
+CreatePetitionerAccountForm.displayName = 'CreatePetitionerAccountForm';
