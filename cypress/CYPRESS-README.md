@@ -1,7 +1,7 @@
 
 # Best Practices
 
-In order to write a realiable cypress test suites, there are some best practices we should follow that our outlined in the cypress documentation and also some best practices we have learned from trying to write realiable tests.
+In order to write a reliable cypress test suites, there are some best practices we should follow that our outlined in the cypress documentation and also some best practices we have learned from trying to write reliable tests.
 
 ## DO'S
 - Access DOM elements using `data-testid selector`.
@@ -11,7 +11,7 @@ In order to write a realiable cypress test suites, there are some best practices
   - Avoid cy.get('#my-id').
 - Wait for actions to finish explicitly.
   - Always verify something on the page after running an action or loading a new page.  For example, if you click on a button which updates a practitioner name, be sure to wait for a success alert to appear before trying to move onto the next steps in your test.  Failing to do this will result in race conditions and flaky tests.  
-  - This is especially important for accessibilty tests, wait explicitly for the page to full load before running an accessibility scan. If you are seeing 'color-contrast' violations that are intermittent you are most likely not waiting for the right element to be loaded before running a scan.
+  - This is especially important for accessibility tests, wait explicitly for the page to full load before running an accessibility scan. If you are seeing 'color-contrast' violations that are intermittent you are most likely not waiting for the right element to be loaded before running a scan.
 - Extract reusable steps.
   - Try to find ways to create helper functions which we can re-use in other tests.  For example, creating a case as a petitioner is a good re-usable flow.  When writing these helpers, be sure they do not contain asserts related to the high level test you are writing.  They should just login as a user, create or modify the data, then return any new created values we may need.
 - Test should be re-runnable.

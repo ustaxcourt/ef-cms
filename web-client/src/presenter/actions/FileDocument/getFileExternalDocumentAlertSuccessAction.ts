@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -55,15 +56,13 @@ export const getFileExternalDocumentAlertSuccessAction = ({
     );
     alertSuccess.message = `${noticeDocketEntry.documentTitle} saved.`;
   }
-
-  if (documentToEdit) {
+  if (!isEmpty(documentToEdit)) {
     return {
       alertSuccess: {
         message: 'Changes saved.',
       },
     };
   }
-
   if (props.printReceiptLink) {
     alertSuccess.linkUrl = props.printReceiptLink;
     alertSuccess.linkText = 'Print receipt.';

@@ -2,6 +2,7 @@ import {
   CASE_TYPES,
   FILING_TYPES,
   MAX_FILE_SIZE_MB,
+  NOT_AVAILABLE_OPTION,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -145,9 +146,8 @@ export class PaperPetition extends JoiValidationEntity {
     });
     this.petitioners = [contacts.primary];
     if (contacts.secondary) {
-      if (!contacts.secondary.phone) {
-        contacts.secondary.phone = 'N/A';
-      }
+      contacts.secondary.phone =
+        contacts.secondary.phone || NOT_AVAILABLE_OPTION;
       this.petitioners.push(contacts.secondary);
     }
   }

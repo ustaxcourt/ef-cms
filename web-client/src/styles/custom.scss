@@ -1513,6 +1513,12 @@ hr.lighter {
   }
 }
 
+.statusReportOrderPdfPreview {
+  .pdf-preview-viewer {
+    height: 846px;
+  }
+}
+
 .ustc-ui-tabs.container-tabs {
   border-bottom: 0;
   background-color: white;
@@ -2274,8 +2280,6 @@ button.change-scanner-button {
 }
 
 .alpha-list {
-  padding-left: 20px;
-  margin-top: 5px;
   list-style-type: lower-alpha;
 }
 
@@ -2286,7 +2290,7 @@ button.change-scanner-button {
 }
 
 .before-case-button {
-	margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .before-case-follow-up-button {
@@ -2296,7 +2300,7 @@ button.change-scanner-button {
 }
 
 .create-petition-navigation-buttons {
-	margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .create-petition-navigation-follow-up-buttons {
@@ -2317,6 +2321,18 @@ button.change-scanner-button {
 .preformatted-text {
   font-family: $font-source-sans;
   text-wrap: balance;
+}
+
+// For content that should be visually hidden but present in the accessibility tree
+.sr-only {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
 }
 
 .petition-review-petitioner-section {
@@ -2343,7 +2359,6 @@ button.change-scanner-button {
   }
 }
 
-
 .petition-review-case-information-section {
   display: grid;
   column-gap: 20px;
@@ -2356,10 +2371,9 @@ button.change-scanner-button {
   }
 }
 
-
 @media only screen and (max-width: $medium-screen) {
   .petition-review-spacing {
-    margin-top: 1.5rem
+    margin-top: 1.5rem;
   }
 }
 
