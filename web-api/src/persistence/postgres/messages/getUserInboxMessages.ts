@@ -1,5 +1,5 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
-import { db } from '@web-api/database';
+import { dbRead } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getUserInboxMessages = async ({
@@ -8,7 +8,7 @@ export const getUserInboxMessages = async ({
   applicationContext: IApplicationContext;
   userId: string;
 }): Promise<MessageResult[]> => {
-  const messages = await db
+  const messages = await dbRead
     .selectFrom('message as m')
     .leftJoin('case as c', 'c.docketNumber', 'm.docketNumber')
     .where('m.isCompleted', '=', false)

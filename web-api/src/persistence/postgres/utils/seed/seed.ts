@@ -1,8 +1,8 @@
-import { db } from '../../../../database';
+import { dbWrite } from '../../../../database';
 import { messages } from './fixtures/messages';
 
 export const seed = async () => {
-  await db
+  await dbWrite
     .insertInto('message')
     .values(messages)
     .onConflict(oc => oc.column('messageId').doNothing()) // ensure doesn't fail if exists

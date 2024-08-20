@@ -1,11 +1,11 @@
-import { db } from '@web-api/database';
+import { dbWrite } from '@web-api/database';
 
 export const setMessageAsRead = async ({
   messageId,
 }: {
   messageId: string;
 }): Promise<void> => {
-  await db
+  await dbWrite
     .updateTable('message')
     .set({
       isRead: true,

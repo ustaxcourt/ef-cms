@@ -1,14 +1,6 @@
-import { db } from '@web-api/database';
+import { dbWrite } from '@web-api/database';
 import { getMessageThreadByParentId } from './getMessageThreadByParentId';
 
-/**
- * markMessageThreadRepliedTo
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.parentMessageId the id of the parent message to update
- * @returns {object} the updated messages
- */
 export const markMessageThreadRepliedTo = async ({
   parentMessageId,
 }: {
@@ -21,7 +13,7 @@ export const markMessageThreadRepliedTo = async ({
   if (messages.length) {
     await Promise.all(
       messages.map(async message => {
-        await db
+        await dbWrite
           .updateTable('message')
           .set({
             isRepliedTo: true,
