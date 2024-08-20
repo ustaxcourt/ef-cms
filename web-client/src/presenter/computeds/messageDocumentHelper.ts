@@ -125,7 +125,7 @@ export const messageDocumentHelper = (
   // The variables affected by formattedDocument are showApplyStampButton and showStatusReportOrderButton.
   const { draftDocuments } = applicationContext
     .getUtilities()
-    .formatCase(applicationContext, caseDetail);
+    .formatCase(applicationContext, caseDetail, user);
   const formattedDocument = draftDocuments.find(
     doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
   );
