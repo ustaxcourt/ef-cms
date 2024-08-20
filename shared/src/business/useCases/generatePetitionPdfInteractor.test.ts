@@ -30,7 +30,7 @@ describe('generatePetitionPdfInteractor', () => {
 
   it('should throw an Unauthorized user error when user does not have the correct permissions', async () => {
     await expect(
-      generatePetitionPdfInteractor(applicationContext, {}, undefined),
+      generatePetitionPdfInteractor(applicationContext, {} as any, undefined),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -144,21 +144,25 @@ describe('generatePetitionPdfInteractor', () => {
       },
     ];
 
-    const results = await generatePetitionPdfInteractor(applicationContext, {
-      caseCaptionExtension: 'TEST_caseCaptionExtension',
-      caseTitle: 'TEST_caseTitle',
-      contactPrimary: 'TEST_contactPrimary' as any,
-      contactSecondary: 'TEST_contactSecondary' as any,
-      hasIrsNotice: true,
-      hasUploadedIrsNotice: true,
-      irsNotices,
-      originalCaseType: 'Disclosure1',
-      partyType: 'TEST_partyType',
-      petitionFacts: ['TEST_petitionFacts'],
-      petitionReasons: ['TEST_petitionReasons'],
-      preferredTrialCity: 'TEST_preferredTrialCity',
-      procedureType: 'TEST_procedureType',
-    });
+    const results = await generatePetitionPdfInteractor(
+      applicationContext,
+      {
+        caseCaptionExtension: 'TEST_caseCaptionExtension',
+        caseTitle: 'TEST_caseTitle',
+        contactPrimary: 'TEST_contactPrimary' as any,
+        contactSecondary: 'TEST_contactSecondary' as any,
+        hasIrsNotice: true,
+        hasUploadedIrsNotice: true,
+        irsNotices,
+        originalCaseType: 'Disclosure1',
+        partyType: 'TEST_partyType',
+        petitionFacts: ['TEST_petitionFacts'],
+        petitionReasons: ['TEST_petitionReasons'],
+        preferredTrialCity: 'TEST_preferredTrialCity',
+        procedureType: 'TEST_procedureType',
+      },
+      mockPetitionerUser,
+    );
 
     const petitionCalls =
       applicationContext.getDocumentGenerators().petition.mock.calls;
