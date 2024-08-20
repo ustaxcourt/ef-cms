@@ -11,11 +11,13 @@ import {
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_LOCK } from '@shared/test/mockLock';
-import { MOCK_USERS, docketClerkUser } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '@shared/business/entities/User';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
+import {
+  mockDocketClerkUser,
+  mockIrsPractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('fileExternalDocumentInteractor', () => {
   const mockDocketEntryId = applicationContext.getUniqueId();
@@ -103,17 +105,9 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'irsPractitioner',
-        role: ROLES.irsPractitioner,
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-      }),
-    );
-
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockImplementation(({ userId }) => MOCK_USERS[userId]);
+      .getUserById.mockReturnValue(mockIrsPractitionerUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -121,34 +115,40 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     await expect(
-      fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
         },
-      }),
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
     await expect(
-      fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'XYZ',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'XYZ',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: mockDocketEntryId,
+          },
         },
-      }),
+        mockIrsPractitionerUser,
+      ),
     ).rejects.toThrow('The DocketEntry entity was invalid.');
 
     expect(
@@ -178,6 +178,7 @@ describe('fileExternalDocumentInteractor', () => {
           primaryDocumentId: mockDocketEntryId,
         },
       },
+      mockIrsPractitionerUser,
     );
 
     expect(
@@ -192,7 +193,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
@@ -295,6 +296,7 @@ describe('fileExternalDocumentInteractor', () => {
           primaryDocumentId: mockDocketEntryId,
         },
       },
+      mockIrsPractitionerUser,
     );
 
     expect(
@@ -312,20 +314,24 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
-    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocketEntryId,
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
@@ -377,11 +383,12 @@ describe('fileExternalDocumentInteractor', () => {
           ],
         },
       },
+      mockIrsPractitionerUser,
     );
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(updatedCase.docketEntries).toMatchObject([
+    expect(updatedCase!.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
       {},
       {},
@@ -424,6 +431,7 @@ describe('fileExternalDocumentInteractor', () => {
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       },
+      mockIrsPractitionerUser,
     );
 
     expect(
@@ -438,8 +446,8 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase.docketEntries[3].status).toBeUndefined();
-    expect(updatedCase.docketEntries[3].servedAt).toBeUndefined();
+    expect(updatedCase!.docketEntries[3].status).toBeUndefined();
+    expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {
@@ -447,16 +455,20 @@ describe('fileExternalDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
 
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Simultaneous Memoranda of Law',
-        documentType: 'Simultaneous Memoranda of Law',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Simultaneous Memoranda of Law',
+          documentType: 'Simultaneous Memoranda of Law',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -471,16 +483,20 @@ describe('fileExternalDocumentInteractor', () => {
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
     caseRecord.status = CASE_STATUS_TYPES.new;
 
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Simultaneous Memoranda of Law',
-        documentType: 'Simultaneous Memoranda of Law',
-        eventCode: 'A',
-        filedBy: 'test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Simultaneous Memoranda of Law',
+          documentType: 'Simultaneous Memoranda of Law',
+          eventCode: 'A',
+          filedBy: 'test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -493,17 +509,21 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        category: 'Application',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Application for Waiver of Filing Fee',
-        documentType: 'Application for Waiver of Filing Fee',
-        eventCode: 'APPW',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          category: 'Application',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APPW',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -528,17 +548,21 @@ describe('fileExternalDocumentInteractor', () => {
         },
       ]);
 
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        category: 'Application',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Application for Waiver of Filing Fee',
-        documentType: 'Application for Waiver of Filing Fee',
-        eventCode: 'APPW',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          category: 'Application',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APPW',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -555,16 +579,20 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'XYZ',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: undefined,
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'XYZ',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: undefined,
+        },
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -578,7 +606,32 @@ describe('fileExternalDocumentInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      fileExternalDocumentInteractor(applicationContext, {
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            category: 'Application',
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Application for Waiver of Filing Fee',
+            documentType: 'Application for Waiver of Filing Fee',
+            eventCode: 'APPW',
+            filedBy: 'Test Petitioner',
+            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
         documentMetadata: {
           category: 'Application',
           docketNumber: caseRecord.docketNumber,
@@ -588,26 +641,9 @@ describe('fileExternalDocumentInteractor', () => {
           filedBy: 'Test Petitioner',
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should acquire and remove the lock on the case', async () => {
-    await fileExternalDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        category: 'Application',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Application for Waiver of Filing Fee',
-        documentType: 'Application for Waiver of Filing Fee',
-        eventCode: 'APPW',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-    });
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

@@ -251,7 +251,7 @@ export const ContactPrimary = connect(
               data-testid="phone"
               id="phone"
               name="contactPrimary.phone"
-              type="tel"
+              type="text"
               value={data.contactPrimary.phone || ''}
               onBlur={() => {
                 onBlurSequence();

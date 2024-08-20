@@ -17,6 +17,7 @@ import React from 'react';
 
 type ContactPrimaryUpdate = {
   addressInfo: AddressType;
+  customPhoneMessage?: string;
   nameLabel: string;
   handleBlur: OnBlurHandler;
   handleChange: OnChangeHandler;
@@ -44,6 +45,7 @@ export const ContactPrimaryUpdated = connect<
   function ContactPrimaryUpdated({
     addressInfo,
     constants,
+    customPhoneMessage,
     handleBlur,
     handleChange,
     handleChangeCountryType,
@@ -68,7 +70,11 @@ export const ContactPrimaryUpdated = connect<
               validationErrors.contactPrimary.name
             }
           >
-            <label className="usa-label" htmlFor="name">
+            <label
+              className="usa-label"
+              data-testid="contact-primary-name-label"
+              htmlFor="contactPrimary.name"
+            >
               {nameLabel}
             </label>
             <input
@@ -239,8 +245,12 @@ export const ContactPrimaryUpdated = connect<
             <label className="usa-label" htmlFor="primary-phone">
               Phone number
             </label>
-            <span className="usa-hint">
-              If you do not have a current phone number, enter N/A.
+            <span
+              className="usa-hint"
+              data-testid="contact-primary-phone-message"
+            >
+              {customPhoneMessage ||
+                'If you do not have a current phone number, enter N/A.'}
             </span>
             <input
               autoCapitalize="none"
@@ -249,7 +259,7 @@ export const ContactPrimaryUpdated = connect<
               id="primary-phone"
               name="contactPrimary.phone"
               ref={registerRef && registerRef('contactPrimary.phone')}
-              type="tel"
+              type="text"
               value={addressInfo.phone || ''}
               onBlur={() => {
                 handleBlur({

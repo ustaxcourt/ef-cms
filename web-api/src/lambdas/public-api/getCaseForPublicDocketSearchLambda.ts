@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getCaseForPublicDocketSearchInteractor } from '@web-api/business/useCases/public/getCaseForPublicDocketSearchInteractor';
 
 /**
  * used for fetching a single case
@@ -8,9 +9,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const getCaseForPublicDocketSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getCaseForPublicDocketSearchInteractor(applicationContext, {
-        docketNumber: event.pathParameters.docketNumber,
-      });
+    return await getCaseForPublicDocketSearchInteractor(applicationContext, {
+      docketNumber: event.pathParameters.docketNumber,
+    });
   });

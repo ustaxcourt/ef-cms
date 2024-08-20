@@ -43,10 +43,6 @@ describe('getDocumentQCServedForUser', () => {
   });
 
   it('should filter out the work items returned from persistence to only have served documents', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: DOCKET_SECTION,
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    });
     applicationContext.getDocumentClient.mockReturnValue({
       query: queryStub,
     });

@@ -1,6 +1,6 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getJudgeInSectionInteractor } from './getJudgeInSectionInteractor';
+import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('getJudgeInSectionInteractor', () => {
   beforeEach(() => {
@@ -12,26 +12,26 @@ describe('getJudgeInSectionInteractor', () => {
   });
 
   it('throws an exception if a petitioner tries to get the judge of a section', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
-
     await expect(() =>
-      getJudgeInSectionInteractor(applicationContext, {
-        section: 'buchsChambers',
-      }),
+      getJudgeInSectionInteractor(
+        applicationContext,
+        {
+          section: 'buchsChambers',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns the correct judge returned from the helper', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.judge,
-    });
-
     expect(
-      await getJudgeInSectionInteractor(applicationContext, {
-        section: 'buchsChambers',
-      }),
+      await getJudgeInSectionInteractor(
+        applicationContext,
+        {
+          section: 'buchsChambers',
+        },
+        mockJudgeUser,
+      ),
     ).toEqual({
       judgeName: 'buch',
     });

@@ -1,17 +1,13 @@
 import { Case, getContactPrimary, isAssociatedUser } from './Case';
 import { INITIAL_DOCUMENT_TYPES, PARTY_TYPES, ROLES } from '../EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_USERS } from '../../../test/mockUsers';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('isAssociatedUser', () => {
   let caseEntity;
   const CONTACT_ID = '3855b2dd-4094-4526-acc0-b48d7eed1f28';
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
     caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -28,7 +24,7 @@ describe('isAssociatedUser', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
   });

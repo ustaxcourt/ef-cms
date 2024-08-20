@@ -1513,6 +1513,12 @@ hr.lighter {
   }
 }
 
+.statusReportOrderPdfPreview {
+  .pdf-preview-viewer {
+    height: 846px;
+  }
+}
+
 .ustc-ui-tabs.container-tabs {
   border-bottom: 0;
   background-color: white;
@@ -2274,8 +2280,6 @@ button.change-scanner-button {
 }
 
 .alpha-list {
-  padding-left: 20px;
-  margin-top: 5px;
   list-style-type: lower-alpha;
 }
 
@@ -2384,4 +2388,13 @@ button.change-scanner-button {
 
 .no-wrap-white-space {
   white-space: normal;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.petitioner-welcome-name {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }

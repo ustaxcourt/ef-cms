@@ -1,10 +1,12 @@
 import {
   BUSINESS_TYPES,
+  COUNTRY_TYPES,
   ESTATE_TYPES,
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   OTHER_TYPES,
+  PARTY_TYPES,
   ROLES,
 } from '../EntityConstants';
 import { ContactFactoryUpdated } from '../contacts/ContactFactoryUpdated';
@@ -92,8 +94,10 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         '*': 'Your Corporate Disclosure Statement file size is empty',
         'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
-    // COUNTRY_TYPES
-    countryType: JoiValidationConstants.STRING.optional(),
+    countryType: JoiValidationConstants.STRING.valid(
+      COUNTRY_TYPES.DOMESTIC,
+      COUNTRY_TYPES.INTERNATIONAL,
+    ).optional(),
     estateType: JoiValidationConstants.STRING.valid(
       ...Object.values(ESTATE_TYPES),
     )
@@ -105,6 +109,7 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
       .messages({ '*': 'Select a type of estate or trust' }),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
     )
       .required()
       .messages({ '*': 'Select on whose behalf you are filing' }),
@@ -151,8 +156,9 @@ export class UploadPetitionStep1 extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({ '*': 'Select an other type of taxpayer' }),
-    // PARTY_TYPES
-    partyType: joi.required(), // This will be undefined when any sub radios are not selected
+    partyType: JoiValidationConstants.STRING.valid(
+      ...Object.values(PARTY_TYPES),
+    ).required(), // This will be undefined when any sub radios are not selected
   };
 
   getValidationRules() {

@@ -8,9 +8,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const setDefaultServiceStampAction = ({
   applicationContext,
+  get,
   store,
 }: ActionProps) => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   if (user.role === USER_ROLES.petitionsClerk) {
     store.set(state.form.serviceStamp, 'Served');

@@ -8,6 +8,7 @@ import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocume
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
 import { isDocumentRequiringAppendedFormAction } from '../actions/CourtIssuedOrder/isDocumentRequiringAppendedFormAction';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
+import { isStatusReportOrderAction } from '@web-client/presenter/actions/StatusReportOrder/isStatusReportOrderAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -51,38 +52,46 @@ const onFileUploadedSuccess = [
   },
 ];
 
-export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
-  clearAlertsAction,
-  startShowValidationAction,
-  validateCourtOrderAction,
+const submitCourtIssuedOrder = showProgressSequenceDecorator([
+  convertHtml2PdfSequence,
+  isEditingOrderAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
-    success: showProgressSequenceDecorator([
-      convertHtml2PdfSequence,
-      isEditingOrderAction,
+    no: [
+      uploadOrderFileAction,
       {
-        no: [
-          uploadOrderFileAction,
+        error: [openFileUploadErrorModal],
+        success: [onFileUploadedSuccess],
+      },
+    ],
+    yes: [
+      overwriteOrderFileAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: [
+          isDocumentRequiringAppendedFormAction,
           {
-            error: [openFileUploadErrorModal],
-            success: [onFileUploadedSuccess],
+            no: [],
+            yes: [appendFormAndOverwriteOrderFileAction],
           },
-        ],
-        yes: [
-          overwriteOrderFileAction,
-          {
-            error: [openFileUploadErrorModal],
-            success: [
-              isDocumentRequiringAppendedFormAction,
-              {
-                no: [],
-                yes: [appendFormAndOverwriteOrderFileAction],
-              },
-              onFileUploadedSuccess,
-            ],
-          },
+          onFileUploadedSuccess,
         ],
       },
-    ]),
+    ],
+  },
+]);
+
+export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
+  isStatusReportOrderAction,
+  {
+    isNotStatusReportOrder: [
+      clearAlertsAction,
+      startShowValidationAction,
+      validateCourtOrderAction,
+      {
+        error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+        success: submitCourtIssuedOrder,
+      },
+    ],
+    isStatusReportOrder: [submitCourtIssuedOrder],
   },
 ]);
