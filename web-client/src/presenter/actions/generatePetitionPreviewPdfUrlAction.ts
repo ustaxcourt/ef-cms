@@ -6,41 +6,29 @@ export const generatePetitionPreviewPdfUrlAction = async ({
   store,
 }: ActionProps) => {
   const petitionFormatted = get(state.petitionFormatted);
-  if (petitionFormatted.corporateDisclosureFile) {
+
+  const KEYS = ['corporateDisclosureFile', 'stinFile', 'petitionFile'];
+  for (let index = 0; index < KEYS.length; index++) {
+    const key = KEYS[index];
+    if (!petitionFormatted[key]) continue;
+
     const url = await generatePdfUrl(
-      petitionFormatted.corporateDisclosureFile,
+      petitionFormatted[key],
       applicationContext,
     );
-    store.set(state.petitionFormatted.corporateDisclosureFileUrl, url);
+
+    const stateKey = `${key}Url`;
+    store.set(state.petitionFormatted[stateKey], url);
   }
 
-  if (petitionFormatted.stinFile) {
-    const url = await generatePdfUrl(
-      petitionFormatted.stinFile,
-      applicationContext,
-    );
-    store.set(state.petitionFormatted.stinFileUrl, url);
-  }
+  if (!petitionFormatted.hasIrsNotice || !petitionFormatted.irsNotices?.length)
+    return;
 
-  if (petitionFormatted.petitionFile) {
-    const url = await generatePdfUrl(
-      petitionFormatted.petitionFile,
-      applicationContext,
-    );
-    store.set(state.petitionFormatted.petitionFileUrl, url);
-  }
-
-  if (petitionFormatted.hasIrsNotice && petitionFormatted.irsNotices?.length) {
-    petitionFormatted.irsNotices.forEach(async (irsNotice, index) => {
-      if (irsNotice.file) {
-        const url = await generatePdfUrl(irsNotice.file, applicationContext);
-        store.set(
-          state.petitionFormatted.irsNotices![index].irsNoticeFileUrl,
-          url,
-        );
-      }
-    });
-  }
+  petitionFormatted.irsNotices.forEach(async (irsNotice, index) => {
+    if (!irsNotice.file) return;
+    const url = await generatePdfUrl(irsNotice.file, applicationContext);
+    store.set(state.petitionFormatted.irsNotices![index].irsNoticeFileUrl, url);
+  });
 };
 
 function generatePdfUrl(file, applicationContext) {

@@ -33,7 +33,7 @@ export function UpdatedFilePetitionStep7() {
         Pay Now Online
       </Button>
 
-      <div className="grid-row grid-gap margin-top-205">
+      <div className="grid-row grid-gap margin-top-205" role="list">
         <Accordion
           className="petitioner-accordion-title"
           headingLevel="3"

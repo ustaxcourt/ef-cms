@@ -2,8 +2,8 @@ import { ElectronicCreatedCaseType } from '@shared/business/useCases/createCaseI
 import {
   FileUploadProgressType,
   FileUploadProgressValueType,
+  PETITION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const saveAndSubmitCaseAction = async ({

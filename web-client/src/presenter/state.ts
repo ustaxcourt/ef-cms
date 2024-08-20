@@ -1,6 +1,10 @@
 /* eslint-disable max-lines */
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import {
+  IDLE_LOGOUT_STATES,
+  IdleLogoutStateType,
+} from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
@@ -612,6 +616,7 @@ export const baseState = {
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
   clientConnectionId: '',
+  clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],
   cognito: {} as any,
   coldCaseReport: {
@@ -674,7 +679,7 @@ export const baseState = {
   health: undefined as any,
   idleLogoutState: {
     logoutAt: undefined,
-    state: 'INITIAL' as 'INITIAL' | 'MONITORING' | 'COUNTDOWN',
+    state: IDLE_LOGOUT_STATES.INITIAL as IdleLogoutStateType,
   },
   idleStatus: IDLE_STATUS.ACTIVE,
   iframeSrc: '',
@@ -691,6 +696,7 @@ export const baseState = {
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
+  logoutType: '',
   maintenanceMode: false,
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
@@ -832,11 +838,6 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
-  updatedFilePetitionStep2State: {
-    selectedFilingOption: undefined,
-  } as {
-    selectedFilingOption?: string;
-  },
   user: null as any,
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
