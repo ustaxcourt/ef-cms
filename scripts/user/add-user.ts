@@ -60,6 +60,7 @@ const checkParams = params => {
           'chambers',
         ],
       ),
+    // TODO 10455: Get the chambers sections dynamically
     section: joi
       .string()
       .valid(

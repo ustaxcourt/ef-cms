@@ -28,9 +28,9 @@ export const getJudgesChambersInteractor = async (
     const phoneNumber = u.contact?.phone;
     const label = pluralizeChambersLabel(u.name);
     return {
-      // Allow legacy judges in test environments
+      // Only allow legacy judges in test environments
       isLegacy:
-        u.section === 'legacyChambers' && process.env.USTC_ENV === 'prod',
+        u.section === 'legacyJudgesChambers' && process.env.USTC_ENV === 'prod',
       judgeFullName: u.judgeFullName,
       label,
       phoneNumber,
