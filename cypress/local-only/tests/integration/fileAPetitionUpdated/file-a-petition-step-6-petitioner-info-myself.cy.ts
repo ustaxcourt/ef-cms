@@ -197,7 +197,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       );
 
       cy.get('[data-testid="info-alert"]').contains(
-        'Your petition will not be created with the Court until the Submit Documents & Create Case button is clicked.',
+        'Your Petition will not be created with the Court until the Submit Documents & Create Case button is clicked.',
       );
     });
 
