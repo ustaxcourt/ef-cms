@@ -25,6 +25,7 @@ resource "aws_rds_global_cluster" "global_cluster" {
   global_cluster_identifier = "${var.environment}-dawson-global"
   engine                    = "aurora-postgresql"
   storage_encrypted = true
+  deletion_protection = true
   lifecycle {
     prevent_destroy = true
   }
@@ -35,6 +36,7 @@ resource "aws_rds_cluster" "postgres" {
   engine                     = "aurora-postgresql"
   engine_mode                = "provisioned"
   engine_version             = var.engine_version
+  deletion_protection = true
   database_name              = "${var.environment}_dawson"
   master_username            = var.postgres_user
   master_password            = var.postgres_password
@@ -70,12 +72,18 @@ resource "aws_rds_cluster" "west_replica" {
   engine                     = "aurora-postgresql"
   engine_mode                = "provisioned"
   engine_version             = var.engine_version
+  deletion_protection = true
   storage_encrypted          = true
   global_cluster_identifier  = aws_rds_global_cluster.global_cluster.id
   iam_database_authentication_enabled = true
   kms_key_id                 = aws_kms_key.replica.arn
 
   depends_on = [ aws_rds_cluster.postgres ]
+
+  serverlessv2_scaling_configuration {
+    max_capacity = 1.0
+    min_capacity = 0.5
+  }
 
   lifecycle {
     prevent_destroy = true

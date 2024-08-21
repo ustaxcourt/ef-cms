@@ -225,17 +225,15 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Sid": "RDS",
       "Effect": "Allow",
       "Action": [
-          "rds:DescribeDBParameterGroups",
-          "rds:DescribeDBParameters",
-          "rds:DescribeDBSubnetGroups",
-          "rds:ListTagsForResource",
-          "rds:DescribeDBInstances",
-          "rds:ModifyDBInstance"
+          "rds:*"
         ],
        "Resource": [
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:db:*",
-          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
+          "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*",
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*",
+          "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
        ]
     },  
     {
