@@ -237,6 +237,17 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:db:*",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
        ]
+    },  
+    {
+      "Sid": "KMS",
+      "Effect": "Allow",
+      "Action": [
+          "kms:*"
+        ],
+       "Resource": [
+          "arn:aws:kms:us-east-1:${data.aws_caller_identity.current.account_id}:key/*",
+          "arn:aws:kms:us-west-1:${data.aws_caller_identity.current.account_id}:key/*"
+       ]
     }, 
     {
       "Action": [
