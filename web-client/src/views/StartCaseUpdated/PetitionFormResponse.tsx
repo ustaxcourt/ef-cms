@@ -98,7 +98,7 @@ export const PetitionFormResponse = connect<
                 data-testid={id}
                 id={id}
                 name={textName}
-                style={{ marginTop: '0px', width: '100%' }}
+                style={{ marginTop: '0px' }}
                 value={form[textName][factOrReasonCount] || ''}
                 onChange={e => {
                   updateFormValueSequence({
