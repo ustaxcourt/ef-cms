@@ -1,4 +1,5 @@
 import { Get } from 'cerebral';
+import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const createOrderHelper = (
@@ -19,7 +20,7 @@ export const createOrderHelper = (
     state.setSelectedConsolidatedCasesToMultiDocketOn,
   );
 
-  const isEditing = !!documentToEdit;
+  const isEditing = !isEmpty(documentToEdit);
 
   const pageTitle = isEditing
     ? `Edit ${documentTitle}`

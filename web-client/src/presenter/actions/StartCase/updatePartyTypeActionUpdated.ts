@@ -26,8 +26,7 @@ export const updatePartyTypeActionUpdated = ({
   };
 
   const handleFilingType = () => {
-    const { value } = props;
-    if (value === 'Myself' || value === 'Individual petitioner') {
+    if (props.value === 'Myself' || props.value === 'Individual petitioner') {
       updatePartyType(PARTY_TYPES.petitioner);
     }
     resetFormFields();
@@ -49,16 +48,15 @@ export const updatePartyTypeActionUpdated = ({
     store.unset(state.form.minorIncompetentType);
     store.unset(state.form.partyType);
 
-    const { value } = props;
-    store.set(state.form.otherType, value);
+    store.set(state.form.otherType, props.value);
 
-    if (value === 'Deceased Spouse') {
+    if (props.value === 'Deceased Spouse') {
       updatePartyType(PARTY_TYPES.survivingSpouse);
       return;
     }
 
-    if (value === 'Donor' || value === 'Transferee') {
-      updatePartyType(value);
+    if (props.value === 'Donor' || props.value === 'Transferee') {
+      updatePartyType(props.value);
     }
   };
 

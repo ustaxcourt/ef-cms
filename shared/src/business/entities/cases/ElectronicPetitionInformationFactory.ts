@@ -2,7 +2,7 @@ import { ContactFactory } from '../contacts/ContactFactory';
 import { ElectronicPetition } from './ElectronicPetition';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 

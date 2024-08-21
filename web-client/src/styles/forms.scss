@@ -8,11 +8,11 @@
   margin-bottom: 35px;
 
   &.autogenerate-petition-form {
-		@media only screen and (max-width: ($medium-screen - 1)) {
-			border-left-width: unset;
-			border-left-style: unset;
-			border-left-color: unset;
-		}
+    @media only screen and (max-width: ($medium-screen - 1)) {
+      border-left-width: unset;
+      border-left-style: unset;
+      border-left-color: unset;
+    }
 
     max-width: 65rem;
 
@@ -39,7 +39,7 @@
       @media only screen and (max-width: ($medium-screen - 1px)) {
         margin-left: 0;
       }
-      
+
       margin-left: 1rem;
     }
 
@@ -248,28 +248,26 @@ select.case-status {
 }
 
 div.usa-radio.usa-radio__inline {
-  display: inline; 
+  display: inline;
 
   .usa-radio__label {
-    padding-right: 2rem; 
+    padding-right: 2rem;
 
     &.smaller-padding-right {
-      padding-right: 1rem; 
+      padding-right: 1rem;
     }
   }
 }
 
-@media (max-width: ($medium-screen - 280px)) { 
+@media (max-width: ($medium-screen - 280px)) {
   div.usa-radio.usa-radio__inline {
     display: block;
   }
-  
-    .usa-radio__label {
-      padding-right: 0; 
-    }
 
+  .usa-radio__label {
+    padding-right: 0;
+  }
 }
-
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
@@ -625,6 +623,37 @@ label.ustc-upload {
   }
 }
 
+.status-report-order-form {
+  .usa-form-group {
+    max-width: 100%;
+    margin-bottom: 0;
+
+    &.status-report-order-form-group {
+      margin: 1rem;
+    }
+
+    &.status-report-order-form-group-error {
+      margin-left: -0.1rem;
+    }
+
+    &.denied-checkboxes {
+      padding: 0 2rem;
+    }
+
+    #due-date-input-date-label {
+      margin: 0;
+    }
+
+    .width-150 {
+      width: 150px;
+    }
+  }
+
+  .narrow-hr {
+    width: 90%;
+  }
+}
+
 .complete-document-type-section {
   :last-child {
     margin-bottom: 0;
@@ -673,7 +702,7 @@ label.ustc-upload {
   }
 }
 
-#other-iteration-field {
+#other-iteration-field-mobile {
   margin-top: 35px;
 }
 
@@ -696,28 +725,30 @@ label.ustc-upload {
   margin-left: -1.25rem;
 }
 
+.status-report-order-form-group textarea,
 .ustc-message-modal-text-area {
   resize: vertical;
 }
 
-.add-another-reason-button, .add-another-fact-button {
-	@media only screen and (max-width: $medium-screen - 1px) {
-		text-align: left !important;
-	}
+.add-another-reason-button,
+.add-another-fact-button {
+  @media only screen and (max-width: $medium-screen - 1px) {
+    text-align: left !important;
+  }
 }
 
 .remove-fact-reason-button {
-	@media only screen and (max-width: $medium-screen - 1px) {
-		padding-right: 1rem !important;
-		text-align: right !important;
-	}
+  @media only screen and (max-width: $medium-screen - 1px) {
+    padding-right: 1rem !important;
+    text-align: right !important;
+  }
 }
 
-.irs-notice-remove-button{
-	@media only screen and (max-width: $medium-screen - 1px) {
-		width: auto !important;
-		margin-left: auto !important;
-	}
+.irs-notice-remove-button {
+  @media only screen and (max-width: $medium-screen - 1px) {
+    width: auto !important;
+    margin-left: auto !important;
+  }
 }
 
 .tax-case-info {
