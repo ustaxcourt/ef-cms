@@ -26,7 +26,6 @@ export const getCompletedMessagesForUserInteractor = async (
   }
 
   const messages = await getCompletedUserInboxMessages({
-    applicationContext,
     userId,
   });
 

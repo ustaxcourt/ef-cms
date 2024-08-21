@@ -26,7 +26,6 @@ export const getCompletedMessagesForSectionInteractor = async (
   }
 
   const messages = await getCompletedSectionInboxMessages({
-    applicationContext,
     section,
   });
 

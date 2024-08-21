@@ -26,7 +26,6 @@ export const getMessageThreadInteractor = async (
   }
 
   const messages = await getMessageThreadByParentId({
-    applicationContext,
     parentMessageId,
   });
 
