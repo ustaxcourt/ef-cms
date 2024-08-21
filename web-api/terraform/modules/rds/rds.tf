@@ -60,6 +60,7 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
   instance_class     = "db.serverless"
   engine             = aws_rds_cluster.postgres.engine
   engine_version     = aws_rds_cluster.postgres.engine_version
+  publicly_accessible = true
 
   lifecycle {
     prevent_destroy = true
@@ -96,6 +97,7 @@ resource "aws_rds_cluster_instance" "west_replica_instance" {
   instance_class         = "db.serverless"
   engine                 = aws_rds_cluster.west_replica.engine
   engine_version         = aws_rds_cluster.west_replica.engine_version
+  publicly_accessible = true
 
   lifecycle {
     prevent_destroy = true
