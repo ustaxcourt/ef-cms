@@ -1,5 +1,5 @@
 import { Message, RawMessage } from '@shared/business/entities/Message';
-import { db } from '@web-api/database';
+import { dbWrite } from '@web-api/database';
 import { toKyselyNewMessage } from './mapper';
 
 export const createMessage = async ({
@@ -7,7 +7,7 @@ export const createMessage = async ({
 }: {
   message: RawMessage;
 }): Promise<RawMessage> => {
-  const createdMessage = await db
+  const createdMessage = await dbWrite
     .insertInto('message')
     .values(toKyselyNewMessage(message))
     .returningAll()

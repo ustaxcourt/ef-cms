@@ -1,5 +1,5 @@
 import { Message } from '@shared/business/entities/Message';
-import { db } from '@web-api/database';
+import { dbRead } from '@web-api/database';
 import { transformNullToUndefined } from '../utils/transformNullToUndefined';
 
 export const getMessageById = async ({
@@ -7,7 +7,7 @@ export const getMessageById = async ({
 }: {
   messageId: string;
 }): Promise<Message> => {
-  const message = await db
+  const message = await dbRead
     .selectFrom('message')
     .where('messageId', '=', messageId)
     .selectAll()
