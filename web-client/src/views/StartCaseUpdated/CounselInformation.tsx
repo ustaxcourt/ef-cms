@@ -37,7 +37,7 @@ export function CounselInformation({ userInfo }) {
         <InfoNotificationComponent
           alertInfo={{
             message:
-              'Any additional counsel representing a party will need to file an entry of appearance after the petition is processed by the Court.',
+              'Any additional counsel representing a party will need to file an Entry of Appearance after the Petition is processed by the Court.',
           }}
           dismissible={false}
           scrollToTop={false}
