@@ -55,11 +55,15 @@ describe('generatePetitionPreviewPdfUrlAction', () => {
           corporateDisclosureFile: b64File,
           hasIrsNotice: true,
           irsNotices: [{ file: b64File }],
+          petitionFile: b64File,
           stinFile: b64File,
         },
       },
     });
 
+    expect(result.state.petitionFormatted.petitionFileUrl).toEqual(
+      'fakePdfUri',
+    );
     expect(result.state.petitionFormatted.stinFileUrl).toEqual('fakePdfUri');
     expect(result.state.petitionFormatted.corporateDisclosureFileUrl).toEqual(
       'fakePdfUri',
