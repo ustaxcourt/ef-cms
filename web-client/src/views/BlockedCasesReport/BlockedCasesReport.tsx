@@ -52,6 +52,7 @@ export const BlockedCasesReport = connect(
                   exportCsvBlockedCaseReportSequence({
                     blockedCases:
                       blockedCasesReportHelper.blockedCasesFormatted,
+                    trialLocation: blockedCaseReportFilter.trialLocationFilter,
                   });
                 }}
               >

@@ -1,52 +1,43 @@
 import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
-// import { stringify } from 'csv-stringify/sync';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { download, generateCsv, mkConfig } from 'export-to-csv';
 
 export const exportCsvBlockedCaseReportAction = ({
   props,
 }: ActionProps<{
   blockedCases: BlockedFormattedCase[];
+  trialLocation: string;
 }>) => {
-  const { blockedCases } = props;
-  //convert array to csv string
-  //blob 64bit
-  // download
-  console.log('blockedCases', blockedCases);
-  // console.log('stringify', stringify);
-};
+  const [city, state] = props.trialLocation.split(', ');
+  const date = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+  const fileName = `Blocked Cases Report - ${city}_${state} ${date}`;
+  const csvConfig = mkConfig({
+    columnHeaders: [
+      {
+        displayLabel: 'Docket No.',
+        key: 'docketNumber',
+      },
+      {
+        displayLabel: 'Date Blocked',
+        key: 'blockedDateEarliest',
+      },
+      {
+        displayLabel: 'Case Title',
+        key: 'caseTitle',
+      },
+      {
+        displayLabel: 'Case Status',
+        key: 'status',
+      },
+      {
+        displayLabel: 'Reason',
+        key: 'blockedReason',
+      },
+    ],
+    filename: fileName,
+    useKeysAsHeaders: false,
+  });
 
-// function exportColdCaseCsv() {
-//   const today = formatNow(FORMATS.MMDDYYYY);
-//   const fileName = `Cold Case Report - ${today}`;
-//   const csvConfig = mkConfig({
-//     columnHeaders: [
-//       {
-//         displayLabel: 'Docket No.',
-//         key: 'docketNumberWithSuffix',
-//       },
-//       {
-//         displayLabel: 'Date Created',
-//         key: 'createdAt',
-//       },
-//       {
-//         displayLabel: 'Case Type',
-//         key: 'caseType',
-//       },
-//       {
-//         displayLabel: 'Requested Place of Trial',
-//         key: 'preferredTrialCity',
-//       },
-//       {
-//         displayLabel: 'Last Entry',
-//         key: 'filingDate',
-//       },
-//       {
-//         displayLabel: 'Last Event',
-//         key: 'eventCode',
-//       },
-//     ],
-//     filename: fileName,
-//     useKeysAsHeaders: false,
-//   });
-//   const csv = generateCsv(csvConfig)(entries);
-//   download(csvConfig)(csv);
-// }
+  const csv = generateCsv(csvConfig)(props.blockedCases);
+  download(csvConfig)(csv);
+};
