@@ -7,7 +7,7 @@ import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const BlockedCasesReport = connect(
   {
@@ -15,6 +15,15 @@ export const BlockedCasesReport = connect(
     form: state.form,
   },
   function BlockedCasesReport({ blockedCasesReportHelper, form }) {
+    const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
+
+    const debounceSubmit = (timeout: number) => {
+      setIsSubmitDebounced(true);
+      setTimeout(() => {
+        setIsSubmitDebounced(false);
+      }, timeout);
+    };
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -29,9 +38,11 @@ export const BlockedCasesReport = connect(
                 aria-label="export pending report"
                 className="margin-top-2"
                 data-testid="export-blocked-case-report"
+                disabled={!blockedCasesReportHelper.blockedCasesCount}
                 icon="file-export"
                 onClick={() => {
-                  // debounceSubmit(200);
+                  if (isSubmitDebounced) return;
+                  debounceSubmit(1000);
                   // exportCsvCustomCaseReportSequence();
                 }}
               >
