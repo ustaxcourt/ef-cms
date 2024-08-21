@@ -3,4 +3,7 @@ import { exportCsvBlockedCaseReportAction } from '@web-client/presenter/actions/
 
 export const exportCsvBlockedCaseReportSequence = [
   exportCsvBlockedCaseReportAction,
-] as unknown as (props: { blockedCases: BlockedFormattedCase[] }) => {};
+] as unknown as (props: {
+  blockedCases: BlockedFormattedCase[];
+  trialLocation: string;
+}) => {};
