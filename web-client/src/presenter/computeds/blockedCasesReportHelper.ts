@@ -11,7 +11,7 @@ import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 
-type BlockedFormattedCase = {
+export type BlockedFormattedCase = {
   docketNumber: string;
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText: string;

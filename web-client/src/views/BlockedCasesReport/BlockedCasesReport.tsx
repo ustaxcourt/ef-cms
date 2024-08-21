@@ -6,15 +6,21 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 export const BlockedCasesReport = connect(
   {
     blockedCasesReportHelper: state.blockedCasesReportHelper,
+    exportCsvBlockedCaseReportSequence:
+      sequences.exportCsvBlockedCaseReportSequence,
     form: state.form,
   },
-  function BlockedCasesReport({ blockedCasesReportHelper, form }) {
+  function BlockedCasesReport({
+    blockedCasesReportHelper,
+    exportCsvBlockedCaseReportSequence,
+    form,
+  }) {
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
     const debounceSubmit = (timeout: number) => {
@@ -43,7 +49,10 @@ export const BlockedCasesReport = connect(
                 onClick={() => {
                   if (isSubmitDebounced) return;
                   debounceSubmit(1000);
-                  // exportCsvCustomCaseReportSequence();
+                  exportCsvBlockedCaseReportSequence({
+                    blockedCases:
+                      blockedCasesReportHelper.blockedCasesFormatted,
+                  });
                 }}
               >
                 Export
