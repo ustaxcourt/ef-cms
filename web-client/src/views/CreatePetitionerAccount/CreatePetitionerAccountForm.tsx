@@ -3,10 +3,12 @@ import { RequirementsText } from '@web-client/views/CreatePetitionerAccount/Requ
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { debounce } from 'lodash';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const CreatePetitionerAccountForm = connect(
   {
+    alertError: state.alertError,
+    alertWarning: state.alertWarning,
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
     navigateToLoginSequence: sequences.navigateToLoginSequence,
@@ -19,6 +21,8 @@ export const CreatePetitionerAccountForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
+    alertError,
+    alertWarning,
     confirmPassword,
     createAccountHelper,
     navigateToLoginSequence,
@@ -33,9 +37,15 @@ export const CreatePetitionerAccountForm = connect(
     const [inFocusName, setInFocusName] = useState(true);
     const [submitDisabled, setSubmitDisabled] = useState(false);
 
+    // Re-enabled submit button if submission was unsuccessful
+    useEffect(() => {
+      if (alertError || alertWarning) {
+        setSubmitDisabled(false);
+      }
+    }, [alertError, alertWarning]);
+
     const submitFunction = debounce(() => {
       submitCreatePetitionerAccountFormSequence();
-      setSubmitDisabled(false);
     }, 500);
 
     return (
