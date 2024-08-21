@@ -224,7 +224,7 @@ export const AddPetitionerToCase = connect(
                 data-testid="add-petitioner-phone"
                 id="phone"
                 name="contact.phone"
-                type="tel"
+                type="text"
                 value={form.contact.phone || ''}
                 onChange={e => {
                   updateFormValueSequence({
