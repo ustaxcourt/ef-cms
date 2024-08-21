@@ -2,8 +2,9 @@ import {
   FORMATS,
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TDynamoRecord } from '../dynamoTypes';
-import { getTableName } from '../../dynamodbClientService';
+import { batchDelete, getTableName } from '../../dynamodbClientService';
 
 export type TLockDynamoRecord = TDynamoRecord & { timestamp: string };
 
@@ -40,33 +41,15 @@ export async function createLock({
     });
 }
 
-/**
- *
- */
 export async function removeLock({
   applicationContext,
   identifiers,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   identifiers: string[];
 }): Promise<void> {
-  await Promise.all(
-    identifiers.map(identifierToUnlock =>
-      applicationContext
-        .getDocumentClient(applicationContext, {
-          useMainRegion: true,
-        })
-        .delete({
-          Key: {
-            pk: identifierToUnlock,
-            sk: 'lock',
-          },
-          TableName: getTableName({
-            applicationContext,
-          }),
-        }),
-    ),
-  );
+  const items = identifiers.map(id => ({ pk: id, sk: 'lock' }));
+  await batchDelete({ applicationContext, items });
 }
 
 /**
