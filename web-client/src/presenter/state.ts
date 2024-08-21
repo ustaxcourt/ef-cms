@@ -606,6 +606,7 @@ export const baseState = {
   blockedCaseReportFilter: {} as {
     caseStatusFilter: string | undefined;
   },
+  blockedCases: undefined as unknown as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
