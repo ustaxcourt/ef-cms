@@ -50,6 +50,10 @@ output "rds_host_name" {
   value = module.rds.address
 }
 
+output "rds_host_name_west" {
+  value = module.rds.address_west
+}
+
 # output vpc_east_id {
 #   value = module.vpc_east.vpc_id
 # }
