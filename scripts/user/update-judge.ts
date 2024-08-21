@@ -1,7 +1,13 @@
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
-import * as readline from 'node:readline/promises';
 import { User } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  emailIsInExpectedFormat,
+  expectedEmailFormats,
+  getChambersNameFromJudgeName,
+  phoneIsInExpectedFormat,
+  promptUser,
+} from 'scripts/user/add-or-update-judge-helpers';
 import { environment } from '@web-api/environment';
 import {
   getDestinationTableInfo,
@@ -35,45 +41,6 @@ function getArgValue(param: string): string {
 
 requireEnvVars(['ENV']);
 
-const defaultEmailHost = 'ustaxcourt.gov';
-
-const getChambersNameFromJudgeName = (judgeName: string) => {
-  return judgeName.endsWith('s') ? '{name}Chambers' : '{name}sChambers';
-};
-
-async function promptUser(query: string): Promise<string> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  const answer = await rl.question(query);
-  rl.close();
-  return answer;
-}
-
-const expectedEmailFormats = (name: string): string[] => {
-  const lowerCaseName = name.toLowerCase();
-  return [
-    `stjudge.${lowerCaseName}@${defaultEmailHost}`,
-    `judge.${lowerCaseName}@${defaultEmailHost}`,
-  ];
-};
-
-const emailIsInExpectedFormat = ({
-  email,
-  name,
-}: {
-  name: string;
-  email: string;
-}): boolean => {
-  return expectedEmailFormats(name).includes(email.toLowerCase());
-};
-
-const phoneIsInExpectedFormat = (phone: string) => {
-  const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
-  return phoneRegex.test(phone);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-floating-promises, complexity
 (async () => {
   const applicationContext = createApplicationContext();
@@ -90,7 +57,7 @@ const phoneIsInExpectedFormat = (phone: string) => {
     updatedIsSeniorJudge &&
     !['true', 'false'].includes(updatedIsSeniorJudge)
   ) {
-    throw new Error('isSeniorJudge must be blank or either true/false');
+    throw new Error('\nisSeniorJudge must be blank or either true/false');
   }
 
   const userPoolId = await getUserPoolId();
@@ -98,6 +65,8 @@ const phoneIsInExpectedFormat = (phone: string) => {
   environment.userPoolId = userPoolId;
   const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
+
+  console.log('\nGetting the Cognito record for the user ...');
 
   const cognitoResult = await applicationContext
     .getUserGateway()
@@ -107,7 +76,7 @@ const phoneIsInExpectedFormat = (phone: string) => {
     });
 
   if (!cognitoResult) {
-    throw new Error(`Cannot find user with email ${currentEmail}`);
+    throw new Error(`\nCannot find user with email ${currentEmail}`);
   }
 
   const { name, userId } = cognitoResult;
@@ -117,11 +86,11 @@ const phoneIsInExpectedFormat = (phone: string) => {
     updatedEmail &&
     !emailIsInExpectedFormat({
       email: updatedEmail,
-      name: updatedName || name,
+      judgeName: updatedName || name,
     })
   ) {
     const userInput = await promptUser(
-      `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(updatedName || name).join(', ')}. Continue anyway? y/n `,
+      `\nWarning: The email you entered does not match expected formats: ${expectedEmailFormats(updatedName || name).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
@@ -131,12 +100,14 @@ const phoneIsInExpectedFormat = (phone: string) => {
   // Check for mistaken phone numbers
   if (updatedPhone && !phoneIsInExpectedFormat(updatedPhone)) {
     const userInput = await promptUser(
-      'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
+      '\nWarning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
     }
   }
+
+  console.log('\nSetting up the updated Cognito user info ...');
 
   const cognitoAttributesToUpdate = {} as { name: string; email: string };
 
@@ -149,12 +120,17 @@ const phoneIsInExpectedFormat = (phone: string) => {
   }
 
   if (!isEmpty(cognitoAttributesToUpdate)) {
+    console.log('\nUpdating the user Cognito record ...');
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: cognitoAttributesToUpdate,
       email: currentEmail,
       poolId: userPoolId,
     });
+  } else {
+    console.log('\nNothing to update in Cognito, continuing ...');
   }
+
+  console.log('\nSetting up the updated Dynamo user info ...');
 
   const updatedChambersSection = updatedName
     ? getChambersNameFromJudgeName(updatedName)
@@ -178,13 +154,18 @@ const phoneIsInExpectedFormat = (phone: string) => {
 
   const rawUser = new User(dynamoUser).validate().toRawObject();
 
+  console.log('\nUpdating the Dynamo record ...');
+
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: rawUser,
   });
 
   if (updatedChambersSection) {
-    // First, create the updated judge's chambers section
+    console.log('\nChambers section needs to be updated.');
+
+    console.log(`\nAdding a record for ${updatedChambersSection}`);
+
     await client.put({
       Item: {
         pk: `section|${updatedChambersSection}`,
@@ -194,7 +175,9 @@ const phoneIsInExpectedFormat = (phone: string) => {
     });
 
     if (oldSection) {
-      // Then, for each member of their chambers section, re-point that member to the new chambers section
+      console.log(
+        `\nUpdating members of ${oldSection} to be members of ${updatedChambersSection} ...`,
+      );
       const chambersUsers: User[] = await applicationContext
         .getPersistenceGateway()
         .getUsersInSection({ applicationContext, section: oldSection });
@@ -208,7 +191,8 @@ const phoneIsInExpectedFormat = (phone: string) => {
         });
       }
 
-      // Finally, remove the old chambers section
+      console.log(`\nRemoving old chambers section ${oldSection} ...`);
+
       // TODO 10455: Would this cause any issues?
       await client.remove({
         applicationContext,
@@ -221,7 +205,7 @@ const phoneIsInExpectedFormat = (phone: string) => {
   }
 
   console.log(
-    `Success! Updated Judge ${dynamoUser.judgeFullName}. Current email = ${dynamoUser.email}.`,
+    `\nSuccess! Updated Judge ${dynamoUser.judgeFullName}. Current email = ${dynamoUser.email}.`,
   );
   if (updatedChambersSection) {
     console.log(

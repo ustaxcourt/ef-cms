@@ -1,7 +1,7 @@
 # Adding or Updating a Judge User
 
 ## Description
-This runbook describes the process of onboarding or updating a Judge user. DO NOT use this script to offboard a judge. Instead, see `offboard-judge-user.md`.
+This runbook describes the process of onboarding or updating a Judge user. DO NOT use this runbook to offboard a judge. Instead, see `offboard-judge-user.md`.
 
 ## Preqrequisites
 - `add-judge.ts`, `update-judge.ts` (see these scripts for usage details)

@@ -26,7 +26,6 @@ const JUDGES_CHAMBERS: Record<string, JudgeChambersInfo> = {
     section: 'cohensChambers',
   },
   COLVINS_CHAMBERS_SECTION: {
-    // TODO 10455: isLegacy needed here for deployed tests?
     judgeFullName: 'John O. Colvin',
     label: 'Colvin’s Chambers',
     phoneNumber: '(202) 521-0662',
