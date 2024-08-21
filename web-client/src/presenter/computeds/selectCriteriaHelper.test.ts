@@ -76,4 +76,27 @@ describe('selectCriteriaHelper', () => {
       },
     ]);
   });
+
+  it('should return the automatic blocked reasons', () => {
+    const { automaticBlockedReasons } = runCompute<{
+      automaticBlockedReasons: any;
+    }>(selectCriteriaHelper, {
+      state: {},
+    });
+
+    expect(automaticBlockedReasons).toEqual([
+      {
+        key: 'dueDate',
+        value: 'Due Date',
+      },
+      {
+        key: 'pending',
+        value: 'Pending Item',
+      },
+      {
+        key: 'pendingAndDueDate',
+        value: 'Pending Item and Due Date',
+      },
+    ]);
+  });
 });
