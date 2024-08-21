@@ -11,6 +11,7 @@ export const AutoGeneratePetitionForm = connect(
     addFactOrReasonSequence: sequences.addFactOrReasonSequence,
     form: state.form,
   },
+
   function AutoGeneratePetitionForm({ addFactOrReasonSequence, form }) {
     return (
       <>
@@ -25,19 +26,23 @@ export const AutoGeneratePetitionForm = connect(
           </label>
 
           <div className="margin-bottom-2-rem">
-            <ol>
-              {form.petitionReasons &&
-                form.petitionReasons.map((_reason, index) => {
-                  return (
+            {form.petitionReasons &&
+              form.petitionReasons.map((_reason, index) => {
+                const key = `petition-reason-${index - 1}`;
+                return (
+                  <div className="display-flex" key={key}>
+                    <div className="text-semibold margin-right-05">
+                      {getCharacter(index)}
+                    </div>
                     <PetitionFormResponse
-                      count={index}
+                      factOrReasonCount={index}
                       id={`petition-reason-${index - 1}`}
-                      key={`petition-reason-${index - 1}`}
+                      labelId="petition-reason-label"
                       textName="petitionReasons"
                     />
-                  );
-                })}
-            </ol>
+                  </div>
+                );
+              })}
             <Button
               link
               className="add-another-reason-button"
@@ -60,19 +65,23 @@ export const AutoGeneratePetitionForm = connect(
             separately):
           </label>
           <div>
-            <ol>
-              {form.petitionFacts &&
-                form.petitionFacts.map((_fact, index) => {
-                  return (
+            {form.petitionFacts &&
+              form.petitionFacts.map((_fact, index) => {
+                const key = `petition-fact-${index - 1}`;
+                return (
+                  <div className="display-flex" key={key}>
+                    <div className="text-semibold margin-right-05">
+                      {getCharacter(index)}
+                    </div>
                     <PetitionFormResponse
-                      count={index}
+                      factOrReasonCount={index}
                       id={`petition-fact-${index - 1}`}
-                      key={`petition-fact-${index - 1}`}
+                      labelId="petition-fact-label"
                       textName="petitionFacts"
                     />
-                  );
-                })}
-            </ol>
+                  </div>
+                );
+              })}
           </div>
           <div>
             <Button
@@ -92,5 +101,11 @@ export const AutoGeneratePetitionForm = connect(
     );
   },
 );
+
+function getCharacter(index: number): string {
+  const asciiOfA = 97;
+  const asciiValue = asciiOfA + index;
+  return `${String.fromCharCode(asciiValue)}. `;
+}
 
 AutoGeneratePetitionForm.displayName = 'AutoGeneratePetitionForm';
