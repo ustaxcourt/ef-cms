@@ -1,4 +1,4 @@
-import { db } from '@web-api/database';
+import { dbWrite } from '@web-api/database';
 
 export const upsertCase = async ({ rawCase }: { rawCase: RawCase }) => {
   const caseToUpsert = {
@@ -8,7 +8,7 @@ export const upsertCase = async ({ rawCase }: { rawCase: RawCase }) => {
     trialDate: rawCase.trialDate,
     trialLocation: rawCase.trialLocation,
   };
-  await db
+  await dbWrite
     .insertInto('case')
     .values(caseToUpsert)
     .onConflict(oc => oc.column('docketNumber').doUpdateSet(caseToUpsert))
