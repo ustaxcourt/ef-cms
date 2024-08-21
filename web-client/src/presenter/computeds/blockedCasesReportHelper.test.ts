@@ -419,4 +419,66 @@ describe('blockedCasesReportHelper', () => {
     });
     expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
   });
+
+  describe('filters', () => {
+    it('should return all the blocked cases when "caseStatusFilter" is not defined', () => {
+      const TEST_CASES = [
+        { docketNumber: '101-19' },
+        { docketNumber: '102-19' },
+        { docketNumber: '103-19' },
+      ];
+
+      const result = runCompute(blockedCasesReportHelper, {
+        state: {
+          blockedCaseReportFilter: {
+            caseStatusFilter: undefined,
+          },
+          blockedCases: TEST_CASES,
+        },
+      });
+      expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
+    });
+
+    it('should return all the blocked cases when "caseStatusFilter" is set to "All', () => {
+      const TEST_CASES = [
+        { docketNumber: '101-19' },
+        { docketNumber: '102-19' },
+        { docketNumber: '103-19' },
+      ];
+
+      const result = runCompute(blockedCasesReportHelper, {
+        state: {
+          blockedCaseReportFilter: {
+            caseStatusFilter: 'All',
+          },
+          blockedCases: TEST_CASES,
+        },
+      });
+      expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
+    });
+
+    it('should filter out blocked cases that do not match "caseStatusFilter"', () => {
+      const TEST_STATUS = 'TEST_STATUS';
+      const TEST_CASES = [
+        { docketNumber: '101-19', status: 'RANDOM' },
+        { docketNumber: '102-19', status: TEST_STATUS },
+        { docketNumber: '103-19', status: 'RANDOM' },
+      ];
+
+      const result = runCompute(blockedCasesReportHelper, {
+        state: {
+          blockedCaseReportFilter: {
+            caseStatusFilter: TEST_STATUS,
+          },
+          blockedCases: TEST_CASES,
+        },
+      });
+
+      expect(result.blockedCasesFormatted.length).toEqual(1);
+      expect(result.blockedCasesFormatted[0]).toMatchObject({
+        docketNumber: '102-19',
+        status: TEST_STATUS,
+      });
+    });
+  });
 });

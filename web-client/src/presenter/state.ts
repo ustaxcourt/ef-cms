@@ -150,7 +150,12 @@ import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
-const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
+const {
+  ASCENDING,
+  CASE_STATUS_TYPES,
+  DOCKET_RECORD_FILTER_OPTIONS,
+  IDLE_STATUS,
+} = getConstants();
 
 export const computeds = {
   addCourtIssuedDocketEntryHelper:
@@ -569,6 +574,7 @@ export const computeds = {
 };
 
 export const baseState = {
+  CASE_STATUS_TYPES,
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -600,6 +606,9 @@ export const baseState = {
     totalFiles?: number;
     fileCount?: number;
     title?: string;
+  },
+  blockedCaseReportFilter: {} as {
+    caseStatusFilter: string | undefined;
   },
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
