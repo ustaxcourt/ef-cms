@@ -1,6 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
-import { db } from '@web-api/database';
+import { dbRead } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCompletedUserInboxMessages = async ({
@@ -10,7 +10,7 @@ export const getCompletedUserInboxMessages = async ({
 }): Promise<Message[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const messages = await db
+  const messages = await dbRead
     .selectFrom('message')
     .where('completedByUserId', '=', userId)
     .where('isCompleted', '=', true)
