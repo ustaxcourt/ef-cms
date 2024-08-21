@@ -68,14 +68,15 @@ export const SelectCriteria = connect(
               <option value="Regular">Regular</option>
             </select>
           </div>
-          <div className="usa-form-group margin-bottom-0">
-            <label className="usa-label" htmlFor="procedure-type">
+
+          <div className="usa-form-group margin-bottom-2">
+            <label className="usa-label" htmlFor="case-status-type">
               Case Status
             </label>
             <select
               className="usa-select"
               disabled={!form.trialLocation}
-              id="case-status"
+              id="case-status-type"
               name="caseStatusFilter"
               value={blockedCaseReportFilter.caseStatusFilter}
               onChange={e => {
@@ -94,6 +95,37 @@ export const SelectCriteria = connect(
                   </option>
                 );
               })}
+            </select>
+          </div>
+
+          <div className="usa-form-group margin-bottom-0">
+            <label className="usa-label" htmlFor="reason-type">
+              Reason
+            </label>
+            <select
+              className="usa-select"
+              disabled={!form.trialLocation}
+              id="reason-type"
+              name="reasonFilter"
+              value={blockedCaseReportFilter.reasonFilter}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  root: 'blockedCaseReportFilter',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="All">All</option>
+              {selectCriteriaHelper.automaticBlockedReasons.map(
+                ({ key, value }) => {
+                  return (
+                    <option key={key} value={value}>
+                      {value}
+                    </option>
+                  );
+                },
+              )}
             </select>
           </div>
         </div>
