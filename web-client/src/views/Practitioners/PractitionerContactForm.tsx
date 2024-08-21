@@ -68,7 +68,7 @@ export const PractitionerContactForm = connect(
                 data-testid="practitioner-phone-input"
                 id="phone"
                 name="contact.phone"
-                type="tel"
+                type="text"
                 value={form.contact.phone || ''}
                 onBlur={() => {
                   onBlurValidationSequence();
@@ -94,7 +94,7 @@ export const PractitionerContactForm = connect(
                 className="usa-input"
                 id="additional-phone"
                 name="additionalPhone"
-                type="tel"
+                type="text"
                 value={form.additionalPhone || ''}
                 onChange={e => {
                   onChangeUpdateSequence({
