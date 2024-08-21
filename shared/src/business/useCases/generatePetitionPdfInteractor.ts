@@ -2,40 +2,88 @@ import {
   CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
   CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
 } from '@shared/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { CreateCaseIrsForm } from '@web-client/presenter/state';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
-// TODO type for props
+export type IrsNotice = CreateCaseIrsForm & {
+  noticeIssuedDateFormatted: string;
+  originalCaseType: string;
+};
+
+export type IrsNoticesWithCaseDescription = IrsNotice & {
+  caseDescription: string;
+};
+
+export interface Contact {
+  countryType: string;
+  name: string;
+  inCareOf?: string;
+  secondaryName?: string;
+  title?: string;
+  country: string;
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city: string;
+  postalCode: string;
+  phone: string;
+  state: string;
+  placeOfLegalResidence?: string;
+  contactType: 'primary' | 'secondary';
+  email: string;
+}
+
+export type ContactSecondary = Contact & {
+  hasConsentedToEService?: boolean;
+  phone?: string;
+  paperPetitionEmail?: string;
+};
+
+export interface PetitionPdfBase {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  contactPrimary: Contact;
+  contactSecondary?: ContactSecondary;
+  hasUploadedIrsNotice: boolean;
+  partyType: string;
+  petitionFacts: string[];
+  petitionReasons: string[];
+  preferredTrialCity: string;
+  procedureType: string;
+}
 
 export const generatePetitionPdfInteractor = async (
-  applicationContext: ServerApplicationContext,
+  applicationContext,
   {
     caseCaptionExtension,
-    caseDescription,
     caseTitle,
     contactPrimary,
     contactSecondary,
     hasIrsNotice,
     hasUploadedIrsNotice,
     irsNotices,
+    originalCaseType,
     partyType,
     petitionFacts,
     petitionReasons,
     preferredTrialCity,
     procedureType,
-    taxYear,
-  }: any,
+  }: PetitionPdfBase & {
+    hasIrsNotice: boolean;
+    originalCaseType: string;
+    irsNotices: IrsNotice[];
+  },
 ): Promise<{ fileId: string }> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const caseDescription = getCaseDescription(hasIrsNotice, originalCaseType);
 
   let pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
@@ -48,19 +96,16 @@ export const generatePetitionPdfInteractor = async (
       hasUploadedIrsNotice,
       irsNotices: irsNotices.map(irsNotice => ({
         ...irsNotice,
-        caseDescription: hasIrsNotice
-          ? CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[irsNotice.caseType]
-          : CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[irsNotice.caseType],
-        noticeIssuedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(irsNotice.noticeIssuedDate || '', FORMATS.MMDDYY),
+        caseDescription: getCaseDescription(
+          hasIrsNotice,
+          irsNotice.originalCaseType,
+        ),
       })),
       partyType,
       petitionFacts,
       petitionReasons,
       preferredTrialCity,
       procedureType,
-      taxYear,
     },
   });
 
@@ -74,3 +119,10 @@ export const generatePetitionPdfInteractor = async (
 
   return { fileId };
 };
+
+function getCaseDescription(hasIrsNotice: boolean, caseType: string) {
+  if (hasIrsNotice) {
+    return CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE[caseType];
+  }
+  return CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE[caseType];
+}

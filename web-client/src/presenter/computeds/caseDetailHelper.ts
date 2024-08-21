@@ -21,8 +21,7 @@ export const caseDetailHelper = (
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
-  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const showJudgesNotes = permissions.JUDGES_NOTES;
+  const userIsAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
@@ -34,7 +33,7 @@ export const caseDetailHelper = (
   let showQcWorkItemsUntouchedState = false;
 
   if (isExternalUser) {
-    if (userAssociatedWithCase) {
+    if (userIsAssociatedWithCase) {
       userHasAccessToCase = true;
       showFileDocumentButton = true;
 
@@ -71,22 +70,34 @@ export const caseDetailHelper = (
     .getUtilities()
     .isSealedCase(caseDetail);
 
-  const userCanViewCase =
-    (isExternalUser && userAssociatedWithCase) || !isSealedCase;
+  const showConsolidatedCasesCard =
+    permissions.VIEW_CONSOLIDATED_CASES_CARD && !!caseDetail.leadDocketNumber;
+
+  const showFilingFeeExternal =
+    isExternalUser &&
+    user.role !== USER_ROLES.irsPractitioner &&
+    user.role !== USER_ROLES.irsSuperuser;
+
+  const showJudgesNotes = permissions.JUDGES_NOTES;
+
+  const showPetitionProcessingAlert =
+    isExternalUser &&
+    !canAllowDocumentServiceForCase &&
+    userIsAssociatedWithCase;
+
+  const showPractitionerSection = !isExternalUser || hasPrivatePractitioners;
 
   const isPractitioner =
     user.role === USER_ROLES.irsPractitioner ||
     user.role === USER_ROLES.privatePractitioner;
-
   const isPetitioner = user.role === USER_ROLES.petitioner;
-
   const showSealedCaseView =
     (isPractitioner || isPetitioner) &&
     !!isSealedCase &&
-    !userAssociatedWithCase;
+    !userIsAssociatedWithCase;
 
-  const showConsolidatedCasesCard =
-    permissions.VIEW_CONSOLIDATED_CASES_CARD && !!caseDetail.leadDocketNumber;
+  const userCanViewCase =
+    (isExternalUser && userIsAssociatedWithCase) || !isSealedCase;
 
   return {
     caseDeadlines,
@@ -105,14 +116,10 @@ export const caseDetailHelper = (
     showDocketRecordInProgressState: !isExternalUser,
     showEditCaseDetailsButton: permissions.EDIT_CASE_DETAILS,
     showFileDocumentButton,
-    showFilingFeeExternal:
-      isExternalUser &&
-      user.role !== USER_ROLES.irsPractitioner &&
-      user.role !== USER_ROLES.irsSuperuser,
+    showFilingFeeExternal,
     showJudgesNotes,
-    showPetitionProcessingAlert:
-      isExternalUser && !canAllowDocumentServiceForCase,
-    showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
+    showPetitionProcessingAlert,
+    showPractitionerSection,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
     showSealedCaseView,
