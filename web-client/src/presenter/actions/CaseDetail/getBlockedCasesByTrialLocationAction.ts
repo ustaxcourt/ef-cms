@@ -11,7 +11,7 @@ export const getBlockedCasesByTrialLocationAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const trialLocation = get(state.form.trialLocation);
+  const trialLocation = get(state.blockedCaseReportFilter.trialLocationFilter);
 
   let blockedCases = [];
   if (trialLocation) {

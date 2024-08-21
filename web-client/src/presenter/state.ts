@@ -605,9 +605,11 @@ export const baseState = {
   },
   blockedCaseReportFilter: {
     caseStatusFilter: 'All',
+    procedureTypeFilter: 'All',
     reasonFilter: 'All',
+    trialLocationFilter: '',
   },
-  blockedCases: undefined as unknown as RawCase[],
+  blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;

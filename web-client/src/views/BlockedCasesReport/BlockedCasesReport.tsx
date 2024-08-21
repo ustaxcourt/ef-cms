@@ -11,15 +11,15 @@ import React, { useState } from 'react';
 
 export const BlockedCasesReport = connect(
   {
+    blockedCaseReportFilter: state.blockedCaseReportFilter,
     blockedCasesReportHelper: state.blockedCasesReportHelper,
     exportCsvBlockedCaseReportSequence:
       sequences.exportCsvBlockedCaseReportSequence,
-    form: state.form,
   },
   function BlockedCasesReport({
+    blockedCaseReportFilter,
     blockedCasesReportHelper,
     exportCsvBlockedCaseReportSequence,
-    form,
   }) {
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
@@ -64,11 +64,11 @@ export const BlockedCasesReport = connect(
               <SelectCriteria />
             </div>
             <div className="grid-col-9">
-              {form.trialLocation && (
+              {blockedCaseReportFilter.trialLocationFilter && (
                 <>
                   <div className="grid-row">
                     <div className="grid-col-6">
-                      <h2>{form.trialLocation}</h2>
+                      <h2>{blockedCaseReportFilter.trialLocationFilter}</h2>
                     </div>
                     <div className="grid-col-6 text-right margin-top-1">
                       <span className="text-semibold">
@@ -141,7 +141,7 @@ export const BlockedCasesReport = connect(
                   )}
                 </>
               )}
-              {!form.trialLocation && (
+              {!blockedCaseReportFilter.trialLocationFilter && (
                 <p className="margin-0 text-semibold">
                   Select a trial location to view blocked cases
                 </p>

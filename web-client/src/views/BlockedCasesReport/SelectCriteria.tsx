@@ -7,7 +7,6 @@ import React from 'react';
 export const SelectCriteria = connect(
   {
     blockedCaseReportFilter: state.blockedCaseReportFilter,
-    form: state.form,
     getBlockedCasesByTrialLocationSequence:
       sequences.getBlockedCasesByTrialLocationSequence,
     selectCriteriaHelper: state.selectCriteriaHelper,
@@ -15,7 +14,6 @@ export const SelectCriteria = connect(
   },
   function SelectCriteria({
     blockedCaseReportFilter,
-    form,
     getBlockedCasesByTrialLocationSequence,
     selectCriteriaHelper,
     updateFormValueSequence,
@@ -33,11 +31,12 @@ export const SelectCriteria = connect(
             <select
               className="usa-select"
               id="trial-location"
-              name="trialLocation"
-              value={form.trialLocation}
+              name="trialLocationFilter"
+              value={blockedCaseReportFilter.trialLocationFilter}
               onChange={e => {
                 getBlockedCasesByTrialLocationSequence({
                   key: e.target.name,
+                  root: 'blockedCaseReportFilter',
                   value: e.target.value,
                 });
               }}
@@ -52,13 +51,14 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
-              disabled={!form.trialLocation}
+              disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="procedure-type"
-              name="procedureType"
-              value={form.procedureType}
+              name="procedureTypeFilter"
+              value={blockedCaseReportFilter.procedureTypeFilter}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
+                  root: 'blockedCaseReportFilter',
                   value: e.target.value,
                 });
               }}
@@ -75,7 +75,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
-              disabled={!form.trialLocation}
+              disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="case-status-type"
               name="caseStatusFilter"
               value={blockedCaseReportFilter.caseStatusFilter}
@@ -104,7 +104,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
-              disabled={!form.trialLocation}
+              disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="reason-type"
               name="reasonFilter"
               value={blockedCaseReportFilter.reasonFilter}
