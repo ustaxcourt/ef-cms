@@ -6,18 +6,18 @@ import React from 'react';
 
 export const SelectCriteria = connect(
   {
-    CASE_STATUS_TYPES: state.CASE_STATUS_TYPES,
     blockedCaseReportFilter: state.blockedCaseReportFilter,
     form: state.form,
     getBlockedCasesByTrialLocationSequence:
       sequences.getBlockedCasesByTrialLocationSequence,
+    selectCriteriaHelper: state.selectCriteriaHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function SelectCriteria({
     blockedCaseReportFilter,
-    CASE_STATUS_TYPES,
     form,
     getBlockedCasesByTrialLocationSequence,
+    selectCriteriaHelper,
     updateFormValueSequence,
   }) {
     return (
@@ -87,7 +87,7 @@ export const SelectCriteria = connect(
               }}
             >
               <option value="All">All</option>
-              {Object.entries(CASE_STATUS_TYPES).map(([key, value]) => {
+              {selectCriteriaHelper.caseStatuses.map(({ key, value }) => {
                 return (
                   <option key={key} value={value}>
                     {value}
