@@ -17,7 +17,12 @@ describe('blockedCasesReportHelper', () => {
 
   it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
     const result = runCompute(blockedCasesReportHelper, {
-      state: {},
+      state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
+      },
     });
     expect(result).toMatchObject({ blockedCasesCount: 0 });
   });
@@ -25,6 +30,10 @@ describe('blockedCasesReportHelper', () => {
   it('returns blockedCasesCount as 0 if the blockedCases array is empty', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [],
       },
     });
@@ -34,6 +43,10 @@ describe('blockedCasesReportHelper', () => {
   it('returns blockedCasesCount as the length of the blockedCases array', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           { docketNumber: '101-19' },
           { docketNumber: '102-19' },
@@ -50,6 +63,10 @@ describe('blockedCasesReportHelper', () => {
   it('formats blocked cases with caseTitle, docketNumberWithSuffix, and blockedDateFormatted and sorts by docket number', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -162,6 +179,10 @@ describe('blockedCasesReportHelper', () => {
   it('should return blocked small cases when small is selected', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -221,6 +242,10 @@ describe('blockedCasesReportHelper', () => {
   it('should return blocked regular cases when regular is selected', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -280,6 +305,10 @@ describe('blockedCasesReportHelper', () => {
   it('should return all cases if the procedureType is undefined', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             blocked: true,
@@ -329,6 +358,10 @@ describe('blockedCasesReportHelper', () => {
   it('should display correct display message when blockedCasesCount equals zero', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [],
         form: { procedureType: 'All' },
       },
@@ -339,6 +372,10 @@ describe('blockedCasesReportHelper', () => {
   it('should display correct display message when procedureType is set to Small and there are no Small Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             automaticBlocked: true,
@@ -358,6 +395,10 @@ describe('blockedCasesReportHelper', () => {
   it('should not display any message when procedureType is set to Regular and there are Regular Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             automaticBlocked: true,
@@ -377,6 +418,10 @@ describe('blockedCasesReportHelper', () => {
   it('should not display any message when procedureType is set to All and there are Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             automaticBlocked: true,
@@ -396,6 +441,10 @@ describe('blockedCasesReportHelper', () => {
   it('should not display any message when procedureType is not set on form and there are Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [
           {
             automaticBlocked: true,
@@ -414,6 +463,10 @@ describe('blockedCasesReportHelper', () => {
   it('should display correct display message when procedureType is not on form and there are no Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
+        blockedCaseReportFilter: {
+          caseStatusFilter: 'All',
+          reasonFilter: 'All',
+        },
         blockedCases: [],
       },
     });
@@ -421,63 +474,95 @@ describe('blockedCasesReportHelper', () => {
   });
 
   describe('filters', () => {
-    it('should return all the blocked cases when "caseStatusFilter" is not defined', () => {
-      const TEST_CASES = [
-        { docketNumber: '101-19' },
-        { docketNumber: '102-19' },
-        { docketNumber: '103-19' },
-      ];
+    describe('caseStatusFilter', () => {
+      it('should return all the blocked cases when "caseStatusFilter" is set to "All', () => {
+        const TEST_CASES = [
+          { docketNumber: '101-19' },
+          { docketNumber: '102-19' },
+          { docketNumber: '103-19' },
+        ];
 
-      const result = runCompute(blockedCasesReportHelper, {
-        state: {
-          blockedCaseReportFilter: {
-            caseStatusFilter: undefined,
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: 'All',
+            },
+            blockedCases: TEST_CASES,
           },
-          blockedCases: TEST_CASES,
-        },
+        });
+        expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
       });
-      expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
+
+      it('should filter out blocked cases that do not match "caseStatusFilter"', () => {
+        const TEST_STATUS = 'TEST_STATUS';
+        const TEST_CASES = [
+          { docketNumber: '101-19', status: 'RANDOM' },
+          { docketNumber: '102-19', status: TEST_STATUS },
+          { docketNumber: '103-19', status: 'RANDOM' },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: TEST_STATUS,
+              reasonFilter: 'All',
+            },
+            blockedCases: TEST_CASES,
+          },
+        });
+
+        expect(result.blockedCasesFormatted.length).toEqual(1);
+        expect(result.blockedCasesFormatted[0]).toMatchObject({
+          docketNumber: '102-19',
+          status: TEST_STATUS,
+        });
+      });
     });
 
-    it('should return all the blocked cases when "caseStatusFilter" is set to "All', () => {
-      const TEST_CASES = [
-        { docketNumber: '101-19' },
-        { docketNumber: '102-19' },
-        { docketNumber: '103-19' },
-      ];
+    describe('reasonFilter', () => {
+      it('should return all the blocked cases when "reasonFilter" is set to "All', () => {
+        const TEST_CASES = [
+          { docketNumber: '101-19' },
+          { docketNumber: '102-19' },
+          { docketNumber: '103-19' },
+        ];
 
-      const result = runCompute(blockedCasesReportHelper, {
-        state: {
-          blockedCaseReportFilter: {
-            caseStatusFilter: 'All',
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: 'All',
+            },
+            blockedCases: TEST_CASES,
           },
-          blockedCases: TEST_CASES,
-        },
-      });
-      expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
-    });
-
-    it('should filter out blocked cases that do not match "caseStatusFilter"', () => {
-      const TEST_STATUS = 'TEST_STATUS';
-      const TEST_CASES = [
-        { docketNumber: '101-19', status: 'RANDOM' },
-        { docketNumber: '102-19', status: TEST_STATUS },
-        { docketNumber: '103-19', status: 'RANDOM' },
-      ];
-
-      const result = runCompute(blockedCasesReportHelper, {
-        state: {
-          blockedCaseReportFilter: {
-            caseStatusFilter: TEST_STATUS,
-          },
-          blockedCases: TEST_CASES,
-        },
+        });
+        expect(result.blockedCasesFormatted.length).toEqual(TEST_CASES.length);
       });
 
-      expect(result.blockedCasesFormatted.length).toEqual(1);
-      expect(result.blockedCasesFormatted[0]).toMatchObject({
-        docketNumber: '102-19',
-        status: TEST_STATUS,
+      it('should filter out blocked cases that do not match "reasonFilter"', () => {
+        const TEST_REASON = 'TEST_REASON';
+        const TEST_CASES = [
+          { automaticBlockedReason: 'RANDOM', docketNumber: '101-19' },
+          { automaticBlockedReason: TEST_REASON, docketNumber: '102-19' },
+          { automaticBlockedReason: 'RANDOM', docketNumber: '103-19' },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: TEST_REASON,
+            },
+            blockedCases: TEST_CASES,
+          },
+        });
+
+        expect(result.blockedCasesFormatted.length).toEqual(1);
+        expect(result.blockedCasesFormatted[0]).toMatchObject({
+          automaticBlockedReason: TEST_REASON,
+          docketNumber: '102-19',
+        });
       });
     });
   });
