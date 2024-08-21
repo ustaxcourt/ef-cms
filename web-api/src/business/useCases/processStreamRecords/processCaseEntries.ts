@@ -29,7 +29,11 @@ export const processCaseEntries = async ({
 
     const marshalledCase = marshall(caseMetadataWithCounsel);
 
-    await upsertCase({ rawCase: caseMetadataWithCounsel });
+    // we are explicitly catching this upsert to prevent the entire
+    // streams from getting blocked in case there is an issue connecting to
+    // rds.  For right now, we don't think the functionality of getting the case
+    // metadata over to RDS warrants blocking the entire stream.
+    await upsertCase({ rawCase: caseMetadataWithCounsel }).catch(console.error);
 
     caseRecords.push({
       dynamodb: {
