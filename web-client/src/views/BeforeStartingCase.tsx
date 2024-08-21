@@ -155,7 +155,7 @@ export const BeforeStartingCase = connect(
                 <li>The Notice(s) will be part of the case record.</li>
               </ul>
 
-              <div className="petitioner-label">3. Confirm your identity</div>
+              <div className="petitioner-label">{`3. Confirm ${isPetitioner ? 'your' : 'the petitioner’s'} identity`}</div>
               <div className="petitioner-flow-text">
                 <ul className="margin-top-0">
                   <li data-testid="confirm-identity-bullet-1">
