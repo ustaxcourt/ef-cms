@@ -603,8 +603,9 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
-  blockedCaseReportFilter: {} as {
-    caseStatusFilter: string | undefined;
+  blockedCaseReportFilter: {
+    caseStatusFilter: 'All',
+    reasonFilter: 'All',
   },
   blockedCases: undefined as unknown as RawCase[],
   caseDeadlineReport: {} as {

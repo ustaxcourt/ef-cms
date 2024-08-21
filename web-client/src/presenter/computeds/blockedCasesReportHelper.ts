@@ -74,7 +74,7 @@ export const blockedCasesReportHelper = (
 ): BlockedCaseReportHelperResults => {
   const blockedCases: RawCase[] = get(state.blockedCases);
   const procedureTypeFilter = get(state.form.procedureType);
-  const { caseStatusFilter = 'All' } = get(state.blockedCaseReportFilter) || {};
+  const { caseStatusFilter, reasonFilter } = get(state.blockedCaseReportFilter);
 
   let blockedCasesFormatted: BlockedFormattedCase[] = [];
   let displayMessage: string | undefined;
@@ -108,6 +108,10 @@ export const blockedCasesReportHelper = (
       .filter(blockedCase => {
         if (caseStatusFilter === 'All') return true;
         return blockedCase.status === caseStatusFilter;
+      })
+      .filter(blockedCase => {
+        if (reasonFilter === 'All') return true;
+        return blockedCase.automaticBlockedReason === reasonFilter;
       });
   }
 
