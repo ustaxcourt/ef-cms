@@ -26,7 +26,6 @@ export const getOutboxMessagesForUserInteractor = async (
   }
 
   const messages = await getUserOutboxMessages({
-    applicationContext,
     userId,
   });
 
