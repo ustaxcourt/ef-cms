@@ -9,7 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
-import { orderBy } from 'lodash';
+import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -109,10 +109,18 @@ export const fileCourtIssuedOrder = async (
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
     const messageEntity = new Message(mostRecentMessage).validate();
-    messageEntity.addAttachment({
-      documentId: docketEntryEntity.docketEntryId,
-      documentTitle: docketEntryEntity.documentTitle,
-    });
+
+    const isAttached = some(
+      messageEntity.attachments,
+      attachment => attachment.documentId === docketEntryEntity.docketEntryId,
+    );
+
+    if (!isAttached) {
+      messageEntity.addAttachment({
+        documentId: docketEntryEntity.docketEntryId,
+        documentTitle: docketEntryEntity.documentTitle,
+      });
+    }
 
     await updateMessage({
       message: messageEntity.validate().toRawObject(),

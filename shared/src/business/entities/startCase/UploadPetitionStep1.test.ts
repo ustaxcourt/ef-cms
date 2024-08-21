@@ -9,7 +9,7 @@ import { UploadPetitionStep1 } from '@shared/business/entities/startCase/UploadP
 describe('UploadPetitionStep1', () => {
   const VALID_ENTITY = {
     filingType: FILING_TYPES[ROLES.petitioner][0],
-    partyType: FILING_TYPES[ROLES.petitioner][0],
+    partyType: PARTY_TYPES.petitioner,
   };
 
   it('should create a valid instance of "UploadPetitionStep1" entity', () => {

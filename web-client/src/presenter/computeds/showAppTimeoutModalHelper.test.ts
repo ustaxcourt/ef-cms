@@ -1,3 +1,4 @@
+import { IDLE_LOGOUT_STATES } from '@shared/business/entities/EntityConstants';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { showAppTimeoutModalHelper } from './showAppTimeoutModalHelper';
 
@@ -6,9 +7,9 @@ describe('showAppTimeoutModalHelper', () => {
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         idleLogoutState: {
-          state: 'COUNTDOWN',
+          state: IDLE_LOGOUT_STATES.COUNTDOWN,
         },
-        user: {},
+        user: { userId: '123' },
       },
     });
 
@@ -18,10 +19,13 @@ describe('showAppTimeoutModalHelper', () => {
   it('does not show the modal due to no user', () => {
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
+        idleLogoutState: {
+          state: IDLE_LOGOUT_STATES.COUNTDOWN,
+        },
         modal: {
           showModal: 'AppTimeoutModal',
         },
-        user: undefined,
+        user: {},
       },
     });
 
