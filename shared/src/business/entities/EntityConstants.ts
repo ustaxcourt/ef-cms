@@ -961,7 +961,10 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   dueDate: 'Due Date',
   pending: 'Pending Item',
   pendingAndDueDate: 'Pending Item and Due Date',
-};
+} as const;
+
+export type AutomaticBlockedReasons =
+  (typeof AUTOMATIC_BLOCKED_REASONS)[keyof typeof AUTOMATIC_BLOCKED_REASONS];
 
 export const CUSTOM_CASE_REPORT_PAGE_SIZE = 100;
 
