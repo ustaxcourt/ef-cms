@@ -57455,7 +57455,10 @@
     "pk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
     "userId": "659789b4-acc5-40b7-9318-3354e7eb8604",
     "isSeniorJudge": false,
-    "email": "judgefoley@example.com"
+    "email": "judgefoley@example.com",
+    "contact": {
+      "phone": "(202) 521-0681"
+    }
   },
   {
     "role": "adc",
@@ -58561,7 +58564,10 @@
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": true,
-    "email": "judgecolvin@example.com"
+    "email": "judgecolvin@example.com",
+    "contact": {
+      "phone": "(202) 521-0662"
+    }
   },
   {
     "judgeTitle": "Judge",
@@ -58574,7 +58580,10 @@
     "pk": "user|dabbad01-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
-    "email": "judgeashford@example.com"
+    "email": "judgeashford@example.com",
+    "contact": {
+      "phone": "(202) 521-0822"
+    }
   },
   {
     "judgeTitle": "Judge",
@@ -58587,7 +58596,10 @@
     "pk": "user|dabbad02-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
-    "email": "judgebuch@example.com"
+    "email": "judgebuch@example.com",
+    "contact": {
+      "phone": "(202) 521-0810"
+    }
   },
   {
     "judgeTitle": "Chief Special Trial Judge",
@@ -58600,7 +58612,10 @@
     "pk": "user|dabbad03-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
-    "email": "judgecarluzzo@example.com"
+    "email": "judgecarluzzo@example.com",
+    "contact": {
+      "phone": "(202) 521-3339"
+    }
   },
   {
     "judgeTitle": "Judge",
@@ -58613,7 +58628,10 @@
     "pk": "user|dabbad04-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": true,
-    "email": "judgecohen@example.com"
+    "email": "judgecohen@example.com",
+    "contact": {
+      "phone": "(202) 521-0655"
+    }
   },
   {
     "judgeTitle": "Judge",
@@ -58626,7 +58644,10 @@
     "pk": "user|dabbad05-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": true,
-    "email": "judgegustafson@example.com"
+    "email": "judgegustafson@example.com",
+    "contact": {
+      "phone": "(202) 521-0850"
+    }
   },
   {
     "judgeTitle": "Judge",
@@ -58639,7 +58660,10 @@
     "pk": "user|dabbad06-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
-    "email": "judgepugh@example.com"
+    "email": "judgepugh@example.com",
+    "contact": {
+      "phone": "(202) 521-0824"
+    }
   },
   {
     "judgeTitle": "Judge",
@@ -58652,7 +58676,10 @@
     "pk": "user|dabbad0a-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
-    "email": "judgeurda@example.com"
+    "email": "judgeurda@example.com",
+    "contact": {
+      "phone": "(202) 521-0800"
+    }
   },
   {
     "judgeTitle": "Judge",
