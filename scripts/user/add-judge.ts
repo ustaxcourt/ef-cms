@@ -1,7 +1,13 @@
-import * as readline from 'node:readline/promises';
 import { RawUser, User } from '@shared/business/entities/User';
 import { Role } from '../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  emailIsInExpectedFormat,
+  expectedEmailFormats,
+  getChambersNameFromJudgeName,
+  phoneIsInExpectedFormat,
+  promptUser,
+} from 'scripts/user/add-or-update-judge-helpers';
 import { environment } from '@web-api/environment';
 import {
   getDestinationTableInfo,
@@ -25,45 +31,6 @@ import {
 
 requireEnvVars(['ENV']);
 
-const defaultEmailHost = 'ustaxcourt.gov';
-
-const getChambersNameFromJudgeName = (judgeName: string) => {
-  return judgeName.endsWith('s') ? '{name}Chambers' : '{name}sChambers';
-};
-
-async function promptUser(query: string): Promise<string> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  const answer = await rl.question(query);
-  rl.close();
-  return answer;
-}
-
-const expectedEmailFormats = (name: string): string[] => {
-  const lowerCaseName = name.toLowerCase();
-  return [
-    `stjudge.${lowerCaseName}@${defaultEmailHost}`,
-    `judge.${lowerCaseName}@${defaultEmailHost}`,
-  ];
-};
-
-const emailIsInExpectedFormat = ({
-  email,
-  name,
-}: {
-  name: string;
-  email: string;
-}): boolean => {
-  return expectedEmailFormats(name).includes(email.toLowerCase());
-};
-
-const phoneIsInExpectedFormat = (phone: string) => {
-  const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
-  return phoneRegex.test(phone);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext();
@@ -81,9 +48,9 @@ const phoneIsInExpectedFormat = (phone: string) => {
     : false;
 
   // Check for mistaken emails
-  if (!emailIsInExpectedFormat({ email, name })) {
+  if (!emailIsInExpectedFormat({ email, judgeName: name })) {
     const userInput = await promptUser(
-      `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(name).join(', ')}. Continue anyway? y/n `,
+      `\nWarning: The email you entered does not match expected formats: ${expectedEmailFormats(name).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
@@ -93,12 +60,14 @@ const phoneIsInExpectedFormat = (phone: string) => {
   // Check for mistaken phone numbers
   if (phone && !phoneIsInExpectedFormat(phone)) {
     const userInput = await promptUser(
-      'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
+      '\nWarning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
     }
   }
+
+  console.log('\nSetting up information to store ... \n');
 
   const section = getChambersNameFromJudgeName(name);
   const judgeTitle = 'Judge';
@@ -144,9 +113,13 @@ const phoneIsInExpectedFormat = (phone: string) => {
     dynamoUserInfo = { ...dynamoUserInfo, contact: { phone } };
   }
 
+  console.log('\nAdding user information to Cognito ... \n');
+
   await applicationContext
     .getUserGateway()
     .createUser(applicationContext, cognitoUserInfo);
+
+  console.log('\nAdding user information to Dynamo ... \n');
 
   const rawUser = new User(dynamoUserInfo).validate().toRawObject();
 
@@ -157,7 +130,7 @@ const phoneIsInExpectedFormat = (phone: string) => {
   });
 
   console.log(
-    `Success! Created Judge ${judgeFullName} with userId = ${userId} and email = ${email}`,
+    `\nSuccess! Created Judge ${judgeFullName} with userId = ${userId} and email = ${email}.`,
   );
   console.log(
     'If you need to update this judge, run update-judge.ts using this email',
