@@ -117,7 +117,6 @@ export const computeTrialSessionFormDataAction = ({
       );
     }
 
-    // TODO 10455 phone number
     store.set(state.form.chambersPhoneNumber, judge.phoneNumber);
   }
 

@@ -119,10 +119,11 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
             `trial-session-detail/${createdTrialSessionId}`,
           );
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
-          // TODO 10455: Why is force true necessary after seemingly unrelated changes
-          cy.get('[data-testid="trial-session-judge"]').select('Colvin', {
-            force: true,
-          });
+          cy.get('[data-testid="trial-session-judge"]').select('Colvin');
+          cy.get('[data-testid="trial-session-judge"] option:selected').should(
+            'have.text',
+            'Colvin',
+          );
           cy.get('[data-testid="submit-edit-trial-session"]').click();
           cy.url().should('include', 'print-paper-trial-notices');
           cy.get('[data-testid="printing-complete"]').click();
