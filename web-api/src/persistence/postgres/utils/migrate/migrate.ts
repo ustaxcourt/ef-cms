@@ -1,11 +1,11 @@
 import * as path from 'path';
 import { FileMigrationProvider, Migrator } from 'kysely';
-import { db } from '../../../../database';
+import { dbWrite } from '../../../../database';
 import { promises as fs } from 'fs';
 
 async function migrateToLatest() {
   const migrator = new Migrator({
-    db,
+    db: dbWrite,
     provider: new FileMigrationProvider({
       fs,
       migrationFolder: path.join(__dirname, 'migrations'),
@@ -29,7 +29,7 @@ async function migrateToLatest() {
     process.exit(1);
   }
 
-  await db.destroy();
+  await dbWrite.destroy();
 }
 
 migrateToLatest().catch;
