@@ -53,6 +53,77 @@ export const NonstandardForm = connect(
       }
     };
 
+    // Might be worth using useCallback here
+    // We use slightly different classes for mobile vs. non-mobile
+    const getOrdinalSection = ({ mobile }: { mobile: boolean }) => {
+      return (
+        <>
+          <FormGroup
+            className={'margin-bottom-0' + mobile ? '' : 'grid-col-6'}
+            errorText={validationErrors?.ordinalValue}
+          >
+            <label
+              className="usa-label"
+              htmlFor={`${namespace}ordinal-field-select`}
+            >
+              {helper[level].ordinalField}
+            </label>
+            <select
+              className="usa-select"
+              id={`${namespace}ordinal-field-select`}
+              name={`${namespace}ordinalValue`}
+              value={get(form, `${namespace}ordinalValue`)}
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateSequence();
+              }}
+            >
+              <option value="">- Select -</option>
+              {getOrdinalValuesForUploadIteration.map(ordinalValue => (
+                <option key={ordinalValue} value={ordinalValue}>
+                  {ordinalValue}
+                </option>
+              ))}
+            </select>
+          </FormGroup>
+          {get(form, `${namespace}ordinalValue`) === 'Other' && (
+            <FormGroup
+              className={mobile ? '' : 'grid-col-6'}
+              errorText={validationErrors?.otherIteration}
+              id={'other-iteration-field' + mobile ? '' : '-mobile'}
+            >
+              <label
+                className="usa-label"
+                htmlFor={`${namespace}other-iteration`}
+              >
+                Iteration
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input margin-0"
+                id={`${namespace}other-iteration`}
+                name={`${namespace}otherIteration`}
+                placeholder="Number"
+                type="number"
+                value={get(form, `${namespace}otherIteration`) || ''}
+                onBlur={() => validateSequence()}
+                onChange={e => {
+                  updateSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateSequence();
+                }}
+              />
+            </FormGroup>
+          )}
+        </>
+      );
+    };
+
     namespace = namespace ? `${namespace}.` : '';
     return (
       <div className="nonstandard-form">
@@ -189,136 +260,8 @@ export const NonstandardForm = connect(
         )}
         {helper[level].ordinalField && (
           <>
-            <NonMobile>
-              <FormGroup className="grid-row grid-gap">
-                <FormGroup
-                  className="grid-col-6 margin-bottom-0"
-                  errorText={validationErrors?.ordinalValue}
-                >
-                  <label
-                    className="usa-label"
-                    htmlFor={`${namespace}ordinal-field-select`}
-                  >
-                    {helper[level].ordinalField}
-                  </label>
-                  <select
-                    className="usa-select"
-                    id={`${namespace}ordinal-field-select`}
-                    name={`${namespace}ordinalValue`}
-                    value={get(form, `${namespace}ordinalValue`)}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateSequence();
-                    }}
-                  >
-                    <option value="">- Select -</option>
-                    {getOrdinalValuesForUploadIteration.map(ordinalValue => (
-                      <option key={ordinalValue} value={ordinalValue}>
-                        {ordinalValue}
-                      </option>
-                    ))}
-                  </select>
-                </FormGroup>
-                {get(form, `${namespace}ordinalValue`) === 'Other' && (
-                  <FormGroup
-                    className="grid-col-6"
-                    errorText={validationErrors?.otherIteration}
-                  >
-                    <label
-                      className="usa-label"
-                      htmlFor={`${namespace}other-iteration`}
-                    >
-                      Iteration
-                    </label>
-                    <input
-                      autoCapitalize="none"
-                      className="usa-input margin-0"
-                      id={`${namespace}other-iteration`}
-                      name={`${namespace}otherIteration`}
-                      placeholder="Number"
-                      type="number"
-                      value={get(form, `${namespace}otherIteration`) || ''}
-                      onBlur={() => validateSequence()}
-                      onChange={e => {
-                        updateSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateSequence();
-                      }}
-                    />
-                  </FormGroup>
-                )}
-              </FormGroup>
-            </NonMobile>
-            <Mobile>
-              <FormGroup>
-                <FormGroup
-                  className="margin-bottom-0"
-                  errorText={validationErrors?.ordinalValue}
-                >
-                  <label
-                    className="usa-label"
-                    htmlFor={`${namespace}ordinal-field-select`}
-                  >
-                    {helper[level].ordinalField}
-                  </label>
-                  <select
-                    className="usa-select"
-                    id={`${namespace}ordinal-field-select`}
-                    name={`${namespace}ordinalValue`}
-                    value={get(form, `${namespace}ordinalValue`)}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateSequence();
-                    }}
-                  >
-                    <option value="">- Select -</option>
-                    {getOrdinalValuesForUploadIteration.map(ordinalValue => (
-                      <option key={ordinalValue} value={ordinalValue}>
-                        {ordinalValue}
-                      </option>
-                    ))}
-                  </select>
-                </FormGroup>
-                {get(form, `${namespace}ordinalValue`) === 'Other' && (
-                  <FormGroup
-                    errorText={validationErrors?.otherIteration}
-                    id="other-iteration-field"
-                  >
-                    <label
-                      className="usa-label"
-                      htmlFor={`${namespace}other-iteration`}
-                    >
-                      Iteration
-                    </label>
-                    <input
-                      autoCapitalize="none"
-                      className="usa-input margin-0"
-                      id={`${namespace}other-iteration`}
-                      name={`${namespace}otherIteration`}
-                      placeholder="Number"
-                      type="number"
-                      value={get(form, `${namespace}otherIteration`) || ''}
-                      onBlur={() => validateSequence()}
-                      onChange={e => {
-                        updateSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateSequence();
-                      }}
-                    />
-                  </FormGroup>
-                )}
-              </FormGroup>
-            </Mobile>
+            <NonMobile>{getOrdinalSection({ mobile: false })}</NonMobile>
+            <Mobile>{getOrdinalSection({ mobile: true })}</Mobile>
           </>
         )}
       </div>

@@ -180,6 +180,7 @@ export const CaseDetailHeader = connect<
                           aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
                           className="usa-tag"
                           id="lead-case-tag"
+                          role="note"
                         >
                           <span aria-hidden="true">Lead case</span>
                         </span>
@@ -201,6 +202,7 @@ export const CaseDetailHeader = connect<
                         <span
                           aria-label="associated judge"
                           className="margin-left-1 usa-tag"
+                          role="note"
                         >
                           <FontAwesomeIcon
                             className="margin-right-05"
