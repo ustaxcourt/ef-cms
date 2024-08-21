@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -20,8 +21,23 @@ export const BlockedCasesReport = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="title">
+          <div className="title grid-row flex-justify">
             <h1>Blocked Cases</h1>
+            <span>
+              <Button
+                link
+                aria-label="export pending report"
+                className="margin-top-2"
+                data-testid="export-blocked-case-report"
+                icon="file-export"
+                onClick={() => {
+                  // debounceSubmit(200);
+                  // exportCsvCustomCaseReportSequence();
+                }}
+              >
+                Export
+              </Button>
+            </span>
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-3">
