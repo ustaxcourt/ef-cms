@@ -3,7 +3,6 @@ import { isStatusReportOrderAction } from '@web-client/presenter/actions/StatusR
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditStatusReportOrderFormAction } from '@web-client/presenter/actions/StatusReportOrder/setEditStatusReportOrderFormAction';
-import { statusReportOrderPdfPreviewSequence } from '@web-client/presenter/sequences/StatusReportOrder/statusReportOrderPdfPreviewSequence';
 
 export const editUnsignedDraftDocumentSequence = [
   checkDocumentTypeAction,
@@ -17,7 +16,6 @@ export const editUnsignedDraftDocumentSequence = [
         isStatusReportOrder: [
           setEditStatusReportOrderFormAction,
           navigateToPathAction,
-          statusReportOrderPdfPreviewSequence,
         ],
       },
     ],
