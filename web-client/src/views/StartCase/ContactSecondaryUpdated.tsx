@@ -171,7 +171,7 @@ export const ContactSecondaryUpdated = connect<
               id="secondary-phone"
               name="contactSecondary.phone"
               ref={registerRef && registerRef('contactSecondary.phone')}
-              type="tel"
+              type="text"
               value={addressInfo.phone || ''}
               onBlur={() => {
                 handleBlur({

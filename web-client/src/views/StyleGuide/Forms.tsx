@@ -85,7 +85,7 @@ export const Forms = () => (
           <input
             className="usa-input max-width-200"
             id="input-tel"
-            type="tel"
+            type="text"
           />
         </div>
 
@@ -96,7 +96,7 @@ export const Forms = () => (
           <input
             className="usa-input max-width-200 usa-input--error"
             id="input-tel-error"
-            type="tel"
+            type="text"
           />
           <span className="usa-error-message">Error message</span>
         </div>
