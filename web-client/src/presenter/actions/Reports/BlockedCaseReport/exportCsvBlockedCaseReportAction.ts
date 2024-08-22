@@ -39,10 +39,13 @@ export const exportCsvBlockedCaseReportAction = ({
     useKeysAsHeaders: false,
   });
 
+  const formatString = (s: string | undefined) =>
+    (s || '').split('\n').join(' ').trim();
+
   const csv = generateCsv(csvConfig)(
     blockedCases.map(c => ({
       ...c,
-      allReasons: `${c.blockedReason?.trim()} ${c.automaticBlockedReason?.trim()}`,
+      allReasons: `${formatString(c.blockedReason)} ${formatString(c.automaticBlockedReason)}`,
     })),
   );
   download(csvConfig)(csv);
