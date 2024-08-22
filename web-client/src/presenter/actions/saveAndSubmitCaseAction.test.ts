@@ -1,4 +1,4 @@
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';

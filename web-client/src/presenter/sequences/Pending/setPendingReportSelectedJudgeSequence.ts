@@ -1,3 +1,4 @@
+import { clearPendingReportsAction } from '@web-client/presenter/actions/PendingItems/clearPendingReportsAction';
 import { fetchPendingItemsAction } from '../../actions/PendingItems/fetchPendingItemsAction';
 import { isJudgeSelectedAction } from '../../actions/PendingItems/isJudgeSelectedAction';
 import { setPendingItemsAction } from '../../actions/PendingItems/setPendingItemsAction';
@@ -8,7 +9,7 @@ export const setPendingReportSelectedJudgeSequence = [
   setPendingReportSelectedJudgeAction,
   isJudgeSelectedAction,
   {
-    no: [],
+    no: [clearPendingReportsAction],
     yes: [
       showProgressSequenceDecorator([
         fetchPendingItemsAction,
