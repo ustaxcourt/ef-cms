@@ -88,7 +88,7 @@ const setUserAttributes = async ({
         userId: user.userId,
       });
       console.log(`Created petitioner entity in Dynamo for ${user.email}.`);
-      totals.usersUpdatedInCognito++;
+      totals.userEntitiesCreatedInDynamo++;
 
       if (cognitoUser.UserStatus === 'UNCONFIRMED') {
         await createUserConfirmation(applicationContext, {
