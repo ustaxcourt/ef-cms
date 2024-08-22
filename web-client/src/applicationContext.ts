@@ -18,7 +18,6 @@ import {
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
-import { ConfigOptions, download, generateCsv, mkConfig } from 'export-to-csv';
 import {
   DocketEntry,
   getServedPartiesCode,
@@ -625,10 +624,21 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
-  downloadCsvFile: (data: any[], config: ConfigOptions) => {
-    const csvConfig = mkConfig(config);
-    const csv = generateCsv(csvConfig)(data);
-    download(csvConfig)(csv);
+  createCsvString: (
+    data: any[],
+    config: { displayLabel: string; key: string }[],
+  ) => {
+    const headers = config.map(c => `"${c.displayLabel}"`).join();
+    const body = data.reduce((acc, currentData) => {
+      const row = config
+        .map(c => c.key)
+        .map(key => `"${currentData[key]}"`)
+        .join();
+      acc += `${row}\n`;
+      return acc;
+    }, '');
+
+    return `${headers}\n${body}`;
   },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
