@@ -23,8 +23,6 @@ export const messageModalHelper = (
   const currentAttachments = [...attachments, ...draftAttachments];
   const judgesChambers = get(state.judgesChambers) || [];
 
-  console.log('judgesChambers', judgesChambers);
-
   const computeIsAlreadyAttached = doc =>
     currentAttachments.some(
       attachment => attachment.documentId === doc.docketEntryId,
