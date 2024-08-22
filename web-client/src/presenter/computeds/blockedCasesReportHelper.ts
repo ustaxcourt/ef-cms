@@ -73,8 +73,9 @@ export const blockedCasesReportHelper = (
   applicationContext: ClientApplicationContext,
 ): BlockedCaseReportHelperResults => {
   const blockedCases: RawCase[] = get(state.blockedCases);
-  const procedureTypeFilter = get(state.form.procedureType);
-  const { caseStatusFilter, reasonFilter } = get(state.blockedCaseReportFilter);
+  const { caseStatusFilter, procedureTypeFilter, reasonFilter } = get(
+    state.blockedCaseReportFilter,
+  );
 
   let blockedCasesFormatted: BlockedFormattedCase[] = [];
   let displayMessage: string | undefined;
