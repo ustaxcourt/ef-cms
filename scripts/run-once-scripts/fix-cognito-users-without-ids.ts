@@ -77,13 +77,15 @@ const setUserAttributes = async ({
         continue;
       }
 
-      await createPetitionerUserRecords({
-        applicationContext,
-        user: omit(user, 'userId'),
-        userId: user.userId,
-      });
-      console.log(`Created petitioner entity in Dynamo for ${user.email}.`);
-      totals.userEntitiesCreatedInDynamo++;
+      if (cognitoUser.UserStatus === 'CONFIRMED') {
+        await createPetitionerUserRecords({
+          applicationContext,
+          user: omit(user, 'userId'),
+          userId: user.userId,
+        });
+        console.log(`Created petitioner entity in Dynamo for ${user.email}.`);
+        totals.userEntitiesCreatedInDynamo++;
+      }
 
       if (cognitoUser.UserStatus === 'UNCONFIRMED') {
         await createUserConfirmation(applicationContext, {
