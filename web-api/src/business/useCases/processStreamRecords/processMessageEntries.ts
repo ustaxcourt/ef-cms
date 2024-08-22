@@ -20,7 +20,11 @@ export const processMessageEntries = async ({
     messageRecords.map(async messageRecord => {
       const messageNewImage = messageRecord.dynamodb.NewImage;
       const rawMessage = unmarshall(messageNewImage) as RawMessage;
-      await upsertMessage(rawMessage);
+      // we are explicitly catching this upsert to prevent the entire
+      // streams from getting blocked in case there is an issue connecting to
+      // rds.  For right now, we don't think the functionality of getting the message
+      // metadata over to RDS warrants blocking the entire stream.
+      await upsertMessage(rawMessage).catch(console.error);
     }),
   );
 };
