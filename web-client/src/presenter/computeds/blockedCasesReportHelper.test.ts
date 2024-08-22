@@ -181,6 +181,7 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureTypeFilter: 'Small',
           reasonFilter: 'All',
         },
         blockedCases: [
@@ -223,7 +224,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'Small' },
       },
     });
     expect(result.blockedCasesCount).toBe(2);
@@ -244,6 +244,7 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureTypeFilter: 'Regular',
           reasonFilter: 'All',
         },
         blockedCases: [
@@ -286,7 +287,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'Regular' },
       },
     });
     expect(result.blockedCasesCount).toBe(2);
@@ -307,6 +307,7 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureTypeFilter: undefined,
           reasonFilter: 'All',
         },
         blockedCases: [
@@ -349,7 +350,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: undefined },
       },
     });
     expect(result.blockedCasesCount).toEqual(4);
@@ -360,10 +360,10 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureTypeFilter: 'All',
           reasonFilter: 'All',
         },
         blockedCases: [],
-        form: { procedureType: 'All' },
       },
     });
     expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
@@ -374,6 +374,7 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureTypeFilter: 'Small',
           reasonFilter: 'All',
         },
         blockedCases: [
@@ -386,7 +387,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'Small' },
       },
     });
     expect(result.displayMessage).toEqual(noBlockedCasesProcedureTypeMessage);
@@ -397,6 +397,7 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureTypeFilter: 'Regular',
           reasonFilter: 'All',
         },
         blockedCases: [
@@ -409,7 +410,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'Regular' },
       },
     });
     expect(result.displayMessage).toBeUndefined();
@@ -420,6 +420,7 @@ describe('blockedCasesReportHelper', () => {
       state: {
         blockedCaseReportFilter: {
           caseStatusFilter: 'All',
+          procedureType: 'All',
           reasonFilter: 'All',
         },
         blockedCases: [
@@ -432,7 +433,6 @@ describe('blockedCasesReportHelper', () => {
             procedureType: 'Regular',
           },
         ],
-        form: { procedureType: 'All' },
       },
     });
     expect(result.displayMessage).toBeUndefined();
