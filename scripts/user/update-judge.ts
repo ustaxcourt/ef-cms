@@ -21,14 +21,16 @@ import { isEmpty } from 'lodash';
  * This script will update the judge user in a deployed environment.
  * It updates both the Cognito record (if necessary) and the associated Dynamo record.
  * Required parameters: the current email of the judge to update
- * Optional parameters: --name, --judgeFullName, --email, --phone, --isSeniorJudge
+ * Optional parameters (although at least one required): --name, --judgeFullName, --email, --phone, --isSeniorJudge
  *
  *  Example usage:
  *
  * $ npx ts-node --transpile-only update-judge.ts 432143213-4321-1234-4321-432143214321 --name Way --judgeFullName "Kashi Way" --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
  */
 
-function getArgValue(param: string): string {
+requireEnvVars(['ENV']);
+
+const getArgValue = (param: string): string => {
   const args = process.argv.slice(3); // Skip the first three arguments (node, script path, and id)
   const index = args.indexOf(`--${param}`);
 
@@ -37,9 +39,19 @@ function getArgValue(param: string): string {
   }
 
   return '';
-}
+};
 
-requireEnvVars(['ENV']);
+const validateUpdates = ({ updates }: { updates: Record<string, string> }) => {
+  if (!Object.values(updates).some(x => x !== '')) {
+    throw new Error('\nNothing to update!');
+  }
+  if (
+    updates.isSeniorJudge &&
+    !['true', 'false'].includes(updates.isSeniorJudge)
+  ) {
+    throw new Error('\nisSeniorJudge must be blank or either true/false');
+  }
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises, complexity
 (async () => {
@@ -47,21 +59,16 @@ requireEnvVars(['ENV']);
 
   const currentEmail = process.argv[2];
 
-  const updatedName = getArgValue('name');
-  const updatedJudgeFullName = getArgValue('judgeFullName');
-  const updatedEmail = getArgValue('email');
-  const updatedPhone = getArgValue('phome');
-  const updatedIsSeniorJudge = getArgValue('isSeniorJudge');
-
-  if (
-    updatedIsSeniorJudge &&
-    !['true', 'false'].includes(updatedIsSeniorJudge)
-  ) {
-    throw new Error('\nisSeniorJudge must be blank or either true/false');
-  }
+  const updates = {
+    email: getArgValue('email'),
+    isSeniorJudge: getArgValue('isSeniorJudge'),
+    judgeFullName: getArgValue('judgeFullName'),
+    name: getArgValue('name'),
+    phone: getArgValue('phone'),
+  };
+  validateUpdates({ updates });
 
   const userPoolId = await getUserPoolId();
-
   environment.userPoolId = userPoolId;
   const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
@@ -79,26 +86,25 @@ requireEnvVars(['ENV']);
     throw new Error(`\nCannot find user with email ${currentEmail}`);
   }
 
-  const { name, userId } = cognitoResult;
+  const { name: currentName, userId } = cognitoResult;
 
   // Check for mistaken emails
   if (
-    updatedEmail &&
+    updates.email &&
     !emailIsInExpectedFormat({
-      email: updatedEmail,
-      judgeName: updatedName || name,
+      email: updates.email,
+      judgeName: updates.name || currentName,
     })
   ) {
     const userInput = await promptUser(
-      `\nWarning: The email you entered does not match expected formats: ${expectedEmailFormats(updatedName || name).join(', ')}. Continue anyway? y/n `,
+      `\nWarning: The email you entered does not match expected formats: ${expectedEmailFormats(updates.name || currentName).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
     }
   }
-
   // Check for mistaken phone numbers
-  if (updatedPhone && !phoneIsInExpectedFormat(updatedPhone)) {
+  if (updates.phone && !phoneIsInExpectedFormat(updates.phone)) {
     const userInput = await promptUser(
       '\nWarning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
@@ -110,15 +116,12 @@ requireEnvVars(['ENV']);
   console.log('\nSetting up the updated Cognito user info ...');
 
   const cognitoAttributesToUpdate = {} as { name: string; email: string };
-
-  if (updatedName) {
-    cognitoAttributesToUpdate.name = updatedName;
+  if (updates.name) {
+    cognitoAttributesToUpdate.name = updates.name;
   }
-
-  if (updatedEmail) {
-    cognitoAttributesToUpdate.email = updatedEmail;
+  if (updates.email) {
+    cognitoAttributesToUpdate.email = updates.email;
   }
-
   if (!isEmpty(cognitoAttributesToUpdate)) {
     console.log('\nUpdating the user Cognito record ...');
     await applicationContext.getUserGateway().updateUser(applicationContext, {
@@ -132,24 +135,25 @@ requireEnvVars(['ENV']);
 
   console.log('\nSetting up the updated Dynamo user info ...');
 
-  const updatedChambersSection = updatedName
-    ? getChambersNameFromJudgeName(updatedName)
-    : '';
-
   const dynamoUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
-  const oldSection = dynamoUser.section;
+  const updatedChambersSection = updates.name
+    ? getChambersNameFromJudgeName(updates.name)
+    : '';
 
-  dynamoUser.email = updatedEmail || dynamoUser.email;
-  dynamoUser.name = updatedName || dynamoUser.name;
-  dynamoUser.contact = updatedPhone
-    ? { phone: updatedPhone }
+  const oldSection = dynamoUser.section;
+  dynamoUser.email = updates.email || dynamoUser.email;
+  dynamoUser.name = updates.name || dynamoUser.name;
+  dynamoUser.contact = updates.phone
+    ? { phone: updates.phone }
     : dynamoUser.contact;
   dynamoUser.isSeniorJudge =
-    updatedIsSeniorJudge.toLowerCase() === 'true' || dynamoUser.isSeniorJudge;
-  dynamoUser.judgeFullName = updatedJudgeFullName || dynamoUser.judgeFullName;
+    updates.isSeniorJudge != ''
+      ? updates.isSeniorJudge.toLowerCase() === 'true'
+      : dynamoUser.isSeniorJudge;
+  dynamoUser.judgeFullName = updates.judgeFullName || dynamoUser.judgeFullName;
   dynamoUser.section = updatedChambersSection || oldSection;
 
   const rawUser = new User(dynamoUser).validate().toRawObject();

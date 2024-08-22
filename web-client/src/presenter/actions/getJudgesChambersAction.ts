@@ -15,7 +15,6 @@ export const getJudgesChambersAction = async ({
     .getUseCases()
     .getJudgesChambersInteractor(applicationContext);
 
-  console.log('Getting the chambers', judgesChambers);
   return {
     judgesChambers: sortBy(judgesChambers, 'label'),
   };
