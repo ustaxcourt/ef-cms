@@ -32,13 +32,18 @@ export const exportCsvBlockedCaseReportAction = ({
       },
       {
         displayLabel: 'Reason',
-        key: 'blockedReason',
+        key: 'allReasons',
       },
     ],
     filename: fileName,
     useKeysAsHeaders: false,
   });
 
-  const csv = generateCsv(csvConfig)(blockedCases);
+  const csv = generateCsv(csvConfig)(
+    blockedCases.map(c => ({
+      ...c,
+      allReasons: `${c.blockedReason?.trim()} ${c.automaticBlockedReason?.trim()}`,
+    })),
+  );
   download(csvConfig)(csv);
 };
