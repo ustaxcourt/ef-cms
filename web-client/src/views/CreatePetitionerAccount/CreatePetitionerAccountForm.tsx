@@ -5,6 +5,8 @@ import { debounce } from 'lodash';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useState } from 'react';
 
+const DEBOUNCE_TIME_MS = 500;
+
 export const CreatePetitionerAccountForm = connect(
   {
     alertError: state.alertError,
@@ -46,7 +48,7 @@ export const CreatePetitionerAccountForm = connect(
 
     const submitFunction = debounce(() => {
       submitCreatePetitionerAccountFormSequence();
-    }, 500);
+    }, DEBOUNCE_TIME_MS);
 
     return (
       <>
