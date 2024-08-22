@@ -111,6 +111,7 @@ export const blockedCasesReportHelper = (
       })
       .filter(blockedCase => {
         if (reasonFilter === 'All') return true;
+        if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
         return blockedCase.automaticBlockedReason === reasonFilter;
       });
   }
