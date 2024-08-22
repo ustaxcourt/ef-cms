@@ -7,6 +7,7 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
+import { judgeUser } from '@shared/test/mockUsers';
 import joi from 'joi';
 
 requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
@@ -46,7 +47,8 @@ const usage = error => {
   process.exit();
 };
 
-const applicationContext = createApplicationContext({});
+// We create the context as a judge user to have permissions to access the chambers interactor
+const applicationContext = createApplicationContext(judgeUser);
 
 const checkParams = ({
   params,

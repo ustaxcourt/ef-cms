@@ -42,13 +42,13 @@ const getArgValue = (param: string): string => {
 
 const validateUpdates = ({ updates }: { updates: Record<string, string> }) => {
   if (!Object.values(updates).some(update => update !== '')) {
-    throw new Error('\nNothing to update!');
+    throw new Error('Nothing to update!');
   }
   if (
     updates.isSeniorJudge &&
     !['true', 'false'].includes(updates.isSeniorJudge)
   ) {
-    throw new Error('\nisSeniorJudge must be blank or either true/false');
+    throw new Error('isSeniorJudge must be blank or either true/false');
   }
 };
 
@@ -63,7 +63,7 @@ const updateCognitoRecord = async ({
   currentEmail: string;
   userPoolId: string;
 }) => {
-  console.log('\nSetting up the updated Cognito user info ...');
+  console.log('Setting up the updated Cognito user info ...');
 
   const cognitoAttributesToUpdate = {} as { name: string; email: string };
   if (updates.name) {
@@ -73,14 +73,14 @@ const updateCognitoRecord = async ({
     cognitoAttributesToUpdate.email = updates.email;
   }
   if (!isEmpty(cognitoAttributesToUpdate)) {
-    console.log('\nUpdating the user Cognito record ...');
+    console.log('Updating the user Cognito record ...');
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: cognitoAttributesToUpdate,
       email: currentEmail,
       poolId: userPoolId,
     });
   } else {
-    console.log('\nNothing to update in Cognito, continuing ...');
+    console.log('Nothing to update in Cognito, continuing ...');
   }
 };
 
@@ -93,7 +93,7 @@ const updateDynamoRecords = async ({
   userId: string;
   applicationContext: any;
 }) => {
-  console.log('\nGetting existing Dynamo record ...');
+  console.log('Getting existing Dynamo record ...');
 
   const dynamoUser: UserRecord = await applicationContext
     .getPersistenceGateway()
@@ -133,7 +133,7 @@ const updateDynamoJudgeUserRecord = async ({
   applicationContext: any;
   chambersSection: string;
 }) => {
-  console.log('\nUpdating the judge user Dynamo record ...');
+  console.log('Updating the judge user Dynamo record ...');
 
   dynamoUser.email = updates.email || dynamoUser.email;
   dynamoUser.name = updates.name || dynamoUser.name;
@@ -149,7 +149,7 @@ const updateDynamoJudgeUserRecord = async ({
 
   const rawUser = new User(dynamoUser).validate().toRawObject();
 
-  console.log('\nUpdating the Dynamo record ...');
+  console.log('Updating the Dynamo record ...');
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
@@ -163,8 +163,8 @@ const updateDynamoChambersRecords = async ({
   updatedChambersSection,
   userId,
 }) => {
-  console.log('\nChambers section needs to be updated.');
-  console.log(`\nAdding a record for ${updatedChambersSection}`);
+  console.log('Chambers section needs to be updated.');
+  console.log(`Adding a record for ${updatedChambersSection}`);
 
   await client.put({
     Item: {
@@ -176,8 +176,9 @@ const updateDynamoChambersRecords = async ({
 
   if (oldChambersSection) {
     console.log(
-      `\nUpdating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
+      `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
     );
+    // TODO 10455: This doesn't actually work for getting all the chambers users in a section!
     const chambersUsers: User[] = await applicationContext
       .getPersistenceGateway()
       .getUsersInSection({ applicationContext, section: oldChambersSection });
@@ -191,7 +192,7 @@ const updateDynamoChambersRecords = async ({
       });
     }
 
-    console.log(`\nRemoving old chambers section ${oldChambersSection} ...`);
+    console.log(`Removing old chambers section ${oldChambersSection} ...`);
 
     // TODO 10455: Would this cause any issues?
     await client.remove({
@@ -224,7 +225,7 @@ const updateDynamoChambersRecords = async ({
   const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
 
-  console.log('\nGetting the Cognito record for the user ...');
+  console.log('Getting the Cognito record for the user ...');
 
   const existingCognitoRecord = await applicationContext
     .getUserGateway()
@@ -234,7 +235,7 @@ const updateDynamoChambersRecords = async ({
     });
 
   if (!existingCognitoRecord) {
-    throw new Error(`\nCannot find user with email ${currentEmail}`);
+    throw new Error(`Cannot find user with email ${currentEmail}`);
   }
 
   const { name: currentName, userId } = existingCognitoRecord;
@@ -247,7 +248,7 @@ const updateDynamoChambersRecords = async ({
     })
   ) {
     const userInput = await promptUser(
-      `\nWarning: The email you entered does not match expected formats: ${expectedEmailFormats(updates.name || currentName).join(', ')}. Continue anyway? y/n `,
+      `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(updates.name || currentName).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
@@ -255,7 +256,7 @@ const updateDynamoChambersRecords = async ({
   }
   if (updates.phone && !phoneIsInExpectedFormat(updates.phone)) {
     const userInput = await promptUser(
-      '\nWarning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
+      'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
@@ -276,9 +277,9 @@ const updateDynamoChambersRecords = async ({
   });
 
   console.log(
-    `\nSuccess! Updated Judge ${updatedDynamoUser.judgeFullName}. Current email = ${updatedDynamoUser.email}.`,
+    `\n\nSuccess! Updated Judge ${updatedDynamoUser.judgeFullName}. Current email = ${updatedDynamoUser.email}.`,
   );
   console.log(
-    'If you need to update this judge further (including an update to undo this update), run update-judge.ts using this email.',
+    'If you need to update this judge further (including an update to undo this update), run update-judge.ts using this email.\n\n',
   );
 })();

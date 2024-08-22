@@ -1,4 +1,4 @@
-name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge,phone,(123) 123-1234
+name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge,phone
 Aarons,Judge,Aarons,legacy.judge.aarons@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Armen,Special Trial Judge,Armen,legacy.judge.armen@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,ashfordsChambers,false,(202) 521-0822
@@ -36,7 +36,7 @@ Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,legacyJudge
 Haines,Judge,Haines,legacy.judge.haines@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Halpern,Judge,James S. Halpern,judge.halpern@example.com,judge,halpernsChambers,true,(202) 521-0707
 Hamblen,Judge,Hamblen,legacy.judge.hamblen@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
-Holmes,Judge,Mark V. Holmes,judge.holmes@example.com,judge,holmesChambers,true,holmesChambers
+Holmes,Judge,Mark V. Holmes,judge.holmes@example.com,judge,holmesChambers,true,(202) 521-0714
 Jacobs,Judge,Jacobs,legacy.judge.jacobs@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Jones,Judge,Courtney D. Jones,judge.jones@example.com,judge,jonesChambers,false,(202) 521-0795
 Kerrigan,Judge,Kathleen Kerrigan,judge.kerrigan@example.com,judge,kerrigansChambers,false,(202) 521-0777

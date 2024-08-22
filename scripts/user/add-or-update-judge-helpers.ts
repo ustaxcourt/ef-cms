@@ -3,7 +3,9 @@ import * as readline from 'node:readline/promises';
 const defaultEmailHost = 'ustaxcourt.gov';
 
 export const getChambersNameFromJudgeName = (judgeName: string) => {
-  return judgeName.endsWith('s') ? '{name}Chambers' : '{name}sChambers';
+  return judgeName.endsWith('s')
+    ? `${judgeName}Chambers`
+    : `${judgeName}sChambers`;
 };
 
 export async function promptUser(query: string): Promise<string> {

@@ -50,7 +50,7 @@ requireEnvVars(['ENV']);
   // Check for mistaken emails
   if (!emailIsInExpectedFormat({ email, judgeName: name })) {
     const userInput = await promptUser(
-      `\nWarning: The email you entered does not match expected formats: ${expectedEmailFormats(name).join(', ')}. Continue anyway? y/n `,
+      `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(name).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
@@ -60,14 +60,14 @@ requireEnvVars(['ENV']);
   // Check for mistaken phone numbers
   if (phone && !phoneIsInExpectedFormat(phone)) {
     const userInput = await promptUser(
-      '\nWarning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
+      'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
       return;
     }
   }
 
-  console.log('\nSetting up information to store ... \n');
+  console.log('Setting up information to store ... ');
 
   const section = getChambersNameFromJudgeName(name);
   const judgeTitle = 'Judge';
@@ -113,13 +113,13 @@ requireEnvVars(['ENV']);
     dynamoUserInfo = { ...dynamoUserInfo, contact: { phone } };
   }
 
-  console.log('\nAdding user information to Cognito ... \n');
+  console.log('Adding user information to Cognito ... ');
 
   await applicationContext
     .getUserGateway()
     .createUser(applicationContext, cognitoUserInfo);
 
-  console.log('\nAdding user information to Dynamo ... \n');
+  console.log('Adding user information to Dynamo ... ');
 
   const rawUser = new User(dynamoUserInfo).validate().toRawObject();
 
@@ -133,6 +133,6 @@ requireEnvVars(['ENV']);
     `\nSuccess! Created Judge ${judgeFullName} with userId = ${userId} and email = ${email}.`,
   );
   console.log(
-    'If you need to update this judge, run update-judge.ts using this email',
+    'If you need to update this judge, run update-judge.ts using this email.\n',
   );
 })();
