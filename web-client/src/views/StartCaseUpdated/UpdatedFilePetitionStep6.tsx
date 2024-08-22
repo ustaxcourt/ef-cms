@@ -49,7 +49,7 @@ export const UpdatedFilePetitionStep6 = connect(
             <InfoNotificationComponent
               alertInfo={{
                 message:
-                  'Your petition will not be created with the Court until the Submit Documents & Create Case button is clicked.',
+                  'Your Petition will not be created with the Court until the Submit Documents & Create Case button is clicked.',
               }}
               dismissible={false}
               scrollToTop={false}
