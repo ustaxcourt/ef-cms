@@ -1,20 +1,19 @@
-import { RawUser } from '../../shared/src/business/entities/User';
+import { RawUser } from '@shared/business/entities/User';
 import {
   type ServerApplicationContext,
   createApplicationContext,
-} from '../../web-api/src/applicationContext';
-import { createPetitionerUserRecords } from '../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
-import { createUserConfirmation } from '../../web-api/src/business/useCaseHelper/auth/createUserConfirmation';
+} from '@web-api/applicationContext';
+import { createPetitionerUserRecords } from '@web-api/persistence/dynamo/users/createPetitionerUserRecords';
+import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { omit } from 'lodash';
 import { usersWithoutUserIds } from './fix-cognito-users-without-ids-constants';
 import type { UserType } from '@aws-sdk/client-cognito-identity-provider';
 
 const getAttributeValue = (
   cognitoUser: UserType,
-  attributeName: string,
+  attr: string,
 ): string | undefined => {
-  return cognitoUser.Attributes?.find(attrib => attrib.Name === attributeName)
-    ?.Value;
+  return cognitoUser.Attributes?.find(attrib => attrib.Name === attr)?.Value;
 };
 
 const buildRawUser = (cognitoUser: UserType): RawUser | undefined => {
@@ -62,11 +61,7 @@ const setUserAttributes = async ({
 (async () => {
   const applicationContext = createApplicationContext({});
 
-  const totals: {
-    emailConfirmationsSent: number;
-    userEntitiesCreatedInDynamo: number;
-    usersUpdatedInCognito: number;
-  } = {
+  const totals = {
     emailConfirmationsSent: 0,
     userEntitiesCreatedInDynamo: 0,
     usersUpdatedInCognito: 0,
