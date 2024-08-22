@@ -39,5 +39,5 @@ jobs:
         working-directory: ./targetBranch
         run: npm ci
 
-      - name: Check untouched files
+      - name: Check files for increased error count
         run: npx ts-node scripts/checkAllFilesForTypeErrorCount.ts
