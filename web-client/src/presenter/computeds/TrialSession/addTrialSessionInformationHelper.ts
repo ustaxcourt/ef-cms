@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { Get } from 'cerebral';
@@ -31,12 +32,18 @@ export const addTrialSessionInformationHelper = (
     });
   }
 
+  // NOTE: what happens if isStandaloneSession is true and user is docketclerk?
+  const getSessionTypes = (user: AuthUser) => {
+    return user.role === 'docketclerk'
+      ? ['Special', 'Motion/Hearing']
+      : sessionTypes;
+  };
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
   return {
     displayRemoteProceedingForm,
+    getSessionTypes,
     isStandaloneSession,
-    sessionTypes,
     title,
     today,
   };
