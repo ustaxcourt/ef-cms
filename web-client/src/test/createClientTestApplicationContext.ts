@@ -525,7 +525,7 @@ const createTestApplicationContext = () => {
     convertBlobToUInt8Array: jest
       .fn()
       .mockImplementation(() => new Uint8Array([])),
-    downloadCsvFile: jest.fn(),
+    createCsvString: jest.fn(),
     filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
