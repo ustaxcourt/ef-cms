@@ -16,14 +16,6 @@ describe('selectDocumentTypeHelper', () => {
     ).docketEntryId;
 
     // Only served documents are valid to select
-    const mockServedDocuments = MOCK_DOCUMENTS.map(d => {
-      return {
-        ...d,
-        isOnDocketRecord: true,
-        isStricken: false,
-        servedAt: '2019-08-25T05:00:00.000Z',
-      };
-    });
 
     it('should return an empty object if categoryInformation is undefined', () => {
       const result = getOptionsForCategory({
@@ -59,11 +51,20 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard A',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
         caseDetail: {
           ...MOCK_CASE,
-          docketEntries: mockServedDocuments,
+          docketEntries: mockDocuments,
         },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
@@ -71,7 +72,7 @@ describe('selectDocumentTypeHelper', () => {
 
       expect(result).toMatchObject({
         previousDocumentSelectLabel: 'Which document are you objecting to?',
-        previouslyFiledDocuments: mockServedDocuments.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -106,11 +107,20 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard C',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
         caseDetail: {
           ...MOCK_CASE,
-          docketEntries: mockServedDocuments,
+          docketEntries: mockDocuments,
         },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
@@ -119,7 +129,7 @@ describe('selectDocumentTypeHelper', () => {
       expect(result).toMatchObject({
         previousDocumentSelectLabel:
           'Which document is this affidavit in support of?',
-        previouslyFiledDocuments: mockServedDocuments.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -136,11 +146,20 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard D',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
         caseDetail: {
           ...MOCK_CASE,
-          docketEntries: mockServedDocuments,
+          docketEntries: mockDocuments,
         },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
@@ -149,7 +168,7 @@ describe('selectDocumentTypeHelper', () => {
       expect(result).toMatchObject({
         previousDocumentSelectLabel:
           'Which document is this Certificate of Service for?',
-        previouslyFiledDocuments: mockServedDocuments.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showDateFields: true,
@@ -185,11 +204,20 @@ describe('selectDocumentTypeHelper', () => {
         scenario: 'Nonstandard F',
       };
 
+      const mockDocuments = MOCK_DOCUMENTS.map(d => {
+        return {
+          ...d,
+          isOnDocketRecord: true,
+          isStricken: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        };
+      });
+
       const result = getOptionsForCategory({
         applicationContext,
         caseDetail: {
           ...MOCK_CASE,
-          docketEntries: mockServedDocuments,
+          docketEntries: mockDocuments,
         },
         categoryInformation: mockCategoryInformation,
         selectedDocketEntryId: mockSelectedDocketEntryId,
@@ -198,7 +226,7 @@ describe('selectDocumentTypeHelper', () => {
       expect(result).toMatchObject({
         ordinalField: 'What iteration is this filing?',
         previousDocumentSelectLabel: 'Which document is this a supplement to?',
-        previouslyFiledDocuments: mockServedDocuments.filter(
+        previouslyFiledDocuments: mockDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,

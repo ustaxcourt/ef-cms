@@ -1,16 +1,13 @@
-import {
-  AUTOMATIC_BLOCKED_REASONS,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { AUTOMATIC_BLOCKED_REASONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteCaseDeadlineInteractor', () => {
   let user;
@@ -34,23 +31,21 @@ describe('deleteCaseDeadlineInteractor', () => {
   });
 
   beforeEach(() => {
-    user = new User({
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      deleteCaseDeadlineInteractor(applicationContext, {
-        caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,
-      }),
+      deleteCaseDeadlineInteractor(
+        applicationContext,
+        {
+          caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -59,10 +54,14 @@ describe('deleteCaseDeadlineInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await deleteCaseDeadlineInteractor(applicationContext, {
-      caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,
-    });
+    await deleteCaseDeadlineInteractor(
+      applicationContext,
+      {
+        caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -83,20 +82,28 @@ describe('deleteCaseDeadlineInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     user = {};
     await expect(
-      deleteCaseDeadlineInteractor(applicationContext, {
-        caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        docketNumber: '123-20',
-      }),
+      deleteCaseDeadlineInteractor(
+        applicationContext,
+        {
+          caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          docketNumber: '123-20',
+        },
+        user,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('calls persistence to delete a case deadline and sets the case as no longer automatically blocked if there are no more deadlines', async () => {
     mockDeadlines = [];
 
-    await deleteCaseDeadlineInteractor(applicationContext, {
-      caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      docketNumber: '123-20',
-    });
+    await deleteCaseDeadlineInteractor(
+      applicationContext,
+      {
+        caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: '123-20',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteCaseDeadline.mock
@@ -122,10 +129,14 @@ describe('deleteCaseDeadlineInteractor', () => {
   it('calls persistence to delete a case deadline and leaves the case automatically blocked if there are more deadlines', async () => {
     mockDeadlines = [{ deadline: 'something' }];
 
-    await deleteCaseDeadlineInteractor(applicationContext, {
-      caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      docketNumber: '123-20',
-    });
+    await deleteCaseDeadlineInteractor(
+      applicationContext,
+      {
+        caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: '123-20',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteCaseDeadline.mock

@@ -6,18 +6,18 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-export const setNoticesForCalendaredTrialSession = async (
+const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
     trialSessionId,
   }: { trialSessionId: string; clientConnectionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -40,7 +40,7 @@ export const setNoticesForCalendaredTrialSession = async (
         trialNoticePdfsKeys,
         trialSessionId,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
 
     return;
@@ -53,7 +53,7 @@ export const setNoticesForCalendaredTrialSession = async (
       action: 'notice_generation_start',
       totalCases: calendaredCases.length,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 
   const trialSession = await applicationContext
@@ -67,9 +67,7 @@ export const setNoticesForCalendaredTrialSession = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const trialSessionProcessingStatus = await applicationContext
     .getPersistenceGateway()
@@ -116,7 +114,7 @@ export const setNoticesForCalendaredTrialSession = async (
           docketNumber: calendaredCase.docketNumber,
           jobId,
           trialSession,
-          userId: user.userId,
+          userId: authorizedUser.userId,
         },
       });
   }
@@ -162,17 +160,21 @@ export const setNoticesForCalendaredTrialSession = async (
       trialNoticePdfsKeys,
       trialSessionId: trialSessionEntity.trialSessionId,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 
   if (trialNoticePdfsKeys.length) {
     await applicationContext
       .getUseCases()
-      .generateTrialSessionPaperServicePdfInteractor(applicationContext, {
-        clientConnectionId,
-        trialNoticePdfsKeys,
-        trialSessionId,
-      });
+      .generateTrialSessionPaperServicePdfInteractor(
+        applicationContext,
+        {
+          clientConnectionId,
+          trialNoticePdfsKeys,
+          trialSessionId,
+        },
+        authorizedUser,
+      );
   }
 };
 
@@ -216,19 +218,20 @@ export const determineEntitiesToLock = async (
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'set_notices_for_calendared_trial_session',
-    },
-    userId: user.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'set_notices_for_calendared_trial_session',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const setNoticesForCalendaredTrialSessionInteractor = withLocking(

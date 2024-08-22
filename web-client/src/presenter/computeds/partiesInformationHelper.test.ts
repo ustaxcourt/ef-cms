@@ -26,10 +26,6 @@ describe('partiesInformationHelper', () => {
     contactId: '25d51a3b-969e-4bb4-a932-cc9645ba888c',
     contactType: CONTACT_TYPES.participant,
   };
-  let mockPetitioner;
-  let mockPrivatePractitioner;
-  let mockIrsPractitioner;
-  let mockUser;
 
   const partiesInformationHelper = withAppContextDecorator(
     partiesInformationHelperComputed,
@@ -37,8 +33,6 @@ describe('partiesInformationHelper', () => {
   );
 
   const getBaseState = user => {
-    mockUser = { ...user };
-
     return {
       featureFlags: {
         [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
@@ -46,11 +40,14 @@ describe('partiesInformationHelper', () => {
       },
       permissions: getUserPermissions(user),
       screenMetadata: { pendingEmails: {} },
+      user,
     };
   };
 
+  let mockPrivatePractitioner;
+  let mockIrsPractitioner;
+  let mockPetitioner;
   beforeEach(() => {
-    mockUser = {};
     mockIrsPractitioner = {
       barNumber: 'RT1111',
       email: mockEmail,
@@ -72,7 +69,6 @@ describe('partiesInformationHelper', () => {
       role: ROLES.privatePractitioner,
       userId: '39f7c7ee-ab75-492a-a4ee-63755a24e845',
     };
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
   });
 
   describe('formattedParticipants', () => {

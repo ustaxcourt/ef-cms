@@ -7,6 +7,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getPublicDownloadPolicyUrlInteractor', () => {
   let mockCase;
@@ -27,11 +28,15 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     jest.spyOn(DocketEntry, 'isPublic').mockReturnValueOnce(false);
 
     await expect(
-      getPublicDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: '123-20',
-        isTerminalUser: false,
-        key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-      }),
+      getPublicDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+          isTerminalUser: false,
+          key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized to access private document');
   });
 
@@ -43,6 +48,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         isTerminalUser: true,
         key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
       },
+      mockDocketClerkUser,
     );
 
     expect(
@@ -86,14 +92,18 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           isOnDocketRecord: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
     await expect(
-      getPublicDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: '123-20',
-        key: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
-      } as any),
+      getPublicDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+          key: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
+        } as any,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized to access documents in a sealed case');
   });
 
@@ -117,7 +127,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
     const result = await getPublicDownloadPolicyUrlInteractor(
@@ -126,6 +136,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         docketNumber: '123-20',
         key: '83813a24-7687-418e-a186-c416b4bb0ad4',
       } as any,
+      mockDocketClerkUser,
     );
     expect(result).toEqual({ url: 'localhost' });
   });
@@ -143,7 +154,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
 
@@ -153,16 +164,21 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         docketNumber: '123-20',
         key: '8008b288-8b6b-48e3-8239-599266b13b8b',
       } as any,
+      mockDocketClerkUser,
     );
     expect(result).toEqual({ url: 'localhost' });
   });
 
   it('should throw a not found error for a document that is not found on the case', async () => {
     await expect(
-      getPublicDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: '123-20',
-        key: 'b907f4e5-4d4d-44b3-bcfd-224a6f31d889',
-      } as any),
+      getPublicDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+          key: 'b907f4e5-4d4d-44b3-bcfd-224a6f31d889',
+        } as any,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       'Docket entry b907f4e5-4d4d-44b3-bcfd-224a6f31d889 was not found.',
     );
@@ -180,15 +196,19 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           eventCode: 'RQT',
           isFileAttached: false,
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
 
     await expect(
-      getPublicDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: '123-20',
-        key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
-      } as any),
+      getPublicDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+          key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
+        } as any,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       'Docket entry 8205c4bc-879f-4648-a3ba-9280384c4c00 does not have an attached file.',
     );
@@ -209,15 +229,19 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
           isSealed: true,
           sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         },
-        { applicationContext },
+        { authorizedUser: undefined },
       ),
     );
 
     await expect(
-      getPublicDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: '123-20',
-        key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
-      } as any),
+      getPublicDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+          key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
+        } as any,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry has been sealed.');
   });
 });

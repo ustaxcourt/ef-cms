@@ -1,6 +1,6 @@
-import { getCognitoUserIdByEmail } from '../cognito/cognito-helpers';
 import { getCypressEnv } from '../../env/cypressEnvironment';
 import { getDocumentClient } from './getDynamoCypress';
+import { getUserByEmail } from '../cognito/cognito-helpers';
 
 export const getUserConfirmationCodeFromDynamo = async (
   userId: string,
@@ -21,7 +21,7 @@ export const getNewAccountVerificationCode = async ({
   userId: string | undefined;
   confirmationCode: string | undefined;
 }> => {
-  const userId = await getCognitoUserIdByEmail(email);
+  const { userId } = await getUserByEmail(email);
   if (!userId)
     return {
       confirmationCode: undefined,
@@ -39,7 +39,7 @@ export const getNewAccountVerificationCode = async ({
 export const expireUserConfirmationCode = async (
   email: string,
 ): Promise<null> => {
-  const userId = await getCognitoUserIdByEmail(email);
+  const { userId } = await getUserByEmail(email);
   if (!userId) return null;
 
   await getDocumentClient()
@@ -99,7 +99,7 @@ export const getEmailVerificationToken = async ({
 }: {
   email: string;
 }): Promise<string> => {
-  const userId = await getCognitoUserIdByEmail(email);
+  const { userId } = await getUserByEmail(email);
   const result = await getDocumentClient().get({
     Key: {
       pk: `user|${userId}`,
