@@ -27,12 +27,12 @@ describe('selectCriteriaHelper', () => {
         value: 'Assigned - Motion',
       },
       {
-        key: 'calendared',
-        value: 'Calendared',
-      },
-      {
         key: 'cav',
         value: 'CAV',
+      },
+      {
+        key: 'calendared',
+        value: 'Calendared',
       },
       {
         key: 'closed',
@@ -43,12 +43,12 @@ describe('selectCriteriaHelper', () => {
         value: 'Closed - Dismissed',
       },
       {
-        key: 'generalDocket',
-        value: 'General Docket - Not at Issue',
-      },
-      {
         key: 'generalDocketReadyForTrial',
         value: 'General Docket - At Issue (Ready for Trial)',
+      },
+      {
+        key: 'generalDocket',
+        value: 'General Docket - Not at Issue',
       },
       {
         key: 'jurisdictionRetained',
@@ -88,6 +88,10 @@ describe('selectCriteriaHelper', () => {
       {
         key: 'dueDate',
         value: 'Due Date',
+      },
+      {
+        key: 'manualBlock',
+        value: 'Manual Block',
       },
       {
         key: 'pending',
