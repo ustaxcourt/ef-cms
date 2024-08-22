@@ -6,9 +6,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 presenter.providers.applicationContext = applicationContext;
 
 describe('broadcastLogoutAction', () => {
-  it('does not broadcast an event if skipBroadcast is true and CI is undefined', async () => {
-    delete process.env.CI;
-
+  it('does not broadcast an event when skipBroadcast is true', async () => {
     await runAction(broadcastLogoutAction, {
       modules: {
         presenter,
@@ -23,39 +21,7 @@ describe('broadcastLogoutAction', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('does not broadcast an event if skipBroadcast is true and CI is defined', async () => {
-    process.env.CI = 'true';
-    await runAction(broadcastLogoutAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        skipBroadcast: true,
-      },
-    });
-
-    expect(
-      applicationContext.getBroadcastGateway().postMessage,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('does not broadcast an event if skipBroadcast is false and CI is defined', async () => {
-    process.env.CI = 'true';
-    await runAction(broadcastLogoutAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        skipBroadcast: false,
-      },
-    });
-
-    expect(
-      applicationContext.getBroadcastGateway().postMessage,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('will only broad an event when both skipBroadcast is false and CI is undefined', async () => {
+  it('does broadcast an event when skipBroadcast is false', async () => {
     delete process.env.CI;
     await runAction(broadcastLogoutAction, {
       modules: {

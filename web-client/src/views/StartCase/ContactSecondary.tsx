@@ -201,7 +201,7 @@ export const ContactSecondary = connect(
                 data-testid="contact-secondary-phone-input"
                 id="secondaryPhone"
                 name="contactSecondary.phone"
-                type="tel"
+                type="text"
                 value={data.contactSecondary.phone || ''}
                 onBlur={() => {
                   onBlurSequence();

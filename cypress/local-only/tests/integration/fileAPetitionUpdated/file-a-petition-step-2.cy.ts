@@ -91,6 +91,31 @@ describe('File a petition', () => {
           cy.get('[data-testid="step-indicator-current-step-3-icon"]');
         });
       });
+
+      describe('add facts and reasons', () => {
+        it('should display empty textbox when text is removed', () => {
+          cy.get('[data-testid="petition-reason--1"]').focus();
+          cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
+          cy.get('[data-testid="petition-reason--1"]').blur();
+          cy.get('[data-testid="petition-reason--1"]').focus();
+          cy.get('[data-testid="petition-reason--1"]').type(
+            '{selectall}{backspace}',
+          );
+          cy.get('[data-testid="petition-reason--1"]').should('be.visible');
+
+          cy.get('[data-testid="petition-fact--1"]').focus();
+          cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
+          cy.get('[data-testid="add-another-fact-link-button"]').click();
+          cy.get('[data-testid="petition-fact-0"]').focus();
+          cy.get('[data-testid="petition-fact-0"]').type('FACT 2');
+          cy.get('[data-testid="petition-fact-0"]').blur();
+          cy.get('[data-testid="petition-fact-0"]').focus();
+          cy.get('[data-testid="petition-fact-0"]').type(
+            '{selectall}{backspace}',
+          );
+          cy.get('[data-testid="petition-fact-0"]').should('be.visible');
+        });
+      });
     });
 
     describe('Upload PDF', () => {

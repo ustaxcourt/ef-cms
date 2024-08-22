@@ -1,3 +1,5 @@
+import { state } from '@web-client/presenter/app.cerebral';
+
 /**
  * tells all open tabs to also logout
  * @param {object} providers the providers object
@@ -6,11 +8,13 @@
  */
 export const broadcastLogoutAction = async ({
   applicationContext,
+  get,
   props,
 }: ActionProps) => {
-  // for some reason this causes jest integration tests to never finish, so don't run in CI
-  if (!process.env.CI && !props.skipBroadcast) {
+  if (!props.skipBroadcast) {
     const broadcastChannel = applicationContext.getBroadcastGateway();
-    await broadcastChannel.postMessage({ subject: 'logout' });
+    await broadcastChannel.postMessage({
+      subject: get(state.logoutType),
+    });
   }
 };
