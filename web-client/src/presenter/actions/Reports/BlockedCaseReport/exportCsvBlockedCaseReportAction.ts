@@ -8,7 +8,8 @@ export const exportCsvBlockedCaseReportAction = ({
   blockedCases: BlockedFormattedCase[];
   trialLocation: string;
 }>) => {
-  const [city, state] = props.trialLocation.split(', ');
+  const { blockedCases, trialLocation } = props;
+  const [city, state] = trialLocation.split(', ');
   const date = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = `Blocked Cases Report - ${city}_${state} ${date}`;
   const csvConfig = mkConfig({
@@ -38,6 +39,6 @@ export const exportCsvBlockedCaseReportAction = ({
     useKeysAsHeaders: false,
   });
 
-  const csv = generateCsv(csvConfig)(props.blockedCases);
+  const csv = generateCsv(csvConfig)(blockedCases);
   download(csvConfig)(csv);
 };
