@@ -91,4 +91,35 @@ describe('checkDocumentTypeAction', () => {
       path: `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}/${mockParentMessageId}`,
     });
   });
+
+  it('should return the correct path for a document with an undefined document type without parentMessageId', async () => {
+    const props = {
+      ...propsBase,
+    };
+
+    await runAction(checkDocumentTypeAction, {
+      modules: { presenter },
+      props,
+    });
+
+    expect(pathDocumentTypeMiscellaneousStub).toHaveBeenCalledWith({
+      path: `/case-detail/${mockDocketNumber}/edit-upload-court-issued/${mockDocketEntryId}`,
+    });
+  });
+
+  it('should return the correct path for a document with an undefined document type with parentMessageId', async () => {
+    const props = {
+      ...propsBase,
+      parentMessageId: mockParentMessageId,
+    };
+
+    await runAction(checkDocumentTypeAction, {
+      modules: { presenter },
+      props,
+    });
+
+    expect(pathDocumentTypeMiscellaneousStub).toHaveBeenCalledWith({
+      path: `/case-detail/${mockDocketNumber}/edit-upload-court-issued/${mockDocketEntryId}/${mockParentMessageId}`,
+    });
+  });
 });
