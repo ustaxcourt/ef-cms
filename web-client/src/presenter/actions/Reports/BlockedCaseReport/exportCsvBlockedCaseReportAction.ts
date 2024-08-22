@@ -22,32 +22,28 @@ export const exportCsvBlockedCaseReportAction = ({
   const [city, state] = trialLocation.split(', ');
   const date = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = `Blocked Cases Report - ${city}_${state} ${date}`;
-  const blockedCasesCsvConfiguration = {
-    columnHeaders: [
-      {
-        displayLabel: 'Docket No.',
-        key: 'docketNumber',
-      },
-      {
-        displayLabel: 'Date Blocked',
-        key: 'blockedDateEarliest',
-      },
-      {
-        displayLabel: 'Case Title',
-        key: 'caseTitle',
-      },
-      {
-        displayLabel: 'Case Status',
-        key: 'status',
-      },
-      {
-        displayLabel: 'Reason',
-        key: 'allReasons',
-      },
-    ],
-    filename: fileName,
-    useKeysAsHeaders: false,
-  };
+  const blockedCasesCsvConfiguration = [
+    {
+      displayLabel: 'Docket No.',
+      key: 'docketNumber',
+    },
+    {
+      displayLabel: 'Date Blocked',
+      key: 'blockedDateEarliest',
+    },
+    {
+      displayLabel: 'Case Title',
+      key: 'caseTitle',
+    },
+    {
+      displayLabel: 'Case Status',
+      key: 'status',
+    },
+    {
+      displayLabel: 'Reason',
+      key: 'allReasons',
+    },
+  ];
 
   const formatString = (s: string | undefined) =>
     (s || '').split('\n').join(' ').trim();
@@ -57,8 +53,10 @@ export const exportCsvBlockedCaseReportAction = ({
     allReasons: `${formatString(c.blockedReason)} ${formatString(c.automaticBlockedReason)}`,
   }));
 
-  applicationContext.downloadCsvFile(
+  const csvString = applicationContext.createCsvString(
     formattedBlockedCases,
     blockedCasesCsvConfiguration,
   );
+
+  applicationContext.getUtilities().downloadCsv({ csvString, fileName });
 };
