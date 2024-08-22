@@ -1,15 +1,22 @@
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
+
 export const checkDocumentTypeAction = ({ path, props }: ActionProps) => {
-  const parentMessageId = props.parentMessageId
-    ? `/${props.parentMessageId}`
-    : '';
+  const { caseDetail, docketEntryIdToEdit, documentType, parentMessageId } =
+    props;
 
-  if (props.documentType === 'Miscellaneous') {
-    return path.documentTypeMiscellaneous({
-      path: `/case-detail/${props.caseDetail.docketNumber}/edit-upload-court-issued/${props.docketEntryIdToEdit}${parentMessageId}`,
-    });
-  }
+  const parentMessagePath = parentMessageId ? `/${parentMessageId}` : '';
 
-  return path.documentTypeOrder({
-    path: `/case-detail/${props.caseDetail.docketNumber}/edit-order/${props.docketEntryIdToEdit}${parentMessageId}`,
-  });
+  const basePath = `/case-detail/${caseDetail.docketNumber}`;
+
+  const isMiscellaneousDocument =
+    documentType === PRACTITIONER_DOCUMENT_TYPES_MAP.MISCELLANEOUS ||
+    !documentType;
+
+  const documentPath = isMiscellaneousDocument
+    ? `/edit-upload-court-issued/${docketEntryIdToEdit}${parentMessagePath}`
+    : `/edit-order/${docketEntryIdToEdit}${parentMessagePath}`;
+
+  return isMiscellaneousDocument
+    ? path.documentTypeMiscellaneous({ path: `${basePath}${documentPath}` })
+    : path.documentTypeOrder({ path: `${basePath}${documentPath}` });
 };
