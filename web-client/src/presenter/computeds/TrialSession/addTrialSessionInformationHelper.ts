@@ -34,7 +34,6 @@ export const addTrialSessionInformationHelper = (
 
   // NOTE: what happens if isStandaloneSession is true and user is docketclerk?
   const getSessionTypes = (user: AuthUser) => {
-    console.log('user: ', user);
     return user.role === 'docketclerk'
       ? ['Special', 'Motion/Hearing']
       : sessionTypes;
