@@ -1,6 +1,5 @@
 import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { generateCsv, mkConfig } from 'export-to-csv';
 
 export type BlockedCsvCase = Pick<
   BlockedFormattedCase,
@@ -13,6 +12,7 @@ export type BlockedCsvCase = Pick<
 >;
 
 export const exportCsvBlockedCaseReportAction = ({
+  applicationContext,
   props,
 }: ActionProps<{
   blockedCases: BlockedCsvCase[];
@@ -48,16 +48,17 @@ export const exportCsvBlockedCaseReportAction = ({
     filename: fileName,
     useKeysAsHeaders: false,
   };
-  const csvConfig = mkConfig(blockedCasesCsvConfiguration);
 
   const formatString = (s: string | undefined) =>
     (s || '').split('\n').join(' ').trim();
 
-  generateCsv(csvConfig)(
-    blockedCases.map(c => ({
-      ...c,
-      allReasons: `${formatString(c.blockedReason)} ${formatString(c.automaticBlockedReason)}`,
-    })),
+  const formattedBlockedCases = blockedCases.map(c => ({
+    ...c,
+    allReasons: `${formatString(c.blockedReason)} ${formatString(c.automaticBlockedReason)}`,
+  }));
+
+  applicationContext.downloadCsvFile(
+    formattedBlockedCases,
+    blockedCasesCsvConfiguration,
   );
-  // download(csvConfig)(csv);
 };
