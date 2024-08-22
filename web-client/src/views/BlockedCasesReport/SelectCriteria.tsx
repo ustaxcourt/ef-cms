@@ -24,7 +24,7 @@ export const SelectCriteria = connect(
           <h3>Select criteria</h3>
         </div>
         <div className="blue-container">
-          <div className="usa-form-group margin-bottom-3">
+          <div className="usa-form-group margin-bottom-2">
             <label className="usa-label" htmlFor="trial-location">
               Trial location
             </label>
