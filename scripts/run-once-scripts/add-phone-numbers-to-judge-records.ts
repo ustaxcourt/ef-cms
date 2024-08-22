@@ -7,6 +7,7 @@ to the relevant DB records.
 
 import { createApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
+import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import {
   requireEnvVars,
   getDestinationTableInfo,
@@ -21,7 +22,7 @@ const OLD_HARDCODED_CHAMBERS_DATA = getTestJudgesChambers();
 const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
   return Object.values(OLD_HARDCODED_CHAMBERS_DATA).find(
     data => data.judgeFullName === judgeUser.judgeFullName,
-  )?.value;
+  )?.phoneNumber;
 };
 
 (async () => {
@@ -38,17 +39,22 @@ const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
       section: 'judge',
     });
 
+  let totalUpdated = 0;
   // For each judge user record, we get the relevant phone number.
   // Then we update the record so that the phone number is stored on the record.
   for (const judgeUser of judgeUsers) {
     const phoneNumber = getPhoneNumberForJudgeUser(judgeUser);
     if (!phoneNumber) {
-      console.error(`\nCould not get phone number for ${judgeUser}.`);
+      console.error(
+        `Could not get phone number for ${judgeUser.judgeFullName}.`,
+      );
       continue;
     }
     judgeUser.contact = { phone: phoneNumber };
-    await applicationContext
-      .getPersistenceGateway()
-      .updateUser(applicationContext, judgeUser);
+    await client.put({ applicationContext, Item: judgeUser });
+    totalUpdated += 1;
+    console.log(`Updated ${judgeUser.judgeFullName}`);
   }
+
+  console.log(`\nUpdated ${totalUpdated} out of ${judgeUsers.length} judges`);
 })();

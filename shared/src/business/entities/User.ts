@@ -58,7 +58,22 @@ export class User extends JoiValidationEntity {
     this.token = rawUser.token;
     this.userId = rawUser.userId;
     this.isUpdatingInformation = rawUser.isUpdatingInformation;
-    if (rawUser.contact) {
+    this.setUpContact(rawUser);
+    if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
+      this.judgeFullName = rawUser.judgeFullName;
+      this.judgeTitle = rawUser.judgeTitle;
+      this.isSeniorJudge = rawUser.isSeniorJudge;
+    }
+
+    this.section = rawUser.section;
+  }
+
+  setUpContact(rawUser) {
+    // For non-judges, we require more contact information
+    if (
+      rawUser.contact &&
+      ![ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)
+    ) {
       this.contact = {
         address1: rawUser.contact.address1,
         address2: rawUser.contact.address2 ? rawUser.contact.address2 : null,
@@ -70,14 +85,9 @@ export class User extends JoiValidationEntity {
         postalCode: rawUser.contact.postalCode,
         state: rawUser.contact.state,
       };
+    } else if (rawUser.contact) {
+      this.contact = { phone: formatPhoneNumber(rawUser.contact.phone) };
     }
-    if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
-      this.judgeFullName = rawUser.judgeFullName;
-      this.judgeTitle = rawUser.judgeTitle;
-      this.isSeniorJudge = rawUser.isSeniorJudge;
-    }
-
-    this.section = rawUser.section;
   }
 
   static USER_CONTACT_VALIDATION_RULES = {
@@ -128,7 +138,7 @@ export class User extends JoiValidationEntity {
     // It might be better to actually create a chambers entity,
     // although that will require more than one DB query to get them.
     contact: joi.object().when('role', {
-      is: ROLES.judge,
+      is: joi.valid(ROLES.judge, ROLES.legacyJudge),
       otherwise: joi
         .object()
         .keys(User.USER_CONTACT_VALIDATION_RULES)
