@@ -18,6 +18,7 @@ import {
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
+import { ConfigOptions, download, generateCsv, mkConfig } from 'export-to-csv';
 import {
   DocketEntry,
   getServedPartiesCode,
@@ -642,6 +643,11 @@ const appConstants = deepFreeze({
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
+  },
+  downloadCsvFile: (data: any[], config: ConfigOptions) => {
+    const csvConfig = mkConfig(config);
+    const csv = generateCsv(csvConfig)(data);
+    download(csvConfig)(csv);
   },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
