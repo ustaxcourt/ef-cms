@@ -564,6 +564,43 @@ describe('blockedCasesReportHelper', () => {
           docketNumber: '102-19',
         });
       });
+
+      it('should filter out blocked cases that do not have user added reason if "reasonFilter" is "Manual Block"', () => {
+        const TEST_CASES = [
+          {
+            automaticBlockedReason: 'RANDOM',
+            blockedReason: '',
+            docketNumber: '101-19',
+          },
+          {
+            automaticBlockedReason: 'RANDOM',
+            blockedReason: 'RANDOM USER REASON',
+            docketNumber: '102-19',
+          },
+          {
+            automaticBlockedReason: 'RANDOM',
+            blockedReason: '',
+            docketNumber: '103-19',
+          },
+        ];
+
+        const result = runCompute(blockedCasesReportHelper, {
+          state: {
+            blockedCaseReportFilter: {
+              caseStatusFilter: 'All',
+              reasonFilter: 'Manual Block',
+            },
+            blockedCases: TEST_CASES,
+          },
+        });
+
+        expect(result.blockedCasesFormatted.length).toEqual(1);
+        expect(result.blockedCasesFormatted[0]).toMatchObject({
+          automaticBlockedReason: 'RANDOM',
+          blockedReason: 'RANDOM USER REASON',
+          docketNumber: '102-19',
+        });
+      });
     });
   });
 });
