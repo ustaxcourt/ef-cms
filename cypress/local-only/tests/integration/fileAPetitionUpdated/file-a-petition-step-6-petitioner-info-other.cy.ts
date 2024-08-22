@@ -28,7 +28,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           fillSecondaryName: true,
           fillTitle: true,
         });
-        cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+        cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
           'AK',
         );
         cy.get('[data-testid="contact-primary-phone"]').type('3232323232');
@@ -70,7 +70,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         fillBusinessandOtherContact({
           fillInCareOf: true,
         });
-        cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+        cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
           'AK',
         );
         cy.get('[data-testid="contact-primary-phone"]').type('3232323232');
@@ -112,7 +112,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         fillBusinessandOtherContact({
           fillSecondaryName: true,
         });
-        cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+        cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
           'AK',
         );
         cy.get('[data-testid="contact-primary-phone"]').type('3232323232');
@@ -174,7 +174,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
               fillSecondaryName: true,
             });
             cy.get(
-              '[data-testid="contactPrimary.placeOfLegalResidence"]',
+              '[data-testid="contactPrimary-placeOfLegalResidence"]',
             ).select(contactInfo.placeOfLegalResidence);
             cy.get('[data-testid="contact-primary-phone"]').type(
               contactInfo.phone,
@@ -269,7 +269,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         cy.get('[data-testid="filing-type-3"]').click();
         cy.get('[data-testid="other-type-radio-option-4"]').click();
         fillBusinessandOtherContact({ fillSecondaryName: true });
-        cy.get('[data-testid="contactPrimary.placeOfLegalResidence"]').select(
+        cy.get('[data-testid="contactPrimary-placeOfLegalResidence"]').select(
           contactInfo.placeOfLegalResidence,
         );
         cy.get('[data-testid="contact-primary-phone"]').type(contactInfo.phone);

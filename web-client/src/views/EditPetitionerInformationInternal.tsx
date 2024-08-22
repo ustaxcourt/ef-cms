@@ -181,7 +181,7 @@ export const EditPetitionerInformationInternal = connect(
                 className="usa-input max-width-200"
                 id="phone"
                 name="contact.phone"
-                type="tel"
+                type="text"
                 value={form.contact.phone || ''}
                 onBlur={() => {
                   validatePetitionerSequence();
