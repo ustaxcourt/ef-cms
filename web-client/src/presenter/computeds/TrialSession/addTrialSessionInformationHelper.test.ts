@@ -115,13 +115,15 @@ describe('addTrialSessionInformationHelper', () => {
 
   describe('sessionTypes', () => {
     it(`should NOT include 'Special' or 'Motion/Hearing' when form.sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const user = { role: 'clerkofclerk' };
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
+          user,
         },
       });
 
-      expect(result.sessionTypes).toEqual([
+      expect(result.getSessionTypes(user)).toEqual([
         'Regular',
         'Small',
         'Hybrid',
@@ -130,17 +132,34 @@ describe('addTrialSessionInformationHelper', () => {
     });
 
     it(`should include 'Special' and 'Motion/Hearing' when form.sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+      const user = { role: 'clerkofclerk' };
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
+          user,
         },
       });
 
-      expect(result.sessionTypes).toEqual([
+      expect(result.getSessionTypes(user)).toEqual([
         'Regular',
         'Small',
         'Hybrid',
         'Hybrid-S',
+        'Special',
+        'Motion/Hearing',
+      ]);
+    });
+
+    it("should ONLY include 'Special' or 'Motion/Hearing' trial sessions when role is docketclerk}", () => {
+      const user = { role: 'docketclerk' };
+      const result = runCompute(addTrialSessionInformationHelper, {
+        state: {
+          form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
+          user,
+        },
+      });
+
+      expect(result.getSessionTypes(user)).toEqual([
         'Special',
         'Motion/Hearing',
       ]);
