@@ -1,5 +1,3 @@
-Here’s the reorganized information grouped by relevant categories:
-
 ## Database Migration & Performance
 
 - **DynamoDB vs. RDS Migration Speed**
@@ -148,13 +146,10 @@ Here’s the reorganized information grouped by relevant categories:
 2. Deeper Cost Exploration
 3. Setup for Lower + Higher Envs
 4. Present to Team for Buy-in
-5. Create Devex card for Transaction
-6. Create Devex card for Postgres / Modify Existing to Include All Postgres Work
-7. Determine Roll out plan
-8. Determine plan for moving remaining opensearch + dynamo entities (or experiment with messages first?)
+5. Determine Roll out plan
+6. Determine plan for moving remaining opensearch + dynamo entities (or experiment with messages first?)
 
 ## Left to do
 
 1. iam token refresh functionality
 2. investigate if we can generate tokens using roles instead of users (jim's request)
-3. need to add indexes to migration.
