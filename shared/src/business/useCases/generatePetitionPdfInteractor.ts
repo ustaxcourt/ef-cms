@@ -21,7 +21,7 @@ export interface Contact {
   inCareOf?: string;
   secondaryName?: string;
   title?: string;
-  country: string;
+  country?: string;
   address1: string;
   address2?: string;
   address3?: string;
