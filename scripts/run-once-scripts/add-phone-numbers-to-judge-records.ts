@@ -18,15 +18,10 @@ requireEnvVars(['ENV']);
 
 const OLD_HARDCODED_CHAMBERS_DATA = getTestJudgesChambers();
 
-const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string => {
-  try {
-    return Object.values(OLD_HARDCODED_CHAMBERS_DATA).filter(
-      data => data.judgeFullName === judgeUser.judgeFullName,
-    )[0].phone;
-  } catch {
-    console.error(`Could not get phone number for ${judgeUser}`);
-    return '';
-  }
+const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
+  return Object.values(OLD_HARDCODED_CHAMBERS_DATA).find(
+    data => data.judgeFullName === judgeUser.judgeFullName,
+  )?.value;
 };
 
 (async () => {
@@ -47,7 +42,10 @@ const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string => {
   // Then we update the record so that the phone number is stored on the record.
   for (const judgeUser of judgeUsers) {
     const phoneNumber = getPhoneNumberForJudgeUser(judgeUser);
-    if (!phoneNumber) continue;
+    if (!phoneNumber) {
+      console.error(`\nCould not get phone number for ${judgeUser}.`);
+      continue;
+    }
     judgeUser.contact = { phone: phoneNumber };
     await applicationContext
       .getPersistenceGateway()
