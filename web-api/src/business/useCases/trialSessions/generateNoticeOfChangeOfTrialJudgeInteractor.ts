@@ -18,7 +18,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
     docketNumber: string;
     trialSessionInformation: RawTrialSession;
   },
-): Promise<Buffer> => {
+): Promise<Uint8Array> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,

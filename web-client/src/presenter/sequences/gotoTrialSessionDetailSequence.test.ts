@@ -1,5 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoTrialSessionDetailSequence } from '../sequences/gotoTrialSessionDetailSequence';
 import { presenter } from '../presenter-mock';
@@ -17,6 +18,11 @@ describe('gotoTrialSessionDetailSequence', () => {
     cerebralTest = CerebralTest(presenter);
     //set token to take 'isLoggedIn' path
     cerebralTest.setState('token', 'a');
+    cerebralTest.setState('user', {
+      name: 'richard',
+      role: ROLES.petitioner,
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    });
   });
 
   it('should set up state for an uncalendared session with eligible cases and case order', async () => {

@@ -11,8 +11,8 @@ export class PrivatePractitioner extends User {
   public representing: string[];
   public serviceIndicator: string;
 
-  constructor(rawUser, options?) {
-    super(rawUser, options);
+  constructor(rawUser, { filtered = false } = {}) {
+    super(rawUser, { filtered });
     this.entityName = PrivatePractitioner.ENTITY_NAME;
     this.barNumber = rawUser.barNumber;
     this.firmName = rawUser.firmName;
