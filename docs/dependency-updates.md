@@ -94,6 +94,10 @@ See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
 ### ws, 3rd party dependency of Cerebral
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
+### typescript
+- We currently run version 5.4.5; upon upgrading to version 5.5.3 on 6 July 2024, we ran into a series of issues. While the tests passed, we ran into issues linting and type-checking. The recurring issue was a RangeError: Maximum call stack size exceeded, which occurred with our npx tsc command as well as our lint-staged command. We noticed related issues in Github around this release. In order to prevent delaying other devs and ensure the remaining dependency updates are completed, we decided to hold on this update till version 5.5.3+ and/or we can spend more time to determine why this is occurring.
+- Update 12 July 2024: There are two new related open issues (https://github.com/microsoft/TypeScript/issues/59255 and https://github.com/microsoft/TypeScript/issues/59253), which provides further evidence for a TS bug. TS is still on version 5.5.3.
+
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
