@@ -29,14 +29,6 @@ Andy:
 
 Javis:
 
-Katie:
-
-Missy:
-
-Sui:
-
-Jen: 
-
 ### USTC
 Jim D:
 
