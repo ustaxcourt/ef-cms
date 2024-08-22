@@ -1,18 +1,28 @@
 import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
+import { generateCsv, mkConfig } from 'export-to-csv';
+
+export type BlockedCsvCase = Pick<
+  BlockedFormattedCase,
+  | 'docketNumber'
+  | 'blockedDateEarliest'
+  | 'caseTitle'
+  | 'status'
+  | 'blockedReason'
+  | 'automaticBlockedReason'
+>;
 
 export const exportCsvBlockedCaseReportAction = ({
   props,
 }: ActionProps<{
-  blockedCases: BlockedFormattedCase[];
+  blockedCases: BlockedCsvCase[];
   trialLocation: string;
 }>) => {
   const { blockedCases, trialLocation } = props;
   const [city, state] = trialLocation.split(', ');
   const date = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
   const fileName = `Blocked Cases Report - ${city}_${state} ${date}`;
-  const csvConfig = mkConfig({
+  const blockedCasesCsvConfiguration = {
     columnHeaders: [
       {
         displayLabel: 'Docket No.',
@@ -37,16 +47,17 @@ export const exportCsvBlockedCaseReportAction = ({
     ],
     filename: fileName,
     useKeysAsHeaders: false,
-  });
+  };
+  const csvConfig = mkConfig(blockedCasesCsvConfiguration);
 
   const formatString = (s: string | undefined) =>
     (s || '').split('\n').join(' ').trim();
 
-  const csv = generateCsv(csvConfig)(
+  generateCsv(csvConfig)(
     blockedCases.map(c => ({
       ...c,
       allReasons: `${formatString(c.blockedReason)} ${formatString(c.automaticBlockedReason)}`,
     })),
   );
-  download(csvConfig)(csv);
+  // download(csvConfig)(csv);
 };
