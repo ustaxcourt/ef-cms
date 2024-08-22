@@ -9,7 +9,7 @@ describe('pendingReportListHelper', () => {
     applicationContext,
   );
 
-  it('should display load more button if more results are to be loaded', () => {
+  it('should set showLoadMore to true when there are additional results to load', () => {
     const mockState = {
       pendingReports: {
         hasPendingItemsResults: true,
@@ -26,7 +26,7 @@ describe('pendingReportListHelper', () => {
     expect(showLoadMore).toBe(true);
   });
 
-  it('should hide the load more button if more results are to be loaded', () => {
+  it('should set showLoadMore to false when there are no additional results to load', () => {
     const mockState = {
       pendingReports: {
         hasPendingItemsResults: true,
