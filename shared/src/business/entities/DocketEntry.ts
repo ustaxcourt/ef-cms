@@ -521,15 +521,16 @@ export class DocketEntry extends JoiValidationEntity {
    *  otherwise false
    */
   isAutoServed() {
-    const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
-      this.documentType,
-    );
+    const documentType = this.documentType as string;
+
+    const isExternalDocumentType =
+      EXTERNAL_DOCUMENT_TYPES.includes(documentType);
 
     const isPractitionerAssociationDocumentType =
-      PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(this.documentType);
+      PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(documentType);
 
     // if fully concatenated document title includes the word Simultaneous, do not auto-serve
-    const isSimultaneous = (this.documentTitle || this.documentType).includes(
+    const isSimultaneous = (this.documentTitle || documentType).includes(
       'Simultaneous',
     );
 
