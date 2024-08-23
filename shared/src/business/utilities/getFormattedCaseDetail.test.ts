@@ -430,32 +430,62 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format draft documents', () => {
+      const orderDocketEntry = {
+        archived: false,
+        createdAt: getDateISO(),
+        docketEntryId: 'd-1-2-3',
+        docketNumber: '101-18',
+        documentType: 'Order',
+        isDraft: true,
+      };
+
+      const stipulatedDecisionDocketEntry = {
+        archived: false,
+        createdAt: getDateISO(),
+        docketEntryId: 'd-2-3-4',
+        docketNumber: '101-18',
+        documentType: 'Stipulated Decision',
+        isDraft: true,
+      };
+
+      const miscellaneousDocketEntry = {
+        archived: false,
+        createdAt: getDateISO(),
+        docketEntryId: 'd-3-4-5',
+        docketNumber: '101-18',
+        documentType: 'Miscellaneous',
+        isDraft: true,
+      };
+
+      const miscellaneousDocketEntryWithUndefinedDocumentType = {
+        archived: false,
+        createdAt: getDateISO(),
+        docketEntryId: 'd-3-4-5',
+        docketNumber: '101-18',
+        isDraft: true,
+      };
+
+      const statusReportOrderDocketEntry = {
+        archived: false,
+        createdAt: getDateISO(),
+        docketEntryId: 'd-3-4-5',
+        docketNumber: '101-18',
+        draftOrderState: {
+          orderType: 'statusReport',
+        },
+        isDraft: true,
+      };
+
       const result = getFormattedCaseDetail({
         applicationContext,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
-            {
-              archived: false,
-              createdAt: getDateISO(),
-              docketEntryId: 'd-1-2-3',
-              documentType: 'Order',
-              isDraft: true,
-            },
-            {
-              archived: false,
-              createdAt: getDateISO(),
-              docketEntryId: 'd-2-3-4',
-              documentType: 'Stipulated Decision',
-              isDraft: true,
-            },
-            {
-              archived: false,
-              createdAt: getDateISO(),
-              docketEntryId: 'd-3-4-5',
-              documentType: 'Miscellaneous',
-              isDraft: true,
-            },
+            orderDocketEntry,
+            stipulatedDecisionDocketEntry,
+            miscellaneousDocketEntry,
+            miscellaneousDocketEntryWithUndefinedDocumentType,
+            statusReportOrderDocketEntry,
           ],
         },
         docketRecordSort: 'byDate',
@@ -474,6 +504,16 @@ describe('getFormattedCaseDetail', () => {
         },
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-upload-court-issued/d-3-4-5`,
+          signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-3-4-5/sign`,
+          signedAtFormatted: '',
+        },
+        {
+          editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-upload-court-issued/d-3-4-5`,
+          signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-3-4-5/sign`,
+          signedAtFormatted: '',
+        },
+        {
+          editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-3-4-5`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-3-4-5/sign`,
           signedAtFormatted: '',
         },

@@ -16,6 +16,7 @@ import {
   formatDateString,
 } from './DateHandler';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
+import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
@@ -248,18 +249,12 @@ const formatTrialSessionScheduling = ({
   }
 };
 
-const getEditUrl = ({
-  docketEntryId,
-  docketNumber,
-  documentType,
-}: {
-  docketNumber: string;
-  documentType: string;
-  docketEntryId: string;
-}) => {
-  return documentType === 'Miscellaneous'
-    ? `/case-detail/${docketNumber}/edit-upload-court-issued/${docketEntryId}`
-    : `/case-detail/${docketNumber}/edit-order/${docketEntryId}`;
+const getEditUrl = (docketEntry: RawDocketEntry): string => {
+  const routeToEditUploadCourtIssued = isMiscellaneousDocketEntry(docketEntry);
+
+  return routeToEditUploadCourtIssued
+    ? `/case-detail/${docketEntry.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
+    : `/case-detail/${docketEntry.docketNumber}/edit-order/${docketEntry.docketEntryId}`;
 };
 
 export const formatCase = (applicationContext, caseDetail) => {
@@ -273,11 +268,7 @@ export const formatCase = (applicationContext, caseDetail) => {
       .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
       .map(docketEntry => ({
         ...formatDocketEntry(applicationContext, docketEntry),
-        editUrl: getEditUrl({
-          docketEntryId: docketEntry.docketEntryId,
-          docketNumber: caseDetail.docketNumber,
-          documentType: docketEntry.documentType,
-        }),
+        editUrl: getEditUrl(docketEntry),
         signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
         signedAtFormatted: applicationContext
           .getUtilities()
