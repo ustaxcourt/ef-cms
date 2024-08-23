@@ -157,6 +157,26 @@ const updateDynamoJudgeUserRecord = async ({
   });
 };
 
+const getChambersUsers = async ({
+  applicationContext,
+  section,
+}: {
+  section: string;
+  applicationContext: any;
+}) => {
+  const params = {
+    ExpressionAttributeNames: {
+      '#section': 'section',
+    },
+    ExpressionAttributeValues: {
+      ':sectionValue': section,
+    },
+    FilterExpression: '#section = :sectionValue',
+    applicationContext,
+  };
+  return await client.scan(params);
+};
+
 const updateDynamoChambersRecords = async ({
   applicationContext,
   oldChambersSection,
@@ -178,12 +198,14 @@ const updateDynamoChambersRecords = async ({
     console.log(
       `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
     );
-    // TODO 10455: This doesn't actually work for getting all the chambers users in a section!
-    const chambersUsers: User[] = await applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection({ applicationContext, section: oldChambersSection });
+
+    const chambersUsers: User[] = await getChambersUsers({
+      applicationContext,
+      section: oldChambersSection,
+    });
 
     for (let chambersUser of chambersUsers) {
+      console.log(`Updating ${chambersUser.role} user ${chambersUser.userId}`);
       chambersUser.section = updatedChambersSection;
       const rawChambersUser = new User(chambersUser).validate().toRawObject();
       await applicationContext.getPersistenceGateway().updateUser({
