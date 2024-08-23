@@ -119,6 +119,7 @@ import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloa
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequences/editUnsignedDraftDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
+import { exportCsvBlockedCaseReportSequence } from '@web-client/presenter/sequences/Reports/exportCsvBlockedCaseReportSequence';
 import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
@@ -797,6 +798,7 @@ export const presenterSequences = {
   editUnsignedDraftDocumentSequence,
   editUploadCourtIssuedDocumentSequence:
     editUploadCourtIssuedDocumentSequence as unknown as Function,
+  exportCsvBlockedCaseReportSequence,
   exportCsvCustomCaseReportSequence:
     exportCsvCustomCaseReportSequence as unknown as Function,
   exportPendingReportSequence:

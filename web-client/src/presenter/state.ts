@@ -127,6 +127,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCriteriaHelper';
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
@@ -494,6 +495,7 @@ export const computeds = {
   sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
     typeof sealedCaseDetailHelper
   >,
+  selectCriteriaHelper,
   serveThirtyDayNoticeModalHelper:
     serveThirtyDayNoticeModalHelper as unknown as ReturnType<
       typeof serveThirtyDayNoticeModalHelper
@@ -602,6 +604,13 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
+  blockedCaseReportFilter: {
+    caseStatusFilter: 'All',
+    procedureTypeFilter: 'All',
+    reasonFilter: 'All',
+    trialLocationFilter: '',
+  },
+  blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
