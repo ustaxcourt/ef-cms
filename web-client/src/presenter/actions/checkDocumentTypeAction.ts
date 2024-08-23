@@ -1,37 +1,21 @@
-import {
-  PRACTITIONER_DOCUMENT_TYPES_MAP,
-  STATUS_REPORT_ORDER_OPTIONS,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 
 export const checkDocumentTypeAction = ({ path, props }: ActionProps) => {
-  const { caseDetail, docketEntryIdToEdit, documentType, parentMessageId } =
-    props;
-
-  const parentMessagePath = parentMessageId ? `/${parentMessageId}` : '';
-
-  const basePath = `/case-detail/${caseDetail.docketNumber}`;
+  const { caseDetail, docketEntryIdToEdit, parentMessageId } = props;
 
   const [docketEntry] = (props.caseDetail.docketEntries || []).filter(
     de => de.docketEntryId === docketEntryIdToEdit,
   );
 
-  const draftStatusReportOrderTypes = Object.values(
-    STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
-  );
+  const routeToEditUploadCourtIssued = isMiscellaneousDocketEntry(docketEntry);
 
-  const isDraftStatusReportOrder = draftStatusReportOrderTypes.includes(
-    docketEntry?.draftOrderState.orderType || '',
-  );
+  const parentMessagePath = parentMessageId ? `/${parentMessageId}` : '';
 
-  const isMiscellaneousDocument =
-    documentType === PRACTITIONER_DOCUMENT_TYPES_MAP.MISCELLANEOUS ||
-    (!isDraftStatusReportOrder && !documentType);
-
-  const documentPath = isMiscellaneousDocument
-    ? `/edit-upload-court-issued/${docketEntryIdToEdit}${parentMessagePath}`
-    : `/edit-order/${docketEntryIdToEdit}${parentMessagePath}`;
-
-  return isMiscellaneousDocument
-    ? path.documentTypeMiscellaneous({ path: `${basePath}${documentPath}` })
-    : path.documentTypeOrder({ path: `${basePath}${documentPath}` });
+  return routeToEditUploadCourtIssued
+    ? path.documentTypeMiscellaneous({
+        path: `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${docketEntryIdToEdit}${parentMessagePath}`,
+      })
+    : path.documentTypeOrder({
+        path: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntryIdToEdit}${parentMessagePath}`,
+      });
 };
