@@ -94,7 +94,7 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType: string;
+  public documentType?: string;
   public eventCode: string;
   public filedBy?: string;
   public filedByRole?: string;
@@ -143,7 +143,25 @@ export class DocketEntry extends JoiValidationEntity {
   public privatePractitioners?: any[];
   public servedParties?: any[];
   public signedAt?: string;
-  public draftOrderState?: object;
+  public draftOrderState?: {
+    additionalOrderText?: string;
+    docketNumber?: string;
+    documentTitle?: string;
+    documentType?: string;
+    dueDate?: string;
+    eventCode?: string;
+    freeText?: string;
+    generatedDocumentTitle?: string;
+    issueOrder?: string;
+    jurisdiction?: string;
+    orderType?: string;
+    primaryDocumentFileSize?: number;
+    richText?: string;
+    scenario?: string;
+    statusReportFilingDate?: string;
+    statusReportIndex?: string;
+    strickenFromTrialSessions?: boolean;
+  };
   public stampData!: object;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
