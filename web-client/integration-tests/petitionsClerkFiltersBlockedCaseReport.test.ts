@@ -117,7 +117,8 @@ describe('Blocking a Case', () => {
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'procedureType',
+      key: 'procedureTypeFilter',
+      root: 'blockedCaseReportFilter',
       value: 'Small',
     });
 
@@ -136,7 +137,8 @@ describe('Blocking a Case', () => {
 
   it('petitions clerk views Regular cases on blocked report', async () => {
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'procedureType',
+      key: 'procedureTypeFilter',
+      root: 'blockedCaseReportFilter',
       value: 'Regular',
     });
 
@@ -155,7 +157,8 @@ describe('Blocking a Case', () => {
 
   it('petitions clerk views All cases on blocked report', async () => {
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'procedureType',
+      key: 'procedureTypeFilter',
+      root: 'blockedCaseReportFilter',
       value: 'All',
     });
 
@@ -176,11 +179,14 @@ describe('Blocking a Case', () => {
 
   it('should reset the procedureType select back to All when changing the trial location dropdown', async () => {
     await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'procedureType',
+      key: 'procedureTypeFilter',
+      root: 'blockedCaseReportFilter',
       value: 'Small',
     });
 
-    expect(cerebralTest.getState('form.procedureType')).toEqual('Small');
+    expect(
+      cerebralTest.getState('blockedCaseReportFilter.procedureTypeFilter'),
+    ).toEqual('Small');
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocationFilter',
@@ -188,6 +194,8 @@ describe('Blocking a Case', () => {
       value: 'No existing trial location',
     });
 
-    expect(cerebralTest.getState('form.procedureType')).toEqual('All');
+    expect(
+      cerebralTest.getState('blockedCaseReportFilter.procedureTypeFilter'),
+    ).toEqual('All');
   });
 });
