@@ -68,7 +68,7 @@ export const ContactPrimaryUpdated = connect<
               validationErrors.contactPrimary.name
             }
           >
-            <label className="usa-label" htmlFor="name">
+            <label className="usa-label" htmlFor="contactPrimary.name">
               {nameLabel}
             </label>
             <input
@@ -249,7 +249,7 @@ export const ContactPrimaryUpdated = connect<
               id="primary-phone"
               name="contactPrimary.phone"
               ref={registerRef && registerRef('contactPrimary.phone')}
-              type="tel"
+              type="text"
               value={addressInfo.phone || ''}
               onBlur={() => {
                 handleBlur({
