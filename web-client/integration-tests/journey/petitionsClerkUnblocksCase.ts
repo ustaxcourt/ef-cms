@@ -25,7 +25,7 @@ export const petitionsClerkUnblocksCase = (
       await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
       await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
-        key: 'trialLocation',
+        key: 'trialLocationFilter',
         root: 'blockedCaseReportFilter',
         value: trialLocation,
       });

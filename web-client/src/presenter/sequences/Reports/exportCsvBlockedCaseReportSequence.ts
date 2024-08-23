@@ -6,4 +6,4 @@ export const exportCsvBlockedCaseReportSequence = [
 ] as unknown as (props: {
   blockedCases: BlockedFormattedCase[];
   trialLocation: string;
-}) => {};
+}) => void;
