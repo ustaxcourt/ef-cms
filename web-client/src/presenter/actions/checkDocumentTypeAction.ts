@@ -1,4 +1,7 @@
-import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  PRACTITIONER_DOCUMENT_TYPES_MAP,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '../../../../shared/src/business/entities/EntityConstants';
 
 export const checkDocumentTypeAction = ({ path, props }: ActionProps) => {
   const { caseDetail, docketEntryIdToEdit, documentType, parentMessageId } =
@@ -8,9 +11,21 @@ export const checkDocumentTypeAction = ({ path, props }: ActionProps) => {
 
   const basePath = `/case-detail/${caseDetail.docketNumber}`;
 
+  const [docketEntry] = (props.caseDetail.docketEntries || []).filter(
+    de => de.docketEntryId === docketEntryIdToEdit,
+  );
+
+  const draftStatusReportOrderTypes = Object.values(
+    STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
+  );
+
+  const isDraftStatusReportOrder = draftStatusReportOrderTypes.includes(
+    docketEntry?.draftOrderState.orderType || '',
+  );
+
   const isMiscellaneousDocument =
     documentType === PRACTITIONER_DOCUMENT_TYPES_MAP.MISCELLANEOUS ||
-    !documentType;
+    (!isDraftStatusReportOrder && !documentType);
 
   const documentPath = isMiscellaneousDocument
     ? `/edit-upload-court-issued/${docketEntryIdToEdit}${parentMessagePath}`
