@@ -89,7 +89,7 @@ describe('Blocking a Case', () => {
     await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
-      key: 'trialLocation',
+      key: 'trialLocationFilter',
       root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
@@ -111,7 +111,7 @@ describe('Blocking a Case', () => {
     await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
-      key: 'trialLocation',
+      key: 'trialLocationFilter',
       root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
@@ -183,7 +183,7 @@ describe('Blocking a Case', () => {
     expect(cerebralTest.getState('form.procedureType')).toEqual('Small');
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
-      key: 'trialLocation',
+      key: 'trialLocationFilter',
       root: 'blockedCaseReportFilter',
       value: 'No existing trial location',
     });
