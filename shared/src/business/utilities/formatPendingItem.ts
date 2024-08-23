@@ -33,7 +33,7 @@ export const formatPendingItem = (
     .getUtilities()
     .formatJudgeName(item.associatedJudge);
 
-  const formattedName = item.documentTitle || item.documentType;
+  const formattedName = item.documentTitle || item.documentType || '';
 
   const formattedStatus: string = applicationContext
     .getUtilities()
