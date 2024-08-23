@@ -60,6 +60,7 @@ describe('Blocking a Case', () => {
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
+      root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
 
@@ -97,6 +98,7 @@ describe('Blocking a Case', () => {
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
+      root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
 
@@ -125,6 +127,7 @@ describe('Blocking a Case', () => {
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
+      root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
 
@@ -172,6 +175,7 @@ describe('Blocking a Case', () => {
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
+      root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
 
@@ -189,6 +193,7 @@ describe('Blocking a Case', () => {
 
     await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
+      root: 'blockedCaseReportFilter',
       value: trialLocation,
     });
 
