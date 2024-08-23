@@ -92,7 +92,7 @@ describe('checkDocumentTypeAction', () => {
     });
   });
 
-  it('should return the correct path for a document with an undefined document type without parentMessageId', async () => {
+  it('should return the correct path for a document that is not a status report order with an undefined document type without parentMessageId', async () => {
     const props = {
       ...propsBase,
     };
@@ -107,7 +107,7 @@ describe('checkDocumentTypeAction', () => {
     });
   });
 
-  it('should return the correct path for a document with an undefined document type with parentMessageId', async () => {
+  it('should return the correct path for a document that is not a status report order with an undefined document type with parentMessageId', async () => {
     const props = {
       ...propsBase,
       parentMessageId: mockParentMessageId,
@@ -120,6 +120,55 @@ describe('checkDocumentTypeAction', () => {
 
     expect(pathDocumentTypeMiscellaneousStub).toHaveBeenCalledWith({
       path: `/case-detail/${mockDocketNumber}/edit-upload-court-issued/${mockDocketEntryId}/${mockParentMessageId}`,
+    });
+  });
+
+  it('should return the correct path for a document that is a status report order with an undefined document type without parentMessageId', async () => {
+    const props = {
+      caseDetail: {
+        ...propsBase.caseDetail,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            draftOrderState: { orderType: 'statusReport' },
+          },
+        ],
+      },
+      docketEntryIdToEdit: propsBase.docketEntryIdToEdit,
+    };
+
+    await runAction(checkDocumentTypeAction, {
+      modules: { presenter },
+      props,
+    });
+
+    expect(pathDocumentTypeOrderStub).toHaveBeenCalledWith({
+      path: `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}`,
+    });
+  });
+
+  it('should return the correct path for a document that is a status report order with an undefined document type with parentMessageId', async () => {
+    const props = {
+      caseDetail: {
+        ...propsBase.caseDetail,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            draftOrderState: { orderType: 'statusReport' },
+          },
+        ],
+      },
+      docketEntryIdToEdit: propsBase.docketEntryIdToEdit,
+      parentMessageId: mockParentMessageId,
+    };
+
+    await runAction(checkDocumentTypeAction, {
+      modules: { presenter },
+      props,
+    });
+
+    expect(pathDocumentTypeOrderStub).toHaveBeenCalledWith({
+      path: `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}/${mockParentMessageId}`,
     });
   });
 });
