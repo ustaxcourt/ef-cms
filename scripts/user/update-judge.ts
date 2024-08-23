@@ -157,26 +157,6 @@ const updateDynamoJudgeUserRecord = async ({
   });
 };
 
-const getChambersUsers = async ({
-  applicationContext,
-  section,
-}: {
-  section: string;
-  applicationContext: any;
-}) => {
-  const params = {
-    ExpressionAttributeNames: {
-      '#section': 'section',
-    },
-    ExpressionAttributeValues: {
-      ':sectionValue': section,
-    },
-    FilterExpression: '#section = :sectionValue',
-    applicationContext,
-  };
-  return await client.scan(params);
-};
-
 const updateDynamoChambersRecords = async ({
   applicationContext,
   oldChambersSection,
@@ -199,10 +179,9 @@ const updateDynamoChambersRecords = async ({
       `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
     );
 
-    const chambersUsers: User[] = await getChambersUsers({
-      applicationContext,
-      section: oldChambersSection,
-    });
+    const chambersUsers: User[] = await applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection({ applicationContext, section: oldChambersSection });
 
     for (let chambersUser of chambersUsers) {
       console.log(`Updating ${chambersUser.role} user ${chambersUser.userId}`);
