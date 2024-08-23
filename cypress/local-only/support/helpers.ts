@@ -2,31 +2,6 @@ import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import fs from 'fs';
 pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
 
-/* eslint-disable */
-/**
- * @param b64Data
- * @param contentType
- * @param sliceSize
- */
-
-export function b64toBlob(b64Data, contentType, sliceSize) {
-  contentType = contentType || '';
-  sliceSize = sliceSize || 512;
-  const byteCharacters = atob(b64Data);
-  const byteArrays = [];
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-    byteArrays.push(new Uint8Array(byteNumbers));
-  }
-  const blob = new Blob(byteArrays, { type: contentType });
-  blob.lastModifiedDate = new Date();
-  return blob;
-}
-
 export function generateRandomPhoneNumber(): string {
   function getRandomNumber(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -40,7 +15,7 @@ export function generateRandomPhoneNumber(): string {
   return phoneNumber;
 }
 
-export function downloadFileFromNewTab(element: string) {
+export function downloadAndParsePdf(element: string) {
   return cy.window().then(win => {
     const stub = cy.stub(win, 'open').as('windowOpen');
     cy.get(element).click();
@@ -57,7 +32,12 @@ export function downloadFileFromNewTab(element: string) {
           const filePath = 'cypress/downloads/file.pdf';
 
           return cy.writeFile(filePath, res.body, 'binary').then(() => {
-            return filePath;
+            return cy
+              .readFile(filePath, { timeout: 15000 })
+              .should('exist')
+              .then(() => {
+                return cy.task('parsePdf', { filePath });
+              });
           });
         });
     });
