@@ -557,7 +557,8 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStatusReportOrder": true
     }
   ],
   "Motion": [

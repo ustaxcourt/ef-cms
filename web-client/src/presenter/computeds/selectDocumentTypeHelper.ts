@@ -19,7 +19,7 @@ export const getOptionsForCategory = ({
     case 'Nonstandard A': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
           selectedDocketEntryId,
@@ -39,7 +39,7 @@ export const getOptionsForCategory = ({
     case 'Nonstandard C': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
           selectedDocketEntryId,
@@ -53,7 +53,7 @@ export const getOptionsForCategory = ({
     case 'Nonstandard D': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
           selectedDocketEntryId,
@@ -76,7 +76,7 @@ export const getOptionsForCategory = ({
       options = {
         ordinalField: categoryInformation.ordinalField,
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
           selectedDocketEntryId,
@@ -133,7 +133,7 @@ export const getOrdinalValuesForUploadIteration = (): string[] => {
 };
 
 export const MAX_TITLE_LENGTH = 100;
-export const getPreviouslyFiledDocuments = (
+export const getValidPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,
   selectedDocketEntryId,
@@ -149,11 +149,23 @@ export const getPreviouslyFiledDocuments = (
     return { ...doc, documentTitle };
   };
 
-  return caseDetail.docketEntries
+  const formattedCaseDetail = applicationContext
+    .getUtilities()
+    .getFormattedCaseDetail({
+      applicationContext,
+      caseDetail,
+    });
+
+  return formattedCaseDetail.formattedDocketEntries
     .filter(
       doc =>
         doc.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType &&
-        doc.docketEntryId !== selectedDocketEntryId,
+        doc.docketEntryId !== selectedDocketEntryId &&
+        !doc.isStricken &&
+        !doc.isNotServedDocument &&
+        // Although this should never happen in practice, it is theoretically
+        // possible for a served document to not be on the docket record
+        doc.isOnDocketRecord,
     )
     .map(withDocumentTitle);
 };
