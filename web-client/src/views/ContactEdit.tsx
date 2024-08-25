@@ -104,7 +104,7 @@ export const ContactEdit = connect(
                 data-testid="phone-number-input"
                 id="phone"
                 name="contact.phone"
-                type="tel"
+                type="text"
                 value={form.contact.phone || ''}
                 onBlur={() => {
                   validatePetitionerSequence();

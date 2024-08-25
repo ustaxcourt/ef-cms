@@ -10,20 +10,14 @@ resource "aws_instance" "dynamsoft" {
     Name        = "dynamsoft-${var.environment}"
     environment = var.environment
   }
-  user_data = data.template_file.setup_dynamsoft.rendered
-  user_data_replace_on_change = true
-
-  iam_instance_profile = "dynamsoft_s3_download_role"
-}
-
-data "template_file" "setup_dynamsoft" {
-  template = file("${path.module}/setup_dynamsoft.sh")
-
-  vars = {
+  user_data = templatefile("${path.module}/setup_dynamsoft.sh", {
     dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
     dynamsoft_url          = var.dynamsoft_url
     dynamsoft_product_keys = var.dynamsoft_product_keys
-  }
+  })
+  user_data_replace_on_change = true
+
+  iam_instance_profile = "dynamsoft_s3_download_role"
 }
 
 resource "aws_security_group" "dynamsoft_load_balancer_security_group" {
