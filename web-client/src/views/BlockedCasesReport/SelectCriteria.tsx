@@ -30,6 +30,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
+              data-testid="trial-location-filter"
               id="trial-location"
               name="trialLocationFilter"
               value={blockedCaseReportFilter.trialLocationFilter}
@@ -51,6 +52,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
+              data-testid="procedure-type-filter"
               disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="procedure-type"
               name="procedureTypeFilter"
@@ -75,6 +77,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
+              data-testid="case-status-filter"
               disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="case-status-type"
               name="caseStatusFilter"
@@ -104,6 +107,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
+              data-testid="blocked-reason-filter"
               disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="reason-type"
               name="reasonFilter"
