@@ -88,7 +88,6 @@ export const UpdatedFilePetitionStep1 = connect(
           form.filingType === 'Individual petitioner') && (
           <ContactPrimaryUpdated
             addressInfo={form.contactPrimary}
-            customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
@@ -102,7 +101,6 @@ export const UpdatedFilePetitionStep1 = connect(
             {isPractitioner && <h2>Petitioner&#39;s information</h2>}
             <ContactPrimaryUpdated
               addressInfo={form.contactPrimary}
-              customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
               handleBlur={petitionGenerationLiveValidationSequence}
               handleChange={updateFormValueUpdatedSequence}
               handleChangeCountryType={updateFormValueCountryTypeSequence}
@@ -166,7 +164,6 @@ export const UpdatedFilePetitionStep1 = connect(
               updateFormValueCountryTypeSequence
             }
             updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
-            updatedFilePetitionHelper={updatedFilePetitionHelper}
             validationErrors={validationErrors}
           />
         )}
