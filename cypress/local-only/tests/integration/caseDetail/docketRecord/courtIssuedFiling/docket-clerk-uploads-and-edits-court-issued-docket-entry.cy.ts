@@ -42,8 +42,6 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
         `Expected to find "${newTitle}" in at least one element`,
       ).to.be.greaterThan(0);
     });
-
-    // TODO: the above assertion fails because the updated document title does not display in the draft menu
   });
 
   it('should let a docket clerk upload a court-issued docket entry and the edit it after it is signed', () => {
@@ -52,9 +50,10 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
     loginAsDocketClerk1();
     goToCase(leadCase);
 
-    cy.get('data-testid=[docket-entry-description-0').click();
-    cy.get('data-testid="edit-order-button"').click();
-    cy.get('data-testid="modal-button-confirm"').click();
+    cy.get('[data-testid="tab-drafts"').click();
+    cy.get('[data-testid="docket-entry-description-0"]').click();
+    cy.get('[data-testid="edit-order-button"]').click();
+    cy.get('[data-testid="modal-button-confirm"]').click();
     // TODO: the call to `/remove-signature` on the backend throws a 400 error
   });
 });
