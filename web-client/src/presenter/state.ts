@@ -875,6 +875,7 @@ export type ViewerDocument = {
   docketEntryId: string;
   documentTitle?: string; // Should this be required?
   documentType?: string;
+  eventCode?: string;
   filingDate?: string;
   index?: number;
 };
