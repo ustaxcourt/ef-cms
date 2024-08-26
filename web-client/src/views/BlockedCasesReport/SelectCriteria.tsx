@@ -67,8 +67,13 @@ export const SelectCriteria = connect(
               }}
             >
               <option value="All">All</option>
-              <option value="Small">Small</option>
-              <option value="Regular">Regular</option>
+              {selectCriteriaHelper.procedureTypes.map(({ key, value }) => {
+                return (
+                  <option key={key} value={value}>
+                    {value}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
