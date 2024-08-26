@@ -19,6 +19,8 @@ export function CounselInformation({ userInfo }) {
                   displayFirmNameOnNewLine
                   noMargin
                   showEmail
+                  showEmailLabel
+                  showPhoneLabel
                   contact={{
                     ...userInfo.contact,
                     email: userInfo.email,

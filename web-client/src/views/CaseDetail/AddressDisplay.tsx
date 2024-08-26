@@ -20,6 +20,7 @@ export const AddressDisplay = connect<
     nameOverride?: string;
     noMargin?: boolean;
     showEmail?: boolean;
+    showEmailLabel?: boolean;
     showPhoneLabel?: boolean;
     showSealAddressLink?: boolean;
   },
@@ -34,6 +35,7 @@ export const AddressDisplay = connect<
     noMargin,
     openSealAddressModalSequence,
     showEmail,
+    showEmailLabel,
     showPhoneLabel,
     showSealAddressLink,
   }) {
@@ -97,6 +99,7 @@ export const AddressDisplay = connect<
               noMargin={noMargin}
               openSealAddressModalSequence={openSealAddressModalSequence}
               showEmail={showEmail}
+              showEmailLabel={showEmailLabel}
               showPhoneLabel={showPhoneLabel}
               showSealAddressLink={showSealAddressLink}
             />
@@ -115,6 +118,7 @@ function ContactDetails({
   noMargin,
   openSealAddressModalSequence,
   showEmail,
+  showEmailLabel,
   showPhoneLabel,
   showSealAddressLink,
 }) {
@@ -154,7 +158,10 @@ function ContactDetails({
       )}
       {contact.email && showEmail && (
         <span className="address-line">
-          <span data-testid="contact-info-email">{contact.email}</span>
+          <span data-testid="contact-info-email">
+            {showEmailLabel && <span className="text-semibold">Email: </span>}
+            {contact.email}
+          </span>
           {contact.showEAccessFlag && (
             <FontAwesomeIcon
               aria-label="has e-access"
