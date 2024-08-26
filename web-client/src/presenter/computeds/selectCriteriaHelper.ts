@@ -3,21 +3,22 @@ import {
   AutomaticBlockedReasons,
   CASE_STATUS_TYPES,
   CaseStatus,
+  PROCEDURE_TYPES_MAP,
+  ProcedureType,
 } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type SelectCriteriaHelperResults = {
+export const selectCriteriaHelper = (
+  get: Get,
+): {
   automaticBlockedReasons: {
     key: string;
     value: AutomaticBlockedReasons | 'Manual Block';
   }[];
   caseStatuses: { key: string; value: CaseStatus }[];
-};
-
-export const selectCriteriaHelperInternal = (
-  get: Get,
-): SelectCriteriaHelperResults => {
+  procedureTypes: { key: string; value: ProcedureType }[];
+} => {
   const blockedCases: RawCase[] = get(state.blockedCases);
 
   const automaticBlockedReasons: {
@@ -50,6 +51,14 @@ export const selectCriteriaHelperInternal = (
     }))
     .filter(option => blockedCases.some(c => c.status === option.value));
 
+  const procedureTypes = Object.entries(PROCEDURE_TYPES_MAP)
+    .map(([key, value]) => ({ key, value }))
+    .filter(procedureType =>
+      blockedCases.some(
+        blockedCase => blockedCase.procedureType === procedureType.value,
+      ),
+    );
+
   const sortByLabel = (a, b) => {
     if (a.value < b.value) return -1;
     if (a.value > b.value) return 1;
@@ -59,8 +68,6 @@ export const selectCriteriaHelperInternal = (
   return {
     automaticBlockedReasons: automaticBlockedReasons.sort(sortByLabel),
     caseStatuses: caseStatuses.sort(sortByLabel),
+    procedureTypes: procedureTypes.sort(sortByLabel),
   };
 };
-
-export const selectCriteriaHelper =
-  selectCriteriaHelperInternal as unknown as SelectCriteriaHelperResults;

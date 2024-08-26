@@ -908,7 +908,10 @@ export type PaymentStatusTypes =
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
   small: 'Small',
-};
+} as const;
+
+export type ProcedureType =
+  (typeof PROCEDURE_TYPES_MAP)[keyof typeof PROCEDURE_TYPES_MAP];
 
 export const PROCEDURE_TYPES = [
   PROCEDURE_TYPES_MAP.regular,

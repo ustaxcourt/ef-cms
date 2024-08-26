@@ -1,24 +1,21 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '../test.cerebral';
-import { selectCriteriaHelperInternal } from '@web-client/presenter/computeds/selectCriteriaHelper';
+import { selectCriteriaHelper as selectCriteriaHelperComputed } from '@web-client/presenter/computeds/selectCriteriaHelper';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('selectCriteriaHelper', () => {
   const selectCriteriaHelper = withAppContextDecorator(
-    selectCriteriaHelperInternal,
+    selectCriteriaHelperComputed,
     applicationContext,
   );
 
   describe('Case Statuses', () => {
     it('should return an empty arrayif there are no case in state', () => {
-      const { caseStatuses } = runCompute<{ caseStatuses: any }>(
-        selectCriteriaHelper,
-        {
-          state: {
-            blockedCases: [],
-          },
+      const { caseStatuses } = runCompute(selectCriteriaHelper, {
+        state: {
+          blockedCases: [],
         },
-      );
+      });
 
       expect(caseStatuses).toEqual([]);
     });
@@ -83,14 +80,11 @@ describe('selectCriteriaHelper', () => {
         },
       ];
 
-      const { caseStatuses } = runCompute<{ caseStatuses: any }>(
-        selectCriteriaHelper,
-        {
-          state: {
-            blockedCases: EXPECTED_OPTIONS.map(o => ({ status: o.value })),
-          },
+      const { caseStatuses } = runCompute(selectCriteriaHelper, {
+        state: {
+          blockedCases: EXPECTED_OPTIONS.map(o => ({ status: o.value })),
         },
-      );
+      });
 
       expect(caseStatuses).toEqual(EXPECTED_OPTIONS);
     });
@@ -98,9 +92,7 @@ describe('selectCriteriaHelper', () => {
 
   describe('Blocked Reasons', () => {
     it('should return an empty array of automatic blocked reasons if there are no blocked cases', () => {
-      const { automaticBlockedReasons } = runCompute<{
-        automaticBlockedReasons: any;
-      }>(selectCriteriaHelper, {
+      const { automaticBlockedReasons } = runCompute(selectCriteriaHelper, {
         state: {
           blockedCases: [],
         },
@@ -110,9 +102,7 @@ describe('selectCriteriaHelper', () => {
     });
 
     it('should return all automatic blocked reasons if there is a blocked cases for each option', () => {
-      const { automaticBlockedReasons } = runCompute<{
-        automaticBlockedReasons: any;
-      }>(selectCriteriaHelper, {
+      const { automaticBlockedReasons } = runCompute(selectCriteriaHelper, {
         state: {
           blockedCases: [
             { automaticBlockedReason: 'Due Date' },
@@ -139,6 +129,40 @@ describe('selectCriteriaHelper', () => {
         {
           key: 'pendingAndDueDate',
           value: 'Pending Item and Due Date',
+        },
+      ]);
+    });
+  });
+
+  describe('Procedure Types', () => {
+    it('should return an empty array of procedure types when there are no blocked cases', () => {
+      const { procedureTypes } = runCompute(selectCriteriaHelper, {
+        state: {
+          blockedCases: [],
+        },
+      });
+
+      expect(procedureTypes).toEqual([]);
+    });
+
+    it('should return all procedure types when there is a blocked case for each option', () => {
+      const { procedureTypes } = runCompute(selectCriteriaHelper, {
+        state: {
+          blockedCases: [
+            { procedureType: 'Regular' },
+            { procedureType: 'Small' },
+          ],
+        },
+      });
+
+      expect(procedureTypes).toEqual([
+        {
+          key: 'regular',
+          value: 'Regular',
+        },
+        {
+          key: 'small',
+          value: 'Small',
         },
       ]);
     });
