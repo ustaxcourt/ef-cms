@@ -3,6 +3,7 @@ import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 const onLockError = new ServiceUnavailableError('The case is currently locked');
 
@@ -26,6 +27,7 @@ describe('acquireLock', () => {
   beforeEach(() => {
     mockCall = {
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       identifiers: ['case|123-45'],
       onLockError,
       retries: 0,
@@ -147,6 +149,7 @@ describe('acquireLock', () => {
         expect(mockCallbackFunction).toHaveBeenCalledWith(
           applicationContext,
           mockCall.options,
+          mockDocketClerkUser,
         );
       });
 
@@ -241,12 +244,20 @@ describe('withLocking', () => {
 
       it('does not throw a ServiceUnavailableError if the feature flag is false and we could not acquire the lock on the specified identifier', async () => {
         await expect(
-          func(applicationContext, { docketNumber: '123-45' }),
+          func(
+            applicationContext,
+            { docketNumber: '123-45' },
+            mockDocketClerkUser,
+          ),
         ).resolves.not.toThrow();
         expect(mockInteractor).toHaveBeenCalledTimes(1);
-        expect(mockInteractor).toHaveBeenCalledWith(applicationContext, {
-          docketNumber: '123-45',
-        });
+        expect(mockInteractor).toHaveBeenCalledWith(
+          applicationContext,
+          {
+            docketNumber: '123-45',
+          },
+          mockDocketClerkUser,
+        );
       });
 
       it('creates a lock for the specified entity', async () => {
@@ -292,11 +303,19 @@ describe('withLocking', () => {
         const onLockErrorFunction = jest.fn();
         func = withLocking(mockInteractor, getLockInfo, onLockErrorFunction);
         await expect(
-          func(applicationContext, { docketNumber: '123-45' }),
+          func(
+            applicationContext,
+            { docketNumber: '123-45' },
+            mockDocketClerkUser,
+          ),
         ).rejects.toThrow(ServiceUnavailableError);
-        expect(onLockErrorFunction).toHaveBeenCalledWith(applicationContext, {
-          docketNumber: '123-45',
-        });
+        expect(onLockErrorFunction).toHaveBeenCalledWith(
+          applicationContext,
+          {
+            docketNumber: '123-45',
+          },
+          mockDocketClerkUser,
+        );
       });
 
       it('throws a ServiceUnavailableError if an onLockError function is provided', async () => {
@@ -328,11 +347,19 @@ describe('withLocking', () => {
     });
 
     it('calls the specified callback function', async () => {
-      await func(applicationContext, { docketNumber: '123-45' });
+      await func(
+        applicationContext,
+        { docketNumber: '123-45' },
+        mockDocketClerkUser,
+      );
       expect(mockInteractor).toHaveBeenCalledTimes(1);
-      expect(mockInteractor).toHaveBeenCalledWith(applicationContext, {
-        docketNumber: '123-45',
-      });
+      expect(mockInteractor).toHaveBeenCalledWith(
+        applicationContext,
+        {
+          docketNumber: '123-45',
+        },
+        mockDocketClerkUser,
+      );
     });
 
     it('removes the lock for the specified identifier', async () => {
@@ -406,6 +433,7 @@ describe('checkLock', () => {
     mockFeatureFlagValue = true; // enabled
     mockCall = {
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       identifier: 'case|123-45',
     };
   });
@@ -475,6 +503,7 @@ describe('checkLock', () => {
         expect(mockCallbackFunction).toHaveBeenCalledWith(
           applicationContext,
           mockCall.options,
+          mockDocketClerkUser,
         );
       });
     });

@@ -1,38 +1,75 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import React, { useState } from 'react';
 
 export const BlockedCasesReport = connect(
   {
+    blockedCaseReportFilter: state.blockedCaseReportFilter,
     blockedCasesReportHelper: state.blockedCasesReportHelper,
-    form: state.form,
+    exportCsvBlockedCaseReportSequence:
+      sequences.exportCsvBlockedCaseReportSequence,
   },
-  function BlockedCasesReport({ blockedCasesReportHelper, form }) {
+  function BlockedCasesReport({
+    blockedCaseReportFilter,
+    blockedCasesReportHelper,
+    exportCsvBlockedCaseReportSequence,
+  }) {
+    const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
+
+    const debounceSubmit = (timeout: number) => {
+      setIsSubmitDebounced(true);
+      setTimeout(() => {
+        setIsSubmitDebounced(false);
+      }, timeout);
+    };
+
     return (
       <>
         <BigHeader text="Reports" />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="title">
+          <div className="title grid-row flex-justify">
             <h1>Blocked Cases</h1>
+            <span>
+              <Button
+                link
+                aria-label="export pending report"
+                className="margin-top-2"
+                data-testid="export-blocked-case-report"
+                disabled={!blockedCasesReportHelper.blockedCasesCount}
+                icon="file-export"
+                onClick={() => {
+                  if (isSubmitDebounced) return;
+                  debounceSubmit(1000);
+                  exportCsvBlockedCaseReportSequence({
+                    blockedCases:
+                      blockedCasesReportHelper.blockedCasesFormatted,
+                    trialLocation: blockedCaseReportFilter.trialLocationFilter,
+                  });
+                }}
+              >
+                Export
+              </Button>
+            </span>
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-3">
               <SelectCriteria />
             </div>
             <div className="grid-col-9">
-              {form.trialLocation && (
+              {blockedCaseReportFilter.trialLocationFilter && (
                 <>
                   <div className="grid-row">
                     <div className="grid-col-6">
-                      <h2>{form.trialLocation}</h2>
+                      <h2>{blockedCaseReportFilter.trialLocationFilter}</h2>
                     </div>
                     <div className="grid-col-6 text-right margin-top-1">
                       <span className="text-semibold">
@@ -105,7 +142,7 @@ export const BlockedCasesReport = connect(
                   )}
                 </>
               )}
-              {!form.trialLocation && (
+              {!blockedCaseReportFilter.trialLocationFilter && (
                 <p className="margin-0 text-semibold">
                   Select a trial location to view blocked cases
                 </p>

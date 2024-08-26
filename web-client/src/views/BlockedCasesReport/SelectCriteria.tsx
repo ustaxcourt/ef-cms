@@ -6,14 +6,16 @@ import React from 'react';
 
 export const SelectCriteria = connect(
   {
-    form: state.form,
+    blockedCaseReportFilter: state.blockedCaseReportFilter,
     getBlockedCasesByTrialLocationSequence:
       sequences.getBlockedCasesByTrialLocationSequence,
+    selectCriteriaHelper: state.selectCriteriaHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function SelectCriteria({
-    form,
+    blockedCaseReportFilter,
     getBlockedCasesByTrialLocationSequence,
+    selectCriteriaHelper,
     updateFormValueSequence,
   }) {
     return (
@@ -22,18 +24,19 @@ export const SelectCriteria = connect(
           <h3>Select criteria</h3>
         </div>
         <div className="blue-container">
-          <div className="usa-form-group margin-bottom-3">
+          <div className="usa-form-group margin-bottom-2">
             <label className="usa-label" htmlFor="trial-location">
               Trial location
             </label>
             <select
               className="usa-select"
               id="trial-location"
-              name="trialLocation"
-              value={form.trialLocation}
+              name="trialLocationFilter"
+              value={blockedCaseReportFilter.trialLocationFilter}
               onChange={e => {
                 getBlockedCasesByTrialLocationSequence({
                   key: e.target.name,
+                  root: 'blockedCaseReportFilter',
                   value: e.target.value,
                 });
               }}
@@ -42,19 +45,20 @@ export const SelectCriteria = connect(
               <TrialCityOptions procedureType="All" />
             </select>
           </div>
-          <div className="usa-form-group margin-bottom-0">
+          <div className="usa-form-group margin-bottom-2">
             <label className="usa-label" htmlFor="procedure-type">
               Case type
             </label>
             <select
               className="usa-select"
-              disabled={!form.trialLocation}
+              disabled={!blockedCaseReportFilter.trialLocationFilter}
               id="procedure-type"
-              name="procedureType"
-              value={form.procedureType}
+              name="procedureTypeFilter"
+              value={blockedCaseReportFilter.procedureTypeFilter}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
+                  root: 'blockedCaseReportFilter',
                   value: e.target.value,
                 });
               }}
@@ -62,6 +66,66 @@ export const SelectCriteria = connect(
               <option value="All">All</option>
               <option value="Small">Small</option>
               <option value="Regular">Regular</option>
+            </select>
+          </div>
+
+          <div className="usa-form-group margin-bottom-2">
+            <label className="usa-label" htmlFor="case-status-type">
+              Case Status
+            </label>
+            <select
+              className="usa-select"
+              disabled={!blockedCaseReportFilter.trialLocationFilter}
+              id="case-status-type"
+              name="caseStatusFilter"
+              value={blockedCaseReportFilter.caseStatusFilter}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  root: 'blockedCaseReportFilter',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="All">All</option>
+              {selectCriteriaHelper.caseStatuses.map(({ key, value }) => {
+                return (
+                  <option key={key} value={value}>
+                    {value}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="usa-form-group margin-bottom-0">
+            <label className="usa-label" htmlFor="reason-type">
+              Reason
+            </label>
+            <select
+              className="usa-select"
+              disabled={!blockedCaseReportFilter.trialLocationFilter}
+              id="reason-type"
+              name="reasonFilter"
+              value={blockedCaseReportFilter.reasonFilter}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  root: 'blockedCaseReportFilter',
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="All">All</option>
+              {selectCriteriaHelper.automaticBlockedReasons.map(
+                ({ key, value }) => {
+                  return (
+                    <option key={key} value={value}>
+                      {value}
+                    </option>
+                  );
+                },
+              )}
             </select>
           </div>
         </div>
