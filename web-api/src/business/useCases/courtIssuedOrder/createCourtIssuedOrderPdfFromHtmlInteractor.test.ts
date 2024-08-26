@@ -48,20 +48,18 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   });
 
   it('fetches the case by id', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor(
-      applicationContext,
-      {} as any,
-    );
+    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
+      addedDocketNumbers: [],
+    } as any);
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
   });
 
   it('calls the pdf document generator function', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor(
-      applicationContext,
-      {} as any,
-    );
+    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
+      addedDocketNumbers: [],
+    } as any);
     expect(
       applicationContext.getDocumentGenerators().order,
     ).toHaveBeenCalledWith(
@@ -76,7 +74,9 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+      {
+        addedDocketNumbers: [],
+      } as any,
     );
 
     expect(
@@ -107,6 +107,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
+        addedDocketNumbers: [],
         eventCode: 'NOT',
       } as any,
     );
@@ -126,6 +127,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
   it('calls the generate the order pdf WITHOUT a defined name or title of the clerk for non-NOT event codes', async () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
+      addedDocketNumbers: [],
       eventCode: 'O',
     } as any);
 
