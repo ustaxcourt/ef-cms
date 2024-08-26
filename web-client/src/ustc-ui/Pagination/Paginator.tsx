@@ -1,13 +1,22 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 
-export const Paginator = ({ currentPageIndex, onPageChange, totalPages }) => {
+export const Paginator = ({
+  currentPageIndex,
+  onPageChange,
+  totalPages,
+}: {
+  totalPages: number;
+  currentPageIndex: number;
+  onPageChange: (currentPage) => void;
+}) => {
   let currentPage = currentPageIndex + 1;
 
   return (
     <nav
       aria-label="Pagination"
       className="usa-pagination margin-bottom-0 margin-top-0"
+      role="navigation"
     >
       <ul className="usa-pagination__list">
         {currentPage > 1 && (
