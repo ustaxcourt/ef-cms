@@ -501,14 +501,14 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       it('should display correct spouse header', () => {
         cy.get('[data-testid="spouse-header"]').should(
           'have.text',
-          "Spouse's information",
+          'Petitioner Spouse information',
         );
       });
 
       it('should display correct is spouse deceased text', () => {
         cy.get('[data-testid="deceased-spouse-legend"]').should(
           'have.text',
-          'Is the spouse deceased?',
+          'Is the petitioner spouse deceased?',
         );
       });
       describe('Spouse is not deceased', () => {

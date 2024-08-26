@@ -61,8 +61,7 @@ export const BeforeStartingCase = connect(
           <h2>How to Create a Case</h2>
           <WarningNotificationComponent
             alertWarning={{
-              message:
-                'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.',
+              message: `Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in ${isPetitioner ? 'your' : 'the'} Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.`,
             }}
             dismissible={false}
             scrollToTop={false}
@@ -84,10 +83,10 @@ export const BeforeStartingCase = connect(
                 className="petitioner-flow-text"
                 style={{ marginBottom: '5px' }}
               >
-                This is the document that explains why you disagree with the
+                {`This is the document that explains why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the
                 Internal Revenue Service (IRS). There are{' '}
-                {petitionFlowUpdated ? 'three' : 'two'} methods to file the
-                Petition:
+                ${petitionFlowUpdated ? 'three' : 'two'} methods to file the
+                Petition:`}
               </div>
               <ul className="margin-top-0">
                 {petitionFlowUpdated && (
@@ -113,8 +112,8 @@ export const BeforeStartingCase = connect(
                   </Button>
                 </li>
                 <li>
-                  Upload for filing your own Petition that complies with the
-                  requirements of the{' '}
+                  {`Upload for filing ${isPetitioner ? 'your own' : 'a'} Petition that complies with the
+                  requirements of the `}
                   <Button
                     link
                     className="usa-link--external text-left mobile-text-wrap"
@@ -186,7 +185,7 @@ export const BeforeStartingCase = connect(
               <div className="petitioner-flow-text">
                 <ul className="margin-top-0">
                   <li>
-                    {`After you submit your case, you'll be asked to pay a $60
+                    {`After you submit ${isPetitioner ? 'your' : 'the'} case, you'll be asked to pay a $60
                     filing fee.`}
                   </li>
                   <li>You may pay online or mail a check/money order.</li>
@@ -213,28 +212,33 @@ export const BeforeStartingCase = connect(
               the mail from the IRS, it may show the last date to file or the
               number of days you have to file a Petition.{' '}
               <b>
-                In most cases, the Court must receive your electronically filed
-                Petition no later than 11:59 pm Eastern Time on the last date to
-                file.
+                In most cases, the Court must receive{' '}
+                {isPetitioner ? 'your' : 'the'} electronically filed Petition no
+                later than 11:59 pm Eastern Time on the last date to file.
               </b>{' '}
-              Petitions received after this date may be untimely and your case
-              may be dismissed.
+              Petitions received after this date may be untimely and{' '}
+              {isPetitioner ? 'your' : 'the'} case may be dismissed.
             </div>
           </div>
           <div className="grid-row grid-gap">
-            <Accordion className="petitioner-accordion-title" headingLevel="3">
-              <AccordionItem
-                customTitleClassName="petitioner-accordion-title"
-                key="Are you filing jointly with a spouse?"
-                title={`${isPetitioner ? 'Are you' : 'Is the petitioner'} filing jointly with a spouse?`}
+            {isPetitioner && (
+              <Accordion
+                className="petitioner-accordion-title"
+                headingLevel="3"
               >
-                <div data-testid="filing-jointly-accordion-item">
-                  {isPetitioner
-                    ? "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
-                    : 'To file a joint Petition with a spouse, the petitioner must have the spouse’s consent. If the petitioner does not have the spouse’s consent, select “Petitioner” as the person you are filing on behalf of.'}
-                </div>
-              </AccordionItem>
-            </Accordion>
+                <AccordionItem
+                  customTitleClassName="petitioner-accordion-title"
+                  key="Are you filing jointly with a spouse?"
+                  title="Are you filing jointly with a spouse?"
+                >
+                  <div data-testid="filing-jointly-accordion-item">
+                    {
+                      "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
+                    }
+                  </div>
+                </AccordionItem>
+              </Accordion>
+            )}
             {isPetitioner && (
               <Accordion
                 className="petitioner-accordion-title"
@@ -272,7 +276,7 @@ export const BeforeStartingCase = connect(
                 title="Are you filing for a business?"
               >
                 <div className="margin-bottom-1">
-                  {`If you're filing for a business, you'll need to complete and
+                  {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
                   submit the Corporate Disclosure Statement.`}
                 </div>
                 <div>

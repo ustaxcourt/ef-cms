@@ -192,7 +192,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       it('should display correct filing type options for private practitioner', () => {
         const EXPECTED_FILING_TYPES: string[] = [
           'Petitioner',
-          'Petitioner and spouse',
+          'Petitioner and petitioner spouse',
           'A business',
           'Other',
         ];

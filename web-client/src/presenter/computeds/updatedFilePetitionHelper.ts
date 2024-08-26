@@ -68,9 +68,22 @@ export const updatedFilePetitionHelper = (
 
 function formatFilingTypes(filingOptions) {
   return filingOptions.map(option => {
-    const isIndividualPetitioner = option === 'Individual petitioner';
+    if (option === 'Individual petitioner') {
+      return {
+        label: 'Petitioner',
+        value: option,
+      };
+    }
+
+    if (option === 'Petitioner and spouse') {
+      return {
+        label: 'Petitioner and petitioner spouse',
+        value: option,
+      };
+    }
+
     return {
-      label: isIndividualPetitioner ? 'Petitioner' : option,
+      label: option,
       value: option,
     };
   });
