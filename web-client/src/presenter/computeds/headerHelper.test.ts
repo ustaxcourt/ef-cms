@@ -1,5 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+//import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { emptyUserState } from '@web-client/presenter/state/userState';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -11,13 +13,14 @@ const headerHelper = withAppContextDecorator(
 );
 
 const getBaseState = user => {
-  applicationContext.getCurrentUser = () => user;
   applicationContext.getPublicSiteUrl = () => 'localhost:5678/';
   return {
     notifications: {
       unreadCount: 0,
     },
     permissions: getUserPermissions(user),
+    token: '283490',
+    user,
   };
 };
 
@@ -100,9 +103,14 @@ describe('headerHelper', () => {
   });
 
   it('should show trial sessions for internal users', () => {
+    const user = {
+      email: 'something@mail.com',
+      name: 'Jody',
+      userId: '77747b11-19b3-4c96-b7a1-fa6a5654e2d5',
+    };
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getBaseState({ role }),
+        state: getBaseState({ role, ...user }),
       });
       expect(result.showTrialSessions).toBeTruthy();
     });
@@ -281,7 +289,7 @@ describe('headerHelper', () => {
       const result = runCompute(headerHelper, {
         state: {
           ...getBaseState({ role: ROLES.privatePractitioner }),
-          currentPage: 'DashboardPractitioner',
+          currentPage: 'DashboardPetitioner',
         },
       });
 
@@ -367,8 +375,9 @@ describe('headerHelper', () => {
     it('should be the public site url when the current user is not logged in', () => {
       const result = runCompute(headerHelper, {
         state: {
-          ...getBaseState(undefined),
+          ...getBaseState(emptyUserState),
           currentPage: 'Messages',
+          token: undefined,
         },
       });
 

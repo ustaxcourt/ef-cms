@@ -5,6 +5,7 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/busin
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 
 jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
@@ -13,7 +14,6 @@ jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
 
 describe('setNoticeOfChangeOfTrialJudge', () => {
   const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-  const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
   const currentTrialSession = {
     ...MOCK_TRIAL_INPERSON,
@@ -39,7 +39,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId,
     },
-    { applicationContext },
+    { authorizedUser: undefined },
   );
 
   beforeEach(() => {
@@ -54,13 +54,16 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
   });
 
   it('should retrieve the judge title and fullname for the current and new judges', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
-    });
+    await setNoticeOfChangeOfTrialJudge(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        currentTrialSession,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: updatedTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(getJudgeWithTitle.mock.calls[0][0]).toMatchObject({
       judgeUserName: currentTrialSession.judge.name,
@@ -73,13 +76,16 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
   });
 
   it('should create a docket entry and serve the generated notice', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
-    });
+    await setNoticeOfChangeOfTrialJudge(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        currentTrialSession,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: updatedTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry

@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateIrsPractitioner', () => {
   let myCase;
@@ -13,7 +13,7 @@ describe('updateIrsPractitioner', () => {
         irsPractitioners: [{ name: 'Christopher Walken', userId: '123' }],
         privatePractitioners: [{ name: 'Slim Shady', userId: '567' }],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
   });
 
@@ -28,7 +28,7 @@ describe('updateIrsPractitioner', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

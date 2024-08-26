@@ -5,9 +5,6 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getJudgeForCurrentUserAction', () => {
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: '123',
-    });
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -18,6 +15,11 @@ describe('getJudgeForCurrentUserAction', () => {
     const result = await runAction(getJudgeForCurrentUserAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          userId: '123',
+        },
       },
     });
     expect(
@@ -33,6 +35,11 @@ describe('getJudgeForCurrentUserAction', () => {
     const result = await runAction(getJudgeForCurrentUserAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          userId: '123',
+        },
       },
     });
     expect(result.output.judgeUser).toBeUndefined();
