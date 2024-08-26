@@ -4,6 +4,8 @@ import {
   CASE_STATUS_TYPES,
   CaseStatus,
 } from '@shared/business/entities/EntityConstants';
+import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 type SelectCriteriaHelperResults = {
   automaticBlockedReasons: {
@@ -13,26 +15,40 @@ type SelectCriteriaHelperResults = {
   caseStatuses: { key: string; value: CaseStatus }[];
 };
 
-export const selectCriteriaHelperInternal = (): SelectCriteriaHelperResults => {
+export const selectCriteriaHelperInternal = (
+  get: Get,
+): SelectCriteriaHelperResults => {
+  const blockedCases: RawCase[] = get(state.blockedCases);
+
   const automaticBlockedReasons: {
     key: string;
     value: AutomaticBlockedReasons | 'Manual Block';
-  }[] = Object.entries(AUTOMATIC_BLOCKED_REASONS).map(([key, value]) => ({
-    key,
-    value,
-  }));
+  }[] = Object.entries(AUTOMATIC_BLOCKED_REASONS)
+    .map(([key, value]) => ({
+      key,
+      value,
+    }))
+    .filter(reason => {
+      return blockedCases.some(
+        bc => bc.automaticBlockedReason === reason.value,
+      );
+    });
 
-  automaticBlockedReasons.push({
-    key: 'manualBlock',
-    value: 'Manual Block',
-  });
+  if (blockedCases.some(bc => !!bc.blockedReason)) {
+    automaticBlockedReasons.push({
+      key: 'manualBlock',
+      value: 'Manual Block',
+    });
+  }
 
   const caseStatuses: { key: string; value: CaseStatus }[] = Object.entries(
     CASE_STATUS_TYPES,
-  ).map(([key, value]) => ({
-    key,
-    value,
-  }));
+  )
+    .map(([key, value]) => ({
+      key,
+      value,
+    }))
+    .filter(option => blockedCases.some(c => c.status === option.value));
 
   const sortByLabel = (a, b) => {
     if (a.value < b.value) return -1;
