@@ -8,7 +8,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const addTrialSessionInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  displayRemoteProceedingForm: boolean;
+  isStandaloneSession: boolean;
+  sessionTypes: string[];
+  title: string;
+  today: string;
+} => {
   const { SESSION_TYPES, TRIAL_SESSION_PROCEEDING_TYPES } =
     applicationContext.getConstants();
 
@@ -45,8 +51,8 @@ export const addTrialSessionInformationHelper = (
 
   return {
     displayRemoteProceedingForm,
-    getSessionTypes,
     isStandaloneSession,
+    sessionTypes: getSessionTypes(get(state.user)),
     title,
     today,
   };

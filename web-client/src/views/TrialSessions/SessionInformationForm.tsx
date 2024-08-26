@@ -6,21 +6,28 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const SessionInformationForm = connect(
-  {
-    DATE_FORMATS: state.constants.DATE_FORMATS,
-    TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
-    addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
-    form: state.form,
-    formatAndUpdateDateFromDatePickerSequence:
-      sequences.formatAndUpdateDateFromDatePickerSequence,
-    formattedTrialSessions: state.formattedTrialSessions,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-    user: state.user,
-    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
-    validationErrors: state.validationErrors,
-  },
+type SessionInformationFormProps = { addingTrialSession: boolean };
+
+const sessionInformationDeps = {
+  DATE_FORMATS: state.constants.DATE_FORMATS,
+  TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
+  addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
+  form: state.form,
+  formatAndUpdateDateFromDatePickerSequence:
+    sequences.formatAndUpdateDateFromDatePickerSequence,
+  formattedTrialSessions: state.formattedTrialSessions,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+  user: state.user,
+  validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const SessionInformationForm = connect<
+  SessionInformationFormProps,
+  typeof sessionInformationDeps
+>(
+  sessionInformationDeps,
   function SessionInformationForm({
     addingTrialSession,
     addTrialSessionInformationHelper,
@@ -30,7 +37,6 @@ export const SessionInformationForm = connect(
     formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
-    user,
     validateTrialSessionSequence,
     validationErrors,
   }) {
@@ -291,35 +297,33 @@ export const SessionInformationForm = connect(
               <legend className="usa-legend" id="session-type-legend">
                 Session type
               </legend>
-              {addTrialSessionInformationHelper
-                .getSessionTypes(user)
-                .map(option => (
-                  <div className="usa-radio max-width-150" key={option}>
-                    <input
-                      aria-describedby="session-type-legend"
-                      checked={form.sessionType === option}
-                      className="usa-radio__input"
-                      id={`session-type-${option}`}
-                      name="sessionType"
-                      type="radio"
-                      value={option}
-                      onChange={e => {
-                        updateTrialSessionFormDataSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateTrialSessionSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      data-testid={`session-type-${option}`}
-                      htmlFor={`session-type-${option}`}
-                    >
-                      {option}
-                    </label>
-                  </div>
-                ))}
+              {addTrialSessionInformationHelper.sessionTypes.map(option => (
+                <div className="usa-radio max-width-150" key={option}>
+                  <input
+                    aria-describedby="session-type-legend"
+                    checked={form.sessionType === option}
+                    className="usa-radio__input"
+                    id={`session-type-${option}`}
+                    name="sessionType"
+                    type="radio"
+                    value={option}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateTrialSessionSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    data-testid={`session-type-${option}`}
+                    htmlFor={`session-type-${option}`}
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
             </fieldset>
           </FormGroup>
           {!addTrialSessionInformationHelper.isStandaloneSession && (
