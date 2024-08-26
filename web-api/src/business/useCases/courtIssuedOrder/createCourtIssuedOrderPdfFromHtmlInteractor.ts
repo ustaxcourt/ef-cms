@@ -2,6 +2,7 @@ import {
   CLERK_OF_THE_COURT_CONFIGURATION,
   NOTICE_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -64,7 +65,9 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
-      addedDocketNumbers,
+      addedDocketNumbers: addedDocketNumbers.sort((a, b) =>
+        Case.docketNumberSort(a, b),
+      ),
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
