@@ -50,10 +50,41 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
     loginAsDocketClerk1();
     goToCase(leadCase);
 
-    cy.get('[data-testid="tab-drafts"').click();
-    cy.get('[data-testid="docket-entry-description-0"]').click();
+    // Arrange: create the docket entry and sign it
+    cy.get('[data-testid="case-detail-menu-button"]').click();
+    cy.get('[data-testid="menu-button-upload-pdf"]').click();
+    const title = `${faker.word.adjective()} ${faker.word.noun()}`;
+    cy.get('[data-testid="upload-description"]').type(title);
+    cy.readFile('cypress/helpers/file/sample.pdf', null).then(fileContent => {
+      cy.get('[data-testid="primary-document-file"]').attachFile({
+        fileContent,
+        fileName: 'sample.pdf',
+        mimeType: 'application/pdf',
+      });
+      cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+    });
+    cy.get('#apply-signature').click();
+    cy.get('[data-testid="sign-pdf-canvas"]').click();
+    cy.get('[data-testid="save-signature-button"]').click();
+
+    // Act: edit the docket entry
     cy.get('[data-testid="edit-order-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
-    // TODO: the call to `/remove-signature` on the backend throws a 400 error
+    const newTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
+    cy.get('[data-testid="upload-description"]').clear();
+    cy.get('[data-testid="upload-description"]').type(newTitle);
+    cy.get('[data-testid="save-edited-pdf-button"]').click();
+
+    // Assert: the new description should display for the edited docket entry
+    cy.get('[data-testid^="docket-entry-description-"]').then($els => {
+      const matchingElements = $els.filter((index, el) => {
+        return Cypress.$(el).text().includes(newTitle);
+      });
+
+      expect(
+        matchingElements.length,
+        `Expected to find "${newTitle}" in at least one element`,
+      ).to.be.greaterThan(0);
+    });
   });
 });
