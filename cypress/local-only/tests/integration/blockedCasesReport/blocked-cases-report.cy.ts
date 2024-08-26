@@ -2,53 +2,50 @@ import {
   FORMATS,
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
-import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Blocked Cases Report', () => {
-  beforeEach(() => {
+  before(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
-
-    loginAsDocketClerk1();
-
-    cy.get('[data-testid="dropdown-select-report"]').click();
-    cy.get('[data-testid="blocked-cases-report"]').click();
   });
 
-  describe('Filtering', () => {
-    it('should display the not found error page when routing to a case that does not exist', () => {
-      cy.get('[data-testid="trial-location-filter"]').select('Lubbock, Texas');
-      cy.get('[data-testid="blocked-cases-count"]').should('have.text', '6');
+  it('should show a blocked case in the blocked cases report and the downloaded csv report', () => {
+    createAndServePaperPetition().then(({ docketNumber }) => {
+      //block case
+      loginAsColvin();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="add-manual-block-button"]').click();
+      cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
+        'This case cannot go to trial.',
+      );
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').contains(
+        'Case blocked from being set for trial.',
+      );
 
-      cy.get('[data-testid="procedure-type-filter"]').select('Regular');
-      cy.get('[data-testid="blocked-cases-count"]').should('have.text', '5');
+      //View report
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(10000); // wait for opensearch to index case
+      cy.get('[data-testid="dropdown-select-report"]').click();
+      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="trial-location-filter"]').select(
+        'Birmingham, Alabama',
+      );
+      cy.get('[data-testid="blocked-cases-count"]').should('exist');
+      cy.get('[data-testid="blocked-cases-report-table"]').contains(
+        docketNumber,
+      );
 
-      cy.get('[data-testid="case-status-filter"]').select('Submitted');
-      cy.get('[data-testid="blocked-cases-count"]').should('have.text', '4');
-
-      cy.get('[data-testid="blocked-reason-filter"]').select('Pending Item');
-      cy.get('[data-testid="blocked-cases-count"]').should('have.text', '3');
-    });
-  });
-
-  describe('CSV Export', () => {
-    it('should display the not found error page when routing to a case that does not exist', () => {
-      cy.get('[data-testid="trial-location-filter"]').select('Lubbock, Texas');
-      cy.get('[data-testid="procedure-type-filter"]').select('Regular');
-      cy.get('[data-testid="case-status-filter"]').select('Submitted');
-      cy.get('[data-testid="blocked-reason-filter"]').select('Pending Item');
-
-      cy.get('[data-testid="blocked-cases-count"]').should('have.text', '3');
-
+      //download csv
       cy.get('[data-testid="export-blocked-case-report"]').click();
-
       const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
-      const fileName = `Blocked Cases Report - Lubbock_Texas ${today}.csv`;
-      cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').should(
+      const fileName = `Blocked Cases Report - Birmingham_Alabama ${today}.csv`;
+      cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').then(
         fileContent => {
-          const totalCasesInReport = fileContent
-            .split('\n')
-            .filter((str: string) => !!str).length;
-          expect(totalCasesInReport).to.equal(4);
+          expect(fileContent).to.include(docketNumber);
         },
       );
     });

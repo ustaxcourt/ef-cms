@@ -81,7 +81,10 @@ export const BlockedCasesReport = connect(
                     </div>
                   </div>
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
-                    <table className="usa-table subsection ustc-table deadlines">
+                    <table
+                      className="usa-table subsection ustc-table deadlines"
+                      data-testid="blocked-cases-report-table"
+                    >
                       <thead>
                         <tr>
                           <th
