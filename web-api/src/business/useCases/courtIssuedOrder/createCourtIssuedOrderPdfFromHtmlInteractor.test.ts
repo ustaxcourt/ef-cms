@@ -42,7 +42,9 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('fetches the case by id', async () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+      {
+        addedDocketNumbers: [],
+      } as any,
       mockDocketClerkUser,
     );
     expect(
@@ -53,7 +55,9 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('calls the pdf document generator function', async () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+      {
+        addedDocketNumbers: [],
+      } as any,
       mockDocketClerkUser,
     );
     expect(
@@ -70,7 +74,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+
+      {
+        addedDocketNumbers: [],
+      } as any,
       mockDocketClerkUser,
     );
 
@@ -103,6 +110,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
+        addedDocketNumbers: [],
         eventCode: 'NOT',
       } as any,
       mockDocketClerkUser,
@@ -125,6 +133,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
+        addedDocketNumbers: [],
         eventCode: 'O',
       } as any,
       mockDocketClerkUser,
@@ -144,5 +153,38 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
         }),
       }),
     );
+  });
+
+  describe('BUG: Order the Docket Numbers', () => {
+    it('should order the docket numbers correctly by year and index', async () => {
+      await createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {
+          addedDocketNumbers: [
+            '101-24',
+            '101-19',
+            '103-19',
+            '101-26',
+            '101-16',
+            '102-19',
+            '101-20',
+          ],
+        } as any,
+        mockDocketClerkUser,
+      );
+
+      const orderCalls =
+        applicationContext.getDocumentGenerators().order.mock.calls;
+      expect(orderCalls.length).toEqual(1);
+      expect(orderCalls[0][0].data.addedDocketNumbers).toEqual([
+        '101-16',
+        '101-19',
+        '102-19',
+        '103-19',
+        '101-20',
+        '101-24',
+        '101-26',
+      ]);
+    });
   });
 });
