@@ -1,6 +1,14 @@
 export function createAndServePaperPetition(
   options = { yearReceived: '2020' },
-) {
+): Cypress.Chainable<{
+  docketNumber: string;
+  documentsCreated: {
+    eventCode: string;
+    index: number;
+    servedTo: string;
+  }[];
+  name: string;
+}> {
   const name = 'rick james ' + Date.now();
   cy.login('petitionsclerk1');
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
