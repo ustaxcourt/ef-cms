@@ -27,6 +27,7 @@ export const UpdatedFilePetitionStep3 = connect(
     setHasIrsNoticeSequence: sequences.setHasIrsNoticeSequence,
     startCaseHelper: state.startCaseHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
     validationErrors: state.validationErrors,
   },
   function UpdatedFilePetitionStep3({
@@ -38,9 +39,12 @@ export const UpdatedFilePetitionStep3 = connect(
     petitionGenerationLiveValidationSequence,
     setHasIrsNoticeSequence,
     startCaseHelper,
+    updatedFilePetitionHelper,
     updateFormValueSequence,
     validationErrors,
   }) {
+    const { isPetitioner } = updatedFilePetitionHelper;
+
     const handleIrsNoticeErrors = (errors, refs, elementsToFocus, prefix) => {
       if (!Array.isArray(errors)) {
         return;
@@ -206,8 +210,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 className="margin-bottom-0"
                 errorMessageId="case-type-root-error-message"
-                legend="Which topic most closely matches your complaint with the
-                IRS?"
+                legend={`Which topic most closely matches ${isPetitioner ? 'your' : 'the petitioner’s'} complaint with the IRS?`}
                 value={form.caseType}
                 onBlurSequence={() => {
                   petitionGenerationLiveValidationSequence({

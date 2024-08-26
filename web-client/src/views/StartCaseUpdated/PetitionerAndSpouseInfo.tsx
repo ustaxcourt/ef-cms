@@ -36,7 +36,7 @@ export function PetitionerAndSpouseInfo({
         >
           {isPetitioner
             ? 'Is your spouse deceased?'
-            : 'Is the spouse deceased?'}
+            : 'Is the petitioner spouse deceased?'}
         </legend>
         {['Yes', 'No'].map((isSpouseDeceased, idx) => (
           <div className="usa-radio usa-radio__inline" key={isSpouseDeceased}>

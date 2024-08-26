@@ -41,7 +41,7 @@ export const UpdatedFilePetitionStep1 = connect(
         <p className="margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
-        <h2>I am filing this petition on behalf of...</h2>
+        <h2>I am filing this Petition on behalf of...</h2>
         <FormGroup
           errorMessageId="filling-type-error-message"
           errorText={validationErrors.filingType}
@@ -110,7 +110,7 @@ export const UpdatedFilePetitionStep1 = connect(
               registerRef={registerRef}
             />
             <h2 data-testid="spouse-header">
-              {isPetitioner ? "Your spouse's" : "Spouse's"} information
+              {isPetitioner ? "Your spouse's" : 'Petitioner Spouse'} information
             </h2>
             <PetitionerAndSpouseInfo
               form={form}

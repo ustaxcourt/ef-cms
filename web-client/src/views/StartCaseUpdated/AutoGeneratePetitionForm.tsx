@@ -10,9 +10,16 @@ export const AutoGeneratePetitionForm = connect(
   {
     addFactOrReasonSequence: sequences.addFactOrReasonSequence,
     form: state.form,
+    updatedFilePetitionHelper: state.updatedFilePetitionHelper,
   },
 
-  function AutoGeneratePetitionForm({ addFactOrReasonSequence, form }) {
+  function AutoGeneratePetitionForm({
+    addFactOrReasonSequence,
+    form,
+    updatedFilePetitionHelper,
+  }) {
+    const { isPetitioner } = updatedFilePetitionHelper;
+
     return (
       <>
         <FormGroup className="autogenerate-petition-form">
@@ -21,8 +28,9 @@ export const AutoGeneratePetitionForm = connect(
             htmlFor="petitionReasons"
             id="petition-reason-label"
           >
-            1. Explain why you disagree with the IRS action(s) in this case
-            (please add each reason separately):
+            {`1. Explain why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the IRS action(s) in this case
+            (please add each reason separately)`}
+            :
           </label>
 
           <div className="margin-bottom-2-rem">
@@ -61,8 +69,8 @@ export const AutoGeneratePetitionForm = connect(
             htmlFor="petitionFacts"
             id="petition-fact-label"
           >
-            2. State the facts upon which you rely (please add each fact
-            separately):
+            {`2. State the facts upon which ${isPetitioner ? 'you rely' : 'the petitioner relies'} (please add each fact
+            separately):`}
           </label>
           <div>
             {form.petitionFacts &&
