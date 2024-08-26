@@ -157,17 +157,21 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
   describe('BUG: Order the Docket Numbers', () => {
     it('should order the docket numbers correctly by year and index', async () => {
-      await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
-        addedDocketNumbers: [
-          '101-24',
-          '101-19',
-          '103-19',
-          '101-26',
-          '101-16',
-          '102-19',
-          '101-20',
-        ],
-      } as any);
+      await createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {
+          addedDocketNumbers: [
+            '101-24',
+            '101-19',
+            '103-19',
+            '101-26',
+            '101-16',
+            '102-19',
+            '101-20',
+          ],
+        } as any,
+        mockDocketClerkUser,
+      );
 
       const orderCalls =
         applicationContext.getDocumentGenerators().order.mock.calls;
