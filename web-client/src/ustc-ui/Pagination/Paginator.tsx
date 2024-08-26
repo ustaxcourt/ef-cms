@@ -1,51 +1,51 @@
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
-import ReactPaginate from 'react-paginate';
 
-export const Paginator = ({
-  breakClassName,
-  forcePage,
-  id,
-  marginPagesDisplayed = 3,
-  onPageChange,
-  pageCount,
-  pageRangeDisplayed,
-}: {
-  breakClassName?: string;
-  marginPagesDisplayed?: number;
-  pageCount: number;
-  id?: string;
-  pageRangeDisplayed: number;
-  onPageChange: (selectedItem: { selected: number }) => void;
-  forcePage: number;
-}) => {
+export const Paginator = ({ currentPageIndex, onPageChange, totalPages }) => {
+  let currentPage = currentPageIndex + 1;
+
   return (
-    <>
-      <nav
-        aria-label="Pagination"
-        className="usa-pagination margin-bottom-0 margin-top-0"
-        id={id}
-      >
-        <ReactPaginate
-          activeLinkClassName="paginator-current"
-          breakClassName={`usa-pagination__item ${breakClassName}`}
-          breakLinkClassName="usa-pagination__button cursor-pointer border-none"
-          className="usa-pagination__list"
-          disabledClassName="hide"
-          forcePage={forcePage}
-          marginPagesDisplayed={marginPagesDisplayed}
-          nextClassName="usa-pagination__item"
-          nextLinkClassName="usa-pagination__link usa-pagination__next-page cursor-pointer"
-          pageClassName="usa-pagination__item usa-pagination__page-no"
-          pageCount={pageCount}
-          pageLinkClassName="usa-pagination__button cursor-pointer"
-          pageRangeDisplayed={pageRangeDisplayed}
-          previousClassName="usa-pagination__item"
-          previousLinkClassName="usa-pagination__link usa-pagination__previous-page cursor-pointer"
-          renderOnZeroPageCount={null}
-          onPageChange={onPageChange}
-        />
-      </nav>
-    </>
+    <nav
+      aria-label="Pagination"
+      className="usa-pagination margin-bottom-0 margin-top-0"
+    >
+      <ul className="usa-pagination__list">
+        {currentPage > 1 && (
+          <li className="usa-pagination__item">
+            <Button
+              link
+              aria-label="Previous"
+              className="usa-pagination__link usa-pagination__previous-page cursor-pointer"
+              disabled={currentPage === 1}
+              onClick={() => onPageChange(currentPage - 2)}
+            >
+              Previous
+            </Button>
+          </li>
+        )}
+        <li
+          className={'usa-pagination__item usa-pagination__page-no'}
+          key={currentPage}
+        >
+          <button className="usa-pagination__button cursor-pointer paginator-current">
+            {currentPage}
+          </button>
+        </li>
+        {currentPage < totalPages && (
+          <li className="usa-pagination__item">
+            <Button
+              link
+              aria-label="Next"
+              className="usa-pagination__link usa-pagination__next-page cursor-pointer"
+              disabled={currentPage === totalPages}
+              onClick={() => onPageChange(currentPage)}
+            >
+              Next
+            </Button>
+          </li>
+        )}
+      </ul>
+    </nav>
   );
 };
 
