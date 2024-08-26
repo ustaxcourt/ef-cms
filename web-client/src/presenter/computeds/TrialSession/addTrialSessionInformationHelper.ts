@@ -24,18 +24,21 @@ export const addTrialSessionInformationHelper = (
     proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote ||
     isStandaloneSession;
 
+  const DISALLOWED_STANDALONE_SESSION_TYPES = ['Special', 'Motion/Hearing'];
+  const DOCKETCLERK_EDITABLE_SESSION_TYPES = ['Special', 'Motion/Hearing'];
+
   let sessionTypes = Object.values(SESSION_TYPES);
 
   if (isStandaloneSession) {
     sessionTypes = sessionTypes.filter(type => {
-      return !['Special', 'Motion/Hearing'].includes(type);
+      return !DISALLOWED_STANDALONE_SESSION_TYPES.includes(type);
     });
   }
 
   // NOTE: what happens if isStandaloneSession is true and user is docketclerk?
   const getSessionTypes = (user: AuthUser) => {
     return user.role === 'docketclerk'
-      ? ['Special', 'Motion/Hearing']
+      ? DOCKETCLERK_EDITABLE_SESSION_TYPES
       : sessionTypes;
   };
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
