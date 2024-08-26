@@ -36,7 +36,7 @@ const onSuccess = [
   getUploadCourtIssuedDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  setCaseDetailPageTabActionGenerator,
+  setCaseDetailPageTabActionGenerator(),
   setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
   followRedirectAction,
