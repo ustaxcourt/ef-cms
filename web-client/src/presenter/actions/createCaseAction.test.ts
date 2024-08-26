@@ -48,9 +48,6 @@ describe('createCaseAction', () => {
       petitionFileId: '123',
       stinFileId: '123',
     });
-    applicationContext.getCurrentUser.mockReturnValue({
-      email: 'petitioner1@example.com',
-    });
   });
 
   it('should call createCaseInteractor and addCoversheetInteractor FOUR times when there is a CDS form, and then call the success path', async () => {
@@ -81,19 +78,26 @@ describe('createCaseAction', () => {
     await runAction(createCaseAction, {
       modules: { presenter },
       props: { fileUploadProgressMap },
-      state: { form: mockPetitionMetadata },
+      state: {
+        form: mockPetitionMetadata,
+        user: { email: 'petitioner1@example.com' },
+      },
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
-    expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
-      attachmentToPetitionUploadProgress: [
-        fileUploadProgressMap.attachmentToPetition,
-      ],
-      corporateDisclosureUploadProgress:
-        fileUploadProgressMap.corporateDisclosure,
-      petitionUploadProgress: fileUploadProgressMap.petition,
-      stinUploadProgress: fileUploadProgressMap.stin,
-    });
+    expect(generateDocumentIds).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        attachmentToPetitionUploadProgress: [
+          fileUploadProgressMap.attachmentToPetition,
+        ],
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
+      },
+      { email: 'petitioner1@example.com' },
+    );
 
     expect(createCaseInteractor).toHaveBeenCalled();
 
@@ -127,16 +131,23 @@ describe('createCaseAction', () => {
           attachmentToPetition: undefined,
         },
       },
-      state: { form: mockPetitionMetadata },
+      state: {
+        form: mockPetitionMetadata,
+        user: { email: 'petitioner1@example.com' },
+      },
     });
 
     expect(generateDocumentIds).toHaveBeenCalled();
-    expect(generateDocumentIds).toHaveBeenCalledWith(expect.anything(), {
-      corporateDisclosureUploadProgress:
-        fileUploadProgressMap.corporateDisclosure,
-      petitionUploadProgress: fileUploadProgressMap.petition,
-      stinUploadProgress: fileUploadProgressMap.stin,
-    });
+    expect(generateDocumentIds).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        corporateDisclosureUploadProgress:
+          fileUploadProgressMap.corporateDisclosure,
+        petitionUploadProgress: fileUploadProgressMap.petition,
+        stinUploadProgress: fileUploadProgressMap.stin,
+      },
+      { email: 'petitioner1@example.com' },
+    );
 
     expect(createCaseInteractor).toHaveBeenCalled();
     expect(createCaseInteractor).toHaveBeenCalledWith(expect.anything(), {

@@ -38,18 +38,12 @@ export class PublicCase extends JoiValidationEntity {
   constructor(
     rawCase: any,
     {
-      applicationContext,
       authorizedUser,
     }: {
-      applicationContext: IApplicationContext;
-      authorizedUser?: UnknownAuthUser;
+      authorizedUser: UnknownAuthUser;
     },
   ) {
     super('PublicCase');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.entityName = 'PublicCase';
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
@@ -73,9 +67,7 @@ export class PublicCase extends JoiValidationEntity {
 
     this.isSealed = isSealedCase(rawCase);
 
-    const currentUser = authorizedUser || applicationContext.getCurrentUser();
-
-    if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
+    if (authorizedUser?.role === ROLES.irsPractitioner && !this.isSealed) {
       this.petitioners = rawCase.petitioners;
 
       this.irsPractitioners = (rawCase.irsPractitioners || []).map(
