@@ -20,6 +20,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -30,6 +31,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -40,6 +42,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { proceedingType: 'def', sessionScope: 'abc' },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -52,6 +55,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -62,6 +66,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -74,6 +79,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -84,6 +90,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -96,6 +103,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -106,6 +114,7 @@ describe('addTrialSessionInformationHelper', () => {
       const result = runCompute(addTrialSessionInformationHelper, {
         state: {
           form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
+          user: { role: 'docketclerk' },
         },
       });
 
@@ -123,7 +132,7 @@ describe('addTrialSessionInformationHelper', () => {
         },
       });
 
-      expect(result.getSessionTypes(user)).toEqual([
+      expect(result.sessionTypes).toEqual([
         'Regular',
         'Small',
         'Hybrid',
@@ -140,7 +149,7 @@ describe('addTrialSessionInformationHelper', () => {
         },
       });
 
-      expect(result.getSessionTypes(user)).toEqual([
+      expect(result.sessionTypes).toEqual([
         'Regular',
         'Small',
         'Hybrid',
@@ -159,10 +168,7 @@ describe('addTrialSessionInformationHelper', () => {
         },
       });
 
-      expect(result.getSessionTypes(user)).toEqual([
-        'Special',
-        'Motion/Hearing',
-      ]);
+      expect(result.sessionTypes).toEqual(['Special', 'Motion/Hearing']);
     });
   });
 });
