@@ -22,7 +22,6 @@ interface IOtherContactNameLabel {
 
 type UpdatedFilePetitionHelper = {
   filingOptions: { label: string; value: string }[];
-  customPhoneMessage?: string;
   isPetitioner: boolean;
   isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
@@ -50,13 +49,8 @@ export const updatedFilePetitionHelper = (
   const isPetitioner = user.role === ROLES.petitioner;
   const isPractitioner = user.role === ROLES.privatePractitioner;
 
-  const customPhoneMessage = isPractitioner
-    ? 'If they do not have a current phone number, enter N/A.'
-    : undefined;
-
   return {
     businessFieldNames,
-    customPhoneMessage,
     filingOptions,
     isPetitioner,
     isPractitioner,

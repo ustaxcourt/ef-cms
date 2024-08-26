@@ -11,7 +11,6 @@ export function OtherInfo({
   petitionGenerationLiveValidationSequence,
   registerRef,
   showContactInformationForOtherPartyType,
-  updatedFilePetitionHelper,
   updateFilingTypeSequence,
   updateFormValueCountryTypeSequence,
   updateFormValueUpdatedSequence,
@@ -93,7 +92,6 @@ export function OtherInfo({
             updateFormValueCountryTypeSequence
           }
           updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
-          updatedFilePetitionHelper={updatedFilePetitionHelper}
         />
       )}
     </div>

@@ -9,7 +9,6 @@ export function BusinessInfo({
   form,
   petitionGenerationLiveValidationSequence,
   registerRef,
-  updatedFilePetitionHelper,
   updateFilingTypeSequence,
   updateFormValueCountryTypeSequence,
   updateFormValueUpdatedSequence,
@@ -65,7 +64,6 @@ export function BusinessInfo({
         <div>
           <ContactPrimaryUpdated
             addressInfo={form.contactPrimary}
-            customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
