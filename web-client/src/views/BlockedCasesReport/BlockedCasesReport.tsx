@@ -73,7 +73,10 @@ export const BlockedCasesReport = connect(
                     </div>
                     <div className="grid-col-6 text-right margin-top-1">
                       <span className="text-semibold">
-                        Count: {blockedCasesReportHelper.blockedCasesCount}
+                        Count:{' '}
+                        <span data-testid="blocked-cases-count">
+                          {blockedCasesReportHelper.blockedCasesCount}
+                        </span>
                       </span>
                     </div>
                   </div>
