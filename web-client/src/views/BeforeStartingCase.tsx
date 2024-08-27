@@ -84,8 +84,7 @@ export const BeforeStartingCase = connect(
                 style={{ marginBottom: '5px' }}
               >
                 {`This is the document that explains why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the
-                Internal Revenue Service (IRS). There are{' '}
-                ${petitionFlowUpdated ? 'three' : 'two'} methods to file the
+                Internal Revenue Service (IRS). There are ${petitionFlowUpdated ? 'three' : 'two'} methods to file the
                 Petition:`}
               </div>
               <ul className="margin-top-0">
