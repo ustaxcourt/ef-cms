@@ -8,7 +8,7 @@ export const Paginator = ({
 }: {
   totalPages: number;
   currentPageIndex: number;
-  onPageChange: (currentPage: string) => void;
+  onPageChange: (currentPage: number) => void;
 }) => {
   let currentPage = currentPageIndex + 1;
 
