@@ -103,7 +103,10 @@ export const BlockedCasesReport = connect(
                       <tbody>
                         {blockedCasesReportHelper.blockedCasesFormatted.map(
                           item => (
-                            <tr key={item.docketNumber}>
+                            <tr
+                              data-testid={`blocked-case-${item.docketNumber}-row`}
+                              key={item.docketNumber}
+                            >
                               <td className="consolidated-case-column">
                                 {item.inConsolidatedGroup && (
                                   <span

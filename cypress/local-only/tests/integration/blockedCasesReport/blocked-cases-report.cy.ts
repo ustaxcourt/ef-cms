@@ -5,9 +5,10 @@ import {
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
+import { retry } from '../../../../helpers/retry';
 
 describe('Blocked Cases Report', () => {
-  before(() => {
+  beforeEach(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
 
@@ -27,17 +28,19 @@ describe('Blocked Cases Report', () => {
       );
 
       //View report
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(10000); // wait for opensearch to index case
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="blocked-cases-report"]').click();
-      cy.get('[data-testid="trial-location-filter"]').select(
-        'Birmingham, Alabama',
-      );
+
+      retry(() => {
+        cy.reload();
+        cy.get('[data-testid="trial-location-filter"]').select(
+          'Birmingham, Alabama',
+        );
+        const selector = `[data-testid="blocked-case-${docketNumber}-row"]`;
+        return cy.get(selector).then(elements => elements.length > 0);
+      });
+
       cy.get('[data-testid="blocked-cases-count"]').should('exist');
-      cy.get('[data-testid="blocked-cases-report-table"]').contains(
-        docketNumber,
-      );
 
       //download csv
       cy.get('[data-testid="export-blocked-case-report"]').click();
