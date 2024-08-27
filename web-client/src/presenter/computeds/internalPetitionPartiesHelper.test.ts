@@ -1,5 +1,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  FILING_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -476,6 +477,45 @@ describe('internalPetitionPartiesHelper', () => {
       });
 
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+  });
+
+  describe('showSecondaryContactEmailFieldAndConsentBox', () => {
+    it('should display secondary contact email field when petition is filed by a petitioner', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES.petitioner[1],
+            isPaper: false,
+          },
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
+    });
+    it('should display secondary contact email field when petition is filed by a private practitioner', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES.privatePractitioner[1],
+            isPaper: false,
+          },
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });

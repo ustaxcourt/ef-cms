@@ -113,14 +113,15 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                 <address aria-labelledby="filing-contact-secondary">
                   <AddressDisplay
                     noMargin
+                    showEmail
                     showEmailLabel
                     showPhoneLabel
                     contact={{
                       ...petitionFormatted.contactSecondary,
                       email:
-                        petitionFormatted.contactSecondary.paperPetitionEmail,
+                        petitionFormatted.contactSecondary.paperPetitionEmail ||
+                        'Email not provided',
                     }}
-                    showEmail={isPetitioner}
                   />
                 </address>
                 {isPetitioner && (
