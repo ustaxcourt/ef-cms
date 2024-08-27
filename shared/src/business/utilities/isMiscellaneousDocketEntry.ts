@@ -3,9 +3,7 @@ import {
   STATUS_REPORT_ORDER_OPTIONS,
 } from '../entities/EntityConstants';
 
-export const isMiscellaneousDocketEntry = (
-  docketEntry: RawDocketEntry,
-): boolean => {
+export const isMiscellaneousDocketEntry = (docketEntry): boolean => {
   const draftStatusReportOrderTypes = Object.values(
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   );
