@@ -27,7 +27,7 @@ describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
     ).should('have.text', 'Regular case');
     cy.get(
       `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.small}-radio"]`,
-    ).should('have.text', 'Regular case');
+    ).should('have.text', 'Small case');
   });
 
   describe('Regular case', () => {
