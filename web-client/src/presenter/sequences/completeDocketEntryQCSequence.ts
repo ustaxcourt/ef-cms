@@ -17,57 +17,61 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { singletonSequenceDecorator } from '@web-client/presenter/utilities/singletonSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { switchErrorActionFactory } from '../actions/switchErrorActionFactory';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-export const completeDocketEntryQCSequence = [
-  getCaseAction,
-  setCaseAction,
-  isWorkItemAlreadyCompletedAction,
-  {
-    no: [
-      startShowValidationAction,
-      setFilersFromFilersMapAction,
-      validateDocketEntryAction,
-      {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          setValidationAlertErrorsAction,
-        ],
-        success: showProgressSequenceDecorator([
-          stopShowValidationAction,
-          refreshExternalDocumentTitleFromEventCodeAction,
-          setPreviousDocumentDocketEntryAction,
-          generateTitleAction,
-          completeDocketEntryQCAction,
-          {
-            error: [
-              switchErrorActionFactory({
-                'currently being updated': 'completed',
-              }),
-              {
-                completed: [
-                  setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
-                ],
-                default: [setShowModalFactoryAction('GenericErrorModal')],
-              },
-            ],
-            success: [
-              setPdfPreviewUrlAction,
-              setCaseAction,
-              setAlertSuccessAction,
-              setPaperServicePartiesAction,
-              setSaveAlertsForNavigationAction,
-              navigateToDocumentQCAction,
-              clearErrorAlertsAction,
-            ],
-          },
-        ]),
-      },
-    ],
-    yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
-  },
-];
+export const completeDocketEntryQCSequence = singletonSequenceDecorator(
+  'completeDocketEntryQCSequence',
+  [
+    getCaseAction,
+    setCaseAction,
+    isWorkItemAlreadyCompletedAction,
+    {
+      no: [
+        startShowValidationAction,
+        setFilersFromFilersMapAction,
+        validateDocketEntryAction,
+        {
+          error: [
+            setAlertErrorAction,
+            setValidationErrorsAction,
+            setValidationAlertErrorsAction,
+          ],
+          success: showProgressSequenceDecorator([
+            stopShowValidationAction,
+            refreshExternalDocumentTitleFromEventCodeAction,
+            setPreviousDocumentDocketEntryAction,
+            generateTitleAction,
+            completeDocketEntryQCAction,
+            {
+              error: [
+                switchErrorActionFactory({
+                  'currently being updated': 'completed',
+                }),
+                {
+                  completed: [
+                    setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
+                  ],
+                  default: [setShowModalFactoryAction('GenericErrorModal')],
+                },
+              ],
+              success: [
+                setPdfPreviewUrlAction,
+                setCaseAction,
+                setAlertSuccessAction,
+                setPaperServicePartiesAction,
+                setSaveAlertsForNavigationAction,
+                navigateToDocumentQCAction,
+                clearErrorAlertsAction,
+              ],
+            },
+          ]),
+        },
+      ],
+      yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
+    },
+  ],
+);

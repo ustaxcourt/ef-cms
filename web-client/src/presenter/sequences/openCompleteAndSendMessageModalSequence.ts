@@ -10,33 +10,35 @@ import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/se
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { singletonSequenceDecorator } from '@web-client/presenter/utilities/singletonSequenceDecorator';
 import { updateMessageModalAfterQCAction } from '../actions/updateMessageModalAfterQCAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-export const openCompleteAndSendMessageModalSequence = [
-  getCaseAction,
-  setCaseAction,
-  isWorkItemAlreadyCompletedAction,
-  {
-    no: [
-      setFilersFromFilersMapAction,
-      validateDocketEntryAction,
-      {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          setValidationAlertErrorsAction,
-        ],
-        success: [
-          clearModalStateAction,
-          refreshExternalDocumentTitleFromEventCodeAction,
-          setPreviousDocumentDocketEntryAction,
-          generateTitleAction,
-          updateMessageModalAfterQCAction,
-          setShowModalFactoryAction('CreateMessageModalDialog'),
-        ],
-      },
-    ],
-    yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
-  },
-];
+export const openCompleteAndSendMessageModalSequence =
+  singletonSequenceDecorator('openCompleteAndSendMessageModalSequence', [
+    getCaseAction,
+    setCaseAction,
+    isWorkItemAlreadyCompletedAction,
+    {
+      no: [
+        setFilersFromFilersMapAction,
+        validateDocketEntryAction,
+        {
+          error: [
+            setAlertErrorAction,
+            setValidationErrorsAction,
+            setValidationAlertErrorsAction,
+          ],
+          success: [
+            clearModalStateAction,
+            refreshExternalDocumentTitleFromEventCodeAction,
+            setPreviousDocumentDocketEntryAction,
+            generateTitleAction,
+            updateMessageModalAfterQCAction,
+            setShowModalFactoryAction('CreateMessageModalDialog'),
+          ],
+        },
+      ],
+      yes: [setShowModalFactoryAction('WorkItemAlreadyCompletedModal')],
+    },
+  ]);
