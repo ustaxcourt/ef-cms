@@ -527,8 +527,11 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           );
         });
 
-        it('should not display email fields for spouse', () => {
-          cy.get('[data-testid="contact-secondary-email"]').should('not.exist');
+        it('should display email fields for spouse', () => {
+          cy.get('[data-testid="contact-secondary-email"]').should('exist');
+        });
+
+        it('should not display register for e-filing field', () => {
           cy.get(
             '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
           ).should('not.exist');
@@ -540,8 +543,11 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           cy.get('[data-testid="is-spouse-deceased-0"]').click();
         });
 
-        it('should not display email fields for spouse', () => {
-          cy.get('[data-testid="contact-secondary-email"]').should('not.exist');
+        it('should display email fields for spouse', () => {
+          cy.get('[data-testid="contact-secondary-email"]').should('exist');
+        });
+
+        it('should not display register for e-filing field', () => {
           cy.get(
             '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
           ).should('not.exist');
