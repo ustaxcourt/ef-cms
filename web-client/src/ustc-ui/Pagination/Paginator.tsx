@@ -8,7 +8,7 @@ export const Paginator = ({
 }: {
   totalPages: number;
   currentPageIndex: number;
-  onPageChange: (currentPage) => void;
+  onPageChange: (currentPage: string) => void;
 }) => {
   let currentPage = currentPageIndex + 1;
 
@@ -36,7 +36,11 @@ export const Paginator = ({
           className={'usa-pagination__item usa-pagination__page-no'}
           key={currentPage}
         >
-          <button className="usa-pagination__button cursor-pointer paginator-current">
+          <button
+            aria-current="page"
+            aria-label={`Page ${currentPage} is you current page`}
+            className="usa-pagination__button cursor-pointer paginator-current"
+          >
             {currentPage}
           </button>
         </li>
