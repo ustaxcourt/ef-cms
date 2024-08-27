@@ -10,12 +10,15 @@ export const SelectCriteria = connect(
     getBlockedCasesByTrialLocationSequence:
       sequences.getBlockedCasesByTrialLocationSequence,
     selectCriteriaHelper: state.selectCriteriaHelper,
+    setBlockedCaseReportCaseTypeSequence:
+      sequences.setBlockedCaseReportCaseTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function SelectCriteria({
     blockedCaseReportFilter,
     getBlockedCasesByTrialLocationSequence,
     selectCriteriaHelper,
+    setBlockedCaseReportCaseTypeSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -58,22 +61,25 @@ export const SelectCriteria = connect(
               name="procedureTypeFilter"
               value={blockedCaseReportFilter.procedureTypeFilter}
               onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  root: 'blockedCaseReportFilter',
-                  value: e.target.value,
+                setBlockedCaseReportCaseTypeSequence({
+                  procedureType: e.target.value,
                 });
               }}
             >
               <option value="All">All</option>
-              <option value="Small">Small</option>
-              <option value="Regular">Regular</option>
+              {selectCriteriaHelper.procedureTypes.map(({ key, value }) => {
+                return (
+                  <option key={key} value={value}>
+                    {value}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
           <div className="usa-form-group margin-bottom-2">
             <label className="usa-label" htmlFor="case-status-type">
-              Case Status
+              Case status
             </label>
             <select
               className="usa-select"

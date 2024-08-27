@@ -495,7 +495,9 @@ export const computeds = {
   sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
     typeof sealedCaseDetailHelper
   >,
-  selectCriteriaHelper,
+  selectCriteriaHelper: selectCriteriaHelper as unknown as ReturnType<
+    typeof selectCriteriaHelper
+  >,
   serveThirtyDayNoticeModalHelper:
     serveThirtyDayNoticeModalHelper as unknown as ReturnType<
       typeof serveThirtyDayNoticeModalHelper

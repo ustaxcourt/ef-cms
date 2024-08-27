@@ -81,7 +81,10 @@ export const BlockedCasesReport = connect(
                     </div>
                   </div>
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
-                    <table className="usa-table subsection ustc-table deadlines">
+                    <table
+                      className="usa-table subsection ustc-table deadlines"
+                      data-testid="blocked-cases-report-table"
+                    >
                       <thead>
                         <tr>
                           <th
@@ -100,7 +103,10 @@ export const BlockedCasesReport = connect(
                       <tbody>
                         {blockedCasesReportHelper.blockedCasesFormatted.map(
                           item => (
-                            <tr key={item.docketNumber}>
+                            <tr
+                              data-testid={`blocked-case-${item.docketNumber}-row`}
+                              key={item.docketNumber}
+                            >
                               <td className="consolidated-case-column">
                                 {item.inConsolidatedGroup && (
                                   <span

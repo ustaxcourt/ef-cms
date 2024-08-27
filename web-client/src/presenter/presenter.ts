@@ -119,7 +119,7 @@ import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloa
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequences/editUnsignedDraftDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
-import { exportCsvBlockedCaseReportSequence } from '@web-client/presenter/sequences/Reports/exportCsvBlockedCaseReportSequence';
+import { exportCsvBlockedCaseReportSequence } from '@web-client/presenter/sequences/Reports/BlockedCases/exportCsvBlockedCaseReportSequence';
 import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
@@ -379,6 +379,7 @@ import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocu
 import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
 import { serveToIrsCompleteSequence } from './sequences/serveToIrsCompleteSequence';
 import { serveToIrsErrorSequence } from './sequences/serveToIrsErrorSequence';
+import { setBlockedCaseReportCaseTypeSequence } from '@web-client/presenter/sequences/Reports/BlockedCases/setBlockedCaseReportProcedureTypeSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -1234,6 +1235,7 @@ export const presenterSequences = {
     serveThirtyDayNoticeOfTrialSequence as unknown as Function,
   serveToIrsCompleteSequence: serveToIrsCompleteSequence as unknown as Function,
   serveToIrsErrorSequence: serveToIrsErrorSequence as unknown as Function,
+  setBlockedCaseReportCaseTypeSequence,
   setCaseDetailPageTabSequence:
     setCaseDetailPageTabSequence as unknown as Function,
   setCaseDetailPrimaryTabSequence:
