@@ -1,4 +1,6 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getUsersInSectionInteractor } from '@web-api/business/useCases/user/getUsersInSectionInteractor';
 
 /**
  * creates a new document and attaches it to a case.  It also creates a work item on the docket section.
@@ -6,13 +8,18 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getUsersInSectionLambda = event =>
+export const getUsersInSectionLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
     const { section } = event.pathParameters || {};
 
-    return await applicationContext
-      .getUseCases()
-      .getUsersInSectionInteractor(applicationContext, {
+    return await getUsersInSectionInteractor(
+      applicationContext,
+      {
         section,
-      });
+      },
+      authorizedUser,
+    );
   });

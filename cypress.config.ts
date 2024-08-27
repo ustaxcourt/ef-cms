@@ -1,6 +1,7 @@
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
+  getUserByEmail,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
@@ -15,6 +16,7 @@ import {
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
+import { parsePdf } from './cypress/local-only/support/helpers.ts';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
@@ -55,6 +57,12 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        getUserByEmail(email: string) {
+          return getUserByEmail(email);
+        },
+        parsePdf({ filePath }) {
+          return parsePdf({ filePath });
         },
         table(message) {
           console.table(message);

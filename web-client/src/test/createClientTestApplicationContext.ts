@@ -25,7 +25,6 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -525,6 +524,7 @@ const createTestApplicationContext = () => {
     convertBlobToUInt8Array: jest
       .fn()
       .mockImplementation(() => new Uint8Array([])),
+    createCsvString: jest.fn(),
     filterCaseMetadata: jest.fn(),
     getBaseUrl: () => 'http://localhost',
     getBounceAlertRecipients: jest.fn(),
@@ -547,17 +547,7 @@ const createTestApplicationContext = () => {
         ERROR_MAP_429,
       };
     }),
-    getCurrentUser: jest.fn().mockImplementation(() => {
-      return new User({
-        name: 'richard',
-        role: ROLES.petitioner,
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    }),
     getCurrentUserPermissions: jest.fn(),
-    getCurrentUserToken: () => {
-      return '';
-    },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
@@ -609,7 +599,6 @@ const createTestApplicationContext = () => {
     isFeatureEnabled: jest.fn(),
     isPublicUser: jest.fn().mockImplementation(() => false),
     setCurrentUser: jest.fn(),
-    setCurrentUserToken: jest.fn(),
   };
   return applicationContext;
 };

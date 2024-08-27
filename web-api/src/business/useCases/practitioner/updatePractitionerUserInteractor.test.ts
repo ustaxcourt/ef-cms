@@ -1,29 +1,24 @@
 import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
+import {
+  mockAdmissionsClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
-  let testUser;
   let mockPractitioner = MOCK_PRACTITIONER;
 
   beforeEach(() => {
-    testUser = {
-      role: ROLES.admissionsClerk,
-      userId: 'admissionsclerk',
-    };
     mockPractitioner = { ...MOCK_PRACTITIONER };
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['123-23']);
 
-    applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
@@ -39,16 +34,15 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
-    testUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
-      updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: mockPractitioner,
-      }),
+      updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: mockPractitioner,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -58,16 +52,20 @@ describe('updatePractitionerUserInteractor', () => {
       .getPractitionerByBarNumber.mockResolvedValue(undefined);
 
     await expect(
-      updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'AB1111',
-        bypassDocketEntry: false,
-        user: {
-          ...mockPractitioner,
+      updatePractitionerUserInteractor(
+        applicationContext,
+        {
           barNumber: 'AB1111',
-          updatedEmail: 'bc@example.com',
-          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+          bypassDocketEntry: false,
+          user: {
+            ...mockPractitioner,
+            barNumber: 'AB1111',
+            updatedEmail: 'bc@example.com',
+            userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+          },
         },
-      }),
+        mockAdmissionsClerkUser,
+      ),
     ).rejects.toThrow(NotFoundError);
   });
 
@@ -80,16 +78,20 @@ describe('updatePractitionerUserInteractor', () => {
       });
 
     await expect(
-      updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'AB1111',
-        bypassDocketEntry: false,
-        user: {
-          ...mockPractitioner,
+      updatePractitionerUserInteractor(
+        applicationContext,
+        {
           barNumber: 'AB1111',
-          updatedEmail: 'bc@example.com',
-          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+          bypassDocketEntry: false,
+          user: {
+            ...mockPractitioner,
+            barNumber: 'AB1111',
+            updatedEmail: 'bc@example.com',
+            userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+          },
         },
-      }),
+        mockAdmissionsClerkUser,
+      ),
     ).rejects.toThrow('Bar number does not match user data.');
   });
 
@@ -100,15 +102,19 @@ describe('updatePractitionerUserInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await updatePractitionerUserInteractor(applicationContext, {
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        barNumber: 'AB2222',
-        confirmEmail: 'bc@example.com',
-        updatedEmail: 'bc@example.com',
+    await updatePractitionerUserInteractor(
+      applicationContext,
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          barNumber: 'AB2222',
+          confirmEmail: 'bc@example.com',
+          updatedEmail: 'bc@example.com',
+        },
       },
-    });
+      mockAdmissionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
@@ -119,15 +125,19 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
-    await updatePractitionerUserInteractor(applicationContext, {
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        barNumber: 'AB2222',
-        confirmEmail: 'bc@example.com',
-        updatedEmail: 'bc@example.com',
+    await updatePractitionerUserInteractor(
+      applicationContext,
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          barNumber: 'AB2222',
+          confirmEmail: 'bc@example.com',
+          updatedEmail: 'bc@example.com',
+        },
       },
-    });
+      mockAdmissionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser,
@@ -142,15 +152,19 @@ describe('updatePractitionerUserInteractor', () => {
     mockPractitioner.email = undefined;
     mockPractitioner.pendingEmail = 'pendingEmail@example.com';
 
-    await updatePractitionerUserInteractor(applicationContext, {
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        barNumber: 'AB2222',
-        confirmEmail: 'bc@example.com',
-        updatedEmail: 'bc@example.com',
+    await updatePractitionerUserInteractor(
+      applicationContext,
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          barNumber: 'AB2222',
+          confirmEmail: 'bc@example.com',
+          updatedEmail: 'bc@example.com',
+        },
       },
-    });
+      mockAdmissionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser,
@@ -169,14 +183,18 @@ describe('updatePractitionerUserInteractor', () => {
         email: undefined,
       });
 
-    await updatePractitionerUserInteractor(applicationContext, {
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        confirmEmail: 'admissionsclerk@example.com',
-        updatedEmail: 'admissionsclerk@example.com',
+    await updatePractitionerUserInteractor(
+      applicationContext,
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'admissionsclerk@example.com',
+          updatedEmail: 'admissionsclerk@example.com',
+        },
       },
-    });
+      mockAdmissionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser,
@@ -195,14 +213,18 @@ describe('updatePractitionerUserInteractor', () => {
         email: undefined,
       });
 
-    await updatePractitionerUserInteractor(applicationContext, {
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        email: undefined,
-        firstName: 'Donna',
+    await updatePractitionerUserInteractor(
+      applicationContext,
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          email: undefined,
+          firstName: 'Donna',
+        },
       },
-    });
+      mockAdmissionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUserRecords.mock
@@ -219,16 +241,15 @@ describe('updatePractitionerUserInteractor', () => {
 
   describe('updating email', () => {
     it('should throw unauthorized error when the logged in user does not have permission to manage emails', async () => {
-      testUser = {
-        role: ROLES.petitioner,
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-      };
-
       await expect(
-        updatePractitionerUserInteractor(applicationContext, {
-          barNumber: 'pt101',
-          user: mockPractitioner,
-        }),
+        updatePractitionerUserInteractor(
+          applicationContext,
+          {
+            barNumber: 'pt101',
+            user: mockPractitioner,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized for updating practitioner user');
     });
 
@@ -238,26 +259,34 @@ describe('updatePractitionerUserInteractor', () => {
         .isEmailAvailable.mockReturnValue(false);
 
       await expect(
-        updatePractitionerUserInteractor(applicationContext, {
-          barNumber: 'pt101',
-          user: {
-            ...mockPractitioner,
-            confirmEmail: 'exists@example.com',
-            updatedEmail: 'exists@example.com',
+        updatePractitionerUserInteractor(
+          applicationContext,
+          {
+            barNumber: 'pt101',
+            user: {
+              ...mockPractitioner,
+              confirmEmail: 'exists@example.com',
+              updatedEmail: 'exists@example.com',
+            },
           },
-        }),
+          mockAdmissionsClerkUser,
+        ),
       ).rejects.toThrow('Email is not available');
     });
 
     it('should update the user with the new user.updatedEmail value', async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            updatedEmail: 'free-email-to-use@example.com',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().updatePractitionerUser.mock
@@ -269,14 +298,18 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it("should send the verification email when the user's email is being changed", async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            updatedEmail: 'free-email-to-use@example.com',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers().sendEmailVerificationLink.mock
@@ -289,14 +322,18 @@ describe('updatePractitionerUserInteractor', () => {
 
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
       mockPractitioner.email = undefined;
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            updatedEmail: 'free-email-to-use@example.com',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers().sendEmailVerificationLink,
@@ -304,72 +341,92 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            updatedEmail: 'free-email-to-use@example.com',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(generateChangeOfAddress).not.toHaveBeenCalled();
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          practitionerNotes: 'wow, real good notes',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            practitionerNotes: 'wow, real good notes',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(generateChangeOfAddress).not.toHaveBeenCalled();
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          practitionerNotes: 'wow, real good notes',
-          updatedEmail: 'free-email-to-use@example.com',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            practitionerNotes: 'wow, real good notes',
+            updatedEmail: 'free-email-to-use@example.com',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(generateChangeOfAddress).not.toHaveBeenCalled();
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          contact: {
-            ...mockPractitioner.contact!,
-            address1: 'yeahhhhh',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            contact: {
+              ...mockPractitioner.contact!,
+              address1: 'yeahhhhh',
+            },
+            updatedEmail: 'free-email-to-use@example.com',
           },
-          updatedEmail: 'free-email-to-use@example.com',
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(generateChangeOfAddress).toHaveBeenCalled();
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
-      await updatePractitionerUserInteractor(applicationContext, {
-        barNumber: 'pt101',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          firstName: 'Helen',
-          lastName: 'Hunt',
-          updatedEmail: 'free-email-to-use@example.com',
+      await updatePractitionerUserInteractor(
+        applicationContext,
+        {
+          barNumber: 'pt101',
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'free-email-to-use@example.com',
+            firstName: 'Helen',
+            lastName: 'Hunt',
+            updatedEmail: 'free-email-to-use@example.com',
+          },
         },
-      });
+        mockAdmissionsClerkUser,
+      );
 
       expect(generateChangeOfAddress).toHaveBeenCalled();
     });

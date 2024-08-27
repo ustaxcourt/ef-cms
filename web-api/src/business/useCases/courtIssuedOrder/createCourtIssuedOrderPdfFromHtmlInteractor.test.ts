@@ -1,6 +1,9 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './createCourtIssuedOrderPdfFromHtmlInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -26,23 +29,12 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       });
   });
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '321',
-    });
-  });
-
   it('throws an error if the user is not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '432',
-    });
-
     await expect(
       createCourtIssuedOrderPdfFromHtmlInteractor(
         applicationContext,
         {} as any,
+        mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
   });
@@ -50,7 +42,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('fetches the case by id', async () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+      {
+        addedDocketNumbers: [],
+      } as any,
+      mockDocketClerkUser,
     );
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -60,7 +55,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('calls the pdf document generator function', async () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+      {
+        addedDocketNumbers: [],
+      } as any,
+      mockDocketClerkUser,
     );
     expect(
       applicationContext.getDocumentGenerators().order,
@@ -76,7 +74,11 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {} as any,
+
+      {
+        addedDocketNumbers: [],
+      } as any,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -91,6 +93,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       {
         addedDocketNumbers: ['101-20'],
       } as any,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -107,8 +110,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
+        addedDocketNumbers: [],
         eventCode: 'NOT',
       } as any,
+      mockDocketClerkUser,
     );
 
     expect(
@@ -125,9 +130,14 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   });
 
   it('calls the generate the order pdf WITHOUT a defined name or title of the clerk for non-NOT event codes', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
-      eventCode: 'O',
-    } as any);
+    await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {
+        addedDocketNumbers: [],
+        eventCode: 'O',
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getConfigurationItemValue,
@@ -143,5 +153,38 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
         }),
       }),
     );
+  });
+
+  describe('BUG: Order the Docket Numbers', () => {
+    it('should order the docket numbers correctly by year and index', async () => {
+      await createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {
+          addedDocketNumbers: [
+            '101-24',
+            '101-19',
+            '103-19',
+            '101-26',
+            '101-16',
+            '102-19',
+            '101-20',
+          ],
+        } as any,
+        mockDocketClerkUser,
+      );
+
+      const orderCalls =
+        applicationContext.getDocumentGenerators().order.mock.calls;
+      expect(orderCalls.length).toEqual(1);
+      expect(orderCalls[0][0].data.addedDocketNumbers).toEqual([
+        '101-16',
+        '101-19',
+        '102-19',
+        '103-19',
+        '101-20',
+        '101-24',
+        '101-26',
+      ]);
+    });
   });
 });

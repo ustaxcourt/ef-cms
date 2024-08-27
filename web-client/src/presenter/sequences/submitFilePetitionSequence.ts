@@ -15,6 +15,8 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
 
+// updated-petition-flow: can be removed when flag is removed
+
 export const submitFilePetitionSequence = [
   clearAlertsAction,
   startShowValidationAction,

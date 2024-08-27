@@ -72,7 +72,9 @@ export const UpdatedFilePetitionStep3 = connect(
       <>
         <div className="padding-bottom-0 margin-bottom-1">
           <div>
-            <h2>{startCaseHelper.noticeLegend}</h2>
+            <h2 data-testid="has-irs-notice-legend">
+              {startCaseHelper.noticeLegend}
+            </h2>
             <FormGroup
               className="irs-notice-form"
               errorText={validationErrors.hasIrsNotice}
@@ -120,7 +122,7 @@ export const UpdatedFilePetitionStep3 = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message:
-                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) of every form except the Statement of Taxpayer Identification Number.',
+                      'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) from every form except the Statement of Taxpayer Identification Number.',
                   }}
                   dismissible={false}
                   scrollToTop={false}

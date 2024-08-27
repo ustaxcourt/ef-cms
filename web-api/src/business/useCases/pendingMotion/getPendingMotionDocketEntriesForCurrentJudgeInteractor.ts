@@ -6,6 +6,7 @@ import {
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   calculateDifferenceInDays,
   prepareDateFromString,
@@ -34,11 +35,11 @@ export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   applicationContext: ServerApplicationContext,
   params: { judgeIds: string[] },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
   const { judgeIds } = params;
-  const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_MOTIONS_TABLE)) {
     throw new UnauthorizedError('Unauthorized');
   }

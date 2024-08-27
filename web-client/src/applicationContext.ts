@@ -28,9 +28,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { RawUser, User } from '../../shared/src/business/entities/User';
+import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
@@ -372,23 +370,6 @@ const reduce = ImageBlobReduce({
 let user;
 let broadcastChannel;
 
-const getCurrentUser = (): RawUser | RawPractitioner | RawIrsPractitioner => {
-  return user;
-};
-const setCurrentUser = (
-  newUser: RawUser | RawPractitioner | RawIrsPractitioner,
-) => {
-  user = newUser;
-};
-
-let token;
-const getCurrentUserToken = () => {
-  return token;
-};
-const setCurrentUserToken = newToken => {
-  token = newToken;
-};
-
 let forceRefreshCallback: () => {};
 
 const allUseCases = {
@@ -643,6 +624,22 @@ const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
+  createCsvString: (
+    data: any[],
+    config: { displayLabel: string; key: string }[],
+  ) => {
+    const headers = config.map(c => `"${c.displayLabel}"`).join();
+    const body = data.reduce((acc, currentData) => {
+      const row = config
+        .map(c => c.key)
+        .map(key => `"${currentData[key]}"`)
+        .join();
+      acc += `${row}\n`;
+      return acc;
+    }, '');
+
+    return `${headers}\n${body}`;
+  },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },
@@ -654,12 +651,6 @@ const applicationContext = {
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => appConstants,
-  getCurrentUser,
-  getCurrentUserPermissions: () => {
-    const currentUser = getCurrentUser();
-    return getUserPermissions(currentUser);
-  },
-  getCurrentUserToken,
   getEnvironment,
   getFileReaderInstance: () => new FileReader(),
   getForceRefreshCallback() {
@@ -822,8 +813,6 @@ const applicationContext = {
     return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
   isPublicUser: () => false,
-  setCurrentUser,
-  setCurrentUserToken,
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },

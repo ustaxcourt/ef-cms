@@ -6,53 +6,29 @@ import {
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import {
+  adcUser as mockAdc,
+  docketClerkUser as mockDocketClerk,
+  judgeUser as mockJudge,
+  petitionerUser as mockPetitioner,
+  petitionsClerkUser as mockPetitionsClerk,
+  privatePractitionerUser as mockPrivatePractitioner,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInformationHelper', () => {
-  const mockPetitionsClerk = {
-    role: ROLES.petitionsClerk,
-    userId: '0dd60083-ab1f-4a43-95f8-bfbc69b48777',
-  };
-  const mockDocketClerk = {
-    role: ROLES.docketClerk,
-    userId: 'a09053ab-58c7-4384-96a1-bd5fbe14977a',
-  };
-  const mockPetitioner = {
-    role: ROLES.petitioner,
-    userId: 'f94cef8e-17b8-4504-9296-af911b32020a',
-  };
-  const mockPrivatePractitioner = {
-    role: ROLES.privatePractitioner,
-    userId: '39f7c7ee-ab75-492a-a4ee-63755a24e845',
-  };
-  const mockAdc = {
-    role: ROLES.adc,
-    userId: '11e15c96-6705-4083-8e10-1c20664ac1ae',
-  };
-  const mockJudge = {
-    role: ROLES.judge,
-    userId: '12e15c96-6705-4083-8e10-1c20664ac1ae',
-  };
-
   const caseInformationHelper = withAppContextDecorator(
     caseInformationHelperComputed,
     applicationContext,
   );
 
   const getBaseState = user => {
-    mockUser = { ...user };
     return {
       permissions: getUserPermissions(user),
+      user,
     };
   };
-
-  let mockUser;
-
-  beforeEach(() => {
-    mockUser = {};
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-  });
 
   describe('formattedPetitioners', () => {
     let baseState;
@@ -318,7 +294,7 @@ describe('caseInformationHelper', () => {
     [ROLES.docketClerk, ROLES.petitionsClerk, ROLES.admissionsClerk].forEach(
       role => {
         it('should be true when the user has permission to edit petitioner counsel and there are privatePractitioners on the case', () => {
-          mockUser = { ...mockDocketClerk, role };
+          let mockUser = { ...mockDocketClerk, role };
 
           const result = runCompute(caseInformationHelper, {
             state: {
@@ -338,11 +314,9 @@ describe('caseInformationHelper', () => {
     );
 
     it('should be false when the user is an internal user that does NOT have permission to edit petitioner counsel', () => {
-      mockUser = { ...mockAdc };
-
       const result = runCompute(caseInformationHelper, {
         state: {
-          ...getBaseState(mockUser),
+          ...getBaseState(mockAdc),
           caseDetail: {
             irsPractitioners: [{ userId: '2' }],
             petitioners: [],
@@ -356,11 +330,9 @@ describe('caseInformationHelper', () => {
     });
 
     it('should be false when there are no privatePractitioners on the case', () => {
-      mockUser = { ...mockDocketClerk };
-
       const result = runCompute(caseInformationHelper, {
         state: {
-          ...getBaseState(mockUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [{ userId: '2' }],
             petitioners: [],
