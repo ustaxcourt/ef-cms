@@ -32,7 +32,11 @@ export const ProcedureType = connect(
             {legend}
           </legend>
           {PROCEDURE_TYPES.map((procedureType, idx) => (
-            <div className="usa-radio usa-radio__inline" key={procedureType}>
+            <div
+              className="usa-radio usa-radio__inline"
+              data-testid={`procedure-type-${procedureType}-radio`}
+              key={procedureType}
+            >
               <input
                 aria-describedby="procedure-type-legend"
                 aria-labelledby={`procedure-type-${idx}`}

@@ -79,7 +79,7 @@ export const SelectCriteria = connect(
 
           <div className="usa-form-group margin-bottom-2">
             <label className="usa-label" htmlFor="case-status-type">
-              Case Status
+              Case status
             </label>
             <select
               className="usa-select"
