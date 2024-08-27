@@ -1,5 +1,4 @@
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { shouldGenerateCoversheetForDocketEntry } from './updateDocketEntryMetaInteractor';
 
 describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry', () => {
@@ -14,7 +13,7 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
       judge: 'Buch',
       userId: '38c36925-c936-44c5-b219-e13039f7d235',
     },
-    { applicationContext },
+    { authorizedUser: undefined },
   );
 
   let entryRequiresCoverSheet = false;

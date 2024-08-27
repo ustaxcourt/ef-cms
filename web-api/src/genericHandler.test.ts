@@ -28,6 +28,12 @@ jest.mock('./applicationContext', () => ({
   },
 }));
 
+jest.mock('./applicationContext', () => ({
+  createApplicationContext: () => {
+    return mockApplicationContext;
+  },
+}));
+
 // Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
 console.error = () => null;
 console.info = () => null;

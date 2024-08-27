@@ -1,6 +1,6 @@
-import { getCognitoUserIdByEmail } from './cognito/cognito-helpers';
 import { getCypressEnv } from '../env/cypressEnvironment';
 import { getDocumentClient } from './dynamo/getDynamoCypress';
+import { getUserByEmail } from './cognito/cognito-helpers';
 
 export async function waitForPractitionerEmailUpdate({
   attempts = 0,
@@ -12,11 +12,11 @@ export async function waitForPractitionerEmailUpdate({
   attempts?: number;
 }): Promise<boolean> {
   const maxAttempts = 10;
-  const practitionerUserId = await getCognitoUserIdByEmail(practitionerEmail);
+  const { userId } = await getUserByEmail(practitionerEmail);
   const result = await getDocumentClient().get({
     Key: {
       pk: `case|${docketNumber}`,
-      sk: `privatePractitioner|${practitionerUserId}`,
+      sk: `privatePractitioner|${userId}`,
     },
     TableName: getCypressEnv().dynamoDbTableName,
   });
