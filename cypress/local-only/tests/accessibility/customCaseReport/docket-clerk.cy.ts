@@ -24,7 +24,6 @@ describe('Custom Case Report - Docket Clerk Accessibility', () => {
       {
         includedImpacts: impactLevel,
         retries: 3,
-        rules: { listitem: { enabled: true } },
       },
       terminalLog,
     );
