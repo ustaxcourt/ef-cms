@@ -6,6 +6,7 @@ import { RawPractitioner } from '../../../../../shared/src/business/entities/Pra
 import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createOrUpdateUser } from '../../../../../shared/admin-tools/user/admin';
 
 export const createUserInteractor = async (
@@ -17,10 +18,9 @@ export const createUserInteractor = async (
       password: string;
     };
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawUser> => {
-  const requestUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_USER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_USER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

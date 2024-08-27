@@ -57,10 +57,6 @@ describe('completeDocumentSigningAction', () => {
       },
     };
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
-    });
-
     mockPdfjsObj = {
       getData: jest.fn().mockResolvedValue(true),
     };

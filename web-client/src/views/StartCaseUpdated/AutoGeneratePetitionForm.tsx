@@ -1,6 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { PetitionFormResponse } from '@web-client/views/StartCaseUpdated/PetitionFormResponse';
+import { PetitionFactOrReason } from '@web-client/views/StartCaseUpdated/PetitionFactOrReason';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -34,7 +34,7 @@ export const AutoGeneratePetitionForm = connect(
                     <div className="text-semibold margin-right-05">
                       {getCharacter(index)}
                     </div>
-                    <PetitionFormResponse
+                    <PetitionFactOrReason
                       factOrReasonCount={index}
                       id={`petition-reason-${index - 1}`}
                       labelId="petition-reason-label"
@@ -73,7 +73,7 @@ export const AutoGeneratePetitionForm = connect(
                     <div className="text-semibold margin-right-05">
                       {getCharacter(index)}
                     </div>
-                    <PetitionFormResponse
+                    <PetitionFactOrReason
                       factOrReasonCount={index}
                       id={`petition-fact-${index - 1}`}
                       labelId="petition-fact-label"

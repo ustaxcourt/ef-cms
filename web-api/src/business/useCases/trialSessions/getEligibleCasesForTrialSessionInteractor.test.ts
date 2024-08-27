@@ -3,17 +3,16 @@ import {
   MOCK_ELIGIBLE_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../../../shared/src/test/mockCase';
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getEligibleCasesForTrialSessionInteractor } from './getEligibleCasesForTrialSessionInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
-  let mockCurrentUser;
   let mockTrial;
 
   const MOCK_TRIAL = {
@@ -32,15 +31,8 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
   };
 
   beforeEach(() => {
-    mockCurrentUser = new User({
-      name: 'Docket Clerk',
-      role: ROLES.docketClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
     mockTrial = MOCK_TRIAL;
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrial);
@@ -55,27 +47,37 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
   });
 
   it('throws an exception when it fails to find the cases for a trial session', async () => {
-    mockCurrentUser = {};
-
     await expect(
-      getEligibleCasesForTrialSessionInteractor(applicationContext, {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
+      getEligibleCasesForTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow();
   });
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(
-      getEligibleCasesForTrialSessionInteractor(applicationContext, {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
+      getEligibleCasesForTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
   });
 
   it('should call getEligibleCasesForTrialSession with correct limit', async () => {
-    await getEligibleCasesForTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    await getEligibleCasesForTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
@@ -111,6 +113,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
         {
           trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        mockDocketClerkUser,
       );
     } catch (e) {
       error = e;

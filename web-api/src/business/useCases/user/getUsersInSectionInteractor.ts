@@ -8,12 +8,13 @@ import {
 } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getUsersInSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawUser[]> => {
-  const user = applicationContext.getCurrentUser();
   let rolePermission;
 
   if (section === 'judge') {
@@ -22,7 +23,7 @@ export const getUsersInSectionInteractor = async (
     rolePermission = ROLE_PERMISSIONS.GET_USERS_IN_SECTION;
   }
 
-  if (!isAuthorized(user, rolePermission)) {
+  if (!isAuthorized(authorizedUser, rolePermission)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -33,5 +34,5 @@ export const getUsersInSectionInteractor = async (
       section,
     });
 
-  return User.validateRawCollection(rawUsers, { applicationContext });
+  return User.validateRawCollection(rawUsers);
 };

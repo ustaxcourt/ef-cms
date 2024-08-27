@@ -61,7 +61,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="change-password-button"]').click();
-        cy.get('[data-testid="open-cases-count"]');
+        cy.get('[data-testid="petition-welcome-text"]');
         logout();
 
         loginAsAdmissionsClerk();
@@ -146,7 +146,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           getCypressEnv().defaultAccountPass,
         );
         cy.get('[data-testid="change-password-button"]').click();
-        cy.get('[data-testid="open-cases-count"]');
+        cy.get('[data-testid="petition-welcome-text"]');
 
         createAndServePaperPetition().then(({ docketNumber }) => {
           cy.login('admissionsclerk1');

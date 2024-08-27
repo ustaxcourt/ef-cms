@@ -10,9 +10,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const setPractitionerOnFormAction = ({
   applicationContext,
+  get,
   store,
 }: ActionProps) => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 
   if (user.role === USER_ROLES.privatePractitioner) {
