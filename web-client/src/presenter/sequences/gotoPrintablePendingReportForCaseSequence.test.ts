@@ -3,14 +3,9 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { gotoPrintablePendingReportForCaseSequence } from '../sequences/gotoPrintablePendingReportForCaseSequence';
 import { presenter } from '../presenter-mock';
 
-const { CHAMBERS_SECTION } = applicationContext.getConstants();
-
 describe('gotoPrintablePendingReportForCaseSequence', () => {
   let cerebralTest;
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: CHAMBERS_SECTION,
-    });
     applicationContext
       .getUseCases()
       .generatePrintablePendingReportInteractor.mockReturnValue(

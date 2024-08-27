@@ -4,7 +4,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -17,17 +19,17 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the case data
  */
 export const removePetitionerAndUpdateCaption = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseCaption,
     contactId,
     docketNumber,
   }: { caseCaption: string; contactId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const petitionerContactId = contactId;
-  const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.REMOVE_PETITIONER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER)) {
     throw new UnauthorizedError(
       'Unauthorized for removing petitioner from case',
     );
@@ -37,7 +39,7 @@ export const removePetitionerAndUpdateCaption = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -55,6 +57,7 @@ export const removePetitionerAndUpdateCaption = async (
     .getUseCaseHelpers()
     .removeCounselFromRemovedPetitioner({
       applicationContext,
+      authorizedUser,
       caseEntity,
       petitionerContactId,
     });
@@ -73,10 +76,11 @@ export const removePetitionerAndUpdateCaption = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(

@@ -7,7 +7,6 @@ import {
   PETITION_TYPES,
 } from '../EntityConstants';
 import { ElectronicPetition } from './ElectronicPetition';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ElectronicPetition entity', () => {
   const validPetitionData = {
@@ -19,15 +18,12 @@ describe('ElectronicPetition entity', () => {
 
   describe('isValid', () => {
     it('requires corporate disclosure if filing type is a business', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          businessType: PARTY_TYPES.corporation,
-          filingType: 'A business',
-          petitionType: undefined,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        businessType: PARTY_TYPES.corporation,
+        filingType: 'A business',
+        petitionType: undefined,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -36,13 +32,10 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('does not require corporate disclosure if filing type not set', () => {
-      const petition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          filingType: undefined,
-        },
-        { applicationContext },
-      );
+      const petition = new ElectronicPetition({
+        ...validPetitionData,
+        filingType: undefined,
+      });
 
       expect(
         petition.getFormattedValidationErrors()!.corporateDisclosureFile,
@@ -50,13 +43,10 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('does not require corporate disclosure if filing type not a business', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          filingType: 'not a biz',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        filingType: 'not a biz',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -65,14 +55,11 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('requires stinFile', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          businessType: PARTY_TYPES.corporation,
-          filingType: 'A business',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        businessType: PARTY_TYPES.corporation,
+        filingType: 'A business',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.stinFile,
@@ -82,19 +69,16 @@ describe('ElectronicPetition entity', () => {
 
   describe('Petition file size', () => {
     it('should inform you if petition file size is greater than the PDF max file size', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          petitionFile: new File([], 'test.pdf'),
-          petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.petitionFileSize,
@@ -104,19 +88,16 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should inform you if petition file size is zero', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          petitionFile: {},
-          petitionFileSize: 0,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        petitionFile: {},
+        petitionFileSize: 0,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.petitionFileSize,
@@ -124,17 +105,14 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.petitionFileSize,
@@ -142,18 +120,15 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should error on petitionFileSize when petitionFile is defined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          petitionFile: new File([], 'testPetitionFile.pdf'),
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        petitionFile: new File([], 'testPetitionFile.pdf'),
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.petitionFileSize,
@@ -163,19 +138,16 @@ describe('ElectronicPetition entity', () => {
 
   describe('STIN file size', () => {
     it('should inform you if stin file size is greater than the file max size', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: MAX_FILE_SIZE_BYTES + 5,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: MAX_FILE_SIZE_BYTES + 5,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.stinFileSize,
@@ -185,19 +157,16 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should inform you if stin file size is zero', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-          stinFile: new File([], 'test.pdf'),
-          stinFileSize: 0,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 0,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.stinFileSize,
@@ -205,17 +174,14 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should not error on stinFileSize when stinFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.stinFileSize,
@@ -223,19 +189,16 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should error on stinFileSize when stinFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-          stinFile: new File([], 'testStinFile.pdf'),
-          stinFileSize: undefined,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        stinFile: new File([], 'testStinFile.pdf'),
+        stinFileSize: undefined,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!.stinFileSize,
@@ -245,19 +208,16 @@ describe('ElectronicPetition entity', () => {
 
   describe('ATP file size', () => {
     it('should inform you if atp file size is greater than the file max size', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          attachmentToPetitionFile: new File([], 'test.pdf'),
-          attachmentToPetitionFileSize: MAX_FILE_SIZE_BYTES + 5,
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        attachmentToPetitionFile: new File([], 'test.pdf'),
+        attachmentToPetitionFileSize: MAX_FILE_SIZE_BYTES + 5,
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -268,20 +228,17 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should inform you if atp file size is zero', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          attachmentToPetitionFile: new File([], 'test.pdf'),
-          attachmentToPetitionFileSize: 0,
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
+      const electronicPetition = new ElectronicPetition({
+        attachmentToPetitionFile: new File([], 'test.pdf'),
+        attachmentToPetitionFileSize: 0,
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
 
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -290,17 +247,14 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should not error on attachmentToPetitionFileSize when attachmentToPetitionFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -309,19 +263,16 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should error on attachmentToPetitionFileSize when attachmentToPetitionFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          attachmentToPetitionFile: new File([], 'testStinFile.pdf'),
-          attachmentToPetitionFileSize: undefined,
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        attachmentToPetitionFile: new File([], 'testStinFile.pdf'),
+        attachmentToPetitionFileSize: undefined,
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -332,19 +283,16 @@ describe('ElectronicPetition entity', () => {
 
   describe('corporate disclosure file size', () => {
     it('should inform you if corporate disclosure file size is greater than the PDF max file size', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: new File([], 'cdsFile.pdf'),
-          corporateDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        corporateDisclosureFile: new File([], 'cdsFile.pdf'),
+        corporateDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -355,19 +303,16 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should inform you if corporate disclosure file size is zero', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: new File([], 'test.pdf'),
-          corporateDisclosureFileSize: 0,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        corporateDisclosureFile: new File([], 'test.pdf'),
+        corporateDisclosureFileSize: 0,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -376,17 +321,14 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -399,19 +341,16 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          caseType: CASE_TYPES_MAP.other,
-          corporateDisclosureFile: new File([], 'testStinFile.pdf'),
-          corporateDisclosureFileSize: undefined,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          partyType: PARTY_TYPES.nextFriendForMinor,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        caseType: CASE_TYPES_MAP.other,
+        corporateDisclosureFile: new File([], 'testStinFile.pdf'),
+        corporateDisclosureFileSize: undefined,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.nextFriendForMinor,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -422,17 +361,14 @@ describe('ElectronicPetition entity', () => {
 
   describe('Secondary contact phone', () => {
     it('should use secondary contact phone when provided', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          contactSecondary: {
-            contactType: CONTACT_TYPES.secondary,
-            phone: '123-234-3456',
-          },
-          partyType: PARTY_TYPES.petitionerSpouse,
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        contactSecondary: {
+          contactType: CONTACT_TYPES.secondary,
+          phone: '123-234-3456',
         },
-        { applicationContext },
-      );
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
       const secondaryContact = electronicPetition
         .toRawObject()
         .petitioners.find(p => p.contactType === CONTACT_TYPES.secondary);
@@ -440,16 +376,13 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should use default secondary contact phone when no phone is provided', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          contactSecondary: {
-            contactType: CONTACT_TYPES.secondary,
-          },
-          partyType: PARTY_TYPES.petitionerSpouse,
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        contactSecondary: {
+          contactType: CONTACT_TYPES.secondary,
         },
-        { applicationContext },
-      );
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
       const secondaryContact = electronicPetition
         .toRawObject()
         .petitioners.find(p => p.contactType === CONTACT_TYPES.secondary);
@@ -459,13 +392,10 @@ describe('ElectronicPetition entity', () => {
 
   describe('Redaction acknowledgements', () => {
     it('should fail validation when petitionRedactionAcknowledgement is false', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          petitionRedactionAcknowledgement: false,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        petitionRedactionAcknowledgement: false,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -474,14 +404,11 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should fail validation when hasIrsNotice is true and irsNoticesRedactionAcknowledgement is false', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          hasIrsNotice: true,
-          irsNoticesRedactionAcknowledgement: false,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        hasIrsNotice: true,
+        irsNoticesRedactionAcknowledgement: false,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!
@@ -490,14 +417,11 @@ describe('ElectronicPetition entity', () => {
     });
 
     it('should pass validation when petitionRedactionAcknowledgement and/or irsNoticesRedactionAcknowledgement are undefined or true', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...validPetitionData,
-          irsNoticesRedactionAcknowledgement: undefined,
-          petitionRedactionAcknowledgement: true,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...validPetitionData,
+        irsNoticesRedactionAcknowledgement: undefined,
+        petitionRedactionAcknowledgement: true,
+      });
 
       expect(
         electronicPetition.getFormattedValidationErrors()!

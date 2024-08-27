@@ -2,23 +2,15 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 import { caseServicesSupervisorUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('assignWorkItemsInteractor', () => {
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
-  const mockUserId = 'ebb34e3f-8ac1-4ac2-bc22-265b80a2acb2';
   let mockWorkItem;
-
-  const mockDocketClerkUser = {
-    name: 'Alex Docketclerk',
-    role: ROLES.docketClerk,
-    section: 'docket',
-    userId: mockUserId,
-  };
 
   beforeEach(() => {
     mockWorkItem = {
@@ -50,11 +42,11 @@ describe('assignWorkItemsInteractor', () => {
       updatedAt: '2018-12-27T18:06:02.968Z',
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
     };
-    applicationContext.getCurrentUser.mockReturnValue(mockDocketClerkUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockDocketClerkUser);
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockDocketClerkUser,
+      section: DOCKET_SECTION,
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -62,12 +54,12 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have permission to assign work items', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'baduser',
-    });
-
     await expect(
-      assignWorkItemsInteractor(applicationContext, options),
+      assignWorkItemsInteractor(
+        applicationContext,
+        options,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -78,24 +70,32 @@ describe('assignWorkItemsInteractor', () => {
     });
 
     await expect(
-      assignWorkItemsInteractor(applicationContext, options),
+      assignWorkItemsInteractor(
+        applicationContext,
+        options,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow();
   });
 
   it('assigns a work item to the current user', async () => {
-    await assignWorkItemsInteractor(applicationContext, {
-      assigneeId: mockUserId,
-      assigneeName: 'Ted Docket',
-      workItemId: mockWorkItem.workItemId,
-    });
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        workItemId: mockWorkItem.workItemId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
     ).toMatchObject({
-      section: mockDocketClerkUser.section,
+      section: DOCKET_SECTION,
       sentBy: mockDocketClerkUser.name,
-      sentBySection: mockDocketClerkUser.section,
+      sentBySection: DOCKET_SECTION,
       sentByUserId: mockDocketClerkUser.userId,
     });
   });
@@ -104,19 +104,26 @@ describe('assignWorkItemsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValueOnce(caseServicesSupervisorUser)
-      .mockReturnValueOnce(mockDocketClerkUser);
+      .mockReturnValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      });
 
-    await assignWorkItemsInteractor(applicationContext, {
-      assigneeId: mockUserId,
-      assigneeName: 'Ted Docket',
-      workItemId: mockWorkItem.workItemId,
-    });
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        workItemId: mockWorkItem.workItemId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
     ).toMatchObject({
-      section: mockDocketClerkUser.section,
+      section: DOCKET_SECTION,
       sentBy: caseServicesSupervisorUser.name,
       sentBySection: caseServicesSupervisorUser.section,
       sentByUserId: caseServicesSupervisorUser.userId,

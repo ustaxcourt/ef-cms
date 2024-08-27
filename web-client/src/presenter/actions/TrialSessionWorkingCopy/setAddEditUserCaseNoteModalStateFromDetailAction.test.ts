@@ -8,7 +8,6 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
 
   let user;
   const { USER_ROLES } = applicationContext.getConstants();
-  applicationContext.getCurrentUser = () => user;
 
   it('should set the modal state from caseDetail and props', async () => {
     user = { role: USER_ROLES.judge };
@@ -26,6 +25,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
             docketNumberWithSuffix: '101-19L',
           },
           judgesNote: { notes: 'i got some notes' },
+          user,
         },
       },
     );
@@ -55,6 +55,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
             docketNumberWithSuffix: '101-19',
           },
           judgesNote: { notes: 'i got some notes' },
+          user,
         },
       },
     );

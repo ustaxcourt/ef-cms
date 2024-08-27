@@ -7,7 +7,6 @@ import {
 } from '../EntityConstants';
 import { ContactFactory } from './ContactFactory';
 import { ElectronicPetition } from '../cases/ElectronicPetition';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ContactFactory', () => {
   const baseElectronicPetition = {
@@ -43,167 +42,128 @@ describe('ContactFactory', () => {
     state: 'AK',
   };
 
-  it('should throw an error if app context is not passed in', () => {
-    expect(
-      () => new ElectronicPetition(baseElectronicPetition, {} as any),
-    ).toThrow();
-  });
-
   describe('for Corporation Contacts', () => {
     it('should not validate without contact when the case status is new', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...baseElectronicPetition,
-          partyType: PARTY_TYPES.corporation,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...baseElectronicPetition,
+        partyType: PARTY_TYPES.corporation,
+      });
       expect(electronicPetition.isValid()).toEqual(false);
     });
 
     it('can validate primary contact when the case is not served', () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...baseElectronicPetition,
-          partyType: PARTY_TYPES.corporation,
-          petitioners: [baseContact],
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...baseElectronicPetition,
+        partyType: PARTY_TYPES.corporation,
+        petitioners: [baseContact],
+      });
       expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 
   it('can validate Petitioner contact when the case is not served', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.petitioner,
-        petitioners: [baseContact],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [baseContact],
+    });
     expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('passes validation when primary contact is defined and everything else is valid on an unserved case', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estateWithoutExecutor,
-        petitioners: [baseContact],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estateWithoutExecutor,
+      petitioners: [baseContact],
+    });
     expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('passes validation when in care of is undefined and everything else is valid on a served case', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estateWithoutExecutor,
-        petitioners: [
-          {
-            ...baseContact,
-            contactType: CONTACT_TYPES.petitioner,
-            inCareOf: undefined,
-          },
-        ],
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estateWithoutExecutor,
+      petitioners: [
+        {
+          ...baseContact,
+          contactType: CONTACT_TYPES.petitioner,
+          inCareOf: undefined,
+        },
+      ],
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
     expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('returns false for isValid if primary contact is missing', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+    });
     expect(electronicPetition.isValid()).toEqual(false);
   });
 
   it('defaults isAddressSealed to false when no value is specified', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [baseContact],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [baseContact],
+    });
 
     expect(electronicPetition.getContactPrimary().isAddressSealed).toBe(false);
   });
 
   it('sets the value of isAddressSealed when a value is specified', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [
-          {
-            ...baseContact,
-            isAddressSealed: true,
-          },
-        ],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [
+        {
+          ...baseContact,
+          isAddressSealed: true,
+        },
+      ],
+    });
     expect(electronicPetition.getContactPrimary().isAddressSealed).toBe(true);
   });
 
   it('defaults sealedAndUnavailable to false when no value is specified', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [baseContact],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [baseContact],
+    });
     expect(electronicPetition.getContactPrimary().sealedAndUnavailable).toBe(
       false,
     );
   });
 
   it('sets the value of sealedAndUnavailable when a value is specified', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [
-          {
-            ...baseContact,
-            sealedAndUnavailable: true,
-          },
-        ],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [
+        {
+          ...baseContact,
+          sealedAndUnavailable: true,
+        },
+      ],
+    });
     expect(electronicPetition.getContactPrimary().sealedAndUnavailable).toBe(
       true,
     );
   });
 
   it('formats phone number string', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        petitioners: [
-          {
-            ...baseContact,
-            phone: '4444444444',
-          },
-        ],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      petitioners: [
+        {
+          ...baseContact,
+          phone: '4444444444',
+        },
+      ],
+    });
 
     expect(electronicPetition.getContactPrimary().phone).toEqual(
       '444-444-4444',
@@ -211,46 +171,35 @@ describe('ContactFactory', () => {
   });
 
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [
-          {
-            ...baseContact,
-            serviceIndicator: 'WHAT',
-          },
-        ],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [
+        {
+          ...baseContact,
+          serviceIndicator: 'WHAT',
+        },
+      ],
+    });
     expect(electronicPetition.isValid()).toEqual(false);
   });
 
   it('a valid case returns true for isValid when status is new', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [baseContact],
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [baseContact],
+    });
     expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('a valid case returns true for isValid when status is not new', () => {
-    const electronicPetition = new ElectronicPetition(
-      {
-        ...baseElectronicPetition,
-        partyType: PARTY_TYPES.estate,
-        petitioners: [
-          { ...baseContact, contactType: CONTACT_TYPES.petitioner },
-        ],
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      },
-      { applicationContext },
-    );
+    const electronicPetition = new ElectronicPetition({
+      ...baseElectronicPetition,
+      partyType: PARTY_TYPES.estate,
+      petitioners: [{ ...baseContact, contactType: CONTACT_TYPES.petitioner }],
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -274,25 +223,19 @@ describe('ContactFactory', () => {
     PARTY_TYPES.trust,
   ].forEach(partyType => {
     it(`can validate invalid ${partyType} contact`, () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...baseElectronicPetition,
-          partyType,
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...baseElectronicPetition,
+        partyType,
+      });
       expect(electronicPetition.isValid()).toEqual(false);
     });
 
     it(`can validate valid ${partyType} contact`, () => {
-      const electronicPetition = new ElectronicPetition(
-        {
-          ...baseElectronicPetition,
-          partyType,
-          petitioners: [baseContact],
-        },
-        { applicationContext },
-      );
+      const electronicPetition = new ElectronicPetition({
+        ...baseElectronicPetition,
+        partyType,
+        petitioners: [baseContact],
+      });
       expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
     });
   });
@@ -300,31 +243,25 @@ describe('ContactFactory', () => {
   [PARTY_TYPES.petitionerDeceasedSpouse, PARTY_TYPES.petitionerSpouse].forEach(
     partyType => {
       it(`can validate invalid ${partyType} contact`, () => {
-        const electronicPetition = new ElectronicPetition(
-          {
-            ...baseElectronicPetition,
-            partyType,
-          },
-          { applicationContext },
-        );
+        const electronicPetition = new ElectronicPetition({
+          ...baseElectronicPetition,
+          partyType,
+        });
         expect(electronicPetition.isValid()).toEqual(false);
       });
 
       it(`can validate valid ${partyType} contact`, () => {
-        const electronicPetition = new ElectronicPetition(
-          {
-            ...baseElectronicPetition,
-            partyType,
-            petitioners: [
-              baseContact,
-              {
-                ...baseContact,
-                contactType: CONTACT_TYPES.secondary,
-              },
-            ],
-          },
-          { applicationContext },
-        );
+        const electronicPetition = new ElectronicPetition({
+          ...baseElectronicPetition,
+          partyType,
+          petitioners: [
+            baseContact,
+            {
+              ...baseContact,
+              contactType: CONTACT_TYPES.secondary,
+            },
+          ],
+        });
         expect(electronicPetition.getFormattedValidationErrors()).toEqual(null);
       });
     },
@@ -332,14 +269,11 @@ describe('ContactFactory', () => {
 
   it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
     expect(() => {
-      new ElectronicPetition(
-        {
-          ...baseElectronicPetition,
-          partyType: 'SOME INVALID PARTY TYPE',
-          petitioners: [baseContact],
-        },
-        { applicationContext },
-      );
+      new ElectronicPetition({
+        ...baseElectronicPetition,
+        partyType: 'SOME INVALID PARTY TYPE',
+        petitioners: [baseContact],
+      });
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 

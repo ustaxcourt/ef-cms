@@ -2,14 +2,14 @@ import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateTrialSessionInformation', () => {
   it('should not change the status of the case', () => {
     const myCase = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.closed },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     myCase.updateTrialSessionInformation({
@@ -24,7 +24,7 @@ describe('updateTrialSessionInformation', () => {
 
   it('should set only judge and trialSessionId if the trial session is calendared', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     myCase.updateTrialSessionInformation({
       isCalendared: false,
@@ -42,22 +42,19 @@ describe('updateTrialSessionInformation', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
-    const trialSession = new TrialSession(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'buch_id' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      { applicationContext },
-    );
+    const trialSession = new TrialSession({
+      isCalendared: true,
+      judge: { name: 'Judge Buch', userId: 'buch_id' },
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
     myCase.updateTrialSessionInformation(trialSession);
 
     expect(myCase.trialDate).toBeTruthy();
@@ -74,22 +71,19 @@ describe('updateTrialSessionInformation', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
-    const trialSession = new TrialSession(
-      {
-        isCalendared: false,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      { applicationContext },
-    );
+    const trialSession = new TrialSession({
+      isCalendared: false,
+      judge: { name: 'Judge Buch' },
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
     myCase.setAsCalendared(trialSession);
 
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);

@@ -63,9 +63,8 @@ export const CreateCaseDeadlineModalDialog = connect(
             <textarea
               className="usa-textarea"
               id="description"
-              maxLength="120"
+              maxLength={120}
               name="description"
-              type="text"
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
