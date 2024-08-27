@@ -28,6 +28,11 @@ export const signUpUserInteractor = async (
       email: user.email,
     });
 
+  // Note that this check can fail to catch two (nearly) simultaneous requests,
+  // and Cognito can therefore create accounts with the same email.
+  // (See https://stackoverflow.com/questions/50730759/user-pool-allows-two-users-with-same-email-despite-configuration)
+  // On the frontend, we can prevent multiple submissions; if we wanted to enforce non-duplicates on the backend,
+  // we would probably need to run an asynchronous task to delete duplicate records.
   if (existingAccount) {
     const accountUnconfirmed =
       existingAccount.accountStatus === UserStatusType.UNCONFIRMED;
