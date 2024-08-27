@@ -10,7 +10,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactPrimary as true when there is a valid party type', () => {
       const { showContactPrimary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.petitioner[3],
-        isSpousedDeceased: false,
+        isSpouseDeceased: false,
         partyType: PARTY_TYPES.conservator,
       });
 
@@ -20,7 +20,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactPrimary as false when there is not a valid party type', () => {
       const { showContactPrimary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.petitioner[3],
-        isSpousedDeceased: false,
+        isSpouseDeceased: false,
         partyType: 'RANDOM_TYPE' as PartyType,
       });
 
@@ -30,7 +30,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactPrimary as true when the filling type is "Myself and my spouse"', () => {
       const { showContactPrimary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.petitioner[1],
-        isSpousedDeceased: false,
+        isSpouseDeceased: false,
         partyType: PARTY_TYPES.petitionerSpouse,
       });
 
@@ -40,7 +40,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactPrimary as true when the filling type is "Myself"', () => {
       const { showContactPrimary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.petitioner[0],
-        isSpousedDeceased: false,
+        isSpouseDeceased: false,
         partyType: PARTY_TYPES.petitioner,
       });
 
@@ -52,7 +52,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactSecondary as false when party type is neither "petitionerDeceasedSpouse" or "petitionerSpouse"', () => {
       const { showContactSecondary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.petitioner[0],
-        isSpousedDeceased: false,
+        isSpouseDeceased: false,
         partyType: PARTY_TYPES.petitioner,
       });
 
@@ -62,7 +62,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactSecondary as false when user is a pro se petitioner and spouse is not deceased', () => {
       const { showContactSecondary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.petitioner[1],
-        isSpousedDeceased: false,
+        isSpouseDeceased: false,
         partyType: PARTY_TYPES.petitionerSpouse,
       });
 
@@ -72,7 +72,7 @@ describe('showContactsHelperUpdated', () => {
     it('should return showContactSecondary as true when user is a private practitioner and spouse is deceased', () => {
       const { showContactSecondary } = showContactsHelperUpdated({
         filingType: FILING_TYPES.privatePractitioner[1],
-        isSpousedDeceased: true,
+        isSpouseDeceased: true,
         partyType: PARTY_TYPES.petitionerSpouse,
       });
 
