@@ -93,7 +93,7 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType?: string;
+  public documentType: string;
   public eventCode: string;
   public filedBy?: string;
   public filedByRole?: string;
