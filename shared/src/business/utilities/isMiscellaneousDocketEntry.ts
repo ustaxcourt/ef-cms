@@ -10,9 +10,11 @@ export const isMiscellaneousDocketEntry = (
     STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions,
   );
 
-  const isDraftStatusReportOrder = draftStatusReportOrderTypes.includes(
-    docketEntry?.draftOrderState?.orderType || '',
-  );
+  const isDraftStatusReportOrder = docketEntry?.draftOrderState?.orderType
+    ? draftStatusReportOrderTypes.includes(
+        docketEntry.draftOrderState.orderType,
+      )
+    : false;
 
   return (
     docketEntry.documentType ===
