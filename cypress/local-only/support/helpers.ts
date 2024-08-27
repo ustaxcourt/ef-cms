@@ -16,31 +16,32 @@ export function generateRandomPhoneNumber(): string {
 }
 
 export function downloadAndParsePdf(element: string) {
-  return cy.window().then(win => {
-    const stub = cy.stub(win, 'open').as('windowOpen');
-    cy.get(element).click();
+  cy.intercept('GET', '**/document-download-url').as('documentDownloadUrl');
 
-    return cy.get('@windowOpen').then(() => {
-      const url = stub.getCall(0).args[0];
+  cy.get(element).click();
 
-      return cy
-        .request({
-          encoding: 'binary',
-          url,
-        })
-        .then(res => {
-          const filePath = 'cypress/downloads/file.pdf';
+  return cy.wait('@documentDownloadUrl').then(({ response }) => {
+    if (!response) throw Error('Did not find response');
 
-          return cy.writeFile(filePath, res.body, 'binary').then(() => {
-            return cy
-              .readFile(filePath, { timeout: 15000 })
-              .should('exist')
-              .then(() => {
-                return cy.task('parsePdf', { filePath });
-              });
-          });
+    const { url } = response.body;
+
+    return cy
+      .request({
+        encoding: 'binary',
+        url,
+      })
+      .then(res => {
+        const filePath = 'cypress/downloads/file.pdf';
+
+        return cy.writeFile(filePath, res.body, 'binary').then(() => {
+          return cy
+            .readFile(filePath, { timeout: 15000 })
+            .should('exist')
+            .then(() => {
+              return cy.task('parsePdf', { filePath });
+            });
         });
-    });
+      });
   });
 }
 
