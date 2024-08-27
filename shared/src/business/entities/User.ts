@@ -69,11 +69,13 @@ export class User extends JoiValidationEntity {
   }
 
   setUpContact(rawUser) {
-    // For non-judges, we require more contact information
+    // For judges, we require fewer contact attributes
     if (
       rawUser.contact &&
-      ![ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)
+      [ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)
     ) {
+      this.contact = { phone: formatPhoneNumber(rawUser.contact.phone) };
+    } else if (rawUser.contact) {
       this.contact = {
         address1: rawUser.contact.address1,
         address2: rawUser.contact.address2 ? rawUser.contact.address2 : null,
@@ -85,8 +87,6 @@ export class User extends JoiValidationEntity {
         postalCode: rawUser.contact.postalCode,
         state: rawUser.contact.state,
       };
-    } else if (rawUser.contact) {
-      this.contact = { phone: formatPhoneNumber(rawUser.contact.phone) };
     }
   }
 
@@ -134,11 +134,8 @@ export class User extends JoiValidationEntity {
   };
 
   static VALIDATION_RULES = {
-    // TODO 10455: The unknown check for judges is a hack
-    // It might be better to actually create a chambers entity,
-    // although that will require more than one DB query to get them.
     contact: joi.object().when('role', {
-      is: joi.valid(ROLES.judge, ROLES.legacyJudge),
+      is: value => value === ROLES.judge || value === ROLES.legacyJudge,
       otherwise: joi
         .object()
         .keys(User.USER_CONTACT_VALIDATION_RULES)
