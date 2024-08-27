@@ -360,7 +360,9 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           .eq(0)
           .should('contain.text', 'privatePractitioner1@example.com');
         cy.get('[data-testid="service-email-label"]').should('not.exist');
-        cy.get('[data-testid="contact-info-email"]').eq(1).should('not.exist');
+        cy.get('[data-testid="contact-info-email"]')
+          .eq(1)
+          .should('contain.text', 'Email not provided');
         cy.get('[data-testid="register-for-e-filing"]').should('not.exist');
       });
     });
