@@ -630,10 +630,7 @@ export class DocketEntry extends JoiValidationEntity {
       return true;
     }
 
-    if (
-      !rootDocument ||
-      !DocketEntry.isBriefType(rootDocument.documentType || '')
-    ) {
+    if (!rootDocument || !DocketEntry.isBriefType(rootDocument.documentType!)) {
       return false;
     }
 
