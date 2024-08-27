@@ -59,7 +59,7 @@ export const editUploadCourtIssuedDocumentSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       setDocumentTitleFromFreeTextAction,
-      chooseByTruthyStateActionFactory('screenMetadata.form'),
+      chooseByTruthyStateActionFactory('screenMetadata.documentReset'),
       {
         no: [setPrimaryDocumentFileIdPropAction, onSuccess],
         yes: [
