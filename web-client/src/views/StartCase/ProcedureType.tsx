@@ -31,15 +31,11 @@ export const ProcedureType = connect(
           <legend className="usa-legend" id="procedure-type-legend">
             {legend}
           </legend>
-          {PROCEDURE_TYPES.map((procedureType, idx) => (
-            <div
-              className="usa-radio usa-radio__inline"
-              data-testid={`procedure-type-${procedureType}-radio`}
-              key={procedureType}
-            >
+          {PROCEDURE_TYPES.map(procedureType => (
+            <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
                 aria-describedby="procedure-type-legend"
-                aria-labelledby={`procedure-type-${idx}`}
+                aria-labelledby={`procedure-type-${procedureType}`}
                 checked={value === procedureType}
                 className="usa-radio__input"
                 data-type={procedureType}
@@ -51,9 +47,9 @@ export const ProcedureType = connect(
               />
               <label
                 className="usa-radio__label"
-                data-testid={`procedure-type-${idx}`}
+                data-testid={`procedure-type-${procedureType}-radio`}
                 htmlFor={procedureType}
-                id={`procedure-type-${idx}`}
+                id={`procedure-type-${procedureType}`}
               >
                 {procedureType} case
               </label>
