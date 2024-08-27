@@ -86,7 +86,7 @@ export function PetitionerAndSpouseInfo({
           handleChangeCountryType={updateFormValueCountryTypeSequence}
           nameLabel="Full name of deceased spouse"
           registerRef={registerRef}
-          showEmailAndElectronicServiceConsent={isPetitioner}
+          showElectronicServiceConsent={isPetitioner}
           useSameAsPrimary={useSameAsPrimary}
         />
       )}
