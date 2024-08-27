@@ -141,7 +141,6 @@ export const UpdatedFilePetitionStep1 = connect(
               updateFormValueCountryTypeSequence
             }
             updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
-            updatedFilePetitionHelper={updatedFilePetitionHelper}
             validationErrors={validationErrors}
           />
         )}
