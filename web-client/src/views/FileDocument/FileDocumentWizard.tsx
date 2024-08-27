@@ -13,16 +13,23 @@ import React from 'react';
 
 export const FileDocumentWizard = connect(
   {
+    closeModalAndReturnToDashboardSequence:
+      sequences.closeModalAndReturnToDashboardSequence,
     showModal: state.modal.showModal,
   },
-  function FileDocumentWizard({ showModal }) {
+  function FileDocumentWizard({
+    closeModalAndReturnToDashboardSequence,
+    showModal,
+  }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
         <section className="usa-section">
           <div className="grid-container">
             {showModal == 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+              <FormCancelModalDialog
+                onCancelSequence={closeModalAndReturnToDashboardSequence}
+              />
             )}
             <SuccessNotification />
             <ErrorNotification />

@@ -11,15 +11,22 @@ import React from 'react';
 
 export const CaseAssociationRequestWizard = connect(
   {
+    closeModalAndReturnToDashboardSequence:
+      sequences.closeModalAndReturnToDashboardSequence,
     showModal: state.modal.showModal,
   },
-  function CaseAssociationRequestWizard({ showModal }) {
+  function CaseAssociationRequestWizard({
+    closeModalAndReturnToDashboardSequence,
+    showModal,
+  }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
         <section className="usa-section grid-container">
           {showModal == 'FormCancelModalDialog' && (
-            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+            <FormCancelModalDialog
+              onCancelSequence={closeModalAndReturnToDashboardSequence}
+            />
           )}
           <SuccessNotification />
           <ErrorNotification />

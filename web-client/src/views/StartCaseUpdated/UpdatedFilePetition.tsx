@@ -15,10 +15,16 @@ import React from 'react';
 
 export const UpdatedFilePetition = connect(
   {
+    closeModalAndReturnToDashboardSequence:
+      sequences.closeModalAndReturnToDashboardSequence,
     showModal: state.modal.showModal,
     stepIndicatorInfo: state.stepIndicatorInfo,
   },
-  function UpdatedFilePetition({ showModal, stepIndicatorInfo }) {
+  function UpdatedFilePetition({
+    closeModalAndReturnToDashboardSequence,
+    showModal,
+    stepIndicatorInfo,
+  }) {
     const { currentStep } = stepIndicatorInfo;
     return (
       <>
@@ -38,7 +44,9 @@ export const UpdatedFilePetition = connect(
           {currentStep === 7 && <UpdatedFilePetitionStep7 />}
         </section>
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToDashboardSequence}
+          />
         )}
       </>
     );
