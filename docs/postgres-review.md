@@ -2,9 +2,11 @@
 
 **Question**: Should we move forward with RDS Aurora Serverless V2 Postgres, starting with messages, and begin iteratively switching to it?
 
+Ideally DynamoDB usage is nil to minimal (only if use case permits) and OpenSearch is limited to text searches.
+
 Looking for 51% from Flexion Team for Approval
 
-Final Approval is subject to the USTC Team per their organization structure
+Final Approval is subject to the USTC Team per their organizational structure
 
 ## Results
 
@@ -15,28 +17,28 @@ Cody: Y
 
 Zach: Y, condition would like to see a database fire drill before going to production. 
 
-Tom:
+Tom: Y
 
-Nechama:
+Nechama: Y
 
-Chris:
+Chris: Y, as long as cost increase isn't too much. 
 
-Jon:
+Jon: Y
 
-Nate:
+Nate: Y
 
-Andy: 
+Andy:  Y
 
-Javis:
+Javis: Y
 
 ### USTC
-Jim D:
+Jim D: Y
 
-Jim L:
+Jim L: Y
 
-Mike: 
+Mike: Y
 
-Chris:
+Chris: Y
 
 ### Questions
 
@@ -49,6 +51,15 @@ Chris:
   - YES!! 
   - Easier to deal with! Still not sure what proper way to use DynamoDB effectivity for our project.
   - Not just fun side item. Use or cut losses. 
+
+- Do you still see a need for DynamoDB in any capacity?
+  - No at this time, maybe file meta data.
+
+- Should we do it all, chunks, or specific entity types first?
+  - Message are somewhat separate from other areas.
+
+- Backups automated with AWS
+  - Yes, but not restore
 
 
 ### Comments
@@ -71,3 +82,5 @@ Chris:
 ## Additional Action Items
 
 - Database fire drill - Production database went offline, restore from copy. We've not tested this in DynamoDB but this is in general a good practice that should ALWAYS be done. Make sure this is documented as well.
+
+- Pricing check on Flexion Side 
