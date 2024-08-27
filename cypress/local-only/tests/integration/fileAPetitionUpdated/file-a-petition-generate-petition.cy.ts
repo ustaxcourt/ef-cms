@@ -243,7 +243,7 @@ describe('File a petition', () => {
               "Petitioner's contact information: John 111 South West St. Orlando, AK 33233 Phone: 3232323232 Place of legal residence: Delaware Service email: petitioner1@example.com",
             );
             expect(text).to.include(
-              "Spouse's contact information: Bill c/o: Spouse Care of 111 South West St. Orlando, AK 33233 Phone: 7878787878 petitioner2@example.com Register for electronic filing and service: Yes Place of legal residence: New Jersey",
+              "Spouse's contact information: Bill c/o: Spouse Care of 111 South West St. Orlando, AK 33233 Phone: 7878787878 Email: petitioner2@example.com Register for electronic filing and service: Yes Place of legal residence: New Jersey",
             );
           },
         );
