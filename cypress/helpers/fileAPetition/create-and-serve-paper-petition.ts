@@ -1,5 +1,19 @@
+import { ProcedureType } from '../../../shared/src/business/entities/EntityConstants';
+
 export function createAndServePaperPetition(
-  options = { yearReceived: '2020' },
+  {
+    procedureType = 'Regular',
+    trialLocation = 'Birmingham, Alabama',
+    yearReceived = '2020',
+  }: Partial<{
+    yearReceived: string;
+    procedureType: ProcedureType;
+    trialLocation: string;
+  }> = {
+    procedureType: 'Regular',
+    trialLocation: 'Birmingham, Alabama',
+    yearReceived: '2020',
+  },
 ): Cypress.Chainable<{
   docketNumber: string;
   documentsCreated: {
@@ -28,10 +42,11 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="phone"]').type('n/a');
   cy.get('#tab-case-info > .button-text').click();
   cy.get('#date-received-picker').clear();
-  cy.get('#date-received-picker').type(`01/02/${options.yearReceived}`);
+  cy.get('#date-received-picker').type(`01/02/${yearReceived}`);
   cy.get('#mailing-date').clear();
   cy.get('#mailing-date').type('01/02/2019');
-  cy.get('[data-testid="preferred-trial-city"]').select('Birmingham, Alabama');
+  cy.get(`[data-testid="procedure-type-${procedureType}-radio"]`).click();
+  cy.get('[data-testid="preferred-trial-city"]').select(trialLocation);
   cy.get(
     ':nth-child(9) > .usa-fieldset > :nth-child(3) > .usa-radio__label',
   ).click();
