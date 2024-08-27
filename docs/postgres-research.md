@@ -1,9 +1,49 @@
 ## Database Migration & Performance
 
-- **DynamoDB vs. RDS Migration Speed**
+- **Overview**
+  - **1. Improve Dynamo Migrations**
+    - looked into speeding up dynamo, but kept hitting write limits on every approach. tried a lot of different approaches (see a.)
+    - tested a simple rds instance and it could easily update 10 million records in 18 seconds
+    - decided instead of using a bandaid, investigate switching databases
+  - **2. SQL Experiment**
+    - researched multiple orms (multiple day effort, wasted effort on some bad ORMs) (see b.)
+    - investigated work to move over messages entity to rds, it was very easy
+    - we refactor all messages into rds using dynamo streams and persistence method refactoring in a few days of work
+  - **3. Migrations**
+    - needed to figure out migration script approach
+    - started with a publically accessible RDS instance (security concerns)
+    - led us down an approach to figure out vpc (address security concerns)
+    - led us down a jumpbox approach because we couldn't run migrations in circleci due to VPC (more security concerns brought up)
+    - led us down setting up a VPN (to allow devs and circleci to be able to connect to the rds instance), but added so much complexity to the system and terraform
+  - **4. IAM Permissions**
+    - vpn complexity made us look into other approaches
+    - we found there was a way to configure RDS with IAM permissions
+    - requires an IAM user and a corresponding user created in the database to be able to generate a short lived (15 minute) access token
+  - **5. Performance Testing**
+    - RDS seemed to work faster than dynamo on east coast
+    - issue, on west coast, we were seeing close to 900ms for a query to get messages
+    - looked into multi-region replicas
+    - led us down figure out how to configure RDS postgres with multi-region, felt like a lot of work
+    - looked into Aurora, seemed to make the east - west setup much easier
+    - spend time getting all that setup in terraform
+    - got the cluster setup, replicas made the queries run fast on west coast; writes still need to hit primary but were fast enough
+  - **6. Backups / Restores**
+    - looked into how RDS snapshots work
+    - started prototyping some changes in terraform to restore a cluster from a snapshot.
+    - felt like it could be done, but put a hold on the work
+    - prepared notes for discussion
 
+- **a.) DynamoDB vs. RDS Migration Speed**
+
+  - We looked into dynamodb to try and find ways to speed up migrations
+    - one approach was add a GSI on specific fields and then do targeted queries to only update those fields
+    - applying the GSI took like 20 minutes or more
+    - felt like it defeated the purpose of "speeding up the migration"
+    - also, if needing to run a migration over 10 million docket entries, there isn't much speed up possible there.
   - Compared migration times: RDS completed a migration in 5 minutes with 10 million records, while DynamoDB took about an hour.
   - Inserted 10 million records in 2 minutes using the smallest RDS instance. DynamoDB took much longer and required more custom code.
+  - did an adhoc query with no index over 10 million records in 18 seconds (no index)
+  - counting all records in that table took 2 seconds
 
 - **Load Testing**
 
@@ -51,8 +91,8 @@
   - DynamoDB was seen as overkill in terms of dataset size.
   - DynamoDB forced denormalization of data, leading to complex application logic.
   - ElasticSearch was used too much to query DynamoDB data.
-  - Transactions in DynamoDB felt very limited.
-  - Jim mentioned it took him days to generate reports with DynamoDB, which would have taken hours with SQL.
+  - Transactions in DynamoDB felt very limited. (moved to separate devex card)
+  - Jim mentioned it took him* days to generate reports with DynamoDB, which would have taken hours with SQL.
   - The team has discussed using SQL for this project for years.
 
 - **Developer Experience**
@@ -93,9 +133,17 @@
 - will handle upgrades for us automatically
 - does these through maintence windows
 
-## ORM & Query Builder Investigation
+## b.) ORM & Query Builder Investigation
 
 - **ORMs**
+
+  - **Dynamo**
+    - **TypedORM**
+        - Related to DynamoDB.
+        - Limited DynamoDB transaction support.
+    - **ElectroDB** - another Dynamodb specific ORM we looked into
+
+  - **SQL**
 
   - **Prisma**
     - Overly complicated.
@@ -104,9 +152,6 @@
     - Generates TypeScript types based on the DSL.
   - **Bookshelf**
     - Felt dated with limited TypeScript support.
-  - **TypedORM**
-    - Related to DynamoDB.
-    - Limited DynamoDB transaction support.
 
 - **TypeScript ORMs**
 
