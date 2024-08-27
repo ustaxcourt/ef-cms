@@ -10,7 +10,7 @@ import { UpdatedFilePetitionStep5 } from '@web-client/views/StartCaseUpdated/Upd
 import { UpdatedFilePetitionStep6 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep6';
 import { UpdatedFilePetitionStep7 } from '@web-client/views/StartCaseUpdated/UpdatedFilePetitionStep7';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const UpdatedFilePetition = connect(
