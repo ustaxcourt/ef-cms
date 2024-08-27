@@ -1,18 +1,29 @@
 import {
+  CASE_STATUS_TYPES,
+  PROCEDURE_TYPES_MAP,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
   FORMATS,
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { loginAsColvin } from '../../../../helpers/authentication/login-as-helpers';
+import { retry } from '../../../../helpers/retry';
 
 describe('Blocked Cases Report', () => {
-  before(() => {
+  beforeEach(() => {
     cy.task('deleteAllFilesInFolder', 'cypress/downloads');
   });
 
   it('should show a blocked case in the blocked cases report and the downloaded csv report', () => {
-    createAndServePaperPetition().then(({ docketNumber }) => {
+    const trialLocation = 'Portland, Maine';
+    const [trialCity, trialState] = trialLocation.split(', ');
+    const procedureType = PROCEDURE_TYPES_MAP.small;
+    createAndServePaperPetition({
+      procedureType,
+      trialLocation,
+    }).then(({ docketNumber }) => {
       //block case
       loginAsColvin();
       goToCase(docketNumber);
@@ -27,23 +38,30 @@ describe('Blocked Cases Report', () => {
       );
 
       //View report
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(10000); // wait for opensearch to index case
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="blocked-cases-report"]').click();
-      cy.get('[data-testid="trial-location-filter"]').select(
-        'Birmingham, Alabama',
-      );
+
+      function checkIfOpensearchHasIndexedBlockedCase() {
+        cy.reload();
+        cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+        cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
+        cy.get('[data-testid="case-status-filter"]').select(
+          CASE_STATUS_TYPES.generalDocket,
+        );
+        cy.get('[data-testid="blocked-reason-filter"]').select('Manual Block');
+        const selector = `[data-testid="blocked-case-${docketNumber}-row"]`;
+        return cy.get(selector).then(elements => elements.length > 0);
+      }
+
+      retry(checkIfOpensearchHasIndexedBlockedCase);
+
       cy.get('[data-testid="blocked-cases-count"]').should('exist');
-      cy.get('[data-testid="blocked-cases-report-table"]').contains(
-        docketNumber,
-      );
 
       //download csv
       cy.get('[data-testid="export-blocked-case-report"]').click();
       const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
-      const fileName = `Blocked Cases Report - Birmingham_Alabama ${today}.csv`;
-      cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').then(
+      const fileName = `Blocked Cases Report - ${trialCity}_${trialState} ${today}.csv`;
+      cy.readFile(`cypress/downloads/${fileName}`, 'utf-8').should(
         fileContent => {
           expect(fileContent).to.include(docketNumber);
         },
