@@ -809,6 +809,7 @@ export const baseState = {
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
+  sequenceSingleton: {} as { [sequenceName: string]: boolean },
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
