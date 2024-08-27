@@ -25,6 +25,7 @@ export const DocketEntryQc = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence:
       sequences.openCompleteAndSendMessageModalSequence,
+    sequenceSingleton: state.sequenceSingleton,
     showModal: state.modal.showModal,
   },
   function DocketEntryQc({
@@ -34,6 +35,7 @@ export const DocketEntryQc = connect(
     docketEntryQcHelper,
     formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence,
+    sequenceSingleton,
     showModal,
   }) {
     return (
@@ -81,6 +83,7 @@ export const DocketEntryQc = connect(
 
                 <div className="margin-top-5">
                   <Button
+                    disabled={sequenceSingleton.completeDocketEntryQCSequence}
                     id="save-and-finish"
                     type="submit"
                     onClick={() => {
@@ -91,6 +94,9 @@ export const DocketEntryQc = connect(
                   </Button>
                   <Button
                     secondary
+                    disabled={
+                      sequenceSingleton.openCompleteAndSendMessageModalSequence
+                    }
                     id="save-and-add-supporting"
                     onClick={() => {
                       openCompleteAndSendMessageModalSequence();
