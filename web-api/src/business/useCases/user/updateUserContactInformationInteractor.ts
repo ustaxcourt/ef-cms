@@ -1,3 +1,7 @@
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
@@ -27,6 +31,7 @@ const updateUserContactInformationHelper = async (
     firmName,
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
+  authorizedUser: AuthUser,
 ) => {
   const user = await applicationContext
     .getPersistenceGateway()
@@ -99,6 +104,7 @@ const updateUserContactInformationHelper = async (
 
   const results = await generateChangeOfAddress({
     applicationContext,
+    authorizedUser,
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
@@ -137,22 +143,25 @@ export const updateUserContactInformation = async (
     firmName,
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authenticatedUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.UPDATE_CONTACT_INFO) ||
-    authenticatedUser.userId !== userId
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CONTACT_INFO) ||
+    authorizedUser?.userId !== userId
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   try {
-    await updateUserContactInformationHelper(applicationContext, {
-      contactInfo,
-      firmName,
-      userId,
-    });
+    await updateUserContactInformationHelper(
+      applicationContext,
+      {
+        contactInfo,
+        firmName,
+        userId,
+      },
+      authorizedUser,
+    );
   } catch (error) {
     applicationContext.logger.error(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -161,7 +170,7 @@ export const updateUserContactInformation = async (
         action: 'user_contact_update_error',
         error: (error as Error).toString(),
       },
-      userId: authenticatedUser.userId,
+      userId: authorizedUser.userId,
     });
     throw error;
   }
@@ -170,18 +179,19 @@ export const updateUserContactInformation = async (
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'update_user_contact_information',
-    },
-    userId: user.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'update_user_contact_information',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const determineEntitiesToLock = async (

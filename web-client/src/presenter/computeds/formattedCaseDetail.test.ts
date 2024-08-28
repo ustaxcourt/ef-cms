@@ -45,23 +45,19 @@ export const mockPetitioners = [
 ];
 
 describe('formattedCaseDetail', () => {
-  let globalUser;
   const { STATUS_TYPES } = applicationContext.getConstants();
 
   const formattedCaseDetail = withAppContextDecorator(
     formattedCaseDetailComputed,
     {
       ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
     },
   );
 
   const getBaseState = user => {
-    globalUser = user;
     return {
       permissions: getUserPermissions(user),
+      user,
     };
   };
 
@@ -214,6 +210,7 @@ describe('formattedCaseDetail', () => {
   it('should set contactTypeDisplay on a contact/petitioner', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {
           ...MOCK_CASE,
           petitioners: [

@@ -1,4 +1,8 @@
 /* eslint-disable complexity */
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import {
@@ -22,10 +26,9 @@ export const updateTrialSession = async (
     clientConnectionId,
     trialSession,
   }: { trialSession: RawTrialSession; clientConnectionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -81,12 +84,10 @@ export const updateTrialSession = async (
     trialLocation: trialSession.trialLocation,
   };
 
-  const updatedTrialSessionEntity = new TrialSession(
-    { ...currentTrialSession, ...editableFields },
-    {
-      applicationContext,
-    },
-  );
+  const updatedTrialSessionEntity = new TrialSession({
+    ...currentTrialSession,
+    ...editableFields,
+  });
 
   const shouldCreateWorkingCopyForNewJudge =
     (!get(currentTrialSession, 'judge.userId') &&
@@ -150,13 +151,13 @@ export const updateTrialSession = async (
 
     await updateCasesAndSetNoticeOfChange({
       applicationContext,
+      authorizedUser,
       currentTrialSession,
       paperServicePdfsCombined,
       shouldIssueNoticeOfChangeOfTrialJudge,
       shouldSetNoticeOfChangeToInPersonProceeding,
       shouldSetNoticeOfChangeToRemoteProceeding,
       updatedTrialSessionEntity,
-      user,
     });
 
     hasPaper = !!paperServicePdfsCombined.getPageCount();
@@ -181,12 +182,14 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .associateSwingTrialSessions(applicationContext, {
+    await applicationContext.getUseCaseHelpers().associateSwingTrialSessions(
+      applicationContext,
+      {
         swingSessionId: trialSession.swingSessionId,
         trialSessionEntity: updatedTrialSessionEntity,
-      });
+      },
+      authorizedUser,
+    );
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -204,25 +207,25 @@ export const updateTrialSession = async (
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
 
 const updateCasesAndSetNoticeOfChange = async ({
   applicationContext,
+  authorizedUser,
   currentTrialSession,
   paperServicePdfsCombined,
   shouldIssueNoticeOfChangeOfTrialJudge,
   shouldSetNoticeOfChangeToInPersonProceeding,
   shouldSetNoticeOfChangeToRemoteProceeding,
   updatedTrialSessionEntity,
-  user,
 }: {
   applicationContext: ServerApplicationContext;
   currentTrialSession: RawTrialSession;
   paperServicePdfsCombined: any;
   updatedTrialSessionEntity: TrialSession;
-  user: any;
+  authorizedUser: AuthUser;
   shouldSetNoticeOfChangeToRemoteProceeding: boolean;
   shouldSetNoticeOfChangeToInPersonProceeding: boolean;
   shouldIssueNoticeOfChangeOfTrialJudge: boolean;
@@ -237,7 +240,7 @@ const updateCasesAndSetNoticeOfChange = async ({
             applicationContext,
             docketNumber: c.docketNumber,
           });
-        return new Case(aCase, { applicationContext });
+        return new Case(aCase, { authorizedUser });
       }),
   );
   const casesThatShouldReceiveNotices = calendaredCaseEntities
@@ -250,41 +253,51 @@ const updateCasesAndSetNoticeOfChange = async ({
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
         .getUseCaseHelpers()
-        .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-          caseEntity,
-          newPdfDoc: paperServicePdfsCombined,
-          newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
-        });
+        .setNoticeOfChangeToRemoteProceeding(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     if (shouldSetNoticeOfChangeToInPersonProceeding) {
       await applicationContext
         .getUseCaseHelpers()
-        .setNoticeOfChangeToInPersonProceeding(applicationContext, {
-          caseEntity,
-          newPdfDoc: paperServicePdfsCombined,
-          newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
-        });
+        .setNoticeOfChangeToInPersonProceeding(
+          applicationContext,
+          {
+            caseEntity,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
       await applicationContext
         .getUseCaseHelpers()
-        .setNoticeOfChangeOfTrialJudge(applicationContext, {
-          caseEntity,
-          currentTrialSession,
-          newPdfDoc: paperServicePdfsCombined,
-          newTrialSessionEntity: updatedTrialSessionEntity,
-          user,
-        });
+        .setNoticeOfChangeOfTrialJudge(
+          applicationContext,
+          {
+            caseEntity,
+            currentTrialSession,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity: updatedTrialSessionEntity,
+          },
+          authorizedUser,
+        );
     }
 
     caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
   }
@@ -371,18 +384,19 @@ export const determineEntitiesToLock = async (
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'update_trial_session',
-    },
-    userId: user.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'update_trial_session',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const updateTrialSessionInteractor = withLocking(

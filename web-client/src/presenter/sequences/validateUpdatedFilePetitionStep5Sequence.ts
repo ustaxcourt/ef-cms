@@ -14,4 +14,4 @@ export const validateUpdatedFilePetitionStep5Sequence = [
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [clearAlertsAction, stopShowValidationAction],
   },
-];
+] as unknown as () => void;

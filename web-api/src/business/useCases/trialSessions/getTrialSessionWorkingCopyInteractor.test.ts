@@ -2,6 +2,12 @@ import { ROLES } from '../../../../../shared/src/business/entities/EntityConstan
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionWorkingCopyInteractor } from './getTrialSessionWorkingCopyInteractor';
+import {
+  mockChambersUser,
+  mockJudgeUser,
+  mockPetitionerUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 const MOCK_WORKING_COPY = {
@@ -39,7 +45,6 @@ describe('Get trial session working copy', () => {
         trialLocation: 'Birmingham, Alabama',
       });
 
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...user,
       section: 'colvinsChambers',
@@ -58,15 +63,14 @@ describe('Get trial session working copy', () => {
   });
 
   it('throws error if user is unauthorized', async () => {
-    user = {
-      role: 'unauthorizedRole',
-      userId: 'unauthorizedUser',
-    };
-
     await expect(
-      getTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-      }),
+      getTrialSessionWorkingCopyInteractor(
+        applicationContext,
+        {
+          trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -78,9 +82,13 @@ describe('Get trial session working copy', () => {
       );
 
     await expect(
-      getTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-      }),
+      getTrialSessionWorkingCopyInteractor(
+        applicationContext,
+        {
+          trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
 
@@ -90,12 +98,14 @@ describe('Get trial session working copy', () => {
       {
         trialSessionId: MOCK_WORKING_COPY.trialSessionId,
       },
+      mockJudgeUser,
     );
     expect(result).toMatchObject(MOCK_WORKING_COPY);
   });
 
   it('does not return data if none is returned from persistence', async () => {
     user = {
+      ...mockJudgeUser,
       name: 'judge who cannot create working copy',
       role: ROLES.judge,
       userId: 'something else',
@@ -108,17 +118,18 @@ describe('Get trial session working copy', () => {
       .getJudgeInSectionHelper.mockReturnValue(null);
 
     await expect(
-      getTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-      }),
+      getTrialSessionWorkingCopyInteractor(
+        applicationContext,
+        {
+          trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow('Trial session working copy not found');
   });
 
   it('correctly returns data from persistence for a trial clerk user', async () => {
-    user = {
-      role: ROLES.trialClerk,
-      userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
-    };
+    user = mockTrialClerkUser;
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockImplementation(() => {});
@@ -128,12 +139,13 @@ describe('Get trial session working copy', () => {
       {
         trialSessionId: MOCK_WORKING_COPY.trialSessionId,
       },
+      user,
     );
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionWorkingCopy.mock
         .calls[0][0],
     ).toMatchObject({
-      userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
+      userId: mockTrialClerkUser.userId,
     });
     expect(result).toMatchObject(MOCK_WORKING_COPY);
   });
@@ -185,14 +197,14 @@ describe('Get trial session working copy', () => {
           trialClerk: undefined,
           trialLocation: 'Birmingham, Alabama',
         });
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.judge,
-        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-      });
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
           trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        {
+          ...mockJudgeUser,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         },
       );
       expect(
@@ -212,14 +224,15 @@ describe('Get trial session working copy', () => {
       applicationContext
         .getUseCaseHelpers()
         .getJudgeInSectionHelper.mockReturnValueOnce(undefined);
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.trialClerk,
-        userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-      });
+
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
           trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        {
+          ...mockTrialClerkUser,
+          userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
         },
       );
       expect(
@@ -236,14 +249,15 @@ describe('Get trial session working copy', () => {
     });
 
     it('for current user who is a chambers user whose associated judge is on this trial session', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.chambers,
-        userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-      });
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
           trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        {
+          ...mockChambersUser,
+          role: ROLES.chambers,
+          userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
         },
       );
       expect(
