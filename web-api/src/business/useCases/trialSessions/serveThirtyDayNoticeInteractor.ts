@@ -18,6 +18,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
@@ -31,10 +32,9 @@ export const serveThirtyDayNoticeInteractor = async (
     trialSessionId: string;
     clientConnectionId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const currentUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(currentUser, ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -69,14 +69,12 @@ export const serveThirtyDayNoticeInteractor = async (
         action: 'thirty_day_notice_paper_service_complete',
         pdfUrl: undefined,
       },
-      userId: currentUser.userId,
+      userId: authorizedUser.userId,
     });
     return;
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();
@@ -91,7 +89,7 @@ export const serveThirtyDayNoticeInteractor = async (
       action: 'paper_service_started',
       totalPdfs: trialSession.caseOrder.length,
     },
-    userId: currentUser.userId,
+    userId: authorizedUser.userId,
   });
 
   let pdfsAppended: number = 0;
@@ -106,7 +104,7 @@ export const serveThirtyDayNoticeInteractor = async (
           docketNumber: aCase.docketNumber,
         });
 
-      const caseEntity = new Case(rawCase, { applicationContext });
+      const caseEntity = new Case(rawCase, { authorizedUser });
 
       let clinicLetter;
       const clinicLetterKey = getClinicLetterKey({
@@ -177,32 +175,36 @@ export const serveThirtyDayNoticeInteractor = async (
 
         await applicationContext
           .getUseCaseHelpers()
-          .createAndServeNoticeDocketEntry(applicationContext, {
-            additionalDocketEntryInfo: {
-              date: trialSession.startDate,
-              trialLocation: trialSession.trialLocation,
-            },
-            caseEntity,
-            documentInfo: {
-              documentTitle: replaceBracketed(
-                thirtyDayNoticeDocumentInfo!.documentTitle,
-                formatDateString(
-                  trialSession.startDate,
-                  FORMATS.MMDDYYYY_DASHED,
+          .createAndServeNoticeDocketEntry(
+            applicationContext,
+            {
+              additionalDocketEntryInfo: {
+                date: trialSession.startDate,
+                trialLocation: trialSession.trialLocation,
+              },
+              caseEntity,
+              documentInfo: {
+                documentTitle: replaceBracketed(
+                  thirtyDayNoticeDocumentInfo!.documentTitle,
+                  formatDateString(
+                    trialSession.startDate,
+                    FORMATS.MMDDYYYY_DASHED,
+                  ),
+                  trialSession.trialLocation!,
                 ),
-                trialSession.trialLocation!,
-              ),
-              documentType: thirtyDayNoticeDocumentInfo!.documentType,
-              eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+                documentType: thirtyDayNoticeDocumentInfo!.documentType,
+                eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+              },
+              newPdfDoc: paperServicePdf,
+              noticePdf,
+              onlyProSePetitioners: true,
             },
-            newPdfDoc: paperServicePdf,
-            noticePdf,
-            onlyProSePetitioners: true,
-            user: currentUser,
-          });
+            authorizedUser,
+          );
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         });
 
@@ -221,7 +223,7 @@ export const serveThirtyDayNoticeInteractor = async (
               action: 'paper_service_updated',
               pdfsAppended,
             },
-            userId: currentUser.userId,
+            userId: authorizedUser.userId,
           });
       }
     });
@@ -266,6 +268,6 @@ export const serveThirtyDayNoticeInteractor = async (
       hasPaper: hasPaperService,
       pdfUrl,
     },
-    userId: currentUser.userId,
+    userId: authorizedUser.userId,
   });
 };

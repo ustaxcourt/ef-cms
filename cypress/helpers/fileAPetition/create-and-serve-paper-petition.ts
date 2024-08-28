@@ -1,4 +1,5 @@
 import { ProcedureType } from '../../../shared/src/business/entities/EntityConstants';
+import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
 
 export function createAndServePaperPetition(
   {
@@ -24,7 +25,7 @@ export function createAndServePaperPetition(
   name: string;
 }> {
   const name = 'rick james ' + Date.now();
-  cy.login('petitionsclerk1');
+  loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="document-qc-nav-item"]').click();
   cy.get('[data-testid="start-a-petition"]').click();

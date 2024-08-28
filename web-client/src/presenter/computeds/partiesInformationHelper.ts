@@ -63,7 +63,7 @@ export const partiesInformationHelper = (
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const permissions = get(state.permissions);
   const isExternalUser = applicationContext
     .getUtilities()

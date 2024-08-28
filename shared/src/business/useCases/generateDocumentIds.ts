@@ -1,12 +1,14 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FileUploadProgressType } from '../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generateDocumentIds = async (
-  applicationContext: any,
+  applicationContext: ClientApplicationContext,
   {
     applicationForWaiverOfFilingFeeUploadProgress,
     attachmentToPetitionUploadProgress,
@@ -22,12 +24,11 @@ export const generateDocumentIds = async (
     requestForPlaceOfTrialUploadProgress?: FileUploadProgressType;
     stinUploadProgress: FileUploadProgressType;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
   const hasPermissions =
-    isAuthorized(user, ROLE_PERMISSIONS.PETITION) ||
-    isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE);
+    isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION) ||
+    isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE);
 
   if (!hasPermissions) {
     throw new UnauthorizedError('Unauthorized');
