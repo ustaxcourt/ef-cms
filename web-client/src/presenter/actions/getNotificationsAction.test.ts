@@ -17,6 +17,9 @@ describe('getNotificationsAction', () => {
       modules: {
         presenter,
       },
+      state: {
+        user: {},
+      },
     });
 
     expect(
@@ -33,6 +36,9 @@ describe('getNotificationsAction', () => {
         judgeUser: {
           userId: '123',
         },
+        state: {
+          user: {},
+        },
       },
     });
 
@@ -43,6 +49,7 @@ describe('getNotificationsAction', () => {
   });
 
   it('makes a call to fetch notifications with case services supervisor information when state.messageBoxToDisplay.section is defined', async () => {
+    const userId = 'this is a user id';
     await runAction(getNotificationsAction, {
       modules: {
         presenter,
@@ -51,6 +58,7 @@ describe('getNotificationsAction', () => {
         messageBoxToDisplay: {
           section: DOCKET_SECTION,
         },
+        user: { userId },
       },
     });
 
@@ -59,16 +67,18 @@ describe('getNotificationsAction', () => {
         .calls[0][1].caseServicesSupervisorData,
     ).toEqual({
       section: DOCKET_SECTION,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId,
     });
   });
 
   it('makes a call to fetch notifications with case services supervisor information when state.workQueueToDisplay.section is defined', async () => {
+    const userId = 'this is a user id';
     await runAction(getNotificationsAction, {
       modules: {
         presenter,
       },
       state: {
+        user: { userId },
         workQueueToDisplay: {
           section: DOCKET_SECTION,
         },
@@ -80,7 +90,7 @@ describe('getNotificationsAction', () => {
         .calls[0][1].caseServicesSupervisorData,
     ).toEqual({
       section: DOCKET_SECTION,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId,
     });
   });
 });
