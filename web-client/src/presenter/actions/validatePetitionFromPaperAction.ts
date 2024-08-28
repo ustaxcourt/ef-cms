@@ -74,10 +74,11 @@ export const validatePetitionFromPaperAction = ({
   path,
 }: ActionProps) => {
   const form = get(state.form);
+  const user = get(state.user);
 
   let errors = applicationContext
     .getUseCases()
-    .validatePetitionFromPaperInteractor(applicationContext, {
+    .validatePetitionFromPaperInteractor(user, {
       petition: form,
     });
 

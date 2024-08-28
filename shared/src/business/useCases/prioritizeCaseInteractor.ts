@@ -3,7 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -15,11 +17,10 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the case data
  */
 export const prioritizeCase = async (
-  applicationContext,
-  { docketNumber, reason },
-) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
+  applicationContext: ServerApplicationContext,
+  { docketNumber, reason }: { docketNumber: string; reason: string },
+  authorizedUser: UnknownAuthUser,
+): Promise<RawCase> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PRIORITIZE_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -31,7 +32,7 @@ export const prioritizeCase = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (caseEntity.isCalendared()) {
     throw new Error('Cannot set a calendared case as high priority');
@@ -56,10 +57,11 @@ export const prioritizeCase = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const prioritizeCaseInteractor = withLocking(

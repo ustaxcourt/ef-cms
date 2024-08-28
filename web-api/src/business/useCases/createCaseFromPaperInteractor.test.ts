@@ -10,10 +10,13 @@ import {
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -28,11 +31,7 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
 
 describe('createCaseFromPaperInteractor', () => {
   const date = '2018-11-21T20:49:28.192Z';
-  let user = new User({
-    name: 'Test Petitionsclerk',
-    role: ROLES.petitionsClerk,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
+
   const mockCreateIsoDateString = createISODateString as jest.Mock;
   mockCreateIsoDateString.mockReturnValue(date);
   beforeEach(() => {
@@ -40,7 +39,6 @@ describe('createCaseFromPaperInteractor', () => {
       '00101-00',
     );
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockReturnValue(user);
 
     applicationContext
       .getUseCaseHelpers()
@@ -68,10 +66,12 @@ describe('createCaseFromPaperInteractor', () => {
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      createCaseFromPaperInteractor(applicationContext, {} as any),
+      createCaseFromPaperInteractor(
+        applicationContext,
+        {} as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
@@ -120,10 +120,11 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const expectedCaseStatus = {
-      changedBy: user.name,
+      changedBy: mockPetitionsClerkUser.name,
       date: createISODateString(),
       updatedCaseStatus: CASE_STATUS_TYPES.new,
     };
@@ -172,6 +173,7 @@ describe('createCaseFromPaperInteractor', () => {
           receivedAt: applicationContext.getUtilities().createISODateString(),
         },
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const applicationForWaiverOfFilingFeeDocketEntry =
@@ -235,6 +237,7 @@ describe('createCaseFromPaperInteractor', () => {
           receivedAt: applicationContext.getUtilities().createISODateString(),
         },
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const corporateDisclosureDocketEntry = caseFromPaper.docketEntries.find(
@@ -292,6 +295,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const stinDocketEntry = caseFromPaper.docketEntries.find(
@@ -352,6 +356,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const rqtDocketEntry = caseFromPaper.docketEntries.find(
@@ -408,6 +413,7 @@ describe('createCaseFromPaperInteractor', () => {
           receivedAt: applicationContext.getUtilities().createISODateString(),
         },
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const atpDocketEntry = caseFromPaper.docketEntries.find(
@@ -484,6 +490,7 @@ describe('createCaseFromPaperInteractor', () => {
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
+      mockPetitionsClerkUser,
     );
 
     expect(caseFromPaper).toBeDefined();
@@ -535,6 +542,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       } as any,
+      mockPetitionsClerkUser,
     );
 
     const reqForPlaceOfTrialDocketEntry = caseFromPaper.docketEntries.find(

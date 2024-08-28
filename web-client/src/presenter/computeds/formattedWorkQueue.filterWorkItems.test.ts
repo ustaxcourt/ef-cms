@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
+import { petitionsClerkUser } from '@shared/test/mockUsers';
 
 const {
   DOCKET_SECTION,
@@ -106,11 +107,6 @@ describe('filterWorkItems', () => {
   let workQueueOutbox;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
-    });
-
     workItemPetitionsMyDocumentQCInbox = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       docketNumber: '100-05',
@@ -201,10 +197,10 @@ describe('filterWorkItems', () => {
   // PETITIONS CLERK
 
   it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerk1);
-
     const filtered = filterWorkItems({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
+      section: PETITIONS_SECTION,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
@@ -229,9 +225,9 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns sent work items for a Petitions Clerk in Section Document QC Outbox', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerk1);
     const filtered = filterWorkItems({
       applicationContext,
+      authorizedUser: petitionsClerk1,
       workItems: workQueueOutbox,
       ...SECTION_DOCUMENT_QC_OUTBOX,
     } as any);
@@ -261,9 +257,9 @@ describe('filterWorkItems', () => {
   // DOCKET CLERK
 
   it('Returns section work items for a Docket Clerk in Section Document QC Inbox', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
     const filtered = filterWorkItems({
       applicationContext,
+      authorizedUser: docketClerk1,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
@@ -288,9 +284,9 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns docket section work items for an ADC in Document QC Inbox', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(adc);
     const filtered = filterWorkItems({
       applicationContext,
+      authorizedUser: adc,
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
@@ -302,9 +298,9 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns docket section work items for a Docket Clerk in My Document QC In Progress', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
     const filtered = filterWorkItems({
       applicationContext,
+      authorizedUser: docketClerk1,
       workItems: workQueueInProgress,
       ...MY_DOCUMENT_QC_IN_PROGRESS,
     } as any);
@@ -313,9 +309,9 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns docket section work items for a Docket Clerk in Section Document QC In Progress', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
     const filtered = filterWorkItems({
       applicationContext,
+      authorizedUser: docketClerk1,
       workItems: workQueueInProgress,
       ...SECTION_DOCUMENT_QC_IN_PROGRESS,
     } as any);
@@ -327,9 +323,9 @@ describe('filterWorkItems', () => {
   });
 
   it('should getWorkQueueFilters with the section argument', () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(docketClerk1);
     filterWorkItems({
       applicationContext,
+      authorizedUser: docketClerk1,
       section: DOCKET_SECTION,
       workItems: workQueueInProgress,
       ...SECTION_DOCUMENT_QC_IN_PROGRESS,

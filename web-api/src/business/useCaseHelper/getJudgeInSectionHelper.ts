@@ -21,9 +21,7 @@ export const getJudgeInSectionHelper = async (
       section,
     });
 
-  const sectionUsers = User.validateRawCollection(rawUsers, {
-    applicationContext,
-  });
+  const sectionUsers = User.validateRawCollection(rawUsers);
 
   const judgeUser = sectionUsers.find(
     sectionUser => sectionUser.role === ROLES.judge,

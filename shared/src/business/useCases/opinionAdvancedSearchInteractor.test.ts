@@ -4,13 +4,14 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { opinionAdvancedSearchInteractor } from './opinionAdvancedSearchInteractor';
-import { petitionerUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('opinionAdvancedSearchInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
@@ -38,19 +39,25 @@ describe('opinionAdvancedSearchInteractor', () => {
   });
 
   it('should return an unauthorized error when the currentUser is a petitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      opinionAdvancedSearchInteractor(applicationContext, {} as any),
+      opinionAdvancedSearchInteractor(
+        applicationContext,
+        {} as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return results when the current user has permission to perform advanced opinion searches (petitionsclerk)', async () => {
-    const result = await opinionAdvancedSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword: 'candy',
-      startDate: '01/01/2001',
-    } as any);
+    const result = await opinionAdvancedSearchInteractor(
+      applicationContext,
+      {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'candy',
+        startDate: '01/01/2001',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toMatchObject([
       {
@@ -88,10 +95,14 @@ describe('opinionAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await opinionAdvancedSearchInteractor(applicationContext, {
-      keyword: 'keyword',
-      petitionerName: 'test person',
-    } as any);
+    const results = await opinionAdvancedSearchInteractor(
+      applicationContext,
+      {
+        keyword: 'keyword',
+        petitionerName: 'test person',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -99,12 +110,16 @@ describe('opinionAdvancedSearchInteractor', () => {
   it('should search for documents that are of type opinions', async () => {
     const keyword = 'keyword';
 
-    await opinionAdvancedSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword,
-      opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      startDate: '01/01/2001',
-    } as any);
+    await opinionAdvancedSearchInteractor(
+      applicationContext,
+      {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword,
+        opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        startDate: '01/01/2001',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -115,7 +130,11 @@ describe('opinionAdvancedSearchInteractor', () => {
   });
 
   it('should search for opinions with isOpinionSearch set to true', async () => {
-    await opinionAdvancedSearchInteractor(applicationContext, {} as any);
+    await opinionAdvancedSearchInteractor(
+      applicationContext,
+      {} as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock

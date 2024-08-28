@@ -6,7 +6,6 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('getCalendarDetailsForTrialSession', () => {
-  let globalUser;
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   const petitionsClerkUser = {
@@ -18,16 +17,13 @@ describe('getCalendarDetailsForTrialSession', () => {
     formattedCaseDetailComputed,
     {
       ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
     },
   );
 
   const getBaseState = user => {
-    globalUser = user;
     return {
       permissions: getUserPermissions(user),
+      user,
     };
   };
 

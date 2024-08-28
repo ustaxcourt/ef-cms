@@ -18,5 +18,5 @@ export const getJudgesForPublicSearchInteractor = async (
       section: ROLES.judge,
     });
 
-  return PublicUser.validateRawCollection(rawJudges, { applicationContext });
+  return PublicUser.validateRawCollection(rawJudges);
 };

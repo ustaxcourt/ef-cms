@@ -41,8 +41,7 @@ import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 
-const applicationContext =
-  clientApplicationContext as unknown as IApplicationContext;
+const applicationContext = clientApplicationContext as any;
 
 const { CASE_TYPES_MAP, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
   applicationContext.getConstants();

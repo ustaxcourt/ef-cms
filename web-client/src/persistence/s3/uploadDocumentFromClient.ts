@@ -1,9 +1,11 @@
+import { getCurrentUserToken } from '@shared/proxies/requests';
+
 const getUploadPolicy = async ({ applicationContext, key }) => {
   const response = await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/documents/${key}/upload-policy`, {
       headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        Authorization: `Bearer ${getCurrentUserToken()}`,
       },
     });
   return response.data;

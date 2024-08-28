@@ -50,6 +50,7 @@ export const petitionsClerkCreateOrder = cerebralTest => {
       .getUtilities()
       .getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: cerebralTest.getState('user'),
         caseDetail: cerebralTest.getState('caseDetail'),
       });
 

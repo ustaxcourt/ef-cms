@@ -1,13 +1,10 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type WorkerMessage = {
   payload: any;
   type: WorkerMessageType;
-  user: {
-    role: string;
-    userId: string;
-    name: string;
-  };
+  authorizedUser: AuthUser;
 };
 
 export const MESSAGE_TYPES = {
@@ -30,12 +27,20 @@ export const workerRouter = async (
     case MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE:
       await applicationContext
         .getUseCases()
-        .updateAssociatedCaseWorker(applicationContext, message.payload);
+        .updateAssociatedCaseWorker(
+          applicationContext,
+          message.payload,
+          message.authorizedUser,
+        );
       break;
     case MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES:
       await applicationContext
         .getUseCases()
-        .queueUpdateAssociatedCasesWorker(applicationContext, message.payload);
+        .queueUpdateAssociatedCasesWorker(
+          applicationContext,
+          message.payload,
+          message.authorizedUser,
+        );
       break;
     default:
       throw new Error(
