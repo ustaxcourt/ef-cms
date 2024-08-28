@@ -10,13 +10,13 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
 
 describe('serveGeneratedNoticesOnCase', () => {
-  const mockOpenCaseEntity = new Case(MOCK_CASE, { applicationContext });
+  const mockOpenCaseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
 
   const mockNoticeDocketEntryEntity = new DocketEntry(
     {
       ...MOCK_CASE.docketEntries[0],
     },
-    { applicationContext },
+    { authorizedUser: undefined },
   );
 
   it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {

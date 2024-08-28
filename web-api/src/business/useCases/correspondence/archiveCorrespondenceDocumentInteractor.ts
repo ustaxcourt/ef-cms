@@ -5,27 +5,18 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * archiveCorrespondenceDocument
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.correspondenceId case correspondence id
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {void}
- */
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
   {
     correspondenceId,
     docketNumber,
   }: { correspondenceId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -38,7 +29,7 @@ export const archiveCorrespondenceDocument = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
   const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
   );
@@ -53,6 +44,7 @@ export const archiveCorrespondenceDocument = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 };

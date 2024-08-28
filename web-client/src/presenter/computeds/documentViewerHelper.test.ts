@@ -30,17 +30,12 @@ describe('documentViewerHelper', () => {
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
+      user,
       viewerDocumentToDisplay: {
         docketEntryId: DOCKET_ENTRY_ID,
       },
     };
   };
-
-  beforeAll(() => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(docketClerkUser);
-  });
 
   it('should return an empty object if the requested docketEntryId is not found in the docket record', () => {
     const result = runCompute(documentViewerHelper, {

@@ -14,7 +14,7 @@ export const validateUserContactAction = ({
   path,
 }: ActionProps) => {
   const formContact = get(state.form);
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
 
   const errors = applicationContext
     .getUseCases()
