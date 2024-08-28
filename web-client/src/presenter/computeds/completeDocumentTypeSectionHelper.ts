@@ -59,7 +59,7 @@ export const completeDocumentTypeSectionHelper = (
       value => value.eventCode,
     );
 
-    const currentUser = applicationContext.getCurrentUser();
+    const currentUser = get(state.user);
     if (currentUser.role === USER_ROLES.irsPractitioner) {
       if (
         Case.isFirstIrsFiling(caseDetail) &&
@@ -85,8 +85,8 @@ export const completeDocumentTypeSectionHelper = (
       return {
         ...documentType,
         documentTitle:
-          applicationContext.getCurrentUser().role ===
-            USER_ROLES.irsPractitioner && documentType.eventCode === 'EA'
+          get(state.user).role === USER_ROLES.irsPractitioner &&
+          documentType.eventCode === 'EA'
             ? `${documentType.documentTitle} for Respondent`
             : documentType.documentTitle,
       };

@@ -5,7 +5,6 @@ import {
   USTC_TZ,
 } from '../../shared/src/business/utilities/DateHandler';
 import { PARTIES_CODES } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { seedEntries } from '../../web-api/storage/fixtures/seed';
@@ -201,7 +200,7 @@ describe('View and manage the deadlines of a case', () => {
       const docketEntries = new Array<DocketEntry>();
       for (const item of seedEntries) {
         if (item.entityName === 'DocketEntry') {
-          const de = new DocketEntry(item, { applicationContext });
+          const de = new DocketEntry(item, { authorizedUser: undefined });
           if (
             [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
               de.servedPartiesCode ?? '',

@@ -3,14 +3,10 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { viewCounselHelper as viewCounselHelperComputed } from './viewCounselHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-let globalUser;
-
-const viewCounselHelper = withAppContextDecorator(viewCounselHelperComputed, {
-  ...applicationContext,
-  getCurrentUser: () => {
-    return globalUser;
-  },
-});
+const viewCounselHelper = withAppContextDecorator(
+  viewCounselHelperComputed,
+  applicationContext,
+);
 
 describe('viewCounselHelper', () => {
   it('returns the expected state when selected work items are set', () => {

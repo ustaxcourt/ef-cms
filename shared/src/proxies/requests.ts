@@ -3,6 +3,14 @@ import moize from 'moize';
 
 const MAX_RETRIES = 10;
 
+let token: string = '';
+export const getCurrentUserToken = (): string => {
+  return token;
+};
+export const setCurrentUserToken = (newToken: string) => {
+  token = newToken;
+};
+
 /**
  *
  *head
@@ -16,7 +24,7 @@ export const head = async ({ applicationContext, endpoint, params }) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
+      headers: getDefaultHeaders(getCurrentUserToken()),
       params,
     })
     .then(response => response.data);
@@ -61,7 +69,7 @@ export const getResponse = ({ applicationContext, endpoint, params }) => {
   return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
+      headers: getDefaultHeaders(getCurrentUserToken()),
       params,
     });
 };
@@ -102,7 +110,7 @@ export const post = async ({
       .getHttpClient()
       .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
         headers: {
-          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
+          ...getDefaultHeaders(getCurrentUserToken()),
           ...headers,
           Asyncsyncid: asyncSyncId,
         },
@@ -179,7 +187,7 @@ export const put = async ({
       .getHttpClient()
       .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
         headers: {
-          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
+          ...getDefaultHeaders(getCurrentUserToken()),
           Asyncsyncid: asyncSyncId,
         },
       })
@@ -230,7 +238,7 @@ export const remove = async ({
     return await applicationContext
       .getHttpClient()
       .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-        headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
+        headers: getDefaultHeaders(getCurrentUserToken()),
         params,
         ...options,
       })

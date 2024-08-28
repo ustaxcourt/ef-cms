@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('canConsolidate', () => {
   let caseEntity;
@@ -10,7 +10,7 @@ describe('canConsolidate', () => {
     caseEntity = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.submitted },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
   });

@@ -192,14 +192,18 @@ export abstract class JoiValidationEntity {
     return this.validate({ applicationContext, logErrors: true });
   }
 
-  static validateRawCollection<T extends JoiValidationEntity>(
-    this: new (someVar: any, someArgs: any) => T,
+  static validateRawCollection<ClassType extends new (...args: any) => any>(
+    this: ClassType,
     collection: any[] = [],
-    args: any,
+    ...args: Tail<ConstructorParameters<ClassType>>
   ) {
     return collection.map(
       rawEntity =>
-        new this(rawEntity, args).validate().toRawObject() as ExcludeMethods<T>,
+        new this(rawEntity, ...args)
+          .validate()
+          .toRawObject() as ExcludeMethods<ClassType>,
     );
   }
 }
+
+type Tail<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;

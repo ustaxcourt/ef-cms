@@ -1,13 +1,12 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getInternalUsersInteractor } from './getInternalUsersInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('Get internal users', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketclerk',
-    });
     applicationContext
       .getPersistenceGateway()
       .getInternalUsers.mockReturnValue([
@@ -27,7 +26,10 @@ describe('Get internal users', () => {
   });
 
   it('returns the same users that were returned from mocked persistence', async () => {
-    const users = await getInternalUsersInteractor(applicationContext);
+    const users = await getInternalUsersInteractor(
+      applicationContext,
+      mockDocketClerkUser,
+    );
     expect(users).toMatchObject([
       {
         name: 'Saul Goodman',
@@ -45,14 +47,9 @@ describe('Get internal users', () => {
   });
 
   it('throws unauthorized error for unauthorized users', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Saul Goodman',
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    });
     let error;
     try {
-      await getInternalUsersInteractor(applicationContext);
+      await getInternalUsersInteractor(applicationContext, mockPetitionerUser);
     } catch (err) {
       error = err;
     }
