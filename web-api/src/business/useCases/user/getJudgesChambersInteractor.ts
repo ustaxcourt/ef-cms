@@ -4,6 +4,7 @@ import {
   User,
 } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUsersInSectionInteractor } from '@web-api/business/useCases/user/getUsersInSectionInteractor';
 
 const pluralizeChambersLabel = (judgeName: string) => {
@@ -14,15 +15,15 @@ const pluralizeChambersLabel = (judgeName: string) => {
 
 export const getJudgesChambersInteractor = async (
   applicationContext: ServerApplicationContext,
+  authorizedUser: UnknownAuthUser,
 ): Promise<JudgeChambersInfo[]> => {
   const judgeRawUsers: RawUser[] = await getUsersInSectionInteractor(
     applicationContext,
     { section: 'judge' },
+    authorizedUser,
   );
 
-  const judgeUsers = User.validateRawCollection(judgeRawUsers, {
-    applicationContext,
-  });
+  const judgeUsers = User.validateRawCollection(judgeRawUsers);
 
   const judgeChambers: JudgeChambersInfo[] = judgeUsers.map(u => {
     const phoneNumber = u.contact?.phone;
