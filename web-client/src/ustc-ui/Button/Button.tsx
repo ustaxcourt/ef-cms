@@ -10,7 +10,7 @@ export const Button = props => {
   const {
     children,
     className,
-    disbleOnClick,
+    disableOnClick,
     icon,
     iconColor, // e.g. blue
     iconRight = false,
@@ -54,17 +54,17 @@ export const Button = props => {
     if (!(results instanceof Promise))
       throw new Error('Convert onClick method to async');
 
-    await results.then(() => {
+    await results.finally(() => {
       setDisableButton(false);
     });
   }, 500);
 
-  const updatedOnClick = disbleOnClick
+  const updatedOnClick = disableOnClick
     ? async () => {
         setDisableButton(true);
         await debouncedWrapper();
       }
-    : onClick;
+    : debounce(() => onClick(), 500);
 
   return (
     <Element
@@ -72,7 +72,7 @@ export const Button = props => {
       {...remainingProps}
       disabled={disableButton}
       title={tooltip}
-      onClick={updatedOnClick}
+      onClick={!onClick ? onClick : updatedOnClick}
     >
       {icon && !iconRight && (
         <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />

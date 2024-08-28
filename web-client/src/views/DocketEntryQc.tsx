@@ -81,7 +81,7 @@ export const DocketEntryQc = connect(
 
                 <div className="margin-top-5">
                   <Button
-                    disbleOnClick
+                    disableOnClick
                     id="save-and-finish"
                     type="submit"
                     onClick={async () => {
@@ -91,7 +91,7 @@ export const DocketEntryQc = connect(
                     Complete
                   </Button>
                   <Button
-                    disbleOnClick
+                    disableOnClick
                     secondary
                     id="save-and-add-supporting"
                     onClick={async () => {
