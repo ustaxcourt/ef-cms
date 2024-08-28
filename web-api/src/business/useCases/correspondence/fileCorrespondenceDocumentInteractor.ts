@@ -6,6 +6,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -22,8 +23,8 @@ export const fileCorrespondenceDocumentInteractor = async (
     documentMetadata,
     primaryDocumentFileId,
   }: { documentMetadata: TDocumentMetaData; primaryDocumentFileId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
@@ -45,7 +46,7 @@ export const fileCorrespondenceDocumentInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const correspondenceEntity = new Correspondence({
     ...documentMetadata,

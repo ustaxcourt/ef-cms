@@ -10,11 +10,10 @@ import { put } from '../requests';
  */
 export const submitPendingCaseAssociationRequestInteractor = (
   applicationContext,
-  { docketNumber },
+  { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
-  const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
-    endpoint: `/users/${user.userId}/case/${docketNumber}/pending`,
+    endpoint: `/users/${userId}/case/${docketNumber}/pending`,
   });
 };

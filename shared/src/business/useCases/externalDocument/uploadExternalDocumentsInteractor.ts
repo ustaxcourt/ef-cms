@@ -5,6 +5,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * Uploads external documents and calls the interactor to associate them with one or more cases
@@ -27,10 +28,9 @@ export const uploadExternalDocumentsInteractor = async (
     documentMetadata: any;
     fileUploadProgressMap: Record<string, FileUploadProgressType>;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

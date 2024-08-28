@@ -1,3 +1,4 @@
+import { getCurrentUserToken } from '@shared/proxies/requests';
 import { getPdfFromUrl } from './getPdfFromUrl';
 
 const getDownloadPolicy = async ({
@@ -17,7 +18,7 @@ const getDownloadPolicy = async ({
       `${applicationContext.getBaseUrl()}/case-documents/${docketNumber}/${key}/download-policy-url`,
       {
         headers: {
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+          Authorization: `Bearer ${getCurrentUserToken()}`,
         },
       },
     );

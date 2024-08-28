@@ -17,9 +17,9 @@ export const validateAddPetitionerInteractor = (
     existingPetitioners,
   }: { contact: any; existingPetitioners?: any[] },
 ) => {
-  const petitionerErrors = new Petitioner(contact, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+  const petitionerErrors = new Petitioner(
+    contact,
+  ).getFormattedValidationErrors();
 
   let caseCaptionError;
   if (!contact.caseCaption) {
