@@ -66,10 +66,14 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
 
     await expect(
-      getPublicDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: '123-20',
-        key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-      } as any),
+      getPublicDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+          key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+        } as any,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Case 123-20 was not found.');
   });
 

@@ -199,9 +199,9 @@ export abstract class JoiValidationEntity {
   ) {
     return collection.map(
       rawEntity =>
-        new this(rawEntity, ...args)
-          .validate()
-          .toRawObject() as ExcludeMethods<ClassType>,
+        new this(rawEntity, ...args).validate().toRawObject() as ExcludeMethods<
+          InstanceType<ClassType>
+        >,
     );
   }
 }
