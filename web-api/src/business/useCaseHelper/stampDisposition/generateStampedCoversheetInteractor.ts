@@ -1,4 +1,5 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
 
 /**
@@ -44,20 +45,10 @@ const createStampedCoversheetPdf = async ({
   };
 };
 
-/**
- * generateStampedCoversheetInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id of the original motion
- * @param {string} providers.docketNumber the docket number of the case
- * @param {boolean} providers.stampData the stamp data from the form to be applied to the stamp order pdf
- * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
- * @returns {Promise<*>} updated docket entry entity
- */
 export const generateStampedCoversheetInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -66,7 +57,9 @@ export const generateStampedCoversheetInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, {
+    authorizedUser,
+  });
 
   const motionDocketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,

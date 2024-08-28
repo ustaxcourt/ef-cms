@@ -4,7 +4,5 @@ export const validateAddDeficiencyStatisticsInteractor = (
   applicationContext: IApplicationContext,
   { statistic }: { statistic: any },
 ) => {
-  return new Statistic(statistic, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+  return new Statistic(statistic).getFormattedValidationErrors();
 };

@@ -1,28 +1,31 @@
-import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { uploadOrderDocumentInteractor } from './uploadOrderDocumentInteractor';
 
 describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     await expect(
-      uploadOrderDocumentInteractor(applicationContext, {
-        documentFile: '',
-        fileIdToOverwrite: '123',
-      }),
+      uploadOrderDocumentInteractor(
+        applicationContext,
+        {
+          documentFile: '',
+          fileIdToOverwrite: '123',
+        },
+        undefined,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('uploads documents on behalf of authorized users', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'admin',
-    });
-
-    await uploadOrderDocumentInteractor(applicationContext, {
-      documentFile: 'document file',
-      fileIdToOverwrite: '123',
-    });
+    await uploadOrderDocumentInteractor(
+      applicationContext,
+      {
+        documentFile: 'document file',
+        fileIdToOverwrite: '123',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock

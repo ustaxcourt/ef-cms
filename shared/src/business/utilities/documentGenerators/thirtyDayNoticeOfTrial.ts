@@ -1,4 +1,5 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   ThirtyDayNoticeOfTrial,
   ThirtyDayNoticeOfTrialRequiredInfo,
@@ -11,9 +12,9 @@ export const thirtyDayNoticeOfTrial = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: ThirtyDayNoticeOfTrialRequiredInfo;
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const thirtyDayNoticeOfTrialTemplate = ReactDOM.renderToString(
     React.createElement(ThirtyDayNoticeOfTrial, data),
   );
