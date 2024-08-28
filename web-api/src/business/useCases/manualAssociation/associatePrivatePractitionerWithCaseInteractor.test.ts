@@ -5,6 +5,7 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
 
@@ -50,19 +51,24 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
 
   it('should throw an error when not authorized', async () => {
     await expect(
-      associatePrivatePractitionerWithCaseInteractor(applicationContext, {
-        docketNumber: caseRecord.docketNumber,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      } as any),
+      associatePrivatePractitionerWithCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: caseRecord.docketNumber,
+          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        } as any,
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should add mapping for a practitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    let mockUser = {
+      email: 'emmet.brown@example.com',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    };
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => {
@@ -81,11 +87,15 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await associatePrivatePractitionerWithCaseInteractor(applicationContext, {
-      docketNumber: caseRecord.docketNumber,
-      representing: [caseRecord.petitioners[0].contactId],
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    } as any);
+    await associatePrivatePractitionerWithCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: caseRecord.docketNumber,
+        representing: [caseRecord.petitioners[0].contactId],
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      } as any,
+      mockUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,

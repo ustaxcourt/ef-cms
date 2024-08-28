@@ -10,11 +10,12 @@ export const getInboxMessagesForSectionAction = async ({
   get,
 }: ActionProps) => {
   const selectedSection = get(state.messageBoxToDisplay.section);
+  const user = get(state.user);
 
   const messages = await applicationContext
     .getUseCases()
     .getInboxMessagesForSectionInteractor(applicationContext, {
-      section: selectedSection || applicationContext.getCurrentUser().section,
+      section: selectedSection || user.section,
     });
 
   return { messages };

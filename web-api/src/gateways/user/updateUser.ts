@@ -5,6 +5,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 interface UserAttributes {
   role?: Role;
   email?: string;
+  name?: string;
 }
 
 export async function updateUser(
@@ -32,6 +33,13 @@ export async function updateUser(
     formattedAttributesToUpdate.push({
       Name: 'email_verified',
       Value: 'true',
+    });
+  }
+
+  if (attributesToUpdate.name) {
+    formattedAttributesToUpdate.push({
+      Name: 'name',
+      Value: attributesToUpdate.name,
     });
   }
 

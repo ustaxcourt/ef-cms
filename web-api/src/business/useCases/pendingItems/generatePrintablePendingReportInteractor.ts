@@ -4,13 +4,13 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, judge }: { docketNumber?: string; judge?: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
   }

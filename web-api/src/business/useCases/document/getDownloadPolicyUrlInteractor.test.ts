@@ -5,7 +5,6 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
-  ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -23,14 +22,19 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import {
   casePetitioner,
-  docketClerkUser,
   irsPractitionerUser,
-  irsSuperuserUser,
-  petitionerUser,
-  petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { cloneDeep } from 'lodash';
+import {
+  mockAdminUser,
+  mockDocketClerkUser,
+  mockIrsPractitionerUser,
+  mockIrsSuperuser,
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;
@@ -57,24 +61,19 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   it('should throw unauthorized error when the users role is invalid', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admin,
-      userId: 'b5724655-1791-4a99-b0f6-f9bbe99c1db5',
-    });
-
     await expect(
-      getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      }),
+      getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockAdminUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw and error when requested document is a correspondence but the user is not internal', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.petitioner,
-      userId: 'b5724655-1791-4a99-b0f6-f9bbe99c1db5',
-    });
     const mockCorrespondenceId = applicationContext.getUniqueId();
     mockCase.correspondence = [
       {
@@ -83,33 +82,41 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ];
 
     await expect(
-      getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: mockCorrespondenceId,
-      }),
+      getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: mockCorrespondenceId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   describe('when the user is a petitioner not associated with case or the consolidated group', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-    });
-
     it('should throw an unauthorized error', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized');
     });
 
     it('should throw an unauthorized error when the document being viewed is the case confirmation pdf', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: `case-${MOCK_CASE.docketNumber}-confirmation.pdf`,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: `case-${MOCK_CASE.docketNumber}-confirmation.pdf`,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized');
     });
 
@@ -126,10 +133,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
@@ -143,10 +154,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -161,32 +176,36 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });
 
     it('should throw an Unauthorized error for a petitioner attempting to access an case confirmation pdf for a different case', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber, //docket number is 101-18
-          key: 'case-101-20-confirmation.pdf',
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber, //docket number is 101-18
+            key: 'case-101-20-confirmation.pdf',
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized');
     });
   });
 
   describe('when the user is a petitioner associated with case', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-    });
-
     beforeEach(() => {
       mockCase.petitioners = [
         {
-          contactId: petitionerUser.userId,
+          contactId: mockPetitionerUser.userId,
         },
       ];
     });
@@ -202,10 +221,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
@@ -221,10 +244,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
@@ -240,18 +267,26 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
     it('should return the policy url when the doucument requested is an available document', async () => {
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
       expect(url).toEqual('localhost');
     });
 
@@ -267,10 +302,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
       expect(url).toEqual('localhost');
     });
 
@@ -290,19 +329,27 @@ describe('getDownloadPolicyUrlInteractor', () => {
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
       expect(url).toEqual('localhost');
     });
 
     it('should throw a not found error when the document requested is a document that is not on the docket record', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: '26258791-7a20-4a53-8e25-cc509b502cf3',
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: '26258791-7a20-4a53-8e25-cc509b502cf3',
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow(
         'Docket entry 26258791-7a20-4a53-8e25-cc509b502cf3 was not found.',
       );
@@ -315,10 +362,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow(
         `Docket entry ${baseDocketEntry.docketEntryId} does not have an attached file.`,
       );
@@ -330,10 +381,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: '123-20',
-          key: '26258791-7a20-4a53-8e25-cc509b502cf3',
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: '123-20',
+            key: '26258791-7a20-4a53-8e25-cc509b502cf3',
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Case 123-20 was not found.');
     });
 
@@ -346,10 +401,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
@@ -362,29 +421,41 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
 
     it('should return the policy url when the document requested is a case confirmation pdf', async () => {
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: 'case-101-18-confirmation.pdf',
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: 'case-101-18-confirmation.pdf',
+        },
+        mockPetitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
 
     it('should throw an error when the document requested is a STIN', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: stinDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: stinDocketEntry.docketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });
 
@@ -414,10 +485,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: briefDocketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: briefDocketEntryId,
+        },
+        mockPetitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -455,19 +530,20 @@ describe('getDownloadPolicyUrlInteractor', () => {
         });
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: briefDocketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: briefDocketEntryId,
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow();
     });
   });
 
   describe('when the user is a private practitioner not associated with case', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        privatePractitionerUser,
-      );
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(false);
@@ -481,10 +557,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPrivatePractitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
@@ -500,23 +580,26 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPrivatePractitionerUser,
+        ),
       ).resolves.toBeDefined();
     });
   });
 
   describe('when the user is a private practitioner associated with case', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        privatePractitionerUser,
-      );
-    });
-
     beforeEach(() => {
-      mockCase.privatePractitioners = [privatePractitionerUser];
+      mockCase.privatePractitioners = [
+        {
+          ...privatePractitionerUser,
+          userId: mockPrivatePractitionerUser.userId,
+        },
+      ];
     });
 
     it('should receive the policy url when the document being viewed is a document that has been sealed to the public', async () => {
@@ -530,10 +613,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPrivatePractitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -550,10 +637,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockPrivatePractitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
@@ -566,27 +657,31 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: applicationContext.getUtilities().createISODateString(),
       });
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPrivatePractitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
   });
 
   describe('when the user is a petitions clerk', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-    });
-
     it('should return the policy url when the case has not been served and the requested document is a STIN', async () => {
       mockCase.docketEntries[0].servedAt = undefined;
       stinDocketEntry.servedAt = undefined;
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: stinDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: stinDocketEntry.docketEntryId,
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -595,25 +690,29 @@ describe('getDownloadPolicyUrlInteractor', () => {
       mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: stinDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: stinDocketEntry.docketEntryId,
+          },
+          mockPetitionsClerkUser,
+        ),
       ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
   });
 
   describe('when the user is a docket clerk', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-    });
-
     it('should throw an error when the requested document is a STIN', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: stinDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: stinDocketEntry.docketEntryId,
+          },
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
 
@@ -625,38 +724,46 @@ describe('getDownloadPolicyUrlInteractor', () => {
         },
       ];
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: mockCorrespondenceId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: mockCorrespondenceId,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(url).toEqual('localhost');
     });
   });
 
   describe('when the user is a irs superuser', () => {
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
-    });
-
     it('should throw an error when the petition document on the case is not served', async () => {
       mockCase.docketEntries[0].servedAt = undefined;
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockIrsSuperuser,
+        ),
       ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
 
     it('should return the policy url when requested document is a petition on a served case', async () => {
       mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: petitionDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: petitionDocketEntry.docketEntryId,
+        },
+        mockIrsSuperuser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -673,10 +780,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: '2019-03-01T21:40:46.415Z',
       });
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        },
+        mockIrsSuperuser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -694,10 +805,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: applicationContext.getUtilities().createISODateString(),
       });
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        },
+        mockIrsSuperuser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -712,10 +827,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+          },
+          mockIrsSuperuser,
+        ),
       ).rejects.toThrow(
         'Docket entry 60814ae9-cd39-454a-9dc7-f5595a39988f does not have an attached file.',
       );
@@ -723,10 +842,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     it('throws a not found error if the user role is irsSuperuser and the petition document on the case is served but the document requested is not on the case', async () => {
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: '984fe4c3-7685-4d1e-9ad6-9914785e6dd6',
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: '984fe4c3-7685-4d1e-9ad6-9914785e6dd6',
+          },
+          mockIrsSuperuser,
+        ),
       ).rejects.toThrow(
         'Docket entry 984fe4c3-7685-4d1e-9ad6-9914785e6dd6 was not found.',
       );
@@ -740,12 +863,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
       units: 'hours',
     });
 
-    beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
-    });
-
     beforeEach(() => {
-      mockCase.irsPractitioners = [irsPractitionerUser];
+      mockCase.irsPractitioners = [
+        { ...irsPractitionerUser, userId: mockIrsPractitionerUser.userId },
+      ];
     });
 
     it('should not throw an error if the user is associated with the case and the document meets age requirements', async () => {
@@ -758,10 +879,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
         isFileAttached: true,
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockIrsPractitionerUser,
+      );
 
       expect(url).toEqual('localhost');
     });
@@ -777,10 +902,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
       };
 
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: baseDocketEntry.docketEntryId,
+          },
+          mockIrsPractitionerUser,
+        ),
       ).rejects.toThrow(UNAUTHORIZED_DOCUMENT_MESSAGE);
     });
   });
@@ -789,39 +918,42 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const leadMockCase: RawCase = {
       ...MOCK_CASE,
       leadDocketNumber: MOCK_CASE.docketNumber,
-      petitioners: [casePetitioner],
+      petitioners: [
+        { ...casePetitioner, contactId: mockPetitionerUser.userId },
+      ],
     };
     leadMockCase.consolidatedCases = [
       new ConsolidatedCaseSummary(leadMockCase),
     ];
 
     beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(leadMockCase);
     });
 
     it('should return the policy url when the document requested is an available document', async () => {
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
       expect(url).toEqual('localhost');
     });
 
     it('should throw an error when the document requested is an available document and the user is not associated with the consolidated group', async () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        ...petitionerUser,
-        userId: 'someone-else',
-      });
-
       await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: `case-${MOCK_CASE.docketNumber}-confirmation.pdf`,
-        }),
+        getDownloadPolicyUrlInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            key: `case-${MOCK_CASE.docketNumber}-confirmation.pdf`,
+          },
+          { ...mockPetitionerUser, userId: 'someone-else' },
+        ),
       ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
     });
   });

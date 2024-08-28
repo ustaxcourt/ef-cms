@@ -16,12 +16,14 @@ export const validateDocumentAction = ({
 }: ActionProps) => {
   const formMetadata = get(state.form);
   const editType = get(state.screenMetadata.editType); // Document, CourtIssued, NoDocument
+  const authorizedUser = get(state.user);
 
-  let errors = applicationContext
-    .getUseCases()
-    .validateDocumentInteractor(applicationContext, {
+  let errors = applicationContext.getUseCases().validateDocumentInteractor(
+    {
       document: formMetadata,
-    });
+    },
+    authorizedUser,
+  );
 
   let errorDisplayOrder = ['description', 'eventCode', 'filingDate', 'index'];
 

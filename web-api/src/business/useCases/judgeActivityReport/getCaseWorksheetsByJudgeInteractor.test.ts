@@ -11,7 +11,11 @@ import {
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
+import { judgeUser } from '@shared/test/mockUsers';
+import {
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getCaseWorksheetsByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
@@ -61,24 +65,26 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       () => mockGetDocketNumbersByStatusAndByJudgeResult,
     );
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-  });
-
   it('should return an error when the user is not authorized to generate the report', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     await expect(
-      getCaseWorksheetsByJudgeInteractor(applicationContext, mockValidRequest),
+      getCaseWorksheetsByJudgeInteractor(
+        applicationContext,
+        mockValidRequest,
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      getCaseWorksheetsByJudgeInteractor(applicationContext, {
-        judges: [judgeUser.name],
-        statuses: [undefined as any],
-      }),
+      getCaseWorksheetsByJudgeInteractor(
+        applicationContext,
+        {
+          judges: [judgeUser.name],
+          statuses: [undefined as any],
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -86,6 +92,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
     await getCaseWorksheetsByJudgeInteractor(
       applicationContext,
       mockValidRequest,
+      mockJudgeUser,
     );
 
     expect(
@@ -126,6 +133,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
     const result = await getCaseWorksheetsByJudgeInteractor(
       applicationContext,
       mockValidRequest,
+      mockJudgeUser,
     );
 
     expect(result.cases).toEqual(
@@ -161,6 +169,7 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
     const result = await getCaseWorksheetsByJudgeInteractor(
       applicationContext,
       mockValidRequest,
+      mockJudgeUser,
     );
 
     const actualCases = result.cases.map(aCase => ({

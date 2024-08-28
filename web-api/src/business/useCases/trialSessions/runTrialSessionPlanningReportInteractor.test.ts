@@ -1,20 +1,15 @@
-import {
-  ROLES,
-  TRIAL_CITIES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { TRIAL_CITIES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { runTrialSessionPlanningReportInteractor } from './runTrialSessionPlanningReportInteractor';
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';
-  let user;
 
   beforeEach(() => {
-    user = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsClerk',
-    };
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
@@ -30,20 +25,19 @@ describe('run trial session planning report', () => {
   });
 
   it('throws error if user is unauthorized', async () => {
-    user = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getEligibleCasesForTrialCity.mockReturnValue([]);
 
     await expect(
-      runTrialSessionPlanningReportInteractor(applicationContext, {
-        term: 'winter',
-        year: '2020',
-      }),
+      runTrialSessionPlanningReportInteractor(
+        applicationContext,
+        {
+          term: 'winter',
+          year: '2020',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -114,6 +108,7 @@ describe('run trial session planning report', () => {
         term: 'winter',
         year: '2020',
       },
+      mockPetitionsClerkUser,
     );
 
     expect(
@@ -149,10 +144,14 @@ describe('run trial session planning report', () => {
   });
 
   it('sorts trial locations by city', async () => {
-    await runTrialSessionPlanningReportInteractor(applicationContext, {
-      term: 'winter',
-      year: '2020',
-    });
+    await runTrialSessionPlanningReportInteractor(
+      applicationContext,
+      {
+        term: 'winter',
+        year: '2020',
+      },
+      mockPetitionsClerkUser,
+    );
 
     const actualtrialLocationData =
       applicationContext.getDocumentGenerators().trialSessionPlanningReport.mock
@@ -171,10 +170,14 @@ describe('run trial session planning report', () => {
 
   describe('previous terms', () => {
     it('returns previous terms when the term is winter', async () => {
-      await runTrialSessionPlanningReportInteractor(applicationContext, {
-        term: 'winter',
-        year: '2020',
-      });
+      await runTrialSessionPlanningReportInteractor(
+        applicationContext,
+        {
+          term: 'winter',
+          year: '2020',
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getDocumentGenerators().trialSessionPlanningReport
@@ -187,10 +190,14 @@ describe('run trial session planning report', () => {
     });
 
     it('returns previous terms when the term is fall', async () => {
-      await runTrialSessionPlanningReportInteractor(applicationContext, {
-        term: 'fall',
-        year: '2020',
-      });
+      await runTrialSessionPlanningReportInteractor(
+        applicationContext,
+        {
+          term: 'fall',
+          year: '2020',
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getDocumentGenerators().trialSessionPlanningReport
@@ -203,10 +210,14 @@ describe('run trial session planning report', () => {
     });
 
     it('returns previous terms when the term is spring', async () => {
-      await runTrialSessionPlanningReportInteractor(applicationContext, {
-        term: 'spring',
-        year: '2020',
-      });
+      await runTrialSessionPlanningReportInteractor(
+        applicationContext,
+        {
+          term: 'spring',
+          year: '2020',
+        },
+        mockPetitionsClerkUser,
+      );
 
       expect(
         applicationContext.getDocumentGenerators().trialSessionPlanningReport

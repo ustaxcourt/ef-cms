@@ -11,12 +11,10 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('messagesHelper', () => {
   let user;
 
-  const messagesHelper = withAppContextDecorator(messagesHelperComputed, {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return user;
-    },
-  });
+  const messagesHelper = withAppContextDecorator(
+    messagesHelperComputed,
+    applicationContext,
+  );
 
   beforeEach(() => {
     user = docketClerkUser;
@@ -28,6 +26,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'my',
         },
+        user,
       },
     });
     expect(result.showIndividualMessages).toBeTruthy();
@@ -40,6 +39,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'section',
         },
+        user,
       },
     });
     expect(result.showIndividualMessages).toBeFalsy();
@@ -52,6 +52,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'my',
         },
+        user,
       },
     });
 
@@ -62,6 +63,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'section',
         },
+        user,
       },
     });
 
@@ -75,6 +77,7 @@ describe('messagesHelper', () => {
           queue: 'section',
           section: DOCKET_SECTION,
         },
+        user,
       },
     });
 
@@ -90,6 +93,7 @@ describe('messagesHelper', () => {
           },
           messagesInboxCount: 5,
           messagesSectionCount: 3,
+          user,
         },
       });
 
@@ -104,6 +108,7 @@ describe('messagesHelper', () => {
           },
           messagesInboxCount: 5,
           messagesSectionCount: 3,
+          user,
         },
       });
 
@@ -119,6 +124,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'section',
         },
+        user,
       },
     });
 
@@ -133,6 +139,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'section',
         },
+        user,
       },
     });
 
@@ -147,6 +154,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'my',
         },
+        user,
       },
     });
 
@@ -161,6 +169,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'section',
         },
+        user,
       },
     });
 
@@ -175,6 +184,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'my',
         },
+        user,
       },
     });
 
@@ -190,6 +200,7 @@ describe('messagesHelper', () => {
           queue: 'my',
           section: DOCKET_SECTION,
         },
+        user,
       },
     });
 
@@ -204,6 +215,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'my',
         },
+        user,
       },
     });
 
@@ -219,6 +231,7 @@ describe('messagesHelper', () => {
           queue: 'my',
           section: DOCKET_SECTION,
         },
+        user,
       },
     });
 
@@ -233,6 +246,7 @@ describe('messagesHelper', () => {
         messageBoxToDisplay: {
           queue: 'my',
         },
+        user,
       },
     });
 
@@ -246,6 +260,7 @@ describe('messagesHelper', () => {
           messageBoxToDisplay: {
             queue: 'my',
           },
+          user,
         },
       });
 
@@ -261,6 +276,7 @@ describe('messagesHelper', () => {
             queue: 'my',
             section: DOCKET_SECTION,
           },
+          user,
         },
       });
 

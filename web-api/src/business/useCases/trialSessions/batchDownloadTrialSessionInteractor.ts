@@ -14,43 +14,52 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   try {
-    await batchDownloadTrialSessionInteractorHelper(applicationContext, {
-      trialSessionId,
-    });
+    await batchDownloadTrialSessionInteractorHelper(
+      applicationContext,
+      {
+        trialSessionId,
+      },
+      authorizedUser,
+    );
   } catch (error: any) {
-    const { userId } = applicationContext.getCurrentUser();
+    const userId = authorizedUser?.userId;
 
     const erMsg = error.message || 'unknown error';
     applicationContext.logger.error(
       `Error when batch downloading trial session with id ${trialSessionId} - ${erMsg}`,
       { error },
     );
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId,
-    });
+    if (userId) {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: 'batch_download_error',
+          error,
+        },
+        userId,
+      });
+    }
   }
 };
 
 const batchDownloadTrialSessionInteractorHelper = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -129,7 +138,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         filesCompleted: numberOfDocketRecordsGenerated,
         totalFiles: numberOfDocketRecordsToGenerate,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -138,10 +147,14 @@ const batchDownloadTrialSessionInteractorHelper = async (
   for (const sessionCase of batchableSessionCases) {
     const result = await applicationContext
       .getUseCases()
-      .generateDocketRecordPdfInteractor(applicationContext, {
-        docketNumber: sessionCase.docketNumber,
-        includePartyDetail: true,
-      });
+      .generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: sessionCase.docketNumber,
+          includePartyDetail: true,
+        },
+        authorizedUser,
+      );
 
     await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
 
@@ -160,7 +173,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         filesCompleted: progressData.filesCompleted,
         totalFiles: progressData.totalFiles,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -171,7 +184,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
       filesCompleted: 0,
       totalFiles: documentsToZip.length,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 
   const trialDate = formatDateString(
@@ -206,7 +219,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
       action: 'batch_download_ready',
       url,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
 

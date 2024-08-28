@@ -7,6 +7,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { omit } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -29,9 +30,8 @@ export const fileCourtIssuedDocketEntry = async (
     documentMeta: any;
     subjectDocketNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -50,7 +50,7 @@ export const fileCourtIssuedDocketEntry = async (
     });
 
   let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
-    applicationContext,
+    authorizedUser,
   });
 
   const subjectDocketEntry = subjectCaseToUpdateEntity.getDocketEntryById({
@@ -84,7 +84,7 @@ export const fileCourtIssuedDocketEntry = async (
           docketNumber,
         });
 
-      let caseEntity = new Case(caseToUpdate, { applicationContext });
+      let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
         {
@@ -108,7 +108,7 @@ export const fileCourtIssuedDocketEntry = async (
           serviceStamp: documentMeta.serviceStamp,
           trialLocation: documentMeta.trialLocation,
         },
-        { applicationContext },
+        { authorizedUser },
       );
 
       docketEntryEntity.setFiledBy(user);
@@ -135,8 +135,7 @@ export const fileCourtIssuedDocketEntry = async (
           trialDate: caseEntity.trialDate,
           trialLocation: caseEntity.trialLocation,
         },
-        { applicationContext },
-        caseEntity,
+        { caseEntity },
       );
 
       if (isUnservable) {
@@ -167,6 +166,7 @@ export const fileCourtIssuedDocketEntry = async (
       const saveItems = [
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         }),
       ];
@@ -202,7 +202,7 @@ export const fileCourtIssuedDocketEntry = async (
     });
 
   const subjectCase = new Case(rawSubjectCase, {
-    applicationContext,
+    authorizedUser,
   }).validate();
   return subjectCase.toRawObject();
 };

@@ -1,12 +1,12 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getAttachmentDocumentById', () => {
   it('should get a docket entry document', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     const result = Case.getAttachmentDocumentById({
       caseDetail: myCase.toRawObject(),
@@ -31,7 +31,7 @@ describe('getAttachmentDocumentById', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = Case.getAttachmentDocumentById({
@@ -49,7 +49,7 @@ describe('getAttachmentDocumentById', () => {
         docketEntries: [],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = Case.getAttachmentDocumentById({
@@ -68,7 +68,7 @@ describe('getAttachmentDocumentById', () => {
         docketEntries: [],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = Case.getAttachmentDocumentById({
@@ -94,7 +94,7 @@ describe('getAttachmentDocumentById', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     const result = Case.getAttachmentDocumentById({

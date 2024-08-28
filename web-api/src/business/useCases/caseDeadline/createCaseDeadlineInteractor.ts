@@ -6,15 +6,15 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
@@ -24,7 +24,7 @@ export const createCaseDeadline = async (
       applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });
-  let caseEntity = new Case(caseDetail, { applicationContext });
+  let caseEntity = new Case(caseDetail, { authorizedUser });
 
   const newCaseDeadline = new CaseDeadline(
     {
@@ -51,6 +51,7 @@ export const createCaseDeadline = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

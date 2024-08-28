@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 
 /**
@@ -19,16 +20,17 @@ import { User } from '../../../../../shared/src/business/entities/User';
 export const getTrialSessionWorkingCopyInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const rawUser = await applicationContext.getPersistenceGateway().getUserById({
     applicationContext,
-    userId: user.userId,
+    userId: authorizedUser?.userId || '',
   });
 
   const userEntity = new User(rawUser);
@@ -39,7 +41,8 @@ export const getTrialSessionWorkingCopyInteractor = async (
       section: userEntity.section,
     });
 
-  const chambersUserId = (judgeUser && judgeUser.userId) || user.userId;
+  const chambersUserId =
+    (judgeUser && judgeUser.userId) || authorizedUser?.userId || '';
 
   let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
 
@@ -70,9 +73,7 @@ export const getTrialSessionWorkingCopyInteractor = async (
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
     }
 
-    const trialSessionEntity = new TrialSession(trialSessionDetails, {
-      applicationContext,
-    });
+    const trialSessionEntity = new TrialSession(trialSessionDetails);
 
     const canCreateWorkingCopy =
       (trialSessionEntity.trialClerk &&

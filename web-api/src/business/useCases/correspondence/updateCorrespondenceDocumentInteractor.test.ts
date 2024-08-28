@@ -8,16 +8,14 @@ import {
 import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { updateCorrespondenceDocumentInteractor } from './updateCorrespondenceDocumentInteractor';
 
 describe('updateCorrespondenceDocumentInteractor', () => {
-  let mockUser;
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-  const mockUserFixture = {
-    name: 'Docket Clerk',
-    role: ROLES.docketClerk,
-    userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-  };
 
   const mockCorrespondence = new Correspondence({
     correspondenceId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
@@ -67,32 +65,35 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   };
 
   beforeEach(() => {
-    mockUser = mockUserFixture;
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
-    mockUser = { ...mockUser, role: ROLES.petitioner };
-
     await expect(
-      updateCorrespondenceDocumentInteractor(applicationContext, {
-        documentMetadata: { docketNumber: mockCase.docketNumber } as any,
-      }),
+      updateCorrespondenceDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: { docketNumber: mockCase.docketNumber } as any,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the specified correspondence document title when the case entity is valid', async () => {
-    await updateCorrespondenceDocumentInteractor(applicationContext, {
-      documentMetadata: {
-        correspondenceId: mockCorrespondence.correspondenceId,
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'A title that has been updated',
-      } as any,
-    });
+    await updateCorrespondenceDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          correspondenceId: mockCorrespondence.correspondenceId,
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'A title that has been updated',
+        } as any,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
@@ -116,6 +117,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
           documentTitle: 'A title that has been updated',
         } as any,
       },
+      mockDocketClerkUser,
     );
 
     expect(result).toMatchObject({

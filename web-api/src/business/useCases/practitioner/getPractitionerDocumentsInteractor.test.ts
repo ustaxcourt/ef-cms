@@ -1,34 +1,24 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentsInteractor } from './getPractitionerDocumentsInteractor';
+import {
+  mockAdmissionsClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionersDocumentsInteractor', () => {
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'admissionsClerk',
-    });
-  });
-
   it('throws an unauthorized error exception when user is not an admissions clerk', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    });
-
     await expect(
-      getPractitionerDocumentsInteractor(applicationContext, {
-        barNumber: 'PT1234',
-      }),
+      getPractitionerDocumentsInteractor(
+        applicationContext,
+        {
+          barNumber: 'PT1234',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for getting practitioner documents');
   });
 
   it('returns and validates the documents returned from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-      userId: 'bob',
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getPractitionerDocuments.mockResolvedValue([
@@ -47,6 +37,7 @@ describe('getPractitionersDocumentsInteractor', () => {
       {
         barNumber: 'PT1234',
       },
+      mockAdmissionsClerkUser,
     );
 
     expect(documents.length).toEqual(1);

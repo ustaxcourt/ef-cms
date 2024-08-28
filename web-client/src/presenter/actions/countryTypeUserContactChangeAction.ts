@@ -16,7 +16,7 @@ export const countryTypeUserContactChangeAction = ({ store }: ActionProps) => {
     'state',
     'city',
   ].forEach(field => {
-    store.unset(state.user.contact[field]);
+    store.unset((state.user as any).contact[field]);
   });
 
   store.set(state.validationErrors.contact, {});
