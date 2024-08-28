@@ -1,9 +1,12 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
 
-export const getJudgesChambersLambda = event =>
+export const getJudgesChambersLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
-    console.log('Got to lambda!!');
     return await applicationContext
       .getUseCases()
-      .getJudgesChambersInteractor(applicationContext);
+      .getJudgesChambersInteractor(applicationContext, authorizedUser);
   });
