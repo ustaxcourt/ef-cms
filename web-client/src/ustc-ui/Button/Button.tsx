@@ -1,12 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import { debounce } from 'lodash';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
 export const Button = props => {
+  const [disableButton, setDisableButton] = useState(false);
+
   const { href } = props;
   const {
     children,
     className,
+    disbleOnClick,
     icon,
     iconColor, // e.g. blue
     iconRight = false,
@@ -15,6 +19,7 @@ export const Button = props => {
     link,
     marginDirection = 'right',
     noMargin = false,
+    onClick,
     overrideMargin = false,
     secondary,
     shouldWrapText = false,
@@ -44,8 +49,31 @@ export const Button = props => {
     iconColor && `fa-icon-${iconColor}`,
   );
 
+  const debouncedWrapper = debounce(async () => {
+    const results = onClick();
+    if (!(results instanceof Promise))
+      throw new Error('Convert onClick method to async');
+
+    await results.then(() => {
+      setDisableButton(false);
+    });
+  }, 500);
+
+  const updatedOnClick = disbleOnClick
+    ? async () => {
+        setDisableButton(true);
+        await debouncedWrapper();
+      }
+    : onClick;
+
   return (
-    <Element className={classes} {...remainingProps} title={tooltip}>
+    <Element
+      className={classes}
+      {...remainingProps}
+      disabled={disableButton}
+      title={tooltip}
+      onClick={updatedOnClick}
+    >
       {icon && !iconRight && (
         <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
       )}
