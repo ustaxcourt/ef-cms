@@ -4,11 +4,11 @@ import {
   CASE_STATUS_TYPES,
 } from '../EntityConstants';
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   calculateISODate,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('checkForReadyForTrial', () => {
   it('should not change the status if no answer docketEntries have been filed', () => {
@@ -18,7 +18,7 @@ describe('checkForReadyForTrial', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).checkForReadyForTrial();
     expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
@@ -36,7 +36,7 @@ describe('checkForReadyForTrial', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).checkForReadyForTrial();
     expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
@@ -54,7 +54,7 @@ describe('checkForReadyForTrial', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).checkForReadyForTrial();
     expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
@@ -81,7 +81,7 @@ describe('checkForReadyForTrial', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).checkForReadyForTrial();
 
@@ -107,7 +107,7 @@ describe('checkForReadyForTrial', () => {
         status: CASE_STATUS_TYPES.new,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).checkForReadyForTrial();
 
@@ -131,7 +131,7 @@ describe('checkForReadyForTrial', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).checkForReadyForTrial();
 

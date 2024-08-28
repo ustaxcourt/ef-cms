@@ -10,15 +10,20 @@ export const uploadDocketEntryFileAction = async ({
   fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
   const docketEntryId = get(state.docketEntryId);
+  const user = get(state.user);
   const { fileUploadProgressMap } = props;
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadDocumentInteractor(applicationContext, {
-        documentFile: fileUploadProgressMap.primary.file,
-        key: docketEntryId,
-        onUploadProgress: fileUploadProgressMap.primary.uploadProgress,
-      });
+      .uploadDocumentInteractor(
+        applicationContext,
+        {
+          documentFile: fileUploadProgressMap.primary.file,
+          key: docketEntryId,
+          onUploadProgress: fileUploadProgressMap.primary.uploadProgress,
+        },
+        user,
+      );
 
     return path.success({
       docketEntryId: primaryDocumentFileId,

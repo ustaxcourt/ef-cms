@@ -7,7 +7,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
   get,
   store,
 }: ActionProps) => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const { USER_ROLES } = applicationContext.getConstants();
 

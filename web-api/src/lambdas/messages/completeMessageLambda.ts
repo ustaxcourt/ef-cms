@@ -1,4 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { completeMessageInteractor } from '@web-api/business/useCases/messages/completeMessageInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -7,7 +9,7 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const completeMessageLambda = event =>
+export const completeMessageLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(
     event,
     async ({
@@ -15,8 +17,10 @@ export const completeMessageLambda = event =>
     }: {
       applicationContext: ServerApplicationContext;
     }) => {
-      return await applicationContext
-        .getUseCases()
-        .completeMessageInteractor(applicationContext, JSON.parse(event.body));
+      return await completeMessageInteractor(
+        applicationContext,
+        JSON.parse(event.body),
+        authorizedUser,
+      );
     },
   );

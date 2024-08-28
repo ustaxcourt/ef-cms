@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLES,
@@ -10,9 +11,11 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 export const updateAssociatedCaseWorker = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, user }: { docketNumber: string; user: RawUser },
+  authorizedUser: AuthUser,
 ): Promise<void> => {
   await applicationContext.getUseCaseHelpers().acquireLock({
     applicationContext,
+    authorizedUser,
     identifiers: [`case|${docketNumber}`],
     retries: 10,
     ttl: 900,
@@ -22,6 +25,7 @@ export const updateAssociatedCaseWorker = async (
   if (user.role === ROLES.petitioner) {
     await updatePetitionerCase({
       applicationContext,
+      authorizedUser,
       docketNumber,
       user,
     });
@@ -33,6 +37,7 @@ export const updateAssociatedCaseWorker = async (
   ) {
     await updatePractitionerCase({
       applicationContext,
+      authorizedUser,
       docketNumber,
       user,
     });
@@ -46,12 +51,14 @@ export const updateAssociatedCaseWorker = async (
 
 export const updatePetitionerCase = async ({
   applicationContext,
+  authorizedUser,
   docketNumber,
   user,
 }: {
   applicationContext: ServerApplicationContext;
   docketNumber: string;
   user: RawUser;
+  authorizedUser: AuthUser;
 }): Promise<void> => {
   const rawCaseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -62,6 +69,7 @@ export const updatePetitionerCase = async ({
 
   const caseToUpdate = await updateCaseEntityAndGenerateChange({
     applicationContext,
+    authorizedUser,
     rawCaseData: rawCaseToUpdate,
     user,
   });
@@ -70,18 +78,21 @@ export const updatePetitionerCase = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate,
   });
 };
 
 export const updatePractitionerCase = async ({
   applicationContext,
+  authorizedUser,
   docketNumber,
   user,
 }: {
   applicationContext: ServerApplicationContext;
   docketNumber: string;
   user: any;
+  authorizedUser: AuthUser;
 }): Promise<void> => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -90,7 +101,9 @@ export const updatePractitionerCase = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
   const practitionerObject = [
     ...caseEntity.privatePractitioners,
     ...caseEntity.irsPractitioners,
@@ -109,26 +122,29 @@ export const updatePractitionerCase = async ({
 
   // we do this again so that it will convert '' to null
   const validatedCaseToUpdate = new Case(caseEntity, {
-    applicationContext,
+    authorizedUser,
   }).validate();
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: validatedCaseToUpdate,
   });
 };
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
+  authorizedUser,
   rawCaseData,
   user,
 }: {
   applicationContext: ServerApplicationContext;
   rawCaseData: RawCase;
   user: RawUser;
+  authorizedUser: AuthUser;
 }): Promise<RawCase | undefined> => {
   const caseEntity = new Case(rawCaseData, {
-    applicationContext,
+    authorizedUser,
   });
 
   const petitionerObject = caseEntity.getPetitionerById(user.userId);
@@ -173,6 +189,7 @@ const updateCaseEntityAndGenerateChange = async ({
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         documentType,
         newData,
