@@ -1,5 +1,5 @@
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isServed', () => {
   it('should return false when servedAt is undefined and isLegacyServed is false', () => {

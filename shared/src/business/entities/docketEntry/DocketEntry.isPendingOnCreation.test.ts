@@ -1,5 +1,5 @@
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isPendingOnCreation', () => {
   beforeAll(() => {

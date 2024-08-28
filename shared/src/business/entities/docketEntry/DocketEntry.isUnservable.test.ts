@@ -1,6 +1,6 @@
 import { DocketEntry } from './DocketEntry';
-import { UNSERVABLE_EVENT_CODES } from './EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isUnservable', () => {
   UNSERVABLE_EVENT_CODES.forEach(eventCode => {

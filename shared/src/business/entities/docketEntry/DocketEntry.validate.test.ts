@@ -7,7 +7,7 @@ import {
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
-} from './EntityConstants';
+} from '../EntityConstants';
 import {
   A_VALID_DOCKET_ENTRY,
   MOCK_PETITIONERS,
@@ -15,7 +15,7 @@ import {
   mockSecondaryId,
 } from './DocketEntry.test';
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('validate', () => {
   const mockUserId = applicationContext.getUniqueId();
