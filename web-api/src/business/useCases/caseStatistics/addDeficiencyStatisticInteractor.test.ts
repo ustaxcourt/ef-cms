@@ -1,9 +1,9 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addDeficiencyStatisticInteractor } from './addDeficiencyStatisticInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addDeficiencyStatisticInteractor', () => {
   const mockStatistic = {
@@ -39,11 +39,6 @@ describe('addDeficiencyStatisticInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
@@ -53,10 +48,14 @@ describe('addDeficiencyStatisticInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      addDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        ...mockStatistic,
-      } as any),
+      addDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          ...mockStatistic,
+        } as any,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -65,10 +64,14 @@ describe('addDeficiencyStatisticInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await addDeficiencyStatisticInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      ...mockStatistic,
-    } as any);
+    await addDeficiencyStatisticInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        ...mockStatistic,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -87,20 +90,26 @@ describe('addDeficiencyStatisticInteractor', () => {
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      addDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      } as any),
+      addDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        } as any,
+        undefined,
+      ),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
   it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const result = await addDeficiencyStatisticInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      ...mockStatistic,
-    } as any);
+    const result = await addDeficiencyStatisticInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        ...mockStatistic,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(result).toMatchObject({
       statistics: [mockStatistic],

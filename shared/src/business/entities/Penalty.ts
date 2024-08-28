@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 
 export class Penalty extends JoiValidationEntity {
@@ -10,17 +11,13 @@ export class Penalty extends JoiValidationEntity {
   public penaltyType: string;
   public statisticId: string;
 
-  constructor(rawProps, { applicationContext }) {
+  constructor(rawProps) {
     super('Penalty');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.name = rawProps.name;
     this.penaltyType = rawProps.penaltyType;
     this.penaltyAmount = rawProps.penaltyAmount;
-    this.penaltyId = rawProps.penaltyId || applicationContext.getUniqueId();
+    this.penaltyId = rawProps.penaltyId || getUniqueId();
     this.statisticId = rawProps.statisticId;
   }
 

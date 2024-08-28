@@ -9,10 +9,6 @@ describe('getTrialSessionsForJudgeAction', () => {
   });
 
   it('should invoke the interactor with the expected judge id when calling this action as a judge user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'judge',
-      userId: '123',
-    });
     applicationContext
       .getUseCases()
       .getTrialSessionsForJudgeInteractor.mockResolvedValue([
@@ -26,7 +22,7 @@ describe('getTrialSessionsForJudgeAction', () => {
         presenter,
       },
       props: {},
-      state: {},
+      state: { user: { role: 'judge', userId: '123' } },
     });
 
     expect(
@@ -36,9 +32,6 @@ describe('getTrialSessionsForJudgeAction', () => {
   });
 
   it('should invoke the interactor with the expected judge id when calling this action as a chambers user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'chambers',
-    });
     applicationContext
       .getUseCases()
       .getTrialSessionsForJudgeInteractor.mockResolvedValue([
@@ -56,6 +49,9 @@ describe('getTrialSessionsForJudgeAction', () => {
         judgeUser: {
           role: 'judge',
           userId: '123',
+        },
+        user: {
+          role: 'chambers',
         },
       },
     });

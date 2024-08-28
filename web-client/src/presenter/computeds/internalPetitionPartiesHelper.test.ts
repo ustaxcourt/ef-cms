@@ -1,13 +1,15 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  FILING_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from './internalPetitionPartiesHelper';
 import {
+  docketClerk1User,
   petitionerUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
+import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from './internalPetitionPartiesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -24,6 +26,7 @@ describe('internalPetitionPartiesHelper', () => {
           PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.conservator },
+        user: docketClerk1User,
       },
     });
 
@@ -44,6 +47,7 @@ describe('internalPetitionPartiesHelper', () => {
           PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.corporation },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -62,6 +66,7 @@ describe('internalPetitionPartiesHelper', () => {
           PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.custodian },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -81,6 +86,7 @@ describe('internalPetitionPartiesHelper', () => {
           PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.donor },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -100,6 +106,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.estate,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -122,6 +129,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.estateWithoutExecutor,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -142,6 +150,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.guardian,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -163,6 +172,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -184,6 +194,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.nextFriendForMinor,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -205,6 +216,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.partnershipBBA,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -226,6 +238,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -247,6 +260,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -268,6 +282,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.petitioner,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -287,6 +302,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.petitionerSpouse,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -312,6 +328,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -335,6 +352,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.survivingSpouse,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -356,6 +374,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.transferee,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -375,6 +394,7 @@ describe('internalPetitionPartiesHelper', () => {
         form: {
           partyType: PARTY_TYPES.trust,
         },
+        user: docketClerk1User,
       },
     });
     expect(result).toMatchObject({
@@ -397,27 +417,25 @@ describe('internalPetitionPartiesHelper', () => {
         isPaper: undefined,
         partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
       },
+      user: docketClerk1User,
     };
 
     it('should be false when the current user is an external user', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const result = runCompute(internalPetitionPartiesHelper, {
-        state: baseState,
+        state: { ...baseState, user: petitionerUser },
       });
 
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
 
     it('should be true when the current user is a petitions clerk user', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
           form: {
             isPaper: true,
           },
+          user: petitionsClerkUser,
         },
       });
 
@@ -425,8 +443,6 @@ describe('internalPetitionPartiesHelper', () => {
     });
 
     it('should be false when the e-consent feature flag is disabled', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
@@ -434,6 +450,7 @@ describe('internalPetitionPartiesHelper', () => {
             [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
               false,
           },
+          user: petitionsClerkUser,
         },
       });
 
@@ -441,8 +458,6 @@ describe('internalPetitionPartiesHelper', () => {
     });
 
     it('should be true when the e-consent feature flag is enabled, it is a paper petition and the current user is internal', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
@@ -453,6 +468,7 @@ describe('internalPetitionPartiesHelper', () => {
           form: {
             isPaper: true,
           },
+          user: petitionsClerkUser,
         },
       });
 
@@ -460,8 +476,6 @@ describe('internalPetitionPartiesHelper', () => {
     });
 
     it('should be false when the e-consent feature flag is enabled, and it is NOT a paper petition', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
@@ -472,10 +486,48 @@ describe('internalPetitionPartiesHelper', () => {
           form: {
             isPaper: false,
           },
+          user: petitionsClerkUser,
         },
       });
 
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
+    });
+  });
+
+  describe('showSecondaryContactEmailFieldAndConsentBox', () => {
+    it('should display secondary contact email field when petition is filed by a petitioner', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES.petitioner[1],
+            isPaper: false,
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
+    });
+    it('should display secondary contact email field when petition is filed by a private practitioner', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES.privatePractitioner[1],
+            isPaper: false,
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
     });
   });
 });

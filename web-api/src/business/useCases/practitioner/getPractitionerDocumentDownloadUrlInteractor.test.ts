@@ -1,10 +1,12 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentDownloadUrlInteractor } from './getPractitionerDocumentDownloadUrlInteractor';
+import {
+  mockAdmissionsClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionerDocumentDownloadUrlInteractor', () => {
-  let testUser;
   const mockDocumentMetadata = {
     categoryName: 'Application',
     categoryType: 'Application',
@@ -25,30 +27,20 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {
-    testUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => testUser);
-
     await expect(
-      getPractitionerDocumentDownloadUrlInteractor(applicationContext, {
-        barNumber: mockPractitioner.barNumber,
-        practitionerDocumentFileId:
-          mockDocumentMetadata.practitionerDocumentFileId,
-      }),
+      getPractitionerDocumentDownloadUrlInteractor(
+        applicationContext,
+        {
+          barNumber: mockPractitioner.barNumber,
+          practitionerDocumentFileId:
+            mockDocumentMetadata.practitionerDocumentFileId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should not throw an unauthorized error when the user has permission to download the practitioner documentation file', async () => {
-    testUser = {
-      role: ROLES.admissionsClerk,
-      userId: 'admissionsclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => testUser);
-
     const results = await getPractitionerDocumentDownloadUrlInteractor(
       applicationContext,
       {
@@ -56,6 +48,7 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
         practitionerDocumentFileId:
           mockDocumentMetadata.practitionerDocumentFileId,
       },
+      mockAdmissionsClerkUser,
     );
     expect(results).toMatchObject({
       url: expect.any(String),

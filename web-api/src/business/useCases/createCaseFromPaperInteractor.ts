@@ -12,16 +12,15 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
 import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
-  applicationContext,
   caseToAdd,
   docketEntryEntity,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
@@ -51,8 +50,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       trialDate: caseToAdd.trialDate,
       trialLocation: caseToAdd.trialLocation,
     },
-    { applicationContext },
-    caseToAdd,
+    { caseEntity: caseToAdd },
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);
@@ -82,9 +80,8 @@ export const createCaseFromPaperInteractor = async (
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -94,7 +91,7 @@ export const createCaseFromPaperInteractor = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const petitionEntity = new PaperPetition(petitionMetadata, {
-    applicationContext,
+    authorizedUser,
   }).validate();
 
   const docketNumber =
@@ -112,7 +109,7 @@ export const createCaseFromPaperInteractor = async (
       userId: user.userId,
     },
     {
-      applicationContext,
+      authorizedUser,
       isNewCase: true,
     },
   );
@@ -143,13 +140,12 @@ export const createCaseFromPaperInteractor = async (
       mailingDate: petitionEntity.mailingDate,
       receivedAt: caseToAdd.receivedAt,
     },
-    { applicationContext, petitioners: caseToAdd.petitioners },
+    { authorizedUser, petitioners: caseToAdd.petitioners },
   );
 
   petitionDocketEntryEntity.setFiledBy(user);
 
   const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
-    applicationContext,
     caseToAdd,
     docketEntryEntity: petitionDocketEntryEntity,
     user,
@@ -175,7 +171,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     applicationForWaiverOfFilingFeeDocketEntryEntity.setFiledBy(user);
@@ -208,7 +204,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     requestForPlaceOfTrialDocketEntryEntity.setFiledBy(user);
@@ -232,7 +228,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     stinDocketEntryEntity.setFiledBy(user);
@@ -255,7 +251,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     cdsDocketEntryEntity.setFiledBy(user);
@@ -279,7 +275,7 @@ export const createCaseFromPaperInteractor = async (
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     atpDocketEntryEntity.setFiledBy(user);
@@ -290,6 +286,7 @@ export const createCaseFromPaperInteractor = async (
   await Promise.all([
     applicationContext.getUseCaseHelpers().createCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),
     applicationContext.getPersistenceGateway().saveWorkItem({
@@ -298,5 +295,5 @@ export const createCaseFromPaperInteractor = async (
     }),
   ]);
 
-  return new Case(caseToAdd, { applicationContext }).toRawObject();
+  return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };

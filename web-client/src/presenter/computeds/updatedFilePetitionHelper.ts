@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IBusinessFields {
@@ -20,7 +21,9 @@ interface IOtherContactNameLabel {
 }
 
 type UpdatedFilePetitionHelper = {
-  filingOptions: string[];
+  filingOptions: { label: string; value: string }[];
+  isPetitioner: boolean;
+  isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
   showContactInformationForOtherPartyType: boolean;
@@ -30,27 +33,55 @@ export const updatedFilePetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): UpdatedFilePetitionHelper => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { FILING_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   const businessType = get(state.form.businessType);
   const partyType = get(state.form.partyType);
 
-  const filingOptions = FILING_TYPES[user.role];
+  const filingOptions = formatFilingTypes(FILING_TYPES[user.role]);
   const businessFieldNames = getBusinessFieldLabels(businessType);
   const otherContactNameLabel = getOtherContactNameLabel(
     partyType,
     PARTY_TYPES,
   );
 
+  const isPetitioner = user.role === ROLES.petitioner;
+  const isPractitioner = user.role === ROLES.privatePractitioner;
+
   return {
     businessFieldNames,
     filingOptions,
+    isPetitioner,
+    isPractitioner,
     otherContactNameLabel,
     showContactInformationForOtherPartyType:
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),
   };
 };
+
+function formatFilingTypes(filingOptions) {
+  return filingOptions.map(option => {
+    if (option === 'Individual petitioner') {
+      return {
+        label: 'Petitioner',
+        value: option,
+      };
+    }
+
+    if (option === 'Petitioner and spouse') {
+      return {
+        label: 'Petitioner and petitioner spouse',
+        value: option,
+      };
+    }
+
+    return {
+      label: option,
+      value: option,
+    };
+  });
+}
 
 function getBusinessFieldLabels(businessType): IBusinessFields | {} {
   switch (businessType) {

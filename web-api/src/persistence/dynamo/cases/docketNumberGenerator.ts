@@ -71,7 +71,7 @@ export const createDocketNumber = async ({
   receivedAt,
 }: {
   applicationContext: IApplicationContext;
-  receivedAt: string;
+  receivedAt?: string;
 }) => {
   const year = receivedAt
     ? formatDateString(receivedAt, FORMATS.YEAR)

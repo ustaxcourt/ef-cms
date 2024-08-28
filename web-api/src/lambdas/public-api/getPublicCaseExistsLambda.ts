@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getCaseExistsInteractor } from '@shared/business/useCases/getCaseExistsInteractor';
 
 /**
  * used for fetching existence of a single case
@@ -8,9 +9,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const getPublicCaseExistsLambda = event =>
   genericHandler(event, ({ applicationContext }) =>
-    applicationContext
-      .getUseCases()
-      .getCaseExistsInteractor(applicationContext, {
-        docketNumber: event.pathParameters.docketNumber,
-      }),
+    getCaseExistsInteractor(applicationContext, {
+      docketNumber: event.pathParameters.docketNumber,
+    }),
   );

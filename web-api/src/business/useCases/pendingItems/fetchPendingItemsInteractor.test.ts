@@ -1,37 +1,32 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fetchPendingItemsInteractor } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('fetchPendingItemsInteractor', () => {
-  let mockUser;
-
-  beforeEach(() => {
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-  });
-
   it('should throw an unauthorized error when the user does not have access to blocked cases', async () => {
-    mockUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
-      fetchPendingItemsInteractor(applicationContext, {
-        judge: 'Judge Colvin',
-      } as any),
+      fetchPendingItemsInteractor(
+        applicationContext,
+        {
+          judge: 'Judge Colvin',
+        } as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error when the judge is not defined', async () => {
     await expect(
-      fetchPendingItemsInteractor(applicationContext, {
-        judge: undefined,
-      } as any),
+      fetchPendingItemsInteractor(
+        applicationContext,
+        {
+          judge: undefined,
+        } as any,
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('judge is required');
   });
 
@@ -43,9 +38,13 @@ describe('fetchPendingItemsInteractor', () => {
         { docketEntryId: 'abc', docketNumber: '201-20', pending: true },
       ]);
 
-    const results = await fetchPendingItemsInteractor(applicationContext, {
-      judge: 'Judge Colvin',
-    } as any);
+    const results = await fetchPendingItemsInteractor(
+      applicationContext,
+      {
+        judge: 'Judge Colvin',
+      } as any,
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().fetchPendingItems,

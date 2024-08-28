@@ -1,3 +1,5 @@
+import { state } from '@web-client/presenter/app.cerebral';
+
 /**
  * takes a path depending on if the user an internal user
  * @param {object} providers the providers object
@@ -6,9 +8,10 @@
  */
 export const isInternalUserAction = ({
   applicationContext,
+  get,
   path,
 }: ActionProps) => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   return applicationContext.getUtilities().isInternalUser(user.role)
     ? path.yes()
     : path.no();
