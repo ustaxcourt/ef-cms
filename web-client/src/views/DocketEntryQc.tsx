@@ -12,7 +12,7 @@ import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCo
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React from 'react';
 
 export const DocketEntryQc = connect(
   {
@@ -36,8 +36,6 @@ export const DocketEntryQc = connect(
     openCompleteAndSendMessageModalSequence,
     showModal,
   }) {
-    const [disableCompleteButton, setDisableCompleteButton] = useState(false);
-
     return (
       <>
         <CaseDetailHeader />
@@ -83,25 +81,21 @@ export const DocketEntryQc = connect(
 
                 <div className="margin-top-5">
                   <Button
-                    disabled={disableCompleteButton}
+                    disableOnClick
                     id="save-and-finish"
                     type="submit"
                     onClick={async () => {
-                      setDisableCompleteButton(true);
                       await completeDocketEntryQCSequence();
-                      setDisableCompleteButton(false);
                     }}
                   >
                     Complete
                   </Button>
                   <Button
+                    disableOnClick
                     secondary
-                    disabled={disableCompleteButton}
                     id="save-and-add-supporting"
                     onClick={async () => {
-                      setDisableCompleteButton(true);
                       await openCompleteAndSendMessageModalSequence();
-                      setDisableCompleteButton(false);
                     }}
                   >
                     Complete &amp; Send Message
