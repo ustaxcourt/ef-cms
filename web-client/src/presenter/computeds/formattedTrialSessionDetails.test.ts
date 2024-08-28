@@ -8,7 +8,7 @@ import {
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   colvinsChambersUser,
-  judgeUser,
+  docketClerk1User,
 } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -63,6 +63,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
+        user: docketClerk1User,
       },
     });
 
@@ -77,6 +78,7 @@ describe('formattedTrialSessionDetails', () => {
     let result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
+        user: docketClerk1User,
       },
     });
 
@@ -89,6 +91,7 @@ describe('formattedTrialSessionDetails', () => {
     result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
+        user: docketClerk1User,
       },
     });
 
@@ -120,6 +123,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
+        user: docketClerk1User,
       },
     });
 
@@ -134,6 +138,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
+        user: docketClerk1User,
       },
     });
 
@@ -146,6 +151,7 @@ describe('formattedTrialSessionDetails', () => {
     const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
+        user: docketClerk1User,
       },
     });
 
@@ -163,6 +169,7 @@ describe('formattedTrialSessionDetails', () => {
             isCalendared: false,
             startDate: PAST_DATE,
           },
+          user: docketClerk1User,
         },
       });
       expect(result).toMatchObject({
@@ -180,6 +187,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -198,6 +206,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -216,6 +225,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -234,6 +244,7 @@ describe('formattedTrialSessionDetails', () => {
             sessionStatus: SESSION_STATUS_GROUPS.open,
             startDate: PAST_DATE,
           },
+          user: docketClerk1User,
         },
       });
       expect(result).toMatchObject({
@@ -251,6 +262,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -266,11 +278,10 @@ describe('formattedTrialSessionDetails', () => {
         startDate: FUTURE_DATE,
       };
 
-      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -286,11 +297,10 @@ describe('formattedTrialSessionDetails', () => {
         startDate: FUTURE_DATE,
       };
 
-      applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
-
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: colvinsChambersUser,
         },
       });
 
@@ -309,6 +319,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -330,6 +341,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -347,6 +359,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -364,6 +377,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
       expect(result.canClose).toBe(false);
@@ -380,6 +394,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -397,6 +412,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -414,6 +430,7 @@ describe('formattedTrialSessionDetails', () => {
       const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
+          user: docketClerk1User,
         },
       });
 
@@ -433,6 +450,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
+          user: docketClerk1User,
         },
       });
 
@@ -454,6 +472,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
+          user: docketClerk1User,
         },
       });
 
@@ -475,6 +494,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
+          user: docketClerk1User,
         },
       });
 
@@ -494,6 +514,7 @@ describe('formattedTrialSessionDetails', () => {
           trialSession: {
             ...mockTrialSession,
           },
+          user: docketClerk1User,
         },
       });
 
@@ -514,6 +535,7 @@ describe('formattedTrialSessionDetails', () => {
             trialSession: {
               ...mockTrialSession,
             },
+            user: docketClerk1User,
           },
         },
       );

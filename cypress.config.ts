@@ -1,6 +1,7 @@
 import {
   confirmUser,
   deleteAllCypressTestAccounts,
+  getUserByEmail,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
 import {
@@ -55,6 +56,9 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        getUserByEmail(email: string) {
+          return getUserByEmail(email);
         },
         table(message) {
           console.table(message);

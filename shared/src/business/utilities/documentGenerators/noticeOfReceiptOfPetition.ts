@@ -1,5 +1,6 @@
 import { NoticeOfReceiptOfPetition } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition';
 import { RawContact } from '@shared/business/entities/contacts/Contact';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -8,7 +9,7 @@ export const noticeOfReceiptOfPetition = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: {
     accessCode?: string;
     caseCaptionExtension: string;

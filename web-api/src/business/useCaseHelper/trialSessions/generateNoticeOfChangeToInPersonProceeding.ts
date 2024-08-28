@@ -14,7 +14,7 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
     docketNumber,
     trialSessionInformation,
   }: { docketNumber: string; trialSessionInformation: any },
-): Promise<Buffer> => {
+): Promise<Uint8Array> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,

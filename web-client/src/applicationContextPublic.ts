@@ -169,8 +169,6 @@ const applicationContextPublic = {
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => frozenConstants,
-  getCurrentUser: () => ({}),
-  getCurrentUserToken: () => null,
   getEnvironment,
   getForceRefreshCallback() {
     return forceRefreshCallback;

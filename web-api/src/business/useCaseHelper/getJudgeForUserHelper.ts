@@ -1,10 +1,11 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { InvalidRequest } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 
 export const getJudgeForUserHelper = async (
   applicationContext: ServerApplicationContext,
-  { user }: { user: { userId: string } },
+  { user }: { user: AuthUser },
 ): Promise<ExcludeMethods<User>> => {
   const rawUser = await applicationContext.getPersistenceGateway().getUserById({
     applicationContext,

@@ -11,6 +11,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
@@ -26,9 +27,8 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -47,7 +47,7 @@ export const fileExternalDocument = async (
       docketNumber,
     });
 
-  let currentCaseEntity = new Case(currentCase, { applicationContext });
+  let currentCaseEntity = new Case(currentCase, { authorizedUser });
 
   const {
     consolidatedCasesToFileAcross,
@@ -132,7 +132,7 @@ export const fileExternalDocument = async (
             docketNumber: individualDocumentMetadata.docketNumber,
           });
 
-        let caseEntity = new Case(caseToUpdate, { applicationContext });
+        let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
         const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -148,7 +148,7 @@ export const fileExternalDocument = async (
                 relationship,
               },
               {
-                applicationContext,
+                authorizedUser,
                 petitioners: currentCaseEntity.petitioners,
               },
             );
@@ -160,30 +160,27 @@ export const fileExternalDocument = async (
             const highPriorityWorkItem =
               caseEntity.status === CASE_STATUS_TYPES.calendared;
 
-            const workItem = new WorkItem(
-              {
-                assigneeId: null,
-                assigneeName: null,
-                associatedJudge: caseToUpdate.associatedJudge,
-                associatedJudgeId: caseToUpdate.associatedJudgeId,
-                caseStatus: caseToUpdate.status,
-                caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-                docketEntry: {
-                  ...docketEntryEntity.toRawObject(),
-                  createdAt: docketEntryEntity.createdAt,
-                },
-                docketNumber: caseToUpdate.docketNumber,
-                docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-                highPriority: highPriorityWorkItem,
-                leadDocketNumber: caseToUpdate.leadDocketNumber,
-                section: DOCKET_SECTION,
-                sentBy: user.name,
-                sentByUserId: user.userId,
-                trialDate: caseEntity.trialDate,
-                trialLocation: caseEntity.trialLocation,
+            const workItem = new WorkItem({
+              assigneeId: null,
+              assigneeName: null,
+              associatedJudge: caseToUpdate.associatedJudge,
+              associatedJudgeId: caseToUpdate.associatedJudgeId,
+              caseStatus: caseToUpdate.status,
+              caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+              docketEntry: {
+                ...docketEntryEntity.toRawObject(),
+                createdAt: docketEntryEntity.createdAt,
               },
-              { applicationContext },
-            ).validate();
+              docketNumber: caseToUpdate.docketNumber,
+              docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+              highPriority: highPriorityWorkItem,
+              leadDocketNumber: caseToUpdate.leadDocketNumber,
+              section: DOCKET_SECTION,
+              sentBy: user.name,
+              sentByUserId: user.userId,
+              trialDate: caseEntity.trialDate,
+              trialLocation: caseEntity.trialLocation,
+            }).validate();
 
             docketEntryEntity.setWorkItem(workItem);
 
@@ -216,6 +213,7 @@ export const fileExternalDocument = async (
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
+          authorizedUser,
           caseToUpdate: caseEntity,
         });
 

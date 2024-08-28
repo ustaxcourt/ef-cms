@@ -26,9 +26,6 @@ describe('practitionerSearchHelper', () => {
           PRACTITIONER_SEARCH_PAGE_SIZE: pageSizeOverride,
         };
       },
-      getCurrentUser: () => {
-        return globalUser;
-      },
     },
   );
 
@@ -84,9 +81,6 @@ describe('practitionerSearchHelper', () => {
             ...applicationContext.getConstants(),
             PRACTITIONER_SEARCH_PAGE_SIZE: pageSizeOverride,
           };
-        },
-        getCurrentUser: () => {
-          return globalUser;
         },
         isPublicUser: () => true,
       },

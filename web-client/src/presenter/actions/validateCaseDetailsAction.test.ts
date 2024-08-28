@@ -43,7 +43,7 @@ describe('validateCaseDetailsAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       petitionPaymentDate: '2019-09-06T04:00:00.000Z',
       petitionPaymentMethod: 'check',
@@ -67,7 +67,7 @@ describe('validateCaseDetailsAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
@@ -90,7 +90,7 @@ describe('validateCaseDetailsAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
       petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
@@ -113,7 +113,7 @@ describe('validateCaseDetailsAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       irsNoticeDate: '2001-01-01T05:00:00.000Z',
     });
@@ -133,7 +133,7 @@ describe('validateCaseDetailsAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       preferredTrialCity: null,
     });
@@ -153,7 +153,7 @@ describe('validateCaseDetailsAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+        .calls[0][0].caseDetail,
     ).toMatchObject({
       preferredTrialCity: 'Fresno, California',
     });

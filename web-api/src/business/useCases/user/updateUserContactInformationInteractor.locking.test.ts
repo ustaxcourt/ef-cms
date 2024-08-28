@@ -3,6 +3,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
@@ -60,16 +61,15 @@ describe('determineEntitiesToLock', () => {
 });
 
 describe('handleLockError', () => {
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
     const mockOriginalRequest = {
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      MOCK_PRACTITIONER as UnknownAuthUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -102,8 +102,6 @@ describe('updateUserContactInformationInteractor', () => {
   beforeEach(() => {
     mockLock = undefined; // unlocked
 
-    applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
-
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...MOCK_PRACTITIONER,
       entityName: 'Practitioner',
@@ -129,7 +127,11 @@ describe('updateUserContactInformationInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        updateUserContactInformationInteractor(applicationContext, mockRequest),
+        updateUserContactInformationInteractor(
+          applicationContext,
+          mockRequest,
+          MOCK_PRACTITIONER as UnknownAuthUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -139,7 +141,11 @@ describe('updateUserContactInformationInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        updateUserContactInformationInteractor(applicationContext, mockRequest),
+        updateUserContactInformationInteractor(
+          applicationContext,
+          mockRequest,
+          MOCK_PRACTITIONER as UnknownAuthUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -169,6 +175,7 @@ describe('updateUserContactInformationInteractor', () => {
       await updateUserContactInformationInteractor(
         applicationContext,
         mockRequest,
+        MOCK_PRACTITIONER as UnknownAuthUser,
       );
 
       expect(
@@ -184,6 +191,7 @@ describe('updateUserContactInformationInteractor', () => {
       await updateUserContactInformationInteractor(
         applicationContext,
         mockRequest,
+        MOCK_PRACTITIONER as UnknownAuthUser,
       );
 
       expect(

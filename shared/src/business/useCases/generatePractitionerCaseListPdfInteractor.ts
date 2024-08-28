@@ -3,7 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { partition } from 'lodash';
 
 /**
@@ -15,12 +17,13 @@ import { partition } from 'lodash';
  * @returns {Object} returns an object of the PDF's fileId and url
  */
 export const generatePractitionerCaseListPdfInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)
+  ) {
     throw new UnauthorizedError('Unauthorized to view practitioners cases');
   }
 

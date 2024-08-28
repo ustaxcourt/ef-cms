@@ -1,48 +1,41 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import {
-  PARTIES_CODES,
-  PARTY_TYPES,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { PARTIES_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCalendaredCasesForTrialSessionInteractor } from './getCalendaredCasesForTrialSessionInteractor';
-
-const user = new User({
-  name: 'Docket Clerk',
-  role: ROLES.docketClerk,
-  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-});
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getCalendaredCasesForTrialSessionInteractor', () => {
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(user);
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([MOCK_CASE]);
   });
 
   it('throws an exception when the user is unauthorized', async () => {
-    const unAuthedUser = new User({
-      name: PARTY_TYPES.petitioner,
-      role: ROLES.petitioner,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockReturnValueOnce(unAuthedUser);
-
     await expect(
-      getCalendaredCasesForTrialSessionInteractor(applicationContext, {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
+      getCalendaredCasesForTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(
-      getCalendaredCasesForTrialSessionInteractor(applicationContext, {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
+      getCalendaredCasesForTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
   });
 
@@ -74,6 +67,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
+      mockDocketClerkUser,
     );
 
     expect(cases[0].PMTServedPartiesCode).toEqual(PARTIES_CODES.PETITIONER);
@@ -89,6 +83,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
+      mockDocketClerkUser,
     );
 
     removedFields.forEach(field => {

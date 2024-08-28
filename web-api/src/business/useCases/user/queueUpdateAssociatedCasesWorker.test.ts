@@ -11,11 +11,19 @@ describe('queueUpdateAssociatedCasesWorker', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
-    applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
 
-    await queueUpdateAssociatedCasesWorker(applicationContext, {
-      user: MOCK_PRACTITIONER,
-    });
+    await queueUpdateAssociatedCasesWorker(
+      applicationContext,
+      {
+        user: MOCK_PRACTITIONER,
+      },
+      {
+        email: MOCK_PRACTITIONER.email!,
+        name: MOCK_PRACTITIONER.name,
+        role: MOCK_PRACTITIONER.role,
+        userId: MOCK_PRACTITIONER.userId,
+      },
+    );
 
     expect(
       await applicationContext.getPersistenceGateway().getDocketNumbersByUser,
@@ -29,38 +37,47 @@ describe('queueUpdateAssociatedCasesWorker', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
-    applicationContext.getCurrentUser.mockReturnValue(MOCK_PRACTITIONER);
     applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
+    const authorizedUser = {
+      email: MOCK_PRACTITIONER.email!,
+      name: MOCK_PRACTITIONER.name,
+      role: MOCK_PRACTITIONER.role,
+      userId: MOCK_PRACTITIONER.userId,
+    };
 
-    await queueUpdateAssociatedCasesWorker(applicationContext, {
-      user: MOCK_PRACTITIONER,
-    });
+    await queueUpdateAssociatedCasesWorker(
+      applicationContext,
+      {
+        user: MOCK_PRACTITIONER,
+      },
+      authorizedUser,
+    );
 
     expect(
       applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
+        authorizedUser,
         payload: { docketNumber: '111-20', user: MOCK_PRACTITIONER },
         type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-        user: MOCK_PRACTITIONER,
       },
     });
     expect(
       applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
+        authorizedUser,
         payload: { docketNumber: '222-20', user: MOCK_PRACTITIONER },
         type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-        user: MOCK_PRACTITIONER,
       },
     });
     expect(
       applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
+        authorizedUser,
         payload: { docketNumber: '333-20', user: MOCK_PRACTITIONER },
         type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-        user: MOCK_PRACTITIONER,
       },
     });
   });
@@ -69,38 +86,47 @@ describe('queueUpdateAssociatedCasesWorker', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
+    const authorizedUser = {
+      email: petitionerUser.email,
+      name: petitionerUser.name,
+      role: petitionerUser.role,
+      userId: petitionerUser.userId,
+    };
 
-    await queueUpdateAssociatedCasesWorker(applicationContext, {
-      user: petitionerUser,
-    });
+    await queueUpdateAssociatedCasesWorker(
+      applicationContext,
+      {
+        user: petitionerUser,
+      },
+      authorizedUser,
+    );
 
     expect(
       applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
+        authorizedUser,
         payload: { docketNumber: '111-20', user: petitionerUser },
         type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-        user: petitionerUser,
       },
     });
     expect(
       applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
+        authorizedUser,
         payload: { docketNumber: '222-20', user: petitionerUser },
         type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-        user: petitionerUser,
       },
     });
     expect(
       applicationContext.getWorkerGateway().queueWork,
     ).toHaveBeenCalledWith(applicationContext, {
       message: {
+        authorizedUser,
         payload: { docketNumber: '333-20', user: petitionerUser },
         type: MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE,
-        user: petitionerUser,
       },
     });
   });

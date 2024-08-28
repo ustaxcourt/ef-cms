@@ -1,23 +1,19 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { Statistic } from '../Statistic';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addStatistic', () => {
   it('should successfully add a statistic', () => {
-    const caseEntity = new Case(MOCK_CASE, { applicationContext });
+    const caseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
 
-    const statisticToAdd = new Statistic(
-      {
-        determinationDeficiencyAmount: 567,
-        determinationTotalPenalties: 789,
-        irsDeficiencyAmount: 11.2,
-        irsTotalPenalties: 66.87,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToAdd = new Statistic({
+      determinationDeficiencyAmount: 567,
+      determinationTotalPenalties: 789,
+      irsDeficiencyAmount: 11.2,
+      irsTotalPenalties: 66.87,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     caseEntity.addStatistic(statisticToAdd);
 
@@ -31,20 +27,17 @@ describe('addStatistic', () => {
         ...MOCK_CASE,
         statistics: statisticsWithMaxLength,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
-    const statisticToAdd = new Statistic(
-      {
-        determinationDeficiencyAmount: 567,
-        determinationTotalPenalties: 789,
-        irsDeficiencyAmount: 11.2,
-        irsTotalPenalties: 66.87,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToAdd = new Statistic({
+      determinationDeficiencyAmount: 567,
+      determinationTotalPenalties: 789,
+      irsDeficiencyAmount: 11.2,
+      irsTotalPenalties: 66.87,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     let error;
     try {

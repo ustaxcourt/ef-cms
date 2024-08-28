@@ -1,11 +1,16 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('getCasesForUserInteractor', () => {
-  const userId = MOCK_CASE.petitioners[0].contactId;
+  const mockPetitioner: AuthUser = {
+    ...mockPetitionerUser,
+    userId: MOCK_CASE.petitioners[0].contactId,
+  };
   let leadCase;
   let memberCase1;
   let memberCase2;
@@ -64,10 +69,6 @@ describe('getCasesForUserInteractor', () => {
     });
 
     consolidatedGroupLeadCase11119 = [leadCase, memberCase1, memberCase2];
-
-    applicationContext.getCurrentUser.mockResolvedValue({
-      userId,
-    });
   });
   describe('Consolidated cases', () => {
     it('should return the expected associated cases combined with the consolidated group cases for 111-19', async () => {
@@ -102,7 +103,10 @@ describe('getCasesForUserInteractor', () => {
           consolidatedGroupLeadCase11119,
         );
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       expect(userCases).toMatchObject({
         closedCaseList: [
@@ -165,7 +169,10 @@ describe('getCasesForUserInteractor', () => {
           consolidatedGroup,
         );
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       const expectedCaseList = [
         expect.objectContaining({
@@ -201,7 +208,10 @@ describe('getCasesForUserInteractor', () => {
           consolidatedGroup,
         );
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       const expectedCaseList = [
         expect.objectContaining({
@@ -237,7 +247,10 @@ describe('getCasesForUserInteractor', () => {
           consolidatedGroup,
         );
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       const expectedCaseList = [
         expect.objectContaining({
@@ -298,7 +311,10 @@ describe('getCasesForUserInteractor', () => {
           consolidatedGroup,
         );
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       const actualOrder = userCases.closedCaseList.map(
         aCase => aCase.docketNumber,
@@ -341,7 +357,10 @@ describe('getCasesForUserInteractor', () => {
           consolidatedGroupLeadCase11119,
         );
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       expect(unconsolidatedCase1.docketEntries).toBeDefined();
       expect(unconsolidatedCase2.docketEntries).toBeDefined();
@@ -379,7 +398,10 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase1,
         ]);
 
-      const userCases = await getCasesForUserInteractor(applicationContext);
+      const userCases = await getCasesForUserInteractor(
+        applicationContext,
+        mockPetitioner,
+      );
 
       expect(userCases.closedCaseList).toEqual([
         expect.objectContaining({
@@ -426,7 +448,7 @@ describe('getCasesForUserInteractor', () => {
       //call validate to ensure that, yes, the case fails validation (todo)
       //call getCasesForUser and expect that no exceptions were thrown
       await expect(
-        getCasesForUserInteractor(applicationContext),
+        getCasesForUserInteractor(applicationContext, mockPetitioner),
       ).resolves.not.toThrow();
     });
   });

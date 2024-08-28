@@ -1,8 +1,12 @@
-import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { prioritizeCaseInteractor } from './prioritizeCaseInteractor';
 
 describe('prioritizeCaseInteractor', () => {
@@ -16,10 +20,6 @@ describe('prioritizeCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
   });
 
   it('should update the case with the highPriority flag set as true and attach a reason', async () => {
@@ -32,10 +32,14 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await prioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    const result = await prioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toMatchObject({
       highPriority: true,
@@ -61,10 +65,14 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    await prioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -73,12 +81,14 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to prioritize cases', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      prioritizeCaseInteractor(applicationContext, {
-        docketNumber: '123-20',
-      } as any),
+      prioritizeCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-20',
+        } as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -93,10 +103,14 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        reason: 'just because',
-      }),
+      prioritizeCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          reason: 'just because',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Cannot set a calendared case as high priority');
   });
 
@@ -113,10 +127,14 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        reason: 'just because',
-      }),
+      prioritizeCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          reason: 'just because',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Cannot set a blocked case as high priority');
   });
 
@@ -130,10 +148,15 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    await prioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
+
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
@@ -153,10 +176,14 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    await prioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -168,10 +195,14 @@ describe('prioritizeCaseInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      prioritizeCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        reason: 'just because',
-      }),
+      prioritizeCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          reason: 'just because',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -180,10 +211,14 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await prioritizeCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
-    });
+    await prioritizeCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        reason: 'just because',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
