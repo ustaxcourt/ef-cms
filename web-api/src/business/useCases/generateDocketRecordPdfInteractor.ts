@@ -6,18 +6,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
-/**
- * generateDocketRecordPdfInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number for the docket record to be generated
- * @returns {Uint8Array} docket record pdf
- */
 export const generateDocketRecordPdfInteractor = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketRecordSort,
@@ -29,14 +24,14 @@ export const generateDocketRecordPdfInteractor = async (
     includePartyDetail: boolean;
     isIndirectlyAssociated?: boolean;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
   const isDirectlyAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
       docketNumber,
-      userId: user.userId,
+      userId: authorizedUser?.userId,
     });
 
   const caseSource = await applicationContext
@@ -53,9 +48,9 @@ export const generateDocketRecordPdfInteractor = async (
     .isSealedCase(caseSource);
 
   if (isSealedCase) {
-    if (user.userId) {
+    if (authorizedUser?.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
-        user,
+        authorizedUser,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
       );
 
@@ -64,7 +59,7 @@ export const generateDocketRecordPdfInteractor = async (
         isDirectlyAssociated ||
         isIndirectlyAssociated
       ) {
-        caseEntity = new Case(caseSource, { applicationContext });
+        caseEntity = new Case(caseSource, { authorizedUser });
       } else {
         // unassociated user viewing sealed case
         throw new UnauthorizedError('Unauthorized to view sealed case.');
@@ -74,13 +69,14 @@ export const generateDocketRecordPdfInteractor = async (
       throw new UnauthorizedError('Unauthorized to view sealed case.');
     }
   } else {
-    caseEntity = new Case(caseSource, { applicationContext });
+    caseEntity = new Case(caseSource, { authorizedUser });
   }
 
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
       applicationContext,
+      authorizedUser,
       caseDetail: caseEntity,
       docketRecordSort,
     });
@@ -88,10 +84,9 @@ export const generateDocketRecordPdfInteractor = async (
   formattedCaseDetail.petitioners.forEach(petitioner => {
     petitioner.counselDetails = [];
 
-    const practitioners = getPractitionersRepresenting(
-      formattedCaseDetail,
-      petitioner.contactId,
-    );
+    const practitioners =
+      getPractitionersRepresenting(formattedCaseDetail, petitioner.contactId) ||
+      [];
 
     if (practitioners.length > 0) {
       practitioners.forEach(practitioner => {

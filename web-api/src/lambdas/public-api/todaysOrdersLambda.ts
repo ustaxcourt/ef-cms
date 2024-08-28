@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getTodaysOrdersInteractor } from '@web-api/business/useCases/public/getTodaysOrdersInteractor';
 
 /**
  * used for fetching orders served on the current date
@@ -8,7 +9,8 @@ import { genericHandler } from '../../genericHandler';
  */
 export const todaysOrdersLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getTodaysOrdersInteractor(applicationContext, event.pathParameters);
+    return await getTodaysOrdersInteractor(
+      applicationContext,
+      event.pathParameters,
+    );
   });

@@ -1,6 +1,6 @@
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getPetitionerById', () => {
   it('returns petitioner with matching contactId from petitioners array', () => {
@@ -13,7 +13,7 @@ describe('getPetitionerById', () => {
           { ...getContactPrimary(MOCK_CASE), contactId: mockContactId },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.getPetitionerById(mockContactId)).toBeDefined();
@@ -32,7 +32,7 @@ describe('getPetitionerById', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.getPetitionerById(mockNonExistingContactId)).toBeUndefined();

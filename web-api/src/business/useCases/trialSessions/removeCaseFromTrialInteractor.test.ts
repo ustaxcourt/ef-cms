@@ -13,14 +13,13 @@ import {
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
-  petitionerUser,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 
 describe('removeCaseFromTrialInteractor', () => {
   let mockLock;
-  let mockUser;
   let mockTrialSession: RawTrialSession;
 
   beforeAll(() => {
@@ -31,10 +30,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    mockUser = petitionsClerkUser;
     mockTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(mockTrialSession);
@@ -56,30 +52,37 @@ describe('removeCaseFromTrialInteractor', () => {
   });
 
   it('should throw an error when the user is unauthorized to remove a case from a trial session', async () => {
-    mockUser = petitionerUser;
     await expect(
-      removeCaseFromTrialInteractor(applicationContext, {
-        associatedJudge: '123',
-        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-        caseStatus: 'new',
-        disposition: 'because',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-      }),
+      removeCaseFromTrialInteractor(
+        applicationContext,
+        {
+          associatedJudge: '123',
+          associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
+          caseStatus: 'new',
+          disposition: 'because',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a calendared session', async () => {
     mockTrialSession.isCalendared = true;
 
-    await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: '123',
-      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-      caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: mockTrialSession.trialSessionId!,
-    });
+    await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: '123',
+        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
+        caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -139,14 +142,18 @@ describe('removeCaseFromTrialInteractor', () => {
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, updateCaseAutomaticBlock, and updateCase persistence methods with correct parameters for a not calendared session', async () => {
     mockTrialSession.isCalendared = false;
 
-    await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: '123',
-      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-      caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+    await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: '123',
+        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
+        caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
@@ -187,14 +194,18 @@ describe('removeCaseFromTrialInteractor', () => {
   it('updates work items to be not high priority', async () => {
     mockTrialSession.isCalendared = true;
 
-    await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: '123',
-      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-      caseStatus: 'New',
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+    await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: '123',
+        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
+        caseStatus: 'New',
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
@@ -222,14 +233,18 @@ describe('removeCaseFromTrialInteractor', () => {
         trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       });
 
-    await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: '123',
-      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-      caseStatus: 'New',
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+    await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: '123',
+        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
+        caseStatus: 'New',
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -251,14 +266,18 @@ describe('removeCaseFromTrialInteractor', () => {
         trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       });
 
-    await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: '123',
-      associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-      caseStatus: 'New',
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+    await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: '123',
+        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
+        caseStatus: 'New',
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -306,14 +325,18 @@ describe('removeCaseFromTrialInteractor', () => {
   it('sets the associatedJudge and caseStatus when provided', async () => {
     mockTrialSession.isCalendared = true;
 
-    const result = await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: 'Judge Dredd',
-      associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
-      caseStatus: CASE_STATUS_TYPES.cav,
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+    const result = await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: 'Judge Dredd',
+        associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+        caseStatus: CASE_STATUS_TYPES.cav,
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result.associatedJudge).toEqual('Judge Dredd');
     expect(result.associatedJudgeId).toEqual(
@@ -326,14 +349,18 @@ describe('removeCaseFromTrialInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      removeCaseFromTrialInteractor(applicationContext, {
-        associatedJudge: 'Judge Dredd',
-        associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
-        caseStatus: CASE_STATUS_TYPES.cav,
-        disposition: 'because',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-      }),
+      removeCaseFromTrialInteractor(
+        applicationContext,
+        {
+          associatedJudge: 'Judge Dredd',
+          associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+          caseStatus: CASE_STATUS_TYPES.cav,
+          disposition: 'because',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -342,14 +369,18 @@ describe('removeCaseFromTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await removeCaseFromTrialInteractor(applicationContext, {
-      associatedJudge: 'Judge Dredd',
-      associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
-      caseStatus: CASE_STATUS_TYPES.cav,
-      disposition: 'because',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+    await removeCaseFromTrialInteractor(
+      applicationContext,
+      {
+        associatedJudge: 'Judge Dredd',
+        associatedJudgeId: 'e5eaf0ac-6a1f-4a5d-a44d-d59f199b7ab5',
+        caseStatus: CASE_STATUS_TYPES.cav,
+        disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

@@ -4,9 +4,12 @@ import {
   createStartOfDayISO,
   formatNow,
 } from '../utilities/DateHandler';
-import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getReconciliationReportInteractor } from './getReconciliationReportInteractor';
+import {
+  mockDocketClerkUser,
+  mockIrsSuperuser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getReconciliationReportInteractor', () => {
   const mockCaseCaption = 'Kaitlin Chaney, Petitioner';
@@ -22,46 +25,56 @@ describe('getReconciliationReportInteractor', () => {
           sk: 'case|135-20',
         },
       ]);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.irsSuperuser,
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-    });
   });
 
   it('should throw unauthorized error if user does not have permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.docketClerk,
-      userId: '33577e31-d6d5-4c4a-adc6-520075f3dde5',
-    });
     await expect(
-      getReconciliationReportInteractor(applicationContext, {
-        reconciliationDate: undefined,
-      }),
+      getReconciliationReportInteractor(
+        applicationContext,
+        {
+          reconciliationDate: undefined,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error if date is not formatted correctly', async () => {
     await expect(
-      getReconciliationReportInteractor(applicationContext, {
-        reconciliationDate: undefined,
-      }),
+      getReconciliationReportInteractor(
+        applicationContext,
+        {
+          reconciliationDate: undefined,
+        },
+        mockIrsSuperuser,
+      ),
     ).rejects.toThrow('Must be valid reconciliation date');
   });
+
   it('should throw an error if date is in the future', async () => {
     await expect(
-      getReconciliationReportInteractor(applicationContext, {
-        reconciliationDate: '9999-01-01',
-      }),
+      getReconciliationReportInteractor(
+        applicationContext,
+        {
+          reconciliationDate: '9999-01-01',
+        },
+        mockIrsSuperuser,
+      ),
     ).rejects.toThrow('not later than today');
   });
+
   it('should call the persistence method with current date if "today" is provided as a parameter', async () => {
     applicationContext
       .getPersistenceGateway()
       .getReconciliationReport.mockReturnValue([]);
 
-    await getReconciliationReportInteractor(applicationContext, {
-      reconciliationDate: 'today',
-    });
+    await getReconciliationReportInteractor(
+      applicationContext,
+      {
+        reconciliationDate: 'today',
+      },
+      mockIrsSuperuser,
+    );
 
     const reconciliationDateNow = formatNow(FORMATS.YYYYMMDD);
     const [year, month, day] = reconciliationDateNow.split('-');
@@ -83,9 +96,13 @@ describe('getReconciliationReportInteractor', () => {
       .getReconciliationReport.mockReturnValue([]);
 
     const reconciliationDate = '2021-01-01';
-    const result = await getReconciliationReportInteractor(applicationContext, {
-      reconciliationDate,
-    });
+    const result = await getReconciliationReportInteractor(
+      applicationContext,
+      {
+        reconciliationDate,
+      },
+      mockIrsSuperuser,
+    );
 
     expect(result).toMatchObject({
       docketEntries: expect.any(Array),
@@ -114,9 +131,13 @@ describe('getReconciliationReportInteractor', () => {
       .getReconciliationReport.mockReturnValue(docketEntries);
 
     const reconciliationDate = '2021-01-01';
-    const result = await getReconciliationReportInteractor(applicationContext, {
-      reconciliationDate,
-    });
+    const result = await getReconciliationReportInteractor(
+      applicationContext,
+      {
+        reconciliationDate,
+      },
+      mockIrsSuperuser,
+    );
 
     expect(result).toMatchObject({
       docketEntries,
@@ -154,9 +175,13 @@ describe('getReconciliationReportInteractor', () => {
       .getReconciliationReport.mockReturnValue(docketEntries);
 
     const reconciliationDate = '2021-01-01';
-    await getReconciliationReportInteractor(applicationContext, {
-      reconciliationDate,
-    });
+    await getReconciliationReportInteractor(
+      applicationContext,
+      {
+        reconciliationDate,
+      },
+      mockIrsSuperuser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCasesByDocketNumbers.mock
@@ -169,10 +194,14 @@ describe('getReconciliationReportInteractor', () => {
     const startDate = '2020-01-01';
     const timeStart = '05:00';
     await expect(
-      getReconciliationReportInteractor(applicationContext, {
-        reconciliationDate: startDate,
-        start: timeStart,
-      }),
+      getReconciliationReportInteractor(
+        applicationContext,
+        {
+          reconciliationDate: startDate,
+          start: timeStart,
+        },
+        mockIrsSuperuser,
+      ),
     ).resolves.not.toThrow();
   });
 
@@ -197,11 +226,15 @@ describe('getReconciliationReportInteractor', () => {
       .getPersistenceGateway()
       .getReconciliationReport.mockReturnValue(docketEntries);
 
-    const result = await getReconciliationReportInteractor(applicationContext, {
-      end: timeEnd,
-      reconciliationDate: startDate,
-      start: timeStart,
-    });
+    const result = await getReconciliationReportInteractor(
+      applicationContext,
+      {
+        end: timeEnd,
+        reconciliationDate: startDate,
+        start: timeStart,
+      },
+      mockIrsSuperuser,
+    );
     expect(result.reconciliationDate).toBe(startDate);
   });
 });

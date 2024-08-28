@@ -15,6 +15,7 @@ import { DocketEntry } from '../DocketEntry';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Statistic } from '../Statistic';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import joi from 'joi';
 
 /**
@@ -64,10 +65,10 @@ export class PaperPetition extends JoiValidationEntity {
   public archivedCorrespondences: any;
   public docketEntries: DocketEntry[];
 
-  constructor(rawProps, { applicationContext }) {
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
+  constructor(
+    rawProps,
+    { authorizedUser }: { authorizedUser: UnknownAuthUser },
+  ) {
     super('PaperPetition');
     this.attachmentToPetitionFile = rawProps.attachmentToPetitionFile;
     this.attachmentToPetitionFileSize = rawProps.attachmentToPetitionFileSize;
@@ -117,14 +118,15 @@ export class PaperPetition extends JoiValidationEntity {
     this.docketEntries = rawProps.docketEntries || [];
 
     this.statistics = Array.isArray(rawProps.statistics)
-      ? rawProps.statistics.map(
-          statistic => new Statistic(statistic, { applicationContext }),
-        )
+      ? rawProps.statistics.map(statistic => new Statistic(statistic))
       : [];
 
     this.archivedDocketEntries = Array.isArray(rawProps.archivedDocketEntries)
       ? rawProps.archivedDocketEntries.map(
-          doc => new DocketEntry(doc, { applicationContext }),
+          doc =>
+            new DocketEntry(doc, {
+              authorizedUser,
+            }),
         )
       : [];
 
@@ -137,7 +139,6 @@ export class PaperPetition extends JoiValidationEntity {
       : [];
 
     const contacts = ContactFactory({
-      applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawProps) || rawProps.contactPrimary,
         secondary: getContactSecondary(rawProps) || rawProps.contactSecondary,

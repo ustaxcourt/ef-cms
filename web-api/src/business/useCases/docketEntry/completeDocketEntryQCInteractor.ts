@@ -17,6 +17,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -29,9 +30,8 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
@@ -57,7 +57,7 @@ const completeDocketEntryQC = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
     record => record.docketEntryId === docketEntryId,
   );
@@ -114,7 +114,7 @@ const completeDocketEntryQC = async (
         trialLocation: caseEntity.trialLocation,
       },
     },
-    { applicationContext, petitioners: caseToUpdate.petitioners },
+    { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
 
@@ -265,6 +265,7 @@ const completeDocketEntryQC = async (
   } else if (needsNoticeOfDocketChange) {
     const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
+      authorizedUser,
       docketChangeInfo,
     });
 
@@ -280,7 +281,7 @@ const completeDocketEntryQC = async (
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext, petitioners: caseToUpdate.petitioners },
+      { authorizedUser, petitioners: caseToUpdate.petitioners },
     );
 
     noticeUpdatedDocketEntry.setFiledBy(user);
@@ -336,16 +337,19 @@ const completeDocketEntryQC = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 
   if (isNewCoverSheetNeeded) {
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
+    await applicationContext.getUseCases().addCoversheetInteractor(
+      applicationContext,
+      {
         docketEntryId,
         docketNumber: caseEntity.docketNumber,
-      });
+      },
+      authorizedUser,
+    );
   }
 
   return {

@@ -1,7 +1,6 @@
 import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('unsealEntry', () => {
   it('should clear the sealedTo property from the docket entry', () => {
@@ -11,7 +10,7 @@ describe('unsealEntry', () => {
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
       },
       {
-        applicationContext,
+        authorizedUser: undefined,
       },
     );
     docketEntry.unsealEntry();
@@ -22,7 +21,7 @@ describe('unsealEntry', () => {
     const docketEntry = new DocketEntry(
       { ...A_VALID_DOCKET_ENTRY, isSealed: undefined },
       {
-        applicationContext,
+        authorizedUser: undefined,
       },
     );
     docketEntry.unsealEntry();
@@ -34,7 +33,7 @@ describe('unsealEntry', () => {
     const docketEntry = new DocketEntry(
       { ...A_VALID_DOCKET_ENTRY, isLegacySealed: true },
       {
-        applicationContext,
+        authorizedUser: undefined,
       },
     );
     docketEntry.unsealEntry();

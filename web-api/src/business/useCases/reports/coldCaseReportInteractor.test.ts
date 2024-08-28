@@ -1,7 +1,10 @@
 import { ColdCaseEntry } from './coldCaseReportInteractor';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { coldCaseReportInteractor } from './coldCaseReportInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('coldCaseReportInteractor', () => {
   const mockColdCases: ColdCaseEntry[] = [
@@ -23,23 +26,16 @@ describe('coldCaseReportInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => ({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    }));
-
-    await expect(coldCaseReportInteractor(applicationContext)).rejects.toThrow(
-      'Unauthorized',
-    );
+    await expect(
+      coldCaseReportInteractor(applicationContext, mockPetitionerUser),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should return the expected mocked data', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => ({
-      role: ROLES.docketClerk,
-      userId: 'docketclerk',
-    }));
-
-    const coldCases = await coldCaseReportInteractor(applicationContext);
+    const coldCases = await coldCaseReportInteractor(
+      applicationContext,
+      mockDocketClerkUser,
+    );
 
     expect(coldCases).toEqual(mockColdCases);
   });

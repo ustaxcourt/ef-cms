@@ -1,10 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
-import {
-  DEFAULT_PROCEDURE_TYPE,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { DEFAULT_PROCEDURE_TYPE } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoStartCaseWizardSequence } from '../sequences/gotoStartCaseWizardSequence';
+import { petitionerUser, petitionsClerkUser } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
 describe('gotoStartCaseWizardSequence', () => {
@@ -19,9 +17,7 @@ describe('gotoStartCaseWizardSequence', () => {
   });
 
   it('should set up state for an internal user going to start case form', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-    });
+    cerebralTest.setState('user', petitionsClerkUser);
 
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
@@ -44,9 +40,7 @@ describe('gotoStartCaseWizardSequence', () => {
   });
 
   it('should set up state for an external user going to start case form', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
+    cerebralTest.setState('user', petitionerUser);
 
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 

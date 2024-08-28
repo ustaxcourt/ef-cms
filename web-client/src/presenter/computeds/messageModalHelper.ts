@@ -20,6 +20,7 @@ export const messageModalHelper = (
   const screenMetadata = get(state.screenMetadata);
   const attachments = get(state.modal.form.attachments);
   const draftAttachments = get(state.modal.form.draftAttachments);
+  const user = get(state.user);
   const currentAttachments = [...attachments, ...draftAttachments];
   const judgesChambers = get(state.judgesChambers) || [];
 
@@ -29,9 +30,11 @@ export const messageModalHelper = (
     );
 
   const { correspondence, draftDocuments, formattedDocketEntries } =
-    applicationContext
-      .getUtilities()
-      .getFormattedCaseDetail({ applicationContext, caseDetail });
+    applicationContext.getUtilities().getFormattedCaseDetail({
+      applicationContext,
+      authorizedUser: user,
+      caseDetail,
+    });
 
   const documents: (RawDocketEntry & {
     isAlreadyAttached: boolean;

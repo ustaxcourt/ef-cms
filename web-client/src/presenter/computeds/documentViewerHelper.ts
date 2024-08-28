@@ -21,11 +21,13 @@ export const documentViewerHelper = (
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
+  const user = get(state.user);
 
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: user,
       caseDetail,
     });
 

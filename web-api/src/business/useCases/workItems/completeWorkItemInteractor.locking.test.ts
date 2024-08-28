@@ -7,7 +7,7 @@ import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
   let mockLock;
@@ -50,7 +50,6 @@ describe('completeWorkItemInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -62,7 +61,11 @@ describe('completeWorkItemInteractor', () => {
   it('throws a ServiceUnavailableError if a Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
     await expect(
-      completeWorkItemInteractor(applicationContext, mockRequest),
+      completeWorkItemInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -71,7 +74,11 @@ describe('completeWorkItemInteractor', () => {
   });
 
   it('acquires a lock that lasts for 30 seconds on the case', async () => {
-    await completeWorkItemInteractor(applicationContext, mockRequest);
+    await completeWorkItemInteractor(
+      applicationContext,
+      mockRequest,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -84,7 +91,11 @@ describe('completeWorkItemInteractor', () => {
 
   it('resolves and calls updateCaseAndAssociations', async () => {
     await expect(
-      completeWorkItemInteractor(applicationContext, mockRequest),
+      completeWorkItemInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      ),
     ).resolves.not.toThrow();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -92,7 +103,11 @@ describe('completeWorkItemInteractor', () => {
   });
 
   it('removes the lock when it is finished', async () => {
-    await completeWorkItemInteractor(applicationContext, mockRequest);
+    await completeWorkItemInteractor(
+      applicationContext,
+      mockRequest,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().removeLock,

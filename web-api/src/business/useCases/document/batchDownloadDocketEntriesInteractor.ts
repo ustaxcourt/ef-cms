@@ -7,6 +7,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 
 export type DownloadDocketEntryRequestType = {
@@ -19,14 +20,16 @@ export type DownloadDocketEntryRequestType = {
 export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
+  authorizedUser: UnknownAuthUser,
 ) => {
   try {
     await batchDownloadDocketEntriesHelper(
       applicationContext,
       downloadDocketEntryRequestInfo,
+      authorizedUser,
     );
   } catch (error: any) {
-    const { userId } = applicationContext.getCurrentUser();
+    const { userId } = authorizedUser;
     const { clientConnectionId, docketNumber } = downloadDocketEntryRequestInfo;
 
     const erMsg = error.message || 'unknown error';
@@ -54,10 +57,14 @@ const batchDownloadDocketEntriesHelper = async (
     documentsSelectedForDownload,
     printableDocketRecordFileId,
   }: DownloadDocketEntryRequestType,
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS)) {
+  if (
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.BATCH_DOWNLOAD_CASE_DOCUMENTS,
+    )
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -69,7 +76,7 @@ const batchDownloadDocketEntriesHelper = async (
       filesCompleted: 0,
       totalFiles: documentsSelectedForDownload.length,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 
   const caseToBatch = await applicationContext
@@ -93,7 +100,7 @@ const batchDownloadDocketEntriesHelper = async (
     useTempBucket: boolean;
   }[] = [];
 
-  const caseEntity = new Case(caseToBatch, { applicationContext });
+  const caseEntity = new Case(caseToBatch, { authorizedUser });
 
   documentsSelectedForDownload.forEach(docketEntryId => {
     const docInfo = caseEntity.getDocketEntryById({
@@ -138,7 +145,7 @@ const batchDownloadDocketEntriesHelper = async (
         filesCompleted: progressData.filesCompleted,
         totalFiles: progressData.totalFiles,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   };
 
@@ -165,6 +172,6 @@ const batchDownloadDocketEntriesHelper = async (
       action: 'batch_download_ready',
       url,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };

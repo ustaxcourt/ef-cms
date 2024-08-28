@@ -28,11 +28,10 @@ describe('orderTypesHelper', () => {
         },
       };
     },
-    getCurrentUser: () => user,
   });
 
   it('should return all event codes for docketclerk', () => {
-    const result = runCompute(orderTypesHelper, { state: {} });
+    const result = runCompute(orderTypesHelper, { state: { user } });
 
     expect(result.orderTypes).toEqual([
       { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
@@ -44,7 +43,7 @@ describe('orderTypesHelper', () => {
   it('should filter out and only return type O for petitionsclerk', () => {
     user = petitionsClerkUser;
 
-    const result = runCompute(orderTypesHelper, { state: {} });
+    const result = runCompute(orderTypesHelper, { state: { user } });
 
     expect(result.orderTypes).toEqual([
       {
@@ -57,7 +56,7 @@ describe('orderTypesHelper', () => {
 
   it('should return showDocumentTitleInput true and documentTitleInputLabel if state.modal.eventCode is O', () => {
     const result = runCompute(orderTypesHelper, {
-      state: { modal: { eventCode: 'O' } },
+      state: { modal: { eventCode: 'O' }, user },
     });
 
     expect(result.showDocumentTitleInput).toEqual(true);
@@ -66,7 +65,7 @@ describe('orderTypesHelper', () => {
 
   it('should return showDocumentTitleInput true and documentTitleInputLabel if state.modal.eventCode is NOT', () => {
     const result = runCompute(orderTypesHelper, {
-      state: { modal: { eventCode: 'NOT' } },
+      state: { modal: { eventCode: 'NOT' }, user },
     });
 
     expect(result.showDocumentTitleInput).toEqual(true);
@@ -75,7 +74,7 @@ describe('orderTypesHelper', () => {
 
   it('should return showDocumentTitleInput false if state.modal.eventCode is not O or NOT', () => {
     const result = runCompute(orderTypesHelper, {
-      state: { modal: { eventCode: 'OTHER' } },
+      state: { modal: { eventCode: 'OTHER' }, user },
     });
 
     expect(result.showDocumentTitleInput).toEqual(false);

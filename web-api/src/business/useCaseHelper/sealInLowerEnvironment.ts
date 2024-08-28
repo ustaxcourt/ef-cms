@@ -1,3 +1,6 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+
 /**
  * sealInLowerEnvironment
  *
@@ -5,7 +8,11 @@
  * @param {array} records an array of docketNumbers and/or docketEntryIds to seal
  * @returns {Promise<array>} the array of responses from the interactor
  */
-export const sealInLowerEnvironment = async (applicationContext, records) => {
+export const sealInLowerEnvironment = async (
+  applicationContext: ServerApplicationContext,
+  records,
+  authorizedUser: UnknownAuthUser,
+) => {
   const isCurrentColorActive =
     await applicationContext.isCurrentColorActive(applicationContext);
 
@@ -25,11 +32,13 @@ export const sealInLowerEnvironment = async (applicationContext, records) => {
         //     docketNumber,
         //   });
       } else if (docketNumber) {
-        return applicationContext
-          .getUseCases()
-          .sealCaseInteractor(applicationContext, {
+        return applicationContext.getUseCases().sealCaseInteractor(
+          applicationContext,
+          {
             docketNumber,
-          });
+          },
+          authorizedUser,
+        );
       }
 
       applicationContext.logger.warn(

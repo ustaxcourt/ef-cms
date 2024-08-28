@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * saveCalendarNoteInteractor
@@ -24,9 +25,11 @@ export const saveCalendarNoteInteractor = async (
     docketNumber,
     trialSessionId,
   }: { calendarNote: string; docketNumber: string; trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -47,9 +50,7 @@ export const saveCalendarNoteInteractor = async (
     }
   });
 
-  const rawTrialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  })
+  const rawTrialSessionEntity = new TrialSession(trialSession)
     .validate()
     .toRawObject();
 

@@ -8,8 +8,12 @@ import {
 } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { addExistingUserToCase } from './addExistingUserToCase';
-import { admissionsClerkUser, petitionerUser } from '@shared/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockAdmissionsClerkUser,
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('addExistingUserToCase', () => {
   const mockUserId = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -27,12 +31,13 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should throw an unauthorized error when the user is not authorized to add a user to a case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
       addExistingUserToCase({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        authorizedUser: mockPetitionerUser,
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockDocketClerkUser,
+        }),
         contactId: mockContactId,
         email: 'testing@example.com',
         name: 'Bob Ross',
@@ -41,13 +46,15 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should throw an error when a user is NOT found with the provided email', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     applicationContext.getUserGateway().getUserByEmail.mockReturnValue(null);
 
     await expect(
       addExistingUserToCase({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        authorizedUser: mockAdmissionsClerkUser,
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockDocketClerkUser,
+        }),
         contactId: mockContactId,
         email: 'testing@example.com',
         name: 'Bob Ross',
@@ -60,15 +67,15 @@ describe('addExistingUserToCase', () => {
       contactId: '60dd21b3-5abb-447f-b036-9794962252a0',
       contactType: CONTACT_TYPES.primary,
     };
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     const caseEntity = new Case(
       { ...MOCK_CASE, petitioners: [mockExistingUser] },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await expect(
       addExistingUserToCase({
         applicationContext,
+        authorizedUser: mockAdmissionsClerkUser,
         caseEntity,
         contactId: mockExistingUser.contactId,
         email: 'testing@example.com',
@@ -78,7 +85,6 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -92,11 +98,12 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: mockContactId,
       email: mockUpdatedEmail,
@@ -118,7 +125,6 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should call associateUserWithCase and update the representing arrays entries with the expect contactId', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -155,11 +161,12 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: mockContactId,
       email: mockUpdatedEmail,
@@ -172,7 +179,6 @@ describe('addExistingUserToCase', () => {
   });
 
   it("should not update the practitioner's representing array when the cognito user's ID already exists", async () => {
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -209,11 +215,12 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: mockContactId,
       email: mockUpdatedEmail,
@@ -226,7 +233,6 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should not change the service indicator to electronic when the user has a pendingEmail', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(admissionsClerkUser);
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       pendingEmail: 'testing@example.com',
       userId: mockUserId,
@@ -245,11 +251,12 @@ describe('addExistingUserToCase', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     await addExistingUserToCase({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: mockContactId,
       email: mockUpdatedEmail,
