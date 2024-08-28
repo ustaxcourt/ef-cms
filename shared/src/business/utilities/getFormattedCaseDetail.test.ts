@@ -1,42 +1,47 @@
 import { CASE_STATUS_TYPES, PAYMENT_STATUS } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_USERS } from '../../test/mockUsers';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatCase, getFormattedCaseDetail } from './getFormattedCaseDetail';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getFormattedCaseDetail', () => {
-  applicationContext.getCurrentUser = () =>
-    MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
-
   const getDateISO = () =>
     applicationContext.getUtilities().createISODateString();
 
   describe('formatCase', () => {
     it('should set showPrintConfirmationLink to true for served cases without legacy docket entries', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[0],
-            servedAt: getDateISO(),
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...MOCK_CASE.docketEntries[0],
+              servedAt: getDateISO(),
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.showPrintConfirmationLink).toBeTruthy();
     });
 
     it('should set showPrintConfirmationLink to false for served cases with legacy docket entries', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[0],
-            isLegacy: true,
-            servedAt: getDateISO(),
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...MOCK_CASE.docketEntries[0],
+              isLegacy: true,
+              servedAt: getDateISO(),
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.showPrintConfirmationLink).toBeFalsy();
     });
@@ -44,59 +49,71 @@ describe('getFormattedCaseDetail', () => {
     it('should return an empty object if caseDetail is empty', () => {
       const mockApplicationContext = {};
       const caseDetail = {};
-      const result = formatCase(mockApplicationContext, caseDetail);
+      const result = formatCase(
+        mockApplicationContext,
+        caseDetail,
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({});
     });
 
     it('should format the filing date of all correspondence documents', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        correspondence: [
-          {
-            documentTitle: 'Test Correspondence',
-            filedBy: 'Test Docket Clerk',
-            filingDate: '2020-05-21T18:21:59.818Z',
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          correspondence: [
+            {
+              documentTitle: 'Test Correspondence',
+              filedBy: 'Test Docket Clerk',
+              filingDate: '2020-05-21T18:21:59.818Z',
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.correspondence[0].formattedFilingDate).toEqual('05/21/20');
     });
 
     it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            createdAt: getDateISO(),
-            docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-            documentType: 'Administrative Record',
-            filingDate: getDateISO(),
-            index: '1',
-            isOnDocketRecord: true,
-            pending: true,
-            servedAt: '2019-08-25T05:00:00.000Z',
-          },
-          {
-            createdAt: getDateISO(),
-            docketEntryId: 'dabe913f-5310-48df-b63d-44cfccb83326',
-            documentType: 'Administrative Record',
-            filingDate: getDateISO(),
-            index: '2',
-            isOnDocketRecord: true,
-            pending: true,
-          },
-          {
-            createdAt: getDateISO(),
-            docketEntryId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
-            documentType: 'Administrative Record',
-            filingDate: getDateISO(),
-            index: '3',
-            isOnDocketRecord: true,
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: getDateISO(),
+              docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+              documentType: 'Administrative Record',
+              filingDate: getDateISO(),
+              index: '1',
+              isOnDocketRecord: true,
+              pending: true,
+              servedAt: '2019-08-25T05:00:00.000Z',
+            },
+            {
+              createdAt: getDateISO(),
+              docketEntryId: 'dabe913f-5310-48df-b63d-44cfccb83326',
+              documentType: 'Administrative Record',
+              filingDate: getDateISO(),
+              index: '2',
+              isOnDocketRecord: true,
+              pending: true,
+            },
+            {
+              createdAt: getDateISO(),
+              docketEntryId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
+              documentType: 'Administrative Record',
+              filingDate: getDateISO(),
+              index: '3',
+              isOnDocketRecord: true,
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.pendingItemsDocketEntries).toMatchObject([
         {
@@ -106,16 +123,20 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should return docket entries with pending and isLegacyServed for pendingItemsDocketEntries', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[0],
-            isLegacyServed: true,
-            pending: true,
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...MOCK_CASE.docketEntries[0],
+              isLegacyServed: true,
+              pending: true,
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.pendingItemsDocketEntries).toMatchObject([
         {
@@ -125,24 +146,32 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should return an empty array for formattedDocketEntries and pendingItemsDocketEntries if docketRecord does not exist', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          docketEntries: [],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.formattedDocketEntries).toEqual([]);
       expect(result.pendingItemsDocketEntries).toEqual([]);
     });
 
     it('should format irsPractitioners if the irsPractitioners array is set', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        irsPractitioners: [
-          {
-            name: 'Test Respondent',
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            {
+              name: 'Test Respondent',
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.irsPractitioners[0].formattedName).toEqual(
         'Test Respondent',
@@ -150,16 +179,20 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format privatePractitioners if the privatePractitioners array is set', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        privatePractitioners: [
-          {
-            barNumber: 'b1234',
-            name: 'Test Practitioner',
-            representing: [MOCK_CASE.petitioners[0].contactId],
-          },
-        ],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [
+            {
+              barNumber: 'b1234',
+              name: 'Test Practitioner',
+              representing: [MOCK_CASE.petitioners[0].contactId],
+            },
+          ],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.privatePractitioners[0].formattedName).toEqual(
         'Test Practitioner (b1234)',
@@ -174,14 +207,18 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format the general properties of case details', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        caseCaption: 'Johnny Joe Jacobson, Petitioner',
-        hasVerifiedIrsNotice: true,
-        irsNoticeDate: undefined,
-        preferredTrialCity: undefined,
-        trialTime: 11,
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          caseCaption: 'Johnny Joe Jacobson, Petitioner',
+          hasVerifiedIrsNotice: true,
+          irsNoticeDate: undefined,
+          preferredTrialCity: undefined,
+          trialTime: 11,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toHaveProperty('createdAtFormatted');
       expect(result).toHaveProperty('receivedAtFormatted');
@@ -194,10 +231,14 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format irs notice date', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        irsNoticeDate: getDateISO(),
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          irsNoticeDate: getDateISO(),
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.irsNoticeDateFormatted).toEqual(
         applicationContext
@@ -207,22 +248,30 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it("should return 'No notice provided' when there is no irs notice date", () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        irsNoticeDate: undefined,
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          irsNoticeDate: undefined,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
     });
 
     describe('should indicate blocked status', () => {
       it('should format blockedDate and when blocked is true', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          blocked: true,
-          blockedDate: getDateISO(),
-          blockedReason: 'for reasons',
-        });
+        const result = formatCase(
+          applicationContext,
+          {
+            ...MOCK_CASE,
+            blocked: true,
+            blockedDate: getDateISO(),
+            blockedReason: 'for reasons',
+          },
+          mockDocketClerkUser,
+        );
 
         expect(result).toMatchObject({
           blockedDateFormatted: applicationContext
@@ -234,13 +283,17 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format trial details if case status is calendared', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2011-11-11T05:00:00.000Z',
-        trialLocation: 'Boise, Idaho',
-        trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2011-11-11T05:00:00.000Z',
+          trialLocation: 'Boise, Idaho',
+          trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         formattedAssociatedJudge: 'Not assigned',
@@ -254,13 +307,17 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format trial details if case status is not calendared but the case has a trialSessionId', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        trialDate: '2011-11-11T05:00:00.000Z',
-        trialLocation: 'Boise, Idaho',
-        trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-        trialTime: '2:00',
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          trialDate: '2011-11-11T05:00:00.000Z',
+          trialLocation: 'Boise, Idaho',
+          trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          trialTime: '2:00',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         formattedAssociatedJudge: 'Not assigned',
@@ -274,23 +331,27 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format hearing details if the case has associated hearings', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        hearings: [
-          {
-            judge: {
-              name: 'Judge Dredd',
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          hearings: [
+            {
+              judge: {
+                name: 'Judge Dredd',
+              },
+              startDate: '2011-11-11T05:00:00.000Z',
+              startTime: '10:00',
+              trialLocation: 'Megacity One',
             },
-            startDate: '2011-11-11T05:00:00.000Z',
-            startTime: '10:00',
-            trialLocation: 'Megacity One',
-          },
-        ],
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2011-11-11T05:00:00.000Z',
-        trialLocation: 'Boise, Idaho',
-        trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-      });
+          ],
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2011-11-11T05:00:00.000Z',
+          trialLocation: 'Boise, Idaho',
+          trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         formattedAssociatedJudge: 'Not assigned',
@@ -317,13 +378,17 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format trial details with incomplete trial information', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: undefined,
-        trialLocation: undefined,
-        trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: undefined,
+          trialLocation: undefined,
+          trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         formattedTrialCity: 'Not assigned',
@@ -332,7 +397,11 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should show not scheduled section if case status is not calendared and case is not blocked', () => {
-      const result = formatCase(applicationContext, MOCK_CASE);
+      const result = formatCase(
+        applicationContext,
+        MOCK_CASE,
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         showNotScheduled: true,
@@ -340,39 +409,55 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should return showNotScheduled as true when the case has not been added to a trial session', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.closed,
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.closed,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.showNotScheduled).toBeTruthy();
     });
 
     it('should return showNotScheduled as false when the case status is closed and has been added to a trial session', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.closed,
-        trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.closed,
+          trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.showNotScheduled).toBeFalsy();
     });
 
     it('should return showScheduled as true when case status is closed and has been added to a trial session', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.closed,
-        trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.closed,
+          trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result.showScheduled).toBeTruthy();
     });
 
     it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        highPriority: true,
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          highPriority: true,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         formattedAssociatedJudge: 'Not assigned',
@@ -382,10 +467,14 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it("should set lead case attributes when the leadDocketNumber matches the current case's docketNumber", () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        leadDocketNumber: MOCK_CASE.docketNumber,
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          leadDocketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         consolidatedIconTooltipText: 'Lead case',
@@ -394,10 +483,14 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it("should not set lead case attributes when the leadDocketNumber does not match the current case's docket number", () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        leadDocketNumber: 'notthedocketNumber',
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          leadDocketNumber: 'notthedocketNumber',
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toMatchObject({
         consolidatedIconTooltipText: 'Consolidated case',
@@ -406,10 +499,14 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should set consolidated cases if there are any', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        consolidatedCases: [MOCK_CASE],
-      });
+      const result = formatCase(
+        applicationContext,
+        {
+          ...MOCK_CASE,
+          consolidatedCases: [MOCK_CASE],
+        },
+        mockDocketClerkUser,
+      );
 
       expect(result).toHaveProperty('consolidatedCases');
       expect(result.consolidatedCases).toMatchObject([MOCK_CASE]);
@@ -420,6 +517,7 @@ describe('getFormattedCaseDetail', () => {
     it('should call formatCase and add additional details on the given case', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: undefined,
         caseDetail: { ...MOCK_CASE },
         docketRecordSort: 'byDate',
       });
@@ -432,6 +530,7 @@ describe('getFormattedCaseDetail', () => {
     it('should format draft documents', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: undefined,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
@@ -483,6 +582,7 @@ describe('getFormattedCaseDetail', () => {
     it('should sort draft documents by their receivedAt', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
+        authorizedUser: undefined,
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
@@ -519,6 +619,7 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for a paid petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: undefined,
       caseDetail: {
         ...MOCK_CASE,
         petitionPaymentDate: '2019-03-01T21:40:46.415Z',
@@ -533,6 +634,7 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for a waived petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: undefined,
       caseDetail: {
         ...MOCK_CASE,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -546,6 +648,7 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for an unpaid petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
+      authorizedUser: undefined,
       caseDetail: {
         ...MOCK_CASE,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,

@@ -1,5 +1,4 @@
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('setNumberOfPages', () => {
   it('sets the number of pages', () => {
@@ -11,7 +10,7 @@ describe('setNumberOfPages', () => {
         filingDate: '9000-01-01T00:00:00.000Z',
         index: 1,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
     docketEntry.setNumberOfPages(13);
     expect(docketEntry.numberOfPages).toEqual(13);

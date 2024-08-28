@@ -61,7 +61,5 @@ export const orderPublicSearchInteractor = async (
 
   const slicedResults = results.slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(slicedResults, {
-    applicationContext,
-  });
+  return PublicDocumentSearchResult.validateRawCollection(slicedResults);
 };

@@ -1,6 +1,6 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
 
 describe('updateCaseDeadlineInteractor', () => {
@@ -16,29 +16,26 @@ describe('updateCaseDeadlineInteractor', () => {
   } as any;
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      updateCaseDeadlineInteractor(applicationContext, {
-        caseDeadline: mockCaseDeadline,
-      }),
+      updateCaseDeadlineInteractor(
+        applicationContext,
+        {
+          caseDeadline: mockCaseDeadline,
+        },
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('updates a case deadline', async () => {
-    const mockPetitionsClerk = new User({
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      userId: '65370e00-f608-4118-980c-56b6c0fe8df5',
-    });
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
 
     const caseDeadline = await updateCaseDeadlineInteractor(
       applicationContext,
       {
         caseDeadline: mockCaseDeadline,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(

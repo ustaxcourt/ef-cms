@@ -23,9 +23,9 @@ export const validatePetitionerInteractor = (
     existingPetitioners: TPetitioner[];
   },
 ) => {
-  const contactErrors = new Petitioner(contactInfo, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+  const contactErrors = new Petitioner(
+    contactInfo,
+  ).getFormattedValidationErrors();
 
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
