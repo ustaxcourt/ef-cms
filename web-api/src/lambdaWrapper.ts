@@ -1,3 +1,4 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
@@ -22,7 +23,7 @@ const defaultOptions: {
 export const lambdaWrapper = (
   lambda: (awsEvent: any, user?: UnknownAuthUser) => any,
   options = defaultOptions,
-  applicationContext?: IApplicationContext,
+  applicationContext?: ServerApplicationContext,
 ) => {
   return async (req, res) => {
     // 'shouldMimicApiGatewayAsyncEndpoint' flag is set to mimic how API gateway async endpoints work locally.
@@ -65,7 +66,7 @@ export const lambdaWrapper = (
 
     const { asyncsyncid } = req.headers;
 
-    if (options.isAsyncSync && asyncsyncid && applicationContext) {
+    if (options.isAsyncSync && asyncsyncid && applicationContext && user) {
       try {
         const fullResponse = {
           ...response,

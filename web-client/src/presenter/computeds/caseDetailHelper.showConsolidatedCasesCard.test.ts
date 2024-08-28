@@ -2,20 +2,18 @@ import {
   adcUser,
   irsPractitionerUser,
   petitionerUser,
-  privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { privatePractitionerUser } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {
-  ...applicationContext,
-  getCurrentUser: () => {
-    return globalUser;
-  },
-});
+const caseDetailHelper = withAppContextDecorator(
+  caseDetailHelperComputed,
+  applicationContext,
+);
 
 let globalUser;
 
@@ -23,6 +21,7 @@ const getBaseState = user => {
   globalUser = user;
   return {
     permissions: getUserPermissions(user),
+    user: globalUser,
   };
 };
 

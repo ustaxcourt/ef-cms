@@ -42,7 +42,7 @@ export const caseDetailHeaderHelper = (
 ): any => {
   const { USER_ROLES } = applicationContext.getConstants();
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);

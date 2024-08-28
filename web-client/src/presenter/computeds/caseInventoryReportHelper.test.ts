@@ -3,7 +3,6 @@ import {
   CHIEF_JUDGE,
   CLOSED_CASE_STATUSES,
   DOCKET_NUMBER_SUFFIXES,
-  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
@@ -25,11 +24,6 @@ describe('caseInventoryReportHelper', () => {
       getConstants: () => mockConstants,
     },
   );
-
-  applicationContext.getCurrentUser = () => ({
-    role: ROLES.docketClerk,
-    userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
-  });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
     const result = runCompute(caseInventoryReportHelper, {

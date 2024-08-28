@@ -14,6 +14,7 @@ jest.mock('./generateChangeOfAddress');
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateUserContactInformationInteractor', () => {
   let mockUser;
@@ -29,10 +30,6 @@ describe('updateUserContactInformationInteractor', () => {
     postalCode: '61234',
     state: 'IL',
   };
-
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-  });
 
   beforeEach(() => {
     mockUser = {
@@ -62,34 +59,43 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should throw unauthorized error when user does not have permission to update contact information', async () => {
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
-    };
+    mockUser = mockPetitionsClerkUser;
 
     await expect(
-      updateUserContactInformationInteractor(applicationContext, {
-        contactInfo,
-        userId: mockUser.userId,
-      } as any),
+      updateUserContactInformationInteractor(
+        applicationContext,
+        {
+          contactInfo,
+          userId: mockUser.userId,
+        } as any,
+        mockUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should throw unauthorized error when the user attempts to modify contact information for a different user', async () => {
     await expect(
-      updateUserContactInformationInteractor(applicationContext, {
-        contactInfo,
-        userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
-      } as any),
+      updateUserContactInformationInteractor(
+        applicationContext,
+        {
+          contactInfo,
+          userId: 'asdf1234-f6cd-442c-a168-202db587f16f',
+        } as any,
+        mockUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo: mockUser.contact,
-      firmName: 'broken',
-      userId: mockUser.userId,
-    });
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo: mockUser.contact,
+        firmName: 'broken',
+        userId: mockUser.userId,
+      },
+      mockUser,
+    );
 
     expect(applicationContext.getUseCases().updateUser).not.toHaveBeenCalled();
     expect(generateChangeOfAddress).not.toHaveBeenCalled();
@@ -119,10 +125,14 @@ describe('updateUserContactInformationInteractor', () => {
       });
 
     await expect(
-      updateUserContactInformationInteractor(applicationContext, {
-        contactInfo,
-        userId: mockUser.userId,
-      } as any),
+      updateUserContactInformationInteractor(
+        applicationContext,
+        {
+          contactInfo,
+          userId: mockUser.userId,
+        } as any,
+        mockUser,
+      ),
     ).rejects.toThrow('something wicked');
 
     expect(
@@ -148,10 +158,14 @@ describe('updateUserContactInformationInteractor', () => {
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: mockUser.userId,
-    } as any);
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        userId: mockUser.userId,
+      } as any,
+      mockUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -182,10 +196,14 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: mockUser.userId,
-    } as any);
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        userId: mockUser.userId,
+      } as any,
+      mockUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -202,10 +220,14 @@ describe('updateUserContactInformationInteractor', () => {
     });
 
     await expect(
-      updateUserContactInformationInteractor(applicationContext, {
-        contactInfo,
-        userId: mockUser.userId,
-      } as any),
+      updateUserContactInformationInteractor(
+        applicationContext,
+        {
+          contactInfo,
+          userId: mockUser.userId,
+        } as any,
+        mockUser,
+      ),
     ).rejects.toThrow();
 
     expect(
@@ -224,10 +246,14 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should generate a change of address document', async () => {
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: mockUser.userId,
-    } as any);
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        userId: mockUser.userId,
+      } as any,
+      mockUser,
+    );
 
     expect(generateChangeOfAddress).toHaveBeenCalled();
   });
@@ -235,26 +261,30 @@ describe('updateUserContactInformationInteractor', () => {
   it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
 
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: mockUser.userId,
-    } as any);
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        userId: mockUser.userId,
+      } as any,
+      mockUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
         .isUpdatingInformation,
     ).not.toBeDefined();
 
-    const notificatsionCalls =
+    const notificationCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls;
 
     expect(
-      notificatsionCalls[notificatsionCalls.length - 1][0].message.action,
+      notificationCalls[notificationCalls.length - 1][0].message.action,
     ).toEqual('user_contact_full_update_complete');
 
     expect(
-      notificatsionCalls[notificatsionCalls.length - 1][0].message.user,
+      notificationCalls[notificationCalls.length - 1][0].message.user,
     ).toMatchObject({
       contact: contactInfo,
     });
@@ -263,10 +293,14 @@ describe('updateUserContactInformationInteractor', () => {
   it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
 
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: mockUser.userId,
-    } as any);
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        userId: mockUser.userId,
+      } as any,
+      mockUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls.length,
@@ -282,11 +316,15 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      firmName: 'testing',
-      userId: mockUser.userId,
-    });
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        firmName: 'testing',
+        userId: mockUser.userId,
+      },
+      mockUser,
+    );
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
         .user,
@@ -303,11 +341,15 @@ describe('updateUserContactInformationInteractor', () => {
         contact: contactInfo,
       }));
 
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      firmName: mockUser.firmName,
-      userId: mockUser.userId,
-    });
+    await updateUserContactInformationInteractor(
+      applicationContext,
+      {
+        contactInfo,
+        firmName: mockUser.firmName,
+        userId: mockUser.userId,
+      },
+      mockUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser,

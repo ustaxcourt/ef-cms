@@ -78,7 +78,7 @@ describe('validateNoteOnCaseDetailAction', () => {
 
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1],
+        .calls[0][0],
     ).toMatchObject({ useCaseEntity: true });
   });
 });
