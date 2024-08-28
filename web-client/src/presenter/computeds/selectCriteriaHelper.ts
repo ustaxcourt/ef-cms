@@ -51,13 +51,9 @@ export const selectCriteriaHelper = (
     }))
     .filter(option => blockedCases.some(c => c.status === option.value));
 
-  const procedureTypes = Object.entries(PROCEDURE_TYPES_MAP)
-    .map(([key, value]) => ({ key, value }))
-    .filter(procedureType =>
-      blockedCases.some(
-        blockedCase => blockedCase.procedureType === procedureType.value,
-      ),
-    );
+  const procedureTypes = Object.entries(PROCEDURE_TYPES_MAP).map(
+    ([key, value]) => ({ key, value }),
+  );
 
   const sortByLabel = (a, b) => {
     if (a.value < b.value) return -1;

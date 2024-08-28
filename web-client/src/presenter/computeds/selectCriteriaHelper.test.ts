@@ -135,14 +135,23 @@ describe('selectCriteriaHelper', () => {
   });
 
   describe('Procedure Types', () => {
-    it('should return an empty array of procedure types when there are no blocked cases', () => {
+    it('should return all procedure types even when there are no blocked cases', () => {
       const { procedureTypes } = runCompute(selectCriteriaHelper, {
         state: {
           blockedCases: [],
         },
       });
 
-      expect(procedureTypes).toEqual([]);
+      expect(procedureTypes).toEqual([
+        {
+          key: 'regular',
+          value: 'Regular',
+        },
+        {
+          key: 'small',
+          value: 'Small',
+        },
+      ]);
     });
 
     it('should return all procedure types when there is a blocked case for each option', () => {
