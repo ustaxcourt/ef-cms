@@ -2,11 +2,11 @@ import {
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
-} from './EntityConstants';
+} from '../EntityConstants';
 import { DocketEntry } from './DocketEntry';
 import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,

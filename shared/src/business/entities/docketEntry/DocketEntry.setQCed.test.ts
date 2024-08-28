@@ -1,6 +1,6 @@
 import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('setQCed', () => {
   it('updates the document QC information with user name, id, and date', () => {

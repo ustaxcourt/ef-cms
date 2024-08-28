@@ -2,7 +2,7 @@ import {
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   REVISED_TRANSCRIPT_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} from './EntityConstants';
+} from '../EntityConstants';
 import { DocketEntry } from './DocketEntry';
 import {
   calculateISODate,
