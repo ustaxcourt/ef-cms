@@ -1,18 +1,19 @@
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
-import { ROLES } from '../entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { updateQcCompleteForTrialInteractor } from './updateQcCompleteForTrialInteractor';
 
 describe('updateQcCompleteForTrialInteractor', () => {
-  let user;
   let mockLock;
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) =>
@@ -28,26 +29,20 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should throw an error if the user is unauthorized to update a trial session', async () => {
-    user = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
-      updateQcCompleteForTrialInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        qcCompleteForTrial: true,
-        trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
-      }),
+      updateQcCompleteForTrialInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          qcCompleteForTrial: true,
+          trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for trial session QC complete');
   });
 
   it('should call updateCase with the updated qcCompleteForTrial value and return the updated case', async () => {
-    user = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsClerk',
-    };
-
     const result = await updateQcCompleteForTrialInteractor(
       applicationContext,
       {
@@ -55,6 +50,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
         qcCompleteForTrial: true,
         trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
       },
+      mockPetitionsClerkUser,
     );
     expect(result.qcCompleteForTrial).toEqual({
       '10aa100f-0330-442b-8423-b01690c76e3f': true,
@@ -65,11 +61,15 @@ describe('updateQcCompleteForTrialInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      updateQcCompleteForTrialInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        qcCompleteForTrial: true,
-        trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
-      }),
+      updateQcCompleteForTrialInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          qcCompleteForTrial: true,
+          trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -78,11 +78,15 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await updateQcCompleteForTrialInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      qcCompleteForTrial: true,
-      trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
-    });
+    await updateQcCompleteForTrialInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        qcCompleteForTrial: true,
+        trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

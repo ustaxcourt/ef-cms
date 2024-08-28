@@ -9,7 +9,7 @@ export const workQueueHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { USER_ROLES } = applicationContext.getConstants();

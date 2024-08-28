@@ -7,7 +7,9 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -30,9 +32,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
       ],
     };
-
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
@@ -55,15 +54,17 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should throw an error when the user is not authorized to serve externally filed documents', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId: mockClientConnectionId,
-        docketEntryId: '',
-        docketNumbers: [],
-        subjectCaseDocketNumber: '',
-      }),
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: '',
+          docketNumbers: [],
+          subjectCaseDocketNumber: '',
+        },
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -71,12 +72,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const mockNonExistentDocketEntryId = 'd9f645b1-c0b6-4782-a798-091760343573';
 
     await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockNonExistentDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: '',
-      }),
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockNonExistentDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: '',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry not found');
   });
 
@@ -94,12 +99,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       });
 
     await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: '',
-      }),
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: '',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry has already been served');
   });
 
@@ -117,12 +126,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       });
 
     await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: '',
-      }),
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: '',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Docket entry is already being served');
 
     expect(
@@ -144,12 +157,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -177,12 +194,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -206,12 +227,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -233,12 +258,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -260,12 +289,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -287,12 +320,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -301,12 +338,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should set the number of pages in the docket entry as the length of the document plus the coversheet', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -328,12 +369,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -357,12 +402,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockMemberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [mockMemberCaseDocketNumber],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
@@ -388,12 +437,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [mockMemberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [mockMemberCaseDocketNumber],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
@@ -418,12 +471,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ],
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
@@ -442,12 +499,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumber: memberCaseDocketNumber,
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [memberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [memberCaseDocketNumber],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
@@ -463,12 +524,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should call the persistence method to set and unset the pending service status on the subjectCase`s docket entry ONLY', async () => {
     const memberCaseDocketNumber = '999-16';
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [memberCaseDocketNumber],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [memberCaseDocketNumber],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -503,12 +568,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       );
 
     await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: mockCase.docketNumber,
-      }),
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: '',
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(mockErrorText);
 
     expect(
@@ -534,12 +603,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should call serveDocumentAndGetPaperServicePdf to generate a paper service pdf', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: '',
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
@@ -550,12 +623,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should send a serve_document_complete notification to the user', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -572,12 +649,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should send a notification including the DOCUMENT_SERVED_MESSAGES.SELECTED_CASES message when the docket entry was served on more than one case', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: ['102-34'],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: ['102-34'],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -586,12 +667,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should send a notification including the DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED message when the docket entry was served on exactly one case', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -600,12 +685,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should send a notification with a paper service url when at least one of the served cases has paper service parties', async () => {
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -620,12 +709,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         pdfUrl: undefined,
       });
 
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        subjectCaseDocketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock

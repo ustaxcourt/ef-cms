@@ -1,12 +1,16 @@
+import { type AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   MOCK_PRACTITIONER,
   irsPractitionerUser,
   petitionerUser,
-  privatePractitionerUser,
   validUser,
 } from '@shared/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateEntryOfAppearancePdfInteractor } from './generateEntryOfAppearancePdfInteractor';
+import {
+  mockIrsPractitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generateEntryOfAppearancePdfInteractor', () => {
   const mockFile = {
@@ -25,7 +29,6 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   ];
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(MOCK_PRACTITIONER);
@@ -38,19 +41,23 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to associate self with case', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
+    let bogusUser = {
       role: 'nope',
       userId: 'nope',
-    });
+    } as unknown as AuthUser;
 
     await expect(
-      generateEntryOfAppearancePdfInteractor(applicationContext, {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-        filers,
-        petitioners,
-      }),
+      generateEntryOfAppearancePdfInteractor(
+        applicationContext,
+        {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          filers,
+          petitioners,
+        },
+        bogusUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -65,6 +72,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
         filers,
         petitioners,
       },
+      mockPrivatePractitionerUser,
     );
 
     expect(
@@ -93,7 +101,6 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   });
 
   it('should use Respondent as the filer name when an IRS practitioner is filing an entry of appearance', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(irsPractitionerUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValueOnce(irsPractitionerUser);
@@ -108,6 +115,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
         filers,
         petitioners,
       },
+      mockIrsPractitionerUser,
     );
 
     expect(

@@ -2,15 +2,31 @@ import {
   IrsPractitioner,
   RawIrsPractitioner,
 } from '../entities/IrsPractitioner';
-import { NotFoundError } from '../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
-import { PrivatePractitioner } from '../entities/PrivatePractitioner';
+import {
+  PrivatePractitioner,
+  RawPrivatePractitioner,
+} from '../entities/PrivatePractitioner';
 import { RawUser, User } from '../entities/User';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+
+export type GetUserResponse =
+  | RawUser
+  | RawPractitioner
+  | RawIrsPractitioner
+  | RawPrivatePractitioner;
 
 export const getUserInteractor = async (
   applicationContext: IApplicationContext,
-): Promise<RawUser | RawPractitioner | RawIrsPractitioner> => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  authorizedUser: UnknownAuthUser,
+): Promise<GetUserResponse> => {
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnauthorizedError('Not authorized to get user');
+  }
 
   const user = await applicationContext
     .getPersistenceGateway()

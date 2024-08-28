@@ -4,10 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -21,11 +23,10 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const saveCaseDetailInternalEdit = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { caseToUpdate, docketNumber },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -45,7 +46,7 @@ export const saveCaseDetailInternalEdit = async (
       docketNumber,
     });
 
-  const originalCaseEntity = new Case(caseRecord, { applicationContext });
+  const originalCaseEntity = new Case(caseRecord, { authorizedUser });
 
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
@@ -89,7 +90,7 @@ export const saveCaseDetailInternalEdit = async (
   };
 
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
-    applicationContext,
+    authorizedUser,
   });
 
   if (!isEmpty(caseToUpdate.contactPrimary)) {
@@ -119,13 +120,14 @@ export const saveCaseDetailInternalEdit = async (
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
         applicationContext,
+        authorizedUser,
         caseEntity: caseEntityWithFormEdits,
         petitionerContactId: originalSecondaryContactId,
       });
   }
 
   const caseEntity = new Case(caseEntityWithFormEdits, {
-    applicationContext,
+    authorizedUser,
   });
 
   if (caseEntity.isPaper) {
@@ -149,8 +151,7 @@ export const saveCaseDetailInternalEdit = async (
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
       },
-      { applicationContext },
-      caseEntity,
+      { caseEntity },
     );
 
     await applicationContext.getPersistenceGateway().saveWorkItem({
@@ -163,10 +164,11 @@ export const saveCaseDetailInternalEdit = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).toRawObject();
+  return new Case(updatedCase, { authorizedUser }).toRawObject();
 };
 
 export const saveCaseDetailInternalEditInteractor = withLocking(
