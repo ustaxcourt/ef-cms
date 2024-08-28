@@ -49,8 +49,8 @@ export const Button = props => {
     iconColor && `fa-icon-${iconColor}`,
   );
 
-  const debouncedWrapper = debounce(async () => {
-    const results = onClick();
+  const debouncedWrapper = debounce(async (...args) => {
+    const results = onClick(...args);
     if (!(results instanceof Promise))
       throw new Error('Convert onClick method to async');
 
@@ -60,11 +60,11 @@ export const Button = props => {
   }, 500);
 
   const updatedOnClick = disableOnClick
-    ? async () => {
+    ? async (...args) => {
         setDisableButton(true);
-        await debouncedWrapper();
+        await debouncedWrapper(...args);
       }
-    : debounce(() => onClick(), 500);
+    : debounce((...args) => onClick(...args), 500);
 
   return (
     <Element
