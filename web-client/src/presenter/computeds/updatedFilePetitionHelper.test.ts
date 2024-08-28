@@ -104,7 +104,10 @@ describe('updatedFilePetitionHelper', () => {
       });
       expect(result.filingOptions).toEqual([
         { label: 'Petitioner', value: 'Individual petitioner' },
-        { label: 'Petitioner and spouse', value: 'Petitioner and spouse' },
+        {
+          label: 'Petitioner and petitioner spouse',
+          value: 'Petitioner and spouse',
+        },
         { label: 'A business', value: 'A business' },
         { label: 'Other', value: 'Other' },
       ]);

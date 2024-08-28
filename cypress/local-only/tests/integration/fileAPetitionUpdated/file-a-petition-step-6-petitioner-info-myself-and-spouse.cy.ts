@@ -91,7 +91,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
 
         cy.get('[data-testid="contact-primary-email"]')
           .eq(0)
-          .should('have.text', contactInfo.email);
+          .should('contain.text', contactInfo.email);
 
         cy.get('[data-testid="contact-name"]')
           .eq(1)
@@ -130,7 +130,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           .should('contain.text', secondaryContactInfo.phone);
 
         cy.get('[data-testid="contact-info-email"]').should(
-          'have.text',
+          'contain.text',
           secondaryContactInfo.email,
         );
 
@@ -199,7 +199,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           .should('contain.text', secondaryContactInfo.phone);
 
         cy.get('[data-testid="contact-info-email"]').should(
-          'have.text',
+          'contain.text',
           secondaryContactInfo.email,
         );
       });
@@ -261,7 +261,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           .should('contain.text', secondaryContactInfo.phone);
 
         cy.get('[data-testid="contact-info-email"]').should(
-          'have.text',
+          'contain.text',
           secondaryContactInfo.email,
         );
       });
@@ -337,7 +337,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
           .should('contain.text', secondaryContactInfo.phone);
 
         cy.get('[data-testid="contact-info-email"]').should(
-          'have.text',
+          'contain.text',
           secondaryContactInfo.email,
         );
       });
@@ -358,9 +358,11 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       it('should not display email information for spouse', () => {
         cy.get('[data-testid="contact-info-email"]')
           .eq(0)
-          .should('have.text', 'privatePractitioner1@example.com');
+          .should('contain.text', 'privatePractitioner1@example.com');
         cy.get('[data-testid="service-email-label"]').should('not.exist');
-        cy.get('[data-testid="contact-info-email"]').eq(1).should('not.exist');
+        cy.get('[data-testid="contact-info-email"]')
+          .eq(1)
+          .should('contain.text', 'Email not provided');
         cy.get('[data-testid="register-for-e-filing"]').should('not.exist');
       });
     });

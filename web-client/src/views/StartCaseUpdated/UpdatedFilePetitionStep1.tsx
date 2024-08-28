@@ -41,7 +41,7 @@ export const UpdatedFilePetitionStep1 = connect(
         <p className="margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
-        <h2>I am filing this petition on behalf of...</h2>
+        <h2>I am filing this Petition on behalf of...</h2>
         <FormGroup
           errorMessageId="filling-type-error-message"
           errorText={validationErrors.filingType}
@@ -88,7 +88,6 @@ export const UpdatedFilePetitionStep1 = connect(
           form.filingType === 'Individual petitioner') && (
           <ContactPrimaryUpdated
             addressInfo={form.contactPrimary}
-            customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
@@ -102,7 +101,6 @@ export const UpdatedFilePetitionStep1 = connect(
             {isPractitioner && <h2>Petitioner&#39;s information</h2>}
             <ContactPrimaryUpdated
               addressInfo={form.contactPrimary}
-              customPhoneMessage={updatedFilePetitionHelper.customPhoneMessage}
               handleBlur={petitionGenerationLiveValidationSequence}
               handleChange={updateFormValueUpdatedSequence}
               handleChangeCountryType={updateFormValueCountryTypeSequence}
@@ -110,7 +108,7 @@ export const UpdatedFilePetitionStep1 = connect(
               registerRef={registerRef}
             />
             <h2 data-testid="spouse-header">
-              {isPetitioner ? "Your spouse's" : "Spouse's"} information
+              {isPetitioner ? "Your spouse's" : 'Petitioner Spouse'} information
             </h2>
             <PetitionerAndSpouseInfo
               form={form}
@@ -143,7 +141,6 @@ export const UpdatedFilePetitionStep1 = connect(
               updateFormValueCountryTypeSequence
             }
             updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
-            updatedFilePetitionHelper={updatedFilePetitionHelper}
             validationErrors={validationErrors}
           />
         )}
@@ -166,7 +163,6 @@ export const UpdatedFilePetitionStep1 = connect(
               updateFormValueCountryTypeSequence
             }
             updateFormValueUpdatedSequence={updateFormValueUpdatedSequence}
-            updatedFilePetitionHelper={updatedFilePetitionHelper}
             validationErrors={validationErrors}
           />
         )}

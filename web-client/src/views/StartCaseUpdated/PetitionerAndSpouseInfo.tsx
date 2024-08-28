@@ -36,7 +36,7 @@ export function PetitionerAndSpouseInfo({
         >
           {isPetitioner
             ? 'Is your spouse deceased?'
-            : 'Is the spouse deceased?'}
+            : 'Is the petitioner spouse deceased?'}
         </legend>
         {['Yes', 'No'].map((isSpouseDeceased, idx) => (
           <div className="usa-radio usa-radio__inline" key={isSpouseDeceased}>
@@ -86,7 +86,7 @@ export function PetitionerAndSpouseInfo({
           handleChangeCountryType={updateFormValueCountryTypeSequence}
           nameLabel="Full name of deceased spouse"
           registerRef={registerRef}
-          showEmailAndElectronicServiceConsent={isPetitioner}
+          showElectronicServiceConsent={isPetitioner}
           useSameAsPrimary={useSameAsPrimary}
         />
       )}

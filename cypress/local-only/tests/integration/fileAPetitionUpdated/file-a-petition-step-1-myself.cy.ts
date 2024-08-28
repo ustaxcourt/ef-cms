@@ -52,14 +52,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         );
       });
 
-      it('should display correct label message for phone number', () => {
-        cy.get('[data-testid="filing-type-0"]').click();
-        cy.get('[data-testid="contact-primary-phone-message"]').should(
-          'have.text',
-          'If you do not have a current phone number, enter N/A.',
-        );
-      });
-
       it('should display validation error messages to all required fields left empty', () => {
         const ERROR_MESSAGES_DATA_TEST_ID = [
           'primary-contact-name-error-message',
@@ -192,7 +184,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       it('should display correct filing type options for private practitioner', () => {
         const EXPECTED_FILING_TYPES: string[] = [
           'Petitioner',
-          'Petitioner and spouse',
+          'Petitioner and petitioner spouse',
           'A business',
           'Other',
         ];
@@ -207,14 +199,6 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         cy.get('[data-testid="contact-primary-name-label"]').should(
           'have.text',
           'Petitioner’s full name',
-        );
-      });
-
-      it('should display correct label message for phone number', () => {
-        cy.get('[data-testid="filing-type-0"]').click();
-        cy.get('[data-testid="contact-primary-phone-message"]').should(
-          'have.text',
-          'If they do not have a current phone number, enter N/A.',
         );
       });
     });

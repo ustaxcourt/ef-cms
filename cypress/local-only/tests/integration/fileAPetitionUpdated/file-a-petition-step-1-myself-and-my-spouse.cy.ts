@@ -193,6 +193,12 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           cy.get('[data-testid="warning-alert"]').should('be.visible');
         });
 
+        it('should not display spouse consent message', () => {
+          cy.get('[data-testid="have-spouse-consent-label"]').should(
+            'not.exist',
+          );
+        });
+
         it('should allow user to go to step 3 if everything is filled out correctly', () => {
           const ERROR_MESSAGES_DATA_TEST_ID: InputFillType[] = [
             {
@@ -501,36 +507,31 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
       it('should display correct spouse header', () => {
         cy.get('[data-testid="spouse-header"]').should(
           'have.text',
-          "Spouse's information",
+          'Petitioner Spouse information',
         );
       });
 
       it('should display correct is spouse deceased text', () => {
         cy.get('[data-testid="deceased-spouse-legend"]').should(
           'have.text',
-          'Is the spouse deceased?',
+          'Is the petitioner spouse deceased?',
         );
       });
       describe('Spouse is not deceased', () => {
         beforeEach(() => {
           cy.get('[data-testid="is-spouse-deceased-1"]').click();
         });
-        it('should display correct text for spouse consent message', () => {
-          cy.get('[data-testid="warning-alert"]').should(
-            'have.text',
-            'To file on behalf of a spouse, you must have consent. If you do not have the spouse’s consent, select “Petitioner” as the person you are filing on behalf of.',
-          );
-        });
-        it('should display correct text for have spouse consent label', () => {
+        it('should not display spouse consent checkbox', () => {
           cy.get('[data-testid="have-spouse-consent-label"]').should(
-            'have.text',
-            "I have the spouse's consent",
+            'not.exist',
           );
         });
 
-        it('should not display email fields for spouse', () => {
-          cy.get('[data-testid="have-spouse-consent-label"]').click();
-          cy.get('[data-testid="contact-secondary-email"]').should('not.exist');
+        it('should display email fields for spouse', () => {
+          cy.get('[data-testid="contact-secondary-email"]').should('exist');
+        });
+
+        it('should not display register for e-filing field', () => {
           cy.get(
             '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
           ).should('not.exist');
@@ -542,8 +543,11 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
           cy.get('[data-testid="is-spouse-deceased-0"]').click();
         });
 
-        it('should not display email fields for spouse', () => {
-          cy.get('[data-testid="contact-secondary-email"]').should('not.exist');
+        it('should display email fields for spouse', () => {
+          cy.get('[data-testid="contact-secondary-email"]').should('exist');
+        });
+
+        it('should not display register for e-filing field', () => {
           cy.get(
             '[data-testid="register-email-address-provided-above-for-electronic-filing-and-service-label"]',
           ).should('not.exist');

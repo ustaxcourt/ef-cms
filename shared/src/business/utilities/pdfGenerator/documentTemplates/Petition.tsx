@@ -248,9 +248,12 @@ export const Petition = ({
                     ? contactSecondary.phone
                     : 'Phone number not provided'}
                 </div>
-                {isPetitioner && contactSecondary.paperPetitionEmail && (
-                  <div>{contactSecondary.paperPetitionEmail}</div>
-                )}
+
+                <div>
+                  <b>Email: </b>
+                  {contactSecondary.paperPetitionEmail || 'Email not provided'}
+                </div>
+
                 {isPetitioner && (
                   <div>
                     <b>Register for electronic filing and service: </b>
