@@ -5,6 +5,11 @@ import {
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { partition, uniqBy } from 'lodash';
 
@@ -27,11 +32,16 @@ export type TAssociatedCase = {
 
 export const getCasesForUserInteractor = async (
   applicationContext: IApplicationContext,
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   openCaseList: TAssociatedCase[];
   closedCaseList: TAssociatedCase[];
 }> => {
-  const { userId } = await applicationContext.getCurrentUser();
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnauthorizedError('Invalid User attempting to get cases');
+  }
+
+  const { userId } = authorizedUser;
 
   const docketNumbers = (
     await applicationContext.getPersistenceGateway().getCasesForUser({

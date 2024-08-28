@@ -6,13 +6,13 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '../../../../../shared/src/business/dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getTrialSessionsInteractor = async (
   applicationContext: ServerApplicationContext,
+  authorizedUser: UnknownAuthUser,
 ): Promise<TrialSessionInfoDTO[]> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -22,9 +22,7 @@ export const getTrialSessionsInteractor = async (
       applicationContext,
     });
 
-  const validatedSessions = TrialSession.validateRawCollection(trialSessions, {
-    applicationContext,
-  });
+  const validatedSessions = TrialSession.validateRawCollection(trialSessions);
 
   return validatedSessions.map(
     trialSession => new TrialSessionInfoDTO(trialSession),

@@ -1,6 +1,7 @@
 import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialCalendar } from '@shared/business/utilities/pdfGenerator/documentTemplates/TrialCalendar';
 import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
@@ -46,9 +47,9 @@ export const trialCalendar = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: TrialCalendarType;
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { cases, sessionDetail } = data;
 
   const trialCalendarTemplate = ReactDOM.renderToString(

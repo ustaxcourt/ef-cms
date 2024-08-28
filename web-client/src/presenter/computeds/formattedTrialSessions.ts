@@ -184,7 +184,7 @@ export const formattedTrialSessions = (
 ): any => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSession.trialSessionId);
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
 
   const trialSessionFilters = pickBy(
     omit(get(state.screenMetadata.trialSessionFilters), 'status'),

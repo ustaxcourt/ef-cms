@@ -1,3 +1,4 @@
+import { checkForReadyForTrialCasesInteractor } from '@web-api/business/useCases/checkForReadyForTrialCasesInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -8,7 +9,5 @@ import { genericHandler } from '../../genericHandler';
  */
 export const checkForReadyForTrialCasesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .checkForReadyForTrialCasesInteractor(applicationContext);
+    return await checkForReadyForTrialCasesInteractor(applicationContext);
   });

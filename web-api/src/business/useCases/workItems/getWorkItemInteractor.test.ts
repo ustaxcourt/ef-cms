@@ -1,9 +1,10 @@
-import {
-  DOCKET_SECTION,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getWorkItemInteractor } from './getWorkItemInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getWorkItemInteractor', () => {
   let mockWorkItem = {
@@ -28,26 +29,19 @@ describe('getWorkItemInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
-  const mockPetitionerUser = {
-    role: ROLES.petitioner,
-    userId: 'petitioner',
-  };
-
-  const mockDocketClerkUser = {
-    role: ROLES.docketClerk,
-    userId: 'docketclerk',
-  };
-
   it('throws an error if the work item was not found', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
     applicationContext
       .getPersistenceGateway()
       .getWorkItemById.mockResolvedValue(null);
     let error;
     try {
-      await getWorkItemInteractor(applicationContext, {
-        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
+      await getWorkItemInteractor(
+        applicationContext,
+        {
+          workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockPetitionerUser,
+      );
     } catch (e) {
       error = e;
     }
@@ -55,16 +49,19 @@ describe('getWorkItemInteractor', () => {
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
     applicationContext
       .getPersistenceGateway()
       .getWorkItemById.mockResolvedValue(mockWorkItem);
 
     let error;
     try {
-      await getWorkItemInteractor(applicationContext, {
-        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
+      await getWorkItemInteractor(
+        applicationContext,
+        {
+          workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockPetitionerUser,
+      );
     } catch (e) {
       error = e;
     }
@@ -72,14 +69,17 @@ describe('getWorkItemInteractor', () => {
   });
 
   it('successfully returns the work item for a docketclerk', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockDocketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getWorkItemById.mockResolvedValue(mockWorkItem);
 
-    const result = await getWorkItemInteractor(applicationContext, {
-      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    const result = await getWorkItemInteractor(
+      applicationContext,
+      {
+        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
     expect(result).toMatchObject({
       docketEntry: { sentBy: 'petitioner' },
       docketNumber: '101-18',
