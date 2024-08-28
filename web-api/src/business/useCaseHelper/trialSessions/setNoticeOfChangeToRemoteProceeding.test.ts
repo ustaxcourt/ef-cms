@@ -6,7 +6,10 @@ import {
 } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
+import {
+  mockDocketClerkUser,
+  mockTrialClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {
@@ -19,7 +22,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     },
-    { applicationContext },
+    { authorizedUser: mockDocketClerkUser },
   );
 
   beforeEach(() => {
@@ -31,12 +34,15 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
   });
 
   it('should generate and serve a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      caseEntity: mockOpenCase,
-      newPdfDoc: mockNewPdf,
-      newTrialSessionEntity: MOCK_TRIAL_REMOTE,
-      user: petitionsClerkUser,
-    });
+    await setNoticeOfChangeToRemoteProceeding(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        newPdfDoc: mockNewPdf,
+        newTrialSessionEntity: MOCK_TRIAL_REMOTE,
+      },
+      mockTrialClerkUser,
+    );
 
     expect(
       applicationContext.getUseCases()
@@ -63,7 +69,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
       newPdfDoc: mockNewPdf,
       noticePdf: mockNoticePdf,
-      user: petitionsClerkUser,
     });
   });
 });

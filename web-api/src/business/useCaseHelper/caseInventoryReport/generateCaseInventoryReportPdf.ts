@@ -4,17 +4,11 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * Generate Case Inventory Report PDF
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity a case entity with its documents
- * @returns {Promise<*>} the promise of the document having been uploaded
- */
 export const generateCaseInventoryReportPdf = async ({
   applicationContext,
+  authorizedUser,
   cases,
   filters,
 }: {
@@ -24,10 +18,9 @@ export const generateCaseInventoryReportPdf = async ({
     associatedJudge?: string;
     status?: string;
   };
+  authorizedUser: UnknownAuthUser;
 }): Promise<{ fileId: string; url: string }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
 

@@ -21,9 +21,7 @@ let trialSessionToAdd;
 
 describe('createTrialSessionAndWorkingCopy', () => {
   beforeEach(() => {
-    trialSessionToAdd = new TrialSession(trialSessionMetadata, {
-      applicationContext,
-    });
+    trialSessionToAdd = new TrialSession(trialSessionMetadata);
 
     applicationContext
       .getPersistenceGateway()
@@ -84,20 +82,15 @@ describe('createTrialSessionAndWorkingCopy', () => {
       await expect(
         createTrialSessionAndWorkingCopy({
           applicationContext,
-          trialSessionToAdd: new TrialSession(
-            {
-              trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-            },
-            { applicationContext },
-          ),
+          trialSessionToAdd: new TrialSession({
+            trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
+          }),
         }),
       ).rejects.toThrow('The TrialSession entity was invalid');
     });
 
     it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
-      const trialSessionToCreate = new TrialSession(trialSessionToAdd, {
-        applicationContext,
-      });
+      const trialSessionToCreate = new TrialSession(trialSessionToAdd);
       delete trialSessionToCreate.trialSessionId;
 
       await expect(

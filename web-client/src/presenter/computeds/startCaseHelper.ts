@@ -16,7 +16,7 @@ export const startCaseHelper = (
     USER_ROLES,
   } = applicationContext.getConstants();
   const form = get(state.form);
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 

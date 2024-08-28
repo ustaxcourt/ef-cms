@@ -3,7 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -15,11 +17,10 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const removePdfFromDocketEntry = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -32,7 +33,7 @@ export const removePdfFromDocketEntry = async (
     });
 
   const caseEntity = new Case(caseRecord, {
-    applicationContext,
+    authorizedUser,
   });
 
   const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
@@ -50,10 +51,11 @@ export const removePdfFromDocketEntry = async (
       .getUseCaseHelpers()
       .updateCaseAndAssociations({
         applicationContext,
+        authorizedUser,
         caseToUpdate: caseEntity,
       });
 
-    return new Case(updatedCase, { applicationContext }).toRawObject();
+    return new Case(updatedCase, { authorizedUser }).toRawObject();
   }
 };
 

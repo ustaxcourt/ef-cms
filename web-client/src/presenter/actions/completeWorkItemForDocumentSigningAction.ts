@@ -23,7 +23,6 @@ export const completeWorkItemForDocumentSigningAction = async ({
     await applicationContext
       .getUseCases()
       .completeWorkItemInteractor(applicationContext, {
-        userId: applicationContext.getCurrentUser().userId,
         workItemId: workItemIdToClose,
       });
   }

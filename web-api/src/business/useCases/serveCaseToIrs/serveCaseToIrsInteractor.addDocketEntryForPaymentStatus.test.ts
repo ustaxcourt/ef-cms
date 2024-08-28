@@ -2,14 +2,13 @@ import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { PAYMENT_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addDocketEntryForPaymentStatus } from './serveCaseToIrsInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('addDocketEntryForPaymentStatus', () => {
-  let user;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
+  let user = mockPetitionerUser;
 
   it('adds a docketRecord for a paid petition payment', async () => {
     const caseEntity = new Case(
@@ -18,10 +17,9 @@ describe('addDocketEntryForPaymentStatus', () => {
         petitionPaymentDate: 'Today',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
     await addDocketEntryForPaymentStatus({
-      applicationContext,
       caseEntity,
       user,
     });
@@ -43,10 +41,9 @@ describe('addDocketEntryForPaymentStatus', () => {
         petitionPaymentWaivedDate: 'Today',
         petitioners: undefined,
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
     await addDocketEntryForPaymentStatus({
-      applicationContext,
       caseEntity,
       user,
     });

@@ -12,6 +12,10 @@ import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
@@ -81,13 +85,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-        role: ROLES.petitionsClerk,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    );
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
       new User({
@@ -103,32 +100,38 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      fileCourtIssuedOrderInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentType: 'Order to Show Cause',
-          eventCode: 'OSC',
+      fileCourtIssuedOrderInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentType: 'Order to Show Cause',
+            eventCode: 'OSC',
+          },
+          primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should add order document to case', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentType: 'Order to Show Cause',
-        eventCode: 'OSC',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -140,19 +143,23 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to do anything',
-        documentType: 'Order',
-        draftOrderState: {},
-        eventCode: 'O',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order to do anything',
+          documentType: 'Order',
+          draftOrderState: {},
+          eventCode: 'O',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -171,24 +178,28 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should delete draftOrderState properties if they exists on the documentMetadata, after saving the document', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: {},
-        documentTitle: 'Order to do anything',
-        documentType: 'Order',
-        draftOrderState: {
-          documentContents: 'something',
-          editorDelta: 'something',
-          richText: 'something',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentContents: {},
+          documentTitle: 'Order to do anything',
+          documentType: 'Order',
+          draftOrderState: {
+            documentContents: 'something',
+            editorDelta: 'something',
+            richText: 'something',
+          },
+          eventCode: 'O',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
         },
-        eventCode: 'O',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -205,18 +216,22 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add a generic notice document to case, set freeText to the document title, and set the document to signed', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Notice to be nice',
-        documentType: 'Notice',
-        eventCode: 'NOT',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Notice to be nice',
+          documentType: 'Notice',
+          eventCode: 'NOT',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -233,18 +248,22 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should store documentMetadata.documentContents in S3 and delete from data sent to persistence', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: 'I am some document contents',
-        documentType: 'Order to Show Cause',
-        eventCode: 'OSC',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentContents: 'I am some document contents',
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -266,18 +285,22 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should append docket number with suffix and case caption to document contents before storing', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: 'I am some document contents',
-        documentType: 'Order to Show Cause',
-        eventCode: 'OSC',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentContents: 'I am some document contents',
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     const savedDocumentContents = JSON.parse(
       applicationContext
@@ -290,18 +313,22 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should append the docket number and case caption to the document contents if document contents was defined', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: 'hello',
-        documentType: 'Order to Show Cause',
-        eventCode: 'OSC',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentContents: 'hello',
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     const savedDocumentContents = JSON.parse(
       applicationContext
@@ -335,19 +362,23 @@ describe('fileCourtIssuedOrderInteractor', () => {
         },
       ]);
 
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to do anything',
-        documentType: 'Order',
-        eventCode: 'O',
-        parentMessageId: '6c1fd626-c1e1-4367-bca6-e00f9ef98cf5',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order to do anything',
+          documentType: 'Order',
+          eventCode: 'O',
+          parentMessageId: '6c1fd626-c1e1-4367-bca6-e00f9ef98cf5',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateMessage,
@@ -386,19 +417,23 @@ describe('fileCourtIssuedOrderInteractor', () => {
         },
       ]);
 
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to do anything',
-        documentType: 'Order',
-        eventCode: 'O',
-        parentMessageId: '6c1fd626-c1e1-4367-bca6-e00f9ef98cf5',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order to do anything',
+          documentType: 'Order',
+          eventCode: 'O',
+          parentMessageId: '6c1fd626-c1e1-4367-bca6-e00f9ef98cf5',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     const lastDocumentIndex =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -417,7 +452,33 @@ describe('fileCourtIssuedOrderInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      fileCourtIssuedOrderInteractor(applicationContext, {
+      fileCourtIssuedOrderInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            documentContents: 'I am some document contents',
+            documentType: 'Order to Show Cause',
+            eventCode: 'OSC',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await fileCourtIssuedOrderInteractor(
+      applicationContext,
+      {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentContents: 'I am some document contents',
@@ -428,27 +489,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
           signedJudgeName: 'Dredd',
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should acquire and remove the lock on the case', async () => {
-    await fileCourtIssuedOrderInteractor(applicationContext, {
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentContents: 'I am some document contents',
-        documentType: 'Order to Show Cause',
-        eventCode: 'OSC',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

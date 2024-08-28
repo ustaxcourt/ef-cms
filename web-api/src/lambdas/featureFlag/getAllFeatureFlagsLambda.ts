@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 
 /**
  * gets the value of the provided feature flag
@@ -10,9 +11,7 @@ export const getAllFeatureFlagsLambda = event =>
   genericHandler(
     event,
     ({ applicationContext }) => {
-      return applicationContext
-        .getUseCases()
-        .getAllFeatureFlagsInteractor(applicationContext);
+      return getAllFeatureFlagsInteractor(applicationContext);
     },
     { bypassMaintenanceCheck: true },
   );

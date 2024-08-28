@@ -6,22 +6,16 @@ import { TrialSessionInfoDTO } from '../../../../../shared/src/business/dto/tria
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsInteractor } from './getTrialSessionsInteractor';
-import { omit } from 'lodash';
 import {
-  petitionerUser,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
+import { omit } from 'lodash';
 
 describe('getTrialSessionsInteractor', () => {
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-  });
-
   it('should throw an unauthorized error when the user does not have permission to view trial sessions', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      getTrialSessionsInteractor(applicationContext),
+      getTrialSessionsInteractor(applicationContext, mockPetitionerUser),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
@@ -33,7 +27,7 @@ describe('getTrialSessionsInteractor', () => {
       ]);
 
     await expect(
-      getTrialSessionsInteractor(applicationContext),
+      getTrialSessionsInteractor(applicationContext, mockPetitionsClerkUser),
     ).rejects.toThrow('The TrialSession entity was invalid.');
   });
 
@@ -45,8 +39,10 @@ describe('getTrialSessionsInteractor', () => {
         MOCK_TRIAL_REGULAR,
       ]);
 
-    const trialSessionDTOs =
-      await getTrialSessionsInteractor(applicationContext);
+    const trialSessionDTOs = await getTrialSessionsInteractor(
+      applicationContext,
+      mockPetitionsClerkUser,
+    );
 
     trialSessionDTOs.forEach(trialSessionDTO => {
       expect(trialSessionDTO instanceof TrialSessionInfoDTO).toBe(true);

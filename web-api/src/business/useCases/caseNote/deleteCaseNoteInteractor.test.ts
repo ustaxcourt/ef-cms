@@ -1,16 +1,17 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteCaseNoteInteractor', () => {
   let mockLock;
+  let mockUser: AuthUser;
 
   beforeAll(() => {
     applicationContext
@@ -20,22 +21,20 @@ describe('deleteCaseNoteInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    const mockUser = new User({
-      name: 'Judge Colvin',
-      role: ROLES.judge,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    mockUser = mockJudgeUser;
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
+    mockUser = {} as AuthUser;
     let error;
     try {
-      await deleteCaseNoteInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      await deleteCaseNoteInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockUser,
+      );
     } catch (err) {
       error = err;
     }
@@ -62,9 +61,13 @@ describe('deleteCaseNoteInteractor', () => {
     let result;
 
     try {
-      result = await deleteCaseNoteInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+      result = await deleteCaseNoteInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockUser,
+      );
     } catch (e) {
       error = e;
     }
@@ -84,9 +87,13 @@ describe('deleteCaseNoteInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      deleteCaseNoteInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      deleteCaseNoteInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -95,9 +102,13 @@ describe('deleteCaseNoteInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await deleteCaseNoteInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await deleteCaseNoteInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

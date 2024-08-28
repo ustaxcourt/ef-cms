@@ -1,19 +1,22 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 const getDocumentInfo = ({
   applicationContext,
+  authorizedUser,
   documentData,
   petitioners,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: UnknownAuthUser;
   documentData: any;
   petitioners?: any[];
 }) => {
   const doc = new DocketEntry(documentData, {
-    applicationContext,
+    authorizedUser,
     petitioners,
   });
 
@@ -51,6 +54,7 @@ export const generatePrintableFilingReceiptInteractor = async (
     documentsFiled: any;
     fileAcrossConsolidatedGroup: boolean;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -59,7 +63,9 @@ export const generatePrintableFilingReceiptInteractor = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseRecord, { applicationContext }).validate();
+  let caseEntity = new Case(caseRecord, {
+    authorizedUser,
+  }).validate();
 
   if (fileAcrossConsolidatedGroup && !caseRecord.leadDocketNumber) {
     throw new Error(
@@ -80,12 +86,13 @@ export const generatePrintableFilingReceiptInteractor = async (
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
       .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
     caseEntity = new Case(leadCase, {
-      applicationContext,
+      authorizedUser,
     }).validate();
   }
 
   const primaryDocument = getDocumentInfo({
     applicationContext,
+    authorizedUser,
     documentData: documentsFiled,
     petitioners: caseRecord.petitioners,
   });
@@ -101,21 +108,30 @@ export const generatePrintableFilingReceiptInteractor = async (
   if (documentsFiled.hasSupportingDocuments) {
     filingReceiptDocumentParams.supportingDocuments =
       documentsFiled.supportingDocuments.map(doc =>
-        getDocumentInfo({ applicationContext, documentData: doc }),
+        getDocumentInfo({
+          applicationContext,
+          authorizedUser,
+          documentData: doc,
+        }),
       );
   }
 
   if (documentsFiled.secondaryDocumentFile) {
     filingReceiptDocumentParams.secondaryDocument = getDocumentInfo({
       applicationContext,
+      authorizedUser,
       documentData: documentsFiled.secondaryDocument,
-    } as any);
+    });
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
     filingReceiptDocumentParams.secondarySupportingDocuments =
       documentsFiled.secondarySupportingDocuments.map(doc =>
-        getDocumentInfo({ applicationContext, documentData: doc }),
+        getDocumentInfo({
+          applicationContext,
+          authorizedUser,
+          documentData: doc,
+        }),
       );
   }
 

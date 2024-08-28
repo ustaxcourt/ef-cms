@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { IrsPractitioner } from '../IrsPractitioner';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('removeIrsPractitioner', () => {
   it('does not remove a practitioner if not found in irsPractitioners array', () => {
@@ -13,7 +13,7 @@ describe('removeIrsPractitioner', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -33,7 +33,7 @@ describe('removeIrsPractitioner', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

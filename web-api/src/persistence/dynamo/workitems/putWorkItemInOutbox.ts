@@ -1,10 +1,19 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createSectionOutboxRecords } from './createSectionOutboxRecords';
 import { createUserOutboxRecord } from './createUserOutboxRecord';
 import { get } from '../../dynamodbClientService';
 
-export const putWorkItemInOutbox = async ({ applicationContext, workItem }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
+export const putWorkItemInOutbox = async ({
+  applicationContext,
+  authorizedUser,
+  workItem,
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
+  workItem: RawWorkItem;
+}) => {
   const user = await get({
     Key: {
       pk: `user|${authorizedUser.userId}`,

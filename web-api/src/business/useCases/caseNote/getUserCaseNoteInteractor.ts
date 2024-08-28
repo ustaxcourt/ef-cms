@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
 
 /**
@@ -17,17 +18,18 @@ import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/
 export const getUserCaseNoteInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const userId = await applicationContext
     .getUseCaseHelpers()
     .getUserIdForNote(applicationContext, {
-      userIdMakingRequest: user.userId,
+      userIdMakingRequest: authorizedUser.userId,
     });
 
   const caseNote = await applicationContext

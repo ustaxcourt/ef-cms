@@ -11,6 +11,7 @@ import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('consolidated cases', () => {
@@ -51,8 +52,6 @@ describe('consolidated cases', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
-
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getUseCaseHelpers()
@@ -127,16 +126,21 @@ describe('consolidated cases', () => {
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      }),
+      fileAndServeCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId,
+          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+          docketNumbers: [
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          form: leadCaseDocketEntries[0],
+          subjectCaseDocketNumber:
+            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(expectedErrorString);
 
     const initialCall = 1;
@@ -175,16 +179,21 @@ describe('consolidated cases', () => {
       .mockRejectedValueOnce(innerError);
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      }),
+      fileAndServeCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId,
+          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+          docketNumbers: [
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          form: leadCaseDocketEntries[0],
+          subjectCaseDocketNumber:
+            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(expectedErrorString);
 
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
@@ -194,16 +203,20 @@ describe('consolidated cases', () => {
   });
 
   it('should create a single source of truth for the document by saving only one copy', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-      docketNumbers: [
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      form: leadCaseDocketEntries[0],
-      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-    });
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,

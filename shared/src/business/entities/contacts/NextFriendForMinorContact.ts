@@ -2,13 +2,8 @@ import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 
 export class NextFriendForMinorContact extends Contact {
-  constructor(
-    rawContact,
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ) {
-    super(rawContact, 'NextFriendForMinorContact', {
-      applicationContext,
-    });
+  constructor(rawContact) {
+    super(rawContact, 'NextFriendForMinorContact');
   }
 
   getValidationRules() {

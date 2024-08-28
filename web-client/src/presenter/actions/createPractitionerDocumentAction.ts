@@ -13,12 +13,17 @@ export const createPractitionerDocumentAction = async ({
 }: ActionProps) => {
   const { practitionerDocumentFile, ...form } = get(state.form);
   const { barNumber } = get(state.practitionerDetail);
+  const user = get(state.user);
 
   const practitionerDocumentFileId = await applicationContext
     .getUseCases()
-    .uploadOrderDocumentInteractor(applicationContext, {
-      documentFile: practitionerDocumentFile,
-    });
+    .uploadOrderDocumentInteractor(
+      applicationContext,
+      {
+        documentFile: practitionerDocumentFile,
+      },
+      user,
+    );
 
   await applicationContext
     .getUseCases()
