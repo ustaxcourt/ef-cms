@@ -135,7 +135,7 @@ export class User extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     contact: joi.object().when('role', {
-      is: ROLES.judge || ROLES.legacyJudge,
+      is: joi.valid(ROLES.judge, ROLES.legacyJudge),
       otherwise: joi
         .object()
         .keys(User.USER_CONTACT_VALIDATION_RULES)
