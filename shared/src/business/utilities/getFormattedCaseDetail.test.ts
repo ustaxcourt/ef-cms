@@ -471,7 +471,8 @@ describe('getFormattedCaseDetail', () => {
         docketEntryId: 'd-3-4-5',
         docketNumber: '101-18',
         draftOrderState: {
-          orderType: 'statusReport',
+          statusReportFilingDate: '2025-01-31',
+          statusReportIndex: '0',
         },
         isDraft: true,
       };
