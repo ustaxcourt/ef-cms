@@ -81,19 +81,21 @@ export const DocketEntryQc = connect(
 
                 <div className="margin-top-5">
                   <Button
+                    disableOnClick
                     id="save-and-finish"
                     type="submit"
-                    onClick={() => {
-                      completeDocketEntryQCSequence();
+                    onClick={async () => {
+                      await completeDocketEntryQCSequence();
                     }}
                   >
                     Complete
                   </Button>
                   <Button
+                    disableOnClick
                     secondary
                     id="save-and-add-supporting"
-                    onClick={() => {
-                      openCompleteAndSendMessageModalSequence();
+                    onClick={async () => {
+                      await openCompleteAndSendMessageModalSequence();
                     }}
                   >
                     Complete &amp; Send Message
