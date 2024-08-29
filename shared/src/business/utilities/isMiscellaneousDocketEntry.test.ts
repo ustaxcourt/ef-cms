@@ -40,7 +40,7 @@ describe('isMiscellaneousDocument', () => {
     expect(result).toEqual(true);
   });
 
-  it('should return false when passed a docket entry is a draft status report order', () => {
+  it('should return false when passed a docket entry that is a draft status report order', () => {
     const result = isMiscellaneousDocketEntry({
       createdAt: '2019-11-21T21:49:28.192Z',
       docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
@@ -63,7 +63,7 @@ describe('isMiscellaneousDocument', () => {
     expect(result).toEqual(false);
   });
 
-  it('should return false when passed a docket entry is not a draft status report order', () => {
+  it('should return false when passed a docket entry that is not a draft status report order', () => {
     const result = isMiscellaneousDocketEntry({
       createdAt: '2019-11-21T21:49:28.192Z',
       docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
