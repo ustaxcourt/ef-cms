@@ -1,6 +1,7 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
-import { RawUser } from '@shared/business/entities/User';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
@@ -17,15 +18,17 @@ import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
  */
 export const associatePrivatePractitionerToCase = async ({
   applicationContext,
+  authorizedUser,
   docketNumber,
   representing = [],
   serviceIndicator,
   user,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
-  user: RawUser;
+  user: RawPractitioner;
   representing: string[];
 }) => {
   const isAssociated = await applicationContext
@@ -57,7 +60,9 @@ export const associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+    const caseEntity = new Case(caseToUpdate, {
+      authorizedUser,
+    });
 
     const { petitioners } = caseEntity;
 
@@ -77,6 +82,7 @@ export const associatePrivatePractitionerToCase = async ({
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

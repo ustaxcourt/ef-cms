@@ -5,16 +5,8 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * seals a given docket entry on a case
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id to seal
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the updated docket entry after it has been sealed
- */
 export const sealDocketEntryInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -26,12 +18,11 @@ export const sealDocketEntryInteractor = async (
     docketEntrySealedTo: string;
     docketNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
   if (!docketEntrySealedTo) {
     throw new Error('Docket entry sealed to is required');
   }
-
-  const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission = isAuthorized(
     authorizedUser,
@@ -49,7 +40,7 @@ export const sealDocketEntryInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,

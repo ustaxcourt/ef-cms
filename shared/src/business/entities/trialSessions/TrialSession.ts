@@ -26,6 +26,7 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
+import { getUniqueId } from '@shared/sharedAppContext';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
@@ -132,12 +133,8 @@ export class TrialSession extends JoiValidationEntity {
     ],
   };
 
-  constructor(rawSession, { applicationContext }) {
+  constructor(rawSession) {
     super('TrialSession');
-
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.address1 = rawSession.address1;
     this.address2 = rawSession.address2;
@@ -191,8 +188,7 @@ export class TrialSession extends JoiValidationEntity {
     this.proceedingType = this.isStandaloneRemote()
       ? TRIAL_SESSION_PROCEEDING_TYPES.remote
       : rawSession.proceedingType;
-    this.trialSessionId =
-      rawSession.trialSessionId || applicationContext.getUniqueId();
+    this.trialSessionId = rawSession.trialSessionId || getUniqueId();
     this.paperServicePdfs = rawSession.paperServicePdfs || [];
 
     if (rawSession.judge?.name) {
