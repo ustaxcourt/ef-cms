@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('hasPendingItems', () => {
   it('should not show the case as having pending items if no docketEntries are pending', () => {
@@ -9,7 +9,7 @@ describe('hasPendingItems', () => {
         ...MOCK_CASE_WITHOUT_PENDING,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -30,7 +30,7 @@ describe('hasPendingItems', () => {
     };
 
     const caseToUpdate = new Case(mockCase, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     expect(caseToUpdate.hasPendingItems).toEqual(false);
@@ -51,7 +51,7 @@ describe('hasPendingItems', () => {
     };
 
     const caseToUpdate = new Case(mockCase, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     expect(caseToUpdate.hasPendingItems).toEqual(true);
@@ -73,7 +73,7 @@ describe('hasPendingItems', () => {
     };
 
     const caseToUpdate = new Case(mockCase, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     expect(caseToUpdate.hasPendingItems).toEqual(true);

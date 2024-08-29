@@ -15,13 +15,15 @@ export const validateNoteOnCaseDetailAction = ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const note = get(state.modal.notes);
+  const user = get(state.user);
 
-  const errors = applicationContext
-    .getUseCases()
-    .validateCaseDetailInteractor(applicationContext, {
+  const errors = applicationContext.getUseCases().validateCaseDetailInteractor(
+    {
       caseDetail: { ...caseDetail, caseNote: note },
       useCaseEntity: true,
-    });
+    },
+    user,
+  );
 
   if (!errors) {
     return path.success();

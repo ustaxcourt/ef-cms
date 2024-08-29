@@ -1,11 +1,16 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { RequirementsText } from '@web-client/views/CreatePetitionerAccount/RequirementsText';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { debounce } from 'lodash';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+const DEBOUNCE_TIME_MS = 500;
 
 export const CreatePetitionerAccountForm = connect(
   {
+    alertError: state.alertError,
+    alertWarning: state.alertWarning,
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
     navigateToLoginSequence: sequences.navigateToLoginSequence,
@@ -18,6 +23,8 @@ export const CreatePetitionerAccountForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
+    alertError,
+    alertWarning,
     confirmPassword,
     createAccountHelper,
     navigateToLoginSequence,
@@ -30,6 +37,18 @@ export const CreatePetitionerAccountForm = connect(
   }) => {
     const [inFocusEmail, setInFocusEmail] = useState(true);
     const [inFocusName, setInFocusName] = useState(true);
+    const [submitDisabled, setSubmitDisabled] = useState(false);
+
+    // Re-enabled submit button if submission was unsuccessful
+    useEffect(() => {
+      if (alertError || alertWarning) {
+        setSubmitDisabled(false);
+      }
+    }, [alertError, alertWarning]);
+
+    const submitFunction = debounce(() => {
+      submitCreatePetitionerAccountFormSequence();
+    }, DEBOUNCE_TIME_MS);
 
     return (
       <>
@@ -42,7 +61,8 @@ export const CreatePetitionerAccountForm = connect(
             <form
               onSubmit={e => {
                 e.preventDefault();
-                submitCreatePetitionerAccountFormSequence();
+                setSubmitDisabled(true);
+                submitFunction();
               }}
             >
               <label className="usa-label" htmlFor="email">
@@ -205,7 +225,7 @@ export const CreatePetitionerAccountForm = connect(
               <Button
                 className="usa-button margin-top-2"
                 data-testid="petitioner-account-creation-submit-button"
-                disabled={!createAccountHelper.formIsValid}
+                disabled={!createAccountHelper.formIsValid || submitDisabled}
                 id="submit-button"
               >
                 Continue

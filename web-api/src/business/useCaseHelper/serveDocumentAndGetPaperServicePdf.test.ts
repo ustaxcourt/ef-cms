@@ -8,6 +8,7 @@ import {
 } from '../../../../shared/src/test/mockCase';
 import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
@@ -17,7 +18,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   beforeEach(() => {
-    caseEntity = new Case(MOCK_CASE, { applicationContext });
+    caseEntity = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
 
     applicationContext
       .getPersistenceGateway()
@@ -79,7 +80,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const result = await serveDocumentAndGetPaperServicePdf({
@@ -123,11 +124,11 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
           { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     const secondCaseEntity = new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     const result = await serveDocumentAndGetPaperServicePdf({
@@ -177,7 +178,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -210,7 +211,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

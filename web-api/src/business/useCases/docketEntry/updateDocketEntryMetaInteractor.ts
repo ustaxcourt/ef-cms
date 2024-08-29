@@ -10,28 +10,20 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../../../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketEntryMeta the docket entry metadata
- * @param {object} providers.docketNumber the docket number of the case to be updated
- * @returns {object} the updated case after the documents are added
- */
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
   {
     docketEntryMeta,
     docketNumber,
   }: { docketEntryMeta: any; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
@@ -46,7 +38,7 @@ export const updateDocketEntryMeta = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
@@ -147,7 +139,7 @@ export const updateDocketEntryMeta = async (
       ...originalDocketEntry,
       ...editableFields,
     },
-    { applicationContext, petitioners: caseEntity.petitioners },
+    { authorizedUser, petitioners: caseEntity.petitioners },
   ).validate();
 
   caseEntity.updateDocketEntry(docketEntryEntity);
@@ -166,11 +158,15 @@ export const updateDocketEntryMeta = async (
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId: originalDocketEntry.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        filingDateUpdated,
-      });
+      .addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: originalDocketEntry.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          filingDateUpdated,
+        },
+        authorizedUser,
+      );
 
     caseEntity.updateDocketEntry(updatedDocketEntry);
   } else if (shouldRemoveExistingCoverSheet) {
@@ -189,10 +185,11 @@ export const updateDocketEntryMeta = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({

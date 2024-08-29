@@ -2,8 +2,9 @@ import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judge
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
+import { judgeUser } from '@shared/test/mockUsers';
+import { mockDocketClerkUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   const mockJudges = [
@@ -117,20 +118,17 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessions.mockReturnValue(mockTrialSessionsForAllJudges);
   });
 
   it('should throw an error when user is unauthorized to retrieve the judge activity report', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     await expect(
       getTrialSessionsForJudgeActivityReportInteractor(
         applicationContext,
         mockValidRequest,
+        mockDocketClerkUser,
       ),
     ).rejects.toThrow();
   });
@@ -140,6 +138,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       getTrialSessionsForJudgeActivityReportInteractor(
         applicationContext,
         mockInvalidRequest,
+        mockJudgeUser,
       ),
     ).rejects.toThrow();
   });
@@ -148,6 +147,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
+      mockJudgeUser,
     );
 
     expect(
@@ -159,6 +159,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     const opinions = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
+      mockJudgeUser,
     );
 
     expect(opinions).toEqual({
@@ -178,6 +179,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
       request,
+      mockJudgeUser,
     );
 
     expect(result).toEqual({

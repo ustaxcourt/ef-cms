@@ -3,13 +3,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const sendNotificationOfSealing = async (
   applicationContext: ServerApplicationContext,
-  {
-    docketEntryId,
-    docketNumber,
-  }: { docketEntryId: string; docketNumber: string },
+  { docketNumber }: { docketNumber: string },
 ): Promise<void> => {
   const params = {
-    Message: JSON.stringify({ docketEntryId, docketNumber }),
+    Message: JSON.stringify({ docketNumber }),
     TopicArn: `arn:aws:sns:us-east-1:${process.env.AWS_ACCOUNT_ID}:seal_notifier`,
   };
 
@@ -22,7 +19,6 @@ export const sendNotificationOfSealing = async (
         .getNotificationService()
         .send(publishCommand);
       applicationContext.logger.info('sent notification of sealing', {
-        docketEntryId,
         docketNumber,
         response,
       });

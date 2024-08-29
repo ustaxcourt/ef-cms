@@ -4,60 +4,62 @@ import { TrialSession } from '../../../../../shared/src/business/entities/trialS
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import {
-  petitionerUser,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
-
-const MOCK_TRIAL_SESSION = {
-  ...MOCK_TRIAL_REGULAR,
-  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-  sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '3000',
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-};
-
-const MOCK_TRIAL_SESSION_FOR_ASSOCIATION = {
-  ...MOCK_TRIAL_REGULAR,
-  sessionType: 'Small',
-  startDate: '3000-03-03T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '3000',
-  trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-};
-
-let mockCurrentTrialSessionEntity;
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('associateSwingTrialSessions', () => {
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+  let mockCurrentTrialSessionEntity;
 
+  const MOCK_TRIAL_SESSION = {
+    ...MOCK_TRIAL_REGULAR,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    sessionType: 'Regular',
+    startDate: '3000-03-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '3000',
+    trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  };
+
+  const MOCK_TRIAL_SESSION_FOR_ASSOCIATION = {
+    ...MOCK_TRIAL_REGULAR,
+    sessionType: 'Small',
+    startDate: '3000-03-03T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '3000',
+    trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+  };
+
+  beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_SESSION_FOR_ASSOCIATION);
 
-    mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION, {
-      applicationContext,
-    });
+    mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION);
   });
 
   it('throws an error if user is unauthorized to associate swing sessions', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      associateSwingTrialSessions(applicationContext, {
-        swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
-        trialSessionEntity: mockCurrentTrialSessionEntity,
-      }),
+      associateSwingTrialSessions(
+        applicationContext,
+        {
+          swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
+          trialSessionEntity: mockCurrentTrialSessionEntity,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow();
   });
 
   it('retrieves the swing session to be associated with the current session from persistence', async () => {
-    await associateSwingTrialSessions(applicationContext, {
-      swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
-      trialSessionEntity: mockCurrentTrialSessionEntity,
-    });
+    await associateSwingTrialSessions(
+      applicationContext,
+      {
+        swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
+        trialSessionEntity: mockCurrentTrialSessionEntity,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
@@ -66,10 +68,14 @@ describe('associateSwingTrialSessions', () => {
   });
 
   it('updates the trial session to be associated with swing session information', async () => {
-    await associateSwingTrialSessions(applicationContext, {
-      swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
-      trialSessionEntity: mockCurrentTrialSessionEntity,
-    });
+    await associateSwingTrialSessions(
+      applicationContext,
+      {
+        swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
+        trialSessionEntity: mockCurrentTrialSessionEntity,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
@@ -88,6 +94,7 @@ describe('associateSwingTrialSessions', () => {
         swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
         trialSessionEntity: mockCurrentTrialSessionEntity,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(updatedTrialSession).toMatchObject({
