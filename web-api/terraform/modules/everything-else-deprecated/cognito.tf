@@ -299,6 +299,18 @@ resource "aws_cognito_user_pool" "irs_pool" {
 
   schema {
     attribute_data_type = "String"
+    name                = "userId"
+    required            = false
+    mutable             = true
+
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 255
+    }
+  }
+
+  schema {
+    attribute_data_type = "String"
     name                = "name"
     required            = true
     mutable             = true
