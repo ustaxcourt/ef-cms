@@ -9,7 +9,7 @@ import { getItem, putItem } from './deployTableHelper';
 
 const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
 const env = process.env.STAGE;
-const key = 'migration-queue-empty';
+const key = 'migration-queue-is-empty';
 
 export const getMetricStatistics = async (
   type: string,
