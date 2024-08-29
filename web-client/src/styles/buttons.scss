@@ -71,12 +71,13 @@ button:disabled {
   }
 
   &.ustc-button--unstyled {
-    padding: 0.75rem 0;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
     line-height: normal;
     text-align: center;
 
     &.padding-top-0 {
-      padding-top: 0;
+      margin-top: 0;
     }
   }
 
