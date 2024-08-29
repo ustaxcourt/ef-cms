@@ -2,7 +2,7 @@ import { Case } from './Case';
 import { Correspondence } from '../Correspondence';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_USERS } from '../../../test/mockUsers';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteCorrespondenceById', () => {
   const mockCorrespondence = new Correspondence({
@@ -15,7 +15,7 @@ describe('deleteCorrespondenceById', () => {
     const myCase = new Case(
       { ...MOCK_CASE, correspondence: [mockCorrespondence] },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -37,7 +37,7 @@ describe('deleteCorrespondenceById', () => {
     const myCase = new Case(
       { ...MOCK_CASE, correspondence: [mockCorrespondence] },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     expect(myCase.correspondence!.length).toEqual(1);

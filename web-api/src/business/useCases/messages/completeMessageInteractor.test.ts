@@ -6,6 +6,10 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeMessageInteractor } from './completeMessageInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('completeMessageInteractor', () => {
   const mockMessages = [
@@ -52,10 +56,6 @@ describe('completeMessageInteractor', () => {
   const PARENT_MESSAGE_ID_2 = '4782edfe-618b-4315-9619-675403246bce';
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
@@ -74,28 +74,31 @@ describe('completeMessageInteractor', () => {
   });
 
   it('should throw unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      completeMessageInteractor(applicationContext, {
-        messages: [{ messageBody: 'hi', parentMessageId: '123' }],
-      }),
+      completeMessageInteractor(
+        applicationContext,
+        {
+          messages: [{ messageBody: 'hi', parentMessageId: '123' }],
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should call persistence methods to mark the thread as replied to and complete the most recent messages', async () => {
-    await completeMessageInteractor(applicationContext, {
-      messages: [
-        {
-          messageBody: 'the completed message',
-          parentMessageId: PARENT_MESSAGE_ID_1,
-        },
-        { messageBody: 'hi', parentMessageId: PARENT_MESSAGE_ID_2 },
-      ],
-    });
+    await completeMessageInteractor(
+      applicationContext,
+      {
+        messages: [
+          {
+            messageBody: 'the completed message',
+            parentMessageId: PARENT_MESSAGE_ID_1,
+          },
+          { messageBody: 'hi', parentMessageId: PARENT_MESSAGE_ID_2 },
+        ],
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().markMessageThreadRepliedTo,
@@ -132,14 +135,18 @@ describe('completeMessageInteractor', () => {
   });
 
   it('should send a success message to the user', async () => {
-    await completeMessageInteractor(applicationContext, {
-      messages: [
-        {
-          messageBody: 'the completed message',
-          parentMessageId: PARENT_MESSAGE_ID_1,
-        },
-      ],
-    });
+    await completeMessageInteractor(
+      applicationContext,
+      {
+        messages: [
+          {
+            messageBody: 'the completed message',
+            parentMessageId: PARENT_MESSAGE_ID_1,
+          },
+        ],
+      },
+      mockPetitionsClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -153,14 +160,18 @@ describe('completeMessageInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateMessage.mockRejectedValueOnce(new Error('Bad!'));
-    await completeMessageInteractor(applicationContext, {
-      messages: [
-        {
-          messageBody: 'the completed message',
-          parentMessageId: PARENT_MESSAGE_ID_1,
-        },
-      ],
-    });
+    await completeMessageInteractor(
+      applicationContext,
+      {
+        messages: [
+          {
+            messageBody: 'the completed message',
+            parentMessageId: PARENT_MESSAGE_ID_1,
+          },
+        ],
+      },
+      mockPetitionsClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,

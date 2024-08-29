@@ -1,7 +1,6 @@
 import { DocketEntry } from './DocketEntry';
 import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from './EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('generateFiledBy', () => {
   let mockDocketEntry;
@@ -24,7 +23,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Petr. Bob');
@@ -37,7 +36,7 @@ describe('generateFiledBy', () => {
         filers: [mockPrimaryContactId],
         otherFilingParty: mockOtherFilingParty,
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual(`Petr. Bob, ${mockOtherFilingParty}`);
@@ -49,7 +48,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         filers: [mockSecondaryContactId],
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Petr. Bill');
@@ -62,7 +61,7 @@ describe('generateFiledBy', () => {
         filers: [mockPrimaryContactId],
         partyIrsPractitioner: true,
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
@@ -76,7 +75,7 @@ describe('generateFiledBy', () => {
         otherFilingParty: mockOtherFilingParty,
         partyIrsPractitioner: true,
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual(
@@ -90,7 +89,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         otherFilingParty: mockOtherFilingParty,
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual(mockOtherFilingParty);
@@ -102,7 +101,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId, mockSecondaryContactId],
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
@@ -118,7 +117,7 @@ describe('generateFiledBy', () => {
           name: 'Test Practitioner',
         },
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Resp.');
@@ -137,7 +136,7 @@ describe('generateFiledBy', () => {
           },
         ],
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Resp.');
@@ -150,7 +149,7 @@ describe('generateFiledBy', () => {
         filers: [mockPrimaryContactId],
         partyIrsPractitioner: true,
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
@@ -162,7 +161,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId, mockSecondaryContactId],
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
@@ -178,7 +177,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
       },
-      { applicationContext, petitioners: mockIntervenors },
+      { authorizedUser: undefined, petitioners: mockIntervenors },
     );
     expect(docketEntry.filedBy).toEqual('Intv. Bob');
   });
@@ -193,7 +192,7 @@ describe('generateFiledBy', () => {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId, mockSecondaryContactId],
       },
-      { applicationContext, petitioners: mockIntervenors },
+      { authorizedUser: undefined, petitioners: mockIntervenors },
     );
     expect(docketEntry.filedBy).toEqual('Intvs. Bob & Bill');
   });
@@ -211,7 +210,7 @@ describe('generateFiledBy', () => {
           },
         ],
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toEqual('Resp.');
@@ -227,7 +226,7 @@ describe('generateFiledBy', () => {
         filers: [mockPrimaryContactId],
         isAutoGenerated: true,
       },
-      { applicationContext, petitioners: mockPetitioners },
+      { authorizedUser: undefined, petitioners: mockPetitioners },
     );
 
     expect(docketEntry.filedBy).toBeUndefined();
@@ -244,7 +243,7 @@ describe('generateFiledBy', () => {
         servedAt: undefined,
       },
       {
-        applicationContext,
+        authorizedUser: undefined,
         petitioners: mockPetitioners,
       },
     );
@@ -265,7 +264,7 @@ describe('generateFiledBy', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: undefined,
         petitioners: mockPetitioners,
       },
     );
@@ -285,7 +284,7 @@ describe('generateFiledBy', () => {
         servedParties: 'Test Petitioner',
       },
       {
-        applicationContext,
+        authorizedUser: undefined,
         petitioners: mockPetitioners,
       },
     );

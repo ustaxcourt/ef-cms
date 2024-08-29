@@ -3,6 +3,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseAndAssociations } from './createCaseAndAssociations';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('createCaseAndAssociations', () => {
   let createCaseMock = jest.fn();
@@ -27,7 +28,7 @@ describe('createCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     )
       .validate()
       .toRawObject();
@@ -40,6 +41,7 @@ describe('createCaseAndAssociations', () => {
   it('always sends valid entities to the createCase persistence method', async () => {
     await createCaseAndAssociations({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseToCreate: validMockCase,
     });
     expect(createCaseMock).toHaveBeenCalled();
@@ -55,7 +57,11 @@ describe('createCaseAndAssociations', () => {
         docketEntries: [{ docketNumber: 'peaches' }],
       };
       await expect(
-        createCaseAndAssociations({ applicationContext, caseToCreate }),
+        createCaseAndAssociations({
+          applicationContext,
+          authorizedUser: mockDocketClerkUser,
+          caseToCreate,
+        }),
       ).rejects.toThrow('entity was invalid');
     });
 
@@ -68,6 +74,7 @@ describe('createCaseAndAssociations', () => {
 
       await createCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToCreate,
       });
 
@@ -104,7 +111,7 @@ describe('createCaseAndAssociations', () => {
         ...MOCK_CASE,
         irsPractitioners: [practitioner],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     it('throws an error if IRS practitioners are invalid', async () => {
@@ -113,13 +120,18 @@ describe('createCaseAndAssociations', () => {
         irsPractitioners: [{ barNumber: 0, role: 'spring', userId: 'yoohoo' }],
       };
       await expect(
-        createCaseAndAssociations({ applicationContext, caseToCreate }),
+        createCaseAndAssociations({
+          applicationContext,
+          authorizedUser: mockDocketClerkUser,
+          caseToCreate,
+        }),
       ).rejects.toThrow('entity was invalid');
     });
 
     it('calls updateIrsPractitionerOnCase once for each IRS practitioner on the case', async () => {
       await createCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToCreate: mockCaseWithIrsPractitioners,
       });
 
@@ -151,7 +163,7 @@ describe('createCaseAndAssociations', () => {
         ...MOCK_CASE,
         privatePractitioners: [practitioner],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     it('throws an error if IRS practitioners are invalid', async () => {
@@ -162,13 +174,18 @@ describe('createCaseAndAssociations', () => {
         ],
       };
       await expect(
-        createCaseAndAssociations({ applicationContext, caseToCreate }),
+        createCaseAndAssociations({
+          applicationContext,
+          authorizedUser: mockDocketClerkUser,
+          caseToCreate,
+        }),
       ).rejects.toThrow('entity was invalid');
     });
 
     it('calls updateprivatePractitionerOnCase once for each private practitioner on the case', async () => {
       await createCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToCreate: mockCaseWithPrivatePractitioners,
       });
 

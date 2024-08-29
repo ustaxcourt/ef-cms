@@ -23,7 +23,7 @@ export const messageDocumentHelper = (
     STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
@@ -125,7 +125,7 @@ export const messageDocumentHelper = (
   // The variables affected by formattedDocument are showApplyStampButton and showStatusReportOrderButton.
   const { draftDocuments } = applicationContext
     .getUtilities()
-    .formatCase(applicationContext, caseDetail);
+    .formatCase(applicationContext, caseDetail, user);
   const formattedDocument = draftDocuments.find(
     doc => doc.docketEntryId === viewerDocumentToDisplayDocumentId,
   );

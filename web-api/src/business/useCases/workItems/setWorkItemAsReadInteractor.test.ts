@@ -2,16 +2,17 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 
 describe('setWorkItemAsReadInteractor', () => {
-  let user;
-
   const mockWorkItem = {
     assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     assigneeName: 'bob',
@@ -26,13 +27,6 @@ describe('setWorkItemAsReadInteractor', () => {
   };
 
   beforeEach(() => {
-    user = {
-      role: ROLES.docketClerk,
-      userId: 'docketclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-
     applicationContext
       .getPersistenceGateway()
       .getWorkItemById.mockResolvedValue(mockWorkItem);
@@ -48,14 +42,14 @@ describe('setWorkItemAsReadInteractor', () => {
   });
 
   it('should throw an error when an unauthorized user tries to invoke this interactor', async () => {
-    user = {
-      userId: 'baduser',
-    };
-
     await expect(
-      setWorkItemAsReadInteractor(applicationContext, {
-        workItemId: mockWorkItem.workItemId,
-      }),
+      setWorkItemAsReadInteractor(
+        applicationContext,
+        {
+          workItemId: mockWorkItem.workItemId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -68,16 +62,24 @@ describe('setWorkItemAsReadInteractor', () => {
       });
 
     await expect(
-      setWorkItemAsReadInteractor(applicationContext, {
-        workItemId: mockWorkItem.workItemId,
-      }),
+      setWorkItemAsReadInteractor(
+        applicationContext,
+        {
+          workItemId: mockWorkItem.workItemId,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(NotFoundError);
   });
 
   it('should call updateDocketEntry with the docket entry work item marked as read', async () => {
-    await setWorkItemAsReadInteractor(applicationContext, {
-      workItemId: mockWorkItem.workItemId,
-    });
+    await setWorkItemAsReadInteractor(
+      applicationContext,
+      {
+        workItemId: mockWorkItem.workItemId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry.mock
@@ -88,9 +90,13 @@ describe('setWorkItemAsReadInteractor', () => {
   });
 
   it('should call saveWorkItem with the work item marked as read', async () => {
-    await setWorkItemAsReadInteractor(applicationContext, {
-      workItemId: mockWorkItem.workItemId,
-    });
+    await setWorkItemAsReadInteractor(
+      applicationContext,
+      {
+        workItemId: mockWorkItem.workItemId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],

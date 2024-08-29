@@ -7,6 +7,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -23,9 +24,8 @@ export const serveCourtIssuedDocument = async (
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const hasPermission =
     (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
       isAuthorized(
@@ -49,7 +49,7 @@ export const serveCourtIssuedDocument = async (
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
   }
 
-  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -115,7 +115,7 @@ export const serveCourtIssuedDocument = async (
           docketNumber,
         });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
     caseEntities = await Promise.all(
@@ -127,7 +127,7 @@ export const serveCourtIssuedDocument = async (
             isOnDocketRecord: true,
           },
           {
-            applicationContext,
+            authorizedUser,
           },
         );
 
@@ -213,19 +213,23 @@ export const determineEntitiesToLock = (
   ttl: 15 * 60,
 });
 
-export const handleLockError = async (applicationContext, originalRequest) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'serve_court_issued_document',
-    },
-    userId: user.userId,
-  });
+export const handleLockError = async (
+  applicationContext,
+  originalRequest,
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'serve_court_issued_document',
+      },
+      userId: authorizedUser?.userId,
+    });
+  }
 };
 
 export const serveCourtIssuedDocumentInteractor = withLocking(

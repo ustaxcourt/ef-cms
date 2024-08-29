@@ -1,11 +1,18 @@
 import { Case } from './Case';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import joi from 'joi';
 
 export class CaseQC extends Case {
-  constructor(rawCase, { applicationContext, filtered = false }) {
+  constructor(
+    rawCase,
+    {
+      authorizedUser,
+      filtered = false,
+    }: { authorizedUser: UnknownAuthUser; filtered?: boolean },
+  ) {
     super(rawCase, {
-      applicationContext,
+      authorizedUser,
       filtered,
     });
     this.entityName = 'CaseQC';

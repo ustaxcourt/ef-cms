@@ -1,16 +1,14 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { addPaperFilingInteractor } from '@web-api/business/useCases/docketEntry/addPaperFilingInteractor';
 import { genericHandler } from '../../genericHandler';
 
-/**
- * lambda used for adding a paper filing to a case
- *
- * @param {object} event the AWS event object
- * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
- */
-export const addPaperFilingLambda = event =>
+export const addPaperFilingLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .addPaperFilingInteractor(applicationContext, {
+    return await addPaperFilingInteractor(
+      applicationContext,
+      {
         ...JSON.parse(event.body),
-      });
+      },
+      authorizedUser,
+    );
   });

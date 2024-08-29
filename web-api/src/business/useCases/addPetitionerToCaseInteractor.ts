@@ -7,16 +7,9 @@ import {
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * used to add a petitioner to a case
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.contact the contact data to add to the case
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the case data
- */
 export const addPetitionerToCase = async (
   applicationContext: ServerApplicationContext,
   {
@@ -24,9 +17,8 @@ export const addPetitionerToCase = async (
     contact,
     docketNumber,
   }: { caseCaption: string; contact: any; docketNumber: string },
-) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
+  authorizedUser: UnknownAuthUser,
+): Promise<RawCase> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized for adding petitioner to case');
   }
@@ -38,7 +30,7 @@ export const addPetitionerToCase = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (caseEntity.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -48,9 +40,7 @@ export const addPetitionerToCase = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  const petitionerEntity = new Petitioner(contact, {
-    applicationContext,
-  });
+  const petitionerEntity = new Petitioner(contact);
 
   caseEntity.addPetitioner(petitionerEntity);
 
@@ -58,10 +48,11 @@ export const addPetitionerToCase = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
 export const addPetitionerToCaseInteractor = withLocking(

@@ -4,22 +4,14 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * getDocumentContentsForDocketEntryInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentContentsId document contents id
- * @returns {string} url for the generated document on the storage client
- */
 export const getDocumentContentsForDocketEntryInteractor = async (
   applicationContext: ServerApplicationContext,
   { documentContentsId }: { documentContentsId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_ORDER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_ORDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

@@ -11,8 +11,6 @@ import { setDefaultGenerationTypeAction } from './setDefaultGenerationTypeAction
 describe('setDefaultGenerationTypeAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-
   it('should set the generation type to auto when the changed event code is EA', async () => {
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },
@@ -27,6 +25,7 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.MANUAL,
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -47,6 +46,7 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -54,8 +54,6 @@ describe('setDefaultGenerationTypeAction', () => {
   });
 
   it('should set the generation type to manual when the changed event code is NOT EA and the user is an IRS Practitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(irsPractitionerUser);
-
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },
       props: {
@@ -69,6 +67,7 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
+        user: irsPractitionerUser,
       },
     });
 
@@ -76,8 +75,6 @@ describe('setDefaultGenerationTypeAction', () => {
   });
 
   it('should set the generation type to "auto"" when the changed event code is EA and the user is an IRS Practitioner with no parties having paper service', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(irsPractitionerUser);
-
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },
       props: {
@@ -91,6 +88,8 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.MANUAL,
         },
+
+        user: irsPractitionerUser,
       },
     });
 
@@ -111,6 +110,7 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -118,8 +118,6 @@ describe('setDefaultGenerationTypeAction', () => {
   });
 
   it('should set the generation type to manual if code is EA but a petitioner has paper', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce(irsPractitionerUser);
-
     const { state } = await runAction(setDefaultGenerationTypeAction, {
       modules: { presenter },
       props: {
@@ -137,6 +135,7 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
+        user: irsPractitionerUser,
       },
     });
 
@@ -162,6 +161,7 @@ describe('setDefaultGenerationTypeAction', () => {
         form: {
           generationType: GENERATION_TYPES.MANUAL,
         },
+        user: privatePractitionerUser,
       },
     });
 

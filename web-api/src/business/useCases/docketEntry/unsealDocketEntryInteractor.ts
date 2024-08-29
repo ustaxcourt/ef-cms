@@ -5,6 +5,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * unseals a given docket entry on a case
@@ -21,9 +22,8 @@ export const unsealDocketEntryInteractor = async (
     docketEntryId,
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const hasPermission = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY,
@@ -40,7 +40,7 @@ export const unsealDocketEntryInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
