@@ -3,7 +3,34 @@ import { debounce } from 'lodash';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const Button = props => {
+function getUpdatedOnClick(
+  onClick: (...args: any) => any | undefined,
+  disableOnClick: boolean | undefined,
+  setDisableButton: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  if (!onClick) return onClick;
+  if (!disableOnClick) return debounce(onClick, 500);
+
+  const debouncedWrapper = debounce(async (...args) => {
+    const results = onClick(...args);
+    if (!(results instanceof Promise))
+      throw new Error('Convert onClick method to async');
+
+    await results.finally(() => {
+      setDisableButton(false);
+    });
+  }, 500);
+
+  return async (...args) => {
+    setDisableButton(true);
+    await debouncedWrapper(...args);
+  };
+}
+
+export const Button = (props: {
+  [key: string]: any;
+  disableOnClick?: boolean;
+}) => {
   const [disableButton, setDisableButton] = useState(false);
 
   const { href } = props;
@@ -49,30 +76,13 @@ export const Button = props => {
     iconColor && `fa-icon-${iconColor}`,
   );
 
-  const debouncedWrapper = debounce(async () => {
-    const results = onClick();
-    if (!(results instanceof Promise))
-      throw new Error('Convert onClick method to async');
-
-    await results.finally(() => {
-      setDisableButton(false);
-    });
-  }, 500);
-
-  const updatedOnClick = disableOnClick
-    ? async () => {
-        setDisableButton(true);
-        await debouncedWrapper();
-      }
-    : onClick;
-
   return (
     <Element
       className={classes}
-      {...remainingProps}
       disabled={disableButton}
+      {...remainingProps}
       title={tooltip}
-      onClick={!onClick ? onClick : updatedOnClick}
+      onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
     >
       {icon && !iconRight && (
         <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
@@ -84,5 +94,3 @@ export const Button = props => {
     </Element>
   );
 };
-
-Button.displayName = 'Button';
