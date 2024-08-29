@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
@@ -10,6 +11,7 @@ import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 
 export const addExistingUserToCase = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   contactId,
   email,
@@ -20,9 +22,8 @@ export const addExistingUserToCase = async ({
   contactId: string;
   email: string;
   name: string;
+  authorizedUser: AuthUser;
 }): Promise<string> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_USER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }

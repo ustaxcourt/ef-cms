@@ -1,26 +1,27 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('setNoticeOfTrialDate', () => {
   it('should set noticeOfTrialDate on the given case', () => {
-    const caseEntity = new Case(MOCK_CASE, { applicationContext });
+    const caseEntity = new Case(MOCK_CASE, {
+      authorizedUser: mockDocketClerkUser,
+    });
     const result = caseEntity.setNoticeOfTrialDate();
 
     expect(result.isValid()).toBeTruthy();
   });
 
   it('should set noticeOfTrialDate when passed through Case constructor', () => {
-    const isoDateString = applicationContext
-      .getUtilities()
-      .createISODateString();
+    const isoDateString = createISODateString();
 
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
         noticeOfTrialDate: isoDateString,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(caseEntity.isValid()).toBeTruthy();

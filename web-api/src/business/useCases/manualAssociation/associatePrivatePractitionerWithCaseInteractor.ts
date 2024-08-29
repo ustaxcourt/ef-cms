@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -30,11 +31,10 @@ export const associatePrivatePractitionerWithCase = async (
     serviceIndicator: string;
     userId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authenticatedUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -45,6 +45,7 @@ export const associatePrivatePractitionerWithCase = async (
 
   return await associatePrivatePractitionerToCase({
     applicationContext,
+    authorizedUser,
     docketNumber,
     representing,
     serviceIndicator,

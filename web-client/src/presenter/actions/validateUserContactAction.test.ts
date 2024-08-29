@@ -23,7 +23,7 @@ describe('validateUserContactAction', () => {
       modules: {
         presenter,
       },
-      state: { form: { contact: {} } },
+      state: { form: { contact: {} }, user: {} },
     });
     expect(errorMock).toHaveBeenCalled();
   });
@@ -36,7 +36,7 @@ describe('validateUserContactAction', () => {
       modules: {
         presenter,
       },
-      state: { form: { contact: {} } },
+      state: { form: { contact: {} }, user: {} },
     });
     expect(successMock).toHaveBeenCalled();
   });

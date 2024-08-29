@@ -10,11 +10,10 @@ import { get } from './requests';
  */
 export const verifyPendingCaseForUserInteractor = (
   applicationContext,
-  { docketNumber },
+  { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
-  const user = applicationContext.getCurrentUser();
   return get({
     applicationContext,
-    endpoint: `/users/${user.userId}/case/${docketNumber}/pending`,
+    endpoint: `/users/${userId}/case/${docketNumber}/pending`,
   });
 };

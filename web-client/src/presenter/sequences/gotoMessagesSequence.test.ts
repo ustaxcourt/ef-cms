@@ -1,5 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { docketClerk1User } from '@shared/test/mockUsers';
 import { gotoMessagesSequence } from '../sequences/gotoMessagesSequence';
 import { presenter } from '../presenter-mock';
 
@@ -34,6 +35,7 @@ describe('gotoMessagesSequence', () => {
 
     //set token to take 'isLoggedIn' path
     cerebralTest.setState('token', 'a');
+    cerebralTest.setState('user', docketClerk1User);
   });
 
   it('should change the page to MyAccount and close the opened menu', async () => {

@@ -7,7 +7,7 @@ export const orderTypesHelper = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const { ORDER_TYPES_MAP, USER_ROLES } = applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const eventCode = get(state.modal.eventCode);
 
   let orderTypes = ORDER_TYPES_MAP;

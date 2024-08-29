@@ -1,16 +1,13 @@
-import {
-  PRACTITIONER_DOCUMENT_TYPES_MAP,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentInteractor } from './getPractitionerDocumentInteractor';
+import {
+  mockAdmissionsClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionerDocumentInteractor', () => {
-  const testUser = {
-    role: ROLES.admissionsClerk,
-    userId: 'admissionsclerk',
-  };
   const barNumber = 'PT4785';
   const practitionerDocumentFileId = '14c373ff-3335-400d-8b39-3e4053072512';
   const practitionerDocument = {
@@ -20,24 +17,21 @@ describe('getPractitionerDocumentInteractor', () => {
   };
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(testUser);
     applicationContext
       .getPersistenceGateway()
       .getPractitionerDocumentByFileId.mockReturnValue(practitionerDocument);
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
-    const testPetitionerUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-    applicationContext.getCurrentUser.mockReturnValueOnce(testPetitionerUser);
-
     await expect(
-      getPractitionerDocumentInteractor(applicationContext, {
-        barNumber,
-        practitionerDocumentFileId,
-      }),
+      getPractitionerDocumentInteractor(
+        applicationContext,
+        {
+          barNumber,
+          practitionerDocumentFileId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -48,6 +42,7 @@ describe('getPractitionerDocumentInteractor', () => {
         barNumber,
         practitionerDocumentFileId,
       },
+      mockAdmissionsClerkUser,
     );
 
     expect(

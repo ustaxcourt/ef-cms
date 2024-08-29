@@ -127,8 +127,16 @@ const setNoticeForCase = async ({
   trialSession,
   trialSessionEntity,
   user,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseRecord: any;
+  docketNumber: any;
+  jobId: any;
+  trialSession: any;
+  trialSessionEntity: any;
+  user: any;
 }) => {
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
 
   let noticeOfTrialIssued = await applicationContext
@@ -199,7 +207,7 @@ const setNoticeForCase = async ({
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
     },
-    { applicationContext },
+    { authorizedUser: undefined },
   );
 
   noticeOfTrialDocketEntry.setFiledBy(user);
@@ -267,7 +275,7 @@ const setNoticeForCase = async ({
       judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },
-    { applicationContext },
+    { authorizedUser: undefined },
   );
 
   standingPretrialDocketEntry.setFiledBy(user);
@@ -306,6 +314,7 @@ const setNoticeForCase = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser: undefined,
     caseToUpdate: caseEntity,
   });
 
@@ -365,9 +374,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
       status: 'processing',
     });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()
