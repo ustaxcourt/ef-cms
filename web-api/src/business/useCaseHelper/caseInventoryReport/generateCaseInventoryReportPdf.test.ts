@@ -1,32 +1,65 @@
 import {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
-  ROLES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES_MAP,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseInventoryReportPdf } from './generateCaseInventoryReportPdf';
-
-const mockCases = [
-  {
-    associatedJudge: CHIEF_JUDGE,
-    docketNumber: '101-19',
-    status: CASE_STATUS_TYPES.new,
-  },
-  {
-    associatedJudge: CHIEF_JUDGE,
-    docketNumber: '101-20',
-    status: CASE_STATUS_TYPES.new,
-  },
-];
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generateCaseInventoryReportPdf', () => {
-  let user;
+  const mockCases: RawCase[] = [
+    {
+      associatedJudge: CHIEF_JUDGE,
+      canAllowPrintableDocketRecord: false,
+      caseCaption: 'Test Caption, Petitioner',
+      caseStatusHistory: [],
+      caseType: CASE_TYPES_MAP.disclosure,
+      consolidatedCases: [],
+      correspondence: [],
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntries: [],
+      docketNumber: '101-19',
+      entityName: 'Case',
+      hearings: [],
+      partyType: PARTY_TYPES.donor,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      petitioners: [],
+      procedureType: PROCEDURE_TYPES_MAP.regular,
+      receivedAt: '2018-11-20T20:49:28.192Z',
+      sortableDocketNumber: 2001000101,
+      status: CASE_STATUS_TYPES.new,
+    },
+    {
+      associatedJudge: CHIEF_JUDGE,
+      canAllowPrintableDocketRecord: true,
+      caseCaption: 'Test Caption Again, Petitioner',
+      caseStatusHistory: [],
+      caseType: CASE_TYPES_MAP.other,
+      consolidatedCases: [],
+      correspondence: [],
+      createdAt: '2020-07-21T20:49:28.192Z',
+      docketEntries: [],
+      docketNumber: '101-20',
+      entityName: 'Case',
+      hearings: [],
+      partyType: PARTY_TYPES.petitioner,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      petitioners: [],
+      procedureType: PROCEDURE_TYPES_MAP.regular,
+      receivedAt: '2020-06-29T20:49:28.192Z',
+      sortableDocketNumber: 2001000111,
+      status: CASE_STATUS_TYPES.new,
+    },
+  ];
 
   beforeEach(() => {
-    user = { role: ROLES.petitionsClerk, userId: 'petitionsClerk' };
-
-    applicationContext.getCurrentUser.mockReturnValue(user);
-
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue({
@@ -39,12 +72,10 @@ describe('generateCaseInventoryReportPdf', () => {
   });
 
   it('throws an error if the user is unauthorized', async () => {
-    user = { role: ROLES.petitioner, userId: 'petitioner' };
-
-    applicationContext.getCurrentUser.mockReturnValue(user);
     await expect(
       generateCaseInventoryReportPdf({
         applicationContext,
+        authorizedUser: mockPetitionerUser,
         cases: mockCases,
         filters: { associatedJudge: CHIEF_JUDGE },
       }),
@@ -54,6 +85,7 @@ describe('generateCaseInventoryReportPdf', () => {
   it('calls the pdf report generator', async () => {
     await generateCaseInventoryReportPdf({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       cases: mockCases,
       filters: { associatedJudge: CHIEF_JUDGE },
     });
@@ -72,6 +104,7 @@ describe('generateCaseInventoryReportPdf', () => {
   it('returns the pre-signed url to the document', async () => {
     const result = await generateCaseInventoryReportPdf({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       cases: mockCases,
       filters: { associatedJudge: CHIEF_JUDGE },
     });
@@ -87,6 +120,7 @@ describe('generateCaseInventoryReportPdf', () => {
     await expect(
       generateCaseInventoryReportPdf({
         applicationContext,
+        authorizedUser: mockPetitionsClerkUser,
         cases: mockCases,
         filters: { associatedJudge: CHIEF_JUDGE },
       }),
@@ -100,6 +134,7 @@ describe('generateCaseInventoryReportPdf', () => {
 
     await generateCaseInventoryReportPdf({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       cases: mockCases,
       filters: { status: CASE_STATUS_TYPES.new },
     });
@@ -118,6 +153,7 @@ describe('generateCaseInventoryReportPdf', () => {
 
     await generateCaseInventoryReportPdf({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       cases: mockCases,
       filters: { associatedJudge: CHIEF_JUDGE },
     });
@@ -136,6 +172,7 @@ describe('generateCaseInventoryReportPdf', () => {
 
     await generateCaseInventoryReportPdf({
       applicationContext,
+      authorizedUser: mockPetitionsClerkUser,
       cases: mockCases,
       filters: {
         associatedJudge: CHIEF_JUDGE,

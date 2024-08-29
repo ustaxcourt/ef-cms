@@ -1,4 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -31,6 +32,7 @@ export type TUserContact = {
  */
 const generateChangeOfAddressForPractitioner = async ({
   applicationContext,
+  authorizedUser,
   bypassDocketEntry = false,
   contactInfo,
   firmName,
@@ -49,6 +51,7 @@ const generateChangeOfAddressForPractitioner = async ({
   updatedName?: string;
   user: any;
   websocketMessagePrefix?: string;
+  authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
   const associatedUserCases = await applicationContext
     .getPersistenceGateway()
@@ -100,7 +103,7 @@ const generateChangeOfAddressForPractitioner = async ({
           firmName,
           jobId,
           requestUser: {
-            ...applicationContext.getCurrentUser(),
+            ...authorizedUser,
             token: undefined,
           },
           requestUserId,
@@ -120,6 +123,7 @@ const generateChangeOfAddressForPractitioner = async ({
           .getUseCaseHelpers()
           .generateChangeOfAddressHelper({
             applicationContext,
+            authorizedUser,
             bypassDocketEntry,
             contactInfo,
             docketNumber: caseInfo.docketNumber,

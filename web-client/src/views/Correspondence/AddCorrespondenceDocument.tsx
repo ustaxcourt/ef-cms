@@ -12,6 +12,8 @@ import React from 'react';
 
 export const AddCorrespondenceDocument = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -24,6 +26,7 @@ export const AddCorrespondenceDocument = connect(
     validationErrors: state.validationErrors,
   },
   function AddCorrespondenceDocument({
+    closeModalAndReturnToCaseDetailSequence,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -37,7 +40,9 @@ export const AddCorrespondenceDocument = connect(
         <CaseDetailHeader />
 
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
 
         <section className="usa-section grid-container DocumentDetail">

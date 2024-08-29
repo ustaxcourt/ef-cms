@@ -7,6 +7,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
 
 export const opinionAdvancedSearchInteractor = async (
@@ -30,9 +31,8 @@ export const opinionAdvancedSearchInteractor = async (
     opinionTypes: string[];
     startDate: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -69,7 +69,5 @@ export const opinionAdvancedSearchInteractor = async (
 
   const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
 
-  return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
-    applicationContext,
-  });
+  return InternalDocumentSearchResult.validateRawCollection(filteredResults);
 };
