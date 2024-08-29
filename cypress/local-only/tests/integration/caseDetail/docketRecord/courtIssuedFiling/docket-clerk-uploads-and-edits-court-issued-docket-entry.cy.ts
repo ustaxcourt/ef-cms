@@ -4,7 +4,7 @@ import { loginAsDocketClerk1 } from '../../../../../../helpers/authentication/lo
 
 describe('Docket clerk uploads and edits court-issued docket entries', () => {
   describe('uploads and edits a court-issued docket entry from draft documents view', () => {
-    it('should let a docket clerk upload a court-issued docket entry and the edit it while it is unsigned', () => {
+    it('should let a docket clerk upload a court-issued docket entry and then edit it while it is unsigned', () => {
       const leadCase = '111-19';
 
       loginAsDocketClerk1();
@@ -34,16 +34,10 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
 
       // Assert: the new description should display for the edited docket entry
       cy.contains('Draft saved.').should('exist');
-      cy.get('[data-testid^="docket-entry-description-"]').then($els => {
-        const matchingElements = $els.filter((index, el) => {
-          return Cypress.$(el).text().includes(newTitle);
-        });
-
-        expect(
-          matchingElements.length,
-          `Expected to find "${newTitle}" in at least one element`,
-        ).to.be.greaterThan(0);
-      });
+      cy.contains(
+        '[data-testid^="docket-entry-description-"]',
+        newTitle,
+      ).should('exist');
     });
 
     it('should let a docket clerk upload a court-issued docket entry and the edit it after it is signed', () => {
@@ -79,16 +73,10 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
 
       // Assert: the new description should display for the edited docket entry
       cy.contains('Draft saved.').should('exist');
-      cy.get('[data-testid^="docket-entry-description-"]').then($els => {
-        const matchingElements = $els.filter((index, el) => {
-          return Cypress.$(el).text().includes(newTitle);
-        });
-
-        expect(
-          matchingElements.length,
-          `Expected to find "${newTitle}" in at least one element`,
-        ).to.be.greaterThan(0);
-      });
+      cy.contains(
+        '[data-testid^="docket-entry-description-"]',
+        newTitle,
+      ).should('exist');
     });
   });
 
