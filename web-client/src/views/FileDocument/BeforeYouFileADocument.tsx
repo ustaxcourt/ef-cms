@@ -11,11 +11,14 @@ import React from 'react';
 export const BeforeYouFileADocument = connect(
   {
     caseDetail: state.caseDetail,
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
   },
   function BeforeYouFileADocument({
     caseDetail,
+    closeModalAndReturnToCaseDetailSequence,
     formCancelToggleCancelSequence,
     showModal,
   }) {
@@ -128,7 +131,9 @@ export const BeforeYouFileADocument = connect(
             Cancel
           </Button>
           {showModal === 'FormCancelModalDialog' && (
-            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+            <FormCancelModalDialog
+              onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+            />
           )}
         </section>
       </>
