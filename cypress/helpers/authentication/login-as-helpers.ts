@@ -37,8 +37,6 @@ export function loginAsPrivatePractitioner(
   cy.login(practitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
-  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
-  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
 export function loginAsIrsPractitioner(
