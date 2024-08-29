@@ -60,6 +60,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
+
     expect(
       applicationContext.getDocumentGenerators().order,
     ).toHaveBeenCalledWith(
@@ -74,7 +75,6 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-
       {
         addedDocketNumbers: [],
       } as any,
