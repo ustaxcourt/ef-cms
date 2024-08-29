@@ -197,13 +197,24 @@ module "ui-healthcheck" {
 #   public_key_name = var.tunnel_key_name
 # }
 
+module "kms" {
+  source      = "../../modules/kms"
+  environment = var.environment
+
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
 module "rds" {
-  source            = "../../modules/rds"
-  environment       = var.environment
-  postgres_user     = var.postgres_user
-  postgres_password = var.postgres_password
-  postgres_snapshot = ""
-  delete_protection = true
+  source             = "../../modules/rds"
+  environment        = var.environment
+  postgres_user      = var.postgres_user
+  postgres_password  = var.postgres_password
+  kms_key_id_primary = module.kms.kms_key_id_primary
+  kms_key_id_replica = module.kms.kms_key_id_replica
+  delete_protection  = true
 
   providers = {
     aws           = aws.us-east-1

@@ -1,30 +1,59 @@
-# Postgres Restore Database
+# Postgres - Restore Database
 
-## Database goes offline
+## Database goes offline (Fire drill)
 
-Assumes snapshot exists
-
-### Manual Process
-- Turn on maintenance mode (optional), otherwise expect error 400 upon viewing dashboard.
-- Disable delete protection on the global database, primary cluster, and secondary cluster.
-  - For global, source to env, run `aws rds modify-global-cluster --global-cluster-identifier <cluster identifier> --no-deletion-protection` 
-- Delete replica instance
-- Promote replica cluster 
-- Delete the replica cluster
-- Delete primary instance
-- Delete primary cluster
-- Delete global database cluster
-- In allColors.tf for the module "rds", update postgres_snapshot to the snapshot identifier of your choice
-- Toggle delete_protection in allColors.tf
-- Deploy terraform allColors
+Ensure snapshot exists for restore (aws console, rds -> snapshots).
 
 ### Terraform Process
+
+#### Prepare for deletion
+- Source to specific env (ex: `source scripts/env/set-env.zsh exp4`)
 - Update allColors.tf
   - Toggle delete_protection from true to false.
 - Update rds.tf
   - Toggle prevent_destroy from true to false
-- Run deploy allColors
--
+  - Uncomment skip_final_snapshot
+- Run deploy allColors (ex: `npm run deploy:allColors exp4`)
+
+#### Delete global cluster
+- Source to specific env (ex: `source scripts/env/set-env.zsh exp4`)
+- Update allColors.tf
+  - Comment out module "rds"
+- Update allColors/output.tf
+  - Comment out:
+  ```
+  output "rds_host_name" {
+    value = module.rds.address
+  }
+
+  output "rds_host_name_west" {
+    value = module.rds.address_west
+  }
+  ```
+- Run deploy allColors (ex: `npm run deploy:allColors exp4`)
+
+#### Restore global cluster
+- Source to specific env (ex: `source scripts/env/set-env.zsh exp4`)
+- In allColors.tf 
+  - Uncomment the module "rds" 
+  - Toggle delete_protection from false to true. 
+- In rds.tf
+  - Uncomment snapshot_identifier and update to the snapshot identifier of your choice
+  - Comment out global_cluster_identifier
+  - Toggle prevent_destroy from true to false
+- Update allColors/output.tf
+  - Uncomment out:
+  ```
+  output "rds_host_name" {
+    value = module.rds.address
+  }
+
+  output "rds_host_name_west" {
+    value = module.rds.address_west
+  }
+  ```
+- Run deploy allColors (ex: `npm run deploy:allColors exp4`)
+
 
 
 ## Database needs to serve traffic but be restored
