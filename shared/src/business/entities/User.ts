@@ -144,7 +144,7 @@ export class User extends JoiValidationEntity {
         .object({
           phone: User.USER_CONTACT_VALIDATION_RULES.phone,
         })
-        .unknown(true),
+        .optional(),
     }),
     email: JoiValidationConstants.EMAIL.optional(),
     entityName: JoiValidationConstants.STRING.valid('User').required(),
