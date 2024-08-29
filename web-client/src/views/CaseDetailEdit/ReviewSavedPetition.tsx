@@ -16,6 +16,7 @@ import React from 'react';
 export const ReviewSavedPetition = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
+    closeModalAndNavigateSequence: sequences.closeModalAndNavigateSequence,
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -30,6 +31,7 @@ export const ReviewSavedPetition = connect(
   },
   function ReviewSavedPetition({
     clearModalSequence,
+    closeModalAndNavigateSequence,
     constants,
     form,
     formCancelToggleCancelSequence,
@@ -279,7 +281,9 @@ export const ReviewSavedPetition = connect(
           ></ConfirmModal>
         )}
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndNavigateSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndNavigateSequence}
+          />
         )}
         {showModal === 'ServeCaseToIrsErrorModal' && (
           <ServeCaseToIrsErrorModal onCancelSequence="closeModalAndNavigateSequence" />
