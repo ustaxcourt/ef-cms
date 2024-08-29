@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoDashboardSequence } from '../sequences/gotoDashboardSequence';
+import { petitionerUser } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
 describe('gotoDashboardSequence', () => {
@@ -26,6 +27,12 @@ describe('gotoDashboardSequence', () => {
 
     //set token to take 'isLoggedIn' path
     cerebralTest.setState('token', 'a');
+    cerebralTest.setState('user', {
+      email: 'richard@e.mail',
+      name: 'richard',
+      role: petitionerUser.role,
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    });
   });
 
   it('should set up state for petitioner going to dashboard', async () => {

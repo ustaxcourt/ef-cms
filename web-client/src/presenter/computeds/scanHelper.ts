@@ -16,7 +16,7 @@ export const scanHelper = (
 
   const { INITIAL_DOCUMENT_TYPES, SCAN_MODES } =
     applicationContext.getConstants();
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const formCaseDocuments = get(state.form.docketEntries);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
@@ -90,11 +90,9 @@ export const scanHelper = (
     STINFileCompleted,
     disableModalSelect,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
-    hasScanFeature: !!(
-      user &&
-      user.role &&
-      applicationContext.getUtilities().isInternalUser(user.role)
-    ),
+    hasScanFeature: !!applicationContext
+      .getUtilities()
+      .isInternalUser(user.role),
     scanFeatureEnabled,
     scanModeNotSelected,
     scanModeOptions,

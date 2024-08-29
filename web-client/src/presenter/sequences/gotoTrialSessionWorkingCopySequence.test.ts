@@ -1,15 +1,13 @@
 import { CerebralTest } from 'cerebral/test';
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoTrialSessionWorkingCopySequence } from '../sequences/gotoTrialSessionWorkingCopySequence';
+import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
 describe('gotoTrialSessionWorkingCopySequence', () => {
   const mockTrialSessionId = '2f731ada-0276-4eca-b518-cfedc4c496d9';
-  const mockJudgeUserId = '42e55e43-2cc2-4266-96ed-8cc0400ff1ce';
+  const mockJudgeUserId = judgeUser.userId;
 
   const mockTrialSession = {
     judge: {
@@ -46,14 +44,10 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
 
     //set token to take 'isLoggedIn' path
     cerebralTest.setState('token', 'a');
+    cerebralTest.setState('user', judgeUser);
   });
 
   it('should set up state for a user associated with the trial session', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.judge,
-      userId: mockJudgeUserId,
-    });
-
     applicationContext
       .getUseCases()
       .getTrialSessionDetailsInteractor.mockReturnValue(mockTrialSession);

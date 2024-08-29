@@ -2,25 +2,22 @@ import { Case } from '../cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('TrialSession entity', () => {
   describe('manuallyAddCaseToCalendar', () => {
-    const mockCaseEntity = new Case(MOCK_CASE, { applicationContext });
+    const mockCaseEntity = new Case(MOCK_CASE, {
+      authorizedUser: mockDocketClerkUser,
+    });
     const dateRegex = /^\d*-\d*-\d*T\d*:\d*:\d*.\d*Z$/g;
 
     let trialSession: TrialSession;
 
     beforeEach(() => {
-      trialSession = new TrialSession(
-        {
-          ...MOCK_TRIAL_INPERSON,
-          caseOrder: [],
-        },
-        {
-          applicationContext,
-        },
-      );
+      trialSession = new TrialSession({
+        ...MOCK_TRIAL_INPERSON,
+        caseOrder: [],
+      });
     });
 
     it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {

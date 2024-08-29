@@ -6,6 +6,11 @@ import {
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { validUser } from '../../../../../shared/src/test/mockUsers';
 import { verifyUserPendingEmailInteractor } from './verifyUserPendingEmailInteractor';
 
@@ -13,6 +18,7 @@ describe('verifyUserPendingEmailInteractor', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
   const mockPractitioner = {
     ...validUser,
+    ...mockPrivatePractitionerUser,
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'RA3333',
@@ -32,6 +38,7 @@ describe('verifyUserPendingEmailInteractor', () => {
 
   const mockPetitioner = {
     ...validUser,
+    ...mockPetitionerUser,
     firstName: 'Olden',
     lastName: 'Vivas',
     pendingEmail: 'other@example.com',
@@ -53,7 +60,6 @@ describe('verifyUserPendingEmailInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(mockPractitioner);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockPractitioner);
@@ -72,23 +78,26 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   it('should throw unauthorized error when user does not have permission to verify emails', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-
     await expect(
-      verifyUserPendingEmailInteractor(applicationContext, {
-        token: 'abc',
-      }),
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: 'abc',
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized to manage emails');
   });
 
   it('should throw an unauthorized error when the token passed as an argument does not match stored token on user', async () => {
     await expect(
-      verifyUserPendingEmailInteractor(applicationContext, {
-        token: 'abc',
-      }),
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: 'abc',
+        },
+        mockPrivatePractitionerUser,
+      ),
     ).rejects.toThrow('Tokens do not match');
   });
 
@@ -99,9 +108,13 @@ describe('verifyUserPendingEmailInteractor', () => {
     });
 
     await expect(
-      verifyUserPendingEmailInteractor(applicationContext, {
-        token: undefined as any,
-      }),
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: undefined as any,
+        },
+        mockPrivatePractitionerUser,
+      ),
     ).rejects.toThrow('Tokens do not match');
   });
 
@@ -111,16 +124,24 @@ describe('verifyUserPendingEmailInteractor', () => {
       .isEmailAvailable.mockReturnValue(false);
 
     await expect(
-      verifyUserPendingEmailInteractor(applicationContext, {
-        token: TOKEN,
-      }),
+      verifyUserPendingEmailInteractor(
+        applicationContext,
+        {
+          token: TOKEN,
+        },
+        mockPrivatePractitionerUser,
+      ),
     ).rejects.toThrow('Email is not available');
   });
 
   it('should update the cognito email when tokens match', async () => {
-    await verifyUserPendingEmailInteractor(applicationContext, {
-      token: TOKEN,
-    });
+    await verifyUserPendingEmailInteractor(
+      applicationContext,
+      {
+        token: TOKEN,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalledWith(
       applicationContext,
@@ -134,9 +155,13 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   it('should update the dynamo record with the new info', async () => {
-    await verifyUserPendingEmailInteractor(applicationContext, {
-      token: TOKEN,
-    });
+    await verifyUserPendingEmailInteractor(
+      applicationContext,
+      {
+        token: TOKEN,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -149,9 +174,13 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined, and service indicator set to electronic with a practitioner user', async () => {
-    await verifyUserPendingEmailInteractor(applicationContext, {
-      token: TOKEN,
-    });
+    await verifyUserPendingEmailInteractor(
+      applicationContext,
+      {
+        token: TOKEN,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -169,9 +198,13 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockPetitioner);
 
-    await verifyUserPendingEmailInteractor(applicationContext, {
-      token: mockPetitioner.pendingEmailVerificationToken,
-    });
+    await verifyUserPendingEmailInteractor(
+      applicationContext,
+      {
+        token: mockPetitioner.pendingEmailVerificationToken,
+      },
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]

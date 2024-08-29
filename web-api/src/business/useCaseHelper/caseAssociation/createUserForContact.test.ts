@@ -10,6 +10,11 @@ import {
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createUserForContact } from './createUserForContact';
+import {
+  mockAdmissionsClerkUser,
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('createUserForContact', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -19,12 +24,13 @@ describe('createUserForContact', () => {
   });
 
   it('should throw an unauthorized error for non admissionsclerk users', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
       createUserForContact({
         applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        authorizedUser: mockPetitionerUser,
+        caseEntity: new Case(MOCK_CASE, {
+          authorizedUser: mockDocketClerkUser,
+        }),
         contactId: USER_ID,
         email: 'testing@example.com',
         name: 'Bob Ross',
@@ -34,11 +40,6 @@ describe('createUserForContact', () => {
 
   it('should call createNewPetitionerUser with the new user entity', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-    });
-
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -53,11 +54,12 @@ describe('createUserForContact', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockAdmissionsClerkUser },
     );
 
     await createUserForContact({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
       email: UPDATED_EMAIL,
@@ -78,11 +80,6 @@ describe('createUserForContact', () => {
 
   it('should return the caseEntity', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-    });
-
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -96,11 +93,12 @@ describe('createUserForContact', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockAdmissionsClerkUser },
     );
 
     const updatedCase = await createUserForContact({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
       email: UPDATED_EMAIL,
@@ -112,11 +110,6 @@ describe('createUserForContact', () => {
 
   it('should call associateUserWithCase', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
-
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-    });
-
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -130,11 +123,12 @@ describe('createUserForContact', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockAdmissionsClerkUser },
     );
 
     await createUserForContact({
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
       email: UPDATED_EMAIL,

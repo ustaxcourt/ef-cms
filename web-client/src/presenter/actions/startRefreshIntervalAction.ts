@@ -1,3 +1,4 @@
+import { setCurrentUserToken } from '@shared/proxies/requests';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const startRefreshIntervalAction = ({
@@ -15,7 +16,7 @@ export const startRefreshIntervalAction = ({
         .renewIdTokenInteractor(applicationContext);
 
       store.set(state.token, response.idToken);
-      applicationContext.setCurrentUserToken(response.idToken);
+      setCurrentUserToken(response.idToken);
     }
   };
 

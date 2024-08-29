@@ -8,6 +8,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateChangeOfAddress } from '../user/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -19,12 +20,14 @@ export const updatePractitionerUser = async (
     bypassDocketEntry = false,
     user,
   }: { barNumber: string; bypassDocketEntry?: boolean; user: RawPractitioner },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const requestUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER) ||
-    !isAuthorized(requestUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
+    ) ||
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)
   ) {
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
@@ -95,7 +98,7 @@ export const updatePractitionerUser = async (
     message: {
       action: 'admin_contact_initial_update_complete',
     },
-    userId: requestUser.userId,
+    userId: authorizedUser.userId,
   });
 
   if (userHasAccount && userIsUpdatingEmail) {
@@ -125,10 +128,11 @@ export const updatePractitionerUser = async (
   if (combinedDiffKeys.length > propertiesNotRequiringChangeOfAddress.length) {
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser,
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
       firmName: validatedUserData.firmName,
-      requestUserId: requestUser.userId,
+      requestUserId: authorizedUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
       user: oldUser,
@@ -140,7 +144,7 @@ export const updatePractitionerUser = async (
       message: {
         action: 'admin_contact_full_update_complete',
       },
-      userId: requestUser.userId,
+      userId: authorizedUser.userId,
     });
   }
 };
@@ -203,19 +207,20 @@ const getUpdatedFieldNames = ({
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'update_practitioner_user',
-    },
-    userId: user.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'update_practitioner_user',
+      },
+      userId: authorizedUser?.userId,
+    });
+  }
 };
 
 export const determineEntitiesToLock = async (

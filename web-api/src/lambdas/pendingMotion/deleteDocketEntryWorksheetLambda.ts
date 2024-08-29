@@ -1,11 +1,15 @@
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deleteDocketEntryWorksheetInteractor } from '@web-api/business/useCases/pendingMotion/deleteDocketEntryWorksheetInteractor';
 import { genericHandler } from '../../genericHandler';
 
-export const deleteDocketEntryWorksheetLambda = event =>
+export const deleteDocketEntryWorksheetLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(event, ({ applicationContext }) => {
-    return applicationContext
-      .getUseCases()
-      .deleteDocketEntryWorksheetInteractor(
-        applicationContext,
-        event.pathParameters.docketEntryId,
-      );
+    return deleteDocketEntryWorksheetInteractor(
+      applicationContext,
+      event.pathParameters.docketEntryId,
+      authorizedUser,
+    );
   });

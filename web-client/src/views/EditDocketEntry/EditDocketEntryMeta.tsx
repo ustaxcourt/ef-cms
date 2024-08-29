@@ -16,6 +16,8 @@ import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     editType: state.screenMetadata.editType,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -23,6 +25,7 @@ export const EditDocketEntryMeta = connect(
       sequences.submitEditDocketEntryMetaSequence,
   },
   function EditDocketEntryMeta({
+    closeModalAndReturnToCaseDetailSequence,
     editType,
     formCancelToggleCancelSequence,
     showModal,
@@ -104,7 +107,9 @@ export const EditDocketEntryMeta = connect(
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
       </>
     );

@@ -1,5 +1,5 @@
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('toRawObject', () => {
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('toRawObject', () => {
   });
 
   it('calls own function to update values after decorated toRawObject', () => {
-    const myCase = new Case({}, { applicationContext });
+    const myCase = new Case({}, { authorizedUser: mockDocketClerkUser });
 
     const result = myCase.toRawObject();
 
@@ -20,7 +20,7 @@ describe('toRawObject', () => {
   });
 
   it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
-    const myCase = new Case({}, { applicationContext });
+    const myCase = new Case({}, { authorizedUser: mockDocketClerkUser });
     const result = myCase.toRawObject(false);
 
     expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();

@@ -1,10 +1,11 @@
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionDetailsInteractor } from './getTrialSessionDetailsInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('Get trial session details', () => {
@@ -19,23 +20,19 @@ describe('Get trial session details', () => {
     trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
   };
 
-  beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
-  });
-
   it('throws error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({});
 
     await expect(
-      getTrialSessionDetailsInteractor(applicationContext, {
-        trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-      }),
+      getTrialSessionDetailsInteractor(
+        applicationContext,
+        {
+          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -47,9 +44,13 @@ describe('Get trial session details', () => {
       );
 
     await expect(
-      getTrialSessionDetailsInteractor(applicationContext, {
-        trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-      }),
+      getTrialSessionDetailsInteractor(
+        applicationContext,
+        {
+          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('The TrialSession entity was invalid');
   });
 
@@ -59,9 +60,13 @@ describe('Get trial session details', () => {
       .getTrialSessionById.mockResolvedValue(null);
 
     await expect(
-      getTrialSessionDetailsInteractor(applicationContext, {
-        trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-      }),
+      getTrialSessionDetailsInteractor(
+        applicationContext,
+        {
+          trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(
       'Trial session 208a959f-9526-4db5-b262-e58c476a4604 was not found.',
     );
@@ -72,9 +77,13 @@ describe('Get trial session details', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION);
 
-    const result = await getTrialSessionDetailsInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
-    });
+    const result = await getTrialSessionDetailsInteractor(
+      applicationContext,
+      {
+        trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
     expect(result).toMatchObject(MOCK_TRIAL_SESSION);
   });
 });
