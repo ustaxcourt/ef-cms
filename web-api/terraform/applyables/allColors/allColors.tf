@@ -214,7 +214,7 @@ module "rds" {
   postgres_password  = var.postgres_password
   kms_key_id_primary = module.kms.kms_key_id_primary
   kms_key_id_replica = module.kms.kms_key_id_replica
-  delete_protection  = true
+  delete_protection  = false
 
   providers = {
     aws           = aws.us-east-1
