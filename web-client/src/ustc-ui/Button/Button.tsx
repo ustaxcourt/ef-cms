@@ -8,8 +8,7 @@ function getUpdatedOnClick(
   disableOnClick: boolean | undefined,
   setDisableButton: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
-  if (!onClick) return onClick;
-  if (!disableOnClick) return debounce(onClick, 500);
+  if (!onClick || !disableOnClick) return onClick;
 
   const debouncedWrapper = debounce(async (...args) => {
     const results = onClick(...args);
