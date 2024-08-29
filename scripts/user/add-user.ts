@@ -8,6 +8,7 @@ import {
   requireEnvVars,
 } from '../../shared/admin-tools/util';
 import { judgeUser } from '@shared/test/mockUsers';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import joi from 'joi';
 
 requireEnvVars(['ENV', 'DEFAULT_ACCOUNT_PASS']);
@@ -121,7 +122,7 @@ const sendWelcomeEmail = async ({ email }) => {
 
   const judgesChambers: JudgeChambersInfo[] = await applicationContext
     .getUseCases()
-    .getJudgesChambersInteractor(applicationContext);
+    .getJudgesChambersInteractor(applicationContext, mockJudgeUser);
   const validChambersSections = judgesChambers.map(
     chambers => chambers.section,
   );

@@ -2,6 +2,7 @@ import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy'
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgesChambersInteractor } from './getJudgesChambersInteractor';
+import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 const MOCK_JUDGE_USERS = [
   {
@@ -44,27 +45,21 @@ const MOCK_JUDGES_CHAMBERS: JudgeChambersInfo[] = [
   },
 ];
 
-// TODO 10455: Merge in 10417 from staging to get rid of getCurrentUser!
 describe('getJudgesChambersInteractor', () => {
   it('throws an exception if a petitioner tries to get the chambers', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
-
     await expect(() =>
-      getJudgesChambersInteractor(applicationContext),
+      getJudgesChambersInteractor(applicationContext, mockPetitionerUser),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns the correct chambers', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.judge,
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getUsersInSection.mockReturnValue(MOCK_JUDGE_USERS);
-    const result = await getJudgesChambersInteractor(applicationContext);
+    const result = await getJudgesChambersInteractor(
+      applicationContext,
+      mockJudgeUser,
+    );
 
     expect(result).toMatchObject(MOCK_JUDGES_CHAMBERS);
   });
