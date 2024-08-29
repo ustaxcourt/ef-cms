@@ -16,6 +16,8 @@ import React from 'react';
 
 export const CreateOrder = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     createOrderHelper: state.createOrderHelper,
     editorDelta: state.form.editorDelta,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -32,6 +34,7 @@ export const CreateOrder = connect(
     validationErrors: state.validationErrors,
   },
   function CreateOrder({
+    closeModalAndReturnToCaseDetailSequence,
     createOrderHelper,
     editorDelta,
     formCancelToggleCancelSequence,
@@ -147,7 +150,9 @@ export const CreateOrder = connect(
         {showModal === 'AddDocketNumbersModal' && <AddDocketNumbersModal />}
 
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
         {showModal === 'EditOrderTitleModal' && <EditOrderTitleModal />}
       </>
