@@ -133,19 +133,24 @@ export class User extends JoiValidationEntity {
     }).messages({ '*': 'Enter state' }),
   };
 
+  static JUDGE_CONTACT_SCHEMA = joi
+    .object({
+      phone: User.USER_CONTACT_VALIDATION_RULES.phone,
+    })
+    .required();
+
+  static NON_JUDGE_CONTACT_SCHEMA = joi
+    .object(User.USER_CONTACT_VALIDATION_RULES)
+    .required();
+
+  static CONTACT_SCHEMA = joi.alternatives().conditional('role', {
+    is: ROLES.judge || ROLES.legacyJudge,
+    otherwise: User.NON_JUDGE_CONTACT_SCHEMA,
+    then: User.JUDGE_CONTACT_SCHEMA,
+  });
+
   static VALIDATION_RULES = {
-    contact: joi.object().when('role', {
-      is: joi.valid(ROLES.judge, ROLES.legacyJudge),
-      otherwise: joi
-        .object()
-        .keys(User.USER_CONTACT_VALIDATION_RULES)
-        .optional(),
-      then: joi
-        .object({
-          phone: User.USER_CONTACT_VALIDATION_RULES.phone,
-        })
-        .optional(),
-    }),
+    contact: User.CONTACT_SCHEMA.optional(),
     email: JoiValidationConstants.EMAIL.optional(),
     entityName: JoiValidationConstants.STRING.valid('User').required(),
     isSeniorJudge: joi.when('role', {
