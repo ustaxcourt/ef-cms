@@ -85,7 +85,9 @@ export const genericHandler = (
   return handle(awsEvent, async () => {
     const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext = createApplicationContext(user, awsEvent.logger);
+    // pinkLog('I am the event logger', awsEvent.logger);
+    console.log('I am awsEvent: ', awsEvent);
+    const applicationContext = createApplicationContext(user);
 
     delete awsEvent.logger;
 

@@ -1,4 +1,4 @@
-import { logger } from './logger';
+import { expressLogger } from './logger';
 import { transports } from 'winston';
 import fs from 'fs';
 jest.mock('@vendia/serverless-express');
@@ -36,7 +36,7 @@ describe('logger', () => {
 
   const subject = (request, response) =>
     new Promise(resolve => {
-      const middleware = logger(
+      const middleware = expressLogger(
         new transports.Stream({
           stream: fs.createWriteStream('/dev/null'),
         }),
@@ -51,7 +51,7 @@ describe('logger', () => {
   });
 
   it('defaults to using a console logger if not specified', () => {
-    const middleware = logger();
+    const middleware = expressLogger();
 
     jest.spyOn(console, 'log').mockImplementation(jest.fn());
     middleware(req, res, () => {
