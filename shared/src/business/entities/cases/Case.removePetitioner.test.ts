@@ -1,10 +1,12 @@
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('removePetitioner', () => {
   it('should remove the petitioner by contactId from the petitioners array', () => {
-    const caseEntity = new Case(MOCK_CASE, { applicationContext });
+    const caseEntity = new Case(MOCK_CASE, {
+      authorizedUser: mockAdmissionsClerkUser,
+    });
     const numberOfPetitionersOnCase = caseEntity.petitioners.length;
     expect(caseEntity.petitioners.length).toEqual(numberOfPetitionersOnCase);
 

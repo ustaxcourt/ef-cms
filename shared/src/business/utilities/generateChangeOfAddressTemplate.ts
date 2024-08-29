@@ -34,7 +34,15 @@ export const getAddressPhoneDiff = ({ newData, oldData }) => {
  * @param {object} providers.oldData the old contact information
  * @returns {string} documentType for the address / phone change scenario
  */
-export const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
+export const getDocumentTypeForAddressChange = ({
+  diff,
+  newData,
+  oldData,
+}: {
+  diff?: any;
+  newData: any;
+  oldData: any;
+}) => {
   let documentType;
 
   const initialDiff = diff || getAddressPhoneDiff({ newData, oldData });

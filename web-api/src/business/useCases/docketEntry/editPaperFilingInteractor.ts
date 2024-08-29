@@ -1,4 +1,8 @@
 import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import {
   Case,
   isLeadCase,
 } from '../../../../../shared/src/business/entities/cases/Case';
@@ -34,14 +38,18 @@ interface IEditPaperFilingRequest {
 export const editPaperFiling = async (
   applicationContext: ServerApplicationContext,
   request: IEditPaperFilingRequest,
+  authorizedUser: UnknownAuthUser,
 ) => {
   request.consolidatedGroupDocketNumbers =
     request.consolidatedGroupDocketNumbers || [];
 
-  authorizeRequest(applicationContext);
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
     applicationContext,
+    authorizedUser,
     docketEntryId: request.docketEntryId,
     docketNumber: request.documentMetadata.docketNumber,
   });
@@ -58,6 +66,7 @@ export const editPaperFiling = async (
 
   return editPaperFilingStrategy({
     applicationContext,
+    authorizedUser,
     caseEntity,
     docketEntryEntity,
     request,
@@ -88,6 +97,7 @@ const getEditPaperFilingStrategy = ({
 
 const saveForLaterStrategy = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   docketEntryEntity,
   request,
@@ -96,15 +106,15 @@ const saveForLaterStrategy = async ({
   request: IEditPaperFilingRequest;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
+  authorizedUser: AuthUser;
 }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const updatedDocketEntryEntity = await updateDocketEntry({
     applicationContext,
+    authorizedUser,
     caseEntity,
     docketEntry: docketEntryEntity,
     documentMetadata: request.documentMetadata,
@@ -119,6 +129,7 @@ const saveForLaterStrategy = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 
@@ -141,6 +152,7 @@ const saveForLaterStrategy = async ({
 
 const multiDocketServeStrategy = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   docketEntryEntity,
   request,
@@ -149,6 +161,7 @@ const multiDocketServeStrategy = async ({
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
+  authorizedUser: AuthUser;
 }) => {
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
@@ -164,7 +177,10 @@ const multiDocketServeStrategy = async ({
   );
 
   const consolidatedCaseEntities = consolidatedCaseRecords.map(
-    consolidatedCase => new Case(consolidatedCase, { applicationContext }),
+    consolidatedCase =>
+      new Case(consolidatedCase, {
+        authorizedUser,
+      }),
   );
 
   validateMultiDocketPaperFilingRequest({
@@ -174,10 +190,9 @@ const multiDocketServeStrategy = async ({
 
   const caseEntitiesToFileOn = [caseEntity, ...consolidatedCaseEntities];
 
-  const authorizedUser = applicationContext.getCurrentUser();
-
   await serveDocketEntry({
     applicationContext,
+    authorizedUser,
     caseEntitiesToFileOn,
     clientConnectionId: request.clientConnectionId,
     docketEntryEntity,
@@ -190,6 +205,7 @@ const multiDocketServeStrategy = async ({
 
 const singleDocketServeStrategy = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   docketEntryEntity,
   request,
@@ -198,6 +214,7 @@ const singleDocketServeStrategy = async ({
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
   request: IEditPaperFilingRequest;
+  authorizedUser: AuthUser;
 }) => {
   validateDocketEntryCanBeServed({
     documentMetadata: request.documentMetadata,
@@ -205,10 +222,9 @@ const singleDocketServeStrategy = async ({
 
   const caseEntitiesToFileOn = [caseEntity];
 
-  const authorizedUser = applicationContext.getCurrentUser();
-
   await serveDocketEntry({
     applicationContext,
+    authorizedUser,
     caseEntitiesToFileOn,
     clientConnectionId: request.clientConnectionId,
     docketEntryEntity,
@@ -222,6 +238,7 @@ const singleDocketServeStrategy = async ({
 // *********************************** Small Helper Functions ***********************************
 const serveDocketEntry = async ({
   applicationContext,
+  authorizedUser,
   caseEntitiesToFileOn,
   clientConnectionId,
   docketEntryEntity,
@@ -238,6 +255,7 @@ const serveDocketEntry = async ({
   userId: string;
   subjectCaseEntity: Case;
   message: string;
+  authorizedUser: AuthUser;
 }) => {
   await applicationContext
     .getPersistenceGateway()
@@ -255,6 +273,7 @@ const serveDocketEntry = async ({
 
     const updatedDocketEntry = await updateDocketEntry({
       applicationContext,
+      authorizedUser,
       caseEntity: subjectCaseEntity,
       docketEntry: docketEntryEntity,
       documentMetadata,
@@ -267,7 +286,7 @@ const serveDocketEntry = async ({
           applicationContext,
           caseEntity: aCase,
           docketEntryEntity: new DocketEntry(cloneDeep(updatedDocketEntry), {
-            applicationContext,
+            authorizedUser,
           }),
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
@@ -367,18 +386,9 @@ const validateMultiDocketPaperFilingRequest = ({
   });
 };
 
-const authorizeRequest = (
-  applicationContext: ServerApplicationContext,
-): void => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-};
-
 const updateDocketEntry = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   docketEntry,
   documentMetadata,
@@ -389,6 +399,7 @@ const updateDocketEntry = async ({
   docketEntry: DocketEntry;
   documentMetadata: any;
   userId: string;
+  authorizedUser: AuthUser;
 }): Promise<DocketEntry> => {
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
@@ -427,7 +438,10 @@ const updateDocketEntry = async ({
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId,
     },
-    { applicationContext, petitioners: caseEntity.petitioners },
+    {
+      authorizedUser,
+      petitioners: caseEntity.petitioners,
+    },
   );
 
   if (editableFields.isFileAttached) {
@@ -474,12 +488,14 @@ const updateAndSaveWorkItem = async ({
 
 const getDocketEntryToEdit = async ({
   applicationContext,
+  authorizedUser,
   docketEntryId,
   docketNumber,
 }: {
   applicationContext: ServerApplicationContext;
   docketNumber: string;
   docketEntryId: string;
+  authorizedUser: AuthUser;
 }): Promise<{
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
@@ -491,7 +507,9 @@ const getDocketEntryToEdit = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -519,19 +537,23 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (applicationContext, originalRequest) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'edit_paper_filing',
-    },
-    userId: user.userId,
-  });
+export const handleLockError = async (
+  applicationContext,
+  originalRequest,
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'edit_paper_filing',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const editPaperFilingInteractor = withLocking(

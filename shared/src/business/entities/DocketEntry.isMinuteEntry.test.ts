@@ -1,6 +1,5 @@
 import { DocketEntry } from './DocketEntry';
 import { MINUTE_ENTRIES_MAP } from './EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isMinuteEntry', () => {
   describe('non RQT event codes', () => {
@@ -13,7 +12,7 @@ describe('isMinuteEntry', () => {
       eventCode => {
         const minuteEntry = new DocketEntry(
           { eventCode },
-          { applicationContext },
+          { authorizedUser: undefined },
         );
 
         expect(DocketEntry.isMinuteEntry(minuteEntry)).toBe(true);
@@ -23,7 +22,7 @@ describe('isMinuteEntry', () => {
     it('should return false when the docketEntry eventCode is NOT in the list of minute entries', () => {
       const orderDocketEntry = new DocketEntry(
         { eventCode: 'O', isFileAttached: true },
-        { applicationContext },
+        { authorizedUser: undefined },
       );
 
       expect(DocketEntry.isMinuteEntry(orderDocketEntry)).toBe(false);
@@ -34,7 +33,7 @@ describe('isMinuteEntry', () => {
     it('should return false when there is a file attached', () => {
       const orderDocketEntry = new DocketEntry(
         { eventCode: 'RQT', isFileAttached: true },
-        { applicationContext },
+        { authorizedUser: undefined },
       );
 
       expect(DocketEntry.isMinuteEntry(orderDocketEntry)).toBe(false);
@@ -43,7 +42,7 @@ describe('isMinuteEntry', () => {
     it('should return true when there is a not file attached', () => {
       const orderDocketEntry = new DocketEntry(
         { eventCode: 'RQT', isFileAttached: false },
-        { applicationContext },
+        { authorizedUser: undefined },
       );
 
       expect(DocketEntry.isMinuteEntry(orderDocketEntry)).toBe(true);

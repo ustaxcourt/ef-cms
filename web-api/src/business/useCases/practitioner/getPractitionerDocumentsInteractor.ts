@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * getPractitionerDocumentsInteractor
@@ -21,11 +22,10 @@ export const getPractitionerDocumentsInteractor = async (
   }: {
     barNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const requestUser = applicationContext.getCurrentUser();
-
   if (
-    !isAuthorized(requestUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {
     throw new UnauthorizedError(
       'Unauthorized for getting practitioner documents',

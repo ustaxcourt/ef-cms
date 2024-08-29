@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import {
   DOCKET_SECTION,
@@ -6,6 +7,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
@@ -24,6 +26,7 @@ import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities
  */
 const createDocketEntryForChange = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   docketMeta = {},
   documentType,
@@ -31,6 +34,16 @@ const createDocketEntryForChange = async ({
   oldData,
   servedParties,
   user,
+}: {
+  applicationContext: any;
+  caseEntity: any;
+  docketMeta: any;
+  documentType: any;
+  newData: any;
+  oldData: any;
+  servedParties: any;
+  user: any;
+  authorizedUser: AuthUser;
 }) => {
   const caseDetail = caseEntity.validate().toRawObject();
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
@@ -79,7 +92,7 @@ const createDocketEntryForChange = async ({
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       ...docketMeta,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   changeOfAddressDocketEntry.setFiledBy(user);
@@ -147,8 +160,7 @@ const createWorkItemForChange = async ({
       trialDate: caseEntity.trialDate,
       trialLocation: caseEntity.trialLocation,
     },
-    { applicationContext },
-    caseEntity,
+    { caseEntity },
   );
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
@@ -161,6 +173,7 @@ const createWorkItemForChange = async ({
 
 export const generateAndServeDocketEntry = async ({
   applicationContext,
+  authorizedUser,
   barNumber,
   caseEntity,
   contactName,
@@ -171,6 +184,19 @@ export const generateAndServeDocketEntry = async ({
   privatePractitionersRepresentingContact,
   servedParties,
   user,
+}: {
+  applicationContext: ServerApplicationContext;
+  barNumber: any;
+  caseEntity: any;
+  contactName: any;
+  docketMeta: any;
+  documentType: any;
+  newData: any;
+  oldData: any;
+  privatePractitionersRepresentingContact: any;
+  servedParties: any;
+  user: any;
+  authorizedUser: AuthUser;
 }) => {
   const partyWithPaperService = caseEntity.hasPartyWithServiceType(
     SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -197,6 +223,7 @@ export const generateAndServeDocketEntry = async ({
   let url;
   ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
     applicationContext,
+    authorizedUser,
     barNumber,
     caseEntity,
     contactName,

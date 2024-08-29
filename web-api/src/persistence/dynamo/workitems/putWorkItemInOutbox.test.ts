@@ -1,6 +1,7 @@
 import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { putWorkItemInOutbox } from './putWorkItemInOutbox';
 
 describe('putWorkItemInOutbox', () => {
@@ -22,16 +23,14 @@ describe('putWorkItemInOutbox', () => {
 
   it('invokes the persistence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
     const timestamp = createISODateString();
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: DOCKET_SECTION,
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+
     applicationContext.getDocumentClient.mockReturnValue({
       get: getStub,
       put: putStub,
     });
     await putWorkItemInOutbox({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       workItem: {
         completedAt: timestamp,
         workItemId: '123',

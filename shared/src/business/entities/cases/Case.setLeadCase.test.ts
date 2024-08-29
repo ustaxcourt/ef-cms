@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('setLeadCase', () => {
   it('Should set the leadDocketNumber on the given case', () => {
@@ -13,7 +13,7 @@ describe('setLeadCase', () => {
         procedureType: 'Regular',
         status: CASE_STATUS_TYPES.submitted,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
     const result = caseEntity.setLeadCase(leadDocketNumber);
 

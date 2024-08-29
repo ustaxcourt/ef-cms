@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { sealInLowerEnvironment } from './sealInLowerEnvironment';
 
 describe('sealInLowerEnvironment', () => {
@@ -11,17 +11,19 @@ describe('sealInLowerEnvironment', () => {
     applicationContext.getNotificationGateway().sendNotificationOfSealing =
       jest.fn();
     applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(true);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
   });
 
   it('should seal the case with the docketNumber provided and return the updated case', async () => {
-    const result = await sealInLowerEnvironment(applicationContext, [
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-      },
-    ]);
+    const result = await sealInLowerEnvironment(
+      applicationContext,
+      [
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+      ],
+      mockDocketClerkUser,
+    );
+
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).toHaveBeenCalled();
@@ -29,7 +31,8 @@ describe('sealInLowerEnvironment', () => {
   });
 
   it('should only log a warning if we do not have a docketNumber', async () => {
-    await sealInLowerEnvironment(applicationContext, [{}]);
+    await sealInLowerEnvironment(applicationContext, [{}], mockDocketClerkUser);
+
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).not.toHaveBeenCalled();
@@ -38,11 +41,17 @@ describe('sealInLowerEnvironment', () => {
 
   it('should not execute if the current color is not active', async () => {
     applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(false);
-    await sealInLowerEnvironment(applicationContext, [
-      {
-        docketNumber: '123-21',
-      },
-    ]);
+
+    await sealInLowerEnvironment(
+      applicationContext,
+      [
+        {
+          docketNumber: '123-21',
+        },
+      ],
+      mockDocketClerkUser,
+    );
+
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).not.toHaveBeenCalled();

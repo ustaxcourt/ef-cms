@@ -19,18 +19,14 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
 
   const messageDocumentHelper = withAppContextDecorator(
     messageDocumentHelperComputed,
-    {
-      ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
-    },
+    applicationContext,
   );
 
   const getBaseState = user => {
     globalUser = user;
     return {
       permissions: getUserPermissions(user),
+      user: globalUser,
     };
   };
 

@@ -1,4 +1,9 @@
 import {
+  AuthUser,
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -13,6 +18,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -48,10 +54,18 @@ export const getIsUserAuthorized = ({
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   petitionerOnCase,
   user,
   userHasAnEmail,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: any;
+  petitionerOnCase: any;
+  user: any;
+  userHasAnEmail: any;
+  authorizedUser: AuthUser;
 }) => {
   const newData = {
     email: petitionerOnCase.newEmail,
@@ -79,6 +93,7 @@ const updateCaseEntityAndGenerateChange = async ({
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         documentType,
         newData,
@@ -105,10 +120,15 @@ const updateCaseEntityAndGenerateChange = async ({
  * @returns {object} the updated case data
  */
 export const updatePetitionerInformation = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, updatedPetitionerData },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
+  if (!isAuthUser(authorizedUser)) {
+    throw new Error(
+      'User attempting to update petitioner information is not an auth user',
+    );
+  }
 
   const oldCase = await applicationContext
     .getPersistenceGateway()
@@ -117,7 +137,7 @@ export const updatePetitionerInformation = async (
   const hasAuthorization = getIsUserAuthorized({
     oldCase,
     updatedPetitionerData,
-    user,
+    user: authorizedUser,
   });
 
   if (!hasAuthorization) {
@@ -175,7 +195,7 @@ export const updatePetitionerInformation = async (
     {
       ...oldCase,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   caseToUpdateContacts.updatePetitioner({
@@ -196,7 +216,7 @@ export const updatePetitionerInformation = async (
     {
       ...caseToUpdateContacts.toRawObject(),
     },
-    { applicationContext },
+    { authorizedUser },
   ).validate();
 
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -225,13 +245,14 @@ export const updatePetitionerInformation = async (
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
+        authorizedUser,
         caseEntity,
         documentType: documentTypeToGenerate,
         newData,
         oldData,
         privatePractitionersRepresentingContact,
         servedParties,
-        user,
+        user: authorizedUser,
       });
     serviceUrl = url;
   }
@@ -252,6 +273,7 @@ export const updatePetitionerInformation = async (
         .getUseCaseHelpers()
         .createUserForContact({
           applicationContext,
+          authorizedUser,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
@@ -262,6 +284,7 @@ export const updatePetitionerInformation = async (
         .getUseCaseHelpers()
         .addExistingUserToCase({
           applicationContext,
+          authorizedUser,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
@@ -281,9 +304,10 @@ export const updatePetitionerInformation = async (
 
       await updateCaseEntityAndGenerateChange({
         applicationContext,
+        authorizedUser,
         caseEntity,
         petitionerOnCase: oldCaseContact,
-        user,
+        user: authorizedUser,
         userHasAnEmail: userToUpdate.email,
       });
     }
@@ -293,6 +317,7 @@ export const updatePetitionerInformation = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
 

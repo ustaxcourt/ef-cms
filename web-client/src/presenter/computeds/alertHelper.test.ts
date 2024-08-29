@@ -1,12 +1,7 @@
-import { alertHelper as alertHelperComputed } from './alertHelper';
+import { alertHelper } from './alertHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
 
-const alertHelper = withAppContextDecorator(alertHelperComputed, {
-  getCurrentUser: () => ({
-    userId: '123',
-  }),
-});
+const user = {};
 
 describe('alertHelper', () => {
   it('single message error alert', () => {
@@ -15,6 +10,7 @@ describe('alertHelper', () => {
         alertError: {
           message: 'abc',
         },
+        user,
       },
     });
     expect(result).toMatchObject({
@@ -29,6 +25,7 @@ describe('alertHelper', () => {
     const result = runCompute(alertHelper, {
       state: {
         alertError: { title: 'hello' },
+        user,
       },
     });
     expect(result).toMatchObject({
@@ -41,7 +38,7 @@ describe('alertHelper', () => {
 
   it('alertError is undefined', () => {
     const result = runCompute(alertHelper, {
-      state: {},
+      state: { user },
     });
     expect(result).toMatchObject({
       showErrorAlert: false,
@@ -57,6 +54,7 @@ describe('alertHelper', () => {
         alertError: {
           responseCode: 504,
         },
+        user,
       },
     });
     expect(result).toMatchObject({
