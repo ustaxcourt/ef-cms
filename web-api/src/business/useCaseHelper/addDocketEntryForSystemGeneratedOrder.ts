@@ -2,6 +2,7 @@ import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -9,14 +10,15 @@ import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/ge
 
 export const addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   systemGeneratedDocument,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   systemGeneratedDocument: any;
+  authorizedUser: AuthUser;
 }): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
   const isNotice = systemGeneratedDocument.eventCode === 'NOT';
 
   const newDocketEntry = new DocketEntry(
@@ -35,10 +37,10 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       isDraft: true,
       isFileAttached: true,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
-  newDocketEntry.setFiledBy(user);
+  newDocketEntry.setFiledBy(authorizedUser);
 
   caseEntity.addDocketEntry(newDocketEntry);
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);

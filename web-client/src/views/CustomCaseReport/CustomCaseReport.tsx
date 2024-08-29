@@ -7,6 +7,7 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -359,87 +360,66 @@ export const CustomCaseReport = connect(
           <div className="grid-col-12">
             <div className="grid-row">
               {customCaseReportFilters.caseStatuses.map(status => (
-                <span className="blue-pill" key={status}>
-                  {status}
-                  <Icon
-                    aria-label={`remove ${status} selection`}
-                    className="margin-left-1 cursor-pointer"
-                    icon="times"
-                    size="1x"
-                    onClick={() => {
+                <PillButton
+                  key={status}
+                  text={status}
+                  onRemove={() => {
+                    setCustomCaseReportFiltersSequence({
+                      caseStatuses: {
+                        action: 'remove',
+                        caseStatus: status,
+                      },
+                    });
+                  }}
+                />
+              ))}
+              {customCaseReportFilters.caseTypes.map(caseType => {
+                return (
+                  <PillButton
+                    key={caseType}
+                    text={caseType}
+                    onRemove={() => {
                       setCustomCaseReportFiltersSequence({
-                        caseStatuses: {
+                        caseTypes: {
                           action: 'remove',
-                          caseStatus: status,
+                          caseType,
                         },
                       });
                     }}
                   />
-                </span>
-              ))}
-
-              {customCaseReportFilters.caseTypes.map(caseType => {
-                return (
-                  <span className="blue-pill" key={caseType}>
-                    {caseType}
-                    <Icon
-                      aria-label={`remove ${caseType} selection`}
-                      className="margin-left-1 cursor-pointer"
-                      icon="times"
-                      size="1x"
-                      onClick={() => {
-                        setCustomCaseReportFiltersSequence({
-                          caseTypes: {
-                            action: 'remove',
-                            caseType,
-                          },
-                        });
-                      }}
-                    />
-                  </span>
                 );
               })}
 
               {customCaseReportFilters.judges.map(judge => {
                 return (
-                  <span className="blue-pill" key={judge}>
-                    {judge}
-                    <Icon
-                      aria-label={`remove ${judge} selection`}
-                      className="margin-left-1 cursor-pointer"
-                      icon="times"
-                      size="1x"
-                      onClick={() => {
-                        setCustomCaseReportFiltersSequence({
-                          judges: {
-                            action: 'remove',
-                            judge,
-                          },
-                        });
-                      }}
-                    />
-                  </span>
+                  <PillButton
+                    key={judge}
+                    text={judge}
+                    onRemove={() => {
+                      setCustomCaseReportFiltersSequence({
+                        judges: {
+                          action: 'remove',
+                          judge,
+                        },
+                      });
+                    }}
+                  />
                 );
               })}
               {customCaseReportFilters.preferredTrialCities.map(city => {
                 return (
-                  <span className="blue-pill" key={city}>
-                    {city}
-                    <Icon
-                      aria-label={`remove ${city} selection`}
-                      className="margin-left-1 cursor-pointer"
-                      icon="times"
-                      size="1x"
-                      onClick={() => {
-                        setCustomCaseReportFiltersSequence({
-                          preferredTrialCities: {
-                            action: 'remove',
-                            preferredTrialCity: city,
-                          },
-                        });
-                      }}
-                    />
-                  </span>
+                  <PillButton
+                    key={city}
+                    text={city}
+                    onRemove={() => {
+                      setCustomCaseReportFiltersSequence({
+                        preferredTrialCities: {
+                          action: 'remove',
+                          preferredTrialCity: city,
+                        },
+                      });
+                    }}
+                  />
                 );
               })}
             </div>

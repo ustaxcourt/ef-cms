@@ -3,6 +3,7 @@ import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 import { petitionerCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { v4 } from 'uuid';
 
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('irs superuser integration', () => {
@@ -20,9 +21,11 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
     it('should let an irs superuser view the reconciliation report and download a STIN', () => {
       cy.task('createAccount', {
-        irsEnv: true,
+        isIrsEnv: true,
+        name: 'irsSuperUser CI/CD',
         password,
         role: ROLES.irsSuperuser,
+        userId: v4(),
         userName,
       });
 

@@ -6,7 +6,7 @@ import {
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getOtherFilers', () => {
   it('sets a valid value of otherFilers on the case', () => {
@@ -46,7 +46,7 @@ describe('getOtherFilers', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

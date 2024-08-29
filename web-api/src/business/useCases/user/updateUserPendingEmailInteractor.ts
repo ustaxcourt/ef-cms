@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 
 /**
@@ -20,9 +21,8 @@ import { User } from '../../../../../shared/src/business/entities/User';
 export const updateUserPendingEmailInteractor = async (
   applicationContext: ServerApplicationContext,
   { pendingEmail }: { pendingEmail: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }

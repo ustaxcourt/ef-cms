@@ -8,10 +8,6 @@ describe('getDocumentQCServedForSectionAction', () => {
   const mockSection = 'A side section';
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: mockSection,
-    });
-
     applicationContext
       .getUseCases()
       .getDocumentQCServedForSectionInteractor.mockReturnValue(mockWorkItems);
@@ -19,20 +15,15 @@ describe('getDocumentQCServedForSectionAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to get the current user', async () => {
-    await runAction(getDocumentQCServedForSectionAction, {
-      modules: {
-        presenter,
-      },
-    });
-
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it("should make a call to getDocumentQCServedForSectionInteractor with the current user's section", async () => {
     await runAction(getDocumentQCServedForSectionAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          section: mockSection,
+        },
       },
     });
 
@@ -49,6 +40,9 @@ describe('getDocumentQCServedForSectionAction', () => {
         presenter,
       },
       state: {
+        user: {
+          section: mockSection,
+        },
         workQueueToDisplay: {
           section: mockSelectedSection,
         },
@@ -66,6 +60,11 @@ describe('getDocumentQCServedForSectionAction', () => {
     const { output } = await runAction(getDocumentQCServedForSectionAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: {
+          section: mockSection,
+        },
       },
     });
 
