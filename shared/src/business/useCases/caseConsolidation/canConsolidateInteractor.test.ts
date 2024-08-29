@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { canConsolidateInteractor } from './canConsolidateInteractor';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('canConsolidateInteractor', () => {
   let currentCase;
@@ -25,7 +25,7 @@ describe('canConsolidateInteractor', () => {
   });
 
   it('should return true when cases are consolidatable', () => {
-    const result = canConsolidateInteractor(applicationContext, {
+    const result = canConsolidateInteractor(mockDocketClerkUser, {
       caseToConsolidate,
       currentCase,
     });
@@ -36,7 +36,7 @@ describe('canConsolidateInteractor', () => {
   it('should return false when cases are not consolidatable', () => {
     caseToConsolidate.status = CASE_STATUS_TYPES.closed;
 
-    const result = canConsolidateInteractor(applicationContext, {
+    const result = canConsolidateInteractor(mockDocketClerkUser, {
       caseToConsolidate,
       currentCase,
     });

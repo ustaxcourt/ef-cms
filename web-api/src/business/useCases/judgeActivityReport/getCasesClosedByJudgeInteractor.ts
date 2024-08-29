@@ -7,6 +7,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type CasesClosedReturnType = {
   aggregations: {
@@ -19,9 +20,8 @@ export type CasesClosedReturnType = {
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext: ServerApplicationContext,
   params: JudgeActivityStatisticsRequest,
+  authorizedUser: UnknownAuthUser,
 ): Promise<CasesClosedReturnType> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -29,7 +29,7 @@ export const getCasesClosedByJudgeInteractor = async (
   const searchEntity = new JudgeActivityReportSearch(params);
 
   if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
+    throw new InvalidRequest('Invalid search terms');
   }
 
   return await applicationContext

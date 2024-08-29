@@ -25,6 +25,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     const caseEntity = entity.validate();
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser: undefined,
       caseToUpdate: caseEntity,
     });
 
@@ -50,6 +51,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     try {
       await acquireLock({
         applicationContext,
+        authorizedUser: undefined,
         identifiers: [`case|${docketNumber}`],
         onLockError: new ServiceUnavailableError(
           `${docketNumber} is currently being updated`,
@@ -80,7 +82,9 @@ export const checkForReadyForTrialCasesInteractor = async (
       });
 
     if (caseToCheck) {
-      const caseEntity = new Case(caseToCheck, { applicationContext });
+      const caseEntity = new Case(caseToCheck, {
+        authorizedUser: undefined,
+      });
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
         if (

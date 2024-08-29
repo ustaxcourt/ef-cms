@@ -15,8 +15,8 @@ export const validateTrialSessionInteractor = (
   applicationContext: IApplicationContext,
   { trialSession }: { trialSession: RawNewTrialSession },
 ) => {
-  const errors = new NewTrialSession(trialSession, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+  const errors = new NewTrialSession(
+    trialSession,
+  ).getFormattedValidationErrors();
   return errors || null;
 };

@@ -13,18 +13,13 @@ const completeDocumentTypeSectionHelper = withAppContextDecorator(
   applicationContext,
 );
 
-beforeEach(() => {
-  applicationContext.getCurrentUser = jest
-    .fn()
-    .mockReturnValue(privatePractitionerUser);
-});
-
 describe('completeDocumentTypeSectionHelper', () => {
   it("should return an empty object given there's no caseDetail", () => {
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
         caseDetail: {},
         form: {},
+        user: privatePractitionerUser,
       },
     });
 
@@ -47,6 +42,7 @@ describe('completeDocumentTypeSectionHelper', () => {
           category,
           documentType,
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -74,6 +70,7 @@ describe('completeDocumentTypeSectionHelper', () => {
             documentType: 'Motion for Leave to File',
           },
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -98,6 +95,7 @@ describe('completeDocumentTypeSectionHelper', () => {
         form: {
           category,
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -123,9 +121,6 @@ describe('completeDocumentTypeSectionHelper', () => {
   });
 
   it('returns an array of documentTypes for select including Entry of Appearance for IRS Practitioners on first filing', () => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(irsPractitionerUser);
     applicationContext.getUtilities().isSealedCase = jest
       .fn()
       .mockReturnValue(false);
@@ -136,6 +131,7 @@ describe('completeDocumentTypeSectionHelper', () => {
           docketNumber: '101-20',
         },
         form: {},
+        user: irsPractitionerUser,
       },
     });
 
@@ -153,9 +149,6 @@ describe('completeDocumentTypeSectionHelper', () => {
   });
 
   it('returns an array of documentTypes for select that only contains documents with canBeFirstIrsDocument for IRS Pracitioners on filing first IRS document', () => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(irsPractitionerUser);
     applicationContext.getUtilities().isSealedCase = jest
       .fn()
       .mockReturnValue(false);
@@ -166,6 +159,7 @@ describe('completeDocumentTypeSectionHelper', () => {
           docketNumber: '101-20',
         },
         form: {},
+        user: irsPractitionerUser,
       },
     });
 
@@ -180,9 +174,6 @@ describe('completeDocumentTypeSectionHelper', () => {
   });
 
   it('returns an array of documentTypes for select excluding Entry of Appearance for IRS Practitioners on non-first filing', () => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(irsPractitionerUser);
     applicationContext.getUtilities().isSealedCase = jest
       .fn()
       .mockReturnValue(false);
@@ -194,6 +185,7 @@ describe('completeDocumentTypeSectionHelper', () => {
           irsPractitioners: [{ thing: 'thing' }],
         },
         form: {},
+        user: irsPractitionerUser,
       },
     });
 
@@ -206,10 +198,6 @@ describe('completeDocumentTypeSectionHelper', () => {
   });
 
   it('returns an array of documentTypes for select excluding Entry of Appearance for IRS Practitioners on sealed case', () => {
-    applicationContext.getCurrentUser = jest
-      .fn()
-      .mockReturnValue(irsPractitionerUser);
-
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
         caseDetail: {
@@ -217,6 +205,7 @@ describe('completeDocumentTypeSectionHelper', () => {
           isSealed: true,
         },
         form: {},
+        user: irsPractitionerUser,
       },
     });
 

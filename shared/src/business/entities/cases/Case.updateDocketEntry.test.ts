@@ -2,12 +2,12 @@ import { Case } from './Case';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateDocketEntry', () => {
   it('should replace the docket entry with the exact object provided', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     myCase.updateDocketEntry({
@@ -27,7 +27,7 @@ describe('updateDocketEntry', () => {
 
   it('should not change any docketEntries if no match is found', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
 
     myCase.updateDocketEntry({

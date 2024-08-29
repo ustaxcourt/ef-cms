@@ -14,9 +14,10 @@ export const canSetTrialSessionToCalendarAction = ({
   path,
 }: ActionProps) => {
   const trialSession = get(state.trialSession);
+  const user = get(state.user);
   const { canSetAsCalendared, emptyFields, isRemote } = applicationContext
     .getUseCases()
-    .canSetTrialSessionAsCalendaredInteractor(applicationContext, {
+    .canSetTrialSessionAsCalendaredInteractor(user, {
       trialSession,
     });
 

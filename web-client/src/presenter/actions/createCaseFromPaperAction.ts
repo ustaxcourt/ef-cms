@@ -12,6 +12,7 @@ export const createCaseFromPaperAction = async ({
 }: ActionProps<{
   fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
+  const user = get(state.user);
   const petitionMetadata: CreatedCaseType = get(state.form);
   const { fileUploadProgressMap } = props;
   let caseDetail: RawCase;
@@ -31,9 +32,9 @@ export const createCaseFromPaperAction = async ({
       petitionFileId,
       requestForPlaceOfTrialFileId,
       stinFileId,
-    } = await applicationContext
-      .getUseCases()
-      .generateDocumentIds(applicationContext, {
+    } = await applicationContext.getUseCases().generateDocumentIds(
+      applicationContext,
+      {
         applicationForWaiverOfFilingFeeUploadProgress:
           fileUploadProgressMap.applicationForWaiverOfFilingFee,
         attachmentToPetitionUploadProgress,
@@ -43,7 +44,9 @@ export const createCaseFromPaperAction = async ({
         requestForPlaceOfTrialUploadProgress:
           fileUploadProgressMap.requestForPlaceOfTrial,
         stinUploadProgress: fileUploadProgressMap.stin,
-      });
+      },
+      user,
+    );
 
     caseDetail = await applicationContext
       .getUseCases()
