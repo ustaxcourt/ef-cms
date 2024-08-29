@@ -46,7 +46,7 @@ export const Paginator = ({
         >
           <button
             aria-current="page"
-            aria-label={`Page ${currentPage} is you current page`}
+            aria-label={`Page ${currentPage} is your current page`}
             className="usa-pagination__button cursor-pointer paginator-current"
           >
             {currentPage}
