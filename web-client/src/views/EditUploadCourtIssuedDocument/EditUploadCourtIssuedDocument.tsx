@@ -17,6 +17,8 @@ import classNames from 'classnames';
 export const EditUploadCourtIssuedDocument = connect(
   {
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
+    closeModalAndReturnToCaseDetailDraftDocumentsSequence:
+      sequences.closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     constants: state.constants,
     editUploadCourtIssuedDocumentSequence:
       sequences.editUploadCourtIssuedDocumentSequence,
@@ -32,6 +34,7 @@ export const EditUploadCourtIssuedDocument = connect(
   },
   function EditUploadCourtIssuedDocument({
     clearExistingDocumentSequence,
+    closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     constants,
     editUploadCourtIssuedDocumentSequence,
     fileDocumentHelper,
@@ -47,7 +50,11 @@ export const EditUploadCourtIssuedDocument = connect(
       <>
         <CaseDetailHeader />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailDraftDocumentsSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={
+              closeModalAndReturnToCaseDetailDraftDocumentsSequence
+            }
+          />
         )}
 
         <section className="usa-section grid-container DocumentDetail">
