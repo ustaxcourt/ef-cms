@@ -179,7 +179,10 @@ describe('checkDocumentTypeAction', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
-            draftOrderState: { orderType: 'statusReport' },
+            draftOrderState: {
+              statusReportFilingDate: '2025-01-31',
+              statusReportIndex: '0',
+            },
           },
         ],
         docketNumber: mockDocketNumber,
@@ -204,7 +207,10 @@ describe('checkDocumentTypeAction', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
-            draftOrderState: { orderType: 'statusReport' },
+            draftOrderState: {
+              statusReportFilingDate: '2025-01-31',
+              statusReportIndex: '0',
+            },
           },
         ],
         docketNumber: mockDocketNumber,
