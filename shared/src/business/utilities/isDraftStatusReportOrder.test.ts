@@ -1,8 +1,8 @@
-import { isMiscellaneousDocketEntry } from './isMiscellaneousDocketEntry';
+import { isDraftStatusReportOrder } from './isDraftStatusReportOrder';
 
-describe('isMiscellaneousDocument', () => {
-  it("should return true when passed a docket entry that has a document type of 'Miscellaneous'", () => {
-    const result = isMiscellaneousDocketEntry({
+describe('isDraftStatusReportOrder', () => {
+  it("should return false when passed a docket entry that has a document type of 'Miscellaneous'", () => {
+    const result = isDraftStatusReportOrder({
       createdAt: '2019-11-21T21:49:28.192Z',
       docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
       docketNumber: '101-18',
@@ -18,11 +18,11 @@ describe('isMiscellaneousDocument', () => {
       stampData: {},
     });
 
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 
-  it('should return true when passed a docket entry that has an undefined document type and that is not a draft status report order', () => {
-    const result = isMiscellaneousDocketEntry({
+  it('should return false when passed a docket entry that has an undefined document type and that is not a draft status report order', () => {
+    const result = isDraftStatusReportOrder({
       createdAt: '2019-11-21T21:49:28.192Z',
       docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
       docketNumber: '101-18',
@@ -37,11 +37,11 @@ describe('isMiscellaneousDocument', () => {
       stampData: {},
     });
 
-    expect(result).toEqual(true);
+    expect(result).toEqual(false);
   });
 
-  it('should return false when passed a docket entry that is a draft status report order', () => {
-    const result = isMiscellaneousDocketEntry({
+  it('should return true when passed a docket entry that is a draft status report order', () => {
+    const result = isDraftStatusReportOrder({
       createdAt: '2019-11-21T21:49:28.192Z',
       docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
       docketNumber: '101-18',
@@ -60,11 +60,11 @@ describe('isMiscellaneousDocument', () => {
       stampData: {},
     });
 
-    expect(result).toEqual(false);
+    expect(result).toEqual(true);
   });
 
   it('should return false when passed a docket entry that is not a draft status report order', () => {
-    const result = isMiscellaneousDocketEntry({
+    const result = isDraftStatusReportOrder({
       createdAt: '2019-11-21T21:49:28.192Z',
       docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
       docketNumber: '101-18',
