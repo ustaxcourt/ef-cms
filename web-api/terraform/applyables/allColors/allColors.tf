@@ -202,9 +202,26 @@ module "rds" {
   environment       = var.environment
   postgres_user     = var.postgres_user
   postgres_password = var.postgres_password
-  
+  postgres_snapshot = ""
+  delete_protection = true
+
   providers = {
     aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
 }
+
+# Used to add additional clusters while keeping the current cluster active
+# module "rds-cluster" {
+#   source            = "../../modules/rds"
+#   environment       = var.environment
+#   postgres_user     = var.postgres_user
+#   postgres_password = var.postgres_password
+#   postgres_postfix  = "-1"
+#   postgres_snapshot = "snapshot_identifier"
+
+#   providers = {
+#     aws           = aws.us-east-1
+#     aws.us-west-1 = aws.us-west-1
+#   }
+# }
