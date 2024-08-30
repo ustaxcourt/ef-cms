@@ -1,4 +1,5 @@
 import { DocketEntry } from '../entities/DocketEntry';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * validateDocumentInteractor
@@ -9,11 +10,11 @@ import { DocketEntry } from '../entities/DocketEntry';
  * @returns {object} the validation errors or null
  */
 export const validateDocumentInteractor = (
-  applicationContext: IApplicationContext,
   { document }: { document: any },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const errors = new DocketEntry(document, {
-    applicationContext,
+    authorizedUser,
   }).getFormattedValidationErrors();
 
   return errors || null;

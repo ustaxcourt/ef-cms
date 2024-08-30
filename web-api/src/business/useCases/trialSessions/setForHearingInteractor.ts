@@ -7,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * setForHearingInteractor
@@ -25,10 +26,9 @@ export const setForHearingInteractor = async (
     docketNumber,
     trialSessionId,
   }: { calendarNotes: string; docketNumber: string; trialSessionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SET_FOR_HEARING)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_FOR_HEARING)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -50,11 +50,9 @@ export const setForHearingInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseDetails, { applicationContext });
+  const caseEntity = new Case(caseDetails, { authorizedUser });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new TrialSession(trialSession);
 
   const existingTrialSessionIds = [];
   if (caseEntity.trialSessionId) {

@@ -10,6 +10,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addCoverToPdf } from './addCoverToPdf';
 import { addCoversheetInteractor } from './addCoversheetInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -79,10 +80,14 @@ describe('addCoversheetInteractor', () => {
   });
 
   it('adds a cover page to a pdf document', async () => {
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -93,11 +98,15 @@ describe('addCoversheetInteractor', () => {
   });
 
   it('replaces the cover page on a document', async () => {
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-      replaceCoversheet: true,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        replaceCoversheet: true,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -108,10 +117,14 @@ describe('addCoversheetInteractor', () => {
   });
 
   it("updates the docket entry's page numbers", async () => {
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -123,10 +136,14 @@ describe('addCoversheetInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(optionalTestingCaseData);
 
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -140,6 +157,7 @@ describe('addCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
       } as any,
+      mockDocketClerkUser,
     );
 
     expect(updatedDocketEntryEntity).toMatchObject({
@@ -149,10 +167,14 @@ describe('addCoversheetInteractor', () => {
   });
 
   it('should call getCaseByDocketNumber to retrieve case entity if it is not passed in', async () => {
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
@@ -161,11 +183,17 @@ describe('addCoversheetInteractor', () => {
   });
 
   it('should not call getCaseByDocketNumber if case entity is passed in', async () => {
-    await addCoversheetInteractor(applicationContext, {
-      caseEntity: new Case(testingCaseData, { applicationContext }),
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        caseEntity: new Case(testingCaseData, {
+          authorizedUser: mockDocketClerkUser,
+        }),
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -203,10 +231,14 @@ describe('addCoversheetInteractor', () => {
         docketNumber: '103-20',
       });
 
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -240,10 +272,14 @@ describe('addCoversheetInteractor', () => {
       pdfData: 'gg',
     });
 
-    await addCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -294,17 +330,21 @@ describe('addCoversheetInteractor', () => {
         docketNumber: mockConsolidatedCaseNonSubjectCase,
       });
 
-    await addCoversheetInteractor(applicationContext, {
-      caseEntity: new Case(
-        {
-          ...testingCaseData,
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        },
-        { applicationContext },
-      ),
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        caseEntity: new Case(
+          {
+            ...testingCaseData,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          },
+          { authorizedUser: mockDocketClerkUser },
+        ),
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     const calls = applicationContext
       .getPersistenceGateway()
@@ -351,17 +391,21 @@ describe('addCoversheetInteractor', () => {
         docketNumber: mockConsolidatedCaseNonSubjectCase,
       });
 
-    await addCoversheetInteractor(applicationContext, {
-      caseEntity: new Case(
-        {
-          ...testingCaseData,
-          documentTitle: 'Super Duper Simultaneous but not really',
-        },
-        { applicationContext },
-      ),
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    } as any);
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        caseEntity: new Case(
+          {
+            ...testingCaseData,
+            documentTitle: 'Super Duper Simultaneous but not really',
+          },
+          { authorizedUser: mockDocketClerkUser },
+        ),
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     const calls = applicationContext
       .getPersistenceGateway()

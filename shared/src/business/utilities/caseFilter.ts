@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -75,7 +76,7 @@ export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   return formattedCase;
 };
 
-export const caseSearchFilter = (searchResults, currentUser) => {
+export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
   return searchResults
     .filter(
       searchResult =>

@@ -2,12 +2,14 @@ import {
   CLERK_OF_THE_COURT_CONFIGURATION,
   NOTICE_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
@@ -25,13 +27,12 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
     documentTitle: string;
     eventCode: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   fileId: string;
   url: string;
 }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -64,7 +65,9 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
-      addedDocketNumbers,
+      addedDocketNumbers: addedDocketNumbers.sort((a, b) =>
+        Case.docketNumberSort(a, b),
+      ),
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,

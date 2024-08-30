@@ -140,8 +140,20 @@ async function createUserInIrsPool({
     TemporaryPassword: password,
     UserAttributes: [
       {
+        Name: 'name',
+        Value: 'irsSuperUser CI/CD',
+      },
+      {
+        Name: 'custom:userId',
+        Value: '37808c8c-e658-4ff9-a57e-bbb64f0e6065',
+      },
+      {
         Name: 'custom:role',
         Value: ROLES.irsSuperuser,
+      },
+      {
+        Name: 'custom:userId',
+        Value: '14de78aa-b148-4a55-a2a1-875253e414f3',
       },
       {
         Name: 'email',
@@ -155,6 +167,7 @@ async function createUserInIrsPool({
     UserPoolId: irsUserPoolId,
     Username: userName,
   });
+
   await cognito.adminSetUserPassword({
     Password: password,
     Permanent: true,

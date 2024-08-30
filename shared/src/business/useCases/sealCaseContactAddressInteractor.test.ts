@@ -3,10 +3,13 @@ import {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
-import { ROLES } from '../entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getOtherFilers } from '../entities/cases/Case';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
 
 describe('sealCaseContactAddressInteractor', () => {
@@ -22,31 +25,31 @@ describe('sealCaseContactAddressInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
   });
 
   it('should throw an error if the user is unauthorized to seal a case contact address', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'docketClerk',
-    });
     await expect(
-      sealCaseContactAddressInteractor(applicationContext, {
-        contactId: '10aa100f-0330-442b-8423-b01690c76e3f',
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      sealCaseContactAddressInteractor(
+        applicationContext,
+        {
+          contactId: '10aa100f-0330-442b-8423-b01690c76e3f',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for sealing case contact addresses');
   });
 
   it('should throw an error if the contactId is not found on the case', async () => {
     await expect(
-      sealCaseContactAddressInteractor(applicationContext, {
-        contactId: '23-skidoo',
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      sealCaseContactAddressInteractor(
+        applicationContext,
+        {
+          contactId: '23-skidoo',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Cannot seal contact');
   });
 
@@ -61,24 +64,27 @@ describe('sealCaseContactAddressInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseWithoutOthers);
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
-
     await expect(
-      sealCaseContactAddressInteractor(applicationContext, {
-        contactId: '23-skidoo',
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      sealCaseContactAddressInteractor(
+        applicationContext,
+        {
+          contactId: '23-skidoo',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Cannot seal contact');
   });
 
   it('should call updateCase with `isSealedAddress` on contactPrimary and return the updated case', async () => {
-    const result = await sealCaseContactAddressInteractor(applicationContext, {
-      contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await sealCaseContactAddressInteractor(
+      applicationContext,
+      {
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -91,15 +97,14 @@ describe('sealCaseContactAddressInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
-
-    const result = await sealCaseContactAddressInteractor(applicationContext, {
-      contactId: '2226050f-a423-47bb-943b-a5661fe08a6b', // contactSecondary
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await sealCaseContactAddressInteractor(
+      applicationContext,
+      {
+        contactId: '2226050f-a423-47bb-943b-a5661fe08a6b', // contactSecondary
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -112,15 +117,14 @@ describe('sealCaseContactAddressInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
-
-    const result = await sealCaseContactAddressInteractor(applicationContext, {
-      contactId: '4446050f-a423-47bb-943b-a5661fe08a6b', // otherFilers[1]
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await sealCaseContactAddressInteractor(
+      applicationContext,
+      {
+        contactId: '4446050f-a423-47bb-943b-a5661fe08a6b', // otherFilers[1]
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -132,10 +136,14 @@ describe('sealCaseContactAddressInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      sealCaseContactAddressInteractor(applicationContext, {
-        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      sealCaseContactAddressInteractor(
+        applicationContext,
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -144,10 +152,14 @@ describe('sealCaseContactAddressInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await sealCaseContactAddressInteractor(applicationContext, {
-      contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await sealCaseContactAddressInteractor(
+      applicationContext,
+      {
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
