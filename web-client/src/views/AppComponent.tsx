@@ -34,7 +34,6 @@ import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
-import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
 import { DownloadDocketEntriesModal } from '@web-client/views/DownloadDocketEntriesModal';
@@ -141,7 +140,6 @@ const pages = {
   DashboardIrsSuperuser,
   DashboardJudge,
   DashboardPetitioner,
-  DashboardPractitioner,
   DashboardRespondent,
   DocketEntryQc,
   EditCaseDetails,

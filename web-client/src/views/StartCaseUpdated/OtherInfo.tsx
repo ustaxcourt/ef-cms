@@ -6,6 +6,7 @@ import React from 'react';
 
 export function OtherInfo({
   form,
+  isPetitioner,
   otherContactNameLabel,
   petitionGenerationLiveValidationSequence,
   registerRef,
@@ -73,6 +74,7 @@ export function OtherInfo({
       )}
       {selectedOtherType === 'A minor or legally incompetent person' && (
         <SecondaryMinorIncompetentOptions
+          isPetitioner={isPetitioner}
           selectedMinorIncompetentType={selectedMinorIncompetentType}
           updateFilingTypeSequence={updateFilingTypeSequence}
           validationErrors={validationErrors}

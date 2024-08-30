@@ -6,14 +6,14 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-type PetitionFormResponseProps = {
+type PetitionFactOrReasonProps = {
   factOrReasonCount: number;
   id: string;
   labelId: string;
   textName: string;
 };
 
-const petitionFormResponseDependencies = {
+const petitionFactOrReasonDependencies = {
   deleteValidationErrorMessageSequence:
     sequences.deleteValidationErrorMessageSequence,
   form: state.form,
@@ -22,11 +22,11 @@ const petitionFormResponseDependencies = {
   validationErrors: state.validationErrors,
 };
 
-export const PetitionFormResponse = connect<
-  PetitionFormResponseProps,
-  typeof petitionFormResponseDependencies
+export const PetitionFactOrReason = connect<
+  PetitionFactOrReasonProps,
+  typeof petitionFactOrReasonDependencies
 >(
-  petitionFormResponseDependencies,
+  petitionFactOrReasonDependencies,
   function PetitionFormResponse({
     deleteValidationErrorMessageSequence,
     factOrReasonCount,
@@ -98,7 +98,7 @@ export const PetitionFormResponse = connect<
                 data-testid={id}
                 id={id}
                 name={textName}
-                style={{ marginTop: '0px', width: '100%' }}
+                style={{ marginTop: '0px' }}
                 value={form[textName][factOrReasonCount] || ''}
                 onChange={e => {
                   updateFormValueSequence({
@@ -135,4 +135,4 @@ export const PetitionFormResponse = connect<
   },
 );
 
-PetitionFormResponse.displayName = 'PetitionFormResponse';
+PetitionFactOrReason.displayName = 'PetitionFactOrReason';

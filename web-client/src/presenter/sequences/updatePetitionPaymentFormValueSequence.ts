@@ -4,4 +4,9 @@ import { updateOrderForFilingFeeAction } from '../actions/StartCaseInternal/upda
 export const updatePetitionPaymentFormValueSequence = [
   setFormValueAction,
   updateOrderForFilingFeeAction,
-];
+] as unknown as (props: {
+  allowEmptyString?: boolean;
+  index?: number;
+  key: string;
+  value: any;
+}) => void;

@@ -162,6 +162,7 @@ export const createCaseInteractor = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       privatePractitioners,
+      redactionAcknowledgement: petitionEntity.petitionRedactionAcknowledgement,
     },
     { authorizedUser, petitioners: caseToAdd.petitioners },
   );
@@ -261,6 +262,8 @@ export const createCaseInteractor = async (
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.noticeIssuedDate,
           privatePractitioners,
+          redactionAcknowledgement:
+            petitionEntity.irsNoticesRedactionAcknowledgement,
           taxYear:
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.taxYear,
