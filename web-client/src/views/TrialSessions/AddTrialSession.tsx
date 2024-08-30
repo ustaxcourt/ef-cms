@@ -12,6 +12,8 @@ import React from 'react';
 
 export const AddTrialSession = connect(
   {
+    closeModalAndReturnToTrialSessionsSequence:
+      sequences.closeModalAndReturnToTrialSessionsSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -20,6 +22,7 @@ export const AddTrialSession = connect(
       sequences.updateTrialSessionFormDataSequence,
   },
   function AddTrialSession({
+    closeModalAndReturnToTrialSessionsSequence,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -38,7 +41,9 @@ export const AddTrialSession = connect(
             role="form"
           >
             {showModal === 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
+              <FormCancelModalDialog
+                onCancelSequence={closeModalAndReturnToTrialSessionsSequence}
+              />
             )}
             <ErrorNotification />
 
