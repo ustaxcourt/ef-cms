@@ -15,16 +15,6 @@ variable "engine_version" {
   default = "15.4"
 }
 
-variable "postgres_postfix" {
-  type    = string
-  default = ""
-}
-
-variable "postgres_snapshot" {
-  type    = string
-  default = ""
-}
-
 variable "delete_protection" {
   type    = bool
   default = true

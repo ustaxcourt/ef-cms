@@ -1,5 +1,5 @@
 resource "aws_rds_global_cluster" "global_cluster" {
-  global_cluster_identifier = "${var.environment}-dawson-global${var.postgres_postfix}"
+  global_cluster_identifier = "${var.environment}-dawson-global"
   engine                    = "aurora-postgresql"
   storage_encrypted         = true
   deletion_protection       = var.delete_protection
@@ -20,7 +20,6 @@ resource "aws_rds_cluster" "postgres" {
   master_password     = var.postgres_password
   storage_encrypted   = true
   global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
-  skip_final_snapshot = true
   # snapshot_identifier                 = "exp4-dawson-cluster-1" - used for a snapshot restore
   iam_database_authentication_enabled = true
   kms_key_id                          = var.kms_key_id_primary
