@@ -43,7 +43,7 @@ export class ElectronicPetition extends JoiValidationEntity {
   public attachmentToPetitionFileSize?: number;
   public petitionType: string;
 
-  constructor(rawCase, { applicationContext }) {
+  constructor(rawCase) {
     super('ElectronicPetition');
 
     this.attachmentToPetitionFile = rawCase.attachmentToPetitionFile;
@@ -69,7 +69,6 @@ export class ElectronicPetition extends JoiValidationEntity {
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
 
     const contacts = ContactFactory({
-      applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,

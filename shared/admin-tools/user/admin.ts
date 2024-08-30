@@ -124,6 +124,7 @@ export async function createOrUpdateUser(
   if (userExists) {
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: {
+        name: rawUser.name,
         role: rawUser.role,
       },
       email: rawUser.email!,

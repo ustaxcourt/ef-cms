@@ -48,6 +48,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Sid": "Cognito",
       "Effect": "Allow",
       "Action": [
+        "cognito-idp:AddCustomAttributes",
         "cognito-idp:AdminCreateUser",
         "cognito-idp:AdminDeleteUser",
         "cognito-idp:AdminDisableUser",

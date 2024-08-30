@@ -1,6 +1,7 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { NoticeOfChangeOfTrialJudge } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -9,7 +10,7 @@ export const noticeOfChangeOfTrialJudge = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: {
     caseCaptionExtension: string;
     caseTitle: string;
@@ -18,7 +19,7 @@ export const noticeOfChangeOfTrialJudge = async ({
     titleOfClerk: string;
     trialInfo: FormattedTrialInfoType;
   };
-}): Promise<Buffer> => {
+}): Promise<Uint8Array> => {
   const { docketNumberWithSuffix } = data;
 
   const noticeOfChangeOfTrialJudgeTemplate = ReactDOM.renderToString(

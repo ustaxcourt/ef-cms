@@ -8,8 +8,6 @@ describe('setDefaultJudgeNameBasedOnUserAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should set state.judgeActivityReport.filters.judgeName to the last name of the current user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
     const { state } = await runAction(setDefaultJudgeNameBasedOnUserAction, {
       modules: {
         presenter,

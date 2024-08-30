@@ -1,7 +1,8 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
 
@@ -13,26 +14,23 @@ describe('updateUserCaseNoteInteractor', () => {
   };
 
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      updateUserCaseNoteInteractor(applicationContext, {
-        docketNumber: mockCaseNote.docketNumber,
-        notes: mockCaseNote.notes,
-      }),
+      updateUserCaseNoteInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCaseNote.docketNumber,
+          notes: mockCaseNote.notes,
+        },
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
   it('updates a case note', async () => {
-    const mockUser = new User({
-      name: 'Judge Colvin',
-      role: ROLES.judge,
+    const mockUser = {
+      ...mockJudgeUser,
       section: 'colvinChambers',
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockImplementation(() =>
-      omit(mockUser, 'section'),
-    );
+    } as UnknownAuthUser;
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
@@ -43,28 +41,29 @@ describe('updateUserCaseNoteInteractor', () => {
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue({
         role: ROLES.judge,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        userId: mockJudgeUser.userId,
       });
 
-    const caseNote = await updateUserCaseNoteInteractor(applicationContext, {
-      docketNumber: mockCaseNote.docketNumber,
-      notes: mockCaseNote.notes,
-    });
+    const caseNote = await updateUserCaseNoteInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCaseNote.docketNumber,
+        notes: mockCaseNote.notes,
+      },
+      omit(mockUser, 'section'),
+    );
 
     expect(caseNote).toBeDefined();
   });
 
   it('updates a case note associated with the current userId when there is no associated judge', async () => {
     const userIdToExpect = 'f922e1fc-567f-4f7d-b1f5-c9eec1567643';
-    const mockUser = new User({
-      name: 'Judge Colvin',
-      role: ROLES.judge,
+    const mockUser = {
+      ...mockJudgeUser,
       section: 'colvinChambers',
       userId: userIdToExpect,
-    });
-    applicationContext.getCurrentUser.mockImplementation(() =>
-      omit(mockUser, 'section'),
-    );
+    } as UnknownAuthUser;
+
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
@@ -73,10 +72,14 @@ describe('updateUserCaseNoteInteractor', () => {
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
 
-    await updateUserCaseNoteInteractor(applicationContext, {
-      docketNumber: mockCaseNote.docketNumber,
-      notes: mockCaseNote.notes,
-    });
+    await updateUserCaseNoteInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCaseNote.docketNumber,
+        notes: mockCaseNote.notes,
+      },
+      omit(mockUser, 'section'),
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateUserCaseNote.mock

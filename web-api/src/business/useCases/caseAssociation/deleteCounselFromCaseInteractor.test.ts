@@ -12,7 +12,10 @@ import {
   deleteCounselFromCaseInteractor,
   setupServiceIndicatorForUnrepresentedPetitioners,
 } from './deleteCounselFromCaseInteractor';
-import { petitionerUser } from '@shared/test/mockUsers';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -74,11 +77,6 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'fb39f224-7985-438d-8327-2df162c20c8e',
-    });
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(({ userId }) => {
@@ -101,13 +99,15 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should return an unauthorized error when the user does not have permission to remove counsel from a case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     await expect(
-      deleteCounselFromCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
-      }),
+      deleteCounselFromCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -115,10 +115,14 @@ describe('deleteCounselFromCaseInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      deleteCounselFromCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
-      }),
+      deleteCounselFromCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -127,10 +131,14 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,
@@ -148,10 +156,14 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should remove the private practitioner with the given user id from the case', async () => {
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteUserFromCase,
@@ -162,10 +174,14 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should remove the irs practitioner with the given userId from the case', async () => {
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: 'bfd97089-cda0-45e0-8454-dd879023d0af',
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: 'bfd97089-cda0-45e0-8454-dd879023d0af',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteUserFromCase,
@@ -177,10 +193,14 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   it('should throw an error when the user is NOT a private practitioner or irs practitioner', async () => {
     await expect(
-      deleteCounselFromCaseInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        userId: '835f072c-5ea1-493c-acb8-d67b05c96f85',
-      }),
+      deleteCounselFromCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          userId: '835f072c-5ea1-493c-acb8-d67b05c96f85',
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('User is not a practitioner');
   });
 
@@ -198,10 +218,14 @@ describe('deleteCounselFromCaseInteractor', () => {
         privatePractitioners: [mockPrivatePractitioners[0]],
       });
 
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: mockPrivatePractitioners[0].userId,
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+      mockDocketClerkUser,
+    );
 
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -228,10 +252,14 @@ describe('deleteCounselFromCaseInteractor', () => {
         privatePractitioners: [mockPrivatePractitioners[0]],
       });
 
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: mockPrivatePractitioners[0].userId,
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+      mockDocketClerkUser,
+    );
 
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -287,10 +315,14 @@ describe('deleteCounselFromCaseInteractor', () => {
         ({ caseToUpdate }) => caseToUpdate,
       );
 
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: mockPrivatePractitioners[0].userId,
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+      mockDocketClerkUser,
+    );
 
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -343,10 +375,14 @@ describe('deleteCounselFromCaseInteractor', () => {
         ({ caseToUpdate }) => caseToUpdate,
       );
 
-    await deleteCounselFromCaseInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      userId: mockPrivatePractitioners[0].userId,
-    });
+    await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+      mockDocketClerkUser,
+    );
 
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -374,7 +410,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       };
 
       const result = setupServiceIndicatorForUnrepresentedPetitioners(
-        new Case(mockCase, { applicationContext }),
+        new Case(mockCase, { authorizedUser: mockDocketClerkUser }),
       );
 
       expect(result.petitioners[0].serviceIndicator).toBeUndefined();
@@ -402,7 +438,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       };
 
       const result = setupServiceIndicatorForUnrepresentedPetitioners(
-        new Case(mockCase, { applicationContext }),
+        new Case(mockCase, { authorizedUser: mockDocketClerkUser }),
       );
 
       expect(result.petitioners[0].serviceIndicator).toEqual(

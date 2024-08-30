@@ -1,3 +1,7 @@
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -18,11 +22,12 @@ export const setTrialSessionCalendarInteractor = async (
     clientConnectionId,
     trialSessionId,
   }: { trialSessionId: string; clientConnectionId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const user = applicationContext.getCurrentUser();
-
   try {
-    if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
+    if (
+      !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
+    ) {
       throw new UnauthorizedError('Unauthorized');
     }
 
@@ -37,9 +42,7 @@ export const setTrialSessionCalendarInteractor = async (
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
     }
 
-    const trialSessionEntity = new TrialSession(trialSession, {
-      applicationContext,
-    });
+    const trialSessionEntity = new TrialSession(trialSession);
 
     trialSessionEntity.validate();
 
@@ -97,6 +100,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     await acquireLock({
       applicationContext,
+      authorizedUser,
       identifiers: allDocketNumbers.map(item => `case|${item}`),
       ttl: 900,
     });
@@ -104,27 +108,36 @@ export const setTrialSessionCalendarInteractor = async (
     const funcs = [
       ...manuallyAddedQcIncompleteCases.map(
         caseRecord => () =>
-          removeManuallyAddedCaseFromTrialSession({
-            applicationContext,
-            caseRecord,
-            trialSessionEntity,
-          }),
+          removeManuallyAddedCaseFromTrialSession(
+            {
+              applicationContext,
+              caseRecord,
+              trialSessionEntity,
+            },
+            authorizedUser,
+          ),
       ),
       ...manuallyAddedQcCompleteCases.map(
         aCase => () =>
-          setManuallyAddedCaseAsCalendared({
-            applicationContext,
-            caseRecord: aCase,
-            trialSessionEntity,
-          }),
+          setManuallyAddedCaseAsCalendared(
+            {
+              applicationContext,
+              caseRecord: aCase,
+              trialSessionEntity,
+            },
+            authorizedUser,
+          ),
       ),
       ...eligibleCases.map(
         aCase => () =>
-          setTrialSessionCalendarForEligibleCase({
-            applicationContext,
-            caseRecord: aCase,
-            trialSessionEntity,
-          }),
+          setTrialSessionCalendarForEligibleCase(
+            {
+              applicationContext,
+              caseRecord: aCase,
+              trialSessionEntity,
+            },
+            authorizedUser,
+          ),
       ),
     ];
 
@@ -157,13 +170,14 @@ export const setTrialSessionCalendarInteractor = async (
         action: 'set_trial_session_calendar_complete',
         trialSessionId,
       },
-      userId: user.userId,
+      userId: authorizedUser.userId,
     });
   } catch (error: any) {
     applicationContext.logger.error(
       `Error setting trial session calendar for trialSessionId: ${trialSessionId}`,
     );
     applicationContext.logger.error(error);
+    console.log(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
@@ -171,44 +185,53 @@ export const setTrialSessionCalendarInteractor = async (
         action: 'set_trial_session_calendar_error',
         message: `Error setting trial session calendar: ${error?.message}`,
       },
-      userId: user.userId,
+      userId: authorizedUser?.userId || '',
     });
   }
 };
 
-const removeManuallyAddedCaseFromTrialSession = ({
-  applicationContext,
-  caseRecord,
-  trialSessionEntity,
-}: {
-  applicationContext: ServerApplicationContext;
-  caseRecord: RawCase;
-  trialSessionEntity: TrialSession;
-}): Promise<RawCase> => {
+const removeManuallyAddedCaseFromTrialSession = (
+  {
+    applicationContext,
+    caseRecord,
+    trialSessionEntity,
+  }: {
+    applicationContext: ServerApplicationContext;
+    caseRecord: RawCase;
+    trialSessionEntity: TrialSession;
+  },
+  authorizedUser: AuthUser,
+): Promise<RawCase> => {
   trialSessionEntity.deleteCaseFromCalendar({
     docketNumber: caseRecord.docketNumber,
   });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, {
+    authorizedUser,
+  });
 
   caseEntity.removeFromTrialWithAssociatedJudge();
 
   return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 };
 
-const setManuallyAddedCaseAsCalendared = async ({
-  applicationContext,
-  caseRecord,
-  trialSessionEntity,
-}: {
-  applicationContext: ServerApplicationContext;
-  caseRecord: RawCase;
-  trialSessionEntity: TrialSession;
-}): Promise<void> => {
-  const caseEntity = new Case(caseRecord, { applicationContext });
+const setManuallyAddedCaseAsCalendared = async (
+  {
+    applicationContext,
+    caseRecord,
+    trialSessionEntity,
+  }: {
+    applicationContext: ServerApplicationContext;
+    caseRecord: RawCase;
+    trialSessionEntity: TrialSession;
+  },
+  authorizedUser: AuthUser,
+): Promise<void> => {
+  const caseEntity = new Case(caseRecord, { authorizedUser });
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -221,21 +244,25 @@ const setManuallyAddedCaseAsCalendared = async ({
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     }),
   ]);
 };
 
-const setTrialSessionCalendarForEligibleCase = async ({
-  applicationContext,
-  caseRecord,
-  trialSessionEntity,
-}: {
-  applicationContext: ServerApplicationContext;
-  caseRecord: RawCase;
-  trialSessionEntity: TrialSession;
-}): Promise<void> => {
-  const caseEntity = new Case(caseRecord, { applicationContext });
+const setTrialSessionCalendarForEligibleCase = async (
+  {
+    applicationContext,
+    caseRecord,
+    trialSessionEntity,
+  }: {
+    applicationContext: ServerApplicationContext;
+    caseRecord: RawCase;
+    trialSessionEntity: TrialSession;
+  },
+  authorizedUser: AuthUser,
+): Promise<void> => {
+  const caseEntity = new Case(caseRecord, { authorizedUser });
 
   caseEntity.setAsCalendared(trialSessionEntity);
   trialSessionEntity.addCaseToCalendar(caseEntity);
@@ -249,6 +276,7 @@ const setTrialSessionCalendarForEligibleCase = async ({
     }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     }),
     applicationContext

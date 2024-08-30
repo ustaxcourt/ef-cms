@@ -5,12 +5,13 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { validatePetitionFromPaperInteractor } from './validatePetitionFromPaperInteractor';
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
-    const errors = validatePetitionFromPaperInteractor(applicationContext, {
+    const errors = validatePetitionFromPaperInteractor(mockDocketClerkUser, {
       petition: {},
     });
 
@@ -28,7 +29,7 @@ describe('validate petition from paper', () => {
   });
 
   it('returns null if no errors exist', () => {
-    const errors = validatePetitionFromPaperInteractor(applicationContext, {
+    const errors = validatePetitionFromPaperInteractor(mockDocketClerkUser, {
       petition: {
         archivedDocketEntries: [],
         caseCaption: 'testing',
@@ -54,7 +55,7 @@ describe('validate petition from paper', () => {
           },
         ],
         procedureType: 'Regular',
-        receivedAt: applicationContext.getUtilities().createISODateString(),
+        receivedAt: createISODateString(),
       },
     });
 

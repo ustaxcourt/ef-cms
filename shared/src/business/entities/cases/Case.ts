@@ -28,6 +28,10 @@ import {
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
 import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import {
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_IRS_PRACTITIONERS_RULE,
@@ -64,7 +68,6 @@ import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
@@ -149,47 +152,50 @@ export class Case extends JoiValidationEntity {
   constructor(
     rawCase: any,
     {
-      applicationContext,
       authorizedUser,
       filtered = false,
       isNewCase = false,
     }: {
-      applicationContext: IApplicationContext;
-      authorizedUser?: UnknownAuthUser;
+      authorizedUser: UnknownAuthUser;
       filtered?: boolean;
       isNewCase?: boolean;
     },
   ) {
     super('Case');
 
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
-
     this.petitioners = [];
     this.correspondence = [];
-    const currentUser = authorizedUser || applicationContext.getCurrentUser();
 
-    if (!filtered || User.isInternalUser(currentUser.role)) {
+    if (!filtered || User.isInternalUser(authorizedUser?.role)) {
       this.assignFieldsForInternalUsers({
-        applicationContext,
+        authorizedUser,
         rawCase,
       });
     }
 
-    const params = { applicationContext, authorizedUser, filtered, rawCase };
-
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
-    this.assignContacts(params);
-    this.assignDocketEntries(params);
-    this.assignHearings(params);
-    this.assignPractitioners(params);
-    this.assignFieldsForAllUsers(params);
+    this.assignContacts({
+      rawCase,
+    });
+    this.assignDocketEntries({
+      authorizedUser,
+      filtered,
+      rawCase,
+    });
+    this.assignHearings({
+      rawCase,
+    });
+    this.assignPractitioners({
+      rawCase,
+    });
+    this.assignFieldsForAllUsers({
+      rawCase,
+    });
     if (isNewCase) {
       const changedBy = rawCase.isPaper
-        ? currentUser.name
-        : startCase(currentUser.role);
+        ? authorizedUser?.name
+        : startCase(authorizedUser?.role);
 
       this.setCaseStatus({
         changedBy,
@@ -294,7 +300,13 @@ export class Case extends JoiValidationEntity {
     );
   }
 
-  assignFieldsForInternalUsers({ applicationContext, rawCase }) {
+  private assignFieldsForInternalUsers({
+    authorizedUser,
+    rawCase,
+  }: {
+    authorizedUser: UnknownAuthUser;
+    rawCase: any;
+  }): void {
     this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
     this.associatedJudgeId = rawCase.associatedJudgeId;
     this.automaticBlocked = rawCase.automaticBlocked;
@@ -322,8 +334,11 @@ export class Case extends JoiValidationEntity {
     this.orderForRatification = rawCase.orderForRatification || false;
     this.orderToShowCause = rawCase.orderToShowCause || false;
 
-    this.assignArchivedDocketEntries({ applicationContext, rawCase });
-    this.assignStatistics({ applicationContext, rawCase });
+    this.assignArchivedDocketEntries({
+      authorizedUser,
+      rawCase,
+    });
+    this.assignStatistics({ rawCase });
     this.assignCorrespondences({ rawCase });
   }
 
@@ -768,12 +783,18 @@ export class Case extends JoiValidationEntity {
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
   }
 
-  assignArchivedDocketEntries({ applicationContext, rawCase }) {
+  private assignArchivedDocketEntries({
+    authorizedUser,
+    rawCase,
+  }: {
+    authorizedUser: UnknownAuthUser;
+    rawCase: any;
+  }) {
     if (Array.isArray(rawCase.archivedDocketEntries)) {
       this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
         docketEntry =>
           new DocketEntry(docketEntry, {
-            applicationContext,
+            authorizedUser,
             petitioners: this.petitioners,
           }),
       );
@@ -782,18 +803,21 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  assignDocketEntries({
-    applicationContext,
+  private assignDocketEntries({
     authorizedUser,
     filtered,
     rawCase,
+  }: {
+    authorizedUser: UnknownAuthUser;
+    filtered: boolean;
+    rawCase: any;
   }) {
     if (Array.isArray(rawCase.docketEntries)) {
       this.docketEntries = rawCase.docketEntries
         .map(
           docketEntry =>
             new DocketEntry(docketEntry, {
-              applicationContext,
+              authorizedUser,
               filtered,
               petitioners: this.petitioners,
             }),
@@ -802,13 +826,11 @@ export class Case extends JoiValidationEntity {
 
       this.isSealed = isSealedCase(rawCase);
 
-      const user = authorizedUser || applicationContext.getCurrentUser();
-
       if (
         filtered &&
-        user.role !== ROLES.irsSuperuser &&
-        ((user.role !== ROLES.petitionsClerk &&
-          user.role !== ROLES.caseServicesSupervisor) ||
+        authorizedUser?.role !== ROLES.irsSuperuser &&
+        ((authorizedUser?.role !== ROLES.petitionsClerk &&
+          authorizedUser?.role !== ROLES.caseServicesSupervisor) ||
           this.getIrsSendDate())
       ) {
         this.docketEntries = this.docketEntries.filter(
@@ -820,10 +842,10 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  assignHearings({ applicationContext, rawCase }) {
+  private assignHearings({ rawCase }) {
     if (Array.isArray(rawCase.hearings)) {
       this.hearings = rawCase.hearings
-        .map(hearing => new TrialSession(hearing, { applicationContext }))
+        .map(hearing => new TrialSession(hearing))
         .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
     } else {
       this.hearings = [];
@@ -834,10 +856,9 @@ export class Case extends JoiValidationEntity {
     return this.privatePractitioners && this.privatePractitioners.length > 0;
   }
 
-  assignContacts({ applicationContext, rawCase }) {
+  private assignContacts({ rawCase }: { rawCase: any }): void {
     if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
       const contacts = ContactFactory({
-        applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
           secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
@@ -852,7 +873,7 @@ export class Case extends JoiValidationEntity {
     } else {
       if (Array.isArray(rawCase.petitioners)) {
         this.petitioners = rawCase.petitioners.map(
-          petitioner => new Petitioner(petitioner, { applicationContext }),
+          petitioner => new Petitioner(petitioner),
         );
 
         setAdditionalNameOnPetitioners({ obj: this, rawCase });
@@ -878,10 +899,10 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  assignStatistics({ applicationContext, rawCase }) {
+  private assignStatistics({ rawCase }) {
     if (Array.isArray(rawCase.statistics)) {
       this.statistics = rawCase.statistics.map(
-        statistic => new Statistic(statistic, { applicationContext }),
+        statistic => new Statistic(statistic),
       );
     } else {
       this.statistics = [];
@@ -1118,12 +1139,10 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   updateCaseCaptionDocketRecord({
-    applicationContext,
     authorizedUser,
   }: {
-    applicationContext: any;
-    authorizedUser?: UnknownAuthUser;
-  }) {
+    authorizedUser: AuthUser;
+  }): Case {
     const caseCaptionRegex =
       /^Caption of case is amended from '(.*)' to '(.*)'/;
     let lastCaption = this.initialCaption;
@@ -1140,8 +1159,6 @@ export class Case extends JoiValidationEntity {
       this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
 
     if (needsCaptionChangedRecord) {
-      const user = authorizedUser || applicationContext.getCurrentUser();
-
       const mincDocketEntry = new DocketEntry(
         {
           documentTitle: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
@@ -1152,10 +1169,10 @@ export class Case extends JoiValidationEntity {
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { applicationContext, petitioners: this.petitioners },
+        { authorizedUser, petitioners: this.petitioners },
       );
 
-      mincDocketEntry.setFiledBy(user);
+      mincDocketEntry.setFiledBy(authorizedUser);
 
       this.addDocketEntry(mincDocketEntry);
     }
@@ -1167,13 +1184,7 @@ export class Case extends JoiValidationEntity {
    *
    * @returns {Case} the updated case entity
    */
-  updateDocketNumberRecord({
-    applicationContext,
-    authorizedUser,
-  }: {
-    applicationContext: any;
-    authorizedUser?: UnknownAuthUser;
-  }) {
+  updateDocketNumberRecord({ authorizedUser }: { authorizedUser: AuthUser }) {
     const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
     let lastDocketNumber =
@@ -1196,8 +1207,6 @@ export class Case extends JoiValidationEntity {
       lastDocketNumber !== newDocketNumber && !this.isPaper;
 
     if (needsDocketNumberChangeRecord) {
-      const user = authorizedUser || applicationContext.getCurrentUser();
-
       const mindDocketEntry = new DocketEntry(
         {
           documentTitle: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
@@ -1208,10 +1217,10 @@ export class Case extends JoiValidationEntity {
           isOnDocketRecord: true,
           processingStatus: 'complete',
         },
-        { applicationContext, petitioners: this.petitioners },
+        { authorizedUser, petitioners: this.petitioners },
       );
 
-      mindDocketEntry.setFiledBy(user);
+      mindDocketEntry.setFiledBy(authorizedUser);
 
       this.addDocketEntry(mindDocketEntry);
     }

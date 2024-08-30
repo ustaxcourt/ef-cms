@@ -1,14 +1,14 @@
 import { CASE_STATUS_TYPES, CLOSED_CASE_STATUSES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('isClosed', () => {
   it(`should return false when the case status is NOT one of ${CLOSED_CASE_STATUSES}`, () => {
     const caseEntity = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.generalDocket },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -21,7 +21,7 @@ describe('isClosed', () => {
     const caseEntity = new Case(
       { ...MOCK_CASE, status: undefined },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -34,7 +34,7 @@ describe('isClosed', () => {
     const caseEntity = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.closed },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -47,7 +47,7 @@ describe('isClosed', () => {
     const caseEntity = new Case(
       { ...MOCK_CASE, status: CASE_STATUS_TYPES.closedDismissed },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
