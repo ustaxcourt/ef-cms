@@ -12,7 +12,6 @@ Ensure snapshot exists for restore (aws console, rds -> snapshots).
   - Toggle delete_protection from true to false.
 - Update rds.tf
   - Toggle prevent_destroy from true to false
-  - Uncomment skip_final_snapshot
 - Run deploy allColors (ex: `npm run deploy:allColors exp4`)
 
 #### Delete global cluster
@@ -41,10 +40,12 @@ Ensure snapshot exists for restore (aws console, rds -> snapshots).
   - Toggle delete_protection from false to true. 
 - In rds.tf
   - Comment out aws_rds_global_cluster
-  - Comment out the west related clusters, and outputs
+  - Comment out global_cluster_identifier on the `aws_rds_cluster.postgres`
+  - Comment out the west related clusters
+  - Comment out the `output.address_west` inside of `rds/outputs.tf`
   - East cluster
     - Uncomment snapshot_identifier and update to the snapshot identifier of your choice
-    - Toggle prevent_destroy from true to false
+    - Toggle prevent_destroy from false to true
 - Update allColors/output.tf
   - Uncomment out:
   ```
@@ -59,7 +60,7 @@ Ensure snapshot exists for restore (aws console, rds -> snapshots).
 - Change the cluster to look like this
 ```
 resource "aws_rds_global_cluster" "global_cluster" {
-  global_cluster_identifier    = "${var.environment}-dawson-global${var.postgres_postfix}"
+  global_cluster_identifier    = "${var.environment}-dawson-global"
   deletion_protection          = false
   source_db_cluster_identifier = aws_rds_cluster.postgres.arn
   force_destroy                = true
@@ -69,48 +70,17 @@ resource "aws_rds_global_cluster" "global_cluster" {
   }
 }
 ```
-- add ignore_changes  = [global_cluster_identifier] to aws_rds_cluster.postgres lifecycle block
+- add ignore_changes  = [global_cluster_identifier] to `aws_rds_cluster.postgres` lifecycle block
 - Run deploy allColors (ex: `npm run deploy:allColors exp4`)
 
 ### Restore West Cluster
 - Uncomment the aws_rds_cluster.west_replica
 - Run deploy allColors (ex: `npm run deploy:allColors exp4`)
 
+### Deploy Current Color
+- Deploy the current color api so it can use the new database (ex: `npm run deploy:$CURRENT_COLOR exp4`)
+- turn DISABLE_HTTP_TRAFFIC on the lambdas to false 
+  - do on east and west coast
+
 ### Return Terraform back to Original State
 - undo any commented out or output changes (git reset --hard)
-
-## Database needs to serve traffic but be restored
-
-- Uncomment module "rds-cluster" in allColors.tf
-- Update postgres_postfix to a value not in use (ex: -1, -2, -3, etc)
-- Update postgres_snapshot to the snapshot identifier of your choice
-- Update allColors/outputs.tf
-  - Change the following output:
-  ```
-    output "rds_host_name" {
-      value = module.rds.address
-    }
-  ```
-    to
-  ```
-    output "rds_host_name" {
-      value = module.rds-cluster.address
-    }
-  ```
-  - Change the following output:
-  ```
-    output "rds_host_name_west" {
-      value = module.rds.address_west
-    }
-  ```
-    to
-  ```
-    output "rds_host_name_west" {
-      value = module.rds-cluster.address_west
-    }
-  ```
-  - Deploy terraform allColors
-  - Deploy terraform blue
-  - Deploy terraform green
-  - Write one time script to resolve differences between original rds cluster and restored rds cluster
-  - Run one time script sync differences
