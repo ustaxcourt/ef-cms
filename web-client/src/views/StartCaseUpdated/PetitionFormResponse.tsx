@@ -75,7 +75,7 @@ export const PetitionFormResponse = connect<
               {factOrReasonCount > 0 && (
                 <Button
                   link
-                  className="reason-button remove-fact-reason-button"
+                  className="reason-button remove-fact-reason-button flex-align-self-center"
                   icon="times"
                   onClick={() =>
                     removeFactOrReasonSequence({
