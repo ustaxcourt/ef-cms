@@ -85,6 +85,7 @@ export const EditUploadCourtIssuedDocument = connect(
                       aria-labelledby="upload-description-label"
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="upload-description"
                       id="upload-description"
                       name="freeText"
                       type="text"
@@ -182,6 +183,8 @@ export const EditUploadCourtIssuedDocument = connect(
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
                 <Button
+                  data-testid="save-edited-pdf-button"
+                  id="save-edited-pdf-button"
                   onClick={() => {
                     editUploadCourtIssuedDocumentSequence({
                       tab: 'drafts',
