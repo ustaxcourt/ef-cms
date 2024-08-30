@@ -13,8 +13,8 @@ export const admissionsClerkAddsNewPractitioner = (
     await cerebralTest.runSequence('submitAddPractitionerSequence');
 
     expect(Object.keys(cerebralTest.getState('validationErrors'))).toEqual([
-      'phone',
       'email',
+      'phone',
       'admissionsDate',
       'birthYear',
       'firstName',
