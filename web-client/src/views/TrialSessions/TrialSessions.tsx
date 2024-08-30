@@ -32,7 +32,6 @@ export const TrialSessions = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           <Tabs
             bind="currentViewMetadata.trialSessions.tab"
             defaultActiveTab={defaultTab || 'calendared'}
@@ -216,6 +215,5 @@ const TrialSessionFilters = connect(
     );
   },
 );
-// });
 
 TrialSessions.displayName = 'TrialSessions';
