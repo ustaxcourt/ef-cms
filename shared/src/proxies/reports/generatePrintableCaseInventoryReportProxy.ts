@@ -22,5 +22,8 @@ export const generatePrintableCaseInventoryReportInteractor = (
         endpoint: '/async/reports/printable-case-inventory-report',
         params: { associatedJudge, status },
       }),
-  );
+  ) as Promise<{
+    fileId: string;
+    url: string;
+  }>;
 };
