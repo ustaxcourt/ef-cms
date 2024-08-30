@@ -1,8 +1,9 @@
+import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setJudgesChambersAction = ({
   props,
   store,
-}: ActionProps<{ judgesChambers: any }>) => {
+}: ActionProps<{ judgesChambers: JudgeChambersInfo[] }>) => {
   store.set(state.judgesChambers, props.judgesChambers);
 };
