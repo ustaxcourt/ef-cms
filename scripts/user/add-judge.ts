@@ -71,7 +71,6 @@ requireEnvVars(['ENV']);
   }
 
   console.log('Setting up information to store ... ');
-
   const section = getChambersNameFromJudgeName(name);
   const judgeTitle = 'Judge';
   const role = 'judge';
