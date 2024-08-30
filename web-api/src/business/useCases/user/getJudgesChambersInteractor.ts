@@ -1,8 +1,5 @@
 import { JudgeChambersInfo } from '../../../../../shared/src/proxies/users/getJudgesChambersProxy';
-import {
-  RawUser,
-  User,
-} from '../../../../../shared/src/business/entities/User';
+import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUsersInSectionInteractor } from '@web-api/business/useCases/user/getUsersInSectionInteractor';
@@ -17,13 +14,11 @@ export const getJudgesChambersInteractor = async (
   applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<JudgeChambersInfo[]> => {
-  const judgeRawUsers: RawUser[] = await getUsersInSectionInteractor(
+  const judgeUsers: RawUser[] = await getUsersInSectionInteractor(
     applicationContext,
     { section: 'judge' },
     authorizedUser,
   );
-
-  const judgeUsers = User.validateRawCollection(judgeRawUsers);
 
   const judgeChambers: JudgeChambersInfo[] = judgeUsers.map(u => {
     const phoneNumber = u.contact?.phone;

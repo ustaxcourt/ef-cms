@@ -1,4 +1,4 @@
-// TODO 10455: Remove, or call update-judge.ts
+// TODO: Remove, or call update-judge.ts?
 import { createApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
 import {
