@@ -1,5 +1,4 @@
 import { BigHeader } from '../BigHeader';
-import { BindedSelect } from '@web-client/ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import {
@@ -141,24 +140,22 @@ const TrialSessionFilters = connect(
             >
               Filter by
             </label>
-            <BindedSelect
+            <select
               aria-label="location"
-              bind="screenMetadata.trialSessionFilters.trialLocation"
-              className="select-left width-180 inline-select"
-              id="locationFilter"
-              name="trialLocation"
+              className="usa-select select-left width-180 inline-select"
+              onChange={() => {}}
             >
-              <option value="">-Location-</option>
+              <option value="All">-Location-</option>
               <TrialCityOptions procedureType="AllPlusStandalone" />
-            </BindedSelect>
-            <BindedSelect
+            </select>
+            <select
               aria-label="proceeding"
-              bind="screenMetadata.trialSessionFilters.proceedingType"
-              className="select-left width-180 inline-select margin-left-1pt5rem"
+              className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="proceedingFilter"
               name="proceedingType"
+              onChange={() => {}}
             >
-              <option value="">-Proceeding Type-</option>
+              <option value="All">-Proceeding Type-</option>
               {Object.values(TRIAL_SESSION_PROCEEDING_TYPES).map(
                 proceedingType => (
                   <option key={proceedingType} value={proceedingType}>
@@ -166,13 +163,13 @@ const TrialSessionFilters = connect(
                   </option>
                 ),
               )}
-            </BindedSelect>
-            <BindedSelect
+            </select>
+            <select
               aria-label="session"
-              bind="screenMetadata.trialSessionFilters.sessionType"
-              className="select-left width-180 inline-select margin-left-1pt5rem"
+              className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="sessionFilter"
               name="sessionType"
+              onChange={() => {}}
             >
               <option value="">-Session Type-</option>
               {Object.values(SESSION_TYPES).map(sessionType => (
@@ -180,17 +177,17 @@ const TrialSessionFilters = connect(
                   {sessionType}
                 </option>
               ))}
-            </BindedSelect>
-            <BindedSelect
+            </select>
+            <select
               aria-label="judge"
-              bind="screenMetadata.trialSessionFilters.judge.userId"
-              className="select-left width-180 inline-select margin-left-1pt5rem"
+              className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="judgeFilter"
               name="judge"
+              onChange={() => {}}
             >
-              <option value="">-Judge-</option>
+              <option value="All">-Judge-</option>
               {trialSessionsHelper.trialSessionJudges.map(judge => (
-                <option key={judge.name} value={judge.userId}>
+                <option key={judge.userId} value={judge.userId}>
                   {judge.name}
                 </option>
               ))}
@@ -203,7 +200,7 @@ const TrialSessionFilters = connect(
                   Unassigned
                 </option>
               )}
-            </BindedSelect>
+            </select>
           </div>
           {trialSessionsHelper.showNewTrialSession && (
             <Button

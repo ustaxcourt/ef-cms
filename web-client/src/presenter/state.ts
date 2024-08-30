@@ -94,6 +94,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
+import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
@@ -850,6 +851,7 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
+  trialSessionsPage: cloneDeep(initialTrialSessionPageState),
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
