@@ -1,4 +1,4 @@
-import { get } from '../requests';
+import { asyncSyncHandler, get } from '../requests';
 
 /**
  * generatePrintableCaseInventoryReportInteractor
@@ -13,9 +13,14 @@ export const generatePrintableCaseInventoryReportInteractor = (
   applicationContext,
   { associatedJudge, status },
 ) => {
-  return get({
+  return asyncSyncHandler(
     applicationContext,
-    endpoint: '/reports/printable-case-inventory-report',
-    params: { associatedJudge, status },
-  });
+    async asyncSyncId =>
+      await get({
+        applicationContext,
+        asyncSyncId,
+        endpoint: '/async/reports/printable-case-inventory-report',
+        params: { associatedJudge, status },
+      }),
+  );
 };
