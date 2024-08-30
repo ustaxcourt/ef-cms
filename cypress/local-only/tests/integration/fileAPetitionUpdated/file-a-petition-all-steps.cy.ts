@@ -41,7 +41,7 @@ describe('File a petition', () => {
 
         cy.get('[data-testid="step-6-next-button"]').click();
         cy.wait('@postCase').then(({ response }) => {
-          if (!response) throw Error('Did not find resposne');
+          if (!response) throw Error('Did not find response');
           expect(response.body).to.have.property('docketNumber');
           const createdDocketNumber = response.body.docketNumber;
           cy.get('.usa-alert__heading').should(

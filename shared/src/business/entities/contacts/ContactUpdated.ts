@@ -97,7 +97,7 @@ export class ContactUpdated extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Enter country type' }),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.required().messages({
-      '*': 'Enter ZIP code',
+      '*': 'Enter a valid ZIP code',
     }),
     state: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),

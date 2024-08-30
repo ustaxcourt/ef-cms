@@ -4,7 +4,8 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type CardHeaderType = {
-  step: number;
+  showEditButton?: boolean;
+  step?: number;
   title: string;
 };
 
@@ -17,25 +18,33 @@ export const CardHeader = connect<
   typeof cardHeaderDependencies
 >(
   cardHeaderDependencies,
-  function CardHeader({ step, title, updateStepIndicatorSequence }) {
+  function CardHeader({
+    showEditButton = true,
+    step,
+    title,
+    updateStepIndicatorSequence,
+  }) {
     return (
       <h3 className="create-petition-review-step-title">
         <div>
-          {step}. {title}
+          {step && <span>{step}. </span>}
+          {title}
         </div>
-        <div>
-          <Button
-            link
-            className="margin-left-2 padding-0"
-            data-testid={`edit-petition-section-button-${step}`}
-            icon="edit"
-            onClick={() => {
-              updateStepIndicatorSequence({ step });
-            }}
-          >
-            Edit
-          </Button>
-        </div>
+        {showEditButton && step && (
+          <div>
+            <Button
+              link
+              className="margin-left-2 padding-0"
+              data-testid={`edit-petition-section-button-${step}`}
+              icon="edit"
+              onClick={() => {
+                updateStepIndicatorSequence({ step });
+              }}
+            >
+              Edit
+            </Button>
+          </div>
+        )}
       </h3>
     );
   },
