@@ -7,6 +7,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm';
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
+import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser } from '@shared/business/entities/User';
@@ -694,7 +695,7 @@ export const baseState = {
   } as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
-  judgesChambers: [] as any, // TODO: Type this
+  judgesChambers: [] as JudgeChambersInfo[],
   lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   login: {} as any,
