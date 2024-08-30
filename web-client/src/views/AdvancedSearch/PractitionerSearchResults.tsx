@@ -27,14 +27,11 @@ export const PractitionerSearchResults = connect(
             <div ref={paginatorTop}>
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
-                  breakClassName="hide"
-                  forcePage={practitionerSearchHelper.activePage}
-                  marginPagesDisplayed={0}
-                  pageCount={practitionerSearchHelper.pageCount}
-                  pageRangeDisplayed={0}
+                  currentPageIndex={practitionerSearchHelper.activePage}
+                  totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
-                      selectedPage: pageChange.selected,
+                      selectedPage: pageChange,
                     });
                     focusPaginatorTop(paginatorTop);
                   }}
@@ -164,14 +161,11 @@ export const PractitionerSearchResults = connect(
             <div ref={paginatorBottom}>
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
-                  breakClassName="hide"
-                  forcePage={practitionerSearchHelper.activePage}
-                  marginPagesDisplayed={0}
-                  pageCount={practitionerSearchHelper.pageCount}
-                  pageRangeDisplayed={0}
+                  currentPageIndex={practitionerSearchHelper.activePage}
+                  totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
-                      selectedPage: pageChange.selected,
+                      selectedPage: pageChange,
                     });
                     focusPaginatorTop(paginatorTop);
                   }}
