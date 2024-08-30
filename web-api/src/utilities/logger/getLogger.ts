@@ -18,6 +18,7 @@ export const getLogger = (): LoggerType => {
       },
       debug: (message, context?) => logger.debug(message, { context }),
       error: (message, context?) => logger.error(message, { context }),
+      getContext: () => logger.defaultMeta,
       info: (message, context?) => logger.info(message, { context }),
       warn: (message, context?) => logger.warn(message, { context }),
     };
@@ -33,4 +34,5 @@ type LoggerType = {
   warn: (message: any, context?: any) => Logger;
   clearContext: () => void;
   addContext: (newMeta: Record<string, any>) => void;
+  getContext: () => Record<string, any>;
 };
