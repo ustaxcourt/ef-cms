@@ -27,6 +27,9 @@ import {
  *  Example usage:
  *
  * $ npx ts-node --transpile-only add-judge.ts Way "Kashi Way" judge.way@ustaxcourt.gov ["(123) 123-1234" false]
+ *
+ * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
+ * Please extract into application logic!
  */
 
 requireEnvVars(['ENV']);
@@ -114,15 +117,12 @@ requireEnvVars(['ENV']);
   }
 
   console.log('Adding user information to Cognito ... ');
-
   await applicationContext
     .getUserGateway()
     .createUser(applicationContext, cognitoUserInfo);
 
   console.log('Adding user information to Dynamo ... ');
-
   const rawUser = new User(dynamoUserInfo).validate().toRawObject();
-
   await applicationContext.getPersistenceGateway().createUserRecords({
     applicationContext,
     user: rawUser,

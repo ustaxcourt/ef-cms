@@ -27,6 +27,9 @@ import { isEmpty } from 'lodash';
  *  Example usage:
  *
  * $ npx ts-node --transpile-only update-judge.ts 432143213-4321-1234-4321-432143214321 --name Way --judgeFullName "Kashi Way" --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
+ *
+ * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
+ * Please extract into application logic!
  */
 
 requireEnvVars(['ENV']);
@@ -64,7 +67,6 @@ const updateCognitoRecord = async ({
   userPoolId: string;
 }) => {
   console.log('Setting up the updated Cognito user info ...');
-
   const cognitoAttributesToUpdate = {} as { name: string; email: string };
   if (updates.name) {
     cognitoAttributesToUpdate.name = updates.name;
@@ -94,11 +96,11 @@ const updateDynamoRecords = async ({
   applicationContext: any;
 }) => {
   console.log('Getting existing Dynamo record ...');
-
   const dynamoUser: UserRecord = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
+  // If the name is updated, then we will need to update the chambers section
   const updatedChambersSection = updates.name
     ? getChambersNameFromJudgeName(updates.name)
     : '';
@@ -134,7 +136,6 @@ const updateDynamoJudgeUserRecord = async ({
   chambersSection: string;
 }) => {
   console.log('Updating the judge user Dynamo record ...');
-
   dynamoUser.email = updates.email || dynamoUser.email;
   dynamoUser.name = updates.name || dynamoUser.name;
   dynamoUser.contact = updates.phone
@@ -150,10 +151,23 @@ const updateDynamoJudgeUserRecord = async ({
   const rawUser = new User(dynamoUser).validate().toRawObject();
 
   console.log('Updating the Dynamo record ...');
-
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: rawUser,
+  });
+};
+
+const createUserChambersSectionRecord = async ({
+  applicationContext,
+  chambersSection,
+  userId,
+}) => {
+  await client.put({
+    Item: {
+      pk: `section|${chambersSection}`,
+      sk: `user|${userId}`,
+    },
+    applicationContext,
   });
 };
 
@@ -165,42 +179,44 @@ const updateDynamoChambersRecords = async ({
 }) => {
   console.log('Chambers section needs to be updated.');
   console.log(`Adding a record for ${updatedChambersSection}`);
+  // If there is no old chambers section, we only need to add the section record
+  if (!oldChambersSection) {
+    await createUserChambersSectionRecord({
+      applicationContext,
+      chambersSection: updatedChambersSection,
+      userId,
+    });
+    return;
+  }
 
-  await client.put({
-    Item: {
-      pk: `section|${updatedChambersSection}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
+  // Otherwise, we need to update existing records for every chambers member, including the judge
+  console.log(
+    `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
+  );
+  const chambersUsers: User[] = await applicationContext
+    .getPersistenceGateway()
+    .getUsersInSection({ applicationContext, section: oldChambersSection });
 
-  if (oldChambersSection) {
-    console.log(
-      `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
-    );
+  for (let chambersUser of chambersUsers) {
+    console.log(`Updating ${chambersUser.role} user ${chambersUser.userId}`);
+    chambersUser.section = updatedChambersSection;
+    const rawChambersUser = new User(chambersUser).validate().toRawObject();
 
-    const chambersUsers: User[] = await applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection({ applicationContext, section: oldChambersSection });
-
-    for (let chambersUser of chambersUsers) {
-      console.log(`Updating ${chambersUser.role} user ${chambersUser.userId}`);
-      chambersUser.section = updatedChambersSection;
-      const rawChambersUser = new User(chambersUser).validate().toRawObject();
-      await applicationContext.getPersistenceGateway().updateUser({
-        applicationContext,
-        user: rawChambersUser,
-      });
-    }
-
-    console.log(`Removing old chambers section ${oldChambersSection} ...`);
-
-    // TODO 10455: Would this cause any issues?
+    // Update the user record, create the section record, and remove the old section record
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: rawChambersUser,
+    });
+    await createUserChambersSectionRecord({
+      applicationContext,
+      chambersSection: updatedChambersSection,
+      userId: chambersUser.userId,
+    });
     await client.remove({
       applicationContext,
       key: {
         pk: `section|${oldChambersSection}`,
-        sk: `user|${userId}`,
+        sk: `user|${chambersUser.userId}`,
       },
     });
   }
@@ -227,7 +243,6 @@ const updateDynamoChambersRecords = async ({
   environment.dynamoDbTableName = tableName;
 
   console.log('Getting the Cognito record for the user ...');
-
   const existingCognitoRecord = await applicationContext
     .getUserGateway()
     .getUserByEmail(applicationContext, {
