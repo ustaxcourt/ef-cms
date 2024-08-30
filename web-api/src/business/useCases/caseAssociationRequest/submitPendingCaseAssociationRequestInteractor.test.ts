@@ -1,5 +1,8 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockAdcUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { submitPendingCaseAssociationRequestInteractor } from './submitPendingCaseAssociationRequestInteractor';
 
 describe('submitPendingCaseAssociationRequest', () => {
@@ -8,37 +11,32 @@ describe('submitPendingCaseAssociationRequest', () => {
   };
 
   it('should throw an error when not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.adc,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await expect(
-      submitPendingCaseAssociationRequestInteractor(applicationContext, {
-        docketNumber: caseRecord.docketNumber,
-      }),
+      submitPendingCaseAssociationRequestInteractor(
+        applicationContext,
+        {
+          docketNumber: caseRecord.docketNumber,
+        },
+        mockAdcUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should not add mapping if already associated', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockPrivatePractitionerUser);
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    await submitPendingCaseAssociationRequestInteractor(applicationContext, {
-      docketNumber: caseRecord.docketNumber,
-    });
+    await submitPendingCaseAssociationRequestInteractor(
+      applicationContext,
+      {
+        docketNumber: caseRecord.docketNumber,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCasePending,
@@ -46,9 +44,13 @@ describe('submitPendingCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if these is already a pending association', async () => {
-    await submitPendingCaseAssociationRequestInteractor(applicationContext, {
-      docketNumber: caseRecord.docketNumber,
-    });
+    await submitPendingCaseAssociationRequestInteractor(
+      applicationContext,
+      {
+        docketNumber: caseRecord.docketNumber,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCasePending,
@@ -63,9 +65,13 @@ describe('submitPendingCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyPendingCaseForUser.mockReturnValue(false);
 
-    await submitPendingCaseAssociationRequestInteractor(applicationContext, {
-      docketNumber: caseRecord.docketNumber,
-    });
+    await submitPendingCaseAssociationRequestInteractor(
+      applicationContext,
+      {
+        docketNumber: caseRecord.docketNumber,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCasePending,

@@ -1,7 +1,6 @@
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CHIEF_JUDGE,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   MOCK_CASE,
@@ -12,9 +11,10 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
@@ -22,7 +22,6 @@ describe('createCaseDeadlineInteractor', () => {
     description: 'hello world',
     docketNumber: MOCK_CASE.docketNumber,
   };
-  let user;
   let mockCase;
   let mockLock;
   beforeAll(() => {
@@ -34,14 +33,7 @@ describe('createCaseDeadlineInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
 
-    user = new User({
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
 
     applicationContext
       .getPersistenceGateway()
@@ -57,11 +49,15 @@ describe('createCaseDeadlineInteractor', () => {
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
-    user = {};
+    let user = {} as UnknownAuthUser;
     await expect(
-      createCaseDeadlineInteractor(applicationContext, {
-        caseDeadline: mockCaseDeadline as any,
-      }),
+      createCaseDeadlineInteractor(
+        applicationContext,
+        {
+          caseDeadline: mockCaseDeadline as any,
+        },
+        user,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -71,6 +67,7 @@ describe('createCaseDeadlineInteractor', () => {
     const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
       { caseDeadline: mockCaseDeadline as any },
+      mockPetitionsClerkUser,
     );
 
     expect(caseDeadline).toBeDefined();
@@ -101,6 +98,7 @@ describe('createCaseDeadlineInteractor', () => {
     const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
       { caseDeadline: mockCaseDeadline as any },
+      mockPetitionsClerkUser,
     );
 
     expect(caseDeadline).toBeDefined();
@@ -133,9 +131,13 @@ describe('createCaseDeadlineInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      createCaseDeadlineInteractor(applicationContext, {
-        caseDeadline: mockCaseDeadline as any,
-      }),
+      createCaseDeadlineInteractor(
+        applicationContext,
+        {
+          caseDeadline: mockCaseDeadline as any,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -147,9 +149,13 @@ describe('createCaseDeadlineInteractor', () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
     mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
-    await createCaseDeadlineInteractor(applicationContext, {
-      caseDeadline: mockCaseDeadline as any,
-    });
+    await createCaseDeadlineInteractor(
+      applicationContext,
+      {
+        caseDeadline: mockCaseDeadline as any,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

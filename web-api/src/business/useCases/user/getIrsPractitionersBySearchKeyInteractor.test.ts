@@ -1,32 +1,30 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getIrsPractitionersBySearchKeyInteractor } from './getIrsPractitionersBySearchKeyInteractor';
-
-let user;
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getIrsPractitionersBySearchKeyInteractor', () => {
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
   it('should throw an error when not authorized', async () => {
-    user = {
-      barNumber: 'PT1234',
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getUsersBySearchKey.mockResolvedValue([]);
 
     let error;
     try {
-      await getIrsPractitionersBySearchKeyInteractor(applicationContext, {
-        searchKey: 'something',
-      });
+      await getIrsPractitionersBySearchKeyInteractor(
+        applicationContext,
+        {
+          searchKey: 'something',
+        },
+        mockPetitionerUser,
+      );
     } catch (err) {
       error = err;
     }
@@ -34,12 +32,6 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
   });
 
   it('should return users from persistence', async () => {
-    user = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getUsersBySearchKey.mockResolvedValue([
@@ -56,6 +48,7 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
       {
         searchKey: 'Test Practitioner',
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result).toMatchObject([{ name: 'Test Practitioner' }]);

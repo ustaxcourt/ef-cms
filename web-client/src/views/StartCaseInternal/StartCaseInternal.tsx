@@ -16,6 +16,8 @@ import React from 'react';
 
 export const StartCaseInternal = connect(
   {
+    closeModalAndReturnToDashboardSequence:
+      sequences.closeModalAndReturnToDashboardSequence,
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -25,6 +27,7 @@ export const StartCaseInternal = connect(
       sequences.validatePetitionFromPaperSequence,
   },
   function StartCaseInternal({
+    closeModalAndReturnToDashboardSequence,
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     showModal,
@@ -38,7 +41,9 @@ export const StartCaseInternal = connect(
         <section className="usa-section grid-container">
           <div noValidate aria-labelledby="start-case-header" role="form">
             {showModal === 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+              <FormCancelModalDialog
+                onCancelSequence={closeModalAndReturnToDashboardSequence}
+              />
             )}
             <ErrorNotification />
             <div className="grid-row grid-gap">

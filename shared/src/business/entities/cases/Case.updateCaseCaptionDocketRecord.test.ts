@@ -1,16 +1,16 @@
 import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateCaseCaptionDocketRecord', () => {
   it('should not add a notice of caption changed document when the caption is not set', () => {
     const caseToVerify = new Case(
       {},
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(0);
   });
@@ -21,10 +21,10 @@ describe('updateCaseCaptionDocketRecord', () => {
         caseCaption: 'Caption',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(0);
   });
@@ -36,10 +36,10 @@ describe('updateCaseCaptionDocketRecord', () => {
         initialCaption: 'Caption',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(0);
   });
@@ -52,10 +52,10 @@ describe('updateCaseCaptionDocketRecord', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(1);
     expect(caseToVerify.docketEntries[0].eventCode).toEqual('MINC');
@@ -82,10 +82,10 @@ describe('updateCaseCaptionDocketRecord', () => {
         initialCaption: 'Caption',
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(2);
   });
@@ -112,10 +112,10 @@ describe('updateCaseCaptionDocketRecord', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     ).updateCaseCaptionDocketRecord({
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     expect(caseToVerify.docketEntries.length).toEqual(3);
     expect(caseToVerify.docketEntries[2]).toMatchObject({

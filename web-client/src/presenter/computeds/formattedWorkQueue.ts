@@ -2,6 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -249,9 +250,16 @@ const getDocketEntryEditLink = ({
 
 export const getWorkItemDocumentLink = ({
   applicationContext,
+  authorizedUser,
   permissions,
   workItem,
   workQueueToDisplay,
+}: {
+  applicationContext: any;
+  permissions: any;
+  workItem: any;
+  workQueueToDisplay: any;
+  authorizedUser: UnknownAuthUser;
 }) => {
   const result = cloneDeep(workItem);
 
@@ -284,8 +292,7 @@ export const getWorkItemDocumentLink = ({
   if (showDocumentEditLink) {
     if (
       permissions.DOCKET_ENTRY &&
-      (applicationContext.getCurrentUser().role !==
-        USER_ROLES.caseServicesSupervisor ||
+      (authorizedUser?.role !== USER_ROLES.caseServicesSupervisor ||
         !formattedDocketEntry.isPetition)
     ) {
       const editLinkExtension = getDocketEntryEditLink({
@@ -317,16 +324,23 @@ export const getWorkItemDocumentLink = ({
 export const filterWorkItems = ({
   applicationContext,
   assignmentFilterValue,
+  authorizedUser,
   section,
   workItems,
   workQueueToDisplay,
+}: {
+  applicationContext: ClientApplicationContext;
+  assignmentFilterValue: any;
+  section: any;
+  workItems: any;
+  workQueueToDisplay: any;
+  authorizedUser: UnknownAuthUser;
 }) => {
-  const user = applicationContext.getCurrentUser();
   const { box, queue } = workQueueToDisplay;
 
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ section, user });
+    .getWorkQueueFilters({ section, user: authorizedUser });
 
   const composedFilter = filters[queue][box];
   let assignmentFilter = workItem => {
@@ -358,10 +372,18 @@ export const filterWorkItems = ({
 const memoizedFormatItemWithLink = memoize(
   ({
     applicationContext,
+    authorizedUser,
     isSelected,
     permissions,
     workItem,
     workQueueToDisplay,
+  }: {
+    applicationContext: any;
+    isSelected: any;
+    permissions: any;
+    workItem: any;
+    workQueueToDisplay: any;
+    authorizedUser: UnknownAuthUser;
   }) => {
     const result = formatWorkItem({
       applicationContext,
@@ -370,6 +392,7 @@ const memoizedFormatItemWithLink = memoize(
     });
     const editLink = getWorkItemDocumentLink({
       applicationContext,
+      authorizedUser,
       permissions,
       workItem,
       workQueueToDisplay,
@@ -393,6 +416,7 @@ export const formattedWorkQueue = (
   let { assignmentFilterValue } = get(state.screenMetadata);
   let { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
+  const authorizedUser = get(state.user);
 
   if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
     assignmentFilterValue = users.find(
@@ -403,12 +427,14 @@ export const formattedWorkQueue = (
   let workQueue = filterWorkItems({
     applicationContext,
     assignmentFilterValue,
+    authorizedUser,
     section,
     workItems,
     workQueueToDisplay,
   }).map(workItem => {
     return memoizedFormatItemWithLink({
       applicationContext,
+      authorizedUser,
       isSelected: selectedWorkItemIds.includes(workItem.workItemId),
       permissions,
       workItem,

@@ -7,8 +7,8 @@ import {
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -66,8 +66,6 @@ describe('generateChangeOfAddress', () => {
       );
   });
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getCasesForUser.mockReturnValue([{ docketNumber }]);
@@ -123,6 +121,7 @@ describe('generateChangeOfAddress', () => {
       });
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -152,6 +151,7 @@ describe('generateChangeOfAddress', () => {
 
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -180,6 +180,7 @@ describe('generateChangeOfAddress', () => {
 
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -201,6 +202,7 @@ describe('generateChangeOfAddress', () => {
   it("should NOT create a work item for an associated practitioner's notice of change of address when there is no paper service for the case", async () => {
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -222,6 +224,7 @@ describe('generateChangeOfAddress', () => {
   it('should not create a docket entry, work item, or serve anything if the bypassDocketEntry flag is true', async () => {
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       bypassDocketEntry: true,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
@@ -255,6 +258,7 @@ describe('generateChangeOfAddress', () => {
 
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -287,6 +291,7 @@ describe('generateChangeOfAddress', () => {
 
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -321,6 +326,7 @@ describe('generateChangeOfAddress', () => {
 
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
@@ -364,6 +370,7 @@ describe('generateChangeOfAddress', () => {
 
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
       },
@@ -389,6 +396,7 @@ describe('generateChangeOfAddress', () => {
   it('should use original case caption to create case title when creating work item', async () => {
     await generateChangeOfAddress({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',

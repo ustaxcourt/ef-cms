@@ -2,15 +2,15 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } from '../../../../../shared/src/test/mockCase';
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
 
 describe('saveCalendarNotes', () => {
-  let mockCurrentUser;
   let mockTrialSession;
   let mockCase;
 
@@ -27,16 +27,10 @@ describe('saveCalendarNotes', () => {
   };
 
   beforeEach(() => {
-    mockCurrentUser = {
-      role: ROLES.docketClerk,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
     mockTrialSession = { ...MOCK_TRIAL };
 
     mockCase = { ...MOCK_CASE };
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
@@ -46,19 +40,19 @@ describe('saveCalendarNotes', () => {
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    mockCurrentUser = {
-      role: ROLES.petitioner,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
     const mockTrialSessionId = '8675309b-18d0-43ec-bafb-654e83405411';
     mockCase.trialSessionId = mockTrialSessionId;
 
     await expect(
-      saveCalendarNoteInteractor(applicationContext, {
-        calendarNote: 'testing',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: mockTrialSessionId,
-      }),
+      saveCalendarNoteInteractor(
+        applicationContext,
+        {
+          calendarNote: 'testing',
+          docketNumber: mockCase.docketNumber,
+          trialSessionId: mockTrialSessionId,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -71,11 +65,15 @@ describe('saveCalendarNotes', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    await saveCalendarNoteInteractor(applicationContext, {
-      calendarNote: 'whatever',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
-    });
+    await saveCalendarNoteInteractor(
+      applicationContext,
+      {
+        calendarNote: 'whatever',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -102,11 +100,15 @@ describe('saveCalendarNotes', () => {
 
     mockCase.trialSessionId = mockTrialSession.trialSessionId;
 
-    const result = await saveCalendarNoteInteractor(applicationContext, {
-      calendarNote: 'this is a calendarNote',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: mockTrialSession.trialSessionId,
-    });
+    const result = await saveCalendarNoteInteractor(
+      applicationContext,
+      {
+        calendarNote: 'this is a calendarNote',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(result.trialSessionId).toEqual(mockTrialSession.trialSessionId);
     expect(
@@ -130,11 +132,15 @@ describe('saveCalendarNotes', () => {
   });
 
   it('does not update the case hearing record if the given trial session is not a hearing on the case', async () => {
-    await saveCalendarNoteInteractor(applicationContext, {
-      calendarNote: 'this is a calendarNote',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: mockTrialSession.trialSessionId,
-    });
+    await saveCalendarNoteInteractor(
+      applicationContext,
+      {
+        calendarNote: 'this is a calendarNote',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -166,11 +172,15 @@ describe('saveCalendarNotes', () => {
       trialSessionId: '8885309b-18d0-43ec-bafb-654e83405412',
     };
 
-    await saveCalendarNoteInteractor(applicationContext, {
-      calendarNote: 'just updating the hearing note',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
-    });
+    await saveCalendarNoteInteractor(
+      applicationContext,
+      {
+        calendarNote: 'just updating the hearing note',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -202,11 +212,15 @@ describe('saveCalendarNotes', () => {
       trialSessionId: '8885309b-18d0-43ec-bafb-654e83405412',
     };
 
-    await saveCalendarNoteInteractor(applicationContext, {
-      calendarNote: 'just updating the hearing note',
-      docketNumber: mockCase.docketNumber,
-      trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
-    });
+    await saveCalendarNoteInteractor(
+      applicationContext,
+      {
+        calendarNote: 'just updating the hearing note',
+        docketNumber: mockCase.docketNumber,
+        trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,

@@ -10,6 +10,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, invert } from 'lodash';
 
 export type PreviousTerm = {
@@ -30,13 +31,12 @@ export type TrialLocationData = {
 export const runTrialSessionPlanningReportInteractor = async (
   applicationContext: ServerApplicationContext,
   { term, year }: { term: string; year: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   fileId: string;
   url: string;
 }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
