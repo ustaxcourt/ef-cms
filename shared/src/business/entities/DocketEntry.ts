@@ -26,22 +26,22 @@ import {
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
-} from '../EntityConstants';
+} from './EntityConstants';
 import {
   Case,
   getPetitionDocketEntry,
   isSealedCase,
 } from '@shared/business/entities/cases/Case';
-import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
+import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { RawUser, User } from '../User';
+import { RawUser, User } from './User';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../WorkItem';
+import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
-} from '../../utilities/DateHandler';
+} from '../utilities/DateHandler';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 

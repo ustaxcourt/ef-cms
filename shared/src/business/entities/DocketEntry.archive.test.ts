@@ -1,6 +1,6 @@
 import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('archive', () => {
   it('archives the document', () => {

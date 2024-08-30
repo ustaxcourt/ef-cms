@@ -5,9 +5,9 @@ import {
   ORDER_EVENT_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-} from '../EntityConstants';
+} from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
-import { createISODateString } from '../../utilities/DateHandler';
+import { createISODateString } from '../utilities/DateHandler';
 
 describe('DocketEntry isPublic', () => {
   const visibilityChangeDate = createISODateString('2023-08-01', 'yyyy-MM-dd');

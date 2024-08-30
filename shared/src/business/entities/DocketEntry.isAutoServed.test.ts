@@ -3,8 +3,8 @@ import { DocketEntry } from './DocketEntry';
 import {
   EXTERNAL_DOCUMENT_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from './EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isAutoServed', () => {
   it('should return true if the documentType is an external document and the document is not a Simultaneous Document', () => {

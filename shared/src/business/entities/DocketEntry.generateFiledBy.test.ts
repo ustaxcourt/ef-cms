@@ -1,7 +1,7 @@
 import { DocketEntry } from './DocketEntry';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from './../EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
+import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from './EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('generateFiledBy', () => {
   let mockDocketEntry;

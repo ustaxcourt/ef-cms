@@ -1,6 +1,6 @@
 import { DocketEntry } from './DocketEntry';
-import { MINUTE_ENTRIES_MAP } from '../EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MINUTE_ENTRIES_MAP } from './EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isMinuteEntry', () => {
   describe('non RQT event codes', () => {

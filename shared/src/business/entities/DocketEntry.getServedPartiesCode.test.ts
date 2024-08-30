@@ -1,4 +1,4 @@
-import { PARTIES_CODES, ROLES } from '../EntityConstants';
+import { PARTIES_CODES, ROLES } from './EntityConstants';
 import { getServedPartiesCode } from './DocketEntry';
 
 describe('getServedPartiesCode', () => {
