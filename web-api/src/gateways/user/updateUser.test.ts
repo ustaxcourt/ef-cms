@@ -60,6 +60,31 @@ describe('updateUser', () => {
     });
   });
 
+  it('should update the user`s name in persistence when it is provided as an attribute to update', async () => {
+    const mockUserPoolId = 'test';
+    applicationContext.environment.UserPoolId = mockUserPoolId;
+
+    await updateUser(applicationContext, {
+      attributesToUpdate: {
+        name: 'Tattersail',
+      },
+      email: mockEmail,
+    });
+
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalledWith({
+      UserAttributes: [
+        {
+          Name: 'name',
+          Value: 'Tattersail',
+        },
+      ],
+      UserPoolId: applicationContext.environment.userPoolId,
+      Username: mockLowerCasedEmail,
+    });
+  });
+
   it('should update the user`s role and email in persistence when they are both provided as attributes to update', async () => {
     const mockUserPoolId = 'test';
     applicationContext.environment.userPoolId = mockUserPoolId;

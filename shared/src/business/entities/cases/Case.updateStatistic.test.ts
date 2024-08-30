@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { Statistic } from '../Statistic';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateStatistic', () => {
   it('should successfully update a statistic', () => {
@@ -22,21 +22,18 @@ describe('updateStatistic', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
-    const statisticToUpdate = new Statistic(
-      {
-        determinationDeficiencyAmount: 1,
-        determinationTotalPenalties: 1,
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        statisticId,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToUpdate = new Statistic({
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 1,
+      irsDeficiencyAmount: 1,
+      irsTotalPenalties: 1,
+      statisticId,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     caseEntity.updateStatistic(statisticToUpdate, statisticId);
 
@@ -60,21 +57,18 @@ describe('updateStatistic', () => {
         ...MOCK_CASE,
         statistics: [originalStatistic],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
-    const statisticToUpdate = new Statistic(
-      {
-        determinationDeficiencyAmount: 1,
-        determinationTotalPenalties: 1,
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
-        year: 2012,
-        yearOrPeriod: 'Year',
-      },
-      { applicationContext },
-    );
+    const statisticToUpdate = new Statistic({
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 1,
+      irsDeficiencyAmount: 1,
+      irsTotalPenalties: 1,
+      statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+      year: 2012,
+      yearOrPeriod: 'Year',
+    });
 
     caseEntity.updateStatistic(
       statisticToUpdate,

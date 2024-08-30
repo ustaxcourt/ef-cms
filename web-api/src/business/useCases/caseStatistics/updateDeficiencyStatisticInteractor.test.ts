@@ -1,8 +1,9 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
 
 describe('updateDeficiencyStatisticInteractor', () => {
@@ -30,6 +31,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     yearOrPeriod: 'Year',
   };
   let mockLock;
+  let authorizedUser: UnknownAuthUser;
 
   beforeAll(() => {
     applicationContext
@@ -39,10 +41,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
+    authorizedUser = mockDocketClerkUser;
 
     applicationContext
       .getPersistenceGateway()
@@ -52,12 +51,16 @@ describe('updateDeficiencyStatisticInteractor', () => {
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
+    authorizedUser = {} as unknown as UnknownAuthUser;
 
     await expect(
-      updateDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      } as any),
+      updateDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        } as any,
+        authorizedUser,
+      ),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
@@ -73,6 +76,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         ...statisticToUpdate,
       } as any,
+      authorizedUser,
     );
     expect(result).toMatchObject({
       statistics: [statisticToUpdate],
@@ -92,6 +96,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         ...statisticToUpdate,
       } as any,
+      authorizedUser,
     );
     expect(result).toMatchObject({
       statistics: [statistic],
@@ -102,10 +107,14 @@ describe('updateDeficiencyStatisticInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      updateDeficiencyStatisticInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        ...statistic,
-      } as any),
+      updateDeficiencyStatisticInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          ...statistic,
+        } as any,
+        authorizedUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -114,10 +123,14 @@ describe('updateDeficiencyStatisticInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await updateDeficiencyStatisticInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      ...statistic,
-    } as any);
+    await updateDeficiencyStatisticInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        ...statistic,
+      } as any,
+      authorizedUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

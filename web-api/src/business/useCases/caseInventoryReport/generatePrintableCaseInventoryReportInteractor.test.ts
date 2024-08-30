@@ -1,13 +1,12 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportInteractor } from './generatePrintableCaseInventoryReportInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('generatePrintableCaseInventoryReportInteractor', () => {
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
     applicationContext
       .getUseCaseHelpers()
       .generateCaseInventoryReportPdf.mockReturnValue('https://example.com');
@@ -22,6 +21,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
       {
         associatedJudge: 'Judge Colvin',
       },
+      mockPetitionsClerkUser,
     );
 
     expect(
@@ -31,26 +31,24 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user does not have access', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    });
-
     await expect(
-      generatePrintableCaseInventoryReportInteractor(applicationContext, {
-        associatedJudge: 'Judge Colvin',
-      }),
+      generatePrintableCaseInventoryReportInteractor(
+        applicationContext,
+        {
+          associatedJudge: 'Judge Colvin',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error if associatedJudge and status are not passed in', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    });
-
     await expect(
-      generatePrintableCaseInventoryReportInteractor(applicationContext, {}),
+      generatePrintableCaseInventoryReportInteractor(
+        applicationContext,
+        {},
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Either judge or status must be provided');
   });
 });
