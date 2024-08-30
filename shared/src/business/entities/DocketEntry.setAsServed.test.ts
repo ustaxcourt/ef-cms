@@ -4,7 +4,7 @@ import {
   PARTIES_CODES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('setAsServed', () => {
   it('sets the Document as served', () => {

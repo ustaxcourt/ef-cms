@@ -1,5 +1,5 @@
 import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('strikeEntry', () => {
   it('strikes a document if isOnDocketRecord is true', () => {

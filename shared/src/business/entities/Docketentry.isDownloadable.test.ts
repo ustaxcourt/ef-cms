@@ -15,7 +15,7 @@ import {
   petitionerUser,
 } from '@shared/test/mockUsers';
 import { cloneDeep } from 'lodash';
-import { getPetitionDocketEntry } from '../cases/Case';
+import { getPetitionDocketEntry } from './cases/Case';
 
 let baseDocketEntry: RawDocketEntry;
 let rawCase: RawCase;
