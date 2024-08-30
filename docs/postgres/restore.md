@@ -31,6 +31,8 @@ Ensure snapshot exists for restore (aws console, rds -> snapshots).
   }
   ```
 - Run deploy allColors (ex: `npm run deploy:allColors exp4`)
+- May error trying to remove due to final snapshot, simply ignore, and manually delete inside aws console.
+
 
 #### Restore global cluster
 - Source to specific env (ex: `source scripts/env/set-env.zsh exp4`)

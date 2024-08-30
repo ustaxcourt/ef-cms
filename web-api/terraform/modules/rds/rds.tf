@@ -1,8 +1,10 @@
 resource "aws_rds_global_cluster" "global_cluster" {
-  global_cluster_identifier = "${var.environment}-dawson-global${var.postgres_postfix}"
-  engine                    = "aurora-postgresql"
-  storage_encrypted         = true
-  deletion_protection       = false
+  global_cluster_identifier    = "${var.environment}-dawson-global${var.postgres_postfix}"
+  engine                       = "aurora-postgresql"
+  storage_encrypted            = true
+  deletion_protection          = false
+  source_db_cluster_identifier = aws_rds_cluster.postgres.arn
+  force_destroy                = true
 
   lifecycle {
     prevent_destroy = false
@@ -19,9 +21,9 @@ resource "aws_rds_cluster" "postgres" {
   master_username     = var.postgres_user
   master_password     = var.postgres_password
   storage_encrypted   = true
-  # global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
-  skip_final_snapshot                 = true
-  snapshot_identifier                 = "exp-dawson-cluster-a"
+  #global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
+  skip_final_snapshot = true
+  # snapshot_identifier                 = "exp4-dawson-cluster-1"
   iam_database_authentication_enabled = true
   kms_key_id                          = var.kms_key_id_primary
 
@@ -31,7 +33,8 @@ resource "aws_rds_cluster" "postgres" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
+    ignore_changes  = [global_cluster_identifier]
   }
 }
 
@@ -43,7 +46,7 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
   publicly_accessible = true
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -55,7 +58,7 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
 #   engine_version                      = var.engine_version
 #   deletion_protection                 = var.delete_protection
 #   storage_encrypted                   = true
-#   # global_cluster_identifier           = aws_rds_global_cluster.global_cluster.id
+#   global_cluster_identifier           = aws_rds_global_cluster.global_cluster.id
 #   iam_database_authentication_enabled = true
 #   kms_key_id                          = var.kms_key_id_replica
 
