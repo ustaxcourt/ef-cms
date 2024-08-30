@@ -130,6 +130,7 @@ describe('sendBulkTemplatedEmail', () => {
     await sendWithRetry({
       applicationContext,
       params: {
+        DefaultTemplateData: undefined,
         Destinations: [
           {
             Destination: {
@@ -200,6 +201,7 @@ describe('sendBulkTemplatedEmail', () => {
       sendWithRetry({
         applicationContext,
         params: {
+          DefaultTemplateData: undefined,
           Destinations: [
             {
               Destination: {

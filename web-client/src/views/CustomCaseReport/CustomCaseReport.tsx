@@ -448,9 +448,9 @@ export const CustomCaseReport = connect(
           <Button
             data-testid="submit-custom-case-report-button"
             tooltip="Run Report"
-            onClick={() => {
+            onClick={async () => {
               setHasRunCustomCaseReport(true);
-              getCustomCaseReportSequence({ selectedPage: 0 });
+              await getCustomCaseReportSequence({ selectedPage: 0 });
               setActivePage(0);
             }}
           >
@@ -468,15 +468,12 @@ export const CustomCaseReport = connect(
           <div ref={paginatorTop}>
             {customCaseReportHelper.pageCount > 1 && (
               <Paginator
-                breakClassName="hide"
-                forcePage={activePage}
-                marginPagesDisplayed={0}
-                pageCount={customCaseReportHelper.pageCount}
-                pageRangeDisplayed={0}
+                currentPageIndex={activePage}
+                totalPages={customCaseReportHelper.pageCount}
                 onPageChange={async pageChange => {
-                  setActivePage(pageChange.selected);
+                  setActivePage(pageChange);
                   await getCustomCaseReportSequence({
-                    selectedPage: pageChange.selected,
+                    selectedPage: pageChange,
                   });
                   focusPaginatorTop(paginatorTop);
                 }}
@@ -514,15 +511,12 @@ export const CustomCaseReport = connect(
           />
           {customCaseReportHelper.pageCount > 1 && (
             <Paginator
-              breakClassName="hide"
-              forcePage={activePage}
-              marginPagesDisplayed={0}
-              pageCount={customCaseReportHelper.pageCount}
-              pageRangeDisplayed={0}
+              currentPageIndex={activePage}
+              totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
-                setActivePage(pageChange.selected);
+                setActivePage(pageChange);
                 await getCustomCaseReportSequence({
-                  selectedPage: pageChange.selected,
+                  selectedPage: pageChange,
                 });
                 focusPaginatorTop(paginatorTop);
               }}
