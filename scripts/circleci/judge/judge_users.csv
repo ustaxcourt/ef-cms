@@ -1,4 +1,4 @@
-name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge,phone
+name,judgeTitle,judgeFullName,email,role,section,isSeniorJudge,judgePhoneNumber
 Aarons,Judge,Aarons,legacy.judge.aarons@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Armen,Special Trial Judge,Armen,legacy.judge.armen@example.com,legacyJudge,legacyJudgesChambers,false,(123) 123-1234
 Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,ashfordsChambers,false,(202) 521-0822

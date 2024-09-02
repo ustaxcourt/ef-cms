@@ -1,4 +1,4 @@
-import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
+import { RawUser } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
@@ -103,7 +103,7 @@ const checkParams = ({
   return value;
 };
 
-const sendWelcomeEmail = async ({ email }) => {
+export const sendWelcomeEmail = async ({ email }) => {
   try {
     await applicationContext.getCognito().adminCreateUser({
       MessageAction: 'RESEND',
@@ -120,12 +120,14 @@ const sendWelcomeEmail = async ({ email }) => {
   const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
 
-  const judgesChambers: JudgeChambersInfo[] = await applicationContext
+  const judgeUsers: RawUser[] = await applicationContext
     .getUseCases()
-    .getJudgesChambersInteractor(applicationContext, mockJudgeUser);
-  const validChambersSections = judgesChambers.map(
-    chambers => chambers.section,
-  );
+    .getUsersInSectionInteractor(
+      applicationContext,
+      { section: 'judge' },
+      mockJudgeUser,
+    );
+  const validChambersSections = judgeUsers.map(user => user.section!);
   const params: UserParamsInterface = {
     email: process.argv[2],
     name: process.argv[3],

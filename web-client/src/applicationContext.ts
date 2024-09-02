@@ -197,7 +197,6 @@ import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFe
 import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeInSectionInteractor } from '../../shared/src/proxies/users/getJudgeInSectionProxy';
-import { getJudgesChambersInteractor } from '../../shared/src/proxies/users/getJudgesChambersProxy';
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
@@ -470,7 +469,6 @@ const allUseCases = {
   getIrsPractitionersBySearchKeyInteractor,
   getItemInteractor,
   getJudgeInSectionInteractor,
-  getJudgesChambersInteractor,
   getMaintenanceModeInteractor,
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,

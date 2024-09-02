@@ -13,21 +13,6 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
-export interface JudgeContact {
-  phone: string;
-}
-
-export interface NonJudgeContact extends JudgeContact {
-  address1: string;
-  address2?: string;
-  address3?: string;
-  city: string;
-  country: string;
-  countryType: string;
-  postalCode: string;
-  state: string;
-}
-
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
   public email?: string;
@@ -37,11 +22,22 @@ export class User extends JoiValidationEntity {
   public token?: string;
   public userId: string;
   public isUpdatingInformation?: boolean;
-  public contact?: JudgeContact | NonJudgeContact;
+  public contact?: {
+    address1: string;
+    address2?: string;
+    address3?: string;
+    city: string;
+    country: string;
+    countryType: string;
+    phone: string;
+    postalCode: string;
+    state: string;
+  };
   public judgeFullName?: string;
   public judgeTitle?: JudgeTitle;
   public section?: string;
   public isSeniorJudge?: boolean;
+  public judgePhoneNumber?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
@@ -58,7 +54,7 @@ export class User extends JoiValidationEntity {
     this.token = rawUser.token;
     this.userId = rawUser.userId;
     this.isUpdatingInformation = rawUser.isUpdatingInformation;
-    this.setUpContact(rawUser);
+    this.setContactInformation(rawUser);
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
       this.judgeFullName = rawUser.judgeFullName;
       this.judgeTitle = rawUser.judgeTitle;
@@ -68,13 +64,9 @@ export class User extends JoiValidationEntity {
     this.section = rawUser.section;
   }
 
-  setUpContact(rawUser) {
-    // For judges, we require fewer contact attributes
-    if (
-      rawUser.contact &&
-      [ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)
-    ) {
-      this.contact = { phone: formatPhoneNumber(rawUser.contact.phone) };
+  setContactInformation(rawUser) {
+    if ([ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)) {
+      this.judgePhoneNumber = formatPhoneNumber(rawUser.judgePhoneNumber);
     } else if (rawUser.contact) {
       this.contact = {
         address1: rawUser.contact.address1,
@@ -133,17 +125,8 @@ export class User extends JoiValidationEntity {
     }).messages({ '*': 'Enter state' }),
   };
 
-  static CONTACT_SCHEMA = joi.when('role', {
-    is: joi.invalid(ROLES.judge, ROLES.legacyJudge),
-    otherwise: joi
-      .object()
-      .keys({ phone: User.USER_CONTACT_VALIDATION_RULES.phone })
-      .optional(),
-    then: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
-  });
-
   static VALIDATION_RULES = {
-    contact: User.CONTACT_SCHEMA,
+    contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
     email: JoiValidationConstants.EMAIL.optional(),
     entityName: JoiValidationConstants.STRING.valid('User').required(),
     isSeniorJudge: joi.when('role', {
@@ -162,6 +145,7 @@ export class User extends JoiValidationEntity {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
+    judgePhoneNumber: JoiValidationConstants.STRING.max(100).optional(),
     judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
