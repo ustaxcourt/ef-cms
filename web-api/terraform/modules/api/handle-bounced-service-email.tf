@@ -7,9 +7,6 @@ module "zip_handle_bounce" {
   role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "60"
-
-  # security_group_ids = var.security_group_ids
-  # subnet_ids         = var.subnet_ids
 }
 
 

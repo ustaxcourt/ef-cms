@@ -7,9 +7,6 @@ module "zip_seal" {
   role           = var.lambda_role_arn
   environment    = var.lambda_environment
   timeout        = "60"
-
-  # security_group_ids = var.security_group_ids
-  # subnet_ids         = var.subnet_ids
 }
 
 resource "terraform_data" "zip_seal_last_modified" {

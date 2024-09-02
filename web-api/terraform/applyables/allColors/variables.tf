@@ -85,7 +85,3 @@ variable "postgres_user" {
 variable "postgres_password" {
   type = string
 }
-
-variable "tunnel_key_name" {
-  type = string
-}

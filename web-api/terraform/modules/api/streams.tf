@@ -7,9 +7,6 @@ module "zip_streams" {
   environment    = var.lambda_environment
   timeout        = "60"
   memory_size    = "3008"
-
-  # security_group_ids = var.security_group_ids
-  # subnet_ids         = var.subnet_ids
 }
 
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
