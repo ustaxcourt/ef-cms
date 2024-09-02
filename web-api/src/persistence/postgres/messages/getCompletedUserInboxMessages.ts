@@ -10,14 +10,16 @@ export const getCompletedUserInboxMessages = async ({
 }): Promise<Message[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const messages = await dbRead
-    .selectFrom('message')
-    .where('completedByUserId', '=', userId)
-    .where('isCompleted', '=', true)
-    .where('completedAt', '>=', filterDate)
-    .selectAll()
-    .limit(5000)
-    .execute();
+  const messages = await dbRead(reader =>
+    reader
+      .selectFrom('message')
+      .where('completedByUserId', '=', userId)
+      .where('isCompleted', '=', true)
+      .where('completedAt', '>=', filterDate)
+      .selectAll()
+      .limit(5000)
+      .execute(),
+  );
 
   return messages.map(message =>
     new Message(transformNullToUndefined(message)).validate(),
