@@ -2,11 +2,11 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_iam_user" "rds_user_dawson" {
-  name = "dawson-${var.environment}"
+  name = "dawson_${var.environment}"
 }
 
 resource "aws_iam_user" "rds_user_developers" {
-  name = "developers-${var.environment}"
+  name = "developers_${var.environment}"
 }
 
 resource "aws_iam_policy" "rds_connect_policy" {

@@ -4,11 +4,12 @@ import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import fs from 'fs';
 
-const POOL = {
-  database: 'postgres',
+export const POOL = {
+  database: process.env.DATABASE_NAME || 'postgres',
   host: process.env.POSTGRES_HOST || 'localhost',
   idleTimeoutMillis: 1000,
   max: 1,
+  password: process.env.POSTGRES_PASSWORD || 'example',
   port: 5432,
   ssl:
     process.env.NODE_ENV === 'production' || process.env.CIRCLE_BRANCH
@@ -29,7 +30,7 @@ const tokens: Record<string, string | null> = {
   'us-west-1': null,
 };
 
-function connect(pool) {
+export function connect(pool) {
   return new Kysely<Database>({
     dialect: new PostgresDialect({
       pool: new Pool(pool),
@@ -58,10 +59,6 @@ function clearToken(region: string) {
 }
 
 async function getToken(region: string, host: string) {
-  if (process.env.NODE_ENV !== 'production') {
-    return process.env.POSTGRES_PASSWORD || 'example';
-  }
-
   const token = tokens[region];
 
   if (!token) {
