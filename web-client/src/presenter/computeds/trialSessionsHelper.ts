@@ -1,23 +1,29 @@
 import { Get } from 'cerebral';
+import { RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const trialSessionsHelper = (get: Get): any => {
+export const trialSessionsHelper = (
+  get: Get,
+): {
+  additionalColumnsShown: number;
+  showNewTrialSession: boolean;
+  showNoticeIssued: boolean;
+  showSessionStatus: boolean;
+  showUnassignedJudgeFilter: boolean;
+  trialSessionJudges: RawUser[];
+} => {
   const permissions = get(state.permissions)!;
-  const status = get(state.screenMetadata.trialSessionFilters.status);
-  const tab =
-    get(state.currentViewMetadata.trialSessions.tab) ||
-    (status && status.toLowerCase());
+  const tab = get(state.trialSessionsPage.filters.currentTab);
 
   const isNewTab = tab === 'new';
-  const isOpenTab = tab === 'open' || tab === undefined;
-  const isAllTab = tab === 'all';
+  const isCalendared = tab === 'calendared';
 
   let additionalColumnsShown = 0;
-  if (isOpenTab || isAllTab) {
+  if (isCalendared) {
     additionalColumnsShown = 1;
   }
 
-  const showCurrentJudgesOnly = isNewTab || isOpenTab;
+  const showCurrentJudgesOnly = isNewTab;
 
   let trialSessionJudges;
   if (showCurrentJudgesOnly) {
@@ -29,8 +35,8 @@ export const trialSessionsHelper = (get: Get): any => {
   return {
     additionalColumnsShown,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
-    showNoticeIssued: isOpenTab,
-    showSessionStatus: isAllTab,
+    showNoticeIssued: isCalendared,
+    showSessionStatus: isCalendared,
     showUnassignedJudgeFilter: isNewTab,
     trialSessionJudges,
   };

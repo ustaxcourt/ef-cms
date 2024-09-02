@@ -2,8 +2,10 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import {
+  SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TrialSessionProceedingType,
 } from '@shared/business/entities/EntityConstants';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -19,11 +21,13 @@ export const TrialSessions = connect(
     defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
+    setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
     trialSessionHelper: state.trialSessionsHelper,
   },
   function TrialSessions({
     defaultTab,
     openTrialSessionPlanningModalSequence,
+    setTrialSessionsFiltersSequence,
     trialSessionHelper,
   }) {
     return (
@@ -33,10 +37,13 @@ export const TrialSessions = connect(
           <SuccessNotification />
           <ErrorNotification />
           <Tabs
-            bind="currentViewMetadata.trialSessions.tab"
+            bind="trialSessionsPage.filters.currentTab"
             defaultActiveTab={defaultTab || 'calendared'}
             headingLevel="2"
             id="trial-sessions-tabs"
+            onSelect={tabName => {
+              setTrialSessionsFiltersSequence({ currentTab: tabName });
+            }}
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
@@ -76,59 +83,85 @@ export const TrialSessions = connect(
 );
 
 const TrialSessionFilters = connect(
-  { trialSessionsHelper: state.trialSessionsHelper },
-  function TrialSessionFilters({ trialSessionsHelper }) {
+  {
+    setTrialSessionsFiltersSequence: sequences.setTrialSessionsFiltersSequence,
+    trialSessionsHelper: state.trialSessionsHelper,
+    trialSessionsPage: state.trialSessionsPage,
+  },
+  function TrialSessionFilters({
+    setTrialSessionsFiltersSequence,
+    trialSessionsHelper,
+    trialSessionsPage,
+  }) {
+    console.log(trialSessionsPage.filters);
     return (
       <>
         <div className="margin-bottom-4">
-          <div className="usa-radio usa-radio__inline">
-            <legend>Session Status</legend>
-            <input
-              aria-describedby="petition-filing-method-radios"
-              checked={false}
-              className="usa-radio__input"
-              id="petitionFilingMethod-electronic"
-              name="filingMethod"
-              type="radio"
-              onChange={() => {}}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor="petitionFilingMethod-electronic"
-            >
-              All
-            </label>
-            <input
-              aria-describedby="petition-filing-method-radios"
-              checked={false}
-              className="usa-radio__input"
-              id="petitionFilingMethod-electronic"
-              name="filingMethod"
-              type="radio"
-              onChange={() => {}}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor="petitionFilingMethod-electronic"
-            >
-              Open
-            </label>
-            <input
-              aria-describedby="petition-filing-method-radios"
-              checked={false}
-              className="usa-radio__input"
-              id="petitionFilingMethod-electronic"
-              name="filingMethod"
-              type="radio"
-              onChange={() => {}}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor="petitionFilingMethod-electronic"
-            >
-              Closed
-            </label>
-          </div>
+          {trialSessionsHelper.showSessionStatus && (
+            <div className="usa-radio usa-radio__inline">
+              <legend>Session Status</legend>
+              <input
+                aria-describedby="petition-filing-method-radios"
+                checked={trialSessionsPage.filters.sessionStatus === 'All'}
+                className="usa-radio__input"
+                id="sessionStatus-All"
+                name="filingMethod"
+                type="radio"
+                value="All"
+                onChange={e => {
+                  setTrialSessionsFiltersSequence({
+                    sessionStatus: e.target.value,
+                  });
+                }}
+              />
+              <label className="usa-radio__label" htmlFor="sessionStatus-All">
+                All
+              </label>
+              <input
+                aria-describedby="petition-filing-method-radios"
+                checked={
+                  trialSessionsPage.filters.sessionStatus ===
+                  SESSION_STATUS_TYPES.open
+                }
+                className="usa-radio__input"
+                id="sessionStatus-Open"
+                name="filingMethod"
+                type="radio"
+                value={SESSION_STATUS_TYPES.open}
+                onChange={e => {
+                  setTrialSessionsFiltersSequence({
+                    sessionStatus: e.target.value,
+                  });
+                }}
+              />
+              <label className="usa-radio__label" htmlFor="sessionStatus-Open">
+                Open
+              </label>
+              <input
+                aria-describedby="petition-filing-method-radios"
+                checked={
+                  trialSessionsPage.filters.sessionStatus ===
+                  SESSION_STATUS_TYPES.closed
+                }
+                className="usa-radio__input"
+                id="sessionStatus-Closed"
+                name="filingMethod"
+                type="radio"
+                value={SESSION_STATUS_TYPES.closed}
+                onChange={e => {
+                  setTrialSessionsFiltersSequence({
+                    sessionStatus: e.target.value,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor="sessionStatus-Closed"
+              >
+                Closed
+              </label>
+            </div>
+          )}
         </div>
         <div className="margin-bottom-5 grid-row flex-justify">
           <div>
@@ -142,7 +175,11 @@ const TrialSessionFilters = connect(
             <select
               aria-label="location"
               className="usa-select select-left width-180 inline-select"
-              onChange={() => {}}
+              onChange={e => {
+                setTrialSessionsFiltersSequence({
+                  trialLocation: e.target.value,
+                });
+              }}
             >
               <option value="All">-Location-</option>
               <TrialCityOptions procedureType="AllPlusStandalone" />
@@ -152,7 +189,11 @@ const TrialSessionFilters = connect(
               className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="proceedingFilter"
               name="proceedingType"
-              onChange={() => {}}
+              onChange={e => {
+                setTrialSessionsFiltersSequence({
+                  proceedingType: e.target.value as TrialSessionProceedingType,
+                });
+              }}
             >
               <option value="All">-Proceeding Type-</option>
               {Object.values(TRIAL_SESSION_PROCEEDING_TYPES).map(
@@ -168,9 +209,13 @@ const TrialSessionFilters = connect(
               className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="sessionFilter"
               name="sessionType"
-              onChange={() => {}}
+              onChange={e => {
+                setTrialSessionsFiltersSequence({
+                  sessionType: e.target.value,
+                });
+              }}
             >
-              <option value="">-Session Type-</option>
+              <option value="All">-Session Type-</option>
               {Object.values(SESSION_TYPES).map(sessionType => (
                 <option key={sessionType} value={sessionType}>
                   {sessionType}
@@ -182,7 +227,11 @@ const TrialSessionFilters = connect(
               className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="judgeFilter"
               name="judge"
-              onChange={() => {}}
+              onChange={e => {
+                setTrialSessionsFiltersSequence({
+                  judgeId: e.target.value,
+                });
+              }}
             >
               <option value="All">-Judge-</option>
               {trialSessionsHelper.trialSessionJudges.map(judge => (

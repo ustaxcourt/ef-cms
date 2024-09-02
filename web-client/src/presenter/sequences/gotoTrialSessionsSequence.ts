@@ -9,7 +9,6 @@ import { parallel } from 'cerebral/factories';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
-import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
 import { setTrialSessionsPageAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionsPageAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -29,6 +28,5 @@ export const gotoTrialSessionsSequence =
         setAllAndCurrentJudgesAction,
       ],
     ]),
-    setTrialSessionsFiltersAction,
     setupCurrentPageAction('TrialSessions'),
   ]);
