@@ -1,6 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
-import { dbRead } from '@web-api/database';
+import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCompletedSectionInboxMessages = async ({
@@ -10,7 +10,7 @@ export const getCompletedSectionInboxMessages = async ({
 }): Promise<Message[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const messages = await dbRead(reader =>
+  const messages = await getDbReader(reader =>
     reader
       .selectFrom('message')
       .where('completedBySection', '=', section)

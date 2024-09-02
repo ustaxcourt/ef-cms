@@ -1,5 +1,5 @@
 import { Message } from '@shared/business/entities/Message';
-import { dbRead } from '@web-api/database';
+import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '../utils/transformNullToUndefined';
 
 export const getMessageById = async ({
@@ -7,11 +7,13 @@ export const getMessageById = async ({
 }: {
   messageId: string;
 }): Promise<Message> => {
-  const message = await dbRead
-    .selectFrom('message')
-    .where('messageId', '=', messageId)
-    .selectAll()
-    .executeTakeFirst();
+  const message = await getDbReader(reader =>
+    reader
+      .selectFrom('message')
+      .where('messageId', '=', messageId)
+      .selectAll()
+      .executeTakeFirst(),
+  );
 
   return new Message(transformNullToUndefined({ ...message })).validate();
 };
