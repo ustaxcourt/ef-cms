@@ -1,4 +1,4 @@
-import { limitFileSize } from '../../views/limitFileSize';
+import { limitFileSize } from '../../views/FileHandlingHelpers/limitFileSize';
 
 /**
  * validates whether the given file size does not exceed the set max upload limit
