@@ -10,14 +10,16 @@ export const getCompletedSectionInboxMessages = async ({
 }): Promise<Message[]> => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
-  const messages = await dbRead
-    .selectFrom('message')
-    .where('completedBySection', '=', section)
-    .where('isCompleted', '=', true)
-    .where('createdAt', '>=', filterDate)
-    .selectAll()
-    .limit(5000)
-    .execute();
+  const messages = await dbRead(reader =>
+    reader
+      .selectFrom('message')
+      .where('completedBySection', '=', section)
+      .where('isCompleted', '=', true)
+      .where('createdAt', '>=', filterDate)
+      .selectAll()
+      .limit(5000)
+      .execute(),
+  );
 
   return messages.map(message =>
     new Message(transformNullToUndefined(message)).validate(),
