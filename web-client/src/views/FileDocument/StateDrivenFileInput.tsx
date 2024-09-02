@@ -1,11 +1,11 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cloneFile } from '../cloneFile';
+import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { limitFileSize } from '../limitFileSize';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { validateFile } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import React from 'react';
 
 type StateDriveFileInputProps = {
@@ -21,6 +21,7 @@ type StateDriveFileInputProps = {
 
 const deps = {
   constants: state.constants,
+  fileUploadErrorSequence: sequences.updateValidationErrorsSequence,
   form: state.form,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
   validationSequence: sequences[props.validationSequence],
@@ -36,6 +37,7 @@ export const StateDrivenFileInput = connect<
     'aria-describedby': ariaDescribedBy,
     constants,
     file,
+    fileUploadErrorSequence,
     form,
     id,
     ignoreSizeKey,
@@ -47,6 +49,42 @@ export const StateDrivenFileInput = connect<
     let inputRef;
 
     const fileOnForm = file || form[fileInputName] || form.existingFileName;
+
+    const onFileSelectionChange = async e => {
+      const { name: inputName } = e.target;
+      const selectedFile = e.target.files[0];
+      const { errorMessage, isValid } = await validateFile({
+        file: selectedFile,
+        megabyteLimit: constants.MAX_FILE_SIZE_MB,
+      });
+      if (!isValid) {
+        console.log(inputName);
+        // TODO 10001: Improve--doesn't work for nested fields
+        fileUploadErrorSequence({
+          errors: { [inputName]: errorMessage },
+        });
+        e.target.value = null;
+        return;
+      }
+      const uploadedFile = e.target.files[0];
+      cloneFile(uploadedFile)
+        .then(clonedFile => {
+          updateFormValueSequence({
+            key: inputName,
+            property: 'file',
+            value: clonedFile,
+          });
+          updateFormValueSequence({
+            key: ignoreSizeKey ? inputName : `${inputName}Size`,
+            property: 'size',
+            value: clonedFile.size,
+          });
+          return validationSequence ? validationSequence() : null;
+        })
+        .catch(() => {
+          /* no-op */
+        });
+    };
 
     return (
       <React.Fragment>
@@ -63,29 +101,7 @@ export const StateDrivenFileInput = connect<
             display: fileOnForm ? 'none' : 'block',
           }}
           type="file"
-          onChange={e => {
-            const { name: inputName } = e.target;
-            limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-              const uploadedFile = e.target.files[0];
-              cloneFile(uploadedFile)
-                .then(clonedFile => {
-                  updateFormValueSequence({
-                    key: inputName,
-                    property: 'file',
-                    value: clonedFile,
-                  });
-                  updateFormValueSequence({
-                    key: ignoreSizeKey ? inputName : `${inputName}Size`,
-                    property: 'size',
-                    value: clonedFile.size,
-                  });
-                  return validationSequence ? validationSequence() : null;
-                })
-                .catch(() => {
-                  /* no-op */
-                });
-            });
-          }}
+          onChange={onFileSelectionChange}
           onClick={e => {
             if (fileOnForm) e.preventDefault();
           }}
@@ -132,5 +148,3 @@ export const StateDrivenFileInput = connect<
     );
   },
 );
-
-StateDrivenFileInput.displayName = 'StateDrivenFileInput';
