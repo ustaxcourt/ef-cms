@@ -17,9 +17,9 @@ export const initialTrialSessionPageState = {
 
 export type TrialSessionsFilters = {
   currentTab: 'calendared' | 'new';
-  judgeId: string | 'All';
+  judgeId: string;
   proceedingType: TrialSessionProceedingType | 'All';
-  sessionStatus: string | 'All';
-  sessionType: string | 'All';
-  trialLocation: string | 'All';
+  sessionStatus: string;
+  sessionType: string;
+  trialLocation: string;
 };
