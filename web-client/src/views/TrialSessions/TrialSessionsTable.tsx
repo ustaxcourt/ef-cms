@@ -1,35 +1,25 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import {
+  isTrialSessionRow,
+  isTrialSessionWeek,
+} from '@web-client/presenter/computeds/trialSessionsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionsTable = connect(
   {
-    formattedTrialSessions:
-      state.formattedTrialSessions.filteredTrialSessions[props.filter],
     trialSessionsHelper: state.trialSessionsHelper,
+    trialSessionsPage: state.trialSessionsPage,
   },
-  function TrialSessionsTable({
-    formattedTrialSessions,
-    trialSessionsHelper,
-  }: {
-    formattedTrialSessions: any[];
-    trialSessionsHelper: {
-      additionalColumnsShown: number;
-      showNoticeIssued: boolean;
-      showSessionStatus: boolean;
-      showUnassignedJudgeFilter: boolean;
-      trialSessionJudges: any[];
-    };
-  }) {
+  function TrialSessionsTable({ trialSessionsHelper, trialSessionsPage }) {
     return (
       <>
         <table
           aria-describedby="trial-sessions-filter-label locationFilter proceedingFilter sessionFilter judgeFilter"
-          aria-label={`${props.filter} trial sessions`}
+          aria-label={`${trialSessionsPage.filters.currentTab} trial sessions`}
           className="usa-table ustc-table trial-sessions subsection"
-          id={`${props.filter}-sessions`}
+          id={`${trialSessionsPage.filters.currentTab}-sessions`}
         >
           <thead>
             <tr>
@@ -44,38 +34,42 @@ export const TrialSessionsTable = connect(
               {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
             </tr>
           </thead>
-          {formattedTrialSessions.map(trialDate => (
-            <React.Fragment key={trialDate.startOfWeekSortable}>
-              <tbody>
-                <tr className="trial-date">
-                  <td colSpan={7 + trialSessionsHelper.additionalColumnsShown}>
-                    <h4 className="margin-bottom-0">
-                      {'Week of '}
-                      {trialDate.dateFormatted}
-                    </h4>
-                  </td>
-                </tr>
-              </tbody>
-              {trialDate.sessions.map(item => (
-                <tbody key={item.trialSessionId}>
+          {trialSessionsHelper.trialSessionRows.map(row => (
+            <>
+              {isTrialSessionWeek(row) && (
+                <tbody>
+                  <tr className="trial-date">
+                    <td
+                      colSpan={7 + trialSessionsHelper.additionalColumnsShown}
+                    >
+                      <h4 className="margin-bottom-0">
+                        {'Week of '}
+                        {row.dateFormatted}
+                      </h4>
+                    </td>
+                  </tr>
+                </tbody>
+              )}
+              {isTrialSessionRow(row) && (
+                <tbody key={row.trialSessionId}>
                   <tr
                     className="trial-sessions-row"
-                    data-testid={`trial-sessions-row-${item.trialSessionId}`}
+                    data-testid={`trial-sessions-row-${row.trialSessionId}`}
                   >
                     <td>
-                      {item.showAlertForNOTTReminder && (
+                      {row.showAlertForNOTTReminder && (
                         <FontAwesomeIcon
                           className="fa-icon-blue margin-right-05"
                           icon="clock"
                           size="sm"
-                          title={item.alertMessageForNOTT}
+                          title={row.alertMessageForNOTT}
                         />
                       )}
-                      {item.formattedStartDate}
+                      {row.formattedStartDate}
                     </td>
-                    <td>{item.formattedEstimatedEndDate}</td>
+                    <td>{row.formattedEstimatedEndDate}</td>
                     <td>
-                      {item.swingSession && (
+                      {row.swingSession && (
                         <FontAwesomeIcon
                           className="fa-icon-blue"
                           icon="link"
@@ -85,34 +79,34 @@ export const TrialSessionsTable = connect(
                       )}
                     </td>
                     <td
-                      data-testid={`trial-location-link-${item.trialSessionId}`}
+                      data-testid={`trial-location-link-${row.trialSessionId}`}
                     >
                       <a
                         href={
-                          item.userIsAssignedToSession
-                            ? `/trial-session-working-copy/${item.trialSessionId}`
-                            : `/trial-session-detail/${item.trialSessionId}`
+                          row.userIsAssignedToSession
+                            ? `/trial-session-working-copy/${row.trialSessionId}`
+                            : `/trial-session-detail/${row.trialSessionId}`
                         }
                       >
-                        {item.trialLocation}
+                        {row.trialLocation}
                       </a>
                     </td>
-                    <td>{item.proceedingType}</td>
-                    <td>{item.sessionType}</td>
-                    <td>{item.judge && item.judge.name}</td>
+                    <td>{row.proceedingType}</td>
+                    <td>{row.sessionType}</td>
+                    <td>{row.judge && row.judge.name}</td>
                     {trialSessionsHelper.showNoticeIssued && (
-                      <td>{item.formattedNoticeIssuedDate}</td>
+                      <td>{row.formattedNoticeIssuedDate}</td>
                     )}
                     {trialSessionsHelper.showSessionStatus && (
-                      <td>{item.sessionStatus}</td>
+                      <td>{row.sessionStatus}</td>
                     )}
                   </tr>
                 </tbody>
-              ))}
-            </React.Fragment>
+              )}
+            </>
           ))}
         </table>
-        {formattedTrialSessions.length === 0 && (
+        {trialSessionsHelper.trialSessionRows.length === 0 && (
           <p>There are no trial sessions.</p>
         )}
       </>

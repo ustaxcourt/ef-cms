@@ -50362,7 +50362,7 @@
     "startDate": "2019-12-02T05:00:00.000Z",
     "maxCases": 30,
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb",
-    "isCalendared": false,
+    "isCalendared": true,
     "status": "Closed"
   },
   {
