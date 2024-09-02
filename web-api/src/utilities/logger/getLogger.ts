@@ -1,4 +1,5 @@
 import { Logger } from 'winston';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createLogger } from '@web-api/createLogger';
 
 let loggerCache: LoggerType;
@@ -11,6 +12,12 @@ export const getLogger = (): LoggerType => {
         logger.defaultMeta = {
           ...logger.defaultMeta,
           ...newMeta,
+        };
+      },
+      addUser: ({ user }: { user: UnknownAuthUser }) => {
+        logger.defaultMeta = {
+          ...logger.defaultMeta,
+          user,
         };
       },
       clearContext: () => {
@@ -28,6 +35,7 @@ export const getLogger = (): LoggerType => {
 };
 
 type LoggerType = {
+  addUser: (user: { user: UnknownAuthUser }) => void;
   debug: (message: any, context?: any) => Logger;
   error: (message: any, context?: any) => Logger;
   info: (message: any, context?: any) => Logger;

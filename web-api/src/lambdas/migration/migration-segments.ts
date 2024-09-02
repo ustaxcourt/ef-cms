@@ -150,7 +150,7 @@ export const processItems = async (
 };
 
 export const handler: Handler = async (event: SQSEvent, context: Context) => {
-  const applicationContext = createApplicationContext({});
+  const applicationContext = createApplicationContext();
   getLogger().clearContext();
   getLogger().addContext({
     environment: {

@@ -96,15 +96,8 @@ const entitiesByName = {
   WorkItem,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
-  const user = new User(appContextUser);
-  const logger = getLogger();
-  if (process.env.NODE_ENV === 'production') {
-    const authenticated = user && Object.keys(user).length;
-    const userForLogging = authenticated ? user : { role: 'unauthenticated' };
-    logger.addContext({ user: userForLogging });
-  }
-
   return {
     barNumberGenerator,
     docketNumberGenerator,
@@ -276,7 +269,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     }),
     isAuthorized,
     isCurrentColorActive,
-    logger,
+    logger: getLogger(),
     setTimeout: (callback, timeout) => setTimeout(callback, timeout),
   };
 };

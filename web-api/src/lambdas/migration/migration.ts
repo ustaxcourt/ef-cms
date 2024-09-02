@@ -61,7 +61,7 @@ export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
     marshallOptions: { removeUndefinedValues: true },
   });
 
-  const applicationContext = createApplicationContext({});
+  const applicationContext = createApplicationContext();
   getLogger().clearContext();
   getLogger().addContext({
     environment: {

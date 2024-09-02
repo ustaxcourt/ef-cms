@@ -6,6 +6,7 @@ import {
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserRecords } from '../../src/persistence/dynamo/users/createUserRecords';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
 
@@ -13,8 +14,14 @@ export const createUsers = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
   const usersByEmail = {};
 
-  const applicationContext = createApplicationContext({
-    role: ROLES.admin,
+  const applicationContext = createApplicationContext();
+  getLogger().addUser({
+    user: {
+      email: 'system@ustc.gov',
+      name: 'ustc automated system',
+      role: ROLES.admin,
+      userId: 'N/A',
+    },
   });
 
   await Promise.all(
