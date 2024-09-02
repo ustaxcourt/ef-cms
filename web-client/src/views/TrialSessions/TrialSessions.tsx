@@ -63,7 +63,7 @@ export const TrialSessions = connect(
                 title="New"
               >
                 <TrialSessionFilters />
-                <TrialSessionsTable filter="New" />
+                <TrialSessionsTable />
               </Tab>
             )}
             <Tab
@@ -73,7 +73,7 @@ export const TrialSessions = connect(
               title="Calendared"
             >
               <TrialSessionFilters />
-              <TrialSessionsTable filter="All" />
+              <TrialSessionsTable />
             </Tab>
           </Tabs>
         </section>
@@ -93,7 +93,6 @@ const TrialSessionFilters = connect(
     trialSessionsHelper,
     trialSessionsPage,
   }) {
-    console.log(trialSessionsPage.filters);
     return (
       <>
         <div className="margin-bottom-4">
