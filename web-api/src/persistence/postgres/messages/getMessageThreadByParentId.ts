@@ -1,5 +1,5 @@
 import { Message } from '@shared/business/entities/Message';
-import { dbRead } from '@web-api/database';
+import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getMessageThreadByParentId = async ({
@@ -7,11 +7,13 @@ export const getMessageThreadByParentId = async ({
 }: {
   parentMessageId: string;
 }): Promise<Message[]> => {
-  const messages = await dbRead
-    .selectFrom('message')
-    .where('parentMessageId', '=', parentMessageId)
-    .selectAll()
-    .execute();
+  const messages = await getDbReader(reader =>
+    reader
+      .selectFrom('message')
+      .where('parentMessageId', '=', parentMessageId)
+      .selectAll()
+      .execute(),
+  );
 
   return messages.map(result =>
     new Message(

@@ -1,5 +1,5 @@
 import { Database } from './database-types';
-import { Kysely, PostgresDialect, SelectQueryBuilder } from 'kysely';
+import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import fs from 'fs';
@@ -19,6 +19,24 @@ const POOL = {
   user: process.env.POSTGRES_USER || 'postgres',
 };
 
+let dbInstances: Record<string, Kysely<Database> | null> = {
+  reader: null,
+  writer: null,
+};
+
+const tokens: Record<string, string | null> = {
+  'us-east-1': null,
+  'us-west-1': null,
+};
+
+function connect(pool) {
+  return new Kysely<Database>({
+    dialect: new PostgresDialect({
+      pool: new Pool(pool),
+    }),
+  });
+}
+
 async function generateRDSAuthToken({ host, region }) {
   const signer = new Signer({
     hostname: host,
@@ -35,38 +53,13 @@ async function generateRDSAuthToken({ host, region }) {
   return token;
 }
 
-const connect = pool => {
-  return new Kysely<Database>({
-    dialect: new PostgresDialect({
-      pool: new Pool(pool),
-    }),
-  });
-};
-
-// const dbWrite = connect(pool);
-
-// let dbRead: Kysely<Database>;
-// if (process.env.REGION === 'us-west-1') {
-//   dbRead = connect({ ...pool, host: process.env.POSTGRES_READ_HOST! });
-// } else {
-//   dbRead = dbWrite;
-// }
-
-let reader: Kysely<Database>;
-let writer: Kysely<Database>;
-
-const tokens: Record<string, string | null> = {
-  'us-east-1': null,
-  'us-west-1': null,
-};
-
 function clearToken(region: string) {
   tokens[region] = null;
 }
 
 async function getToken(region: string, host: string) {
-  if (process.env.NODE_ENV === 'development') {
-    return process.env.POSTGRES_PASSWORD!;
+  if (process.env.NODE_ENV !== 'production') {
+    return process.env.POSTGRES_PASSWORD || 'example';
   }
 
   const token = tokens[region];
@@ -82,63 +75,60 @@ async function getToken(region: string, host: string) {
   return tokens[region];
 }
 
-export const dbRead = async <T>(cb: (r: Kysely<Database>) => T): Promise<T> => {
-  const region = process.env.REGION ?? 'us-east-1';
-  const host =
-    process.env.REGION === 'us-west-1'
-      ? (process.env.POSTGRES_READ_HOST ?? 'localhost')
-      : (process.env.POSTGRES_HOST ?? 'localhost');
-
-  const token = await getToken(region, host);
-
-  if (!token) {
-    throw new Error('token does not exist');
-  }
-
+async function createConnection<T>({
+  cb,
+  dbKey,
+  host,
+  region,
+}: {
+  dbKey: string;
+  cb: (r: Kysely<Database>) => T;
+  region: string;
+  host: string;
+}): Promise<T> {
   try {
-    reader = await connect({
+    const token = await getToken(region, host);
+
+    if (!token) {
+      throw new Error('token does not exist');
+    }
+
+    dbInstances[dbKey] = await connect({
       ...POOL,
       host,
       password: token,
     });
-    return await cb(reader);
+
+    return await cb(dbInstances[dbKey]);
   } catch (err) {
     clearToken(region);
-    reader = await connect({
-      ...POOL,
-      host,
-      password: await getToken(region, host),
-    });
-    return await cb(reader);
-  }
-};
-
-export const getDbWriter = async <T>(
-  cb: (w: Kysely<Database>) => T,
-): Promise<T> => {
-  const region = 'us-east-1';
-  const host = process.env.POSTGRES_HOST ?? 'localhost';
-
-  const token = await getToken(region, host);
-
-  if (!token) {
-    throw new Error('token does not exist');
-  }
-
-  try {
-    writer = await connect({
+    const token = await getToken(region, host);
+    dbInstances[dbKey] = await connect({
       ...POOL,
       host,
       password: token,
     });
-    return await cb(writer);
-  } catch (err) {
-    clearToken(region);
-    writer = await connect({
-      ...POOL,
-      host,
-      password: await getToken(region, host),
-    });
-    return await cb(writer);
+    return await cb(dbInstances[dbKey]);
   }
-};
+}
+
+export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
+  return createConnection({
+    cb,
+    dbKey: 'reader',
+    host:
+      process.env.REGION === 'us-west-1'
+        ? process.env.POSTGRES_READ_HOST!
+        : (process.env.POSTGRES_HOST ?? 'localhost'),
+    region: process.env.REGION ?? 'us-east-1',
+  });
+}
+
+export function getDbWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
+  return createConnection({
+    cb,
+    dbKey: 'writer',
+    host: process.env.POSTGRES_HOST ?? 'localhost',
+    region: 'us-east-1',
+  });
+}
