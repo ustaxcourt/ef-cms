@@ -18,7 +18,7 @@ import axios from 'axios';
   for (let i = 0; i < 100; i++) {
     try {
       await axios.get(
-        `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/reports/printable-case-inventory-report?associatedJudge=&status=New`,
+        `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/async/reports/printable-case-inventory-report?associatedJudge=&status=New`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
