@@ -1,8 +1,8 @@
 import { Database } from './database-types';
 import { Kysely, PostgresDialect, SelectQueryBuilder } from 'kysely';
 import { Pool } from 'pg';
-import fs from 'fs';
 import { Signer } from '@aws-sdk/rds-signer';
+import fs from 'fs';
 
 const POOL = {
   database: 'postgres',
@@ -19,13 +19,14 @@ const POOL = {
   user: process.env.POSTGRES_USER || 'postgres',
 };
 
-async function generateRDSAuthToken({ region, host }) {
+async function generateRDSAuthToken({ host, region }) {
   const signer = new Signer({
     hostname: host,
     port: 5432,
-    username: process.env.POSTGRES_USER || 'postgres',
     // credentials: fromNodeCredentialProvider(),
     region,
+
+    username: process.env.POSTGRES_USER || 'postgres',
     // sha256: HashCtor,
   });
 
@@ -55,8 +56,8 @@ let reader: Kysely<Database>;
 let writer: Kysely<Database>;
 
 const tokens: Record<string, string | null> = {
-  'us-west-1': null,
   'us-east-1': null,
+  'us-west-1': null,
 };
 
 function clearToken(region: string) {
@@ -81,9 +82,7 @@ async function getToken(region: string, host: string) {
   return tokens[region];
 }
 
-export const dbRead = async <T>(
-  cb: (reader: Kysely<Database>) => T,
-): Promise<T> => {
+export const dbRead = async <T>(cb: (r: Kysely<Database>) => T): Promise<T> => {
   const region = process.env.REGION ?? 'us-east-1';
   const host =
     process.env.REGION === 'us-west-1'
@@ -115,7 +114,7 @@ export const dbRead = async <T>(
 };
 
 export const getDbWriter = async <T>(
-  cb: (writer: Kysely<Database>) => T,
+  cb: (w: Kysely<Database>) => T,
 ): Promise<T> => {
   const region = 'us-east-1';
   const host = process.env.POSTGRES_HOST ?? 'localhost';
