@@ -1,4 +1,4 @@
-import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
+import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setJudgesChambersAction = ({

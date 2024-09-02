@@ -5,7 +5,9 @@ import { createApplicationContext } from '@web-api/applicationContext';
 import {
   emailIsInExpectedFormat,
   expectedEmailFormats,
+  expectedJudgeTitles,
   getChambersNameFromJudgeName,
+  judgeTitleIsInExpectedFormat,
   phoneIsInExpectedFormat,
   promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
@@ -22,11 +24,11 @@ import { isEmpty } from 'lodash';
  * This script will update the judge user in a deployed environment.
  * It updates both the Cognito record (if necessary) and the associated Dynamo record.
  * Required parameters: the current email of the judge to update
- * Optional parameters (although at least one required): --name, --judgeFullName, --email, --phone, --isSeniorJudge
+ * Optional parameters (although at least one required): --name, --judgeFullName, --judgeTitle, --email, --phone, --isSeniorJudge
  *
  *  Example usage:
  *
- * $ npx ts-node --transpile-only update-judge.ts 432143213-4321-1234-4321-432143214321 --name Way --judgeFullName "Kashi Way" --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
+ * $ npx ts-node --transpile-only update-judge.ts judge.someone.ustaxcourt.gove --name Way --judgeFullName "Kashi Way" --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
  *
  * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
  * Please extract into application logic!
@@ -138,9 +140,9 @@ const updateDynamoJudgeUserRecord = async ({
   console.log('Updating the judge user Dynamo record ...');
   dynamoUser.email = updates.email || dynamoUser.email;
   dynamoUser.name = updates.name || dynamoUser.name;
-  dynamoUser.contact = updates.phone
-    ? { phone: updates.phone }
-    : dynamoUser.contact;
+  dynamoUser.judgePhoneNumber = updates.phone
+    ? updates.phone
+    : dynamoUser.phone;
   dynamoUser.isSeniorJudge =
     updates.isSeniorJudge != ''
       ? updates.isSeniorJudge.toLowerCase() === 'true'
@@ -232,6 +234,7 @@ const updateDynamoChambersRecords = async ({
     email: getArgValue('email'),
     isSeniorJudge: getArgValue('isSeniorJudge'),
     judgeFullName: getArgValue('judgeFullName'),
+    judgeTitle: getArgValue('judgeTitle'),
     name: getArgValue('name'),
     phone: getArgValue('phone'),
   };
@@ -273,6 +276,14 @@ const updateDynamoChambersRecords = async ({
   if (updates.phone && !phoneIsInExpectedFormat(updates.phone)) {
     const userInput = await promptUser(
       'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
+    );
+    if (userInput.toLowerCase() !== 'y') {
+      return;
+    }
+  }
+  if (updates.judgeTitle && !judgeTitleIsInExpectedFormat(updates.judgeTitle)) {
+    const userInput = await promptUser(
+      `Warning: The judgeTitle you entered does not match expected values: ${expectedJudgeTitles.join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
       return;

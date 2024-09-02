@@ -57456,9 +57456,7 @@
     "userId": "659789b4-acc5-40b7-9318-3354e7eb8604",
     "isSeniorJudge": false,
     "email": "judgefoley@example.com",
-    "contact": {
-      "phone": "(202) 521-0681"
-    }
+    "judgePhoneNumber": "(202) 521-0681"
   },
   {
     "role": "adc",
@@ -58565,9 +58563,7 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": true,
     "email": "judgecolvin@example.com",
-    "contact": {
-      "phone": "(202) 521-0662"
-    }
+    "judgePhoneNumber": "(202) 521-0662"
   },
   {
     "judgeTitle": "Judge",
@@ -58581,9 +58577,7 @@
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
     "email": "judgeashford@example.com",
-    "contact": {
-      "phone": "(202) 521-0822"
-    }
+    "judgePhoneNumber": "(202) 521-0822"
   },
   {
     "judgeTitle": "Judge",
@@ -58597,9 +58591,7 @@
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
     "email": "judgebuch@example.com",
-    "contact": {
-      "phone": "(202) 521-0810"
-    }
+    "judgePhoneNumber": "(202) 521-0810"
   },
   {
     "judgeTitle": "Chief Special Trial Judge",
@@ -58613,9 +58605,7 @@
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
     "email": "judgecarluzzo@example.com",
-    "contact": {
-      "phone": "(202) 521-3339"
-    }
+    "judgePhoneNumber": "(202) 521-3339"
   },
   {
     "judgeTitle": "Judge",
@@ -58629,9 +58619,7 @@
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": true,
     "email": "judgecohen@example.com",
-    "contact": {
-      "phone": "(202) 521-0655"
-    }
+    "judgePhoneNumber": "(202) 521-0655"
   },
   {
     "judgeTitle": "Judge",
@@ -58645,9 +58633,7 @@
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": true,
     "email": "judgegustafson@example.com",
-    "contact": {
-      "phone": "(202) 521-0850"
-    }
+    "judgePhoneNumber": "(202) 521-0850"
   },
   {
     "judgeTitle": "Judge",
@@ -58661,9 +58647,7 @@
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
     "email": "judgepugh@example.com",
-    "contact": {
-      "phone": "(202) 521-0824"
-    }
+    "judgePhoneNumber": "(202) 521-0824"
   },
   {
     "judgeTitle": "Judge",
@@ -58677,9 +58661,7 @@
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "isSeniorJudge": false,
     "email": "judgeurda@example.com",
-    "contact": {
-      "phone": "(202) 521-0800"
-    }
+    "judgePhoneNumber": "(202) 521-0800"
   },
   {
     "judgeTitle": "Judge",
