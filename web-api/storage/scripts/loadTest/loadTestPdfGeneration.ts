@@ -37,10 +37,11 @@ import axios from 'axios';
     if (!response) return await checkPDFComplete(asyncSyncId);
 
     const responseObj = JSON.parse(response);
-    if (+responseObj.statusCode !== 200) {
-      console.log('responseObj', responseObj);
-      throw new Error('Error generating PDF');
-    }
+    if (+responseObj.statusCode === 200) return;
+
+    throw new Error(
+      `Error generating PDF -> ${JSON.stringify(responseObj, null, 2)}`,
+    );
   };
 
   for (let i = 0; i < 100; i++) {
