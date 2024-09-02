@@ -5,7 +5,7 @@ resource "aws_rds_global_cluster" "global_cluster" {
   deletion_protection       = var.delete_protection
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -16,7 +16,7 @@ resource "aws_rds_cluster" "postgres" {
   engine_version      = var.engine_version
   deletion_protection = var.delete_protection
   database_name       = "${var.environment}_dawson"
-  master_username     = "admin"
+  master_username     = var.postgres_user
   master_password     = var.postgres_password
   storage_encrypted   = true
   global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
@@ -30,7 +30,7 @@ resource "aws_rds_cluster" "postgres" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
     # ignore_changes  = [global_cluster_identifier] - used for a snapshot restore
   }
 }
@@ -43,7 +43,7 @@ resource "aws_rds_cluster_instance" "cluster_instance" {
   publicly_accessible = true
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_rds_cluster" "west_replica" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
@@ -80,6 +80,6 @@ resource "aws_rds_cluster_instance" "west_replica_instance" {
   publicly_accessible = true
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
