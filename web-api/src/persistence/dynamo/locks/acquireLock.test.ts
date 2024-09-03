@@ -3,13 +3,7 @@ import {
   MOCK_EXPIRED_LOCK,
 } from '../../../../../shared/src/test/mockLock';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { batchDelete } from '../../dynamodbClientService';
 import { createLock, getLock, removeLock } from './acquireLock';
-
-jest.mock('../../dynamodbClientService', () => ({
-  batchDelete: jest.fn(),
-  getTableName: jest.fn(() => 'efcms-test-table'),
-}));
 
 describe('createLock', () => {
   it('should persist a record with the specified prefix and identifier', async () => {
@@ -72,16 +66,13 @@ describe('removeLock', () => {
       identifiers: ['case|123-45'],
     });
 
-    expect(batchDelete).toHaveBeenCalledWith(
-      expect.objectContaining({
-        items: [
-          {
-            pk: 'case|123-45',
-            sk: 'lock',
-          },
-        ],
-      }),
-    );
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
+      Key: {
+        pk: 'case|123-45',
+        sk: 'lock',
+      },
+      TableName: expect.anything(),
+    });
   });
 
   it('deletes all of the specified locks from persistence when handed an array of identifiers', async () => {
@@ -90,18 +81,20 @@ describe('removeLock', () => {
       identifiers: ['case|111-45', 'case|222-45'],
     });
 
-    expect(batchDelete).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      items: [
-        {
-          pk: 'case|111-45',
-          sk: 'lock',
-        },
-        {
-          pk: 'case|222-45',
-          sk: 'lock',
-        },
-      ],
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
+      Key: {
+        pk: 'case|111-45',
+        sk: 'lock',
+      },
+      TableName: expect.anything(),
+    });
+
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
+      Key: {
+        pk: 'case|222-45',
+        sk: 'lock',
+      },
+      TableName: expect.anything(),
     });
   });
 });
