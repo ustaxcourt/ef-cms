@@ -16,8 +16,8 @@ resource "aws_rds_cluster" "postgres" {
   engine_version      = var.engine_version
   deletion_protection = var.delete_protection
   database_name       = "${var.environment}_dawson"
-  master_username     = var.postgres_user
-  master_password     = var.postgres_password
+  master_username     = var.postgres_master_username
+  master_password     = var.postgres_master_password
   storage_encrypted   = true
   global_cluster_identifier = aws_rds_global_cluster.global_cluster.id
   # snapshot_identifier                 = "exp4-dawson-cluster-1" - used for a snapshot restore
