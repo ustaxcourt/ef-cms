@@ -1,4 +1,5 @@
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
+import { JudgeTitle } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { createApplicationContext } from '@web-api/applicationContext';
@@ -103,10 +104,11 @@ const updateDynamoRecords = async ({
     .getUserById({ applicationContext, userId });
 
   // If the name is updated, then we will need to update the chambers section
-  const updatedChambersSection = updates.name
-    ? getChambersNameFromJudgeName(updates.name)
-    : '';
   const oldChambersSection = dynamoUser.section;
+  const updatedChambersSection =
+    updates.name && updates.name != dynamoUser.name // No need to update if same name
+      ? getChambersNameFromJudgeName(updates.name)
+      : '';
 
   await updateDynamoJudgeUserRecord({
     applicationContext,
@@ -149,6 +151,8 @@ const updateDynamoJudgeUserRecord = async ({
       : dynamoUser.isSeniorJudge;
   dynamoUser.judgeFullName = updates.judgeFullName || dynamoUser.judgeFullName;
   dynamoUser.section = chambersSection;
+  dynamoUser.judgeTitle =
+    (updates.judgeTitle as JudgeTitle) || dynamoUser.judgeTitle;
 
   const rawUser = new User(dynamoUser).validate().toRawObject();
 
