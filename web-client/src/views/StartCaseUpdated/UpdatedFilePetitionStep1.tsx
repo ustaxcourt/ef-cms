@@ -151,6 +151,7 @@ export const UpdatedFilePetitionStep1 = connect(
             otherContactNameLabel={
               updatedFilePetitionHelper.otherContactNameLabel
             }
+            otherFilingOptions={updatedFilePetitionHelper.otherFilingOptions}
             petitionGenerationLiveValidationSequence={
               petitionGenerationLiveValidationSequence
             }
