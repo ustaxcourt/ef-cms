@@ -86,36 +86,6 @@ export const trialSessionsHelper = (
   };
 };
 
-type TrialSessionRow = {
-  trialSessionId: string;
-  showAlertForNOTTReminder: boolean;
-  alertMessageForNOTT: string;
-  formattedStartDate: string; //MM/DD/YYYY
-  formattedEstimatedEndDate: string;
-  swingSession: boolean;
-  userIsAssignedToSession: boolean;
-  trialLocation: string;
-  proceedingType: string;
-  startDate: string; // ISO format
-  sessionType: string;
-  judge?: { name: string; userId: string };
-  formattedNoticeIssuedDate: string;
-  sessionStatus: string;
-};
-
-type TrialSessionWeek = {
-  sessionWeekStartDate: string;
-  formattedSessionWeekStartDate: string;
-};
-
-export function isTrialSessionRow(item: any): item is TrialSessionRow {
-  return !!item?.trialSessionId;
-}
-
-export function isTrialSessionWeek(item: any): item is TrialSessionWeek {
-  return !!item?.sessionWeekStartDate;
-}
-
 const formatTrialSessions = ({
   judgeAssociatedToUser,
   trialSessions,
@@ -201,3 +171,31 @@ const formatTrialSessions = ({
 
   return trialSessionWithStartWeeks;
 };
+
+type TrialSessionRow = {
+  trialSessionId: string;
+  showAlertForNOTTReminder: boolean;
+  alertMessageForNOTT: string;
+  formattedStartDate: string; //MM/DD/YYYY
+  formattedEstimatedEndDate: string;
+  swingSession: boolean;
+  userIsAssignedToSession: boolean;
+  trialLocation: string;
+  proceedingType: string;
+  startDate: string; // ISO format
+  sessionType: string;
+  judge?: { name: string; userId: string };
+  formattedNoticeIssuedDate: string;
+  sessionStatus: string;
+};
+export function isTrialSessionRow(item: any): item is TrialSessionRow {
+  return !!item?.trialSessionId;
+}
+
+type TrialSessionWeek = {
+  sessionWeekStartDate: string;
+  formattedSessionWeekStartDate: string;
+};
+export function isTrialSessionWeek(item: any): item is TrialSessionWeek {
+  return !!item?.sessionWeekStartDate;
+}
