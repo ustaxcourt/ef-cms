@@ -78,7 +78,7 @@ export const blockedCasesReportHelper = (
   );
 
   const genericNoBlockedCasesMessage =
-    'There are no blocked cases for this set of critieria.';
+    'There are no blocked cases for this set of criteria.';
 
   if (!blockedCases || !blockedCases.length) {
     return {
