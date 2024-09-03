@@ -126,13 +126,13 @@ module "kms" {
 }
 
 module "rds" {
-  source             = "../../modules/rds"
-  environment        = var.environment
-  postgres_user      = var.postgres_user
-  postgres_password  = var.postgres_password
-  kms_key_id_primary = module.kms.kms_key_id_primary
-  kms_key_id_replica = module.kms.kms_key_id_replica
-  delete_protection  = false
+  source                   = "../../modules/rds"
+  environment              = var.environment
+  postgres_master_username = var.postgres_master_username
+  postgres_master_password = var.postgres_master_password
+  kms_key_id_primary       = module.kms.kms_key_id_primary
+  kms_key_id_replica       = module.kms.kms_key_id_replica
+  delete_protection        = false
 
   providers = {
     aws           = aws.us-east-1
@@ -142,6 +142,6 @@ module "rds" {
 
 
 module "rds_users" {
-   source             = "../../modules/rds-users"
-  environment        = var.environment
+  source      = "../../modules/rds-users"
+  environment = var.environment
 }

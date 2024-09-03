@@ -80,8 +80,8 @@ resource "terraform_data" "locals" {
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
     POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
     POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
-    POSTGRES_USER                      = var.postgres_user
-    POSTGRES_PASSWORD                  = var.postgres_password
+    POSTGRES_MASTER_USERNAME           = var.postgres_master_username
+    POSTGRES_MASTER_PASSWORD           = var.postgres_master_password
   }
 }
 
