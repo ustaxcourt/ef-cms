@@ -17,7 +17,7 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
-import { sendWelcomeEmail } from 'scripts/user/add-user';
+import { sendWelcomeEmail } from 'scripts/user/email-helpers';
 
 // eslint-disable-next-line spellcheck/spell-checker
 /**
@@ -88,7 +88,6 @@ requireEnvVars(['ENV']);
   console.log('Setting up information to store ... ');
   const section = getChambersNameFromJudgeName(name);
   const role = 'judge';
-  const userId = applicationContext.getUniqueId();
 
   environment.userPoolId = await getUserPoolId();
   const { tableName } = await getDestinationTableInfo();
@@ -104,19 +103,19 @@ requireEnvVars(['ENV']);
     name,
     role,
     section,
-    userId,
+    userId: applicationContext.getUniqueId(), // Silly as this will be overwritten, but we need one for validation
   };
   const rawUser = new User(dynamoUserInfo).validate().toRawObject();
 
   console.log('Adding user information to Dynamo and Cognito ... ');
-  await createOrUpdateUser(applicationContext, {
+  const { userId } = await createOrUpdateUser(applicationContext, {
     password: environment.defaultAccountPass,
     setPasswordAsPermanent: true,
     user: rawUser,
   });
 
   console.log('Sending welcome email ... ');
-  await sendWelcomeEmail({ email });
+  await sendWelcomeEmail({ applicationContext, email });
 
   console.log(
     `\nSuccess! Created Judge ${judgeFullName} with userId = ${userId} and email = ${email}.`,
