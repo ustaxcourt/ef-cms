@@ -11,7 +11,7 @@ describe('blockedCasesReportHelper', () => {
   );
 
   const genericNoBlockedCasesMessage =
-    'There are no blocked cases for this set of critieria.';
+    'There are no blocked cases for this set of criteria.';
 
   it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
     const result = runCompute(blockedCasesReportHelper, {
