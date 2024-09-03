@@ -410,6 +410,7 @@ import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumen
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showErrorModalSequence } from '@web-client/presenter/sequences/showErrorModalSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
@@ -551,7 +552,6 @@ import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessi
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
-import { updateValidationErrorsSequence } from '@web-client/presenter/sequences/updateValidationErrorsSequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { updatedFilePetitionCompleteStep1Sequence } from './sequences/updatedFilePetitionCompleteStep1Sequence';
 import { updatedFilePetitionCompleteStep2Sequence } from './sequences/updatedFilePetitionCompleteStep2Sequence';
@@ -1288,6 +1288,7 @@ export const presenterSequences = {
     showCalculatePenaltiesModalSequence as unknown as Function,
   showDocketRecordDetailModalSequence:
     showDocketRecordDetailModalSequence as unknown as Function,
+  showErrorModalSequence,
   showGenerateNoticesProgressSequence:
     showGenerateNoticesProgressSequence as unknown as Function,
   showMoreClosedCasesSequence:
@@ -1521,7 +1522,6 @@ export const presenterSequences = {
   updateTrialSessionSequence: updateTrialSessionSequence as unknown as Function,
   updateUserCaseNoteOnWorkingCopySequence:
     updateUserCaseNoteOnWorkingCopySequence as unknown as Function,
-  updateValidationErrorsSequence,
   updateWorkingCopySessionNoteSequence:
     updateWorkingCopySessionNoteSequence as unknown as Function,
   updatedFilePetitionCompleteStep1Sequence:

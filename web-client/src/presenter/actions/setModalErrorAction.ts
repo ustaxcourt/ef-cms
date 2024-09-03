@@ -10,4 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const setModalErrorAction = ({ props, store }: ActionProps) => {
   const { error } = props;
   store.set(state.modal.error, error);
+  store.set(state.modal.title, 'File Upload Error');
+  store.set(state.modal.message, error);
 };

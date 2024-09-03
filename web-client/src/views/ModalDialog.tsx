@@ -99,6 +99,7 @@ export const ModalDialog = ({
       <FocusLock>
         <dialog
           open
+          aria-live="assertive"
           aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
@@ -163,6 +164,7 @@ export const ModalDialog = ({
                     secondary
                     className="modal-button-cancel"
                     link={cancelLink}
+                    tabIndex={0}
                     onClick={runCancelSequence}
                   >
                     {cancelLabel}
