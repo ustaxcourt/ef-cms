@@ -5,7 +5,7 @@ const filters: TrialSessionsFilters = {
   currentTab: 'calendared' as 'calendared' | 'new',
   judgeId: 'All',
   proceedingType: 'All' as TrialSessionProceedingType,
-  sessionStatus: 'All',
+  sessionStatus: 'Open',
   sessionType: 'All',
   trialLocation: 'All',
 };
