@@ -17,6 +17,7 @@ import axios from 'axios';
   });
 
   const checkPDFComplete = async (asyncSyncId: string) => {
+    await new Promise(resolve => setTimeout(() => resolve(null), 1000));
     const URL = `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/results/fetch/${asyncSyncId}`;
     const headers = {
       Asyncsyncid: asyncSyncId,
