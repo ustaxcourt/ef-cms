@@ -1,3 +1,0 @@
-# Postgres Promote Secondary Cluster 
-
-...
