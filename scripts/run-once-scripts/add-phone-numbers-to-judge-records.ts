@@ -50,7 +50,7 @@ const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
       );
       continue;
     }
-    judgeUser.contact = { phone: phoneNumber };
+    judgeUser.judgePhoneNumber = phoneNumber;
     await client.put({ applicationContext, Item: judgeUser });
     totalUpdated += 1;
     console.log(`Updated ${judgeUser.judgeFullName}`);

@@ -1,10 +1,13 @@
+import { JudgeTitle } from '../../shared/src/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
-import { Role } from '../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '@web-api/applicationContext';
+import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import {
   emailIsInExpectedFormat,
   expectedEmailFormats,
+  expectedJudgeTitles,
   getChambersNameFromJudgeName,
+  judgeTitleIsInExpectedFormat,
   phoneIsInExpectedFormat,
   promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
@@ -14,6 +17,7 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
+import { sendWelcomeEmail } from 'scripts/user/email-helpers';
 
 // eslint-disable-next-line spellcheck/spell-checker
 /**
@@ -26,7 +30,7 @@ import {
  *
  *  Example usage:
  *
- * $ npx ts-node --transpile-only add-judge.ts Way "Kashi Way" judge.way@ustaxcourt.gov ["(123) 123-1234" false]
+ * $ npx ts-node --transpile-only add-judge.ts Way "Kashi Way" judge.way@ustaxcourt.gov ["(123) 123-1234" false "Special Trial Judge"]
  *
  * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
  * Please extract into application logic!
@@ -49,6 +53,7 @@ requireEnvVars(['ENV']);
   const isSeniorJudge = process.argv[6]
     ? process.argv[6].toLowerCase() === 'true'
     : false;
+  const judgeTitle = process.argv[7] ? process.argv[7] : 'Judge';
 
   // Check for mistaken emails
   if (!emailIsInExpectedFormat({ email, judgeName: name })) {
@@ -70,63 +75,47 @@ requireEnvVars(['ENV']);
     }
   }
 
+  // Check for mistaken judgeTitle
+  if (!judgeTitleIsInExpectedFormat(judgeTitle)) {
+    const userInput = await promptUser(
+      `Warning: The judgeTitle you entered does not match expected values: ${expectedJudgeTitles.join(', ')}. Continue anyway? y/n `,
+    );
+    if (userInput.toLowerCase() !== 'y') {
+      return;
+    }
+  }
+
   console.log('Setting up information to store ... ');
   const section = getChambersNameFromJudgeName(name);
-  const judgeTitle = 'Judge';
   const role = 'judge';
-  const userId = applicationContext.getUniqueId();
 
-  const userPoolId = await getUserPoolId();
-
-  environment.userPoolId = userPoolId;
+  environment.userPoolId = await getUserPoolId();
   const { tableName } = await getDestinationTableInfo();
   environment.dynamoDbTableName = tableName;
-
-  const cognitoUserInfo: {
-    email: string;
-    role: Role;
-    name: string;
-    userId: string;
-    poolId?: string;
-    temporaryPassword?: string;
-    sendWelcomeEmail: boolean;
-  } = {
-    email,
-    name,
-    poolId: userPoolId,
-    role,
-    sendWelcomeEmail: true,
-    userId,
-  };
 
   let dynamoUserInfo: RawUser = {
     email,
     entityName: 'User',
     isSeniorJudge,
     judgeFullName,
-    judgeTitle,
+    judgePhoneNumber: phone,
+    judgeTitle: judgeTitle as JudgeTitle,
     name,
     role,
     section,
-    userId,
+    userId: applicationContext.getUniqueId(), // Silly as this will be overwritten, but we need one for validation
   };
-
-  if (phone) {
-    dynamoUserInfo = { ...dynamoUserInfo, contact: { phone } };
-  }
-
-  console.log('Adding user information to Cognito ... ');
-  await applicationContext
-    .getUserGateway()
-    .createUser(applicationContext, cognitoUserInfo);
-
-  console.log('Adding user information to Dynamo ... ');
   const rawUser = new User(dynamoUserInfo).validate().toRawObject();
-  await applicationContext.getPersistenceGateway().createUserRecords({
-    applicationContext,
+
+  console.log('Adding user information to Dynamo and Cognito ... ');
+  const { userId } = await createOrUpdateUser(applicationContext, {
+    password: environment.defaultAccountPass,
+    setPasswordAsPermanent: true,
     user: rawUser,
-    userId: rawUser.userId,
   });
+
+  console.log('Sending welcome email ... ');
+  await sendWelcomeEmail({ applicationContext, email });
 
   console.log(
     `\nSuccess! Created Judge ${judgeFullName} with userId = ${userId} and email = ${email}.`,

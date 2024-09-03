@@ -1,4 +1,4 @@
-import { JudgeChambersInfo } from '@shared/proxies/users/getJudgesChambersProxy';
+import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 
 const JUDGES_CHAMBERS: Record<string, JudgeChambersInfo> = {
   ASHFORDS_CHAMBERS_SECTION: {
