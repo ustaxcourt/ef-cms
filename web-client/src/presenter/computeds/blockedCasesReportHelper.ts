@@ -77,53 +77,56 @@ export const blockedCasesReportHelper = (
     state.blockedCaseReportFilter,
   );
 
-  let blockedCasesFormatted: BlockedFormattedCase[] = [];
-  let displayMessage: string | undefined;
+  const genericNoBlockedCasesMessage =
+    'There are no blocked cases for this set of criteria.';
 
-  if (blockedCases && blockedCases.length) {
-    blockedCasesFormatted = blockedCases
-      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-      .map(blockedCase => {
-        const blockedCaseWithConsolidatedProperties = applicationContext
-          .getUtilities()
-          .setConsolidationFlagsForDisplay(blockedCase);
-
-        const updatedCase = {
-          ...setFormattedBlockDates(
-            blockedCaseWithConsolidatedProperties,
-            applicationContext,
-          ),
-          caseTitle: applicationContext.getCaseTitle(
-            blockedCase.caseCaption || '',
-          ),
-          docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
-        };
-
-        return updatedCase;
-      })
-      .filter(blockedCase => {
-        return procedureTypeFilter && procedureTypeFilter !== 'All'
-          ? blockedCase.procedureType === procedureTypeFilter
-          : true;
-      })
-      .filter(blockedCase => {
-        if (caseStatusFilter === 'All') return true;
-        return blockedCase.status === caseStatusFilter;
-      })
-      .filter(blockedCase => {
-        if (reasonFilter === 'All') return true;
-        if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
-        return blockedCase.automaticBlockedReason === reasonFilter;
-      });
+  if (!blockedCases || !blockedCases.length) {
+    return {
+      blockedCasesCount: 0,
+      blockedCasesFormatted: [],
+      displayMessage: genericNoBlockedCasesMessage,
+    };
   }
 
-  if (blockedCasesFormatted.length === 0) {
-    displayMessage = 'There are no blocked cases for this location.';
+  const blockedCasesFormatted: BlockedFormattedCase[] = blockedCases
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(blockedCase => {
+      const blockedCaseWithConsolidatedProperties = applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(blockedCase);
 
-    if (procedureTypeFilter && procedureTypeFilter !== 'All') {
-      displayMessage = 'There are no blocked cases for this case type.';
-    }
-  }
+      const updatedCase = {
+        ...setFormattedBlockDates(
+          blockedCaseWithConsolidatedProperties,
+          applicationContext,
+        ),
+        caseTitle: applicationContext.getCaseTitle(
+          blockedCase.caseCaption || '',
+        ),
+        docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
+      };
+
+      return updatedCase;
+    })
+    .filter(blockedCase => {
+      return procedureTypeFilter && procedureTypeFilter !== 'All'
+        ? blockedCase.procedureType === procedureTypeFilter
+        : true;
+    })
+    .filter(blockedCase => {
+      if (caseStatusFilter === 'All') return true;
+      return blockedCase.status === caseStatusFilter;
+    })
+    .filter(blockedCase => {
+      if (reasonFilter === 'All') return true;
+      if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
+      return blockedCase.automaticBlockedReason === reasonFilter;
+    });
+
+  const displayMessage =
+    blockedCasesFormatted.length === 0
+      ? genericNoBlockedCasesMessage
+      : undefined;
 
   return {
     blockedCasesCount: blockedCasesFormatted.length,
