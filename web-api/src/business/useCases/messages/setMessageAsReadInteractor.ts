@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * setMessageAsReadInteractor
@@ -17,10 +18,9 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const setMessageAsReadInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, messageId }: { docketNumber: string; messageId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

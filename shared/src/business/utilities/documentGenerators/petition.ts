@@ -3,6 +3,7 @@ import {
   PetitionPdfBase,
 } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { Petition } from '@shared/business/utilities/pdfGenerator/documentTemplates/Petition';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -11,7 +12,7 @@ export const petition = async ({
   applicationContext,
   data,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   data: PetitionPdfBase & {
     caseDescription: string;
     irsNotices: IrsNoticesWithCaseDescription[];

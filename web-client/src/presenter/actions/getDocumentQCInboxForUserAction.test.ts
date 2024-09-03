@@ -8,10 +8,6 @@ describe('getDocumentQCInboxForUserAction', () => {
   const mockUserId = '35f77d01-df22-479c-b5a9-84edfbc876af';
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: mockUserId,
-    });
-
     applicationContext
       .getUseCases()
       .getDocumentQCInboxForUserInteractor.mockReturnValue(mockWorkItems);
@@ -19,20 +15,13 @@ describe('getDocumentQCInboxForUserAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to get the current user', async () => {
-    await runAction(getDocumentQCInboxForUserAction, {
-      modules: {
-        presenter,
-      },
-    });
-
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it("should make a call to getDocumentQCInboxForUserInteractor with the current user's userId", async () => {
     await runAction(getDocumentQCInboxForUserAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: { userId: mockUserId },
       },
     });
 
@@ -46,6 +35,9 @@ describe('getDocumentQCInboxForUserAction', () => {
     const { output } = await runAction(getDocumentQCInboxForUserAction, {
       modules: {
         presenter,
+      },
+      state: {
+        user: { userId: mockUserId },
       },
     });
 

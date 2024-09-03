@@ -16,7 +16,7 @@ export const setDefaultGenerationTypeAction = async ({
   const { GENERATION_TYPES } = applicationContext.getConstants();
 
   const petitioners = get(state.caseDetail.petitioners);
-  const user = await applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   if (props.key === 'eventCode') {
     const showGenerationTypeForm = showGenerationType(

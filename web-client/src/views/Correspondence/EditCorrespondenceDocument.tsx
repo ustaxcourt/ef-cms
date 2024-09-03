@@ -14,6 +14,8 @@ import React from 'react';
 
 export const EditCorrespondenceDocument = connect(
   {
+    cancelAndNavigateToCorrespondenceSequence:
+      sequences.cancelAndNavigateToCorrespondenceSequence,
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
     editCorrespondenceDocumentSequence:
       sequences.editCorrespondenceDocumentSequence,
@@ -28,6 +30,7 @@ export const EditCorrespondenceDocument = connect(
     validationErrors: state.validationErrors,
   },
   function EditCorrespondenceDocument({
+    cancelAndNavigateToCorrespondenceSequence,
     clearExistingDocumentSequence,
     editCorrespondenceDocumentSequence,
     form,
@@ -43,7 +46,9 @@ export const EditCorrespondenceDocument = connect(
       <>
         <CaseDetailHeader hideActionButtons />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="cancelAndNavigateToCorrespondenceSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={cancelAndNavigateToCorrespondenceSequence}
+          />
         )}
 
         <section className="usa-section grid-container">

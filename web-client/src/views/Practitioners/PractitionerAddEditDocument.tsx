@@ -16,6 +16,8 @@ import classNames from 'classnames';
 
 export const PractitionerAddEditDocument = connect(
   {
+    closeModalAndReturnToPractitionerDocumentsPageSequence:
+      sequences.closeModalAndReturnToPractitionerDocumentsPageSequence,
     constants: state.constants,
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
     form: state.form,
@@ -35,6 +37,7 @@ export const PractitionerAddEditDocument = connect(
     validationErrors: state.validationErrors,
   },
   function PractitionerAddEditDocument({
+    closeModalAndReturnToPractitionerDocumentsPageSequence,
     constants,
     documentTypes,
     form,
@@ -222,7 +225,11 @@ export const PractitionerAddEditDocument = connect(
                   </Button>
 
                   {showModal === 'FormCancelModalDialog' && (
-                    <FormCancelModalDialog onCancelSequence="closeModalAndReturnToPractitionerDocumentsPageSequence" />
+                    <FormCancelModalDialog
+                      onCancelSequence={
+                        closeModalAndReturnToPractitionerDocumentsPageSequence
+                      }
+                    />
                   )}
                 </div>
               </div>

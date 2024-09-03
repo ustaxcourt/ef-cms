@@ -11,6 +11,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const serveExternallyFiledDocument = async (
@@ -26,9 +27,8 @@ export const serveExternallyFiledDocument = async (
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const hasPermission =
     (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
       isAuthorized(
@@ -48,7 +48,7 @@ export const serveExternallyFiledDocument = async (
       docketNumber: subjectCaseDocketNumber,
     });
 
-  const subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
   const originalSubjectDocketEntry = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -110,7 +110,7 @@ export const serveExternallyFiledDocument = async (
           });
 
         const caseEntity = new Case(rawCaseToUpdate, {
-          applicationContext,
+          authorizedUser,
         });
 
         const isSubjectCase =
@@ -133,7 +133,7 @@ export const serveExternallyFiledDocument = async (
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
-          { applicationContext },
+          { authorizedUser },
         );
 
         return applicationContext
@@ -154,13 +154,15 @@ export const serveExternallyFiledDocument = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
+    await applicationContext.getUseCases().addCoversheetInteractor(
+      applicationContext,
+      {
         caseEntity: updatedSubjectCaseEntity,
         docketEntryId: updatedSubjectDocketEntry.docketEntryId,
         docketNumber: updatedSubjectCaseEntity!.docketNumber,
-      });
+      },
+      authorizedUser,
+    );
 
     paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -219,19 +221,20 @@ export const determineEntitiesToLock = (
 export const handleLockError = async (
   applicationContext: ServerApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: originalRequest.clientConnectionId,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'serve_externally_filed_document',
-    },
-    userId: user.userId,
-  });
+  if (authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId: originalRequest.clientConnectionId,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'serve_externally_filed_document',
+      },
+      userId: authorizedUser.userId,
+    });
+  }
 };
 
 export const serveExternallyFiledDocumentInteractor = withLocking(

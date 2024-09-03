@@ -5,27 +5,18 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * deleteCaseDeadline
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.caseDeadlineId the id of the case deadline to delete
- * @param {string} providers.docketNumber the docket number of the case the case deadline is attached to
- * @returns {Promise} the promise of the delete call
- */
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
   }: { caseDeadlineId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
 
@@ -33,7 +24,7 @@ export const deleteCaseDeadline = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  let updatedCase = new Case(caseToUpdate, { applicationContext });
+  let updatedCase = new Case(caseToUpdate, { authorizedUser });
 
   await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,
@@ -52,9 +43,10 @@ export const deleteCaseDeadline = async (
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: updatedCase,
     });
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
 export const deleteCaseDeadlineInteractor = withLocking(

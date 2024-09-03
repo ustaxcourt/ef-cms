@@ -1,6 +1,5 @@
 import { Contact } from './Contact';
 import { MOCK_CONTACT_PRIMARY } from '../../../test/mockContact';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('Contact', () => {
   describe('hasEAccess validation', () => {
@@ -12,7 +11,6 @@ describe('Contact', () => {
           hasEAccess: true,
         },
         'PetitionerPrimaryContact',
-        { applicationContext },
       );
 
       expect(contact.getFormattedValidationErrors()!.email).toEqual(
@@ -28,7 +26,6 @@ describe('Contact', () => {
           hasEAccess: false,
         },
         'PetitionerPrimaryContact',
-        { applicationContext },
       );
 
       expect(contact.getFormattedValidationErrors()?.email).toEqual(undefined);

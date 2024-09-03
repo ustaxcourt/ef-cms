@@ -39,7 +39,7 @@ export const getCaseForPublicDocketSearchInteractor = async (
     throw error;
   } else {
     caseDetailRaw = new PublicCase(caseRecord, {
-      applicationContext,
+      authorizedUser: undefined,
     })
       .validate()
       .toRawObject();

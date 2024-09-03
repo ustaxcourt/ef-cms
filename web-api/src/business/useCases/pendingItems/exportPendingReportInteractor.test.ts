@@ -1,14 +1,15 @@
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { exportPendingReportInteractor } from '@web-api/business/useCases/pendingItems/exportPendingReportInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('exportPendingReportInteractor', () => {
-  let mockUser;
-
   const judge = 'Colvin';
 
   const mockFoundDocuments = [
@@ -97,32 +98,26 @@ describe('exportPendingReportInteractor', () => {
       });
   });
 
-  beforeEach(() => {
-    mockUser = {
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-  });
-
   it('should throw an unauthorized error when the user does not have access', async () => {
-    mockUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
-
     await expect(
-      exportPendingReportInteractor(applicationContext, {
-        judge: 'Colvin',
-      }),
+      exportPendingReportInteractor(
+        applicationContext,
+        {
+          judge: 'Colvin',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should call fetchPendingItems from persistence and return a csv string of the results', async () => {
-    const results = await exportPendingReportInteractor(applicationContext, {
-      judge,
-    });
+    const results = await exportPendingReportInteractor(
+      applicationContext,
+      {
+        judge,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().fetchPendingItems,

@@ -1,7 +1,11 @@
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { judgeUser, trialClerkUser } from '@shared/test/mockUsers';
+import {
+  docketClerkUser,
+  judgeUser,
+  trialClerkUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -30,7 +34,9 @@ describe('trialSessionHeaderHelper', () => {
   });
 
   it('should not throw an error when state.trialSession is undefined', () => {
-    expect(() => runCompute(trialSessionHeaderHelper, {} as any)).not.toThrow();
+    expect(() =>
+      runCompute(trialSessionHeaderHelper, { user: {} } as any),
+    ).not.toThrow();
   });
 
   describe('isStandaloneSession', () => {
@@ -41,7 +47,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, user: docketClerkUser },
       });
 
       expect(isStandaloneSession).toEqual(true);
@@ -50,10 +56,8 @@ describe('trialSessionHeaderHelper', () => {
 
   describe('nameToDisplay', () => {
     it("should be the assigned judge's name when the current user is NOT a trial clerk", () => {
-      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, user: judgeUser },
       });
 
       expect(result.nameToDisplay).toBe(
@@ -62,10 +66,8 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it("should be the current user's name when the current user is a trial clerk", () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.nameToDisplay).toBe(trialClerkUser.name);
@@ -80,7 +82,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.showBatchDownloadButton).toBe(false);
@@ -93,7 +95,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.showBatchDownloadButton).toBe(true);
@@ -108,7 +110,7 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: baseState,
+        state: { ...baseState, user: trialClerkUser },
       });
 
       expect(result.showPrintCalendarButton).toBe(true);
@@ -128,7 +130,11 @@ describe('trialSessionHeaderHelper', () => {
       };
 
       const result = runCompute(trialSessionHeaderHelper, {
-        state: { ...baseState, permissions: { TRIAL_SESSIONS: true } },
+        state: {
+          ...baseState,
+          permissions: { TRIAL_SESSIONS: true },
+          user: trialClerkUser,
+        },
       });
 
       expect(result.showPrintPaperServicePDFsButton).toBe(true);
@@ -145,6 +151,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -152,8 +159,6 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is a trial clerk, they are on the TrialSessionWorkingCopy screen, but they are not assigned to the trial session', () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
@@ -161,6 +166,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: 'NOT_ASSIGNED' },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -168,8 +174,6 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is assigned to the session but they are already on the TrialSessionDetail screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
@@ -177,6 +181,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: trialClerkUser.userId },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -184,8 +189,6 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be true when the user is assigned to the session and they are on the TrialSessionWorkingCopy screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
@@ -193,6 +196,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: trialClerkUser.userId },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -208,6 +212,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             judge: { userId: judgeUser.userId },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -225,6 +230,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             judge: { userId: 'NOT_ASSIGNED' },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -232,8 +238,6 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is a trial clerk, they are on the TrialSessionDetail screen, but they are not assigned to the trial session', () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
@@ -241,6 +245,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: 'NOT_ASSIGNED' },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -248,8 +253,6 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be false when the user is assigned to the session but they are already on the TrialSessionWorkingCopy screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
@@ -257,6 +260,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: trialClerkUser.userId },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -264,8 +268,6 @@ describe('trialSessionHeaderHelper', () => {
     });
 
     it('should be true when the user is a trial clerk assigned to the session and they are on the TrialSessionDetail screen', () => {
-      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
-
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
           ...baseState,
@@ -273,6 +275,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             trialClerk: { userId: trialClerkUser.userId },
           },
+          user: trialClerkUser,
         },
       });
 
@@ -288,6 +291,7 @@ describe('trialSessionHeaderHelper', () => {
           trialSession: {
             judge: { userId: judgeUser.userId },
           },
+          user: trialClerkUser,
         },
       });
 

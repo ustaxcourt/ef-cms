@@ -7,23 +7,16 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const caseDetailSubnavHelper = withAppContextDecorator(
   caseDetailSubnavHelperComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
-  },
+  applicationContext,
 );
 
-let globalUser;
-
 const getBaseState = user => {
-  globalUser = user;
   return {
     caseDetail: {
       docketEntries: [],
     },
     permissions: getUserPermissions(user),
+    user,
   };
 };
 
