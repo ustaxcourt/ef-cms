@@ -66,8 +66,7 @@ export const StateDrivenFileInput = connect<
         e.target.value = null;
         return;
       }
-      const uploadedFile = e.target.files[0];
-      cloneFile(uploadedFile)
+      cloneFile(selectedFile)
         .then(clonedFile => {
           updateFormValueSequence({
             key: inputName,
