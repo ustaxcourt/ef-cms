@@ -2,9 +2,9 @@
 
 # Set variables
 REGION="us-east-1"                      # e.g., us-east-1
-DB_HOST="tf-20240821150813340100000001.ctjufrxxikdr.us-east-1.rds.amazonaws.com"  # e.g., mydb.cluster-abcdefghijkl.us-east-1.rds.amazonaws.com
+DB_HOST="tf-20240902220852451900000001.ctjufrxxikdr.us-east-1.rds.amazonaws.com"  # e.g., mydb.cluster-abcdefghijkl.us-east-1.rds.amazonaws.com
 DB_PORT=5432                             # Change this if using a different port, e.g., 5432 for PostgreSQL
-DB_USER="testing"                         # Database user
+DB_USER="exp4_developers"                         # Database user
 DB_NAME="exp4_dawson"                    # Database name
 SSL_CERT_PATH="global-bundle.pem"     # Path to SSL certificate bundle
 
