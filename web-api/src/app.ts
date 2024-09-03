@@ -454,7 +454,6 @@ app.use(logger());
     '/async/case-documents/batch-download',
     lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
   );
-  app.post('/logError', lambdaWrapper(logErrorLambda));
 
   // PUT
   app.put(
@@ -1080,6 +1079,7 @@ app.delete(
 {
   app.get('/system/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+  app.post('/logError', lambdaWrapper(logErrorLambda));
 }
 
 /**
