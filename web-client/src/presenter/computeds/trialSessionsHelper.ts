@@ -66,7 +66,16 @@ export const trialSessionsHelper = (
     .filter(trialSession => {
       if (filters.trialLocation === 'All') return true;
       return filters.trialLocation === trialSession.trialLocation;
+    })
+    .sort((sessionA, sessionB) => {
+      if (sessionA.startDate === sessionB.startDate) {
+        const sessionATrialLocation = sessionA.trialLocation || '';
+        const sessionBTrialLocation = sessionA.trialLocation || '';
+        return sessionATrialLocation.localeCompare(sessionBTrialLocation);
+      }
+      return sessionA.startDate.localeCompare(sessionB.startDate);
     });
+
   const trialSessionRows = formatTrialSessions({
     judgeAssociatedToUser: judge,
     trialSessions: filteredTrialSessions,

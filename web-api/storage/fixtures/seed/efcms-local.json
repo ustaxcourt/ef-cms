@@ -50345,7 +50345,7 @@
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
-    "sessionStatus": "New",
+    "sessionStatus": "Open",
     "trialLocation": "Denver, Colorado",
     "proceedingType": "In Person",
     "createdAt": "2019-11-02T05:00:00.000Z",
