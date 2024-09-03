@@ -10,10 +10,8 @@ describe('blockedCasesReportHelper', () => {
     blockedCasesReportHelperComputed,
   );
 
-  const noBlockedCasesLocationMessage =
-    'There are no blocked cases for this location.';
-  const noBlockedCasesProcedureTypeMessage =
-    'There are no blocked cases for this case type.';
+  const genericNoClockedCasesMessage =
+    'There are no blocked cases for this set of critieria.';
 
   it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
     const result = runCompute(blockedCasesReportHelper, {
@@ -366,7 +364,7 @@ describe('blockedCasesReportHelper', () => {
         blockedCases: [],
       },
     });
-    expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
+    expect(result.displayMessage).toEqual(genericNoClockedCasesMessage);
   });
 
   it('should display correct display message when procedureType is set to Small and there are no Small Blocked Cases', () => {
@@ -389,7 +387,7 @@ describe('blockedCasesReportHelper', () => {
         ],
       },
     });
-    expect(result.displayMessage).toEqual(noBlockedCasesProcedureTypeMessage);
+    expect(result.displayMessage).toEqual(genericNoClockedCasesMessage);
   });
 
   it('should not display any message when procedureType is set to Regular and there are Regular Blocked Cases', () => {
@@ -470,7 +468,7 @@ describe('blockedCasesReportHelper', () => {
         blockedCases: [],
       },
     });
-    expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
+    expect(result.displayMessage).toEqual(genericNoClockedCasesMessage);
   });
 
   describe('filters', () => {
