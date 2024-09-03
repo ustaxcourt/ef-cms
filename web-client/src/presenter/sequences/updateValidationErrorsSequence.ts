@@ -1,5 +1,5 @@
-import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
+import { updateValidationErrorsAction } from '@web-client/presenter/actions/updateValidationErrorsAction';
 
 export const updateValidationErrorsSequence = [
-  setValidationErrorsAction,
+  updateValidationErrorsAction,
 ] as unknown as (props: { errors: any }) => void;
