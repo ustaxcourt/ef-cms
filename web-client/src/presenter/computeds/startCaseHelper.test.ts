@@ -1,10 +1,13 @@
 import {
   CASE_TYPES_MAP,
   FILING_TYPES,
-  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '../../applicationContext';
+import {
+  irsPractitionerUser,
+  petitionerUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -17,17 +20,11 @@ describe('startCaseHelper', () => {
     applicationContext,
   );
 
-  beforeAll(() => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.petitioner,
-      }) as RawUser;
-  });
-
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {},
+        user: petitionerUser,
       },
     });
     expect(result.showPetitionFileValid).toBeFalsy();
@@ -37,6 +34,7 @@ describe('startCaseHelper', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: { petitionFile: true },
+        user: petitionerUser,
       },
     });
     expect(result.showPetitionFileValid).toBeTruthy();
@@ -50,6 +48,7 @@ describe('startCaseHelper', () => {
           partyType: true,
           petitionFile: true,
         },
+        user: petitionerUser,
       },
     });
     expect(result.showCorporateDisclosure).toBeTruthy();
@@ -63,6 +62,7 @@ describe('startCaseHelper', () => {
           partyType: true,
           petitionFile: true,
         },
+        user: petitionerUser,
       },
     });
     expect(result.showCorporateDisclosure).toBeFalsy();
@@ -74,6 +74,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: true,
         },
+        user: petitionerUser,
       },
     });
     expect(result.showHasIrsNoticeOptions).toBeTruthy();
@@ -86,6 +87,7 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: false,
         },
+        user: petitionerUser,
       },
     });
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
@@ -98,38 +100,31 @@ describe('startCaseHelper', () => {
         form: {
           hasIrsNotice: false,
         },
+        user: petitionerUser,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
   });
 
   it('returns privatePractitioner filing types if user is privatePractitioner role', () => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.privatePractitioner,
-      }) as RawUser;
-
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
           hasIrsNotice: false,
         },
+        user: privatePractitionerUser,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.privatePractitioner);
   });
 
   it('returns petitioner filing types by default if user is not petitioner or privatePractitioner role', () => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.irsPractitioner,
-      }) as RawUser;
-
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
           hasIrsNotice: false,
         },
+        user: irsPractitionerUser,
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
@@ -142,6 +137,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: 'Michael G. Scott' },
           partyType: PARTY_TYPES.petitioner,
         },
+        user: petitionerUser,
       },
     });
 
@@ -156,6 +152,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
+        user: petitionerUser,
       },
     });
 
@@ -170,6 +167,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerSpouse,
         },
+        user: petitionerUser,
       },
     });
 
@@ -184,6 +182,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
+        user: petitionerUser,
       },
     });
 
@@ -200,6 +199,7 @@ describe('startCaseHelper', () => {
           contactSecondary: { name: 'Carol Stills' },
           partyType: PARTY_TYPES.petitionerSpouse,
         },
+        user: petitionerUser,
       },
     });
 
@@ -215,6 +215,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
+        user: petitionerUser,
       },
     });
 
@@ -228,6 +229,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
+        user: petitionerUser,
       },
     });
 
@@ -241,6 +243,7 @@ describe('startCaseHelper', () => {
           contactPrimary: { name: '' },
           partyType: PARTY_TYPES.trust,
         },
+        user: petitionerUser,
       },
     });
 
@@ -336,6 +339,7 @@ describe('startCaseHelper', () => {
           form: {
             caseType: 'Disclosure1',
           },
+          user: petitionerUser,
         },
       });
 
@@ -348,6 +352,7 @@ describe('startCaseHelper', () => {
           form: {
             caseType: 'Disclosure2',
           },
+          user: petitionerUser,
         },
       });
 
@@ -360,6 +365,7 @@ describe('startCaseHelper', () => {
           form: {
             caseType: CASE_TYPES_MAP.deficiency,
           },
+          user: petitionerUser,
         },
       });
 
@@ -378,6 +384,7 @@ describe('startCaseHelper', () => {
             },
             {},
           ],
+          user: petitionerUser,
         },
       });
 
@@ -389,6 +396,7 @@ describe('startCaseHelper', () => {
         state: {
           form: {},
           irsNoticeUploadFormInfo: [{}, {}],
+          user: petitionerUser,
         },
       });
 

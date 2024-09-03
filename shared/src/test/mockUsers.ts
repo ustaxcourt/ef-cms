@@ -20,6 +20,7 @@ import {
 } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adminUser: RawUser = {
+  email: 'admin@example.com',
   entityName: 'User',
   name: 'Test admin',
   role: ROLES.admin,
@@ -27,13 +28,15 @@ export const adminUser: RawUser = {
 };
 
 export const adcUser = {
+  email: 'adc@example.com',
   name: 'ADC',
   role: ROLES.adc,
   section: ADC_SECTION,
-  userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
+  userId: '9f357f78-a8fa-40bf-83db-8144ddf14047',
 };
 
 export const colvinsChambersUser = {
+  email: 'chambers@e.mail',
   name: 'Chandler Chambers',
   role: ROLES.chambers,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
@@ -41,6 +44,8 @@ export const colvinsChambersUser = {
 };
 
 export const clerkOfCourtUser = {
+  email: 'theClerkUser@example.com',
+  name: 'Caster Clerk',
   role: ROLES.clerkOfCourt,
   userId: 'b6e4a5ac-c006-4b47-a5f0-67028372cd63',
 };
@@ -140,6 +145,7 @@ export const judgeColvin: RawUser = {
 };
 
 export const petitionerUser: RawUser = {
+  email: 'petitioner@example.com',
   entityName: 'User',
   name: 'Tax Payer',
   role: ROLES.petitioner,
@@ -169,6 +175,7 @@ export const trialClerkUser: RawUser = {
 };
 
 export const caseServicesSupervisorUser = {
+  email: 'caseservicessupervisor@example.com',
   name: 'Test Case Services Supervisor',
   role: ROLES.caseServicesSupervisor,
   section: CASE_SERVICES_SUPERVISOR_SECTION,
@@ -176,6 +183,7 @@ export const caseServicesSupervisorUser = {
 };
 
 export const docketClerkUser = {
+  email: 'theDocketMocket@example.com',
   name: 'Docketclerk',
   role: ROLES.docketClerk,
   section: DOCKET_SECTION,
@@ -201,6 +209,7 @@ export const petitionsClerkUser: RawUser = {
 };
 
 export const admissionsClerkUser = {
+  email: 'admissionsClerk@example.com',
   name: 'AdmissionsClerk',
   role: ROLES.admissionsClerk,
   section: ADMISSIONS_SECTION,

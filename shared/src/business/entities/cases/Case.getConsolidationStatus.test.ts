@@ -1,7 +1,6 @@
 import { CASE_STATUS_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getConsolidationStatus', () => {
   let leadCaseEntity;
@@ -14,7 +13,7 @@ describe('getConsolidationStatus', () => {
         procedureType: 'Regular',
         status: CASE_STATUS_TYPES.submitted,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
 
     pendingCaseEntity = new Case(
@@ -24,7 +23,7 @@ describe('getConsolidationStatus', () => {
         procedureType: 'Regular',
         status: CASE_STATUS_TYPES.submitted,
       },
-      { applicationContext },
+      { authorizedUser: undefined },
     );
   });
 

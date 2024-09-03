@@ -7,8 +7,9 @@ import {
   editPaperFilingInteractor,
   handleLockError,
 } from './editPaperFilingInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -46,21 +47,16 @@ describe('determineEntitiesToLock', () => {
 describe('handleLockError', () => {
   const mockClientConnectionId = '987654';
 
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-  });
-
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-  });
-
   it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
     const mockOriginalRequest = {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -99,7 +95,6 @@ describe('editPaperFilingInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -133,7 +128,11 @@ describe('editPaperFilingInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        editPaperFilingInteractor(applicationContext, mockRequest),
+        editPaperFilingInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -143,7 +142,11 @@ describe('editPaperFilingInteractor', () => {
 
     it('should return a "retry_async_request" notification with the original request', async () => {
       await expect(
-        editPaperFilingInteractor(applicationContext, mockRequest),
+        editPaperFilingInteractor(
+          applicationContext,
+          mockRequest,
+          mockDocketClerkUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -156,7 +159,7 @@ describe('editPaperFilingInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'edit_paper_filing',
         },
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       });
 
       expect(
@@ -171,7 +174,11 @@ describe('editPaperFilingInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await editPaperFilingInteractor(applicationContext, mockRequest);
+      await editPaperFilingInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -190,7 +197,11 @@ describe('editPaperFilingInteractor', () => {
     });
 
     it('should remove the lock', async () => {
-      await editPaperFilingInteractor(applicationContext, mockRequest);
+      await editPaperFilingInteractor(
+        applicationContext,
+        mockRequest,
+        mockDocketClerkUser,
+      );
       expect(
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({

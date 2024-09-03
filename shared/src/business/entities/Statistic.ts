@@ -2,6 +2,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
 import { Penalty } from './Penalty';
+import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
 
 /**
@@ -21,11 +22,8 @@ export class Statistic extends JoiValidationEntity {
   public statisticId: string;
   public penalties: any[];
 
-  constructor(rawStatistic, { applicationContext }) {
+  constructor(rawStatistic) {
     super('Statistic');
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
 
     this.determinationDeficiencyAmount =
       rawStatistic.determinationDeficiencyAmount;
@@ -35,8 +33,7 @@ export class Statistic extends JoiValidationEntity {
     this.lastDateOfPeriod = rawStatistic.lastDateOfPeriod;
     this.year = rawStatistic.year;
     this.yearOrPeriod = rawStatistic.yearOrPeriod;
-    this.statisticId =
-      rawStatistic.statisticId || applicationContext.getUniqueId();
+    this.statisticId = rawStatistic.statisticId || getUniqueId();
     this.penalties = [];
     if (
       rawStatistic.penalties &&
@@ -44,13 +41,11 @@ export class Statistic extends JoiValidationEntity {
       rawStatistic.irsTotalPenalties
     ) {
       assignPenalties(this, {
-        applicationContext,
         rawPenalties: rawStatistic.penalties,
         statisticId: this.statisticId,
       });
     } else if (rawStatistic.irsTotalPenalties) {
       itemizeTotalPenalties(this, {
-        applicationContext,
         determinationTotalPenalties: this.determinationTotalPenalties,
         irsTotalPenalties: this.irsTotalPenalties,
       });
@@ -133,12 +128,12 @@ export class Statistic extends JoiValidationEntity {
    * @param {Object} penalty  the Penalty object to add
    * @returns {void} modifies the penalties array on the Statistic
    */
-  addPenalty({ applicationContext, rawPenalty }) {
+  addPenalty({ rawPenalty }) {
     const rawPenaltyCopy = { ...rawPenalty };
     if (!rawPenaltyCopy.statisticId) {
       rawPenaltyCopy.statisticId = this.statisticId;
     }
-    const penalty = new Penalty(rawPenaltyCopy, { applicationContext });
+    const penalty = new Penalty(rawPenaltyCopy);
     this.penalties.push(penalty);
   }
 
@@ -161,15 +156,11 @@ export class Statistic extends JoiValidationEntity {
   }
 }
 
-const assignPenalties = (
-  obj,
-  { applicationContext, rawPenalties, statisticId },
-) => {
+const assignPenalties = (obj, { rawPenalties, statisticId }) => {
   rawPenalties.forEach(penalty => {
     penalty.statisticId
-      ? obj.addPenalty({ applicationContext, rawPenalty: penalty })
+      ? obj.addPenalty({ rawPenalty: penalty })
       : obj.addPenalty({
-          applicationContext,
           rawPenalty: { ...penalty, statisticId },
         });
   });
@@ -177,10 +168,9 @@ const assignPenalties = (
 
 const itemizeTotalPenalties = function (
   obj,
-  { applicationContext, determinationTotalPenalties, irsTotalPenalties },
+  { determinationTotalPenalties, irsTotalPenalties },
 ) {
   obj.addPenalty({
-    applicationContext,
     rawPenalty: {
       name: 'Penalty 1 (IRS)',
       penaltyAmount: irsTotalPenalties,
@@ -191,7 +181,6 @@ const itemizeTotalPenalties = function (
 
   if (determinationTotalPenalties) {
     obj.addPenalty({
-      applicationContext,
       rawPenalty: {
         name: 'Penalty 1 (Court)',
         penaltyAmount: determinationTotalPenalties,

@@ -4,15 +4,11 @@ import { getCompleteTrialSessionAlertSuccessAction } from '../actions/getComplet
 import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToPrintPaperTrialNoticesAction } from '@web-client/presenter/actions/TrialSession/navigateToPrintPaperTrialNoticesAction';
 import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
-import { sequence } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const updateTrialSessionCompleteSequence = sequence<{
-  fileId?: string;
-  hasPaper: boolean;
-}>([
+export const updateTrialSessionCompleteSequence = [
   unsetWaitingForResponseAction,
   clearModalStateAction,
   clearModalAction,
@@ -26,4 +22,4 @@ export const updateTrialSessionCompleteSequence = sequence<{
     ],
     paper: [navigateToPrintPaperTrialNoticesAction],
   },
-]);
+] as unknown as (props: { fileId?: string; hasPaper: boolean }) => void;

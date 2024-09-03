@@ -9,7 +9,9 @@ export const formattedOpenCases = (
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.openCases);
-  return cases.map(myCase => formatCase(applicationContext, myCase));
+  const user = get(state.user);
+
+  return cases.map(myCase => formatCase(applicationContext, myCase, user));
 };
 
 export const formattedClosedCases = (
@@ -17,9 +19,10 @@ export const formattedClosedCases = (
   applicationContext: ClientApplicationContext,
 ): any => {
   const { formatCase } = applicationContext.getUtilities();
+  const user = get(state.user);
 
   const cases = get(state.closedCases);
-  return cases.map(myCase => formatCase(applicationContext, myCase));
+  return cases.map(myCase => formatCase(applicationContext, myCase, user));
 };
 
 export const getUserIsAssignedToSession = ({
@@ -82,16 +85,15 @@ export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
-
   const { formatCase, setServiceIndicatorsForCase } =
     applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
+  const user = get(state.user);
 
   const result = {
     ...setServiceIndicatorsForCase(caseDetail),
-    ...formatCase(applicationContext, caseDetail),
+    ...formatCase(applicationContext, caseDetail, user),
   };
 
   result.petitioners = applicationContext

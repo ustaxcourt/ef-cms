@@ -13,6 +13,8 @@ import classNames from 'classnames';
 
 export const UploadCourtIssuedDocument = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
@@ -26,6 +28,7 @@ export const UploadCourtIssuedDocument = connect(
     validationErrors: state.validationErrors,
   },
   function UploadCourtIssuedDocument({
+    closeModalAndReturnToCaseDetailSequence,
     constants,
     fileDocumentHelper,
     form,
@@ -40,7 +43,9 @@ export const UploadCourtIssuedDocument = connect(
       <>
         <CaseDetailHeader />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
 
         <section className="usa-section grid-container DocumentDetail">

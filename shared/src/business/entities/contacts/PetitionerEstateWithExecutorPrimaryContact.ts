@@ -2,13 +2,8 @@ import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 
 export class PetitionerEstateWithExecutorPrimaryContact extends Contact {
-  constructor(
-    rawContact,
-    { applicationContext }: { applicationContext: IApplicationContext },
-  ) {
-    super(rawContact, 'PetitionerEstateWithExecutorPrimaryContact', {
-      applicationContext,
-    });
+  constructor(rawContact) {
+    super(rawContact, 'PetitionerEstateWithExecutorPrimaryContact');
   }
 
   getValidationRules() {

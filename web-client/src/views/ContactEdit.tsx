@@ -14,6 +14,8 @@ import React from 'react';
 export const ContactEdit = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -23,6 +25,7 @@ export const ContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   function ContactEdit({
+    closeModalAndReturnToCaseDetailSequence,
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
@@ -137,7 +140,9 @@ export const ContactEdit = connect(
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
       </>
     );

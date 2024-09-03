@@ -258,7 +258,7 @@ describe('validate', () => {
       const docketEntry = new DocketEntry(
         { ...A_VALID_DOCKET_ENTRY, ...item.docketEntry },
         {
-          applicationContext,
+          authorizedUser: undefined,
           petitioners: MOCK_PETITIONERS,
         },
       ).validate();
@@ -457,7 +457,7 @@ describe('validate', () => {
       const docketEntry = new DocketEntry(
         { ...A_VALID_DOCKET_ENTRY, ...item.docketEntry },
         {
-          applicationContext,
+          authorizedUser: undefined,
           petitioners: MOCK_PETITIONERS,
         },
       );
@@ -473,7 +473,7 @@ describe('validate', () => {
 
   it('should throw an error on invalid docket entries', () => {
     expect(() => {
-      new DocketEntry({}, { applicationContext }).validate();
+      new DocketEntry({}, { authorizedUser: undefined }).validate();
     }).toThrow('The DocketEntry entity was invalid');
   });
 });
