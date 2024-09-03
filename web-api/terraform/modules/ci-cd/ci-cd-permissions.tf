@@ -359,6 +359,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
       "Sid": "IamGranular",
       "Effect": "Allow",
       "Action": [
+        "iam:GetUser",
         "iam:GetRole",
         "iam:PassRole",
         "iam:GetRolePolicy",
@@ -377,6 +378,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:CreateRole"
       ],
       "Resource": [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
