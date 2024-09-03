@@ -39,12 +39,10 @@ export const TrialSessionsTable = connect(
               {isTrialSessionWeek(row) && (
                 <tbody>
                   <tr className="trial-date">
-                    <td
-                      colSpan={7 + trialSessionsHelper.additionalColumnsShown}
-                    >
+                    <td colSpan={100}>
                       <h4 className="margin-bottom-0">
                         {'Week of '}
-                        {row.dateFormatted}
+                        {row.formattedSessionWeekStartDate}
                       </h4>
                     </td>
                   </tr>

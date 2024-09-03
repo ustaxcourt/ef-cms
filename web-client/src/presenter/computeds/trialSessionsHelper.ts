@@ -1,5 +1,6 @@
 import {
   FORMATS,
+  createDateAtStartOfWeekEST,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
@@ -10,7 +11,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const trialSessionsHelper = (
   get: Get,
 ): {
-  additionalColumnsShown: number;
   showNewTrialSession: boolean;
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
@@ -26,11 +26,6 @@ export const trialSessionsHelper = (
 
   const isNewTab = tab === 'new';
   const isCalendared = tab === 'calendared';
-
-  let additionalColumnsShown = 0;
-  if (isCalendared) {
-    additionalColumnsShown = 1;
-  }
 
   const showCurrentJudgesOnly = isNewTab;
 
@@ -82,7 +77,6 @@ export const trialSessionsHelper = (
   });
 
   return {
-    additionalColumnsShown,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: isCalendared,
     showSessionStatus: isCalendared,
@@ -96,12 +90,13 @@ type TrialSessionRow = {
   trialSessionId: string;
   showAlertForNOTTReminder: boolean;
   alertMessageForNOTT: string;
-  formattedStartDate: string;
+  formattedStartDate: string; //MM/DD/YYYY
   formattedEstimatedEndDate: string;
   swingSession: boolean;
   userIsAssignedToSession: boolean;
   trialLocation: string;
   proceedingType: string;
+  startDate: string; // ISO format
   sessionType: string;
   judge?: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
@@ -109,8 +104,8 @@ type TrialSessionRow = {
 };
 
 type TrialSessionWeek = {
-  startOfWeekSortable: string;
-  dateFormatted: string;
+  sessionWeekStartDate: string;
+  formattedSessionWeekStartDate: string;
 };
 
 export function isTrialSessionRow(item: any): item is TrialSessionRow {
@@ -118,7 +113,7 @@ export function isTrialSessionRow(item: any): item is TrialSessionRow {
 }
 
 export function isTrialSessionWeek(item: any): item is TrialSessionWeek {
-  return !!item?.startOfWeekSortable;
+  return !!item?.sessionWeekStartDate;
 }
 
 const formatTrialSessions = ({
@@ -168,6 +163,7 @@ const formatTrialSessions = ({
         sessionStatus: trialSession.sessionStatus,
         sessionType: trialSession.sessionType,
         showAlertForNOTTReminder,
+        startDate: trialSession.startDate,
         swingSession: !!trialSession.swingSession,
         trialLocation: trialSession.trialLocation || '',
         trialSessionId: trialSession.trialSessionId || '',
@@ -176,5 +172,32 @@ const formatTrialSessions = ({
     },
   );
 
-  return trialSessionRows;
+  const trialSessionWithStartWeeks: (TrialSessionRow | TrialSessionWeek)[] = [];
+
+  let lastSessionWeek: TrialSessionWeek = {
+    formattedSessionWeekStartDate: '',
+    sessionWeekStartDate: '',
+  };
+  trialSessionRows.forEach(trialSession => {
+    const trialSessionStartOfWeek = createDateAtStartOfWeekEST(
+      trialSession.startDate,
+      FORMATS.ISO,
+    );
+    if (lastSessionWeek.sessionWeekStartDate < trialSessionStartOfWeek) {
+      const formattedSessionWeekStartDate = createDateAtStartOfWeekEST(
+        trialSession.startDate,
+        FORMATS.MONTH_DAY_YEAR,
+      );
+
+      lastSessionWeek = {
+        formattedSessionWeekStartDate,
+        sessionWeekStartDate: trialSessionStartOfWeek,
+      };
+
+      trialSessionWithStartWeeks.push(lastSessionWeek);
+    }
+    trialSessionWithStartWeeks.push(trialSession);
+  });
+
+  return trialSessionWithStartWeeks;
 };
