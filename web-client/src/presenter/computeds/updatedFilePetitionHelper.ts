@@ -26,6 +26,7 @@ type UpdatedFilePetitionHelper = {
   isPractitioner: boolean;
   businessFieldNames: IBusinessFields | {};
   otherContactNameLabel?: IOtherContactNameLabel;
+  otherFilingOptions: string[];
   showContactInformationForOtherPartyType: boolean;
 };
 
@@ -49,16 +50,39 @@ export const updatedFilePetitionHelper = (
   const isPetitioner = user.role === ROLES.petitioner;
   const isPractitioner = user.role === ROLES.privatePractitioner;
 
+  const otherFilingOptions = getOtherFilingOptions(isPractitioner);
+
   return {
     businessFieldNames,
     filingOptions,
     isPetitioner,
     isPractitioner,
     otherContactNameLabel,
+    otherFilingOptions,
     showContactInformationForOtherPartyType:
       getShowContactInformationForOtherPartyType(partyType, PARTY_TYPES),
   };
 };
+
+function getOtherFilingOptions(isPractitioner) {
+  const estateOrTrust = 'An estate or trust';
+  const minorOrIncompetentPerson = 'A minor or legally incompetent person';
+  const donor = 'Donor';
+  const transferee = 'Transferee';
+  const deceasedSpouse = 'Deceased Spouse';
+
+  const otherFilingOptions = isPractitioner
+    ? [estateOrTrust, donor, transferee, deceasedSpouse]
+    : [
+        estateOrTrust,
+        minorOrIncompetentPerson,
+        donor,
+        transferee,
+        deceasedSpouse,
+      ];
+
+  return otherFilingOptions;
+}
 
 function formatFilingTypes(filingOptions) {
   return filingOptions.map(option => {

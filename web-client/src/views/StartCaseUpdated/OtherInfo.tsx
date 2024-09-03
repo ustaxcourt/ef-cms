@@ -8,6 +8,7 @@ export function OtherInfo({
   form,
   isPetitioner,
   otherContactNameLabel,
+  otherFilingOptions,
   petitionGenerationLiveValidationSequence,
   registerRef,
   showContactInformationForOtherPartyType,
@@ -30,13 +31,7 @@ export function OtherInfo({
           <legend id="other-type-legend">
             What other type of taxpayer are you filing for?
           </legend>
-          {[
-            'An estate or trust',
-            'A minor or legally incompetent person',
-            'Donor',
-            'Transferee',
-            'Deceased Spouse',
-          ].map((otherType, idx) => (
+          {otherFilingOptions.map((otherType, idx) => (
             <div className="usa-radio max-width-fit-content" key={otherType}>
               <input
                 aria-describedby="other-type-legend"

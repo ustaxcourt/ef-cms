@@ -118,6 +118,32 @@ describe('updatedFilePetitionHelper', () => {
       ]);
     });
   });
+  describe('otherFilingOptions', () => {
+    it('should return the other filing options for petitioner', () => {
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: { form: {} },
+      });
+      expect(result.otherFilingOptions).toEqual([
+        'An estate or trust',
+        'A minor or legally incompetent person',
+        'Donor',
+        'Transferee',
+        'Deceased Spouse',
+      ]);
+    });
+    it('should return other filing options for practitioner', () => {
+      user = privatePractitionerUser;
+      const result = runCompute(updatedFilePetitionHelper, {
+        state: { form: {}, user: privatePractitionerUser },
+      });
+      expect(result.otherFilingOptions).toEqual([
+        'An estate or trust',
+        'Donor',
+        'Transferee',
+        'Deceased Spouse',
+      ]);
+    });
+  });
   describe('showContactInformationForOtherPartyType', () => {
     const partyTypesWithOtherPartyTypeContactInfo = [
       PARTY_TYPES.donor,
@@ -158,7 +184,6 @@ describe('updatedFilePetitionHelper', () => {
       expect(result.showContactInformationForOtherPartyType).toBeFalsy();
     });
   });
-
   describe('otherContactNameLabel', () => {
     it('should return correct labels for survivingSpouse', () => {
       const result = runCompute(updatedFilePetitionHelper, {
