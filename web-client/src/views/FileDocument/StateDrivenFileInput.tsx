@@ -19,11 +19,24 @@ type StateDriveFileInputProps = {
   ignoreSizeKey?: boolean;
 };
 
+// Get an error object that mimics our formatted error messages
+// Currently only handles a single nesting level, e.g., supportingDocuments.n.supportingDocumentFile
+// but not, e.g., supportingDocuments.n.part1.m.documentFile or supportingDocuments.n.m.documentFile
+const getErrorObject = (inputName: string, errorMessage: string) => {
+  if (!inputName.includes('.')) {
+    return { [inputName]: errorMessage };
+  }
+  const split = inputName.split('.');
+  return {
+    [split[0]]: [{ index: parseInt(split[1]), [split[2]]: errorMessage }],
+  };
+};
+
 const deps = {
   constants: state.constants,
-  fileUploadErrorSequence: sequences.updateValidationErrorsSequence,
   form: state.form,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
+  updateValidationErrorsSequence: sequences.updateValidationErrorsSequence,
   validationSequence: sequences[props.validationSequence],
 };
 
@@ -37,12 +50,12 @@ export const StateDrivenFileInput = connect<
     'aria-describedby': ariaDescribedBy,
     constants,
     file,
-    fileUploadErrorSequence,
     form,
     id,
     ignoreSizeKey,
     name: fileInputName,
     updateFormValueSequence,
+    updateValidationErrorsSequence,
     validationSequence,
     ...remainingProps
   }) {
@@ -59,13 +72,16 @@ export const StateDrivenFileInput = connect<
       });
       if (!isValid) {
         console.log(inputName);
-        // TODO 10001: Improve--doesn't work for nested fields
-        fileUploadErrorSequence({
-          errors: { [inputName]: errorMessage },
+        updateValidationErrorsSequence({
+          errors: getErrorObject(inputName, errorMessage!),
         });
         e.target.value = null;
         return;
       }
+      // On success, remove the error validation and update form values
+      updateValidationErrorsSequence({
+        errors: getErrorObject(inputName, ''),
+      });
       const uploadedFile = e.target.files[0];
       cloneFile(uploadedFile)
         .then(clonedFile => {
