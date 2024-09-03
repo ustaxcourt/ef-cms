@@ -48,7 +48,6 @@ function getFormattedValidationErrors(entity): Record<string, any> | null {
   if (entity.getFormattedValidationErrors) {
     errors = entity.getValidationErrors();
   }
-  console.log('errors', errors);
   if (errors) {
     for (const key of Object.keys(errors)) {
       if (
@@ -84,7 +83,6 @@ function getFormattedValidationErrors(entity): Record<string, any> | null {
       if (!obj[key]) delete obj[key];
     }
   }
-  console.log('Wow', obj);
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
