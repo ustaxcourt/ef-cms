@@ -59,6 +59,9 @@ function clearToken(region: string) {
 }
 
 async function getToken(region: string, host: string) {
+  if (process.env.NODE_ENV !== 'production') {
+    return process.env.POSTGRES_PASSWORD || 'example';
+  }
   const token = tokens[region];
 
   if (!token) {
@@ -96,7 +99,7 @@ async function createConnection<T>({
       password: token,
     });
 
-    return await cb(dbInstances[dbKey]);
+    return await cb(dbInstances[dbKey]!);
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
@@ -105,7 +108,7 @@ async function createConnection<T>({
       host,
       password: token,
     });
-    return await cb(dbInstances[dbKey]);
+    return await cb(dbInstances[dbKey]!);
   }
 }
 
