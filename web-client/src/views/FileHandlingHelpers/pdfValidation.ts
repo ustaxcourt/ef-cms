@@ -7,7 +7,6 @@ export const validatePDFUpload = ({
   file: File;
 }): Promise<FileValidationResponse> => {
   return new Promise(resolve => {
-    console.log('file', file.type);
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
 
@@ -19,7 +18,7 @@ export const validatePDFUpload = ({
         resolve({
           errorMessage: 'Failed to read file as ArrayBuffer.',
           isValid: false,
-        }); // Return false on failure
+        });
         return;
       }
 
@@ -45,13 +44,12 @@ export const validatePDFUpload = ({
             });
           }
         }
-        resolve({ errorMessage: 'An unknown error occurred', isValid: false }); // Return false on failure
+        resolve({ errorMessage: 'An unknown error occurred', isValid: false });
       }
     };
 
     fileReader.onerror = () => {
-      console.error('Error reading the file.');
-      resolve({ errorMessage: 'Error reading the file.', isValid: false }); // Return false on failure
+      resolve({ errorMessage: 'Error reading the file.', isValid: false });
     };
   });
 };

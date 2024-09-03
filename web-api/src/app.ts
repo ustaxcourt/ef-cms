@@ -127,6 +127,7 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { logger } from './logger';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
@@ -453,6 +454,7 @@ app.use(logger());
     '/async/case-documents/batch-download',
     lambdaWrapper(batchDownloadDocketEntriesLambda, { isAsync: true }),
   );
+  app.post('/logError', lambdaWrapper(logErrorLambda));
 
   // PUT
   app.put(

@@ -19,24 +19,11 @@ type StateDriveFileInputProps = {
   ignoreSizeKey?: boolean;
 };
 
-// Get an error object that mimics our formatted error messages
-// Currently only handles a single nesting level, e.g., supportingDocuments.n.supportingDocumentFile
-// but not, e.g., supportingDocuments.n.part1.m.documentFile or supportingDocuments.n.m.documentFile
-const getErrorObject = (inputName: string, errorMessage: string) => {
-  if (!inputName.includes('.')) {
-    return { [inputName]: errorMessage };
-  }
-  const split = inputName.split('.');
-  return {
-    [split[0]]: [{ index: parseInt(split[1]), [split[2]]: errorMessage }],
-  };
-};
-
 const deps = {
   constants: state.constants,
   form: state.form,
+  showErrorModalSequence: sequences.showErrorModalSequence,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
-  updateValidationErrorsSequence: sequences.updateValidationErrorsSequence,
   validationSequence: sequences[props.validationSequence],
 };
 
@@ -54,8 +41,8 @@ export const StateDrivenFileInput = connect<
     id,
     ignoreSizeKey,
     name: fileInputName,
+    showErrorModalSequence,
     updateFormValueSequence,
-    updateValidationErrorsSequence,
     validationSequence,
     ...remainingProps
   }) {
@@ -71,17 +58,14 @@ export const StateDrivenFileInput = connect<
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
       });
       if (!isValid) {
-        console.log(inputName);
-        updateValidationErrorsSequence({
-          errors: getErrorObject(inputName, errorMessage!),
+        showErrorModalSequence({
+          errorToLog: errorMessage,
+          message: errorMessage!,
+          title: 'File Upload Error',
         });
         e.target.value = null;
         return;
       }
-      // On success, remove the error validation and update form values
-      updateValidationErrorsSequence({
-        errors: getErrorObject(inputName, ''),
-      });
       const uploadedFile = e.target.files[0];
       cloneFile(uploadedFile)
         .then(clonedFile => {
