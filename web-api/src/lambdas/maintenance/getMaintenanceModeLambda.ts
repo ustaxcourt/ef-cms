@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getMaintenanceModeInteractor } from '@shared/business/useCases/getMaintenanceModeInteractor';
 
 /**
  * used for fetching the value of maintenance mode
@@ -10,9 +11,7 @@ export const getMaintenanceModeLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getMaintenanceModeInteractor(applicationContext);
+      return await getMaintenanceModeInteractor(applicationContext);
     },
     { bypassMaintenanceCheck: true },
   );

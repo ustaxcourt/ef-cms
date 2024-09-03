@@ -5,25 +5,16 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * strikes a given docket entry on a case
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id to strike
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the updated case after the docket entry is stricken
- */
 export const strikeDocketEntryInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   const hasPermission = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY,
@@ -40,7 +31,7 @@ export const strikeDocketEntryInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,

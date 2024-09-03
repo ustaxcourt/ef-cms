@@ -13,7 +13,7 @@ export const setAddEditSessionNoteModalStateAction = ({
   get,
   store,
 }: ActionProps) => {
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const notes = get(state.trialSessionWorkingCopy.sessionNotes);
   const trialSessionDetail = get(state.trialSession);

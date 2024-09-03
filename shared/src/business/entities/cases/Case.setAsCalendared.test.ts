@@ -2,12 +2,12 @@ import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('setAsCalendared', () => {
   it('should set case as calendared with only judge and trialSessionId if the trial session is calendared', () => {
     const myCase = new Case(MOCK_CASE, {
-      applicationContext,
+      authorizedUser: mockDocketClerkUser,
     });
     myCase.setAsCalendared({
       isCalendared: true,
@@ -26,22 +26,19 @@ describe('setAsCalendared', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
-    const trialSession = new TrialSession(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch', userId: 'buch-id' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      { applicationContext },
-    );
+    const trialSession = new TrialSession({
+      isCalendared: true,
+      judge: { name: 'Judge Buch', userId: 'buch-id' },
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
     myCase.setAsCalendared(trialSession);
 
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.calendared);
@@ -59,22 +56,19 @@ describe('setAsCalendared', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
-    const trialSession = new TrialSession(
-      {
-        isCalendared: false,
-        judge: { name: 'Judge Buch', userId: 'buch-id' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      { applicationContext },
-    );
+    const trialSession = new TrialSession({
+      isCalendared: false,
+      judge: { name: 'Judge Buch', userId: 'buch-id' },
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    });
     myCase.setAsCalendared(trialSession);
 
     expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);

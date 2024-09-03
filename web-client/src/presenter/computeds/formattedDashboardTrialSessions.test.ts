@@ -69,9 +69,6 @@ describe('formattedDashboardTrialSessions', () => {
   });
 
   it('returns the expected recent and upcoming sessions', () => {
-    applicationContext.getCurrentUser = () => ({
-      userId: '6',
-    });
     const result = runCompute(formattedDashboardTrialSessions, {
       state: {
         trialSessions: TRIAL_SESSIONS_LIST,
@@ -82,10 +79,6 @@ describe('formattedDashboardTrialSessions', () => {
   });
 
   it('returns only open trial sessions', () => {
-    applicationContext.getCurrentUser = () => ({
-      userId: '6',
-    });
-
     const trialSessions = [...TRIAL_SESSIONS_LIST];
     trialSessions.forEach(session => {
       session.isCalendared = false;

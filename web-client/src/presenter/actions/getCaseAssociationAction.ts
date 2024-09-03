@@ -12,7 +12,7 @@ export const getCaseAssociationAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const { USER_ROLES } = applicationContext.getConstants();
 
@@ -68,6 +68,7 @@ export const getCaseAssociationAction = async ({
       .getUseCases()
       .verifyPendingCaseForUserInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
+        userId: user.userId,
       });
   }
 
