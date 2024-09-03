@@ -78,7 +78,6 @@ export const blockedCasesReportHelper = (
   );
 
   let blockedCasesFormatted: BlockedFormattedCase[] = [];
-  let displayMessage: string | undefined;
 
   if (blockedCases && blockedCases.length) {
     blockedCasesFormatted = blockedCases
@@ -117,13 +116,10 @@ export const blockedCasesReportHelper = (
       });
   }
 
-  if (blockedCasesFormatted.length === 0) {
-    displayMessage = 'There are no blocked cases for this location.';
-
-    if (procedureTypeFilter && procedureTypeFilter !== 'All') {
-      displayMessage = 'There are no blocked cases for this case type.';
-    }
-  }
+  const displayMessage =
+    blockedCasesFormatted.length === 0
+      ? 'There are no blocked cases for this set of critieria.'
+      : undefined;
 
   return {
     blockedCasesCount: blockedCasesFormatted.length,
