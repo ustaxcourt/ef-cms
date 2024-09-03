@@ -2,9 +2,9 @@ import {
   CASE_TYPES_MAP,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { NonJudgeContact, RawUser } from '@shared/business/entities/User';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -49,17 +49,17 @@ export const formatPetitionAction = ({
 
   const contactCounsel = isRawPractitioner(user)
     ? {
-        address1: (user.contact as NonJudgeContact)?.address1,
-        address2: (user.contact as NonJudgeContact)?.address2,
-        address3: (user.contact as NonJudgeContact)?.address3,
+        address1: user.contact?.address1,
+        address2: user.contact?.address2,
+        address3: user.contact?.address3,
         barNumber: user.barNumber,
-        city: (user.contact as NonJudgeContact)?.city,
+        city: user.contact?.city,
         email: user.email,
         firmName: user.firmName,
         name: user.name,
         phone: user.contact?.phone,
-        postalCode: (user.contact as NonJudgeContact)?.postalCode,
-        state: (user.contact as NonJudgeContact)?.state,
+        postalCode: user.contact?.postalCode,
+        state: user.contact?.state,
       }
     : undefined;
 
