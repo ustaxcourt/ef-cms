@@ -119,7 +119,7 @@ export const Login = connect(
                     <span>
                       Don&apos;t have an account?{' '}
                       <Button
-                        className="padding-top-0"
+                        className="margin-top-0"
                         link={true}
                         type="button"
                         onClick={e => {
