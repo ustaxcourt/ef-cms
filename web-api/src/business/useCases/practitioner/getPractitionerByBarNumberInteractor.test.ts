@@ -2,36 +2,28 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerByBarNumberInteractor } from './getPractitionerByBarNumberInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionerByBarNumberInteractor', () => {
   describe('Logged in User', () => {
     it('throws an unauthorized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        new User({
-          name: 'Test Petitioner',
-          role: ROLES.petitioner,
-          userId: '1005d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      );
-
       await expect(
-        getPractitionerByBarNumberInteractor(applicationContext, {
-          barNumber: 'BN0000',
-        }),
+        getPractitionerByBarNumberInteractor(
+          applicationContext,
+          {
+            barNumber: 'BN0000',
+          },
+          mockPetitionerUser,
+        ),
       ).rejects.toThrow('Unauthorized for getting attorney user');
     });
 
     it('calls the persistence method to get a private practitioner with the given bar number', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        new User({
-          name: 'Test Petitionsclerk',
-          role: ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      );
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockReturnValue({
@@ -58,6 +50,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         {
           barNumber: 'PP1234',
         },
+        mockPetitionsClerkUser,
       );
 
       expect(practitioner).toEqual({
@@ -89,13 +82,6 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get an IRS practitioner with the given bar number', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        new User({
-          name: 'Test Petitionsclerk',
-          role: ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      );
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockReturnValue({
@@ -120,6 +106,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         {
           barNumber: 'PI5678',
         },
+        mockPetitionsClerkUser,
       );
 
       expect(practitioner).toEqual({
@@ -149,13 +136,6 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('throws a not found error if no practitioner is found with the given bar number', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        new User({
-          name: 'Test Petitionsclerk',
-          role: ROLES.petitionsClerk,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
-      );
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockReturnValue(undefined);
@@ -165,6 +145,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         {
           barNumber: 'BN0000',
         },
+        mockPetitionsClerkUser,
       );
 
       expect(practitioner).toBeUndefined();
@@ -173,8 +154,6 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
   describe('Public User', () => {
     beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue(undefined);
-
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockReturnValue({
@@ -197,26 +176,24 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('should not throw an error when a public user access interactor', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(undefined);
-
       const results = await getPractitionerByBarNumberInteractor(
         applicationContext,
         {
           barNumber: 'BN0000',
         },
+        undefined,
       );
 
       expect(results).toBeDefined();
     });
 
     it('should return an array with Practitioner result', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(undefined);
-
       const results = await getPractitionerByBarNumberInteractor(
         applicationContext,
         {
           barNumber: 'BN0000',
         },
+        undefined,
       );
 
       expect(results).toEqual([

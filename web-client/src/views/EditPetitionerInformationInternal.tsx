@@ -23,6 +23,8 @@ import React from 'react';
 export const EditPetitionerInformationInternal = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -37,6 +39,7 @@ export const EditPetitionerInformationInternal = connect(
     validationErrors: state.validationErrors,
   },
   function EditPetitionerInformationInternal({
+    closeModalAndReturnToCaseDetailSequence,
     COUNTRY_TYPES,
     editPetitionerInformationHelper,
     form,
@@ -354,7 +357,9 @@ export const EditPetitionerInformationInternal = connect(
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+          />
         )}
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
         {showModal === 'AccountUnverifiedModal' && <AccountUnverifiedModal />}

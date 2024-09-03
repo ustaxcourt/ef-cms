@@ -52,9 +52,9 @@ const getClientId = async (userPoolId: string): Promise<string> => {
   return clientId;
 };
 
-export const getCognitoUserIdByEmail = async (
+export const getUserByEmail = async (
   email: string,
-): Promise<string> => {
+): Promise<{ role: string; name: string; userId: string; email: string }> => {
   const userPoolId = await getUserPoolId();
   const foundUser = await getCognito().adminGetUser({
     UserPoolId: userPoolId,
@@ -65,7 +65,24 @@ export const getCognitoUserIdByEmail = async (
     element => element.Name === 'custom:userId',
   )?.Value!;
 
-  return userId;
+  const name = foundUser.UserAttributes?.find(
+    element => element.Name === 'name' || element.Name === 'custom:name', // custom:name is only used locally for cognito-local
+  )?.Value!;
+
+  const userEmail = foundUser.UserAttributes?.find(
+    element => element.Name === 'email',
+  )?.Value!;
+
+  const role = foundUser.UserAttributes?.find(
+    element => element.Name === 'custom:role',
+  )?.Value!;
+
+  return {
+    email: userEmail,
+    name,
+    role,
+    userId,
+  };
 };
 
 const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
@@ -88,19 +105,31 @@ const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
 
 export const createAccount = async ({
   isIrsEnv,
+  name,
   password,
   role,
+  userId,
   userName,
 }: {
   userName: string;
   password: string;
   role: string;
   isIrsEnv: boolean;
+  name: string;
+  userId: string;
 }): Promise<null> => {
   const userPoolId = await getUserPoolId(isIrsEnv);
   await getCognito().adminCreateUser({
     TemporaryPassword: password,
     UserAttributes: [
+      {
+        Name: 'name',
+        Value: name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: userId,
+      },
       {
         Name: 'custom:role',
         Value: role,

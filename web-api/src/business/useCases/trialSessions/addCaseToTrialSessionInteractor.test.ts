@@ -1,7 +1,6 @@
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
@@ -9,9 +8,12 @@ import { MOCK_TRIAL_REMOTE } from '../../../../../shared/src/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('addCaseToTrialSessionInteractor', () => {
-  let mockCurrentUser;
   let mockTrialSession;
   let mockCase;
   let mockLock;
@@ -20,7 +22,6 @@ describe('addCaseToTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
@@ -31,26 +32,21 @@ describe('addCaseToTrialSessionInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    mockCurrentUser = {
-      role: ROLES.petitionsClerk,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
     mockTrialSession = MOCK_TRIAL_REMOTE;
     mockCase = MOCK_CASE;
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    mockCurrentUser = {
-      role: ROLES.petitioner,
-      userId: '8675309b-18d0-43ec-bafb-654e83405411',
-    };
-
     await expect(
-      addCaseToTrialSessionInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-      }),
+      addCaseToTrialSessionInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: mockCase.docketNumber,
+          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -61,11 +57,15 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-      }),
+      addCaseToTrialSessionInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: mockCase.docketNumber,
+          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('The case is already calendared');
   });
 
@@ -77,11 +77,15 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-      }),
+      addCaseToTrialSessionInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('The case is already part of this trial session.');
   });
 
@@ -99,6 +103,7 @@ describe('addCaseToTrialSessionInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: mockTrialSession.trialSessionId,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(latestCase).toMatchObject({
@@ -118,11 +123,15 @@ describe('addCaseToTrialSessionInteractor', () => {
       isCalendared: true,
     };
 
-    await addCaseToTrialSessionInteractor(applicationContext, {
-      calendarNotes: 'Test',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-    });
+    await addCaseToTrialSessionInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'Test',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     const caseWithCalendarNotes = applicationContext
       .getPersistenceGateway()
@@ -139,11 +148,15 @@ describe('addCaseToTrialSessionInteractor', () => {
       isCalendared: true,
     };
 
-    await addCaseToTrialSessionInteractor(applicationContext, {
-      calendarNotes: 'testing',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-    });
+    await addCaseToTrialSessionInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
@@ -161,11 +174,15 @@ describe('addCaseToTrialSessionInteractor', () => {
       isCalendared: false,
     };
 
-    await addCaseToTrialSessionInteractor(applicationContext, {
-      calendarNotes: 'testing',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-    });
+    await addCaseToTrialSessionInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
@@ -176,11 +193,15 @@ describe('addCaseToTrialSessionInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      addCaseToTrialSessionInteractor(applicationContext, {
-        calendarNotes: 'testing',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: mockTrialSession.trialSessionId,
-      }),
+      addCaseToTrialSessionInteractor(
+        applicationContext,
+        {
+          calendarNotes: 'testing',
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: mockTrialSession.trialSessionId,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -189,11 +210,15 @@ describe('addCaseToTrialSessionInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await addCaseToTrialSessionInteractor(applicationContext, {
-      calendarNotes: 'testing',
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: mockTrialSession.trialSessionId,
-    });
+    await addCaseToTrialSessionInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

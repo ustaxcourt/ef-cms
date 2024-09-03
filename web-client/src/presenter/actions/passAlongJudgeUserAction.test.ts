@@ -8,13 +8,14 @@ describe('passAlongJudgeUserAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should call the setItemInteractor to persists the tab and form', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
     const { output } = await runAction(passAlongJudgeUserAction, {
       modules: {
         presenter,
       },
       props: {},
+      state: {
+        user: judgeUser,
+      },
     });
 
     expect(output.judgeUser).toEqual(judgeUser);

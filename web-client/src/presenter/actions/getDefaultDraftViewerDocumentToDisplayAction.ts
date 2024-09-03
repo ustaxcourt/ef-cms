@@ -13,6 +13,7 @@ export const getDefaultDraftViewerDocumentToDisplayAction = ({
   applicationContext,
   get,
 }: ActionProps) => {
+  const user = get(state.user);
   const draftDocketEntryId =
     get(state.draftDocumentViewerDocketEntryId) ||
     get(state.screenMetadata.draftDocumentViewerDocketEntryId);
@@ -20,7 +21,7 @@ export const getDefaultDraftViewerDocumentToDisplayAction = ({
   const caseDetail = get(state.caseDetail);
   const { draftDocuments } = applicationContext
     .getUtilities()
-    .formatCase(applicationContext, cloneDeep(caseDetail));
+    .formatCase(applicationContext, cloneDeep(caseDetail), user);
 
   let viewerDraftDocumentToDisplay = draftDocuments[0];
 

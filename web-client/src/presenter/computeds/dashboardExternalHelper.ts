@@ -1,11 +1,9 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const dashboardExternalHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
 ): {
   showFilingFee: boolean;
   showStartButton: boolean;
@@ -13,7 +11,7 @@ export const dashboardExternalHelper = (
   welcomeMessageTitle: string;
   welcomeMessage: string;
 } => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const openCases = get(state.openCases) || [];
   const closedCases = get(state.closedCases) || [];

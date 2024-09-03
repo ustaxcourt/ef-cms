@@ -7,7 +7,7 @@ export const messagesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const userRole = user && user.role;
   const isCaseServicesSupervisor =

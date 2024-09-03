@@ -4,6 +4,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -35,10 +36,6 @@ describe('formatPetitionAction', () => {
       .getUtilities()
       .getCaseCaption.mockImplementation(() => TEST_CASE_CAPTION);
 
-    applicationContext.getCurrentUser.mockImplementation(() => ({
-      email: TEST_EMAIL,
-    }));
-
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -50,6 +47,10 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 
@@ -85,6 +86,10 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 
@@ -129,6 +134,10 @@ describe('formatPetitionAction', () => {
       props: propsWithDisclosure,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 
@@ -177,6 +186,10 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
+        user: {
+          ...mockPetitionerUser,
+          email: TEST_EMAIL,
+        },
       },
     });
 

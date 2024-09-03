@@ -1,9 +1,8 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
 
 describe('saveCaseNoteInteractor', () => {
@@ -16,12 +15,6 @@ describe('saveCaseNoteInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    const mockJudge = new User({
-      name: 'Judge Colvin',
-      role: ROLES.judge,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
@@ -30,21 +23,27 @@ describe('saveCaseNoteInteractor', () => {
       .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
   });
   it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      saveCaseNoteInteractor(applicationContext, {
-        caseNote: 'testing',
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      saveCaseNoteInteractor(
+        applicationContext,
+        {
+          caseNote: 'testing',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('saves a case note', async () => {
-    const result = await saveCaseNoteInteractor(applicationContext, {
-      caseNote: 'This is my case note',
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await saveCaseNoteInteractor(
+      applicationContext,
+      {
+        caseNote: 'This is my case note',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockJudgeUser,
+    );
 
     expect(result).toBeDefined();
     expect(
@@ -60,10 +59,14 @@ describe('saveCaseNoteInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      saveCaseNoteInteractor(applicationContext, {
-        caseNote: 'This is my case note',
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      saveCaseNoteInteractor(
+        applicationContext,
+        {
+          caseNote: 'This is my case note',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -72,10 +75,14 @@ describe('saveCaseNoteInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await saveCaseNoteInteractor(applicationContext, {
-      caseNote: 'This is my case note',
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await saveCaseNoteInteractor(
+      applicationContext,
+      {
+        caseNote: 'This is my case note',
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockJudgeUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

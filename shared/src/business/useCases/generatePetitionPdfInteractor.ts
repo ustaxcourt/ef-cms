@@ -4,6 +4,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseDescription } from '@shared/business/utilities/getCaseDescription';
 
 export type IrsNotice = CreateCaseIrsForm & {
@@ -90,10 +91,9 @@ export const generatePetitionPdfInteractor = async (
     originalCaseType: string;
     irsNotices: IrsNotice[];
   },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{ fileId: string }> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
   const caseDescription = getCaseDescription(hasIrsNotice, originalCaseType);

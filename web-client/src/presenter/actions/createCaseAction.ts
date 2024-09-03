@@ -22,7 +22,7 @@ export const createCaseAction = async ({
 
   const form: ElectronicCreatedCaseType = omit(petitionMetadata, 'trialCities');
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   form.contactPrimary.email = user.email;
 
   let caseDetail;
@@ -41,9 +41,9 @@ export const createCaseAction = async ({
       corporateDisclosureFileId,
       petitionFileId,
       stinFileId,
-    } = await applicationContext
-      .getUseCases()
-      .generateDocumentIds(applicationContext, {
+    } = await applicationContext.getUseCases().generateDocumentIds(
+      applicationContext,
+      {
         attachmentToPetitionUploadProgress,
         corporateDisclosureUploadProgress:
           fileUploadProgressMap.corporateDisclosure as FileUploadProgressType,
@@ -51,7 +51,9 @@ export const createCaseAction = async ({
           fileUploadProgressMap.petition as FileUploadProgressType,
         stinUploadProgress:
           fileUploadProgressMap.stin as FileUploadProgressType,
-      });
+      },
+      user,
+    );
 
     stinFile = stinFileId;
 
