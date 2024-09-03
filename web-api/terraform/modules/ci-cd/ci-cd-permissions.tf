@@ -248,6 +248,16 @@ resource "aws_iam_policy" "ci_cd_policy" {
        ]
     }, 
     {
+      "Sid": "IAM",
+      "Effect": "Allow",
+      "Action": [
+          "iam:GetUser"
+        ],
+       "Resource": [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*"
+        ]
+    }, 
+    {
       "Action": [
         "ecs:CreateCluster",
         "ecs:DescribeClusters",
