@@ -1066,7 +1066,11 @@ export const FILING_TYPES = {
     'A business',
     'Other',
   ],
-};
+} as const;
+
+export type FilingType =
+  | (typeof FILING_TYPES)['petitioner'][number]
+  | (typeof FILING_TYPES)['privatePractitioner'][number];
 
 export const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 

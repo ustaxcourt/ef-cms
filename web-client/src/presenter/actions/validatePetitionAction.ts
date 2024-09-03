@@ -22,11 +22,9 @@ export const validatePetitionAction = ({
     'trialCities',
   );
 
-  const errors = applicationContext
-    .getUseCases()
-    .validatePetitionInteractor(applicationContext, {
-      petition: form,
-    });
+  const errors = applicationContext.getUseCases().validatePetitionInteractor({
+    petition: form,
+  });
 
   if (!errors) {
     return path.success();

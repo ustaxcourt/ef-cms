@@ -12,6 +12,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
+import { setDocumentTitleFromFreeTextAction } from '../actions/UploadCourtIssuedDocument/setDocumentTitleFromFreeTextAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/EditUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -57,6 +58,7 @@ export const editUploadCourtIssuedDocumentSequence = [
     success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
+      setDocumentTitleFromFreeTextAction,
       chooseByTruthyStateActionFactory('screenMetadata.documentReset'),
       {
         no: [setPrimaryDocumentFileIdPropAction, onSuccess],
