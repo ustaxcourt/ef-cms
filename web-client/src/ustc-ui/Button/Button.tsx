@@ -1,3 +1,4 @@
+import { DEBOUNCE_TIME_MILLISECONDS } from '@shared/business/entities/EntityConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { debounce } from 'lodash';
 import React, { useState } from 'react';
@@ -18,7 +19,7 @@ function getUpdatedOnClick(
     await results.finally(() => {
       setDisableButton(false);
     });
-  }, 500);
+  }, DEBOUNCE_TIME_MILLISECONDS);
 
   return async (...args) => {
     setDisableButton(true);
