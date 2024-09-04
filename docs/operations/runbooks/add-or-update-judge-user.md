@@ -19,3 +19,9 @@ npx ts-node --transpile-only ./scripts/user/add-judge.ts ...
 ```
 These scripts will add/update the appropriate user records in Cognito and Dynamo.
 4. To update the production environment: If you have access to the production environment, run either `add-judge.ts` or `update-judge.ts` as above. If you do not have access, hand off to a USTC engineer, linking to this documentation.
+
+## Caveat
+If you update the name of a judge, their chambers section will be updated as well. However, as of 4 September 2024, we do not have anything that prevents a stale edit from overwriting an update. In other words, the following is possible:
+- An admin begins to update a chambers user
+- The script to update the judge's name is run
+- The admin finishes the updates to the chambers user (in principle up to 24 hours later), overwriting that user's newly updated chambers section
