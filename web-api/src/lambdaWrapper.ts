@@ -34,9 +34,9 @@ export const lambdaWrapper = (
       process.env.NODE_ENV != 'production';
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
-    const currentInvoke = getCurrentInvoke();
+    const { event: currentInvokeEvent } = getCurrentInvoke();
     let isTerminalUser =
-      get(currentInvoke, 'event.requestContext.authorizer.isTerminalUser') ===
+      get(currentInvokeEvent, 'requestContext.authorizer.isTerminalUser') ===
       'true';
 
     const event = {
@@ -44,7 +44,10 @@ export const lambdaWrapper = (
       isTerminalUser,
       path: req.path,
       pathParameters: req.params,
-      queryStringParameters: req.query,
+      queryStringParameters: {
+        ...currentInvokeEvent.queryStringParameters,
+        ...req.query,
+      },
     };
 
     const user = getUserFromAuthHeader(event);
