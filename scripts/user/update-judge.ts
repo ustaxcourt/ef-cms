@@ -29,7 +29,7 @@ import { isEmpty } from 'lodash';
  *
  *  Example usage:
  *
- * $ npx ts-node --transpile-only update-judge.ts judge.someone.ustaxcourt.gove --name Way --judgeFullName "Kashi Way" --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
+ * $ npx ts-node --transpile-only update-judge.ts judge.someone.ustaxcourt.gov --name Way --judgeFullName "Kashi Way" --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
  *
  * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
  * Please extract into application logic!
