@@ -35,6 +35,10 @@ export const generateCaseInventoryReportPdf = async ({
       caseTitle: applicationContext.getCaseTitle(caseItem.caseCaption || ''),
     }));
 
+  applicationContext.logger.info(
+    'generateCaseInventoryReportPdf - prepared formatted cases',
+  );
+
   let reportTitle = '';
   let showJudgeColumn = true;
   let showStatusColumn = true;
@@ -50,6 +54,10 @@ export const generateCaseInventoryReportPdf = async ({
     reportTitle += filters.associatedJudge;
     showJudgeColumn = false;
   }
+
+  applicationContext.logger.info(
+    'generateCaseInventoryReportPdf - prepared title',
+  );
 
   const caseInventoryReportPdf = await applicationContext
     .getDocumentGenerators()

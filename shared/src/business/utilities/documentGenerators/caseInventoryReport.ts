@@ -26,6 +26,8 @@ export const caseInventoryReport = async ({
     showStatusColumn: boolean;
   };
 }) => {
+  applicationContext.logger.info('caseInventoryReport - start');
+
   const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
     data;
 
@@ -38,10 +40,18 @@ export const caseInventoryReport = async ({
     }),
   );
 
+  applicationContext.logger.info(
+    'caseInventoryReport - generated CaseInventoryReport',
+  );
+
   const headerHtml = ReactDOM.renderToString(
     React.createElement(ReportsMetaHeader, {
       headerTitle: `Case Inventory Report: ${reportTitle}`,
     }),
+  );
+
+  applicationContext.logger.info(
+    'caseInventoryReport - generated ReportsMetaHeader',
   );
 
   const footerHtml = ReactDOM.renderToString(
@@ -50,10 +60,18 @@ export const caseInventoryReport = async ({
     }),
   );
 
+  applicationContext.logger.info(
+    'caseInventoryReport - generated DatePrintedFooter',
+  );
+
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: caseInventoryReportTemplate,
   });
+
+  applicationContext.logger.info(
+    'caseInventoryReport - generated generateHTMLTemplateForPDF',
+  );
 
   const pdf = await applicationContext
     .getUseCases()
@@ -63,6 +81,10 @@ export const caseInventoryReport = async ({
       footerHtml,
       headerHtml,
     });
+
+  applicationContext.logger.info(
+    'caseInventoryReport - generated generatePdfFromHtmlInteractor',
+  );
 
   return pdf;
 };
