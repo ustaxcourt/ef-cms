@@ -1,12 +1,43 @@
+import { DEBOUNCE_TIME_MILLISECONDS } from '@shared/business/entities/EntityConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import { debounce } from 'lodash';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const Button = props => {
+function getUpdatedOnClick(
+  onClick: (...args: any) => any | undefined,
+  disableOnClick: boolean | undefined,
+  setDisableButton: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  if (!onClick || !disableOnClick) return onClick;
+
+  const debouncedWrapper = debounce(async (...args) => {
+    const results = onClick(...args);
+    if (!(results instanceof Promise))
+      throw new Error('Convert onClick method to async');
+
+    await results.finally(() => {
+      setDisableButton(false);
+    });
+  }, DEBOUNCE_TIME_MILLISECONDS);
+
+  return async (...args) => {
+    setDisableButton(true);
+    await debouncedWrapper(...args);
+  };
+}
+
+export const Button = (props: {
+  [key: string]: any;
+  disableOnClick?: boolean;
+}) => {
+  const [disableButton, setDisableButton] = useState(false);
+
   const { href } = props;
   const {
     children,
     className,
+    disableOnClick,
     icon,
     iconColor, // e.g. blue
     iconRight = false,
@@ -15,6 +46,7 @@ export const Button = props => {
     link,
     marginDirection = 'right',
     noMargin = false,
+    onClick,
     overrideMargin = false,
     secondary,
     shouldWrapText = false,
@@ -45,7 +77,13 @@ export const Button = props => {
   );
 
   return (
-    <Element className={classes} {...remainingProps} title={tooltip}>
+    <Element
+      className={classes}
+      disabled={disableButton}
+      {...remainingProps}
+      title={tooltip}
+      onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
+    >
       {icon && !iconRight && (
         <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
       )}
@@ -56,5 +94,3 @@ export const Button = props => {
     </Element>
   );
 };
-
-Button.displayName = 'Button';
