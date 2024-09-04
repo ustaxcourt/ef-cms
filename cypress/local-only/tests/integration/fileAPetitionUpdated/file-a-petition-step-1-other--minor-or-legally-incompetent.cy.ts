@@ -687,21 +687,28 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
   });
 
   describe('Practitioner', () => {
-    beforeEach(() => {
-      loginAsPrivatePractitioner();
-      cy.visit('/file-a-petition/new');
-      cy.get('[data-testid="step-indicator-current-step-1-icon"]');
-      cy.get('[data-testid="filing-type-3"').click();
-    });
-    describe('Other', () => {
-      describe('A minor or legally incompetent person', () => {
-        it('should display correct other type title', () => {
-          cy.get('[data-testid="other-type-radio-option-1"]').click();
-          cy.get('[data-testid="estate-type-legend"]').should(
-            'have.text',
-            'What is the petitioner’s role in filing for this minor or legally incompetent person?',
-          );
-        });
+    describe('Other Filing Options', () => {
+      it('should display other filing options', () => {
+        loginAsPrivatePractitioner();
+        cy.visit('/file-a-petition/new');
+        cy.get('[data-testid="filing-type-3"').click();
+
+        cy.get('[data-testid="other-type-radio-option-0"]').should(
+          'have.text',
+          'An estate or trust',
+        );
+        cy.get('[data-testid="other-type-radio-option-1"]').should(
+          'have.text',
+          'Donor',
+        );
+        cy.get('[data-testid="other-type-radio-option-2"]').should(
+          'have.text',
+          'Transferee',
+        );
+        cy.get('[data-testid="other-type-radio-option-3"]').should(
+          'have.text',
+          'Deceased Spouse',
+        );
       });
     });
   });
