@@ -846,6 +846,7 @@ export const baseState = {
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
+  viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -876,6 +877,8 @@ export type CreateCaseIrsForm = {
 export type ViewerDocument = {
   docketEntryId: string;
   documentTitle?: string; // Should this be required?
+  documentType?: string;
+  eventCode?: string;
   filingDate?: string;
   index?: number;
 };
