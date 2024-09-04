@@ -7,70 +7,126 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} {blockedCasesFormatted: *[], blockedCasesCount: number}
  */
+import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+
+export type BlockedFormattedCase = {
+  docketNumber: string;
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  isLeadCase: boolean;
+  blockedDateEarliest: string;
+  caseTitle: string;
+  procedureType: string;
+  status: CaseStatus;
+  blockedReason?: string;
+  automaticBlockedReason?: string;
+  docketNumberWithSuffix?: string;
+};
+
+type BlockedCaseReportHelperResults = {
+  blockedCasesCount: number;
+  blockedCasesFormatted: BlockedFormattedCase[];
+  displayMessage: string | undefined;
+};
+
+const setFormattedBlockDates = (
+  blockedCase: RawCase & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+  },
+  applicationContext: ClientApplicationContext,
+): BlockedFormattedCase => {
+  const blockedFormattedCase: BlockedFormattedCase = {
+    ...blockedCase,
+    blockedDateEarliest: '',
+    caseTitle: '',
+  };
+
+  if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
+    if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
+      blockedFormattedCase.blockedDateEarliest = applicationContext
+        .getUtilities()
+        .formatDateString(blockedCase.blockedDate, 'MMDDYY');
+    } else {
+      blockedFormattedCase.blockedDateEarliest = applicationContext
+        .getUtilities()
+        .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
+    }
+  } else if (blockedCase.blocked) {
+    blockedFormattedCase.blockedDateEarliest = applicationContext
+      .getUtilities()
+      .formatDateString(blockedCase.blockedDate!, 'MMDDYY');
+  } else if (blockedCase.automaticBlocked) {
+    blockedFormattedCase.blockedDateEarliest = applicationContext
+      .getUtilities()
+      .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
+  }
+  return blockedFormattedCase;
+};
+
 export const blockedCasesReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
-  const blockedCases = get(state.blockedCases);
-  const procedureTypeFilter = get(state.form.procedureType);
+): BlockedCaseReportHelperResults => {
+  const blockedCases: RawCase[] = get(state.blockedCases);
+  const { caseStatusFilter, procedureTypeFilter, reasonFilter } = get(
+    state.blockedCaseReportFilter,
+  );
 
-  let blockedCasesFormatted = [];
-  let displayMessage;
+  const genericNoBlockedCasesMessage =
+    'There are no blocked cases for this set of criteria.';
 
-  const setFormattedBlockDates = blockedCase => {
-    if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
-      if (blockedCase.blockedDate < blockedCase.automaticBlockedDate) {
-        blockedCase.blockedDateEarliest = applicationContext
-          .getUtilities()
-          .formatDateString(blockedCase.blockedDate, 'MMDDYY');
-      } else {
-        blockedCase.blockedDateEarliest = applicationContext
-          .getUtilities()
-          .formatDateString(blockedCase.automaticBlockedDate, 'MMDDYY');
-      }
-    } else if (blockedCase.blocked) {
-      blockedCase.blockedDateEarliest = applicationContext
-        .getUtilities()
-        .formatDateString(blockedCase.blockedDate, 'MMDDYY');
-    } else if (blockedCase.automaticBlocked) {
-      blockedCase.blockedDateEarliest = applicationContext
-        .getUtilities()
-        .formatDateString(blockedCase.automaticBlockedDate, 'MMDDYY');
-    }
-    return blockedCase;
-  };
-
-  if (blockedCases && blockedCases.length) {
-    blockedCasesFormatted = blockedCases
-      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-      .map(blockedCase => {
-        const blockedCaseWithConsolidatedProperties = applicationContext
-          .getUtilities()
-          .setConsolidationFlagsForDisplay(blockedCase);
-        return {
-          ...setFormattedBlockDates(blockedCaseWithConsolidatedProperties),
-          caseTitle: applicationContext.getCaseTitle(
-            blockedCase.caseCaption || '',
-          ),
-          docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
-        };
-      })
-      .filter(blockedCase => {
-        return procedureTypeFilter && procedureTypeFilter !== 'All'
-          ? blockedCase.procedureType === procedureTypeFilter
-          : true;
-      });
+  if (!blockedCases || !blockedCases.length) {
+    return {
+      blockedCasesCount: 0,
+      blockedCasesFormatted: [],
+      displayMessage: genericNoBlockedCasesMessage,
+    };
   }
 
-  if (blockedCasesFormatted.length === 0) {
-    displayMessage = 'There are no blocked cases for this location.';
+  const blockedCasesFormatted: BlockedFormattedCase[] = blockedCases
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(blockedCase => {
+      const blockedCaseWithConsolidatedProperties = applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(blockedCase);
 
-    if (procedureTypeFilter && procedureTypeFilter !== 'All') {
-      displayMessage = 'There are no blocked cases for this case type.';
-    }
-  }
+      const updatedCase = {
+        ...setFormattedBlockDates(
+          blockedCaseWithConsolidatedProperties,
+          applicationContext,
+        ),
+        caseTitle: applicationContext.getCaseTitle(
+          blockedCase.caseCaption || '',
+        ),
+        docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
+      };
+
+      return updatedCase;
+    })
+    .filter(blockedCase => {
+      return procedureTypeFilter && procedureTypeFilter !== 'All'
+        ? blockedCase.procedureType === procedureTypeFilter
+        : true;
+    })
+    .filter(blockedCase => {
+      if (caseStatusFilter === 'All') return true;
+      return blockedCase.status === caseStatusFilter;
+    })
+    .filter(blockedCase => {
+      if (reasonFilter === 'All') return true;
+      if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
+      return blockedCase.automaticBlockedReason === reasonFilter;
+    });
+
+  const displayMessage =
+    blockedCasesFormatted.length === 0
+      ? genericNoBlockedCasesMessage
+      : undefined;
 
   return {
     blockedCasesCount: blockedCasesFormatted.length,

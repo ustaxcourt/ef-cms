@@ -289,7 +289,7 @@ describe('headerHelper', () => {
       const result = runCompute(headerHelper, {
         state: {
           ...getBaseState({ role: ROLES.privatePractitioner }),
-          currentPage: 'DashboardPractitioner',
+          currentPage: 'DashboardPetitioner',
         },
       });
 

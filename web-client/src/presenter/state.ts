@@ -127,6 +127,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { selectCriteriaHelper } from '@web-client/presenter/computeds/selectCriteriaHelper';
 import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
@@ -494,6 +495,9 @@ export const computeds = {
   sealedCaseDetailHelper: sealedCaseDetailHelper as unknown as ReturnType<
     typeof sealedCaseDetailHelper
   >,
+  selectCriteriaHelper: selectCriteriaHelper as unknown as ReturnType<
+    typeof selectCriteriaHelper
+  >,
   serveThirtyDayNoticeModalHelper:
     serveThirtyDayNoticeModalHelper as unknown as ReturnType<
       typeof serveThirtyDayNoticeModalHelper
@@ -602,6 +606,13 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
+  blockedCaseReportFilter: {
+    caseStatusFilter: 'All',
+    procedureTypeFilter: 'All',
+    reasonFilter: 'All',
+    trialLocationFilter: '',
+  },
+  blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
       caseCaption: string;
@@ -758,6 +769,7 @@ export const baseState = {
     caseCaptionExtension: undefined,
     caseTitle: undefined,
     caseType: undefined,
+    contactCounsel: undefined,
     contactPrimary: undefined,
     contactSecondary: undefined,
     corporateDisclosureFile: undefined,
@@ -842,8 +854,9 @@ export const baseState = {
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
-  validationErrors: {} as Record<string, string>,
+  validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
+  viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -866,7 +879,7 @@ export type CreateCaseIrsForm = {
   size?: number;
   caseType?: string;
   noticeIssuedDate?: string;
-  taxYear?: number;
+  taxYear?: string;
   irsNoticeFileUrl?: string;
   cityAndStateIssuingOffice?: string;
 };
@@ -874,6 +887,8 @@ export type CreateCaseIrsForm = {
 export type ViewerDocument = {
   docketEntryId: string;
   documentTitle?: string; // Should this be required?
+  documentType?: string;
+  eventCode?: string;
   filingDate?: string;
   index?: number;
 };
