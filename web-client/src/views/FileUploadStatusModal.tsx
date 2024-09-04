@@ -1,25 +1,22 @@
-import { Button } from '../ustc-ui/Button/Button';
 import { Focus } from '../ustc-ui/Focus/Focus';
 import { ModalDialog } from './ModalDialog';
 import { ProgressBar } from '../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const FileUploadStatusModal = connect(
   {
-    cancelUploadSequence: sequences.cancelFileUploadSequence,
     helper: state.fileUploadStatusHelper,
     percentComplete: state.fileUploadProgress.percentComplete,
   },
-  function FileUploadStatusModal({
-    cancelUploadSequence,
-    helper,
-    percentComplete,
-  }) {
+  function FileUploadStatusModal({ helper, percentComplete }) {
     return (
-      <ModalDialog className="file-upload-status-modal" showButtons={false}>
+      <ModalDialog
+        className="file-upload-status-modal"
+        closeLink={false}
+        showButtons={false}
+      >
         <Focus>
           <ProgressBar
             aria-labelledby="progress-description"
@@ -42,19 +39,6 @@ export const FileUploadStatusModal = connect(
             />
           </div>
           {helper.isHavingSystemIssues && <div>Still processing...</div>}
-          {helper.isCancelable && (
-            <div className="cancel">
-              <Button
-                link
-                onClick={e => {
-                  e.stopPropagation();
-                  cancelUploadSequence();
-                }}
-              >
-                Cancel Upload
-              </Button>
-            </div>
-          )}
         </div>
       </ModalDialog>
     );

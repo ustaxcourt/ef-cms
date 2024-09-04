@@ -18,7 +18,7 @@ export const DateSelector = ({
   placeHolderText,
   showDateHint = false,
 }: {
-  defaultValue: string | undefined;
+  defaultValue: string | undefined; // expects format 'YYYY-MM-DD'
   displayOptionalHintText?: boolean;
   placeHolderText?: string;
   errorText?: string;

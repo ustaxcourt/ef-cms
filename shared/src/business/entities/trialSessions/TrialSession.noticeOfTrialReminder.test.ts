@@ -1,6 +1,5 @@
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { prepareDateFromString } from '../../utilities/DateHandler';
 
 describe('TrialSession entity', () => {
@@ -22,15 +21,10 @@ describe('TrialSession entity', () => {
       { daysFromToday: 35, expectedOutput: false },
     ];
     it('should set isStartDateWithinNOTTReminderRange to false when the trial session is not calendared', () => {
-      const trialSession = new TrialSession(
-        {
-          ...MOCK_TRIAL_REGULAR,
-          isCalendared: false,
-        },
-        {
-          applicationContext,
-        },
-      );
+      const trialSession = new TrialSession({
+        ...MOCK_TRIAL_REGULAR,
+        isCalendared: false,
+      });
 
       expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(false);
     });
@@ -39,16 +33,11 @@ describe('TrialSession entity', () => {
       it(`should set isStartDateWithinNOTTReminderRange to ${expectedOutput} when the trial session is calendared and the start date is ${daysFromToday} days from today`, () => {
         const thirtyDaysFromToday = today.plus({ ['days']: daysFromToday });
 
-        const trialSession = new TrialSession(
-          {
-            ...MOCK_TRIAL_REGULAR,
-            isCalendared: true,
-            startDate: thirtyDaysFromToday,
-          },
-          {
-            applicationContext,
-          },
-        );
+        const trialSession = new TrialSession({
+          ...MOCK_TRIAL_REGULAR,
+          isCalendared: true,
+          startDate: thirtyDaysFromToday,
+        });
 
         expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(
           expectedOutput,

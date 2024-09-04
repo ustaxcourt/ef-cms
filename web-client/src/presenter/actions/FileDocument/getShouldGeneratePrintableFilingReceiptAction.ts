@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -14,7 +15,8 @@ export const getShouldGeneratePrintableFilingReceiptAction = ({
   path,
   props,
 }: ActionProps) => {
-  if (!get(state.documentToEdit) && props.documentsFiled) {
+  const documentToEdit = get(state.documentToEdit);
+  if (isEmpty(documentToEdit) && props.documentsFiled) {
     return path.true();
   }
 

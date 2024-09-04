@@ -4,6 +4,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 
 /**
@@ -17,6 +18,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 export const getWorkItemInteractor = async (
   applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
@@ -29,13 +31,15 @@ export const getWorkItemInteractor = async (
     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
   }
 
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM, workItem.assigneeId)) {
+  if (
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.WORKITEM,
+      workItem.assigneeId,
+    )
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return new WorkItem(workItem, { applicationContext })
-    .validate()
-    .toRawObject();
+  return new WorkItem(workItem).validate().toRawObject();
 };

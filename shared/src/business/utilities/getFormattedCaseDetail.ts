@@ -7,7 +7,6 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   FORMATS,
@@ -15,6 +14,7 @@ import {
   combineISOandEasternTime,
   formatDateString,
 } from './DateHandler';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 
 const computeIsInProgress = ({ formattedEntry }) => {
@@ -248,7 +248,7 @@ const formatTrialSessionScheduling = ({
   }
 };
 
-export const getEditUrl = ({
+const getEditUrl = ({
   docketEntryId,
   docketNumber,
   documentType,
@@ -262,7 +262,11 @@ export const getEditUrl = ({
     : `/case-detail/${docketNumber}/edit-order/${docketEntryId}`;
 };
 
-export const formatCase = (applicationContext, caseDetail) => {
+export const formatCase = (
+  applicationContext,
+  caseDetail,
+  authorizedUser: UnknownAuthUser,
+) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
@@ -375,7 +379,9 @@ export const formatCase = (applicationContext, caseDetail) => {
   }
   result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
 
-  const caseEntity = new Case(caseDetail, { applicationContext });
+  const caseEntity = new Case(caseDetail, {
+    authorizedUser,
+  });
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
@@ -385,7 +391,7 @@ export const formatCase = (applicationContext, caseDetail) => {
   if (result.consolidatedCases) {
     result.consolidatedCases = result.consolidatedCases.map(
       consolidatedCase => {
-        return formatCase(applicationContext, consolidatedCase);
+        return formatCase(applicationContext, consolidatedCase, authorizedUser);
       },
     );
   }
@@ -479,20 +485,23 @@ export const sortDocketEntries = (
   return docketEntries.sort(sortUndefined);
 };
 
+// Used by both front and backend
 export const getFormattedCaseDetail = ({
   applicationContext,
+  authorizedUser,
   caseDetail,
   docketRecordSort,
 }: {
-  applicationContext: ClientApplicationContext;
+  applicationContext: IApplicationContext;
   caseDetail: RawCase;
   docketRecordSort?: string;
+  authorizedUser: UnknownAuthUser;
 }) => {
   const result = {
     ...applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase(caseDetail),
-    ...formatCase(applicationContext, caseDetail),
+    ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
   result.formattedDocketEntries = sortDocketEntries(
     result.formattedDocketEntries,

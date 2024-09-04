@@ -32,7 +32,7 @@ export const CountryUpdated = connect<CountryTypes, typeof countryDeps>(
     validationErrors,
   }) {
     return (
-      <React.Fragment>
+      <>
         <FormGroup errorText={validationErrors?.[type]?.countryType}>
           <label className="usa-label" htmlFor={`${type}.countryType`}>
             Country
@@ -95,7 +95,7 @@ export const CountryUpdated = connect<CountryTypes, typeof countryDeps>(
             </label>
           </div>
         </FormGroup>
-      </React.Fragment>
+      </>
     );
   },
 );

@@ -1,7 +1,10 @@
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB } from '../EntityConstants';
-import { PETITION_TYPES } from '@web-client/presenter/actions/setupPetitionStateAction';
+import {
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+  PETITION_TYPES,
+} from '../EntityConstants';
 import joi from 'joi';
 
 export class UploadPetitionStep2 extends JoiValidationEntity {
@@ -11,8 +14,6 @@ export class UploadPetitionStep2 extends JoiValidationEntity {
   public petitionType: (typeof PETITION_TYPES)[keyof typeof PETITION_TYPES];
   public petitionFacts?: string[];
   public petitionReasons?: string[];
-
-  //TODO: Handle generated petition inputs
 
   constructor(rawProps) {
     super('UploadPetitionStep2');

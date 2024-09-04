@@ -1,8 +1,11 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
 
 let mockCases;
@@ -51,9 +54,6 @@ describe('removeConsolidatedCasesInteractor', () => {
       },
     };
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
@@ -72,23 +72,27 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-    });
-
     await expect(
-      removeConsolidatedCasesInteractor(applicationContext, {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['101-19'],
-      }),
+      removeConsolidatedCasesInteractor(
+        applicationContext,
+        {
+          docketNumber: '102-19',
+          docketNumbersToRemove: ['101-19'],
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for case consolidation');
   });
 
   it('Should try to get the case by its docketNumber', async () => {
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '102-19',
-      docketNumbersToRemove: ['101-19'],
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -97,27 +101,39 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
     await expect(
-      removeConsolidatedCasesInteractor(applicationContext, {
-        docketNumber: '111-11',
-        docketNumbersToRemove: ['101-19'],
-      }),
+      removeConsolidatedCasesInteractor(
+        applicationContext,
+        {
+          docketNumber: '111-11',
+          docketNumbersToRemove: ['101-19'],
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Case 111-11 was not found.');
   });
 
   it('Should return a Not Found error if the case to remove cannot be found', async () => {
     await expect(
-      removeConsolidatedCasesInteractor(applicationContext, {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['111-11'],
-      }),
+      removeConsolidatedCasesInteractor(
+        applicationContext,
+        {
+          docketNumber: '102-19',
+          docketNumbersToRemove: ['111-11'],
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Case to consolidate with (111-11) was not found.');
   });
 
   it('Should only update the removed case if the case to remove is not the lead case', async () => {
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '101-19',
-      docketNumbersToRemove: ['102-19'],
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '101-19',
+        docketNumbersToRemove: ['102-19'],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -132,10 +148,14 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and all other currently consolidated cases if the case to remove is the lead case', async () => {
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '102-19',
-      docketNumbersToRemove: ['101-19'],
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -167,10 +187,14 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   it('Should update all cases to remove consolidation if new consolidated cases length is 0', async () => {
     const docketNumbersToRemove = allDocketNumbers;
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '101-19',
-      docketNumbersToRemove,
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '101-19',
+        docketNumbersToRemove,
+      },
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalledTimes(docketNumbersToRemove.length);
@@ -184,10 +208,14 @@ describe('removeConsolidatedCasesInteractor', () => {
       '104-19',
       '105-19',
     ];
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '101-19',
-      docketNumbersToRemove,
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '101-19',
+        docketNumbersToRemove,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -202,10 +230,14 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and remove consolidation from the original lead case if there is only one case remaining after removal', async () => {
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '104-19',
-      docketNumbersToRemove: ['105-19'],
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '104-19',
+        docketNumbersToRemove: ['105-19'],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -229,10 +261,14 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and remove consolidation from the original non-lead case if there is only one case remaining after removal', async () => {
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '105-19',
-      docketNumbersToRemove: ['104-19'],
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '105-19',
+        docketNumbersToRemove: ['104-19'],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
@@ -259,10 +295,14 @@ describe('removeConsolidatedCasesInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      removeConsolidatedCasesInteractor(applicationContext, {
-        docketNumber: '105-19',
-        docketNumbersToRemove: ['104-19'],
-      }),
+      removeConsolidatedCasesInteractor(
+        applicationContext,
+        {
+          docketNumber: '105-19',
+          docketNumbersToRemove: ['104-19'],
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -271,10 +311,14 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('should acquire and remove the lock on the cases', async () => {
-    await removeConsolidatedCasesInteractor(applicationContext, {
-      docketNumber: '105-19',
-      docketNumbersToRemove: ['104-19'],
-    });
+    await removeConsolidatedCasesInteractor(
+      applicationContext,
+      {
+        docketNumber: '105-19',
+        docketNumbersToRemove: ['104-19'],
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

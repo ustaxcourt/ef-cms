@@ -22,7 +22,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     docketNumber,
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
-): Promise<Buffer> => {
+): Promise<Uint8Array> => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({

@@ -10,23 +10,20 @@ import {
   OTHER_FILER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
-  ROLES,
   SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import {
-  docketClerkUser,
-  irsSuperuserUser,
-  petitionerUser,
-  petitionsClerkUser,
-  privatePractitionerUser,
-} from '../../../test/mockUsers';
-import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
+  mockDocketClerkUser,
+  mockIrsSuperuser,
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 jest.mock('../../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../../utilities/DateHandler');
@@ -40,19 +37,18 @@ jest.mock('../../utilities/DateHandler', () => {
 describe('Case entity', () => {
   describe('init', () => {
     it('should add case status information including the internal users NAME to the `caseStatusHistory` if a new case is created by an internal user', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce(docketClerkUser);
       const mockCreateIsoDateString = createISODateString as jest.Mock;
       mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
 
       const expectedCaseStatus = {
-        changedBy: docketClerkUser.name,
+        changedBy: mockDocketClerkUser.name,
         date: createISODateString(),
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       };
       const myCase = new Case(
         { ...MOCK_CASE, isPaper: true, status: undefined },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
           isNewCase: true,
         },
       );
@@ -63,7 +59,6 @@ describe('Case entity', () => {
     });
 
     it('should add case status information including the petitioners ROLE to the `caseStatusHistory` if a new case is created by an petitioner', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce(petitionerUser);
       const mockCreateIsoDateString = createISODateString as jest.Mock;
       mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
 
@@ -75,7 +70,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         { ...MOCK_CASE, isPaper: false, status: undefined },
         {
-          applicationContext,
+          authorizedUser: mockPetitionerUser,
           isNewCase: true,
         },
       );
@@ -97,7 +92,6 @@ describe('Case entity', () => {
       const myCase = new Case(
         { ...MOCK_CASE, isPaper: false, status: undefined },
         {
-          applicationContext,
           authorizedUser: mockPetitionerUser,
           isNewCase: true,
         },
@@ -109,9 +103,6 @@ describe('Case entity', () => {
     });
 
     it('should add case status information including a private practitioners ROLE to the `caseStatusHistory` if a new case is created by an private practitioners', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce(
-        privatePractitionerUser,
-      );
       const mockCreateIsoDateString = createISODateString as jest.Mock;
       mockCreateIsoDateString.mockReturnValue('2019-08-25T05:00:00.000Z');
 
@@ -123,7 +114,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         { ...MOCK_CASE, isPaper: false, status: undefined },
         {
-          applicationContext,
+          authorizedUser: mockPrivatePractitionerUser,
           isNewCase: true,
         },
       );
@@ -133,12 +124,9 @@ describe('Case entity', () => {
       });
     });
   });
-  it('should throw an error if app context is not passed in', () => {
-    expect(() => new Case({}, {} as any)).toThrow();
-  });
 
   it('defaults the orders to false', () => {
-    const myCase = new Case(MOCK_CASE, { applicationContext });
+    const myCase = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
 
     expect(myCase).toMatchObject({
       isSealed: false,
@@ -167,7 +155,7 @@ describe('Case entity', () => {
         orderToShowCause: true,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -192,7 +180,7 @@ describe('Case entity', () => {
           { filingDate: '2019-01-05T01:02:03.004Z' },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.correspondence).toMatchObject([
@@ -215,7 +203,7 @@ describe('Case entity', () => {
         ],
         status: CASE_STATUS_TYPES.new,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBeUndefined();
@@ -240,7 +228,7 @@ describe('Case entity', () => {
         ],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     expect(myCase.petitioners[0].additionalName).toBeDefined();
@@ -273,7 +261,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           hearings: [mockhearing1, mockhearing2, mockhearing3],
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(newCase.hearings[0].createdAt).toEqual(mockhearing2.createdAt);
@@ -286,7 +274,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(newCase.hearings).toEqual([]);
@@ -295,8 +283,6 @@ describe('Case entity', () => {
 
   describe('filtered', () => {
     it('does not return private data if filtered is true and the user is external', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -305,7 +291,7 @@ describe('Case entity', () => {
           associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
-          applicationContext,
+          authorizedUser: mockPetitionerUser,
           filtered: true,
         },
       );
@@ -316,8 +302,6 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -326,7 +310,7 @@ describe('Case entity', () => {
           associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
           filtered: true,
         },
       );
@@ -337,8 +321,6 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is external', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -346,7 +328,7 @@ describe('Case entity', () => {
           associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
-          applicationContext,
+          authorizedUser: mockPetitionerUser,
           filtered: false,
         },
       );
@@ -356,8 +338,6 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -365,7 +345,7 @@ describe('Case entity', () => {
           associatedJudgeId: 'CHIEF_JUDGE_ID',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
           filtered: false,
         },
       );
@@ -375,12 +355,10 @@ describe('Case entity', () => {
     });
 
     it('returns STIN docket entry if filtered is false and the user is docketclerk', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const myCase = new Case(
         { ...MOCK_CASE },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
           filtered: false,
         },
       );
@@ -392,12 +370,10 @@ describe('Case entity', () => {
     });
 
     it('returns STIN docket entry if filtered is true and the user is IRS superuser', () => {
-      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
-
       const myCase = new Case(
         { ...MOCK_CASE },
         {
-          applicationContext,
+          authorizedUser: mockIrsSuperuser,
           filtered: true,
         },
       );
@@ -409,12 +385,10 @@ describe('Case entity', () => {
     });
 
     it('returns STIN docket entry if filtered is true and the user is petitionsclerk and the petition is not served', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const myCase = new Case(
         { ...MOCK_CASE },
         {
-          applicationContext,
+          authorizedUser: mockPetitionsClerkUser,
           filtered: true,
         },
       );
@@ -426,12 +400,10 @@ describe('Case entity', () => {
     });
 
     it('does not return STIN docket entry if filtered is true and the user is docketclerk and the petition is not served', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const myCase = new Case(
         { ...MOCK_CASE },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
           filtered: true,
         },
       );
@@ -443,8 +415,6 @@ describe('Case entity', () => {
     });
 
     it('does not return STIN docket entry if filtered is true and the user is petitionsclerk and the petition is served', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -471,7 +441,7 @@ describe('Case entity', () => {
           ],
         },
         {
-          applicationContext,
+          authorizedUser: mockPetitionsClerkUser,
           filtered: true,
         },
       );
@@ -524,7 +494,7 @@ describe('Case entity', () => {
           status: CASE_STATUS_TYPES.generalDocket,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -544,7 +514,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -553,16 +523,13 @@ describe('Case entity', () => {
     });
 
     it('creates a valid case without a petition docket entry and does not throw an error', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitionsClerk,
-      });
       const myCase = new Case(
         {
           ...MOCK_CASE,
           docketEntries: [MOCK_CASE.docketEntries[1]],
         },
         {
-          applicationContext,
+          authorizedUser: mockPetitionsClerkUser,
           filtered: true,
         },
       );
@@ -572,7 +539,7 @@ describe('Case entity', () => {
 
     it('Creates a valid case from an already existing case json', () => {
       const myCase = new Case(MOCK_CASE, {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       });
 
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
@@ -582,7 +549,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         { ...MOCK_CASE, docketNumber: '00101-20' },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -598,7 +565,7 @@ describe('Case entity', () => {
           trialSessionId: undefined,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -615,7 +582,7 @@ describe('Case entity', () => {
           petitioners: [{}],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -634,7 +601,7 @@ describe('Case entity', () => {
           petitioners: [{ name: 'Test Petitioner' }],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -647,7 +614,7 @@ describe('Case entity', () => {
           docketEntries: [],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -658,7 +625,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {},
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -671,7 +638,7 @@ describe('Case entity', () => {
           petitioners: [],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -699,7 +666,7 @@ describe('Case entity', () => {
           ],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -720,7 +687,7 @@ describe('Case entity', () => {
           ],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -734,7 +701,7 @@ describe('Case entity', () => {
           trialTime: '91:30',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -748,7 +715,7 @@ describe('Case entity', () => {
           blocked: true,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -763,7 +730,7 @@ describe('Case entity', () => {
           blockedDate: '2019-03-01T21:42:29.073Z',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -779,7 +746,7 @@ describe('Case entity', () => {
           blockedReason: 'something',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
       expect(myCase.isValid()).toBeFalsy();
@@ -792,7 +759,7 @@ describe('Case entity', () => {
           blocked: false,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -808,7 +775,7 @@ describe('Case entity', () => {
           blockedReason: 'something',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -822,7 +789,7 @@ describe('Case entity', () => {
           trialTime: '9:30',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -838,7 +805,7 @@ describe('Case entity', () => {
           automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -854,7 +821,7 @@ describe('Case entity', () => {
           automaticBlockedReason: 'Some Other Reason Not Valid',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -868,7 +835,7 @@ describe('Case entity', () => {
           highPriority: true,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -883,7 +850,7 @@ describe('Case entity', () => {
           highPriorityReason: 'something',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -897,7 +864,7 @@ describe('Case entity', () => {
           status: CASE_STATUS_TYPES.closed,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -914,7 +881,7 @@ describe('Case entity', () => {
           status: CASE_STATUS_TYPES.closedDismissed,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -932,7 +899,7 @@ describe('Case entity', () => {
           status: CASE_STATUS_TYPES.closed,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -946,7 +913,7 @@ describe('Case entity', () => {
           sealedDate: '2019-09-19T16:42:00.000Z',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -961,7 +928,7 @@ describe('Case entity', () => {
             petitionPaymentStatus: PAYMENT_STATUS.PAID,
           },
           {
-            applicationContext,
+            authorizedUser: mockDocketClerkUser,
           },
         );
 
@@ -978,7 +945,7 @@ describe('Case entity', () => {
             petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           },
           {
-            applicationContext,
+            authorizedUser: mockDocketClerkUser,
           },
         );
 
@@ -997,7 +964,7 @@ describe('Case entity', () => {
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1014,7 +981,7 @@ describe('Case entity', () => {
           petitionPaymentWaivedDate: '2050-10-01T21:40:46.415Z',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1028,7 +995,7 @@ describe('Case entity', () => {
     it('should do nothing if valid', () => {
       expect(() =>
         new Case(MOCK_CASE, {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         }).validate(),
       ).not.toThrow();
     });
@@ -1038,7 +1005,7 @@ describe('Case entity', () => {
         new Case(
           {},
           {
-            applicationContext,
+            authorizedUser: mockDocketClerkUser,
           },
         ).validate(),
       ).toThrow();
@@ -1052,7 +1019,7 @@ describe('Case entity', () => {
           petitioners: [],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1091,7 +1058,7 @@ describe('Case entity', () => {
           petitioners: [],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1121,7 +1088,7 @@ describe('Case entity', () => {
           consolidatedCases: [invalidConsolidatedCase],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1137,7 +1104,7 @@ describe('Case entity', () => {
           associatedJudgeId: undefined,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1153,7 +1120,7 @@ describe('Case entity', () => {
           associatedJudgeId: undefined,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1169,7 +1136,7 @@ describe('Case entity', () => {
           associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1185,7 +1152,7 @@ describe('Case entity', () => {
           associatedJudgeId: 'uuid',
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1202,7 +1169,7 @@ describe('Case entity', () => {
           associatedJudgeId: undefined,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1219,7 +1186,9 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
       };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      const myCase = new Case(blockedCalendaredCase, {
+        authorizedUser: mockDocketClerkUser,
+      });
       expect(myCase.getFormattedValidationErrors()).toEqual({
         trialDate: '"trialDate" is required',
       });
@@ -1231,7 +1200,9 @@ describe('Case entity', () => {
         status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
       };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      const myCase = new Case(blockedCalendaredCase, {
+        authorizedUser: mockDocketClerkUser,
+      });
       expect(myCase.getFormattedValidationErrors()).toEqual({
         trialSessionId: '"trialSessionId" is required',
       });
@@ -1244,7 +1215,9 @@ describe('Case entity', () => {
         trialDate: undefined,
         trialSessionId: undefined,
       };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      const myCase = new Case(blockedCalendaredCase, {
+        authorizedUser: mockDocketClerkUser,
+      });
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
 
@@ -1255,7 +1228,9 @@ describe('Case entity', () => {
         trialDate: '2019-03-01T21:40:46.415Z',
         trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
       };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      const myCase = new Case(blockedCalendaredCase, {
+        authorizedUser: mockDocketClerkUser,
+      });
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
   });
@@ -1264,7 +1239,7 @@ describe('Case entity', () => {
     const myCase = new Case(
       {},
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -1288,7 +1263,7 @@ describe('Case entity', () => {
           statistics: [],
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1305,7 +1280,7 @@ describe('Case entity', () => {
           hasVerifiedIrsNotice: false,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1320,7 +1295,7 @@ describe('Case entity', () => {
           hasVerifiedIrsNotice: true,
         },
         {
-          applicationContext,
+          authorizedUser: mockDocketClerkUser,
         },
       );
 
@@ -1330,7 +1305,10 @@ describe('Case entity', () => {
 
   describe('secondary contact', () => {
     it('does not create a secondary contact when one is not needed by the party type', () => {
-      const myCase = new Case({ ...MOCK_CASE }, { applicationContext });
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        { authorizedUser: mockDocketClerkUser },
+      );
 
       expect(myCase.getContactSecondary()).toBeUndefined();
     });
@@ -1341,7 +1319,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           partyType: PARTY_TYPES.petitionerSpouse,
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(myCase.getFormattedValidationErrors()).toMatchObject({
@@ -1369,7 +1347,7 @@ describe('Case entity', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(myCase.getFormattedValidationErrors()).toMatchObject({
@@ -1389,7 +1367,7 @@ describe('Case entity', () => {
 
       const myCase = new Case(
         { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
-        { applicationContext },
+        { authorizedUser: mockDocketClerkUser },
       );
 
       expect(myCase).toMatchObject({
@@ -1399,7 +1377,9 @@ describe('Case entity', () => {
     });
 
     it('does not fail validation without a judgeUserId', () => {
-      const myCase = new Case(MOCK_CASE, { applicationContext });
+      const myCase = new Case(MOCK_CASE, {
+        authorizedUser: mockDocketClerkUser,
+      });
 
       expect(myCase.judgeUserId).toBeUndefined();
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
@@ -1420,7 +1400,9 @@ describe('Case entity', () => {
         trialSessionId: mockTrialSessionId,
       };
 
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      const myCase = new Case(blockedCalendaredCase, {
+        authorizedUser: mockDocketClerkUser,
+      });
 
       expect(myCase.getFormattedValidationErrors()).toEqual({
         blocked: '"blocked" contains an invalid value',
@@ -1436,7 +1418,9 @@ describe('Case entity', () => {
         trialSessionId: mockTrialSessionId,
       };
 
-      const myCase = new Case(calendaredCase, { applicationContext });
+      const myCase = new Case(calendaredCase, {
+        authorizedUser: mockDocketClerkUser,
+      });
 
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
@@ -1453,7 +1437,7 @@ describe('Case entity', () => {
       };
 
       const myCase = new Case(blockedReadyForTrialCase, {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       });
 
       expect(myCase.getFormattedValidationErrors()).toBe(null);

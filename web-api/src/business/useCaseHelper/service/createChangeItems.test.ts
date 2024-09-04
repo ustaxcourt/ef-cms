@@ -6,6 +6,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateAndServeDocketEntry } from './createChangeItems';
+import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('generateAndServeDocketEntry', () => {
   let testCaseEntity;
@@ -17,9 +18,12 @@ describe('generateAndServeDocketEntry', () => {
       name: 'Test Admissionsclerk',
       role: 'Admissionsclerk',
     };
-    testCaseEntity = new Case(MOCK_CASE, { applicationContext });
+    testCaseEntity = new Case(MOCK_CASE, {
+      authorizedUser: mockAdmissionsClerkUser,
+    });
     testArguments = {
       applicationContext,
+      authorizedUser: mockAdmissionsClerkUser,
       barNumber: 'DD44444',
       caseEntity: testCaseEntity,
       contactName: 'Test Petitioner',
@@ -104,7 +108,7 @@ describe('generateAndServeDocketEntry', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockAdmissionsClerkUser },
       ),
       privatePractitionersRepresentingContact: true,
       user: testUser,
@@ -127,7 +131,7 @@ describe('generateAndServeDocketEntry', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockAdmissionsClerkUser },
       ),
       privatePractitionersRepresentingContact: true,
       user: testUser,
@@ -150,7 +154,7 @@ describe('generateAndServeDocketEntry', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockAdmissionsClerkUser },
       ),
       user: {
         ...testUser,
@@ -176,7 +180,7 @@ describe('generateAndServeDocketEntry', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockAdmissionsClerkUser },
       ),
       user: {
         ...testUser,
@@ -202,7 +206,7 @@ describe('generateAndServeDocketEntry', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockAdmissionsClerkUser },
       ),
       user: {
         ...testUser,
@@ -236,7 +240,7 @@ describe('generateAndServeDocketEntry', () => {
               },
             ],
           },
-          { applicationContext },
+          { authorizedUser: mockAdmissionsClerkUser },
         ),
         docketMeta: undefined,
         user: {

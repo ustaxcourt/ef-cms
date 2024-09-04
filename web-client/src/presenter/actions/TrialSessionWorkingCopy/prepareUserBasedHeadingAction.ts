@@ -11,7 +11,7 @@ export const prepareUserBasedHeadingAction = ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const userRole = currentUser.role;
   const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);

@@ -1,3 +1,5 @@
+import { getCypressEnv } from '../env/cypressEnvironment';
+
 export function loginAsTestAdmissionsClerk() {
   cy.login('testAdmissionsClerk');
   cy.get('#inbox-tab-content').should('exist');
@@ -59,7 +61,7 @@ export function loginAsIrsPractitioner1() {
 }
 
 export function loginAsPetitioner(
-  petitionerUser: 'petitioner' | 'petitioner1' = 'petitioner1',
+  petitionerUser: 'petitioner' | 'petitioner1' | 'petitioner7' = 'petitioner1',
 ) {
   cy.login(petitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
@@ -76,7 +78,7 @@ export function loginAsPetitionsClerk() {
 }
 
 export function loginAsPetitionsClerk1() {
-  cy.login('petitionsclerk1');
+  login({ email: 'petitionsclerk1@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
@@ -118,4 +120,26 @@ export function loginAsReportersOffice() {
 export function loginAsIrsSuperUser() {
   cy.login('irssuperuser');
   cy.get('[data-testid="advanced-search-link"]').should('exist');
+}
+
+// We created this new login function because our current login function was too generically
+// waiting for the account menu button, resulting in visiting a route before the page was fully loaded.
+// We need to deprecate usage of cy.login and have all tests login through helper functions so we properly await
+function login({ email }: { email: string }) {
+  cy.clearAllCookies();
+  cy.visit('/login');
+  cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="password-input"]').type(
+    getCypressEnv().defaultAccountPass,
+  );
+  cy.get('[data-testid="login-button"]').click();
+  cy.window().then(win =>
+    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
+  );
+  cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
+    body: `window.Dynamsoft = {DWT: {
+            GetWebTwain() {}
+          }}`,
+    statusCode: 200,
+  });
 }

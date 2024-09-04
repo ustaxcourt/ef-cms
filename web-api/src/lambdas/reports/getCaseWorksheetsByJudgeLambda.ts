@@ -1,16 +1,20 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { getCaseWorksheetsByJudgeInteractor } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 
-export const getCaseWorksheetsByJudgeLambda = (event: APIGatewayProxyEvent) =>
+export const getCaseWorksheetsByJudgeLambda = (
+  event,
+  authorizedUser: UnknownAuthUser,
+) =>
   genericHandler(
     event,
+
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .getCaseWorksheetsByJudgeInteractor(
-          applicationContext,
-          event.queryStringParameters,
-        );
+      return await getCaseWorksheetsByJudgeInteractor(
+        applicationContext,
+        event.queryStringParameters,
+        authorizedUser,
+      );
     },
     { logResults: false },
   );

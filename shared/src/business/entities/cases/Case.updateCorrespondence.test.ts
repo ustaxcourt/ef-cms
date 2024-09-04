@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { Correspondence } from '../Correspondence';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('updateCorrespondence', () => {
   it('should update a correspondence document', () => {
@@ -13,7 +13,7 @@ describe('updateCorrespondence', () => {
     const myCase = new Case(
       { ...MOCK_CASE, correspondence: [mockCorrespondence] },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -38,7 +38,7 @@ describe('updateCorrespondence', () => {
     const myCase = new Case(
       { ...MOCK_CASE, correspondence: [mockCorrespondence] },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

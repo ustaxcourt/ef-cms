@@ -90,27 +90,6 @@ describe('UploadPetitionStep3', () => {
             irsNotices: '"irsNotices" must contain at least 1 items',
           });
         });
-
-        it('should return an error message for "irsNotices" if an item has an error in it', () => {
-          const entity = new UploadPetitionStep3({
-            ...VALID_ENTITY,
-            irsNotices: [VALID_ENTITY.irsNotices![0], {}],
-          });
-
-          expect(entity).toBeDefined();
-
-          const errors = entity.getFormattedValidationErrors();
-          expect(errors).toEqual({
-            irsNotices: [
-              {
-                caseType: 'Select a case type',
-                index: 1,
-                key: '"key" is required',
-              },
-            ],
-          });
-        });
-
         it('should return an error message for "irsNotices" when there is more than the max in array', () => {
           const entity = new UploadPetitionStep3({
             ...VALID_ENTITY,

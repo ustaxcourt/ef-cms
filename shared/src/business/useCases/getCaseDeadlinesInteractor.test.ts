@@ -4,12 +4,14 @@ import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-  ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getCaseDeadlinesInteractor } from './getCaseDeadlinesInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
@@ -79,12 +81,6 @@ describe('getCaseDeadlinesInteractor', () => {
     },
   ];
 
-  const mockPetitionsClerk = new User({
-    name: 'Test Petitionsclerk',
-    role: ROLES.petitionsClerk,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
-
   const START_DATE = '2019-08-25T05:00:00.000Z';
   const END_DATE = '2020-08-25T05:00:00.000Z';
 
@@ -99,14 +95,15 @@ describe('getCaseDeadlinesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByDocketNumbers.mockReturnValue(mockCases);
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
   });
 
-  it('throws an error if the user is not valid or authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(new User({}));
-
+  it('throws an error when the user is not valid or authorized', async () => {
     await expect(
-      getCaseDeadlinesInteractor(applicationContext, {} as any),
+      getCaseDeadlinesInteractor(
+        applicationContext,
+        {} as any,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -114,6 +111,7 @@ describe('getCaseDeadlinesInteractor', () => {
     const result = await getCaseDeadlinesInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     expect(result).toEqual({
@@ -152,13 +150,17 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
-    await getCaseDeadlinesInteractor(applicationContext, {
-      endDate: END_DATE,
-      from: 20,
-      judge: 'Buch',
-      pageSize: 50,
-      startDate: START_DATE,
-    });
+    await getCaseDeadlinesInteractor(
+      applicationContext,
+      {
+        endDate: END_DATE,
+        from: 20,
+        judge: 'Buch',
+        pageSize: 50,
+        startDate: START_DATE,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseDeadlinesByDateRange
@@ -219,7 +221,6 @@ describe('getCaseDeadlinesInteractor', () => {
           ],
         },
       ]);
-
     applicationContext
       .getPersistenceGateway()
       .getCaseDeadlinesByDateRange.mockReturnValue({
@@ -241,6 +242,7 @@ describe('getCaseDeadlinesInteractor', () => {
     const result = await getCaseDeadlinesInteractor(
       applicationContext,
       {} as any,
+      mockPetitionsClerkUser,
     );
 
     expect(result).toEqual({

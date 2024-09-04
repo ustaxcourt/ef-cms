@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  * gets messages for a case
@@ -17,9 +18,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const getMessagesForCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
