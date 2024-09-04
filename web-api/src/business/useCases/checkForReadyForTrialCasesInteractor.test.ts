@@ -2,7 +2,6 @@ import '@web-api/persistence/postgres/messages/mocks.jest';
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { checkForReadyForTrialCasesInteractor } from './checkForReadyForTrialCasesInteractor';
 
@@ -10,10 +9,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   let mockCasesReadyForTrial;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
-
     applicationContext
       .getPersistenceGateway()
       .getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);

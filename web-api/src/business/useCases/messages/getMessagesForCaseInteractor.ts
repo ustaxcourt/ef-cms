@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 
 /**
@@ -18,9 +19,8 @@ import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/message
 export const getMessagesForCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -30,7 +30,5 @@ export const getMessagesForCaseInteractor = async (
     docketNumber,
   });
 
-  return Message.validateRawCollection(messages, {
-    applicationContext,
-  });
+  return Message.validateRawCollection(messages);
 };

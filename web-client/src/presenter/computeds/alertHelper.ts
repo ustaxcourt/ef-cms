@@ -1,4 +1,3 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { uniq } from 'lodash';
@@ -10,12 +9,9 @@ const DEFAULT_ALERT_ERROR = {
   title: undefined,
 };
 
-export const alertHelper = (
-  get: Get,
-  applicationContext: ClientApplicationContext,
-): any => {
+export const alertHelper = (get: Get): any => {
   const alertError = get(state.alertError) || DEFAULT_ALERT_ERROR;
-  const userIsIdentified = applicationContext.getCurrentUser() || false;
+  const userIsIdentified = get(state.token) || false;
 
   return {
     messagesDeduped: uniq(alertError.messages).filter(Boolean),

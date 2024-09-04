@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCompletedSectionInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedSectionInboxMessages';
 
 /**
@@ -18,9 +19,8 @@ import { getCompletedSectionInboxMessages } from '@web-api/persistence/postgres/
 export const getCompletedMessagesForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -29,7 +29,5 @@ export const getCompletedMessagesForSectionInteractor = async (
     section,
   });
 
-  return MessageResult.validateRawCollection(messages, {
-    applicationContext,
-  });
+  return MessageResult.validateRawCollection(messages);
 };

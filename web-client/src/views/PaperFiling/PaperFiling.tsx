@@ -18,6 +18,8 @@ import React from 'react';
 
 export const PaperFiling = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     confirmWorkItemAlreadyCompleteSequence:
       sequences.confirmWorkItemAlreadyCompleteSequence,
     form: state.form,
@@ -30,6 +32,7 @@ export const PaperFiling = connect(
     submitPaperFilingSequence: sequences.submitPaperFilingSequence,
   },
   function PaperFiling({
+    closeModalAndReturnToCaseDetailSequence,
     confirmWorkItemAlreadyCompleteSequence,
     form,
     formCancelToggleCancelSequence,
@@ -119,7 +122,9 @@ export const PaperFiling = connect(
                     Cancel
                   </Button>
                   {showModal === 'FormCancelModalDialog' && (
-                    <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+                    <FormCancelModalDialog
+                      onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+                    />
                   )}
                 </div>
               </section>

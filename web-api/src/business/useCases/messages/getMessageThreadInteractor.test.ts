@@ -2,24 +2,26 @@ import '@web-api/persistence/postgres/messages/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { getMessageThreadInteractor } from './getMessageThreadInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getMessageThreadInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      getMessageThreadInteractor(applicationContext, {
-        parentMessageId: 'abc',
-      }),
+      getMessageThreadInteractor(
+        applicationContext,
+        {
+          parentMessageId: 'abc',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -44,10 +46,7 @@ describe('getMessageThreadInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
+
     (getMessageThreadByParentId as jest.Mock).mockReturnValue([mockMessage]);
 
     const returnedMessage = await getMessageThreadInteractor(
@@ -55,6 +54,7 @@ describe('getMessageThreadInteractor', () => {
       {
         parentMessageId: 'abc',
       },
+      mockPetitionsClerkUser,
     );
 
     expect(getMessageThreadByParentId).toHaveBeenCalled();

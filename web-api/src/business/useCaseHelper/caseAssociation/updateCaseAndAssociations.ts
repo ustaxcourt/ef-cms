@@ -6,6 +6,7 @@ import { IrsPractitioner } from '../../../../../shared/src/business/entities/Irs
 import { Message } from '../../../../../shared/src/business/entities/Message';
 import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
@@ -21,8 +22,14 @@ import diff from 'diff-arrays-of-objects';
  */
 const updateCaseDocketEntries = ({
   applicationContext,
+  authorizedUser,
   caseToUpdate,
   oldCase,
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: UnknownAuthUser;
+  caseToUpdate: any;
+  oldCase: any;
 }) => {
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries,
@@ -46,7 +53,7 @@ const updateCaseDocketEntries = ({
       ...addedArchivedDocketEntries,
       ...updatedArchivedDocketEntries,
     ],
-    { applicationContext, petitioners: caseToUpdate.petitioners },
+    { authorizedUser, petitioners: caseToUpdate.petitioners },
   );
 
   return validDocketEntries.map(
@@ -141,15 +148,12 @@ const updateCorrespondence = ({
     'correspondenceId',
   );
 
-  const validCorrespondence = Correspondence.validateRawCollection(
-    [
-      ...addedCorrespondences,
-      ...updatedCorrespondences,
-      ...addedArchivedCorrespondences,
-      ...updatedArchivedCorrespondences,
-    ],
-    { applicationContext },
-  );
+  const validCorrespondence = Correspondence.validateRawCollection([
+    ...addedCorrespondences,
+    ...updatedCorrespondences,
+    ...addedArchivedCorrespondences,
+    ...updatedArchivedCorrespondences,
+  ]);
 
   return validCorrespondence.map(
     correspondence =>
@@ -227,7 +231,6 @@ const updateIrsPractitioners = ({
 
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     currentIrsPractitioners,
-    { applicationContext },
   );
 
   const deletePractitionerFunctions = deletedIrsPractitioners.map(
@@ -297,7 +300,6 @@ const updatePrivatePractitioners = ({
 
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
     currentPrivatePractitioners,
-    { applicationContext },
   );
 
   const deletePractitionerFunctions = deletedPrivatePractitioners.map(
@@ -376,9 +378,7 @@ const updateCaseWorkItems = async ({
     trialLocation: caseToUpdate.trialLocation || null,
   }));
 
-  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems, {
-    applicationContext,
-  });
+  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
 
   return validWorkItems.map(
     validWorkItem =>
@@ -443,14 +443,18 @@ const updateCaseDeadlines = async ({
  */
 export const updateCaseAndAssociations = async ({
   applicationContext,
+  authorizedUser,
   caseToUpdate,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
 }): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
-    : new Case(caseToUpdate, { applicationContext });
+    : new Case(caseToUpdate, {
+        authorizedUser,
+      });
 
   const oldCaseEntity = await applicationContext
     .getPersistenceGateway()
@@ -461,7 +465,9 @@ export const updateCaseAndAssociations = async ({
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
-  const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
+  const validRawOldCaseEntity = new Case(oldCaseEntity, {
+    authorizedUser,
+  })
     .validate()
     .toRawObject();
 
@@ -479,6 +485,7 @@ export const updateCaseAndAssociations = async ({
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
     fn({
       applicationContext,
+      authorizedUser,
       caseToUpdate: validRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),

@@ -10,9 +10,11 @@ import {
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../../../shared/src/test/mockCase';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addPaperFilingInteractor', () => {
   const mockClientConnectionId = '987654';
@@ -34,8 +36,6 @@ describe('addPaperFilingInteractor', () => {
       isSavingForLater: false,
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -46,10 +46,12 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should throw an error when the user is not authorized to add a paper filing', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
     await expect(
-      addPaperFilingInteractor(applicationContext, defaultParamaters),
+      addPaperFilingInteractor(
+        applicationContext,
+        defaultParamaters,
+        {} as UnknownAuthUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -57,7 +59,11 @@ describe('addPaperFilingInteractor', () => {
     defaultParamaters.docketEntryId = undefined as any;
 
     await expect(
-      addPaperFilingInteractor(applicationContext, defaultParamaters),
+      addPaperFilingInteractor(
+        applicationContext,
+        defaultParamaters,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Did not receive a docketEntryId');
   });
 
@@ -65,28 +71,36 @@ describe('addPaperFilingInteractor', () => {
     defaultParamaters.documentMetadata = undefined as any;
 
     await expect(
-      addPaperFilingInteractor(applicationContext, defaultParamaters),
+      addPaperFilingInteractor(
+        applicationContext,
+        defaultParamaters,
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow('Did not receive meta data for docket entry');
   });
 
   it('should add documents and send service emails for electronic service parties', async () => {
     const mockdocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
 
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: mockdocketEntryId,
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: mockdocketEntryId,
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
@@ -115,21 +129,25 @@ describe('addPaperFilingInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -153,23 +171,27 @@ describe('addPaperFilingInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -178,21 +200,25 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should add documents and workItem to inbox when saving for later when a document is attached', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: true,
       },
-      isSavingForLater: true,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
@@ -210,21 +236,25 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should add documents and workItem to inbox when saving for later when a document is NOT attached', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: false,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: false,
+          isPaper: true,
+        },
+        isSavingForLater: true,
       },
-      isSavingForLater: true,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -242,21 +272,25 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should add workItem to the user outbox when NOT saving for later if a document is attached', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: undefined as any,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: undefined as any,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
@@ -268,22 +302,26 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        category: 'Application',
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Application for Examination Pursuant to Rule 73',
-        documentType: 'Application for Examination Pursuant to Rule 73',
-        eventCode: 'AFE',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          category: 'Application',
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Application for Examination Pursuant to Rule 73',
+          documentType: 'Application for Examination Pursuant to Rule 73',
+          eventCode: 'AFE',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -309,22 +347,26 @@ describe('addPaperFilingInteractor', () => {
         { deadline: 'something' },
       ]);
 
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        category: 'Application',
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Application for Examination Pursuant to Rule 73',
-        documentType: 'Application for Examination Pursuant to Rule 73',
-        eventCode: 'AFE',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          category: 'Application',
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Application for Examination Pursuant to Rule 73',
+          documentType: 'Application for Examination Pursuant to Rule 73',
+          eventCode: 'AFE',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -349,7 +391,36 @@ describe('addPaperFilingInteractor', () => {
       .updateCase.mockRejectedValueOnce(new Error('bad!'));
 
     await expect(
-      addPaperFilingInteractor(applicationContext, {
+      addPaperFilingInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          consolidatedGroupDocketNumbers: [],
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentMetadata: {
+            docketNumber: mockCase.docketNumber,
+            documentTitle: 'Memorandum in Support',
+            documentType: 'Memorandum in Support',
+            eventCode: 'MISP',
+            filedBy: 'Test Petitioner',
+            isFileAttached: true,
+            isPaper: true,
+          },
+          isSavingForLater: false,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -362,31 +433,10 @@ describe('addPaperFilingInteractor', () => {
           isFileAttached: true,
           isPaper: true,
         },
-        isSavingForLater: false,
-      }),
-    ).rejects.toThrow(new Error('bad!'));
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+        isSavingForLater: true,
       },
-      isSavingForLater: true,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
@@ -397,21 +447,25 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should send a serve_document_complete notification with a success message when all document processing has completed', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: true,
       },
-      isSavingForLater: true,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -430,21 +484,25 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should send a serve_document_complete notification with generateCoversheet true when the docket entry has a file attached and the user is NOT saving for later', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -453,21 +511,25 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should send a serve_document_complete notification with generateCoversheet false when the docket entry does NOT have a file attached', async () => {
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: false,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: false,
+          isPaper: true,
+        },
+        isSavingForLater: true,
       },
-      isSavingForLater: true,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -503,6 +565,7 @@ describe('addPaperFilingInteractor', () => {
       await addPaperFilingInteractor(
         applicationContext,
         mockConsolidatedGroupRequest,
+        mockDocketClerkUser,
       );
 
       expect(
@@ -525,6 +588,7 @@ describe('addPaperFilingInteractor', () => {
       await addPaperFilingInteractor(
         applicationContext,
         mockConsolidatedGroupRequest,
+        mockDocketClerkUser,
       );
 
       expect(
@@ -537,21 +601,25 @@ describe('addPaperFilingInteractor', () => {
   it('should pass in an empty array for electronicParties when calling "serveDocumentAndGetPaperServicePdf" when dealing with ATP docket entry', async () => {
     const mockdocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
 
-    await addPaperFilingInteractor(applicationContext, {
-      clientConnectionId: mockClientConnectionId,
-      consolidatedGroupDocketNumbers: [],
-      docketEntryId: mockdocketEntryId,
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'ATP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        isPaper: true,
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: mockdocketEntryId,
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'ATP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
       },
-      isSavingForLater: false,
-    });
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,

@@ -1,10 +1,7 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  ROLES,
-} from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -155,9 +152,7 @@ const appContextProxy = (initial = {}, makeMock = true) => {
   return makeMock ? jest.fn().mockReturnValue(proxied) : proxied;
 };
 
-export const createTestApplicationContext = ({
-  user,
-}: { user?: User } = {}) => {
+export const createTestApplicationContext = () => {
   const emptyAppContextProxy = appContextProxy();
 
   const mockGetPdfJsReturnValue = {
@@ -628,19 +623,6 @@ export const createTestApplicationContext = ({
         ERROR_MAP_429,
       };
     }),
-    getCurrentUser: jest.fn().mockImplementation(() => {
-      return new User(
-        user || {
-          name: 'richard',
-          role: ROLES.petitioner,
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      );
-    }),
-    getCurrentUserPermissions: jest.fn(),
-    getCurrentUserToken: () => {
-      return '';
-    },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
@@ -705,7 +687,6 @@ export const createTestApplicationContext = ({
       warn: jest.fn(),
     },
     setCurrentUser: jest.fn(),
-    setCurrentUserToken: jest.fn(),
     setTimeout: jest.fn().mockImplementation(callback => callback()),
   };
   return applicationContext;

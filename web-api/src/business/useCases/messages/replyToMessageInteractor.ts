@@ -10,6 +10,7 @@ import {
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 
@@ -24,9 +25,8 @@ export const replyToMessage = async (
     toSection,
     toUserId,
   }: ReplyMessageType,
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawMessage> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -85,14 +85,19 @@ export const replyToMessageInteractor = (
     toSection,
     toUserId,
   }: ReplyMessageType,
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawMessage> => {
-  return replyToMessage(applicationContext, {
-    attachments,
-    docketNumber,
-    message,
-    parentMessageId,
-    subject,
-    toSection,
-    toUserId,
-  });
+  return replyToMessage(
+    applicationContext,
+    {
+      attachments,
+      docketNumber,
+      message,
+      parentMessageId,
+      subject,
+      toSection,
+      toUserId,
+    },
+    authorizedUser,
+  );
 };

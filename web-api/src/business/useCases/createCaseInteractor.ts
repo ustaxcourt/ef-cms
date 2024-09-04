@@ -13,6 +13,7 @@ import {
 } from '../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '../../../../shared/src/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
@@ -21,7 +22,6 @@ import { setServiceIndicatorsForCase } from '../../../../shared/src/business/uti
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
 const addPetitionDocketEntryToCase = ({
-  applicationContext,
   caseToAdd,
   docketEntryEntity,
   user,
@@ -47,8 +47,7 @@ const addPetitionDocketEntryToCase = ({
       trialDate: caseToAdd.trialDate,
       trialLocation: caseToAdd.trialLocation,
     },
-    { applicationContext },
-    caseToAdd,
+    { caseEntity: caseToAdd },
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);
@@ -72,9 +71,8 @@ export const createCaseInteractor = async (
     petitionMetadata: any;
     stinFileId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -83,9 +81,7 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new ElectronicPetition(petitionMetadata, {
-    applicationContext,
-  }).validate();
+  const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
@@ -130,7 +126,7 @@ export const createCaseInteractor = async (
       privatePractitioners,
     },
     {
-      applicationContext,
+      authorizedUser,
       isNewCase: true,
     },
   );
@@ -167,13 +163,12 @@ export const createCaseInteractor = async (
       isOnDocketRecord: true,
       privatePractitioners,
     },
-    { applicationContext, petitioners: caseToAdd.petitioners },
+    { authorizedUser, petitioners: caseToAdd.petitioners },
   );
 
   petitionDocketEntryEntity.setFiledBy(user);
 
   const newWorkItem = addPetitionDocketEntryToCase({
-    applicationContext,
     caseToAdd,
     docketEntryEntity: petitionDocketEntryEntity,
     user,
@@ -190,7 +185,7 @@ export const createCaseInteractor = async (
       processingStatus: 'complete',
     },
     {
-      applicationContext,
+      authorizedUser,
       petitioners: caseToAdd.petitioners,
     },
   );
@@ -213,7 +208,7 @@ export const createCaseInteractor = async (
       isFileAttached: true,
       privatePractitioners,
     },
-    { applicationContext, petitioners: caseToAdd.petitioners },
+    { authorizedUser, petitioners: caseToAdd.petitioners },
   );
 
   stinDocketEntryEntity.setFiledBy(user);
@@ -235,7 +230,7 @@ export const createCaseInteractor = async (
         isOnDocketRecord: true,
         privatePractitioners,
       },
-      { applicationContext, petitioners: caseToAdd.petitioners },
+      { authorizedUser, petitioners: caseToAdd.petitioners },
     );
 
     cdsDocketEntryEntity.setFiledBy(user);
@@ -270,7 +265,7 @@ export const createCaseInteractor = async (
             petitionMetadata.hasIrsNotice &&
             petitionMetadata.irsNotices?.[index]?.taxYear,
         },
-        { applicationContext, petitioners: caseToAdd.petitioners },
+        { authorizedUser, petitioners: caseToAdd.petitioners },
       );
 
       atpDocketEntryEntity.setFiledBy(user);
@@ -281,6 +276,7 @@ export const createCaseInteractor = async (
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
@@ -302,5 +298,5 @@ export const createCaseInteractor = async (
     docketNumber: caseToAdd.docketNumber,
   });
 
-  return new Case(caseToAdd, { applicationContext }).toRawObject();
+  return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };

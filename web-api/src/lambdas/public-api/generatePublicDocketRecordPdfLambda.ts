@@ -1,3 +1,4 @@
+import { generateDocketRecordPdfInteractor } from '@web-api/business/useCases/generateDocketRecordPdfInteractor';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -10,12 +11,14 @@ export const generatePublicDocketRecordPdfLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .generateDocketRecordPdfInteractor(applicationContext, {
+      return await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
           ...JSON.parse(event.body),
           includePartyDetail: false,
-        });
+        },
+        undefined,
+      );
     },
     { logResults: false },
   );

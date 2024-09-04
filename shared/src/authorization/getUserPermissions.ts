@@ -1,5 +1,6 @@
 import { ROLE_PERMISSIONS, isAuthorized } from './authorizationClientService';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 
 /**

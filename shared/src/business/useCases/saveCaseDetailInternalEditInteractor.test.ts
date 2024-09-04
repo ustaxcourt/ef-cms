@@ -11,6 +11,10 @@ import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
 
@@ -55,10 +59,10 @@ describe('updateCase', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(petitionsClerkUser);
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...petitionsClerkUser,
+      userId: mockPetitionsClerkUser.userId,
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -67,32 +71,39 @@ describe('updateCase', () => {
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
     await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-      } as any),
+      saveCaseDetailInternalEditInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+        } as any,
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('cannot process');
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'nope',
-      userId: 'nope',
-    });
-
     await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: mockCase,
-        docketNumber: mockCase.docketNumber,
-      }),
+      saveCaseDetailInternalEditInteractor(
+        applicationContext,
+        {
+          caseToUpdate: mockCase,
+          docketNumber: mockCase.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized for update case');
   });
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
     await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: omit({ ...mockCase }, 'caseCaption'),
-        docketNumber: mockCase.docketNumber,
-      }),
+      saveCaseDetailInternalEditInteractor(
+        applicationContext,
+        {
+          caseToUpdate: omit({ ...mockCase }, 'caseCaption'),
+          docketNumber: mockCase.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('The Case entity was invalid');
   });
 
@@ -113,6 +124,7 @@ describe('updateCase', () => {
         },
         docketNumber: mockCase.docketNumber,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result.petitioners[1].address1).toEqual(mockAddress);
@@ -121,14 +133,18 @@ describe('updateCase', () => {
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
     const caseToUpdate = Object.assign(mockCase);
 
-    await saveCaseDetailInternalEditInteractor(applicationContext, {
-      caseToUpdate: {
-        ...caseToUpdate,
-        caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-        contactPrimary: getContactPrimary(mockCase),
+    await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...caseToUpdate,
+          caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+          contactPrimary: getContactPrimary(mockCase),
+        },
+        docketNumber: caseToUpdate.docketNumber,
       },
-      docketNumber: caseToUpdate.docketNumber,
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -137,7 +153,7 @@ describe('updateCase', () => {
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
     ).toMatchObject({
-      assigneeId: petitionsClerkUser.userId,
+      assigneeId: mockPetitionsClerkUser.userId,
       assigneeName: petitionsClerkUser.name,
       caseIsInProgress: true,
     });
@@ -148,14 +164,18 @@ describe('updateCase', () => {
     caseToUpdate.isPaper = true;
     caseToUpdate.mailingDate = 'yesterday';
 
-    await saveCaseDetailInternalEditInteractor(applicationContext, {
-      caseToUpdate: {
-        ...caseToUpdate,
-        caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-        contactPrimary: getContactPrimary(mockCase),
+    await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...caseToUpdate,
+          caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+          contactPrimary: getContactPrimary(mockCase),
+        },
+        docketNumber: caseToUpdate.docketNumber,
       },
-      docketNumber: caseToUpdate.docketNumber,
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -166,14 +186,18 @@ describe('updateCase', () => {
     const caseToUpdate = Object.assign(mockCase);
 
     await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: {
-          ...caseToUpdate,
-          contactPrimary: null,
-          contactSecondary: {},
+      saveCaseDetailInternalEditInteractor(
+        applicationContext,
+        {
+          caseToUpdate: {
+            ...caseToUpdate,
+            contactPrimary: null,
+            contactSecondary: {},
+          },
+          docketNumber: caseToUpdate.docketNumber,
         },
-        docketNumber: caseToUpdate.docketNumber,
-      }),
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('The Case entity was invalid');
   });
 
@@ -196,16 +220,20 @@ describe('updateCase', () => {
         isPaper: true,
       });
 
-    await saveCaseDetailInternalEditInteractor(applicationContext, {
-      caseToUpdate: {
-        ...mockCase,
-        contactPrimary: getContactPrimary(mockCase),
-        docketEntries: [...mockCase.docketEntries, mockRQT],
-        isPaper: true,
-        mailingDate: 'yesterday',
+    await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCase,
+          contactPrimary: getContactPrimary(mockCase),
+          docketEntries: [...mockCase.docketEntries, mockRQT],
+          isPaper: true,
+          mailingDate: 'yesterday',
+        },
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateInitialFilingDocuments,
@@ -232,6 +260,7 @@ describe('updateCase', () => {
         },
         docketNumber: caseToUpdate.docketNumber,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
@@ -256,6 +285,7 @@ describe('updateCase', () => {
         },
         docketNumber: mockCase.docketNumber,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result.petitioners[0].contactId).toEqual(
@@ -278,6 +308,7 @@ describe('updateCase', () => {
         },
         docketNumber: mockCase.docketNumber,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result.petitioners.length).toEqual(1);
@@ -318,6 +349,7 @@ describe('updateCase', () => {
         },
         docketNumber: mockCase.docketNumber,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result.privatePractitioners).toBeDefined();
@@ -349,6 +381,7 @@ describe('updateCase', () => {
         },
         docketNumber: mockCase.docketNumber,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
@@ -357,16 +390,20 @@ describe('updateCase', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: {
-          ...mockCase,
-          contactPrimary: {
-            ...getContactPrimary(mockCase),
+      saveCaseDetailInternalEditInteractor(
+        applicationContext,
+        {
+          caseToUpdate: {
+            ...mockCase,
+            contactPrimary: {
+              ...getContactPrimary(mockCase),
+            },
+            petitioners: undefined,
           },
-          petitioners: undefined,
+          docketNumber: mockCase.docketNumber,
         },
-        docketNumber: mockCase.docketNumber,
-      }),
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -375,16 +412,20 @@ describe('updateCase', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await saveCaseDetailInternalEditInteractor(applicationContext, {
-      caseToUpdate: {
-        ...mockCase,
-        contactPrimary: {
-          ...getContactPrimary(mockCase),
+    await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCase,
+          contactPrimary: {
+            ...getContactPrimary(mockCase),
+          },
+          petitioners: undefined,
         },
-        petitioners: undefined,
+        docketNumber: mockCase.docketNumber,
       },
-      docketNumber: mockCase.docketNumber,
-    });
+      mockPetitionsClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

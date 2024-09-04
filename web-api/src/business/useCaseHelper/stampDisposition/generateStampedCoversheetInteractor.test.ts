@@ -2,6 +2,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOTION_DISPOSITIONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateStampedCoversheetInteractor } from './generateStampedCoversheetInteractor';
+import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 
 describe('generateStampedCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -35,12 +36,16 @@ describe('generateStampedCoversheetInteractor', () => {
   });
 
   it('clears the servedAt property of the motion docket entry used for coversheet generation', async () => {
-    await generateStampedCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-      stampData: mockStampData,
-      stampedDocketEntryId: mockStampedDocketEntryId,
-    });
+    await generateStampedCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        stampData: mockStampData,
+        stampedDocketEntryId: mockStampedDocketEntryId,
+      },
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet.mock.calls[0][0]
@@ -49,12 +54,16 @@ describe('generateStampedCoversheetInteractor', () => {
   });
 
   it('generates a stamped coversheet pdf document with stampData', async () => {
-    await generateStampedCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-      stampData: mockStampData,
-      stampedDocketEntryId: mockStampedDocketEntryId,
-    });
+    await generateStampedCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        stampData: mockStampData,
+        stampedDocketEntryId: mockStampedDocketEntryId,
+      },
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -68,12 +77,16 @@ describe('generateStampedCoversheetInteractor', () => {
   });
 
   it('should save the stamped coversheet', async () => {
-    await generateStampedCoversheetInteractor(applicationContext, {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-      stampData: {},
-      stampedDocketEntryId: mockStampedDocketEntryId,
-    });
+    await generateStampedCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        stampData: {},
+        stampedDocketEntryId: mockStampedDocketEntryId,
+      },
+      mockPetitionerUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock

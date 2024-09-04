@@ -17,6 +17,8 @@ import React from 'react';
 
 export const StartCaseWizard = connect(
   {
+    closeModalAndReturnToDashboardSequence:
+      sequences.closeModalAndReturnToDashboardSequence,
     showModal: state.modal.showModal,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
   },
@@ -52,7 +54,7 @@ export const StartCaseWizard = connect(
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog
             useRunConfirmSequence={true}
-            onCancelSequence="closeModalAndReturnToDashboardSequence"
+            onCancelSequence={closeModalAndReturnToDashboardSequence}
           />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}

@@ -1,5 +1,10 @@
 import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
@@ -30,6 +35,7 @@ export const getNotificationsInteractor = async (
     caseServicesSupervisorData,
     judgeUserId,
   }: { judgeUserId: string; caseServicesSupervisorData: any },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   qcIndividualInProgressCount: number;
   qcIndividualInboxCount: number;
@@ -40,17 +46,19 @@ export const getNotificationsInteractor = async (
   userInboxCount: number;
   userSectionCount: number;
 }> => {
-  const appContextUser = applicationContext.getCurrentUser();
-
   applicationContext.logger.info('getNotificationsInteractor start', {
-    appContextUser,
+    appContextUser: authorizedUser,
   });
+
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnauthorizedError('Invalid User getting notifications');
+  }
 
   const [currentUser, judgeUser] = await Promise.all([
     applicationContext
       .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: appContextUser.userId }),
-    getJudgeUser(judgeUserId, applicationContext, appContextUser.role),
+      .getUserById({ applicationContext, userId: authorizedUser.userId }),
+    getJudgeUser(judgeUserId, applicationContext, authorizedUser.role),
   ]);
 
   applicationContext.logger.info('getNotificationsInteractor getUser', {

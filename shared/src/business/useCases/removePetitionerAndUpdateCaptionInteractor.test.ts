@@ -14,13 +14,19 @@ import {
 } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getPetitionerById } from '../entities/cases/Case';
+import {
+  mockDocketClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';
 
 describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
   let petitionerToRemove;
-  const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
   let mockLock;
+
+  const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -47,10 +53,6 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       petitioners: [MOCK_CASE.petitioners[0], petitionerToRemove],
       status: CASE_STATUS_TYPES.generalDocket,
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    });
 
     applicationContext
       .getPersistenceGateway()
@@ -62,16 +64,16 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   });
 
   it('should throw an unauthorized error when the current user does not have permission to edit petitioners', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'petitionsClerk',
-    });
     await expect(
-      removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      removePetitionerAndUpdateCaptionInteractor(
+        applicationContext,
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -82,11 +84,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     };
 
     await expect(
-      removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contactId: SECONDARY_CONTACT_ID,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      removePetitionerAndUpdateCaptionInteractor(
+        applicationContext,
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          contactId: SECONDARY_CONTACT_ID,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       `Case with docketNumber ${mockCase.docketNumber} has not been served`,
     );
@@ -100,22 +106,30 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     };
 
     await expect(
-      removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-        caseCaption: MOCK_CASE.caseCaption,
-        contactId: MOCK_CASE.petitioners[0].contactId,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
+      removePetitionerAndUpdateCaptionInteractor(
+        applicationContext,
+        {
+          caseCaption: MOCK_CASE.caseCaption,
+          contactId: MOCK_CASE.petitioners[0].contactId,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(
       `Cannot remove petitioner ${MOCK_CASE.petitioners[0].contactId} from case with docketNumber ${MOCK_CASE.docketNumber}`,
     );
   });
 
   it('should remove the specified petitioner form the case petitioners array', async () => {
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: MOCK_CASE.caseCaption,
-      contactId: petitionerToRemove.contactId,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    await removePetitionerAndUpdateCaptionInteractor(
+      applicationContext,
+      {
+        caseCaption: MOCK_CASE.caseCaption,
+        contactId: petitionerToRemove.contactId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     const { caseToUpdate } =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -143,11 +157,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       privatePractitioners: [mockPrivatePractitioner],
     };
 
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockCase.caseCaption,
-      contactId: petitionerToRemove.contactId,
-      docketNumber: mockCase.docketNumber,
-    });
+    await removePetitionerAndUpdateCaptionInteractor(
+      applicationContext,
+      {
+        caseCaption: mockCase.caseCaption,
+        contactId: petitionerToRemove.contactId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     const { caseToUpdate } =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -168,11 +186,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   it('should update the case caption', async () => {
     const mockUpdatedCaption = 'An updated caption';
 
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockUpdatedCaption,
-      contactId: MOCK_CASE.petitioners[0].contactId,
-      docketNumber: mockCase.docketNumber,
-    });
+    await removePetitionerAndUpdateCaptionInteractor(
+      applicationContext,
+      {
+        caseCaption: mockUpdatedCaption,
+        contactId: MOCK_CASE.petitioners[0].contactId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -210,11 +232,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       },
     ];
 
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: 'hello world',
-      contactId: MOCK_CASE.petitioners[0].contactId,
-      docketNumber: mockCase.docketNumber,
-    });
+    await removePetitionerAndUpdateCaptionInteractor(
+      applicationContext,
+      {
+        caseCaption: 'hello world',
+        contactId: MOCK_CASE.petitioners[0].contactId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -225,11 +251,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     mockLock = MOCK_LOCK;
 
     await expect(
-      removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-        caseCaption: 'some caption',
-        contactId: MOCK_CASE.petitioners[0].contactId,
-        docketNumber: mockCase.docketNumber,
-      }),
+      removePetitionerAndUpdateCaptionInteractor(
+        applicationContext,
+        {
+          caseCaption: 'some caption',
+          contactId: MOCK_CASE.petitioners[0].contactId,
+          docketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
     ).rejects.toThrow(ServiceUnavailableError);
 
     expect(
@@ -238,11 +268,15 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: 'some caption',
-      contactId: MOCK_CASE.petitioners[0].contactId,
-      docketNumber: mockCase.docketNumber,
-    });
+    await removePetitionerAndUpdateCaptionInteractor(
+      applicationContext,
+      {
+        caseCaption: 'some caption',
+        contactId: MOCK_CASE.petitioners[0].contactId,
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().createLock,

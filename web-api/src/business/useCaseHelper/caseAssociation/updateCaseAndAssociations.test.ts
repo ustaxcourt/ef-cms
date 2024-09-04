@@ -19,6 +19,7 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 import { v4 as uuidv4 } from 'uuid';
@@ -51,7 +52,7 @@ describe('updateCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     )
       .validate()
       .toRawObject();
@@ -85,6 +86,7 @@ describe('updateCaseAndAssociations', () => {
 
     await updateCaseAndAssociations({
       applicationContext,
+      authorizedUser: undefined,
       caseToUpdate,
     });
 
@@ -103,6 +105,7 @@ describe('updateCaseAndAssociations', () => {
   it('always sends valid entities to the updateCase persistence method', async () => {
     await updateCaseAndAssociations({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseToUpdate: validMockCase,
     });
     expect(
@@ -124,6 +127,7 @@ describe('updateCaseAndAssociations', () => {
     await expect(
       updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
           associatedJudge: 'Judge Arnold',
@@ -220,6 +224,7 @@ describe('updateCaseAndAssociations', () => {
 
     await updateCaseAndAssociations({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       caseToUpdate,
     });
 
@@ -257,6 +262,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
 
@@ -293,6 +299,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
 
@@ -332,6 +339,7 @@ describe('updateCaseAndAssociations', () => {
       updatedCase.mailingDate = '2025-01-05T05:22:16.001Z';
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
       expect(
@@ -344,6 +352,7 @@ describe('updateCaseAndAssociations', () => {
       updatedCase.associatedJudgeId = '2f46a889-901c-4e8b-b2bb-c3994e2c75c1';
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
       const { workItem } =
@@ -357,9 +366,10 @@ describe('updateCaseAndAssociations', () => {
 
     it('the docket docketNumberWithSuffix is updated because the case type has changed', async () => {
       updatedCase.caseType = CASE_TYPES_MAP.whistleblower;
-      // updatedCase.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
+
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
 
@@ -375,6 +385,7 @@ describe('updateCaseAndAssociations', () => {
       updatedCase.caseCaption = 'Some caption changed';
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
 
@@ -388,6 +399,7 @@ describe('updateCaseAndAssociations', () => {
       updatedCase.status = CASE_STATUS_TYPES.generalDocket;
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
 
@@ -403,6 +415,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
 
@@ -425,6 +438,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
           trialDate: undefined,
@@ -440,6 +454,7 @@ describe('updateCaseAndAssociations', () => {
     it('the trial location has been updated', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
           trialDate: '2021-01-02T05:22:16.001Z',
@@ -468,6 +483,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
           trialLocation: undefined,
@@ -497,6 +513,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
           leadDocketNumber: undefined,
@@ -521,6 +538,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
           leadDocketNumber: '202-20',
@@ -541,6 +559,7 @@ describe('updateCaseAndAssociations', () => {
         .getCaseByDocketNumber.mockReturnValue(validMockCase);
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
       expect(
@@ -577,6 +596,7 @@ describe('updateCaseAndAssociations', () => {
 
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
 
@@ -600,7 +620,7 @@ describe('updateCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     beforeAll(() => {
@@ -612,6 +632,7 @@ describe('updateCaseAndAssociations', () => {
     it('does not call updateIrsPractitionerOnCase or removeIrsPractitionerOnCase if all IRS practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsPractitioners,
       });
       expect(
@@ -631,6 +652,7 @@ describe('updateCaseAndAssociations', () => {
       };
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
           irsPractitioners: [updatedPractitioner],
@@ -656,6 +678,7 @@ describe('updateCaseAndAssociations', () => {
     it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
           irsPractitioners: [],
@@ -680,6 +703,7 @@ describe('updateCaseAndAssociations', () => {
     it('calls updateIrsPractitionerOnCase to update gsi1pk for unchanged irsPractitioners when the case is part of a consolidated group', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
           leadDocketNumber: '101-23',
@@ -718,7 +742,7 @@ describe('updateCaseAndAssociations', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockDocketClerkUser },
     );
 
     beforeAll(() => {
@@ -732,6 +756,7 @@ describe('updateCaseAndAssociations', () => {
     it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsAndPrivatePractitioners,
       });
       expect(
@@ -753,6 +778,7 @@ describe('updateCaseAndAssociations', () => {
       };
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
           privatePractitioners: [updatedPractitioner],
@@ -780,6 +806,7 @@ describe('updateCaseAndAssociations', () => {
     it('calls updatePrivatePractitionerOnCase to update gsi1pk for unchanged privatePractitioners when the case is part of a consolidated group', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
           leadDocketNumber: '101-23',
@@ -808,6 +835,7 @@ describe('updateCaseAndAssociations', () => {
     it('removes an privatePractitioner from a case with existing privatePractitioners', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
           privatePractitioners: [],
@@ -841,6 +869,7 @@ describe('updateCaseAndAssociations', () => {
     it('completes without altering message records if no message updates are necessary', async () => {
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
       expect(getMessagesByDocketNumber).not.toHaveBeenCalled();
@@ -857,6 +886,7 @@ describe('updateCaseAndAssociations', () => {
       await expect(
         updateCaseAndAssociations({
           applicationContext,
+          authorizedUser: mockDocketClerkUser,
           caseToUpdate: {
             ...validMockCase,
             caseCaption: 'Some other caption',
@@ -873,6 +903,7 @@ describe('updateCaseAndAssociations', () => {
       await expect(
         updateCaseAndAssociations({
           applicationContext,
+          authorizedUser: mockDocketClerkUser,
           caseToUpdate: {
             ...validMockCase,
             caseCaption: 'Some other caption',
@@ -910,6 +941,7 @@ describe('updateCaseAndAssociations', () => {
       };
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
       expect(
@@ -929,6 +961,7 @@ describe('updateCaseAndAssociations', () => {
       };
       await updateCaseAndAssociations({
         applicationContext,
+        authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
       expect(

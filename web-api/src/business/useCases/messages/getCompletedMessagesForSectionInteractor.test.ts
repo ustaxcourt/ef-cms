@@ -9,19 +9,22 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCompletedMessagesForSectionInteractor } from './getCompletedMessagesForSectionInteractor';
 import { getCompletedSectionInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedSectionInboxMessages';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('getCompletedMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      getCompletedMessagesForSectionInteractor(applicationContext, {
-        section: DOCKET_SECTION,
-      }),
+      getCompletedMessagesForSectionInteractor(
+        applicationContext,
+        {
+          section: DOCKET_SECTION,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -66,6 +69,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
       {
         section: DOCKET_SECTION,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(getCompletedSectionInboxMessages).toHaveBeenCalled();

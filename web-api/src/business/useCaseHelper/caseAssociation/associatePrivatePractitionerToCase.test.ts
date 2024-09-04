@@ -6,26 +6,17 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
-import { RawUser } from '@shared/business/entities/User';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {
   getContactPrimary,
   getContactSecondary,
 } from '../../../../../shared/src/business/entities/cases/Case';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
-
-  const practitionerUser: RawUser = {
-    barNumber: 'PT1234',
-    email: 'emmett@example.com',
-    entityName: 'User',
-    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-    role: ROLES.privatePractitioner,
-    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  };
 
   beforeEach(() => {
     caseRecord = {
@@ -92,10 +83,6 @@ describe('associatePrivatePractitionerToCase', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(caseRecord);
@@ -108,9 +95,10 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
-      user: practitionerUser,
+      user: MOCK_PRACTITIONER,
     });
 
     expect(
@@ -128,9 +116,10 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
-      user: practitionerUser,
+      user: MOCK_PRACTITIONER,
     });
 
     expect(
@@ -148,13 +137,14 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [
         caseRecord.petitioners[0].contactId,
         caseRecord.petitioners[1].contactId,
         caseRecord.petitioners[2].contactId,
       ],
-      user: practitionerUser,
+      user: MOCK_PRACTITIONER,
     });
 
     const updatedCase =
@@ -180,9 +170,10 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[1].contactId],
-      user: practitionerUser,
+      user: MOCK_PRACTITIONER,
     });
 
     const updatedCase =
@@ -216,9 +207,10 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [],
-      user: practitionerUser,
+      user: MOCK_PRACTITIONER,
     });
 
     expect(
@@ -227,7 +219,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
     expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
+      `BUG 9323: Private Practitioner with userId: ${MOCK_PRACTITIONER.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
     );
   });
 
@@ -240,20 +232,20 @@ describe('associatePrivatePractitionerToCase', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValueOnce({
         ...caseRecord,
-        privatePractitioners: [{ userId: practitionerUser.userId }],
+        privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
       });
 
     await associatePrivatePractitionerToCase({
       applicationContext,
+      authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
-      user: practitionerUser,
+      user: MOCK_PRACTITIONER,
     });
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
-
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });

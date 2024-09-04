@@ -8,6 +8,7 @@ import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getMessageThreadByParentId as getMessageThreadByParentIdMock } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 
@@ -57,13 +58,34 @@ describe('saveSignedDocumentInteractor', () => {
     ]);
   });
 
+  it('should throw an error when an unknown user attempts to save a signed document', async () => {
+    await expect(
+      saveSignedDocumentInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          nameForSigning: mockSigningName,
+          originalDocketEntryId: mockOriginalDocketEntryId,
+          signedDocketEntryId: mockSignedDocketEntryId,
+        } as any,
+        undefined,
+      ),
+    ).rejects.toThrow(
+      'User attempting to save signed document is not an auth user',
+    );
+  });
+
   it('should save the original, unsigned document to S3 with a new id', async () => {
-    await saveSignedDocumentInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      nameForSigning: mockSigningName,
-      originalDocketEntryId: mockOriginalDocketEntryId,
-      signedDocketEntryId: mockSignedDocketEntryId,
-    } as any);
+    await saveSignedDocumentInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCase.docketNumber,
+        nameForSigning: mockSigningName,
+        originalDocketEntryId: mockOriginalDocketEntryId,
+        signedDocketEntryId: mockSignedDocketEntryId,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(applicationContext.getUniqueId).toHaveBeenCalled();
     expect(
@@ -75,12 +97,16 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should replace the original, unsigned document with the signed document', async () => {
-    await saveSignedDocumentInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      nameForSigning: mockSigningName,
-      originalDocketEntryId: mockOriginalDocketEntryId,
-      signedDocketEntryId: mockSignedDocketEntryId,
-    } as any);
+    await saveSignedDocumentInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCase.docketNumber,
+        nameForSigning: mockSigningName,
+        originalDocketEntryId: mockOriginalDocketEntryId,
+        signedDocketEntryId: mockSignedDocketEntryId,
+      } as any,
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -99,6 +125,7 @@ describe('saveSignedDocumentInteractor', () => {
         originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
+      mockDocketClerkUser,
     );
 
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
@@ -133,6 +160,7 @@ describe('saveSignedDocumentInteractor', () => {
         originalDocketEntryId: mockOriginalDocketEntryId,
         signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
+      mockDocketClerkUser,
     );
 
     const signedDocument = caseEntity.docketEntries.find(
@@ -152,6 +180,7 @@ describe('saveSignedDocumentInteractor', () => {
         originalDocketEntryId: mockOriginalDocketEntryId,
         signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
+      mockDocketClerkUser,
     );
 
     const signedDocument = caseEntity.docketEntries.find(
@@ -164,13 +193,17 @@ describe('saveSignedDocumentInteractor', () => {
 
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
     const updateMessage = updateMessageMock as jest.Mock;
-    await saveSignedDocumentInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      nameForSigning: mockSigningName,
-      originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      parentMessageId: mockParentMessageId,
-      signedDocketEntryId: mockSignedDocketEntryId,
-    });
+    await saveSignedDocumentInteractor(
+      applicationContext,
+      {
+        docketNumber: mockCase.docketNumber,
+        nameForSigning: mockSigningName,
+        originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        parentMessageId: mockParentMessageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(updateMessage).toHaveBeenCalled();
     expect(updateMessage.mock.calls[0][0].message).toMatchObject({

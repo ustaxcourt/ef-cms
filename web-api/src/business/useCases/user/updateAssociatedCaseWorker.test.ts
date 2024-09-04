@@ -18,6 +18,10 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
+import {
   updateAssociatedCaseWorker,
   updatePetitionerCase,
   updatePractitionerCase,
@@ -72,10 +76,14 @@ describe('updateAssociatedCaseWorker', () => {
         privatePractitioners: [],
       });
 
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: '101-18',
-      user: mockPractitioner,
-    });
+    await updateAssociatedCaseWorker(
+      applicationContext,
+      {
+        docketNumber: '101-18',
+        user: mockPractitioner,
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
@@ -91,13 +99,17 @@ describe('updateAssociatedCaseWorker', () => {
       userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
     });
 
-    await updateAssociatedCaseWorker(applicationContext, {
-      docketNumber: '101-18',
-      user: {
-        ...mockPetitioner,
-        userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+    await updateAssociatedCaseWorker(
+      applicationContext,
+      {
+        docketNumber: '101-18',
+        user: {
+          ...mockPetitioner,
+          userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+        },
       },
-    });
+      mockPetitionerUser,
+    );
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
@@ -113,10 +125,14 @@ describe('updateAssociatedCaseWorker', () => {
         .getPersistenceGateway()
         .getLock.mockImplementation(() => MOCK_LOCK);
       await expect(
-        updateAssociatedCaseWorker(applicationContext, {
-          docketNumber: '123-45',
-          user: MOCK_PRACTITIONER,
-        }),
+        updateAssociatedCaseWorker(
+          applicationContext,
+          {
+            docketNumber: '123-45',
+            user: MOCK_PRACTITIONER,
+          },
+          mockPrivatePractitionerUser,
+        ),
       ).rejects.toThrow(ServiceUnavailableError);
 
       expect(
@@ -128,10 +144,14 @@ describe('updateAssociatedCaseWorker', () => {
       applicationContext
         .getPersistenceGateway()
         .getLock.mockImplementation(() => undefined);
-      await updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        user: MOCK_PRACTITIONER,
-      });
+      await updateAssociatedCaseWorker(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          user: MOCK_PRACTITIONER,
+        },
+        mockPrivatePractitionerUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -143,10 +163,14 @@ describe('updateAssociatedCaseWorker', () => {
     });
 
     it('should remove the lock', async () => {
-      await updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        user: MOCK_PRACTITIONER,
-      });
+      await updateAssociatedCaseWorker(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          user: MOCK_PRACTITIONER,
+        },
+        mockPrivatePractitionerUser,
+      );
 
       expect(
         applicationContext.getPersistenceGateway().removeLock,
@@ -185,10 +209,14 @@ describe('updateAssociatedCaseWorker', () => {
           ...mockCase,
           privatePractitioners: [],
         });
-      await updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        user: mockPetitioner,
-      });
+      await updateAssociatedCaseWorker(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          user: mockPetitioner,
+        },
+        mockPetitionerUser,
+      );
       const { servedParties } =
         applicationContext.getUseCaseHelpers().generateAndServeDocketEntry.mock
           .calls[0][0];
@@ -198,10 +226,14 @@ describe('updateAssociatedCaseWorker', () => {
     });
 
     it("should update the user's case with the new email", async () => {
-      await updateAssociatedCaseWorker(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        user: mockPractitioner,
-      });
+      await updateAssociatedCaseWorker(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          user: mockPractitioner,
+        },
+        mockPrivatePractitionerUser,
+      );
 
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -223,10 +255,14 @@ describe('updateAssociatedCaseWorker', () => {
         );
 
       await expect(
-        updateAssociatedCaseWorker(applicationContext, {
-          docketNumber: mockCase.docketNumber,
-          user: mockPractitioner,
-        }),
+        updateAssociatedCaseWorker(
+          applicationContext,
+          {
+            docketNumber: mockCase.docketNumber,
+            user: mockPractitioner,
+          },
+          mockPrivatePractitionerUser,
+        ),
       ).rejects.toThrow('updateCaseAndAssociations failure');
 
       expect(
@@ -257,10 +293,14 @@ describe('updateAssociatedCaseWorker', () => {
         .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
-        updateAssociatedCaseWorker(applicationContext, {
-          docketNumber: mockCase.docketNumber,
-          user: mockPetitioner,
-        }),
+        updateAssociatedCaseWorker(
+          applicationContext,
+          {
+            docketNumber: mockCase.docketNumber,
+            user: mockPetitioner,
+          },
+          mockPetitionerUser,
+        ),
       ).resolves.toBeUndefined(); // has no return value
 
       expect(
@@ -282,10 +322,14 @@ describe('updateAssociatedCaseWorker', () => {
         });
 
       await expect(
-        updateAssociatedCaseWorker(applicationContext, {
-          docketNumber: mockCase.docketNumber,
-          user: mockPetitioner,
-        }),
+        updateAssociatedCaseWorker(
+          applicationContext,
+          {
+            docketNumber: mockCase.docketNumber,
+            user: mockPetitioner,
+          },
+          mockPetitionerUser,
+        ),
       ).resolves.toBeUndefined(); // has no return value
 
       expect(
@@ -308,10 +352,14 @@ describe('updateAssociatedCaseWorker', () => {
         });
 
       await expect(
-        updateAssociatedCaseWorker(applicationContext, {
-          docketNumber: mockCase.docketNumber,
-          user: mockPetitioner,
-        }),
+        updateAssociatedCaseWorker(
+          applicationContext,
+          {
+            docketNumber: mockCase.docketNumber,
+            user: mockPetitioner,
+          },
+          mockPetitionerUser,
+        ),
       ).resolves.toBeUndefined(); // has no return value
 
       expect(
@@ -322,7 +370,7 @@ describe('updateAssociatedCaseWorker', () => {
 });
 describe('updatePetitionerCases', () => {
   const UPDATED_EMAIL = 'hello@example.com';
-  const mockPetitionerUser = {
+  const mockPetitionerUser2 = {
     ...validUser,
     email: UPDATED_EMAIL,
     role: ROLES.petitioner,
@@ -342,8 +390,9 @@ describe('updatePetitionerCases', () => {
 
     await updatePetitionerCase({
       applicationContext,
+      authorizedUser: mockPetitionerUser2,
       docketNumber: MOCK_CASE.docketNumber,
-      user: mockPetitionerUser,
+      user: mockPetitionerUser2,
     });
 
     expect(
@@ -376,14 +425,15 @@ describe('updatePetitionerCases', () => {
     await expect(
       updatePetitionerCase({
         applicationContext,
+        authorizedUser: mockPetitionerUser2,
         docketNumber: '101-21',
-        user: mockPetitionerUser,
+        user: mockPetitionerUser2,
       }),
     ).resolves.not.toThrow();
 
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      `Could not find user|${mockPetitionerUser.userId} on ${caseMock.docketNumber}`,
+      `Could not find user|${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -402,8 +452,9 @@ describe('updatePetitionerCases', () => {
     await expect(
       updatePetitionerCase({
         applicationContext,
+        authorizedUser: mockPetitionerUser2,
         docketNumber: MOCK_CASE.docketNumber,
-        user: mockPetitionerUser,
+        user: mockPetitionerUser2,
       }),
     ).rejects.toThrow('entity was invalid');
 
@@ -425,7 +476,7 @@ describe('updatePetitionerCases', () => {
           },
           {
             ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
+            contactId: mockPetitionerUser2.userId,
             contactType: CONTACT_TYPES.secondary,
             inCareOf: 'Barney',
           },
@@ -434,8 +485,9 @@ describe('updatePetitionerCases', () => {
 
     await updatePetitionerCase({
       applicationContext,
+      authorizedUser: mockPetitionerUser2,
       docketNumber: MOCK_CASE.docketNumber,
-      user: mockPetitionerUser,
+      user: mockPetitionerUser2,
     });
 
     const { caseToUpdate } =
@@ -458,7 +510,7 @@ describe('updatePetitionerCases', () => {
           },
           {
             ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
+            contactId: mockPetitionerUser2.userId,
             contactType: CONTACT_TYPES.secondary,
             inCareOf: 'Barney',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -474,8 +526,9 @@ describe('updatePetitionerCases', () => {
 
     await updatePetitionerCase({
       applicationContext,
+      authorizedUser: mockPetitionerUser2,
       docketNumber: MOCK_CASE.docketNumber,
-      user: mockPetitionerUser,
+      user: mockPetitionerUser2,
     });
 
     const { caseToUpdate } =
@@ -498,7 +551,7 @@ describe('updatePetitionerCases', () => {
           ...MOCK_CASE.petitioners,
           {
             ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
+            contactId: mockPetitionerUser2.userId,
             contactType: CONTACT_TYPES.secondary,
             inCareOf: 'Barney',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -507,15 +560,16 @@ describe('updatePetitionerCases', () => {
         privatePractitioners: [
           {
             ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [mockPetitionerUser.userId],
+            representing: [mockPetitionerUser2.userId],
           },
         ],
       });
 
     await updatePetitionerCase({
       applicationContext,
+      authorizedUser: mockPetitionerUser2,
       docketNumber: MOCK_CASE.docketNumber,
-      user: mockPetitionerUser,
+      user: mockPetitionerUser2,
     });
 
     const { caseToUpdate } =
@@ -553,6 +607,7 @@ describe('updatePractitionerCases', () => {
   it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {
     await updatePractitionerCase({
       applicationContext,
+      authorizedUser: mockPractitionerUser,
       docketNumber: MOCK_CASE.docketNumber,
       user: mockPractitionerUser,
     });
