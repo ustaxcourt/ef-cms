@@ -25,6 +25,7 @@ type ContactPrimaryUpdate = {
   registerRef?: Function;
   secondaryLabel?: string;
   secondaryLabelNote?: string;
+  showEmail?: boolean;
   showInCareOf?: boolean;
   showInCareOfOptional?: boolean;
   titleLabel?: string;
@@ -52,6 +53,7 @@ export const ContactPrimaryUpdated = connect<
     registerRef,
     secondaryLabel,
     secondaryLabelNote,
+    showEmail,
     showInCareOf,
     showInCareOfOptional,
     titleLabel,
@@ -271,6 +273,40 @@ export const ContactPrimaryUpdated = connect<
               }}
             />
           </FormGroup>
+          {showEmail && (
+            <FormGroup
+              errorMessageId="email-error-message"
+              errorText={
+                validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.email
+              }
+            >
+              <label className="usa-label" htmlFor="email">
+                Email address <span className="usa-hint">(Optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="contact-primary-email"
+                id="email"
+                name="contactPrimary.email"
+                ref={registerRef && registerRef('contactPrimary.email')}
+                type="text"
+                value={addressInfo.email || ''}
+                onBlur={() => {
+                  handleBlur({
+                    validationKey: ['contactPrimary', 'email'],
+                  });
+                }}
+                onChange={e => {
+                  handleChange({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
+          )}
         </div>
       </>
     );

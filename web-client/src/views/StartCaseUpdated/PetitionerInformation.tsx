@@ -61,7 +61,13 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     noMargin
                     showEmailLabel
                     showPhoneLabel
-                    contact={petitionFormatted.contactPrimary}
+                    contact={{
+                      ...petitionFormatted.contactPrimary,
+                      email:
+                        petitionFormatted.contactPrimary.email ||
+                        'Email not provided',
+                    }}
+                    showEmail={!isPetitioner}
                   />
                   {petitionFormatted.contactPrimary.placeOfLegalResidence && (
                     <div className="margin-top-1">

@@ -6,6 +6,7 @@ import React from 'react';
 
 export function OtherInfo({
   form,
+  isPractitioner,
   otherContactNameLabel,
   otherFilingOptions,
   petitionGenerationLiveValidationSequence,
@@ -76,6 +77,7 @@ export function OtherInfo({
       {showContactInformationForOtherPartyType && (
         <OtherContactInformation
           form={form}
+          isPractitioner={isPractitioner}
           otherContactNameLabel={otherContactNameLabel}
           petitionGenerationLiveValidationSequence={
             petitionGenerationLiveValidationSequence

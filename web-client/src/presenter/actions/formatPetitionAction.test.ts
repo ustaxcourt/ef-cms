@@ -200,4 +200,43 @@ describe('formatPetitionAction', () => {
       state: 'TEST_state',
     });
   });
+
+  it('should set primary contact email to user email when the user is a petitioner', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: PROPS,
+      state: {
+        petitionFormatted: undefined,
+        user: mockPetitionerUser,
+      },
+    });
+
+    expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
+      'mockPetitioner@example.com',
+    );
+  });
+
+  it('should not set primary contact email to user email when the user is a private practitioner', async () => {
+    const results = await runAction(formatPetitionAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        ...PROPS,
+        createPetitionStep1Data: {
+          contactPrimary: { email: 'test@example.com' },
+        },
+      },
+      state: {
+        petitionFormatted: undefined,
+        user: mockPrivatePractitionerUser,
+      },
+    });
+
+    expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
+      'test@example.com',
+    );
+  });
 });

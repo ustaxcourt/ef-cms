@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
@@ -759,8 +760,8 @@ export const baseState = {
     caseTitle: undefined,
     caseType: undefined,
     contactCounsel: undefined,
-    contactPrimary: undefined,
-    contactSecondary: undefined,
+    contactPrimary: undefined as Contact | undefined,
+    contactSecondary: undefined as Contact | undefined,
     corporateDisclosureFile: undefined,
     corporateDisclosureFileUrl: undefined,
     hasIrsNotice: undefined,
