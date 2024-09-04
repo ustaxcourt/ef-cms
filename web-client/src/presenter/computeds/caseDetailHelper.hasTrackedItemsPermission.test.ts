@@ -8,12 +8,10 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {
-  ...applicationContext,
-  getCurrentUser: () => {
-    return globalUser;
-  },
-});
+const caseDetailHelper = withAppContextDecorator(
+  caseDetailHelperComputed,
+  applicationContext,
+);
 
 let globalUser;
 
@@ -23,6 +21,7 @@ const getBaseState = user => {
     currentPage: 'CaseDetailInternal',
     form: {},
     permissions: getUserPermissions(user),
+    user: globalUser,
   };
 };
 

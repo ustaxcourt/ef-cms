@@ -9,6 +9,8 @@ import React from 'react';
 
 export const ViewAllDocumentsDesktop = connect(
   {
+    closeModalAndReturnToCaseDetailSequence:
+      sequences.closeModalAndReturnToCaseDetailSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     openCompleteSelectDocumentTypeModalSequence:
@@ -19,6 +21,7 @@ export const ViewAllDocumentsDesktop = connect(
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   function ViewAllDocumentsDesktop({
+    closeModalAndReturnToCaseDetailSequence,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     openCompleteSelectDocumentTypeModalSequence,
@@ -100,7 +103,9 @@ export const ViewAllDocumentsDesktop = connect(
               Cancel
             </Button>
             {showModal === 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+              <FormCancelModalDialog
+                onCancelSequence={closeModalAndReturnToCaseDetailSequence}
+              />
             )}
             {showModal === 'CompleteSelectDocumentModalDialog' && (
               <CompleteSelectDocumentModalDialog />

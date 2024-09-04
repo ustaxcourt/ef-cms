@@ -16,7 +16,7 @@ export const submitCaseAssociationRequestAction = async ({
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const { primaryDocumentId } = props.documentsFiled;
 
@@ -55,12 +55,14 @@ export const submitCaseAssociationRequestAction = async ({
       .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
         filers: documentMetadata.filers,
+        userId: user.userId,
       });
   } else if (isDocumentWithPendingAssociation) {
     await applicationContext
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
+        userId: user.userId,
       });
   }
 

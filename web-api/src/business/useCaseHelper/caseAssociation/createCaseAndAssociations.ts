@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
@@ -14,12 +15,19 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
  */
 const createCaseDocketEntries = ({
   applicationContext,
+  authorizedUser,
   docketEntries,
   docketNumber,
   petitioners,
+}: {
+  applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
+  docketEntries: any;
+  docketNumber: any;
+  petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
-    applicationContext,
+    authorizedUser,
     petitioners,
   });
 
@@ -46,10 +54,8 @@ const connectIrsPractitioners = ({
   docketNumber,
   irsPractitioners,
 }) => {
-  const validIrsPractitioners = IrsPractitioner.validateRawCollection(
-    irsPractitioners,
-    { applicationContext },
-  );
+  const validIrsPractitioners =
+    IrsPractitioner.validateRawCollection(irsPractitioners);
 
   return validIrsPractitioners.map(practitioner =>
     applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase({
@@ -74,10 +80,8 @@ const connectPrivatePractitioners = ({
   docketNumber,
   privatePractitioners,
 }) => {
-  const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
-    privatePractitioners,
-    { applicationContext },
-  );
+  const validPrivatePractitioners =
+    PrivatePractitioner.validateRawCollection(privatePractitioners);
 
   return validPrivatePractitioners.map(practitioner =>
     applicationContext.getPersistenceGateway().updatePrivatePractitionerOnCase({
@@ -99,14 +103,18 @@ const connectPrivatePractitioners = ({
  */
 export const createCaseAndAssociations = async ({
   applicationContext,
+  authorizedUser,
   caseToCreate,
 }: {
   applicationContext: ServerApplicationContext;
+  authorizedUser: AuthUser;
   caseToCreate: any;
 }) => {
   const caseEntity = caseToCreate.validate
     ? caseToCreate
-    : new Case(caseToCreate, { applicationContext });
+    : new Case(caseToCreate, {
+        authorizedUser,
+      });
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
@@ -124,6 +132,7 @@ export const createCaseAndAssociations = async ({
     }),
     ...createCaseDocketEntries({
       applicationContext,
+      authorizedUser,
       docketEntries,
       docketNumber,
       petitioners: caseToCreate.petitioners,

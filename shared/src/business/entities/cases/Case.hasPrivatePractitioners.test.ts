@@ -1,6 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('hasPrivatePractitioners', () => {
   it('returns true when there are privatePractitioners on the case', () => {
@@ -31,7 +31,7 @@ describe('hasPrivatePractitioners', () => {
         ],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -45,7 +45,7 @@ describe('hasPrivatePractitioners', () => {
         privatePractitioners: [],
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

@@ -8,28 +8,18 @@ import {
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- * createTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
- * @returns {object} the created trial session
- */
 export const createTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: RawTrialSession },
-) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
+  authorizedUser: UnknownAuthUser,
+): Promise<RawTrialSession> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessionToAdd = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionToAdd = new TrialSession(trialSession);
 
   if (
     ['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType) ||
@@ -39,12 +29,14 @@ export const createTrialSessionInteractor = async (
   }
 
   if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .associateSwingTrialSessions(applicationContext, {
+    await applicationContext.getUseCaseHelpers().associateSwingTrialSessions(
+      applicationContext,
+      {
         swingSessionId: trialSessionToAdd.swingSessionId,
         trialSessionEntity: trialSessionToAdd,
-      });
+      },
+      authorizedUser,
+    );
   }
 
   return await applicationContext

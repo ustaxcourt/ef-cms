@@ -4,6 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const pendingItemCaseSource = [
   'associatedJudge',
@@ -34,12 +35,11 @@ export type PendingItem = Pick<
 export const fetchPendingItemsInteractor = async (
   applicationContext: ServerApplicationContext,
   { judge, page }: { judge: string; page: number },
+  authorizedUser: UnknownAuthUser,
 ): Promise<{
   foundDocuments: PendingItem[];
   total: number;
 }> => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
   }

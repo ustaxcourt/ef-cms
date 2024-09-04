@@ -16,6 +16,8 @@ import React from 'react';
 
 export const DocketEntryQc = connect(
   {
+    closeModalAndNavigateBackSequence:
+      sequences.closeModalAndNavigateBackSequence,
     completeDocketEntryQCAndSendMessageSequence:
       sequences.completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
@@ -28,6 +30,7 @@ export const DocketEntryQc = connect(
     showModal: state.modal.showModal,
   },
   function DocketEntryQc({
+    closeModalAndNavigateBackSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     confirmWorkItemAlreadyCompleteSequence,
@@ -81,19 +84,21 @@ export const DocketEntryQc = connect(
 
                 <div className="margin-top-5">
                   <Button
+                    disableOnClick
                     id="save-and-finish"
                     type="submit"
-                    onClick={() => {
-                      completeDocketEntryQCSequence();
+                    onClick={async () => {
+                      await completeDocketEntryQCSequence();
                     }}
                   >
                     Complete
                   </Button>
                   <Button
+                    disableOnClick
                     secondary
                     id="save-and-add-supporting"
-                    onClick={() => {
-                      openCompleteAndSendMessageModalSequence();
+                    onClick={async () => {
+                      await openCompleteAndSendMessageModalSequence();
                     }}
                   >
                     Complete &amp; Send Message
@@ -116,7 +121,9 @@ export const DocketEntryQc = connect(
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndNavigateBackSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={closeModalAndNavigateBackSequence}
+          />
         )}
         {showModal === 'CreateMessageModalDialog' && (
           <CreateMessageModalDialog

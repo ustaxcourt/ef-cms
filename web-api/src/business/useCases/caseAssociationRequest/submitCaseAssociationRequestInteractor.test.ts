@@ -5,17 +5,19 @@ import {
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  mockAdcUser,
+  mockIrsPractitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
 
 describe('submitCaseAssociationRequest', () => {
   const mockContactId = getContactPrimary(MOCK_CASE).contactId;
 
-  let mockCurrentUser;
   let mockGetUserById;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockGetUserById);
@@ -26,27 +28,19 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should throw an error when not authorized', async () => {
-    mockCurrentUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.adc,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     await expect(
-      submitCaseAssociationRequestInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        filers: [],
-      }),
+      submitCaseAssociationRequestInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          filers: [],
+        },
+        mockAdcUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should not add mapping if already there', async () => {
-    mockCurrentUser = {
-      barNumber: 'BN1234',
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
     mockGetUserById = {
       barNumber: 'BN1234',
       contact: {
@@ -59,18 +53,22 @@ describe('submitCaseAssociationRequest', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      name: mockPrivatePractitionerUser.name,
       role: ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: mockPrivatePractitionerUser.userId,
     };
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    await submitCaseAssociationRequestInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      filers: [],
-    });
+    await submitCaseAssociationRequestInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        filers: [],
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -78,30 +76,18 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    mockCurrentUser = {
-      barNumber: 'BN1234',
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await submitCaseAssociationRequestInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      filers: [mockContactId],
-    });
+    await submitCaseAssociationRequestInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        filers: [mockContactId],
+      },
+      mockPrivatePractitionerUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().associatePrivatePractitionerToCase,
@@ -109,12 +95,6 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    mockCurrentUser = {
-      barNumber: 'BN1234',
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.irsPractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
     mockGetUserById = {
       barNumber: 'BN1234',
       contact: {
@@ -127,18 +107,22 @@ describe('submitCaseAssociationRequest', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      name: mockIrsPractitionerUser.name,
       role: ROLES.irsPractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: mockIrsPractitionerUser,
     };
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await submitCaseAssociationRequestInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      filers: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-    });
+    await submitCaseAssociationRequestInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        filers: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      },
+      mockIrsPractitionerUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().associateIrsPractitionerToCase,

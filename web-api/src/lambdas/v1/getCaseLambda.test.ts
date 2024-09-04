@@ -1,15 +1,16 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
-import { Role } from '@shared/business/entities/EntityConstants';
 import { getCaseLambda } from './getCaseLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { getCaseInteractor as mockGetCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
 
 jest.mock('@web-api/applicationContext', () => {
   return {
-    createApplicationContext: user => {
-      let appContext = mockCreateTestApplicationContext(user);
+    createApplicationContext: () => {
+      let appContext = mockCreateTestApplicationContext();
       appContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(mockFeatureFlag);
@@ -21,8 +22,6 @@ jest.mock('@web-api/applicationContext', () => {
       appContext.getUseCases().getCaseInteractor = jest
         .fn()
         .mockImplementation(mockGetCaseInteractor);
-
-      appContext.getCurrentUser = jest.fn().mockReturnValue(mockUser);
 
       if (mockShouldThrowError) {
         appContext.getDocumentClient = jest.fn().mockReturnValue({
@@ -44,19 +43,15 @@ const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
 let mockItems;
 let mockFeatureFlag;
 let mockShouldThrowError;
-let mockUser;
 const setupMock = ({
   featureFlag,
   items,
   shouldThrowError,
-  user,
 }: {
   items: (typeof mockDynamoCaseRecord)[];
   featureFlag: boolean;
   shouldThrowError: boolean;
-  user: AuthUser;
 }) => {
-  mockUser = user;
   mockItems = items;
   mockShouldThrowError = shouldThrowError;
   mockFeatureFlag = featureFlag;
@@ -103,7 +98,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   // disable logging by mimicking CI for this test
   beforeAll(() => {
     ({ CI } = process.env);
-    process.env.CI = true;
+    process.env.CI = 'true';
   });
 
   afterAll(() => (process.env.CI = CI));
@@ -115,15 +110,9 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: {
-        email: '',
-        name: '',
-        role: 'roleWithNoPermissions' as Role,
-        userId: '',
-      },
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -138,15 +127,9 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [mockDynamoCaseRecord],
       shouldThrowError: false,
-      user: {
-        email: '',
-        name: '',
-        role: 'roleWithNoPermissions' as Role,
-        userId: '',
-      },
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
     expect(response.statusCode).toBe('200');
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -167,10 +150,9 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -185,10 +167,9 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       featureFlag: true,
       items: [],
       shouldThrowError: true,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
-    const response = await getCaseLambda(REQUEST_EVENT, {});
+    const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
     expect(response.statusCode).toBe(500);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -206,10 +187,9 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
         featureFlag: isFeatureFlagOn,
         items: [mockDynamoCaseRecord],
         shouldThrowError: false,
-        user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
       });
 
-      const response = await getCaseLambda(REQUEST_EVENT, {});
+      const response = await getCaseLambda(REQUEST_EVENT, mockDocketClerkUser);
 
       expect(response.statusCode).toBe('200');
       expect(response.headers['Content-Type']).toBe('application/json');

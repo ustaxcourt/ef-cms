@@ -4,6 +4,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 /**
  *
@@ -18,11 +19,10 @@ export const uploadOrderDocumentInteractor = async (
   {
     documentFile,
     fileIdToOverwrite,
-  }: { fileIdToOverwrite: string; documentFile: any },
+  }: { fileIdToOverwrite?: string; documentFile: any },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

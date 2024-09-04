@@ -1,6 +1,11 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgeForUserHelper } from './getJudgeForUserHelper';
+import {
+  mockChambersUser,
+  mockDocketClerkUser,
+  mockJudgeUser,
+} from '@shared/test/mockAuthUsers';
 import { validUser } from '@shared/test/mockUsers';
 
 describe('getJudgeForUserHelper', () => {
@@ -32,11 +37,11 @@ describe('getJudgeForUserHelper', () => {
 
   describe('Judge User', () => {
     beforeAll(() => {
-      mockFoundUser = judgeUser;
+      mockFoundUser = mockJudgeUser;
     });
 
     it('retrieves the specified user from the database by its userId', async () => {
-      await getJudgeForUserHelper(applicationContext, { user: judgeUser });
+      await getJudgeForUserHelper(applicationContext, { user: mockJudgeUser });
 
       expect(
         applicationContext.getPersistenceGateway().getUserById,
@@ -48,9 +53,9 @@ describe('getJudgeForUserHelper', () => {
 
     it('returns the retrieved from the database', async () => {
       const result = await getJudgeForUserHelper(applicationContext, {
-        user: judgeUser,
+        user: mockJudgeUser,
       });
-      expect(result).toMatchObject(judgeUser);
+      expect(result).toMatchObject(mockJudgeUser);
     });
   });
 
@@ -64,7 +69,7 @@ describe('getJudgeForUserHelper', () => {
 
     it('calls getJudgeInSectionHelper with the retrieved user`s section if they are a chambers user', async () => {
       await getJudgeForUserHelper(applicationContext, {
-        user: chambersUser,
+        user: mockChambersUser,
       });
 
       expect(
@@ -75,12 +80,8 @@ describe('getJudgeForUserHelper', () => {
     });
 
     it('returns the user that getJudgeInSectionHelper found', async () => {
-      await getJudgeForUserHelper(applicationContext, {
-        user: chambersUser,
-      });
-
       const result = await getJudgeForUserHelper(applicationContext, {
-        user: judgeUser,
+        user: mockJudgeUser,
       });
       expect(result).toMatchObject(judgeUser);
     });
@@ -92,7 +93,7 @@ describe('getJudgeForUserHelper', () => {
 
       await expect(
         getJudgeForUserHelper(applicationContext, {
-          user: docketClerkUser,
+          user: mockDocketClerkUser,
         }),
       ).rejects.toThrow(
         `Could not find Judge for Chambers Section ${chambersUser.section}`,
@@ -105,7 +106,7 @@ describe('getJudgeForUserHelper', () => {
       mockFoundUser = docketClerkUser;
       await expect(
         getJudgeForUserHelper(applicationContext, {
-          user: docketClerkUser,
+          user: mockDocketClerkUser,
         }),
       ).rejects.toThrow(
         'Could not get Judge User ID for non Judge or Chambers User',

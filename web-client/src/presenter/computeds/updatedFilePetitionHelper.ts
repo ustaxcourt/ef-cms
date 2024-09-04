@@ -30,7 +30,7 @@ export const updatedFilePetitionHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): UpdatedFilePetitionHelper => {
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const { FILING_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   const businessType = get(state.form.businessType);

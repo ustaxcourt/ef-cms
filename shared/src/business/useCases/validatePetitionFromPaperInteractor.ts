@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { PaperPetition } from '../entities/cases/PaperPetition';
 
 /**
@@ -9,11 +10,11 @@ import { PaperPetition } from '../entities/cases/PaperPetition';
  * @returns {object} errors (null if no errors)
  */
 export const validatePetitionFromPaperInteractor = (
-  applicationContext: IApplicationContext,
+  authorizedUser: AuthUser,
   { petition }: { petition: any },
 ) => {
   const errors = new PaperPetition(petition, {
-    applicationContext,
+    authorizedUser,
   }).getFormattedValidationErrors();
   return errors || null;
 };

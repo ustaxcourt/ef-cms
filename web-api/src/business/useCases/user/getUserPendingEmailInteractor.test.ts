@@ -1,35 +1,24 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPendingEmailInteractor } from './getUserPendingEmailInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getUserPendingEmailInteractor', () => {
-  let currentLoggedInUser;
   const PENDING_EMAIL = 'pending@example.com';
   const USER_ID = 'a8024d79-1cd0-4864-bdd9-60325bd6d6b9';
 
-  beforeEach(() => {
-    currentLoggedInUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
-    applicationContext.getCurrentUser.mockImplementation(
-      () => currentLoggedInUser,
-    );
-  });
-
   it('should throw an error when not authorized', async () => {
-    currentLoggedInUser = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     await expect(
-      getUserPendingEmailInteractor(applicationContext, {
-        userId: USER_ID,
-      }),
+      getUserPendingEmailInteractor(
+        applicationContext,
+        {
+          userId: USER_ID,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -41,9 +30,13 @@ describe('getUserPendingEmailInteractor', () => {
       userId: USER_ID,
     });
 
-    const result = await getUserPendingEmailInteractor(applicationContext, {
-      userId: USER_ID,
-    });
+    const result = await getUserPendingEmailInteractor(
+      applicationContext,
+      {
+        userId: USER_ID,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toEqual(PENDING_EMAIL);
   });
@@ -55,9 +48,13 @@ describe('getUserPendingEmailInteractor', () => {
       userId: USER_ID,
     });
 
-    const result = await getUserPendingEmailInteractor(applicationContext, {
-      userId: USER_ID,
-    });
+    const result = await getUserPendingEmailInteractor(
+      applicationContext,
+      {
+        userId: USER_ID,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toBeUndefined();
   });
@@ -67,9 +64,13 @@ describe('getUserPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockResolvedValue(undefined);
 
-    const result = await getUserPendingEmailInteractor(applicationContext, {
-      userId: USER_ID,
-    });
+    const result = await getUserPendingEmailInteractor(
+      applicationContext,
+      {
+        userId: USER_ID,
+      },
+      mockPetitionsClerkUser,
+    );
 
     expect(result).toBeUndefined();
   });

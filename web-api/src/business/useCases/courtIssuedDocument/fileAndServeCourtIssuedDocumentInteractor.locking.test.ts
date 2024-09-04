@@ -8,6 +8,7 @@ import {
   handleLockError,
 } from './fileAndServeCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -43,13 +44,11 @@ describe('determineEntitiesToLock', () => {
 describe('handleLockError', () => {
   const mockClientConnectionId = '987654';
 
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-  });
-
-  it('should determine who the user is based on applicationContext', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' });
-    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
+  it('should not send a notification if there is no authorizedUser', async () => {
+    await handleLockError(applicationContext, { foo: 'bar' }, undefined);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).not.toHaveBeenCalled();
   });
 
   it('should send a notification to the user with "retry_file_and_serve_court_issued_document" and the originalRequest', async () => {
@@ -57,7 +56,11 @@ describe('handleLockError', () => {
       clientConnectionId: mockClientConnectionId,
       foo: 'bar',
     };
-    await handleLockError(applicationContext, mockOriginalRequest);
+    await handleLockError(
+      applicationContext,
+      mockOriginalRequest,
+      mockDocketClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -96,7 +99,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -132,6 +134,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         fileAndServeCourtIssuedDocumentInteractor(
           applicationContext,
           mockRequest,
+          mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
@@ -145,6 +148,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         fileAndServeCourtIssuedDocumentInteractor(
           applicationContext,
           mockRequest,
+          mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
@@ -158,7 +162,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           originalRequest: mockRequest,
           requestToRetry: 'file_and_serve_court_issued_document',
         },
-        userId: docketClerkUser.userId,
+        userId: mockDocketClerkUser.userId,
       });
 
       expect(
@@ -176,6 +180,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         mockRequest,
+        mockDocketClerkUser,
       );
 
       expect(
@@ -198,6 +203,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         mockRequest,
+        mockDocketClerkUser,
       );
       expect(
         applicationContext.getPersistenceGateway().removeLock,

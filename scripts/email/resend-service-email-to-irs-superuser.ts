@@ -10,8 +10,8 @@ if (!process.argv[2] || !process.argv[3]) {
 import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { sendIrsSuperuserPetitionEmail } from '@shared/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
-import { sendServedPartiesEmails } from '@shared/business/useCaseHelper/service/sendServedPartiesEmails';
+import { sendIrsSuperuserPetitionEmail } from '@web-api/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
+import { sendServedPartiesEmails } from '@web-api/business/useCaseHelper/service/sendServedPartiesEmails';
 
 const getCase = async (
   applicationContext: IApplicationContext,
@@ -24,7 +24,7 @@ const getCase = async (
       docketNumber,
     });
 
-  return new Case(caseToBatch, { applicationContext });
+  return new Case(caseToBatch, { authorizedUser: undefined });
 };
 
 const resendServiceEmail = async (

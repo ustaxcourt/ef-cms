@@ -135,18 +135,19 @@ You may wish for a function to be called if you fail to acquire a lock. One use 
 const handleLockError = async (
   applicationContext: IApplicationContext,
   originalRequest: any,
+  authorizedUser: UnknownAuthUser
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'retry_async_request',
-      originalRequest,
-      requestToRetry: 'update_something',
-    },
-    userId: user.userId,
-  });
+  if(authorizedUser?.userId) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'retry_async_request',
+        originalRequest,
+        requestToRetry: 'update_something',
+      },
+      userId: user.userId,
+    });
+  }
 };
 ```
 

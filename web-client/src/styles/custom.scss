@@ -2199,6 +2199,12 @@ button.change-scanner-button {
   color: $color-white;
   font-weight: $font-semibold;
   text-align: center;
+
+  button {
+    border: none;
+    background: none;
+    color: white;
+  }
 }
 
 .cursor-pointer {

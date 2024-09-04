@@ -5,7 +5,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from '../InfoNotification';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -17,6 +17,8 @@ import classNames from 'classnames';
 export const EditUploadCourtIssuedDocument = connect(
   {
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
+    closeModalAndReturnToCaseDetailDraftDocumentsSequence:
+      sequences.closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     constants: state.constants,
     editUploadCourtIssuedDocumentSequence:
       sequences.editUploadCourtIssuedDocumentSequence,
@@ -32,6 +34,7 @@ export const EditUploadCourtIssuedDocument = connect(
   },
   function EditUploadCourtIssuedDocument({
     clearExistingDocumentSequence,
+    closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     constants,
     editUploadCourtIssuedDocumentSequence,
     fileDocumentHelper,
@@ -47,14 +50,24 @@ export const EditUploadCourtIssuedDocument = connect(
       <>
         <CaseDetailHeader />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailDraftDocumentsSequence" />
+          <FormCancelModalDialog
+            onCancelSequence={
+              closeModalAndReturnToCaseDetailDraftDocumentsSequence
+            }
+          />
         )}
 
         <section className="usa-section grid-container DocumentDetail">
           <SuccessNotification />
           <ErrorNotification />
           {screenMetadata.documentReset && (
-            <Hint>When you submit it will overwrite the previous document</Hint>
+            <InfoNotificationComponent
+              alertInfo={{
+                message: 'Saving will replace the previous document.',
+              }}
+              dismissible={false}
+              scrollToTop={false}
+            />
           )}
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
@@ -78,6 +91,7 @@ export const EditUploadCourtIssuedDocument = connect(
                       aria-labelledby="upload-description-label"
                       autoCapitalize="none"
                       className="usa-input"
+                      data-testid="upload-description"
                       id="upload-description"
                       name="freeText"
                       type="text"
@@ -91,6 +105,29 @@ export const EditUploadCourtIssuedDocument = connect(
                       }}
                     />
                   </FormGroup>
+                </div>
+                <div className="grid-row grid-gap margin-top-4">
+                  <div className="grid-col-8">
+                    <Button
+                      data-testid="save-edited-pdf-button"
+                      id="save-edited-pdf-button"
+                      onClick={() => {
+                        editUploadCourtIssuedDocumentSequence({
+                          tab: 'drafts',
+                        });
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      link
+                      onClick={() => {
+                        formCancelToggleCancelSequence();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -169,28 +206,6 @@ export const EditUploadCourtIssuedDocument = connect(
                     <DocumentDisplayIframe />
                   </>
                 )}
-              </div>
-            </div>
-
-            <div className="grid-row grid-gap margin-top-4">
-              <div className="grid-col-8">
-                <Button
-                  onClick={() => {
-                    editUploadCourtIssuedDocumentSequence({
-                      tab: 'drafts',
-                    });
-                  }}
-                >
-                  Save
-                </Button>
-                <Button
-                  link
-                  onClick={() => {
-                    formCancelToggleCancelSequence();
-                  }}
-                >
-                  Cancel
-                </Button>
               </div>
             </div>
           </div>
