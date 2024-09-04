@@ -288,8 +288,14 @@ export const Petition = ({
                   {contactCounsel.city}, {contactCounsel.state}{' '}
                   {contactCounsel.postalCode}
                 </div>
-                <div>{contactCounsel.phone}</div>
-                <div>{contactCounsel.email}</div>
+                <div>
+                  <b>Phone: </b>
+                  {contactCounsel.phone}
+                </div>
+                <div>
+                  <b>Email: </b>
+                  {contactCounsel.email}
+                </div>
 
                 <div>
                   <b>Tax Court Bar No.: </b>
