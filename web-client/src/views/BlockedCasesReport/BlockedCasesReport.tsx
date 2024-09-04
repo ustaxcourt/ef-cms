@@ -1,25 +1,25 @@
 import { BigHeader } from '../BigHeader';
+import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ErrorNotification } from '../ErrorNotification';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { download, generateCsv, mkConfig } from 'export-to-csv';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 export const BlockedCasesReport = connect(
   {
     blockedCaseReportFilter: state.blockedCaseReportFilter,
     blockedCasesReportHelper: state.blockedCasesReportHelper,
-    exportCsvBlockedCaseReportSequence:
-      sequences.exportCsvBlockedCaseReportSequence,
   },
   function BlockedCasesReport({
     blockedCaseReportFilter,
     blockedCasesReportHelper,
-    exportCsvBlockedCaseReportSequence,
   }) {
     const [isSubmitDebounced, setIsSubmitDebounced] = useState(false);
 
@@ -49,7 +49,7 @@ export const BlockedCasesReport = connect(
                 onClick={() => {
                   if (isSubmitDebounced) return;
                   debounceSubmit(1000);
-                  exportCsvBlockedCaseReportSequence({
+                  exportBlockedCasesReportCsv({
                     blockedCases:
                       blockedCasesReportHelper.blockedCasesFormatted,
                     trialLocation: blockedCaseReportFilter.trialLocationFilter,
@@ -146,8 +146,9 @@ export const BlockedCasesReport = connect(
                       </tbody>
                     </table>
                   )}
-                  {blockedCasesReportHelper.displayMessage && (
-                    <p>{blockedCasesReportHelper.displayMessage}</p>
+                  {blockedCasesReportHelper.blockedCasesFormatted.length ===
+                    0 && (
+                    <p>There are no blocked cases for this set of critieria.</p>
                   )}
                 </>
               )}
@@ -163,5 +164,63 @@ export const BlockedCasesReport = connect(
     );
   },
 );
+
+function exportBlockedCasesReportCsv({
+  blockedCases,
+  trialLocation,
+}: {
+  blockedCases: Pick<
+    BlockedFormattedCase,
+    | 'docketNumber'
+    | 'blockedDateEarliest'
+    | 'caseTitle'
+    | 'status'
+    | 'blockedReason'
+    | 'automaticBlockedReason'
+  >[];
+  trialLocation: string;
+}): void {
+  const [city, usState] = trialLocation.split(', ');
+  const date = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+  const fileName = `Blocked Cases Report - ${city}_${usState} ${date}`;
+  const csvConfig = mkConfig({
+    columnHeaders: [
+      {
+        displayLabel: 'Docket No.',
+        key: 'docketNumber',
+      },
+      {
+        displayLabel: 'Date Blocked',
+        key: 'blockedDateEarliest',
+      },
+      {
+        displayLabel: 'Case Title',
+        key: 'caseTitle',
+      },
+      {
+        displayLabel: 'Case Status',
+        key: 'status',
+      },
+      {
+        displayLabel: 'Reason',
+        key: 'allReasons',
+      },
+    ],
+    filename: fileName,
+    useKeysAsHeaders: false,
+  });
+
+  const formatString = (s: string | undefined) =>
+    (s || '').split('\n').join(' ').trim();
+
+  const formattedBlockedCases = blockedCases.map(c => ({
+    ...c,
+    allReasons: `${formatString(c.blockedReason)} ${formatString(c.automaticBlockedReason)}`,
+  }));
+
+  const csv = generateCsv(csvConfig)(formattedBlockedCases);
+
+  download(csvConfig)(csv);
+}
 
 BlockedCasesReport.displayName = 'BlockedCasesReport';

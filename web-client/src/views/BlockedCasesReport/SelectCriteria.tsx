@@ -10,15 +10,15 @@ export const SelectCriteria = connect(
     getBlockedCasesByTrialLocationSequence:
       sequences.getBlockedCasesByTrialLocationSequence,
     selectCriteriaHelper: state.selectCriteriaHelper,
-    setBlockedCaseReportCaseTypeSequence:
-      sequences.setBlockedCaseReportCaseTypeSequence,
+    setBlockedCaseReportProcedureTypeSequence:
+      sequences.setBlockedCaseReportProcedureTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function SelectCriteria({
     blockedCaseReportFilter,
     getBlockedCasesByTrialLocationSequence,
     selectCriteriaHelper,
-    setBlockedCaseReportCaseTypeSequence,
+    setBlockedCaseReportProcedureTypeSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -61,7 +61,7 @@ export const SelectCriteria = connect(
               name="procedureTypeFilter"
               value={blockedCaseReportFilter.procedureTypeFilter}
               onChange={e => {
-                setBlockedCaseReportCaseTypeSequence({
+                setBlockedCaseReportProcedureTypeSequence({
                   procedureType: e.target.value,
                 });
               }}
