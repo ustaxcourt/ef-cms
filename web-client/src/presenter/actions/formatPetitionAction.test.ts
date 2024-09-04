@@ -1,10 +1,10 @@
-import {
-  CASE_TYPES_MAP,
-  ROLES,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatPetitionAction } from '@web-client/presenter/actions/formatPetitionAction';
-import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import {
+  mockPetitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -162,23 +162,6 @@ describe('formatPetitionAction', () => {
   });
 
   it('should set counsel contact if user is a private practitioner', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => ({
-      barNumber: 'TEST_barNumber',
-      contact: {
-        address1: 'TEST_address1',
-        address2: 'TEST_address2',
-        address3: 'TEST_address3',
-        city: 'TEST_city',
-        phone: 'TEST_phone',
-        postalCode: 'TEST_postalCode',
-        state: 'TEST_state',
-      },
-      email: TEST_EMAIL,
-      firmName: 'TEST_firmName',
-      name: 'TEST_Name',
-      role: ROLES.privatePractitioner,
-    }));
-
     const results = await runAction(formatPetitionAction, {
       modules: {
         presenter,
@@ -186,10 +169,7 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
-        user: {
-          ...mockPetitionerUser,
-          email: TEST_EMAIL,
-        },
+        user: mockPrivatePractitionerUser,
       },
     });
 

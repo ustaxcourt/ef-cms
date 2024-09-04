@@ -14,6 +14,8 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+type PetitionCreationRoles = 'petitioner' | 'privatePractitioner';
+
 export const BeforeStartingCase = connect(
   {
     closeModalAndReturnToDashboardSequence:
@@ -30,7 +32,9 @@ export const BeforeStartingCase = connect(
   }) {
     const redirectUrl =
       petitionFlowUpdated &&
-      [ROLES.petitioner, ROLES.privatePractitioner].includes(user.role)
+      [ROLES.petitioner, ROLES.privatePractitioner].includes(
+        user.role as PetitionCreationRoles,
+      )
         ? '/file-a-petition/new'
         : '/file-a-petition/step-1';
 

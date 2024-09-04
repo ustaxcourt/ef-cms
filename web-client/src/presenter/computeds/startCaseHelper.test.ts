@@ -299,15 +299,12 @@ describe('startCaseHelper', () => {
   });
 
   it('should set notice legend correctly when user is petitioner', () => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.petitioner,
-      }) as RawUser;
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
           hasIrsNotice: false,
         },
+        user: petitionerUser,
       },
     });
     expect(result.noticeLegend).toEqual(
@@ -316,15 +313,12 @@ describe('startCaseHelper', () => {
   });
 
   it('should set notice legend correctly when user is private practitioner', () => {
-    applicationContext.getCurrentUser = () =>
-      ({
-        role: ROLES.privatePractitioner,
-      }) as RawUser;
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
           hasIrsNotice: false,
         },
+        user: privatePractitionerUser,
       },
     });
     expect(result.noticeLegend).toEqual(
