@@ -138,6 +138,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePetitionButton && (
                 <Button
                   link
+                  // className="document-viewer-button"
                   data-testid="review-and-serve-petition"
                   href={documentViewerLinksHelper.reviewAndServePetitionLink}
                   icon="paper-plane"
@@ -205,6 +206,7 @@ export const DocumentViewerDocument = connect(
               )}
               <Button
                 link
+                className="document-viewer-button"
                 icon="file-pdf"
                 iconColor="white"
                 onClick={() =>
