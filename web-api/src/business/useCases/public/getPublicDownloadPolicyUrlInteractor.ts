@@ -9,6 +9,7 @@ import {
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -17,6 +18,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     isTerminalUser,
     key,
   }: { docketNumber: string; isTerminalUser: boolean; key: string },
+  authorizdeUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {
   const caseToCheck: any = await applicationContext
     .getPersistenceGateway()
@@ -29,7 +31,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseToCheck, { applicationContext });
+  const caseEntity = new Case(caseToCheck, { authorizedUser: authorizdeUser });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId: key,
@@ -72,7 +74,6 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       isTerminalUser,
       rawCase: caseToCheck,
       user: {
-        name: '',
         role: ROLES.petitioner,
         userId: '',
       },

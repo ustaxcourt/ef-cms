@@ -4,6 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type ColdCaseEntry = {
   createdAt: string;
@@ -17,10 +18,9 @@ export type ColdCaseEntry = {
 
 export const coldCaseReportInteractor = async (
   applicationContext: ServerApplicationContext,
+  authorizedUser: UnknownAuthUser,
 ): Promise<ColdCaseEntry[]> => {
-  const requestUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.COLD_CASE_REPORT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COLD_CASE_REPORT)) {
     throw new UnauthorizedError(
       'Unauthorized for viewing the cold case report data',
     );

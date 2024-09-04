@@ -18,8 +18,6 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should set fileAcrossConsolidatedGroup to false when the user is filing a document on a case that is NOT consolidated', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
@@ -28,6 +26,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
           leadDocketNumber: undefined,
         },
         form: {},
+        user: privatePractitionerUser,
       },
     });
 
@@ -44,8 +43,6 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   });
 
   it('should set fileAcrossConsolidatedGroup to false when the user is filing on a consolidated case but the document they are filing is NOT multi-docketable', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
@@ -56,6 +53,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
         form: {
           eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -73,8 +71,6 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   });
 
   it('should set fileAcrossConsolidatedGroup to true when the user is filing a document on a case that is consolidated and they have chosen to file a document that is multi-docketable', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
-
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
@@ -85,6 +81,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
         form: {
           eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
         },
+        user: privatePractitionerUser,
       },
     });
 
@@ -102,13 +99,12 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   });
 
   it('should set filersMap[userId] to true when the logged in user is a petitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
         caseDetail: {},
         form: {},
+        user: petitionerUser,
       },
     });
 
@@ -118,8 +114,6 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   });
 
   it('should set partyIrsPractitioner to true when first IRS filing', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
-
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
@@ -129,6 +123,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
         form: {
           eventCode: 'EA',
         },
+        user: irsPractitionerUser,
       },
     });
 
@@ -136,13 +131,12 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
   });
 
   it('should default the generationType to manual', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
         caseDetail: {},
         form: { generationType: undefined },
+        user: petitionerUser,
       },
     });
 

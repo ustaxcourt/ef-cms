@@ -3,25 +3,27 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOutboxMessagesForSectionInteractor } from './getOutboxMessagesForSectionInteractor';
 import { getSectionOutboxMessages } from '@web-api/persistence/postgres/messages/getSectionOutboxMessages';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('getOutboxMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      getOutboxMessagesForSectionInteractor(applicationContext, {
-        section: DOCKET_SECTION,
-      }),
+      getOutboxMessagesForSectionInteractor(
+        applicationContext,
+        {
+          section: DOCKET_SECTION,
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -50,10 +52,7 @@ describe('getOutboxMessagesForSectionInteractor', () => {
       trialDate: '2028-03-01T21:40:46.415Z',
       trialLocation: 'El Paso, Texas',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
+
     (getSectionOutboxMessages as jest.Mock).mockReturnValue([messageData]);
 
     const returnedMessages = await getOutboxMessagesForSectionInteractor(
@@ -61,6 +60,7 @@ describe('getOutboxMessagesForSectionInteractor', () => {
       {
         section: DOCKET_SECTION,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(getSectionOutboxMessages).toHaveBeenCalled();

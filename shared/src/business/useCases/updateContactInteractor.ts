@@ -5,7 +5,16 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { DocketEntry } from '../entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  NotFoundError,
+  UnauthorizedError,
+  UnidentifiedUserError,
+} from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  UnknownAuthUser,
+  isAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../entities/WorkItem';
 import { addCoverToPdf } from '../../../../web-api/src/business/useCases/addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
@@ -24,10 +33,15 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case
  */
 export const updateContact = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   { contactInfo, docketNumber },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
+  if (!isAuthUser(authorizedUser)) {
+    throw new UnidentifiedUserError(
+      'Unable to confirm user is an authenticated user',
+    );
+  }
 
   const editableFields = {
     address1: contactInfo.address1,
@@ -56,7 +70,7 @@ export const updateContact = async (
     {
       ...caseToUpdate,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   const oldCaseContact = cloneDeep(
@@ -75,12 +89,12 @@ export const updateContact = async (
   }
 
   const rawUpdatedCase = caseEntity.validate().toRawObject();
-  caseEntity = new Case(rawUpdatedCase, { applicationContext });
+  caseEntity = new Case(rawUpdatedCase, { authorizedUser });
 
   const updatedPetitioner = caseEntity.getPetitionerById(contactInfo.contactId);
 
   const userIsAssociated = caseEntity.isAssociatedUser({
-    user,
+    user: authorizedUser,
   });
 
   if (!userIsAssociated) {
@@ -136,10 +150,10 @@ export const updateContact = async (
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
-      { applicationContext, petitioners: caseEntity.petitioners },
+      { authorizedUser, petitioners: caseEntity.petitioners },
     );
 
-    changeOfAddressDocketEntry.setFiledBy(user);
+    changeOfAddressDocketEntry.setFiledBy(authorizedUser);
 
     const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -170,13 +184,12 @@ export const updateContact = async (
           docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
+          sentBy: authorizedUser.name,
+          sentByUserId: authorizedUser.userId,
           trialDate: caseEntity.trialDate,
           trialLocation: caseEntity.trialLocation,
         },
-        { applicationContext },
-        caseEntity,
+        { caseEntity },
       );
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
@@ -227,6 +240,7 @@ export const updateContact = async (
   if (shouldUpdateCase) {
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
+      authorizedUser,
       caseToUpdate: caseEntity,
     });
   }

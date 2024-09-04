@@ -8,6 +8,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
@@ -19,8 +20,8 @@ export const fileCourtIssuedOrder = async (
     documentMetadata,
     primaryDocumentFileId,
   }: { documentMetadata: any; primaryDocumentFileId: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
-  const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -37,7 +38,7 @@ export const fileCourtIssuedOrder = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
@@ -87,7 +88,7 @@ export const fileCourtIssuedOrder = async (
       isFileAttached: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
   docketEntryEntity.setFiledBy(user);
@@ -98,6 +99,7 @@ export const fileCourtIssuedOrder = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 

@@ -5,22 +5,14 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 
-/**
- * getInboxMessagesForSectionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the inbox messages
- * @returns {object} the messages in the section inbox
- */
 export const getInboxMessagesForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -30,7 +22,5 @@ export const getInboxMessagesForSectionInteractor = async (
     section,
   });
 
-  return MessageResult.validateRawCollection(messages, {
-    applicationContext,
-  });
+  return MessageResult.validateRawCollection(messages);
 };

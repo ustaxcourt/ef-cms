@@ -4,7 +4,7 @@ import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFakeFile } from '../../../../../shared/src/business/test/getFakeFile';
-import { petitionsClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { setNoticeOfChangeToInPersonProceeding } from './setNoticeOfChangeToInPersonProceeding';
 
 describe('setNoticeOfChangeToInPersonProceeding', () => {
@@ -22,7 +22,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: mockTrialSessionId,
     },
-    { applicationContext },
+    { authorizedUser: mockDocketClerkUser },
   );
 
   beforeEach(() => {
@@ -32,12 +32,15 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   });
 
   it('should make a call to generate the NOIP pdf', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      caseEntity: mockOpenCase,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      user: petitionsClerkUser,
-    });
+    await setNoticeOfChangeToInPersonProceeding(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers()
@@ -62,12 +65,15 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   });
 
   it('should make a call to create and serve the NOIP docket entry on the case', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      caseEntity: mockOpenCase,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      user: petitionsClerkUser,
-    });
+    await setNoticeOfChangeToInPersonProceeding(
+      applicationContext,
+      {
+        caseEntity: mockOpenCase,
+        newPdfDoc: getFakeFile,
+        newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      },
+      mockDocketClerkUser,
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry
@@ -83,7 +89,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding,
       newPdfDoc: getFakeFile,
       noticePdf: getFakeFile,
-      user: petitionsClerkUser,
     });
   });
 });

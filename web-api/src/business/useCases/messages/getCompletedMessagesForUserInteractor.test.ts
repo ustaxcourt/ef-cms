@@ -8,19 +8,22 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCompletedMessagesForUserInteractor } from './getCompletedMessagesForUserInteractor';
 import { getCompletedUserInboxMessages } from '@web-api/persistence/postgres/messages/getCompletedUserInboxMessages';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
 describe('getCompletedMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
-    });
-
     await expect(
-      getCompletedMessagesForUserInteractor(applicationContext, {
-        userId: 'abc',
-      }),
+      getCompletedMessagesForUserInteractor(
+        applicationContext,
+        {
+          userId: 'abc',
+        },
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -64,6 +67,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
       {
         userId: messageData.completedByUserId,
       },
+      mockPetitionsClerkUser,
     );
 
     expect(getCompletedUserInboxMessages).toHaveBeenCalled();

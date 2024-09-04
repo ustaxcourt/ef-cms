@@ -9,10 +9,11 @@ import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import {
-  judgeUser,
-  petitionsClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
+  mockJudgeUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 const mockClosedCases = 3;
 const mockClosedDismissedCases = 2;
@@ -50,8 +51,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(judgeUser);
@@ -62,20 +61,26 @@ describe('getCasesClosedByJudgeInteractor', () => {
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     await expect(
-      getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest),
+      getCasesClosedByJudgeInteractor(
+        applicationContext,
+        mockValidRequest,
+        mockPetitionsClerkUser,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      getCasesClosedByJudgeInteractor(applicationContext, {
-        endDate: 'baddabingbaddaboom',
-        judges: [judgeUser.name],
-        startDate: 'yabbadabbadoo',
-      }),
+      getCasesClosedByJudgeInteractor(
+        applicationContext,
+        {
+          endDate: 'baddabingbaddaboom',
+          judges: [judgeUser.name],
+          startDate: 'yabbadabbadoo',
+        },
+        mockJudgeUser,
+      ),
     ).rejects.toThrow();
   });
 
@@ -83,6 +88,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     const closedCases = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
+      mockJudgeUser,
     );
 
     expect(

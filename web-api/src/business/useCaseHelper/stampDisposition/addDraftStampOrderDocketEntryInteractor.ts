@@ -9,8 +9,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
@@ -28,7 +30,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {string} providers.stampData the stampData from the form
  */
 export const addDraftStampOrderDocketEntry = async (
-  applicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     formattedDraftDocumentTitle,
@@ -47,10 +49,9 @@ export const addDraftStampOrderDocketEntry = async (
     };
     stampedDocketEntryId: string;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.STAMP_MOTION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.STAMP_MOTION)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
@@ -60,7 +61,7 @@ export const addDraftStampOrderDocketEntry = async (
       applicationContext,
       docketNumber,
     });
-  const caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
@@ -87,7 +88,7 @@ export const addDraftStampOrderDocketEntry = async (
         freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo?.eventCode,
-      filedBy: user.judgeFullName || user.name,
+      filedBy: authorizedUser.name,
       freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isFileAttached: true,
@@ -95,12 +96,15 @@ export const addDraftStampOrderDocketEntry = async (
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       stampData: validatedStampData,
     },
-    { applicationContext },
+    { authorizedUser },
   );
 
-  stampedDocketEntryEntity.setFiledBy(user);
+  stampedDocketEntryEntity.setFiledBy(authorizedUser);
 
-  stampedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
+  stampedDocketEntryEntity.setSigned(
+    authorizedUser.userId,
+    stampData.nameForSigning,
+  );
 
   caseEntity.addDocketEntry(stampedDocketEntryEntity);
 
@@ -124,6 +128,7 @@ export const addDraftStampOrderDocketEntry = async (
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
+    authorizedUser,
     caseToUpdate: caseEntity,
   });
 };

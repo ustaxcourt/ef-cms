@@ -52,7 +52,5 @@ export const createTrialSessionAndWorkingCopy = async ({
       });
   }
 
-  return new TrialSession(createdTrialSession, { applicationContext })
-    .validate()
-    .toRawObject();
+  return new TrialSession(createdTrialSession).validate().toRawObject();
 };

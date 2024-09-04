@@ -4,7 +4,7 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../../test/mockCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('markAsSentToIRS', () => {
   it('updates case status to general docket not at issue', () => {
@@ -13,7 +13,7 @@ describe('markAsSentToIRS', () => {
         ...MOCK_CASE,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
     caseRecord.markAsSentToIRS();
@@ -26,7 +26,7 @@ describe('markAsSentToIRS', () => {
         ...MOCK_CASE_WITH_SECONDARY_OTHERS,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 
@@ -46,7 +46,7 @@ describe('markAsSentToIRS', () => {
         ...MOCK_CASE_WITH_SECONDARY_OTHERS,
       },
       {
-        applicationContext,
+        authorizedUser: mockDocketClerkUser,
       },
     );
 

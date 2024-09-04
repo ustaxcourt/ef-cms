@@ -1,26 +1,23 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  CASE_STATUS_TYPES,
-  Role,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { createTestApplicationContext as mockCreateTestApplicationContext } from '@shared/business/test/createTestApplicationContext';
+import {
+  mockDocketClerkUser,
+  mockPetitionerUser,
+} from '@shared/test/mockAuthUsers';
 import { getDownloadPolicyUrlInteractor as mockGetDownloadPolicyUrlInteractor } from '@web-api/business/useCases/document/getDownloadPolicyUrlInteractor';
 
 jest.mock('@web-api/applicationContext', () => {
   return {
-    createApplicationContext: user => {
-      let appContext = mockCreateTestApplicationContext(user);
+    createApplicationContext: () => {
+      let appContext = mockCreateTestApplicationContext();
       appContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(mockFeatureFlag);
       appContext.getUseCases().getDownloadPolicyUrlInteractor = jest
         .fn()
         .mockImplementation(mockGetDownloadPolicyUrlInteractor);
-
-      appContext.getCurrentUser = jest.fn().mockReturnValue(mockUser);
 
       appContext.getDocumentClient = jest.fn().mockReturnValue({
         query: jest.fn().mockResolvedValue({
@@ -51,20 +48,16 @@ jest.mock('@web-api/applicationContext', () => {
 
 let mockFeatureFlag;
 let mockShouldThrowError;
-let mockUser;
 let mockItems;
 const setupMock = ({
   featureFlag,
   items,
   shouldThrowError,
-  user,
 }: {
   items: any[];
   featureFlag: boolean;
   shouldThrowError: boolean;
-  user: AuthUser;
 }) => {
-  mockUser = user;
   mockShouldThrowError = shouldThrowError;
   mockFeatureFlag = featureFlag;
   mockItems = items;
@@ -83,7 +76,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   // disable logging by mimicking CI for this test
   beforeAll(() => {
     ({ CI } = process.env);
-    process.env.CI = true;
+    process.env.CI = 'true';
   });
 
   afterAll(() => (process.env.CI = CI));
@@ -95,15 +88,12 @@ describe('getDocumentDownloadUrlLambda', () => {
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: {
-        email: '',
-        name: '',
-        role: 'roleWithNoPermissions' as Role,
-        userId: '',
-      },
     });
 
-    const response = await getDocumentDownloadUrlLambda(REQUEST_EVENT, {});
+    const response = await getDocumentDownloadUrlLambda(
+      REQUEST_EVENT,
+      undefined,
+    );
 
     expect(response.statusCode).toBe(403);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -122,10 +112,12 @@ describe('getDocumentDownloadUrlLambda', () => {
       featureFlag: true,
       items: [],
       shouldThrowError: false,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
-    const response = await getDocumentDownloadUrlLambda(request, {});
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockPetitionerUser,
+    );
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -162,10 +154,12 @@ describe('getDocumentDownloadUrlLambda', () => {
         },
       ],
       shouldThrowError: false,
-      user: MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'] as AuthUser,
     });
 
-    const response = await getDocumentDownloadUrlLambda(request, {});
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockPetitionerUser,
+    );
 
     expect(response.statusCode).toBe(404);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -187,10 +181,12 @@ describe('getDocumentDownloadUrlLambda', () => {
       featureFlag: true,
       items: [],
       shouldThrowError: true,
-      user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
     });
 
-    const response = await getDocumentDownloadUrlLambda(request, {});
+    const response = await getDocumentDownloadUrlLambda(
+      request,
+      mockDocketClerkUser,
+    );
 
     expect(response.statusCode).toBe(500);
     expect(response.headers['Content-Type']).toBe('application/json');
@@ -228,10 +224,12 @@ describe('getDocumentDownloadUrlLambda', () => {
           },
         ],
         shouldThrowError: false,
-        user: MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'] as AuthUser,
       });
 
-      const response = await getDocumentDownloadUrlLambda(request, {});
+      const response = await getDocumentDownloadUrlLambda(
+        request,
+        mockDocketClerkUser,
+      );
 
       expect(response.statusCode).toBe('200');
       expect(response.headers['Content-Type']).toBe('application/json');
