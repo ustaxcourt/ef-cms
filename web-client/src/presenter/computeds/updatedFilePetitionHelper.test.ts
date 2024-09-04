@@ -116,7 +116,7 @@ describe('updatedFilePetitionHelper', () => {
   describe('otherFilingOptions', () => {
     it('should return the other filing options for petitioner', () => {
       const result = runCompute(updatedFilePetitionHelper, {
-        state: { form: {} },
+        state: { form: {}, user: petitionerUser },
       });
       expect(result.otherFilingOptions).toEqual([
         'An estate or trust',

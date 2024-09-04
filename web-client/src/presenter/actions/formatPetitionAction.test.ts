@@ -169,7 +169,20 @@ describe('formatPetitionAction', () => {
       props: PROPS,
       state: {
         petitionFormatted: undefined,
-        user: mockPrivatePractitionerUser,
+        user: {
+          ...mockPrivatePractitionerUser,
+          barNumber: 'TEST_barNumber',
+          contact: {
+            address1: 'TEST_address1',
+            address2: 'TEST_address2',
+            address3: 'TEST_address3',
+            city: 'TEST_city',
+            phone: 'TEST_phone',
+            postalCode: 'TEST_postalCode',
+            state: 'TEST_state',
+          },
+          firmName: 'TEST_firmName',
+        },
       },
     });
 
@@ -179,9 +192,9 @@ describe('formatPetitionAction', () => {
       address3: 'TEST_address3',
       barNumber: 'TEST_barNumber',
       city: 'TEST_city',
-      email: 'TEST_EMAIL',
+      email: 'mockPrivatePractitioner@example.com',
       firmName: 'TEST_firmName',
-      name: 'TEST_Name',
+      name: 'Reginald Barclay',
       phone: 'TEST_phone',
       postalCode: 'TEST_postalCode',
       state: 'TEST_state',
