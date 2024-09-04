@@ -6,20 +6,28 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const SessionInformationForm = connect(
-  {
-    DATE_FORMATS: state.constants.DATE_FORMATS,
-    TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
-    addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
-    form: state.form,
-    formatAndUpdateDateFromDatePickerSequence:
-      sequences.formatAndUpdateDateFromDatePickerSequence,
-    formattedTrialSessions: state.formattedTrialSessions,
-    updateTrialSessionFormDataSequence:
-      sequences.updateTrialSessionFormDataSequence,
-    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
-    validationErrors: state.validationErrors,
-  },
+type SessionInformationFormProps = { addingTrialSession: boolean };
+
+const sessionInformationDeps = {
+  DATE_FORMATS: state.constants.DATE_FORMATS,
+  TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
+  addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
+  form: state.form,
+  formatAndUpdateDateFromDatePickerSequence:
+    sequences.formatAndUpdateDateFromDatePickerSequence,
+  formattedTrialSessions: state.formattedTrialSessions,
+  updateTrialSessionFormDataSequence:
+    sequences.updateTrialSessionFormDataSequence,
+  user: state.user,
+  validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const SessionInformationForm = connect<
+  SessionInformationFormProps,
+  typeof sessionInformationDeps
+>(
+  sessionInformationDeps,
   function SessionInformationForm({
     addingTrialSession,
     addTrialSessionInformationHelper,
