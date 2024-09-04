@@ -398,7 +398,7 @@ export const batchDelete = async ({
   items,
 }: {
   applicationContext: ServerApplicationContext;
-  items: DynamoRecordKey[];
+  items: DynamoRecordKey[] | undefined;
 }): Promise<void> => {
   if (!items || items.length === 0) {
     return Promise.resolve();
