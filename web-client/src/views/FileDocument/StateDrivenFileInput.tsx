@@ -54,6 +54,7 @@ export const StateDrivenFileInput = connect<
       const { name: inputName } = e.target;
       const selectedFile = e.target.files[0];
       const { errorMessage, isValid } = await validateFile({
+        allowedFileExtensions: accept.split(','),
         file: selectedFile,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
       });

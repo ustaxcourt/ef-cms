@@ -1,6 +1,11 @@
 import { FileValidationResponse } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { applicationContext } from '@web-client/applicationContext';
 
+export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
+  'File is encrypted or password protected. Remove encryption or password protection and try again.';
+export const PDF_CORRUPTED_ERROR_MESSAGE =
+  'File is corrupted or in an unsupported PDF format. Ensure the file is not corrupted and/or is in a supported PDF format and try again.';
+
 export const validatePDFUpload = ({
   file,
 }: {
@@ -32,14 +37,12 @@ export const validatePDFUpload = ({
         if (err instanceof Error) {
           if (err.name === 'PasswordException') {
             resolve({
-              errorMessage:
-                'File is encrypted or password protected. Remove encryption or password protection and try again.',
+              errorMessage: PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
               isValid: false,
             });
           } else if (err.name === 'InvalidPDFException') {
             resolve({
-              errorMessage:
-                'File is not a PDF. Select a PDF file or resave the file as a PDF.',
+              errorMessage: PDF_CORRUPTED_ERROR_MESSAGE,
               isValid: false,
             });
           }
