@@ -13,7 +13,11 @@ if (!databaseName) {
 }
 
 async function grantPrivileges() {
-  const db = await connect({ ...POOL });
+  const db = await connect({
+    ...POOL,
+    password: process.env.POSTGRES_MASTER_PASSWORD,
+    user: process.env.POSTGRES_MASTER_USERNAME,
+  });
 
   try {
     await sql`CREATE USER ${sql.raw(userToCreate)} WITH LOGIN;`.execute(db);
