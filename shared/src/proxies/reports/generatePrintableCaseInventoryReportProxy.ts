@@ -1,3 +1,4 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { asyncSyncHandler, get } from '../requests';
 
 /**
@@ -10,8 +11,14 @@ import { asyncSyncHandler, get } from '../requests';
  * @returns {Promise<*>} the promise of the api call
  */
 export const generatePrintableCaseInventoryReportInteractor = (
-  applicationContext,
-  { associatedJudge, status },
+  applicationContext: ClientApplicationContext,
+  {
+    associatedJudge,
+    status,
+  }: {
+    associatedJudge?: string;
+    status?: string;
+  },
 ) => {
   return asyncSyncHandler(
     applicationContext,
