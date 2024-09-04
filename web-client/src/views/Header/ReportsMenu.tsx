@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -58,8 +57,7 @@ export const ReportsMenu = connect(
               </li>
             )}
             <li className="usa-nav__submenu-item">
-              <Button
-                link
+              <button
                 id="case-inventory-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
@@ -68,7 +66,7 @@ export const ReportsMenu = connect(
                 }}
               >
                 Case Inventory
-              </Button>
+              </button>
             </li>
 
             <li className="usa-nav__submenu-item">
@@ -136,8 +134,7 @@ export const ReportsMenu = connect(
               </a>
             </li>
             <li className="usa-nav__submenu-item" id="reports-nav">
-              <Button
-                link
+              <button
                 id="trial-session-planning-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
@@ -146,7 +143,7 @@ export const ReportsMenu = connect(
                 }}
               >
                 Trial Session Planning
-              </Button>
+              </button>
             </li>
           </ul>
         )}
