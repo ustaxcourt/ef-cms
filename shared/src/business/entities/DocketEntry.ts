@@ -143,7 +143,28 @@ export class DocketEntry extends JoiValidationEntity {
   public privatePractitioners?: any[];
   public servedParties?: any[];
   public signedAt?: string;
-  public draftOrderState?: object;
+  public draftOrderState?: {
+    additionalOrderText?: string;
+    docketEntryDescription?: string;
+    docketNumber?: string;
+    documentContents?: any;
+    documentTitle?: string;
+    documentType?: string;
+    dueDate?: string;
+    editorDelta?: any;
+    eventCode?: string;
+    freeText?: string;
+    generatedDocumentTitle?: string;
+    issueOrder?: string;
+    jurisdiction?: string;
+    orderType?: string;
+    primaryDocumentFileSize?: number;
+    richText?: string;
+    scenario?: string;
+    statusReportFilingDate?: string;
+    statusReportIndex?: string;
+    strickenFromTrialSessions?: boolean;
+  };
   public stampData!: object;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
@@ -495,6 +516,8 @@ export class DocketEntry extends JoiValidationEntity {
    *  otherwise false
    */
   isAutoServed() {
+    if (!this.documentType) return false;
+
     const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
       this.documentType,
     );
@@ -602,7 +625,7 @@ export class DocketEntry extends JoiValidationEntity {
       return true;
     }
 
-    if (!rootDocument || !DocketEntry.isBriefType(rootDocument.documentType)) {
+    if (!rootDocument || !DocketEntry.isBriefType(rootDocument.documentType!)) {
       return false;
     }
 
