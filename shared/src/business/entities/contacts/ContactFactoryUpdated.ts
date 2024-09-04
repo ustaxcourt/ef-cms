@@ -1,5 +1,5 @@
 import { BusinessContact } from './BusinessContact';
-import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { CONTACT_TYPES, FilingType, PARTY_TYPES } from '../EntityConstants';
 import { ContactUpdated } from '@shared/business/entities/contacts/ContactUpdated';
 import { DeceasedSpouseContact } from '@shared/business/entities/contacts/DeceasedSpouseContact';
 import { OtherContact } from '@shared/business/entities/contacts/OtherContact';
@@ -15,7 +15,7 @@ export function ContactFactoryUpdated({
 }: {
   contactInfoPrimary: {};
   contactInfoSecondary: {};
-  filingType: string;
+  filingType: FilingType;
   partyType: string;
   petitionType: string;
   hasSpouseConsent: boolean;
