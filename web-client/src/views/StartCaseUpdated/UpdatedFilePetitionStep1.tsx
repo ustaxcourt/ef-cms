@@ -147,7 +147,6 @@ export const UpdatedFilePetitionStep1 = connect(
         {form.filingType === 'Other' && (
           <OtherInfo
             form={form}
-            isPetitioner={isPetitioner}
             otherContactNameLabel={
               updatedFilePetitionHelper.otherContactNameLabel
             }
