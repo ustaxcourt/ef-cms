@@ -1,84 +1,21 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
-/**
- * gets the blocked cases and formats them and filters based on procedureType
- * @param {Function} get the cerebral get function used
- * for getting state.form.procedureType and state.blockedCases
- * @param {object} applicationContext the application context
- * @returns {object} {blockedCasesFormatted: *[], blockedCasesCount: number}
- */
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-
-export type BlockedFormattedCase = {
-  docketNumber: string;
-  inConsolidatedGroup: boolean;
-  consolidatedIconTooltipText: string;
-  isLeadCase: boolean;
-  blockedDateEarliest: string;
-  caseTitle: string;
-  procedureType: string;
-  status: CaseStatus;
-  blockedReason?: string;
-  automaticBlockedReason?: string;
-  docketNumberWithSuffix?: string;
-};
-
-type BlockedCaseReportHelperResults = {
-  blockedCasesCount: number;
-  blockedCasesFormatted: BlockedFormattedCase[];
-  displayMessage: string | undefined;
-};
-
-const setFormattedBlockDates = (
-  blockedCase: RawCase & {
-    inConsolidatedGroup: boolean;
-    consolidatedIconTooltipText: string;
-    shouldIndent: boolean;
-    isLeadCase: boolean;
-  },
-  applicationContext: ClientApplicationContext,
-): BlockedFormattedCase => {
-  const blockedFormattedCase: BlockedFormattedCase = {
-    ...blockedCase,
-    blockedDateEarliest: '',
-    caseTitle: '',
-  };
-
-  if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
-    if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
-      blockedFormattedCase.blockedDateEarliest = applicationContext
-        .getUtilities()
-        .formatDateString(blockedCase.blockedDate, 'MMDDYY');
-    } else {
-      blockedFormattedCase.blockedDateEarliest = applicationContext
-        .getUtilities()
-        .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
-    }
-  } else if (blockedCase.blocked) {
-    blockedFormattedCase.blockedDateEarliest = applicationContext
-      .getUtilities()
-      .formatDateString(blockedCase.blockedDate!, 'MMDDYY');
-  } else if (blockedCase.automaticBlocked) {
-    blockedFormattedCase.blockedDateEarliest = applicationContext
-      .getUtilities()
-      .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
-  }
-  return blockedFormattedCase;
-};
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const blockedCasesReportHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): BlockedCaseReportHelperResults => {
+): {
+  blockedCasesCount: number;
+  blockedCasesFormatted: BlockedFormattedCase[];
+} => {
   const blockedCases: RawCase[] = get(state.blockedCases);
   const { caseStatusFilter, procedureTypeFilter, reasonFilter } = get(
     state.blockedCaseReportFilter,
   );
 
   let blockedCasesFormatted: BlockedFormattedCase[] = [];
-  let displayMessage: string | undefined;
 
   if (blockedCases && blockedCases.length) {
     blockedCasesFormatted = blockedCases
@@ -117,17 +54,59 @@ export const blockedCasesReportHelper = (
       });
   }
 
-  if (blockedCasesFormatted.length === 0) {
-    displayMessage = 'There are no blocked cases for this location.';
-
-    if (procedureTypeFilter && procedureTypeFilter !== 'All') {
-      displayMessage = 'There are no blocked cases for this case type.';
-    }
-  }
-
   return {
     blockedCasesCount: blockedCasesFormatted.length,
     blockedCasesFormatted,
-    displayMessage,
   };
+};
+
+export type BlockedFormattedCase = {
+  docketNumber: string;
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  isLeadCase: boolean;
+  blockedDateEarliest: string;
+  caseTitle: string;
+  procedureType: string;
+  status: CaseStatus;
+  blockedReason?: string;
+  automaticBlockedReason?: string;
+  docketNumberWithSuffix?: string;
+};
+
+const setFormattedBlockDates = (
+  blockedCase: RawCase & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+  },
+  applicationContext: ClientApplicationContext,
+): BlockedFormattedCase => {
+  const blockedFormattedCase: BlockedFormattedCase = {
+    ...blockedCase,
+    blockedDateEarliest: '',
+    caseTitle: '',
+  };
+
+  if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
+    if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
+      blockedFormattedCase.blockedDateEarliest = applicationContext
+        .getUtilities()
+        .formatDateString(blockedCase.blockedDate, 'MMDDYY');
+    } else {
+      blockedFormattedCase.blockedDateEarliest = applicationContext
+        .getUtilities()
+        .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
+    }
+  } else if (blockedCase.blocked) {
+    blockedFormattedCase.blockedDateEarliest = applicationContext
+      .getUtilities()
+      .formatDateString(blockedCase.blockedDate!, 'MMDDYY');
+  } else if (blockedCase.automaticBlocked) {
+    blockedFormattedCase.blockedDateEarliest = applicationContext
+      .getUtilities()
+      .formatDateString(blockedCase.automaticBlockedDate!, 'MMDDYY');
+  }
+  return blockedFormattedCase;
 };
