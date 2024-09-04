@@ -1,6 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { FilingType, ROLES } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IBusinessFields {
@@ -84,7 +84,7 @@ function getOtherFilingOptions(isPractitioner) {
   return otherFilingOptions;
 }
 
-function formatFilingTypes(filingOptions) {
+function formatFilingTypes(filingOptions: FilingType[]) {
   return filingOptions.map(option => {
     if (option === 'Individual petitioner') {
       return {
