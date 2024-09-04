@@ -1,3 +1,4 @@
+import { PROCEDURE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { faker } from '@faker-js/faker';
 import {
   getCreateACaseButton,
@@ -54,7 +55,9 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
 
   cy.get('input#date-received-picker').type('01/01/2020');
   cy.get('#mailing-date').type('01/01/2020');
-  cy.get('#procedure-type-0').click();
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
   cy.get('#preferred-trial-city').scrollIntoView();
   cy.get('#preferred-trial-city').select('Birmingham, Alabama');
   cy.get('label[for="payment-status-paid"]').click();

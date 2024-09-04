@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CardHeader } from './CardHeader';
+import { getCaseDescription } from '@shared/business/utilities/getCaseDescription';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -16,7 +17,10 @@ export function IRSNoticeInformation({ petitionFormatted }) {
                   Type of notice/case
                 </div>
                 <div className="margin-bottom-2px">
-                  {petitionFormatted.caseType}
+                  {getCaseDescription(
+                    petitionFormatted.hasIrsNotice,
+                    petitionFormatted.originalCaseType,
+                  )}
                 </div>
               </div>
             </div>
@@ -37,7 +41,12 @@ export function IRSNoticeInformation({ petitionFormatted }) {
                   <div className="margin-bottom-1 semi-bold">
                     IRS notice {index + 1}
                   </div>
-                  <div className="margin-bottom-2px">{irsNotice.caseType}</div>
+                  <div className="margin-bottom-2px">
+                    {getCaseDescription(
+                      petitionFormatted.hasIrsNotice,
+                      irsNotice.originalCaseType,
+                    )}
+                  </div>
                   {irsNotice.taxYear && (
                     <div className="margin-bottom-2px">{irsNotice.taxYear}</div>
                   )}

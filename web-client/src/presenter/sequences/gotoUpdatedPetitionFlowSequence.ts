@@ -12,4 +12,4 @@ export const gotoUpdatedPetitionFlowSequence =
     setupPetitionStateAction,
     setDefaultCaseProcedureAction,
     setupCurrentPageAction('UpdatedFilePetition'),
-  ]);
+  ]) as unknown as () => void;
