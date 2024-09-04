@@ -78,13 +78,10 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
       {totalPages > 1 && (
         <div ref={paginatorTop}>
           <Paginator
-            breakClassName="hide"
-            forcePage={activePage}
-            marginPagesDisplayed={0}
-            pageCount={totalPages}
-            pageRangeDisplayed={0}
-            onPageChange={async pageChange => {
-              setActivePage(pageChange.selected);
+            currentPageIndex={activePage}
+            totalPages={totalPages}
+            onPageChange={pageChange => {
+              setActivePage(pageChange);
               focusPaginatorTop(paginatorTop);
             }}
           />
@@ -161,13 +158,10 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
 
       {totalPages > 1 && (
         <Paginator
-          breakClassName="hide"
-          forcePage={activePage}
-          marginPagesDisplayed={0}
-          pageCount={totalPages}
-          pageRangeDisplayed={0}
-          onPageChange={async pageChange => {
-            setActivePage(pageChange.selected);
+          currentPageIndex={activePage}
+          totalPages={totalPages}
+          onPageChange={pageChange => {
+            setActivePage(pageChange);
             focusPaginatorTop(paginatorTop);
           }}
         />
