@@ -27,7 +27,9 @@ export class DeceasedSpouseContact extends ContactUpdated {
           then: joi.string().required(),
         },
       ).messages({
-        '*': 'Enter an email address to register for electronic service',
+        'any.required':
+          'Enter an email address to register for electronic service',
+        'string.email': 'Enter email address in format: yourname@example.com',
       }),
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
     };

@@ -8,7 +8,7 @@ export class PrivatePractitioner extends User {
   public entityName: string;
   public barNumber: string;
   public firmName: string;
-  public representing: string;
+  public representing: string[];
   public serviceIndicator: string;
 
   constructor(rawUser, { filtered = false } = {}) {

@@ -1,3 +1,4 @@
+import { PROCEDURE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import {
   fillIrsNoticeInformation,
@@ -22,7 +23,9 @@ describe('Petition generation - step 4', () => {
   });
 
   it('Small Case: should be free of a11y issues', () => {
-    cy.get('[data-testid="procedure-type-1"]').click();
+    cy.get(
+      `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.small}-radio"]`,
+    ).click();
     checkA11y();
   });
 });
