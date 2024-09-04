@@ -4,9 +4,11 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export const generateNoticeOfDocketChangePdf = async ({
   applicationContext,
+  authorizedUser,
   docketChangeInfo,
 }: {
   applicationContext: ServerApplicationContext;
@@ -20,10 +22,9 @@ export const generateNoticeOfDocketChangePdf = async ({
     filingParties: { after: string | undefined; before: string | undefined };
     filingsAndProceedings: { after: string; before: string };
   };
+  authorizedUser: UnknownAuthUser;
 }): Promise<string> => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

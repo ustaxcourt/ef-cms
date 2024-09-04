@@ -4,6 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type PractitionersByName = {
   searchResults: {
@@ -26,13 +27,13 @@ export type PractitionersByName = {
 export const getPractitionersByNameInteractor = async (
   applicationContext: ServerApplicationContext,
   { name, searchAfter }: { name: string; searchAfter: string },
+  authorizedUser: UnknownAuthUser,
 ): Promise<PractitionersByName> => {
-  const authenticatedUser = applicationContext.getCurrentUser();
-  const isLoggedInUser = !!authenticatedUser?.userId;
+  const isLoggedInUser = !!authorizedUser?.userId;
 
   if (
     isLoggedInUser &&
-    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)
   ) {
     throw new UnauthorizedError('Unauthorized for searching practitioners');
   }

@@ -13,9 +13,7 @@ export const updatedValidatePetitionAction = ({
       petition,
     });
 
-  if (!errors) {
-    return path.success();
-  } else {
+  if (errors) {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
@@ -23,4 +21,6 @@ export const updatedValidatePetitionAction = ({
       errors,
     });
   }
+
+  return path.success();
 };

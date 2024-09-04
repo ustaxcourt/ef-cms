@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { getTodaysOpinionsInteractor } from '@web-api/business/useCases/public/getTodaysOpinionsInteractor';
 
 /**
  * used for fetching opinions created for the current date
@@ -8,7 +9,5 @@ import { genericHandler } from '../../genericHandler';
  */
 export const todaysOpinionsLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getTodaysOpinionsInteractor(applicationContext);
+    return await getTodaysOpinionsInteractor(applicationContext);
   });

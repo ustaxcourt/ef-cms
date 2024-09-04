@@ -5,19 +5,15 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import {
-  MOCK_PRACTITIONER,
-  docketClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
-  let mockUser;
   let mockCase;
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
 
@@ -43,10 +39,6 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
 
-    applicationContext.getCurrentUser.mockImplementation(
-      () => new User(mockUser),
-    );
-
     applicationContext
       .getUseCaseHelpers()
       .addExistingUserToCase.mockImplementation(({ caseEntity }) => caseEntity);
@@ -57,8 +49,6 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
   });
 
   beforeEach(() => {
-    mockUser = docketClerkUser;
-
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -93,6 +83,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
           address1: 'A Changed Street',
         },
       },
+      mockDocketClerkUser,
     );
 
     const noticeOfChangeDocketEntryWithWorkItem =
@@ -126,6 +117,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
           address1: 'A Changed Street',
         },
       },
+      mockDocketClerkUser,
     );
 
     const noticeOfChangeDocketEntryWithWorkItem =
@@ -159,6 +151,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       },
+      mockDocketClerkUser,
     );
 
     const noticeOfChangeDocketEntryWithWorkItem =
@@ -194,6 +187,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
           address1: 'A Changed Street',
         },
       },
+      mockDocketClerkUser,
     );
 
     const noticeOfChangeDocketEntryWithWorkItem =

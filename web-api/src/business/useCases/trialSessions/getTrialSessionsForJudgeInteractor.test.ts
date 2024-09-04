@@ -1,6 +1,9 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeInteractor } from './getTrialSessionsForJudgeInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -21,17 +24,15 @@ describe('getTrialSessionsForJudgeInteractor', () => {
     );
 
     await expect(
-      getTrialSessionsForJudgeInteractor(applicationContext, JUDGE_ID),
+      getTrialSessionsForJudgeInteractor(
+        applicationContext,
+        JUDGE_ID,
+        mockPetitionerUser,
+      ),
     ).rejects.toThrow();
   });
 
   it('should only return trial sessions associated with the judgeId', async () => {
-    applicationContext.getCurrentUser.mockImplementation(() => {
-      return {
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsclerk',
-      };
-    });
     applicationContext
       .getPersistenceGateway()
       .getTrialSessions.mockResolvedValue([
@@ -47,6 +48,7 @@ describe('getTrialSessionsForJudgeInteractor', () => {
     const trialSessions = await getTrialSessionsForJudgeInteractor(
       applicationContext,
       JUDGE_ID,
+      mockPetitionsClerkUser,
     );
 
     expect(trialSessions.length).toEqual(1);

@@ -8,16 +8,17 @@ import {
 } from '../EntityConstants';
 import { Correspondence } from '../Correspondence';
 import { PaperPetition } from './PaperPetition';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getUniqueId } from '@shared/sharedAppContext';
+import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('paperPetition entity', () => {
   describe('validation', () => {
-    it('throws an exception when not provided an application context', () => {
-      expect(() => new PaperPetition({}, {} as any)).toThrow();
-    });
-
     it('returns the expected set of errors for an empty object', () => {
-      const paperPetition = new PaperPetition({}, { applicationContext });
+      const paperPetition = new PaperPetition(
+        {},
+        { authorizedUser: mockPetitionsClerkUser },
+      );
       expect(paperPetition.getFormattedValidationErrors()).toEqual({
         caseCaption: 'Enter a case caption',
         caseType: 'Select a case type',
@@ -58,7 +59,7 @@ describe('paperPetition entity', () => {
           ],
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           requestForPlaceOfTrialFile: { anObject: true },
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
@@ -70,7 +71,7 @@ describe('paperPetition entity', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
@@ -113,7 +114,7 @@ describe('paperPetition entity', () => {
           ],
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           requestForPlaceOfTrialFile: { anObject: true },
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
@@ -125,7 +126,7 @@ describe('paperPetition entity', () => {
             },
           ],
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
@@ -162,9 +163,9 @@ describe('paperPetition entity', () => {
             },
           ],
           procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
@@ -200,9 +201,9 @@ describe('paperPetition entity', () => {
             },
           ],
           procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(paperPetition.getFormattedValidationErrors()).toEqual(null);
@@ -217,7 +218,7 @@ describe('paperPetition entity', () => {
           petitionFileSize: 1,
           receivedAt: '9999-01-01T00:00:00.000Z',
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
       expect(paperPetition.getFormattedValidationErrors()).not.toEqual(null);
     });
@@ -227,9 +228,9 @@ describe('paperPetition entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: new File([], 'test.pdf'),
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -242,9 +243,9 @@ describe('paperPetition entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -258,7 +259,7 @@ describe('paperPetition entity', () => {
         {
           partyType: PARTY_TYPES.corporation,
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -272,7 +273,7 @@ describe('paperPetition entity', () => {
           orderForCds: false,
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -285,9 +286,9 @@ describe('paperPetition entity', () => {
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -300,10 +301,10 @@ describe('paperPetition entity', () => {
       const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           stinFile: new File([], 'test.pdf'),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -316,9 +317,9 @@ describe('paperPetition entity', () => {
         {
           attachmentToPetitionFile: new File([], 'test.pdf'),
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -332,9 +333,9 @@ describe('paperPetition entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           corporateDisclosureFile: new File([], 'test.pdf'),
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -347,10 +348,10 @@ describe('paperPetition entity', () => {
       const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -363,10 +364,10 @@ describe('paperPetition entity', () => {
       const paperPetition = new PaperPetition(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -379,9 +380,9 @@ describe('paperPetition entity', () => {
         {
           caseCaption: 'Dr. Roslindis Angelino, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(
@@ -419,11 +420,11 @@ describe('paperPetition entity', () => {
             },
           ],
           procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           stinFile: { anObject: true },
           stinFileSize: 1,
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(paperPetition.isValid()).toEqual(false);
@@ -463,11 +464,11 @@ describe('paperPetition entity', () => {
             },
           ],
           procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
+          receivedAt: createISODateString(),
           stinFile: { anObject: true },
           stinFileSize: 1,
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
 
       expect(paperPetition.isValid()).toEqual(false);
@@ -486,14 +487,14 @@ describe('paperPetition entity', () => {
           contactSecondary: {},
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        { applicationContext },
+        { authorizedUser: mockPetitionsClerkUser },
       );
       expect(paperPetition.petitioners[1].phone).toEqual('N/A');
     });
   });
 
   it('should populate archivedCorrespondences', () => {
-    const mockGuid = applicationContext.getUniqueId();
+    const mockGuid = getUniqueId();
     const mockCorrespondence = new Correspondence({
       correspondenceId: mockGuid,
       documentTitle: 'My Correspondence',
@@ -527,7 +528,7 @@ describe('paperPetition entity', () => {
         ],
         preferredTrialCity: 'Boise, Idaho',
         procedureType: 'Small',
-        receivedAt: applicationContext.getUtilities().createISODateString(),
+        receivedAt: createISODateString(),
         requestForPlaceOfTrialFile: { anObject: true },
         requestForPlaceOfTrialFileSize: 1,
         statistics: [
@@ -539,7 +540,7 @@ describe('paperPetition entity', () => {
           },
         ],
       },
-      { applicationContext },
+      { authorizedUser: mockPetitionsClerkUser },
     );
 
     expect(paperPetition.getFormattedValidationErrors()).toEqual(null);

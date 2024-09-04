@@ -12,7 +12,7 @@ export const getDocumentQCServedForSectionAction = async ({
 }: ActionProps) => {
   const selectedSection = get(state.workQueueToDisplay.section);
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
   const workItems = await applicationContext
     .getUseCases()
     .getDocumentQCServedForSectionInteractor(applicationContext, {

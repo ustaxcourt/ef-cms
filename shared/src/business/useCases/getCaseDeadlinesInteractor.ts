@@ -1,3 +1,7 @@
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '../entities/cases/Case';
 import { CaseDeadline } from '../entities/CaseDeadline';
 import {
@@ -22,10 +26,9 @@ export const getCaseDeadlinesInteractor = async (
     pageSize: number;
     startDate;
   },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -49,6 +52,7 @@ export const getCaseDeadlinesInteractor = async (
 
   const caseMap = await getCasesByDocketNumbers({
     applicationContext,
+    authorizedUser,
     docketNumbers: validatedCaseDeadlines.map(item => item.docketNumber),
   });
 
@@ -70,10 +74,12 @@ export const getCaseDeadlinesInteractor = async (
 
 const getCasesByDocketNumbers = async ({
   applicationContext,
+  authorizedUser,
   docketNumbers,
 }: {
   applicationContext: IApplicationContext;
   docketNumbers: string[];
+  authorizedUser: AuthUser;
 }) => {
   const caseData = await applicationContext
     .getPersistenceGateway()
@@ -83,7 +89,12 @@ const getCasesByDocketNumbers = async ({
     });
 
   return caseData
-    .map(caseRecord => new Case(caseRecord, { applicationContext }))
+    .map(
+      caseRecord =>
+        new Case(caseRecord, {
+          authorizedUser,
+        }),
+    )
     .filter(caseEntity => {
       try {
         caseEntity.validate();
