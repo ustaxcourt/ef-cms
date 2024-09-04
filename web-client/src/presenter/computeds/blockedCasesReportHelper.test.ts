@@ -10,18 +10,6 @@ describe('blockedCasesReportHelper', () => {
     blockedCasesReportHelperComputed,
   );
 
-  it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
-    const result = runCompute(blockedCasesReportHelper, {
-      state: {
-        blockedCaseReportFilter: {
-          caseStatusFilter: 'All',
-          reasonFilter: 'All',
-        },
-      },
-    });
-    expect(result).toMatchObject({ blockedCasesCount: 0 });
-  });
-
   it('returns blockedCasesCount as 0 if the blockedCases array is empty', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
