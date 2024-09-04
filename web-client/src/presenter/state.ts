@@ -89,6 +89,7 @@ import { getAllIrsPractitionersForSelectHelper } from '@web-client/presenter/com
 import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { headerHelper } from './computeds/headerHelper';
+import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -606,12 +607,7 @@ export const baseState = {
     fileCount?: number;
     title?: string;
   },
-  blockedCaseReportFilter: {
-    caseStatusFilter: 'All',
-    procedureTypeFilter: 'All',
-    reasonFilter: 'All',
-    trialLocationFilter: '',
-  },
+  blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
   blockedCases: [] as RawCase[],
   caseDeadlineReport: {} as {
     caseDeadlines: (RawCaseDeadline & {
