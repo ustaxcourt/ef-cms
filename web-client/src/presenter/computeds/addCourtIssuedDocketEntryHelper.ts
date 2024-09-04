@@ -20,7 +20,7 @@ export const addCourtIssuedDocketEntryHelper = (
 
   const form = get(state.form);
 
-  const user = applicationContext.getCurrentUser();
+  const user = get(state.user);
 
   const eventCodes = COURT_ISSUED_EVENT_CODES;
 

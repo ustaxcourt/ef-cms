@@ -62,6 +62,7 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -838,11 +839,12 @@ export const baseState = {
     name: '',
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
-  user: null as any,
+  user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
+  viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -873,6 +875,8 @@ export type CreateCaseIrsForm = {
 export type ViewerDocument = {
   docketEntryId: string;
   documentTitle?: string; // Should this be required?
+  documentType?: string;
+  eventCode?: string;
   filingDate?: string;
   index?: number;
 };

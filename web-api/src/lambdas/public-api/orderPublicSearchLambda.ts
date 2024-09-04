@@ -1,4 +1,5 @@
 import { genericHandler } from '../../genericHandler';
+import { orderPublicSearchInteractor } from '@web-api/business/useCases/public/orderPublicSearchInteractor';
 
 /**
  * used for fetching orders matching the given a keyword
@@ -8,9 +9,7 @@ import { genericHandler } from '../../genericHandler';
  */
 export const orderPublicSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .orderPublicSearchInteractor(applicationContext, {
-        ...event.queryStringParameters,
-      });
+    return await orderPublicSearchInteractor(applicationContext, {
+      ...event.queryStringParameters,
+    });
   });
