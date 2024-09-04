@@ -24,7 +24,7 @@ import { sendWelcomeEmail } from 'scripts/user/email-helpers';
  * This script will add a judge user to a deployed environment.
  * It creates both the Cognito record and the associated Dynamo record.
  * Required parameters: name, judgeFullName, and email
- * Optional parameters: phone (defaults to none), isSeniorJudge (defaults to false)
+ * Optional parameters: phone (defaults to none), isSeniorJudge (defaults to false), judgeTitle (defaults to "Judge")
  * Note that a phone number is eventually required; otherwise, trial information will
  * lack a chambers number. To add one later, use update-judge.ts.
  *
