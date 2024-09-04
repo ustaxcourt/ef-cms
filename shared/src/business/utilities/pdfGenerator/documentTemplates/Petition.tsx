@@ -199,6 +199,12 @@ export const Petition = ({
               <b>Phone: </b>
               {contactPrimary.phone}
             </div>
+            {!isPetitioner && (
+              <div>
+                <b>Email: </b>
+                {contactPrimary.email || 'Email not provided'}
+              </div>
+            )}
             {contactPrimary.placeOfLegalResidence && (
               <div>
                 {BUSINESS_TYPE_VALUES.includes(partyType) ? (
