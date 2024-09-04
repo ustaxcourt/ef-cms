@@ -15,44 +15,40 @@ export const blockedCasesReportHelper = (
     state.blockedCaseReportFilter,
   );
 
-  let blockedCasesFormatted: BlockedFormattedCase[] = [];
+  const blockedCasesFormatted: BlockedFormattedCase[] = blockedCases
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(blockedCase => {
+      const blockedCaseWithConsolidatedProperties = applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(blockedCase);
 
-  if (blockedCases && blockedCases.length) {
-    blockedCasesFormatted = blockedCases
-      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-      .map(blockedCase => {
-        const blockedCaseWithConsolidatedProperties = applicationContext
-          .getUtilities()
-          .setConsolidationFlagsForDisplay(blockedCase);
+      const updatedCase = {
+        ...setFormattedBlockDates(
+          blockedCaseWithConsolidatedProperties,
+          applicationContext,
+        ),
+        caseTitle: applicationContext.getCaseTitle(
+          blockedCase.caseCaption || '',
+        ),
+        docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
+      };
 
-        const updatedCase = {
-          ...setFormattedBlockDates(
-            blockedCaseWithConsolidatedProperties,
-            applicationContext,
-          ),
-          caseTitle: applicationContext.getCaseTitle(
-            blockedCase.caseCaption || '',
-          ),
-          docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
-        };
-
-        return updatedCase;
-      })
-      .filter(blockedCase => {
-        return procedureTypeFilter && procedureTypeFilter !== 'All'
-          ? blockedCase.procedureType === procedureTypeFilter
-          : true;
-      })
-      .filter(blockedCase => {
-        if (caseStatusFilter === 'All') return true;
-        return blockedCase.status === caseStatusFilter;
-      })
-      .filter(blockedCase => {
-        if (reasonFilter === 'All') return true;
-        if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
-        return blockedCase.automaticBlockedReason === reasonFilter;
-      });
-  }
+      return updatedCase;
+    })
+    .filter(blockedCase => {
+      return procedureTypeFilter && procedureTypeFilter !== 'All'
+        ? blockedCase.procedureType === procedureTypeFilter
+        : true;
+    })
+    .filter(blockedCase => {
+      if (caseStatusFilter === 'All') return true;
+      return blockedCase.status === caseStatusFilter;
+    })
+    .filter(blockedCase => {
+      if (reasonFilter === 'All') return true;
+      if (reasonFilter === 'Manual Block') return !!blockedCase.blockedReason;
+      return blockedCase.automaticBlockedReason === reasonFilter;
+    });
 
   return {
     blockedCasesCount: blockedCasesFormatted.length,
