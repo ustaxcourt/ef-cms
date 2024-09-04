@@ -108,6 +108,7 @@ export const MessageModalAttachments = connect(
             </label>
             <select
               className="usa-select"
+              data-testid="select-document"
               id="document"
               name="document"
               onChange={e => {
