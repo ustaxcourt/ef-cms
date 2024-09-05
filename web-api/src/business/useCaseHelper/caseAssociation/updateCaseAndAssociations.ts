@@ -106,9 +106,7 @@ const updateCaseMessages = async ({
     message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
   });
 
-  const validMessages = Message.validateRawCollection(caseMessages, {
-    applicationContext,
-  });
+  const validMessages = Message.validateRawCollection(caseMessages);
 
   return validMessages.map(
     message =>

@@ -152,14 +152,18 @@ describe('completeMessageInteractor', () => {
 
   it('should send an error message to the user', async () => {
     (updateMessage as jest.Mock).mockRejectedValueOnce(new Error('Bad!'));
-    await completeMessageInteractor(applicationContext, {
-      messages: [
-        {
-          messageBody: 'the completed message',
-          parentMessageId: PARENT_MESSAGE_ID_1,
-        },
-      ],
-    });
+    await completeMessageInteractor(
+      applicationContext,
+      {
+        messages: [
+          {
+            messageBody: 'the completed message',
+            parentMessageId: PARENT_MESSAGE_ID_1,
+          },
+        ],
+      },
+      mockPetitionsClerkUser,
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
