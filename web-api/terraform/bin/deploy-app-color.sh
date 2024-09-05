@@ -129,8 +129,6 @@ export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME
-export TF_VAR_postgres_master_username=$POSTGRES_MASTER_USERNAME
-export TF_VAR_postgres_master_password=$POSTGRES_MASTER_PASSWORD
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
