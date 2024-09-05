@@ -57,9 +57,8 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = () => {
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: 'input#primary-document-file',
-    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+    selectorToAwaitOnSuccess: '[data-testid="upload-file-success"]',
   });
-  cy.get('[data-testid="upload-file-success"]');
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.get('#document-type .select-react-element__input-container input').clear();
