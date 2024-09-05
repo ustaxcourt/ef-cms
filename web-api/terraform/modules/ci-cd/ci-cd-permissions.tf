@@ -166,6 +166,16 @@ resource "aws_iam_policy" "ci_cd_policy" {
       ]
     },
     {
+      "Sid": "RdsConnect",
+      "Effect": "Allow",
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [
