@@ -278,24 +278,27 @@ export const ContactPrimaryUpdated = connect<
               errorMessageId="email-error-message"
               errorText={
                 validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.email
+                validationErrors.contactPrimary.paperPetitionEmail
               }
             >
-              <label className="usa-label" htmlFor="email">
+              <label className="usa-label" htmlFor="paperPetitionEmail">
                 Email address <span className="usa-hint">(Optional)</span>
               </label>
               <input
                 autoCapitalize="none"
                 className="usa-input"
-                data-testid="contact-primary-email"
-                id="email"
-                name="contactPrimary.email"
-                ref={registerRef && registerRef('contactPrimary.email')}
+                data-testid="contact-primary-paper-petition-email"
+                id="paperPetitionEmail"
+                name="contactPrimary.paperPetitionEmail"
+                ref={
+                  registerRef &&
+                  registerRef('contactPrimary.paperPetitionEmail')
+                }
                 type="text"
-                value={addressInfo.email || ''}
+                value={addressInfo.paperPetitionEmail || ''}
                 onBlur={() => {
                   handleBlur({
-                    validationKey: ['contactPrimary', 'email'],
+                    validationKey: ['contactPrimary', 'paperPetitionEmail'],
                   });
                 }}
                 onChange={e => {
