@@ -1,8 +1,11 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import {
+  PROCEDURE_TYPES_MAP,
+  SESSION_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 // One session per location per week.
-const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; //
+const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; //sessionScheduledPerCityPerWeek
 // Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
 
@@ -47,8 +50,11 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // If there has been no trial in the last two terms for a location, then add a session if there are any cases. (ignore the minimum rule)
   //
   // data that has a table
+  const input = { endDate: trialTermEndDate, startDate: trialTermStartDate };
+  const cases = getCases(); //?
+  const specialSessions = getSpecialSessions(); //?
 
-  return scheduleTrialSessions();
+  return scheduleTrialSessions({ cases, input, specialSessions });
 };
 
 function scheduleTrialSessions({
@@ -117,14 +123,16 @@ function scheduleTrialSessions({
         sessionCountPerCity[city] < MAX_SESSIONS_PER_LOCATION
       ) {
         // Handle Regular Sessions
-        const regularCases = readyCases.filter(
-          c => c.caseType === 'regular' && c.location === city,
+        const regularCases = cases.filter(
+          c =>
+            c.procedureType === PROCEDURE_TYPES_MAP.regular &&
+            c.location === city,
         );
         if (regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY) {
           sessions.push({
             cases: regularCases.slice(0, REGULAR_CASE_MAX_QUANTITY),
             city,
-            sessionType: 'regular',
+            sessionType: SESSION_TYPES.regular,
             weekOf: weekOfString,
           });
           sessionCountPerWeek[weekOfString]++;
@@ -135,14 +143,16 @@ function scheduleTrialSessions({
         }
 
         // Handle Small Sessions
-        const smallCases = readyCases.filter(
-          c => c.caseType === 'small' && c.location === city,
+        const smallCases = cases.filter(
+          c =>
+            c.procedureType === PROCEDURE_TYPES_MAP.small &&
+            c.location === city,
         );
         if (smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY) {
           sessions.push({
             cases: smallCases.slice(0, SMALL_CASE_MAX_QUANTITY),
             city,
-            sessionType: 'small',
+            sessionType: SESSION_TYPES.small,
             weekOf: weekOfString,
           });
           sessionCountPerWeek[weekOfString]++;
@@ -164,7 +174,7 @@ function scheduleTrialSessions({
               HYBRID_CASE_MAX_QUANTITY,
             ),
             city,
-            sessionType: 'hybrid',
+            sessionType: SESSION_TYPES.hybrid,
             weekOf: weekOfString,
           });
           sessionCountPerWeek[weekOfString]++;
