@@ -27,6 +27,7 @@ export interface Contact {
   address2?: string;
   address3?: string;
   city: string;
+  paperPetitionEmail: string;
   postalCode: string;
   phone: string;
   state: string;
