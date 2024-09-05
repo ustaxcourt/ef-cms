@@ -228,6 +228,27 @@ describe('trialSessionsHelper', () => {
         expect(trialSessionsOnly.length).toEqual(1);
       });
 
+      it('should only show trial sessions who do not have a judge when the judge filter is "unassigned"', () => {
+        trialSession1.judge = undefined;
+        trialSession2.judge!.userId = '2';
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+        trialSessionsPageState.filters.judgeId = 'unassigned';
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
       it('should not filter trial sessions by judge when judge filter is All', () => {
         trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
         trialSessionsPageState.filters.judgeId = 'All';
