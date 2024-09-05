@@ -1,3 +1,4 @@
+#!/usr/bin/env npx ts-node --transpile-only
 import { JudgeTitle } from '../../shared/src/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';

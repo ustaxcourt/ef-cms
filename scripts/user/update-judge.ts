@@ -1,3 +1,4 @@
+#!/usr/bin/env npx ts-node --transpile-only
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { JudgeTitle } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
