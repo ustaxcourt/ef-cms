@@ -152,7 +152,7 @@ describe('File a petition', () => {
           attachFile({
             filePath: '../../helpers/file/sample.pdf',
             selector: '#petition-file',
-            selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+            selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
           });
 
           cy.get('[data-testid="petition-error-message-0"]').should(
@@ -164,7 +164,7 @@ describe('File a petition', () => {
           attachFile({
             filePath: '../../helpers/file/sample.pdf',
             selector: '#petition-file',
-            selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+            selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
           });
 
           cy.get('[data-testid="petition-error-message-0"]').should(
