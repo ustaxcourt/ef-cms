@@ -5,12 +5,11 @@ import {
   petitionsClerkUser,
   trialClerkUser,
 } from '../../../../shared/src/test/mockUsers';
+import { getTestJudgesChambers } from '../../../../shared/src/test/mockJudgesChambers';
 import { getUserIsAssignedToSession } from './formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
-const JUDGES_CHAMBERS = applicationContext
-  .getPersistenceGateway()
-  .getJudgesChambers();
+const JUDGES_CHAMBERS = getTestJudgesChambers();
 
 describe('formattedCaseDetail getUserIsAssignedToSession', () => {
   const mockTrialSessionId = applicationContext.getUniqueId();
