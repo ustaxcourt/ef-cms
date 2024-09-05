@@ -4,6 +4,9 @@ import {
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+// use different lib?
+import { addWeeks, isWithinInterval, startOfWeek } from 'date-fns';
 // One session per location per week.
 const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; // sessionScheduledPerCityPerWeek
 // Maximum of 6 sessions per week overall.
@@ -35,12 +38,8 @@ const HYBRID_CASE_MAX_QUANTITY = 100;
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  {
-    trialTermEndDate,
-    trialTermStartDate,
-  }: { trialTermEndDate: string; trialTermStartDate: string },
+  { endDate, startDate }: { endDate: string; startDate: string },
 ) => {
-  // get cases that are ready for trial
   //
   // Maximum of 6 sessions per week
   // Maximum of 5 sessions total per location
@@ -50,41 +49,41 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // Special sessions already created will be automatically included
   // If there has been no trial in the last two terms for a location, then add a session if there are any cases. (ignore the minimum rule)
   //
-  // data that has a table
-  const input = { endDate: trialTermEndDate, startDate: trialTermStartDate };
-  const cases = applicationContext
+
+  const cases = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
-  const specialSessions = getSpecialSessions(); //?
+  const sessions = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessions({ applicationContext });
 
-  return scheduleTrialSessions({ cases, input, specialSessions });
+  const specialSessions = sessions.filter(
+    session => session.sessionType === SESSION_TYPES.special,
+  );
+
+  return scheduleTrialSessions({ cases, endDate, specialSessions, startDate });
 };
 
 function scheduleTrialSessions({
   cases,
-  input,
+  endDate,
   specialSessions,
+  startDate,
 }: {
-  cases: Case[];
-  specialSessions: SpecialSession[];
-  input: InputForm;
+  cases: RawCase[];
+  specialSessions: RawTrialSession[];
+  endDate: string;
+  startDate: string;
 }): TrialSession[] {
-  const sessions: TrialSession[] = [];
+  const sessions: {}[] = [];
   const sessionCountPerWeek: Record<string, number> = {}; // weekOf -> session count
   const sessionCountPerCity: Record<string, number> = {}; // city -> session count
   const sessionScheduledPerCityPerWeek: Record<string, Set<string>> = {}; // weekOf -> Set of cities
 
-  let currentWeek = getMondayOfWeek(input.startDate);
+  let currentWeek = getMondayOfWeek(startDate);
 
-  const formattedSpecialSessions = specialSessions.map(session => {
-    session.weekOf = getMondayOfWeek(session.startDate);
-  });
-
-  while (currentWeek <= input.endDate) {
-    const weekOfString = currentWeek.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-    });
+  while (currentWeek <= endDate) {
+    const weekOfString = currentWeek;
 
     if (!sessionCountPerWeek[weekOfString]) {
       sessionCountPerWeek[weekOfString] = 0;
@@ -94,23 +93,25 @@ function scheduleTrialSessions({
       sessionScheduledPerCityPerWeek[weekOfString] = new Set();
     }
 
-    const specialSessionsForWeek = formattedSpecialSessions.filter(
-      s => s.weekOf === weekOfString,
+    const specialSessionsForWeek = specialSessions.filter(
+      s => getMondayOfWeek(s.startDate) === weekOfString,
     );
 
     specialSessionsForWeek.forEach(session => {
       sessions.push({
         cases: [],
-        city: session.city,
+        city: session.trialLocation,
         sessionType: SESSION_TYPES.special,
-        weekOf: session.weekOf, // Special sessions cases are handled differently
+        weekOf: getMondayOfWeek(session.startDate), // Special sessions cases are handled differently
       });
 
       sessionCountPerWeek[weekOfString]++;
-      sessionCountPerCity[session.city]++;
+      sessionCountPerCity[session.trialLocation!]++;
+      sessionScheduledPerCityPerWeek[weekOfString];
     });
 
-    const cities = cases.map(c => c.preferredTrialCity);
+    // filter instead of preferredTrialCity!?
+    const cities: string[] = cases.map(c => c.preferredTrialCity!);
 
     for (const city of cities) {
       if (!sessionCountPerCity[city]) {
@@ -122,72 +123,89 @@ function scheduleTrialSessions({
       }
 
       if (
-        sessionCountPerWeek[weekOfString] < MAX_SESSIONS_PER_WEEK &&
+        sessionCountPerWeek[weekOfString] < MAX_SESSIONS_PER_WEEK && // TODO, currently we're going to move to the next city if this limit is reached, and keep checking until we move to the next week.
         sessionCountPerCity[city] < MAX_SESSIONS_PER_LOCATION
       ) {
-        // Handle Regular Sessions
         const regularCases = cases.filter(
           c =>
             c.procedureType === PROCEDURE_TYPES_MAP.regular &&
             c.preferredTrialCity === city,
         );
-        if (regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY) {
-          sessions.push({
-            cases: regularCases.slice(0, REGULAR_CASE_MAX_QUANTITY),
-            city,
-            sessionType: SESSION_TYPES.regular,
-            weekOf: weekOfString,
-          });
-          sessionCountPerWeek[weekOfString]++;
-          sessionCountPerCity[city]++;
 
-          sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
-          continue; // Only one session per city per week, so continue to the next city
-        }
-
-        // Handle Small Sessions
         const smallCases = cases.filter(
           c =>
             c.procedureType === PROCEDURE_TYPES_MAP.small &&
             c.preferredTrialCity === city,
         );
-        if (smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY) {
-          sessions.push({
-            cases: smallCases.slice(0, SMALL_CASE_MAX_QUANTITY),
-            city,
-            sessionType: SESSION_TYPES.small,
-            weekOf: weekOfString,
-          });
-          sessionCountPerWeek[weekOfString]++;
-          sessionCountPerCity[city]++;
-        }
 
-        // Handle Hybrid Sessions
-        const remainingRegularCases = regularCases.slice(
-          REGULAR_CASE_MAX_QUANTITY,
-        );
-        const remainingSmallCases = smallCases.slice(SMALL_CASE_MAX_QUANTITY);
+        let regularCaseSliceSize;
+        let smallCaseSliceSize;
+
         if (
-          remainingRegularCases.length + remainingSmallCases.length >=
-          HYBRID_CASE_MINIMUM_QUANTITY
+          regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY ||
+          smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY
         ) {
-          sessions.push({
-            cases: [...remainingRegularCases, ...remainingSmallCases].slice(
-              0,
-              HYBRID_CASE_MAX_QUANTITY,
-            ),
-            city,
-            sessionType: SESSION_TYPES.hybrid,
-            weekOf: weekOfString,
-          });
-          sessionCountPerWeek[weekOfString]++;
-          sessionCountPerCity[city]++;
+          if (regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY) {
+            regularCaseSliceSize = REGULAR_CASE_MAX_QUANTITY;
+            sessions.push({
+              cases: regularCases.slice(0, regularCaseSliceSize),
+              city,
+              sessionType: SESSION_TYPES.regular,
+              weekOf: weekOfString,
+            });
+            sessionCountPerWeek[weekOfString]++;
+            sessionCountPerCity[city]++;
+
+            sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
+            continue; // Only one session per city per week, so continue to the next city
+          }
+
+          if (smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY) {
+            smallCaseSliceSize = SMALL_CASE_MAX_QUANTITY;
+            sessions.push({
+              cases: smallCases.slice(0, smallCaseSliceSize),
+              city,
+              sessionType: SESSION_TYPES.small,
+              weekOf: weekOfString,
+            });
+            sessionCountPerWeek[weekOfString]++;
+            sessionCountPerCity[city]++;
+            sessionScheduledPerCityPerWeek[weekOfString].add(city); // Mark this city as scheduled for the current week
+            continue; // Only one session per city per week, so continue to the next city
+          }
+        } else {
+          regularCaseSliceSize = 0;
+          smallCaseSliceSize = 0;
+          // Handle Hybrid Sessions
+          const remainingRegularCases =
+            regularCases.slice(regularCaseSliceSize);
+          const remainingSmallCases = smallCases.slice(smallCaseSliceSize);
+          if (
+            remainingRegularCases.length + remainingSmallCases.length >=
+            HYBRID_CASE_MINIMUM_QUANTITY
+          ) {
+            sessions.push({
+              cases: [...remainingRegularCases, ...remainingSmallCases].slice(
+                0,
+                HYBRID_CASE_MAX_QUANTITY,
+              ),
+              city,
+              sessionType: SESSION_TYPES.hybrid,
+              weekOf: weekOfString,
+            });
+            sessionCountPerWeek[weekOfString]++;
+            sessionCountPerCity[city]++;
+            sessionScheduledPerCityPerWeek[weekOfString].add(city);
+          }
         }
       }
     }
-
     currentWeek = addWeeks(currentWeek, 1); // Move to the next week
   }
-
   return sessions;
+}
+
+// Helper function to get the Monday of the week for a given date
+function getMondayOfWeek(date: string): string {
+  return startOfWeek(date, { weekStartsOn: 1 }); // Monday as the first day of the week
 }
