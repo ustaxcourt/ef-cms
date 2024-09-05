@@ -1,3 +1,5 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
+
 type TextFillType = {
   errorMessage: string;
   input: string;
@@ -53,7 +55,7 @@ export function selectInput(
 
 export function fillPetitionFileInformation(filePath: string) {
   cy.get('[data-testid="upload-a-petition-label"').click();
-  cy.get('#petition-file').attachFile(filePath);
+  attachFile({ filePath, selector: '#petition-file' });
   cy.get('[data-testid="petition-redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-2-next-button"]').click();
 }
@@ -150,14 +152,17 @@ export function fillIrsNoticeInformation(
   caseType: string = 'Deficiency',
 ) {
   cy.get('[data-testid="irs-notice-Yes"]').click();
-  cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
+  attachFile({ filePath, selector: '[data-testid="irs-notice-upload-0"]' });
   cy.get('[data-testid="case-type-select"]').select(caseType);
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-3-next-button"]').click();
 }
 
 export function fillIrsNotice(index: number, filePath: string) {
-  cy.get(`[data-testid="irs-notice-upload-${index}"]`).attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: `[data-testid="irs-notice-upload-${index}"]`,
+  });
   cy.get('[data-testid="case-type-select"]').eq(index).select('Deficiency');
   cy.get(`[data-testid="irs-notice-tax-year-${index}"]`).type(
     `Tax Year ${index}`,
@@ -171,7 +176,7 @@ export function fillMultipleIRSNotices(filePath: string) {
   cy.get('[data-testid="irs-notice-Yes"]').click();
 
   // IRS Notice #1
-  cy.get('[data-testid="irs-notice-upload-0"]').attachFile(filePath);
+  attachFile({ filePath, selector: '[data-testid="irs-notice-upload-0"]' });
   cy.get('[data-testid="case-type-select"]').select('Deficiency');
   cy.get(
     '.usa-date-picker__wrapper > [data-testid="notice-issued-date-0-picker"]',
@@ -182,7 +187,10 @@ export function fillMultipleIRSNotices(filePath: string) {
   cy.get('[data-testid="add-another-irs-notice-button"]').click();
 
   // IRS Notice #2
-  cy.get('[data-testid="irs-notice-upload-1"]').attachFile(filePath);
+  attachFile({
+    filePath,
+    selector: '[data-testid="add-another-irs-notice-button"]',
+  });
   cy.get('[data-testid="case-type-select"]').eq(1).select('CDP (Lien/Levy)');
   cy.get(
     '.usa-date-picker__wrapper > [data-testid="notice-issued-date-1-picker"]',
@@ -208,7 +216,7 @@ export function fillCaseProcedureInformation(procedureType = 'regular') {
 }
 
 export function fillStinInformation(filePath: string) {
-  cy.get('[data-testid="stin-file"]').attachFile(filePath);
+  attachFile({ filePath, selector: '[data-testid="stin-file"]' });
   cy.get('[data-testid="step-5-next-button"]').click();
 }
 

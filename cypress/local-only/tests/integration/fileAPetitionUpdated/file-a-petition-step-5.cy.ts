@@ -1,3 +1,4 @@
+import { attachFile } from '../../../../helpers/file/upload-file';
 import {
   fillCaseProcedureInformation,
   fillIrsNoticeInformation,
@@ -27,7 +28,10 @@ describe('File a petition - Step 5 Statement of Taxpayer Identification Number',
   });
 
   it('should allow user to go to step 6 if stin file is uploaded', () => {
-    cy.get('[data-testid="stin-file"]').attachFile(VALID_FILE);
+    attachFile({
+      filePath: VALID_FILE,
+      selector: '[data-testid="stin-file"]',
+    });
 
     cy.get('[data-testid="step-5-next-button"]').click();
     cy.get('[data-testid="step-indicator-current-step-6-icon"]');

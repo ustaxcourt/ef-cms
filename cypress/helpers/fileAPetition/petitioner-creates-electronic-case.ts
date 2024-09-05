@@ -1,3 +1,4 @@
+import { attachFile } from '../file/upload-file';
 import {
   petitionerAttemptsToUploadCorruptPdfUpdated,
   petitionerCreatesElectronicCaseForBusinessUpdated,
@@ -293,9 +294,10 @@ export function petitionerAttemptsToUploadCorruptPdf() {
 export function petitionerAttemptsToUploadCorruptPdfOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
-  cy.get('[data-testid="stin-file"]').attachFile(
-    '../../helpers/file/corrupt-pdf.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/corrupt-pdf.pdf',
+    selector: '[data-testid="stin-file"]',
+  });
   cy.get('[data-testid="complete-step-1"]').click();
   uploadFile('petition-file');
   cy.get('[data-testid="irs-notice-Yes"]').click();
