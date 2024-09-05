@@ -213,7 +213,10 @@ export const internalPetitionPartiesHelper = (
     applicationContext.getConstants();
   const user = get(state.user);
 
-  const { filingType, isPaper, partyType } = get(state.form);
+  const { filingType, isPaper, partyType, privatePractitioners } = get(
+    state.form,
+  );
+
   const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
@@ -225,7 +228,12 @@ export const internalPetitionPartiesHelper = (
     .isExternalUser(user.role);
 
   const showPaperPetitionEmailFieldAndConsentBox =
-    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !!isPaper && !isExternalUser;
+    getShowPaperPetitionEmailFieldAndConsentBox({
+      eConsentFieldsEnabled: !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG,
+      isExternalUser,
+      isPaperFiling: isPaper,
+      petitionFiledByPrivatePractitioner: privatePractitioners?.length,
+    });
 
   const showSecondaryContactEmailFieldAndConsentBox =
     E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
@@ -242,3 +250,19 @@ export const internalPetitionPartiesHelper = (
     showSecondaryContactEmailFieldAndConsentBox,
   };
 };
+
+function getShowPaperPetitionEmailFieldAndConsentBox({
+  eConsentFieldsEnabled,
+  isExternalUser,
+  isPaperFiling,
+  petitionFiledByPrivatePractitioner,
+}: {
+  eConsentFieldsEnabled: boolean;
+  isExternalUser: boolean;
+  petitionFiledByPrivatePractitioner: boolean;
+  isPaperFiling: boolean;
+}) {
+  if (!eConsentFieldsEnabled || isExternalUser) return false;
+  if (petitionFiledByPrivatePractitioner || isPaperFiling) return true;
+  return false;
+}
