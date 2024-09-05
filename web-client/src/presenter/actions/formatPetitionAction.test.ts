@@ -236,7 +236,7 @@ describe('formatPetitionAction', () => {
     });
 
     expect(results.state.petitionFormatted?.contactPrimary?.email).toEqual(
-      'test@example.com',
+      'mockPrivatePractitioner@example.com',
     );
   });
 });
