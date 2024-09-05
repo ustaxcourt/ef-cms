@@ -181,7 +181,11 @@ const sortSessionsByTerm = ({
 export const formattedTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  sessionsByTerm: any[];
+  showSwingSessionList: boolean;
+  showSwingSessionOption: boolean;
+} => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSession.trialSessionId);
   const currentUser = get(state.user);
@@ -249,8 +253,6 @@ export const formattedTrialSessions = (
   }
 
   return {
-    filteredTrialSessions: filterFormattedSessionsByStatus(formattedSessions),
-    formattedSessions,
     sessionsByTerm,
     showSwingSessionList: get(state.form.swingSession),
     showSwingSessionOption: sessionsByTerm.length > 0,
