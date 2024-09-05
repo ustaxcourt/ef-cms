@@ -3,7 +3,13 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { processMessageEntries } from './processMessageEntries';
 import { upsertMessage } from '@web-api/persistence/postgres/messages/upsertMessage';
 
+jest.mock('@web-api/persistence/postgres/messages/upsertMessage');
+
 describe('processMessageEntries', () => {
+  beforeEach(() => {
+    (upsertMessage as jest.Mock).mockResolvedValue(undefined);
+  });
+
   it('should attempt to store the messages using the upsert method', async () => {
     const mockRepliedToMessageRecord = {
       dynamodb: {
