@@ -29,9 +29,12 @@ export const BeforeStartingCase = connect(
     user,
   }) {
     const redirectUrl =
-      petitionFlowUpdated && ROLES.petitioner === user.role
+      petitionFlowUpdated &&
+      [ROLES.petitioner, ROLES.privatePractitioner].includes(user.role)
         ? '/file-a-petition/new'
         : '/file-a-petition/step-1';
+
+    const isPetitioner = user.role === ROLES.petitioner;
     return (
       <>
         <style>
@@ -58,8 +61,7 @@ export const BeforeStartingCase = connect(
           <h2>How to Create a Case</h2>
           <WarningNotificationComponent
             alertWarning={{
-              message:
-                'Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in your Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.',
+              message: `Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in ${isPetitioner ? 'your' : 'the'} Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.`,
             }}
             dismissible={false}
             scrollToTop={false}
@@ -71,7 +73,7 @@ export const BeforeStartingCase = connect(
               {`Once you start this process, you won't be able to save your work and
               come back to it.`}
             </b>{' '}
-            {`After the petition has been processed, you'll be able to log in at any
+            {`After the Petition has been processed, you'll be able to log in at any
             time to view the status and take action in the case.`}
           </div>
           <div className="petitioner-flow-text">
@@ -81,10 +83,9 @@ export const BeforeStartingCase = connect(
                 className="petitioner-flow-text"
                 style={{ marginBottom: '5px' }}
               >
-                This is the document that explains why you disagree with the
-                Internal Revenue Service (IRS). There are{' '}
-                {petitionFlowUpdated ? 'three' : 'two'} methods to file the
-                Petition:
+                {`This is the document that explains why ${isPetitioner ? 'you disagree' : 'the petitioner disagrees'} with the
+                Internal Revenue Service (IRS). There are ${petitionFlowUpdated ? 'three' : 'two'} methods to file the
+                Petition:`}
               </div>
               <ul className="margin-top-0">
                 {petitionFlowUpdated && (
@@ -110,8 +111,8 @@ export const BeforeStartingCase = connect(
                   </Button>
                 </li>
                 <li>
-                  Upload for filing your own Petition that complies with the
-                  requirements of the{' '}
+                  {`Upload for filing ${isPetitioner ? 'your own' : 'a'} Petition that complies with the
+                  requirements of the `}
                   <Button
                     link
                     className="usa-link--external text-left mobile-text-wrap"
@@ -129,12 +130,19 @@ export const BeforeStartingCase = connect(
               <div className="petitioner-label">2. Upload IRS Notice(s)</div>
               <div
                 className="petitioner-flow-text"
+                data-testid="upload-irs-notice-title"
                 style={{ marginBottom: '5px' }}
               >
-                If you received one or more Notices from the IRS:
+                {isPetitioner
+                  ? 'If you received'
+                  : 'If the petitioner received'}{' '}
+                one or more Notices from the IRS:
               </div>
               <ul className="margin-top-0">
-                <li>Submit a PDF of the Notice(s) you received.</li>
+                <li data-testid="upload-irs-notice-bullet-1">
+                  Submit a PDF of the Notice(s) {isPetitioner ? 'you' : 'they'}{' '}
+                  received.
+                </li>
                 <li>
                   Remove or block out (redact) Social Security Numbers (SSN),
                   Taxpayer Identification Numbers (TIN), or Employer
@@ -145,15 +153,15 @@ export const BeforeStartingCase = connect(
                 <li>The Notice(s) will be part of the case record.</li>
               </ul>
 
-              <div className="petitioner-label">3. Confirm your identity</div>
+              <div className="petitioner-label">{`3. Confirm ${isPetitioner ? 'your' : 'the petitioner’s'} identity`}</div>
               <div className="petitioner-flow-text">
                 <ul className="margin-top-0">
-                  <li>
+                  <li data-testid="confirm-identity-bullet-1">
                     {`You'll be asked to complete and upload a Statement of
                     Taxpayer Identification Number (STIN) form. This document is
-                    sent to the IRS to help them identify you, but it's never
+                    sent to the IRS to help them identify ${isPetitioner ? 'you' : 'the petitioner'}, but it's never
                     visible as part of the case record. This is the only
-                    document that should contain your SSN, TIN, or EIN.`}
+                    document that should contain ${isPetitioner ? 'your' : 'the petitioner’s'} SSN, TIN, or EIN.`}
                   </li>
                   <li>
                     {' '}
@@ -176,7 +184,7 @@ export const BeforeStartingCase = connect(
               <div className="petitioner-flow-text">
                 <ul className="margin-top-0">
                   <li>
-                    {`After you submit your case, you'll be asked to pay a $60
+                    {`After you submit ${isPetitioner ? 'your' : 'the'} case, you'll be asked to pay a $60
                     filing fee.`}
                   </li>
                   <li>You may pay online or mail a check/money order.</li>
@@ -195,58 +203,71 @@ export const BeforeStartingCase = connect(
           />
           <div>
             <h3>Deadline to File</h3>
-            <div className="petitioner-flow-text margin-bottom-2">
-              If you received a notice in the mail from the IRS, it may show the
-              last date to file or the number of days you have to file a
-              Petition.{' '}
+            <div
+              className="petitioner-flow-text margin-bottom-2"
+              data-testid="deadline-to-file"
+            >
+              If {isPetitioner ? 'you' : 'the petitioner'} received a notice in
+              the mail from the IRS, it may show the last date to file or the
+              number of days you have to file a Petition.{' '}
               <b>
-                In most cases, the Court must receive your electronically filed
-                Petition no later than 11:59 pm Eastern Time on the last date to
-                file.
+                In most cases, the Court must receive{' '}
+                {isPetitioner ? 'your' : 'the'} electronically filed Petition no
+                later than 11:59 pm Eastern Time on the last date to file.
               </b>{' '}
-              Petitions received after this date may be untimely and your case
-              may be dismissed.
+              Petitions received after this date may be untimely and{' '}
+              {isPetitioner ? 'your' : 'the'} case may be dismissed.
             </div>
           </div>
           <div className="grid-row grid-gap">
-            <Accordion className="petitioner-accordion-title" headingLevel="3">
-              <AccordionItem
-                customTitleClassName="petitioner-accordion-title"
-                key="Are you filing jointly with a spouse?"
-                title="Are you filing jointly with a spouse?"
+            {isPetitioner && (
+              <Accordion
+                className="petitioner-accordion-title"
+                headingLevel="3"
               >
-                <div>
-                  {`To file a joint Petition with your spouse, you must have the
-                  spouse's consent. If you do not have your spouse's consent,
-                  select “Myself” as the person who is filing.`}
-                </div>
-              </AccordionItem>
-            </Accordion>
-            <Accordion className="petitioner-accordion-title" headingLevel="3">
-              <AccordionItem
-                customTitleClassName="petitioner-accordion-title"
-                key="Are you filing on behalf of someone else?"
-                title="Are you filing on behalf of someone else?"
+                <AccordionItem
+                  customTitleClassName="petitioner-accordion-title"
+                  key="Are you filing jointly with a spouse?"
+                  title="Are you filing jointly with a spouse?"
+                >
+                  <div data-testid="filing-jointly-accordion-item">
+                    {
+                      "To file a joint Petition with your spouse, you must have the spouse's consent. If you do not have your spouse's consent, select “Myself” as the person who is filing."
+                    }
+                  </div>
+                </AccordionItem>
+              </Accordion>
+            )}
+            {isPetitioner && (
+              <Accordion
+                className="petitioner-accordion-title"
+                headingLevel="3"
               >
-                <div>
-                  To file a case on behalf of someone else, you must be
-                  authorized to practice before this Court as provided by the{' '}
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://ustaxcourt.gov/rules.html"
-                    overrideMargin="margin-right-0"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Tax Court Rules of Practice and Procedure (Rule 60)
-                  </Button>
-                  {
-                    '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
-                  }
-                </div>
-              </AccordionItem>
-            </Accordion>
+                <AccordionItem
+                  customTitleClassName="petitioner-accordion-title"
+                  key="Are you filing on behalf of someone else?"
+                  title="Are you filing on behalf of someone else?"
+                >
+                  <div data-testid="filing-someone-else-accordion-item">
+                    To file a case on behalf of someone else, you must be
+                    authorized to practice before this Court as provided by the{' '}
+                    <Button
+                      link
+                      className="usa-link--external text-left mobile-text-wrap"
+                      href="https://ustaxcourt.gov/rules.html"
+                      overrideMargin="margin-right-0"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Tax Court Rules of Practice and Procedure (Rule 60)
+                    </Button>
+                    {
+                      '. Enrolled agents, certified public accountants, and attorneys who are not admitted to practice before the Court are not eligible to represent a party.'
+                    }
+                  </div>
+                </AccordionItem>
+              </Accordion>
+            )}
             <Accordion className="petitioner-accordion-title" headingLevel="3">
               <AccordionItem
                 customTitleClassName="petitioner-accordion-title"
@@ -254,7 +275,7 @@ export const BeforeStartingCase = connect(
                 title="Are you filing for a business?"
               >
                 <div className="margin-bottom-1">
-                  {`If you're filing for a business, you'll need to complete and
+                  {`If ${isPetitioner ? "you're filing for" : 'the petitioner is'} a business, you'll need to complete and
                   submit the Corporate Disclosure Statement.`}
                 </div>
                 <div>
