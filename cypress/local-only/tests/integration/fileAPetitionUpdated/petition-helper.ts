@@ -58,7 +58,7 @@ export function fillPetitionFileInformation(filePath: string) {
   attachFile({
     filePath,
     selector: '#petition-file',
-    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
   });
   cy.get('[data-testid="petition-redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="step-2-next-button"]').click();
