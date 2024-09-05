@@ -11,7 +11,7 @@ export function uploadFile(testId: string) {
   cy.get(`[data-testid="${testId}"]`).attachFile(
     '../../helpers/file/sample.pdf',
   );
-  cy.get('[data-testid="upload-file-success"]').should('exist');
+  cy.get('[data-testid^="upload-file-success"]').should('exist');
 }
 
 export function attachFile({
