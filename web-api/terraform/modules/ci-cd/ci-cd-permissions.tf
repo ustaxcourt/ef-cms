@@ -239,6 +239,8 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "rds:*"
         ],
        "Resource": [
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:global-cluster:*",
+          "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster:*",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:pg:postgres",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:db:*",
           "arn:aws:rds:us-east-1:${data.aws_caller_identity.current.account_id}:subgrp:*",
@@ -386,9 +388,11 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "iam:DeleteRole",
         "iam:ListRolePolicies",
         "iam:PutRolePolicy",
-        "iam:CreateRole"
+        "iam:CreateRole",
+        "iam:ListEntitiesForPolicy"
       ],
       "Resource": [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
