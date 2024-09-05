@@ -22,7 +22,6 @@ describe('File a petition - Corrupted Files', () => {
 
     cy.get('[data-testid="upload-a-petition-label"').click();
     attachFile({
-      awaitSuccess: false,
       filePath: CORRUPTED_FILE,
       selector: '#petition-file',
     });
@@ -38,7 +37,6 @@ describe('File a petition - Corrupted Files', () => {
 
     cy.get('[data-testid="irs-notice-Yes"]').click();
     attachFile({
-      awaitSuccess: false,
       filePath: CORRUPTED_FILE,
       selector: '[data-testid="irs-notice-upload-0"]',
     });
@@ -57,7 +55,6 @@ describe('File a petition - Corrupted Files', () => {
     fillCaseProcedureInformation();
 
     attachFile({
-      awaitSuccess: false,
       filePath: CORRUPTED_FILE,
       selector: '[data-testid="stin-file"]',
     });

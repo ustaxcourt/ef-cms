@@ -62,6 +62,7 @@ describe('File a Petition', () => {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: 'input#stin-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
       cy.get('label#stin-file-label').should('have.class', 'validated');
     });
@@ -82,6 +83,7 @@ describe('File a Petition', () => {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: 'input#petition-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
 
       cy.get('label#petition-file-label').should('have.class', 'validated');

@@ -57,6 +57,7 @@ describe('Docket clerk views consolidated case', function () {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
       cy.get('[data-testid="remove-pdf"]');
       cy.get('button#upload-correspondence').click();

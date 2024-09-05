@@ -59,6 +59,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
 
       cy.get('[data-testid="save-for-later"]').click();

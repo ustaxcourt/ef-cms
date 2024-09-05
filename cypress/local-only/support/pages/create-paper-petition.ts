@@ -92,6 +92,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: 'input#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
   cy.get('[data-testid="remove-pdf"]');
 
@@ -101,6 +102,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: 'input#stinFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
   cy.get('[data-testid="remove-pdf"]');
 
@@ -110,6 +112,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: 'input#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
   cy.get('[data-testid="remove-pdf"]');
   cy.get('[data-testid="icon-requestForPlaceOfTrialFile"]').should(
@@ -122,6 +125,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: 'input#attachmentToPetitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
 
   cy.get('[data-testid="remove-pdf"]');

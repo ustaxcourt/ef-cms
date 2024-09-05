@@ -26,6 +26,7 @@ describe(
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: '[data-testid="primary-document"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
       cy.get('[data-testid=primaryDocument-objections-No]').click();
       cy.get('#submit-document').click();

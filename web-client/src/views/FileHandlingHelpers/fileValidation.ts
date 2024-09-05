@@ -51,6 +51,45 @@ const validateCorrectFileType = ({
   return { isValid: true };
 };
 
+export const validateFileOnSelect = async ({
+  allowedFileExtensions,
+  e,
+  megabyteLimit,
+  onError,
+  onSuccess,
+}: {
+  allowedFileExtensions: string[];
+  e: any;
+  megabyteLimit: number;
+  onSuccess: () => void;
+  onError: ({
+    errorToLog,
+    message,
+    title,
+  }: {
+    errorToLog: string;
+    message: string;
+    title: string;
+  }) => void;
+}) => {
+  const selectedFile = e.target.files[0];
+  const { errorMessage, isValid } = await validateFile({
+    allowedFileExtensions,
+    file: selectedFile,
+    megabyteLimit,
+  });
+  if (!isValid) {
+    onError({
+      errorToLog: errorMessage!,
+      message: errorMessage!,
+      title: 'File Upload Error',
+    });
+    e.target.value = null;
+    return;
+  }
+  onSuccess();
+};
+
 export const validateFile = async ({
   allowedFileExtensions,
   file,

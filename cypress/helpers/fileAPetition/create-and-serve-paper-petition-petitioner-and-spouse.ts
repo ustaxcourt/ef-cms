@@ -62,6 +62,7 @@ export function createAndServePaperPetitionMultipleParties(
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: '#petitionFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#scan-mode-radios').click();
@@ -70,6 +71,7 @@ export function createAndServePaperPetitionMultipleParties(
   attachFile({
     filePath: '../../helpers/file/sample.pdf',
     selector: '#requestForPlaceOfTrialFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy

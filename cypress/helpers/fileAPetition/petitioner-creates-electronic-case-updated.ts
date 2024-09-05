@@ -125,7 +125,6 @@ export function petitionerAttemptsToUploadCorruptPdfUpdated() {
   cy.get('[data-testid="step-4-next-button"]').click();
 
   attachFile({
-    awaitSuccess: false,
     filePath: '../../helpers/file/corrupt-pdf.pdf',
     selector: '[data-testid="stin-file"]',
   });
