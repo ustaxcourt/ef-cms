@@ -18,7 +18,6 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
-import { sendWelcomeEmail } from 'scripts/user/email-helpers';
 
 // eslint-disable-next-line spellcheck/spell-checker
 /**
@@ -114,9 +113,6 @@ requireEnvVars(['ENV']);
     setPasswordAsPermanent: false,
     user: rawUser,
   });
-
-  console.log('Sending welcome email ... ');
-  await sendWelcomeEmail({ applicationContext, email });
 
   console.log(
     `\nSuccess! Created Judge ${judgeFullName} with userId = ${userId} and email = ${email}.`,
