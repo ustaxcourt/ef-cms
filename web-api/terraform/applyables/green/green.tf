@@ -89,6 +89,7 @@ module "lambda_role_green" {
   role_name   = "lambda_role_${var.environment}_green"
   environment = var.environment
   dns_domain  = var.dns_domain
+  postgres_user = data.terraform_remote_state.remote.outputs.postgres_user
 }
 
 module "api-east-green" {
