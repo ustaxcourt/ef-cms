@@ -178,6 +178,7 @@ const TrialSessionFilters = connect(
             <select
               aria-label="location"
               className="usa-select select-left width-180 inline-select"
+              value={trialSessionsPage.filters.trialLocation}
               onChange={e => {
                 setTrialSessionsFiltersSequence({
                   trialLocation: e.target.value,
@@ -192,6 +193,7 @@ const TrialSessionFilters = connect(
               className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="proceedingFilter"
               name="proceedingType"
+              value={trialSessionsPage.filters.proceedingType}
               onChange={e => {
                 setTrialSessionsFiltersSequence({
                   proceedingType: e.target.value as TrialSessionProceedingType,
@@ -212,6 +214,7 @@ const TrialSessionFilters = connect(
               className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="sessionFilter"
               name="sessionType"
+              value={trialSessionsPage.filters.sessionType}
               onChange={e => {
                 setTrialSessionsFiltersSequence({
                   sessionType: e.target.value,
@@ -230,6 +233,7 @@ const TrialSessionFilters = connect(
               className="usa-select select-left width-180 inline-select margin-left-1pt5rem"
               id="judgeFilter"
               name="judge"
+              value={trialSessionsPage.filters.judgeId}
               onChange={e => {
                 setTrialSessionsFiltersSequence({
                   judgeId: e.target.value,
@@ -244,10 +248,7 @@ const TrialSessionFilters = connect(
               ))}
 
               {trialSessionsHelper.showUnassignedJudgeFilter && (
-                <option
-                  key={trialSessionsHelper.trialSessionJudges.length}
-                  value="unassigned"
-                >
+                <option key="unassigned" value="unassigned">
                   Unassigned
                 </option>
               )}
