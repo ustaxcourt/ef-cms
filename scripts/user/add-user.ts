@@ -7,6 +7,7 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
+import { getNewPasswordForEnvironment } from './make-new-password';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import joi from 'joi';
@@ -137,7 +138,7 @@ export const sendWelcomeEmail = async ({ email }) => {
   checkParams({ params, validChambersSections });
   environment.userPoolId = await getUserPoolId();
   await createOrUpdateUser(applicationContext, {
-    password: environment.defaultAccountPass,
+    password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: true,
     user: { ...params },
   });
