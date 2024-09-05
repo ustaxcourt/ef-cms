@@ -1,5 +1,4 @@
-import { attachFile } from '../file/upload-file';
-import { uploadFile } from '../file/upload-file';
+import { attachFile, uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseUpdated(
   primaryFilerName = 'John',
