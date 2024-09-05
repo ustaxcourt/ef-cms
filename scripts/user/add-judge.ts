@@ -18,6 +18,7 @@ import {
   getUserPoolId,
   requireEnvVars,
 } from '../../shared/admin-tools/util';
+import { getNewPasswordForEnvironment } from './make-new-password';
 
 // eslint-disable-next-line spellcheck/spell-checker
 /**
@@ -109,7 +110,7 @@ requireEnvVars(['ENV']);
 
   console.log('Adding user information to Dynamo and Cognito ... ');
   const { userId } = await createOrUpdateUser(applicationContext, {
-    password: environment.defaultAccountPass,
+    password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: false,
     user: rawUser,
   });
