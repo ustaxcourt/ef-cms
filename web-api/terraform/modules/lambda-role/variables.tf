@@ -10,3 +10,6 @@ variable "dns_domain" {
   type = string
 }
 
+variable "postgres_user" {
+  type = string
+}
