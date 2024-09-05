@@ -3,7 +3,6 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
-  ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -55,10 +54,6 @@ describe('getCompletedMessagesForSectionInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
 
     (getCompletedSectionInboxMessages as jest.Mock).mockReturnValue([
       messageData,
