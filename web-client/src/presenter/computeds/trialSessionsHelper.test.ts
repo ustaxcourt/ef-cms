@@ -1,5 +1,8 @@
 import {
   ROLES,
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
@@ -238,6 +241,162 @@ describe('trialSessionsHelper', () => {
         const trialSessionsOnly =
           result.trialSessionRows.filter(isTrialSessionRow);
         expect(trialSessionsOnly.length).toEqual(2);
+      });
+
+      it('should show open and closed trial sessions when the current tab is calendared', () => {
+        trialSession1.isCalendared = false;
+        trialSession2.isCalendared = true;
+        trialSession2.sessionStatus = SESSION_STATUS_TYPES.open;
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession2.trialSessionId,
+        );
+      });
+
+      it('should show remote proceeding types when proceeding type is remote', () => {
+        trialSession1.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.remote;
+        trialSession2.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
+      it('should show open trial sessions when session status filter is open', () => {
+        trialSession1.sessionStatus = SESSION_STATUS_TYPES.open;
+        trialSession1.isCalendared = true;
+        trialSession2.sessionStatus = SESSION_STATUS_TYPES.closed;
+        trialSession2.isCalendared = true;
+        trialSessionsPageState.filters.sessionStatus =
+          SESSION_STATUS_TYPES.open;
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
+      it('should show closed trial sessions when session status filter is closed', () => {
+        trialSession1.sessionStatus = SESSION_STATUS_TYPES.closed;
+        trialSession1.isCalendared = true;
+        trialSession2.sessionStatus = SESSION_STATUS_TYPES.open;
+        trialSession2.isCalendared = true;
+        trialSessionsPageState.filters.sessionStatus =
+          SESSION_STATUS_TYPES.closed;
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
+      it('should ignore session status filter when the current tab is new', () => {
+        trialSession1.sessionStatus = SESSION_STATUS_TYPES.closed;
+        trialSession1.isCalendared = true;
+        trialSession2.sessionStatus = SESSION_STATUS_TYPES.new;
+        trialSession2.isCalendared = false;
+        trialSessionsPageState.filters.sessionStatus =
+          SESSION_STATUS_TYPES.closed;
+        trialSessionsPageState.filters.currentTab = 'new';
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession2.trialSessionId,
+        );
+      });
+
+      it('should show regular trial sessions when session type filter is regular', () => {
+        trialSession1.sessionType = SESSION_TYPES.regular;
+        trialSession2.sessionType = SESSION_TYPES.hybridSmall;
+        trialSessionsPageState.filters.sessionType = SESSION_TYPES.regular;
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
+      });
+
+      it('should show trial sessions in honolulu when trial sessions when trial location filter is honolulu', () => {
+        trialSession1.trialLocation = 'Honolulu, Hawaii';
+        trialSession2.trialLocation = 'Jacksonville, Florida';
+        trialSessionsPageState.filters.trialLocation = 'Honolulu, Hawaii';
+        trialSessionsPageState.trialSessions = [trialSession1, trialSession2];
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly.length).toEqual(1);
+        expect(trialSessionsOnly[0].trialSessionId).toEqual(
+          trialSession1.trialSessionId,
+        );
       });
     });
     describe('formatting', () => {
