@@ -59,11 +59,7 @@ export function loginAsIrsPractitioner1() {
 }
 
 export function loginAsPetitioner(
-  petitionerUser:
-    | 'petitioner'
-    | 'petitioner1'
-    | 'petitioner2'
-    | 'petitioner7' = 'petitioner1',
+  petitionerUser: 'petitioner' | 'petitioner1' | 'petitioner7' = 'petitioner1',
 ) {
   cy.login(petitionerUser);
   cy.get('[data-testid="file-a-petition"]').should('exist');
