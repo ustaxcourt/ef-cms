@@ -5,7 +5,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { validateFile } from '@web-client/views/FileHandlingHelpers/fileValidation';
+import { validateFileOnSelect } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import React from 'react';
 
 type StateDriveFileInputProps = {
@@ -50,40 +50,36 @@ export const StateDrivenFileInput = connect<
 
     const fileOnForm = file || form[fileInputName] || form.existingFileName;
 
-    const onFileSelectionChange = async e => {
-      const { name: inputName } = e.target;
-      const selectedFile = e.target.files[0];
-      const { errorMessage, isValid } = await validateFile({
+    const onFileSelectionChange = async (
+      e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+      await validateFileOnSelect({
         allowedFileExtensions: accept.split(','),
-        file: selectedFile,
+        e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
+        onError: showErrorModalSequence,
+        onSuccess: () => {
+          const { name: inputName } = e.target;
+          const selectedFile = e.target.files[0];
+          cloneFile(selectedFile)
+            .then(clonedFile => {
+              updateFormValueSequence({
+                key: inputName,
+                property: 'file',
+                value: clonedFile,
+              });
+              updateFormValueSequence({
+                key: ignoreSizeKey ? inputName : `${inputName}Size`,
+                property: 'size',
+                value: clonedFile.size,
+              });
+              return validationSequence ? validationSequence() : null;
+            })
+            .catch(() => {
+              /* no-op */
+            });
+        },
       });
-      if (!isValid) {
-        showErrorModalSequence({
-          errorToLog: errorMessage,
-          message: errorMessage!,
-          title: 'File Upload Error',
-        });
-        e.target.value = null;
-        return;
-      }
-      cloneFile(selectedFile)
-        .then(clonedFile => {
-          updateFormValueSequence({
-            key: inputName,
-            property: 'file',
-            value: clonedFile,
-          });
-          updateFormValueSequence({
-            key: ignoreSizeKey ? inputName : `${inputName}Size`,
-            property: 'size',
-            value: clonedFile.size,
-          });
-          return validationSequence ? validationSequence() : null;
-        })
-        .catch(() => {
-          /* no-op */
-        });
     };
 
     return (

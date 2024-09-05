@@ -22,6 +22,7 @@ describe('Filing an Answer', function () {
     attachFile({
       filePath: '../../helpers/file/sample.pdf',
       selector: '#primary-document',
+      selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
     });
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });

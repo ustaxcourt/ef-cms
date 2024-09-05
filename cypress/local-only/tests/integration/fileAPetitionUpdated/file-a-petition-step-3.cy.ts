@@ -38,6 +38,7 @@ describe('File a petition - Step 3 IRS Notices', () => {
       attachFile({
         filePath: VALID_FILE,
         selector: '[data-testid="irs-notice-upload-0"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
       cy.get('[data-testid="step-3-next-button"]').should('exist');
       cy.get('[data-testid="step-3-next-button"]').should('be.disabled');

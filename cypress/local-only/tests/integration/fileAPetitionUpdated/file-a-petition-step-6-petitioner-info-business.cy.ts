@@ -32,6 +32,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       attachFile({
         filePath: VALID_FILE,
         selector: '[data-testid="corporate-disclosure-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
 
       cy.get('[data-testid="step-1-next-button"]').click();
@@ -73,6 +74,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       attachFile({
         filePath: VALID_FILE,
         selector: '[data-testid="corporate-disclosure-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
 
       cy.get('[data-testid="step-1-next-button"]').click();
@@ -128,6 +130,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       attachFile({
         filePath: VALID_FILE,
         selector: '[data-testid="corporate-disclosure-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
 
       cy.get('[data-testid="step-1-next-button"]').click();
@@ -183,6 +186,7 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
       attachFile({
         filePath: VALID_FILE,
         selector: '[data-testid="corporate-disclosure-file"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
 
       cy.get('[data-testid="step-1-next-button"]').click();

@@ -15,16 +15,16 @@ export function uploadFile(testId: string) {
 }
 
 export function attachFile({
-  awaitSuccess = true,
   filePath,
   selector,
+  selectorToAwaitOnSuccess = '[data-testid^="upload-file-success"]',
 }: {
   selector: string;
   filePath: string;
-  awaitSuccess?: boolean;
+  selectorToAwaitOnSuccess?: string;
 }) {
   cy.get(selector).attachFile(filePath);
-  if (awaitSuccess) {
-    cy.get('[data-testid^="upload-file-success"]').should('exist');
+  if (selectorToAwaitOnSuccess) {
+    cy.get(selectorToAwaitOnSuccess).should('exist');
   }
 }

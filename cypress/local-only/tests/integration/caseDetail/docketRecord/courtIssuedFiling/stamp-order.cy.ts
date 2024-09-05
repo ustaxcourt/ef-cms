@@ -24,6 +24,7 @@ describe('Judge`s chambers stamps an order', () => {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
       cy.get('[data-testid="remove-pdf"]');
       cy.get('[data-testid="save-and-serve"]').click();

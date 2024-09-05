@@ -31,6 +31,7 @@ describe('File a petition - Step 5 Statement of Taxpayer Identification Number',
     attachFile({
       filePath: VALID_FILE,
       selector: '[data-testid="stin-file"]',
+      selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
     });
 
     cy.get('[data-testid="step-5-next-button"]').click();

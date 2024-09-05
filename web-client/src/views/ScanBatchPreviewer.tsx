@@ -14,9 +14,9 @@ import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { limitFileSize } from './FileHandlingHelpers/limitFileSize';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { validateFileOnSelect } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
@@ -43,6 +43,7 @@ export const ScanBatchPreviewer = connect(
     setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
+    showErrorModalSequence: sequences.showErrorModalSequence,
     showModal: state.modal.showModal,
     startScanSequence: sequences.startScanSequence,
     validationErrors: state.validationErrors,
@@ -66,6 +67,7 @@ export const ScanBatchPreviewer = connect(
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
+    showErrorModalSequence,
     showModal,
     startScanSequence,
     title,
@@ -407,18 +409,24 @@ export const ScanBatchPreviewer = connect(
               id={`${documentType}-file`}
               name={documentType}
               type="file"
-              onChange={e => {
+              onChange={async e => {
                 e.preventDefault();
-                limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                  const file = e.target.files[0];
-                  setDocumentForUploadSequence({
-                    documentType,
-                    documentUploadMode: 'preview',
-                    file,
-                  });
-                  if (validateSequence) {
-                    validateSequence();
-                  }
+                await validateFileOnSelect({
+                  allowedFileExtensions: ['.pdf'],
+                  e,
+                  megabyteLimit: constants.MAX_FILE_SIZE_MB,
+                  onError: showErrorModalSequence,
+                  onSuccess: () => {
+                    const file = e.target.files[0];
+                    setDocumentForUploadSequence({
+                      documentType,
+                      documentUploadMode: 'preview',
+                      file,
+                    });
+                    if (validateSequence) {
+                      validateSequence();
+                    }
+                  },
                 });
               }}
             />

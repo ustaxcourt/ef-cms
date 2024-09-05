@@ -52,6 +52,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: 'input#primaryDocumentFile-file',
+        selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
 
       cy.get('[data-testid="save-for-later"]').click();
@@ -100,6 +101,7 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
     attachFile({
       filePath: '../../helpers/file/sample.pdf',
       selector: '[data-testid="primary-document"]',
+      selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
     });
     cy.get('[data-testid=primaryDocument-objections-No]').click();
     cy.get('#submit-document').click();

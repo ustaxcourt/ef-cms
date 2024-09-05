@@ -132,6 +132,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               attachFile({
                 filePath: uploadFile,
                 selector: `[data-testid="${input}"]`,
+                selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
               });
             }
           });
@@ -201,6 +202,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               attachFile({
                 filePath: uploadFile,
                 selector: `[data-testid="${input}"]`,
+                selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
               });
             }
           });
@@ -302,6 +304,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               attachFile({
                 filePath: uploadFile,
                 selector: `[data-testid="${input}"]`,
+                selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
               });
             }
           });
@@ -371,6 +374,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               attachFile({
                 filePath: uploadFile,
                 selector: `[data-testid="${input}"]`,
+                selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
               });
             }
           });
