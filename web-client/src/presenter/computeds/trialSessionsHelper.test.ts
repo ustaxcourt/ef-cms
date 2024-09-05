@@ -262,11 +262,6 @@ describe('trialSessionsHelper', () => {
     it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is Open', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
-          currentViewMetadata: {
-            trialSessions: {
-              tab: 'open',
-            },
-          },
           judges: [
             { name: 'I am not a legacy judge part 2', role: ROLES.judge },
           ],
@@ -275,6 +270,7 @@ describe('trialSessionsHelper', () => {
             { name: 'I am a legacy judge', role: ROLES.legacyJudge },
           ],
           permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: { trialSessions: [] },
         },
       });
 
@@ -412,12 +408,8 @@ describe('trialSessionsHelper', () => {
     it('should return showNewTrialSession as true when current user has CREATE_TRIAL_SESSION permission', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
-          currentViewMetadata: {
-            trialSessions: {
-              tab: 'open',
-            },
-          },
           permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: { trialSessions: [] },
         },
       });
 
@@ -427,12 +419,8 @@ describe('trialSessionsHelper', () => {
     it('should return showNewTrialSession as false when current user does not have CREATE_TRIAL_SESSION permission', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
-          currentViewMetadata: {
-            trialSessions: {
-              tab: 'open',
-            },
-          },
           permissions: getUserPermissions(judgeUser),
+          trialSessionsPage: { trialSessions: [] },
         },
       });
 
