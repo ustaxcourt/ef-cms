@@ -17,7 +17,7 @@ export function uploadFile(testId: string) {
 export function attachFile({
   filePath,
   selector,
-  selectorToAwaitOnSuccess = '[data-testid^="upload-file-success"]',
+  selectorToAwaitOnSuccess,
 }: {
   selector: string;
   filePath: string;
