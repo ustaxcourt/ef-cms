@@ -1,3 +1,4 @@
+#!/usr/bin/env npx ts-node --transpile-only
 /*
 We used to hard-code information for judges' chambers.
 The only piece of data not in our DB was the phone
