@@ -53,3 +53,7 @@ output "rds_host_name" {
 output "rds_host_name_west" {
   value = module.rds.address_west
 }
+
+output "postgres_user" {
+  value = module.rds_users.postgres_user
+}
