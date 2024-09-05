@@ -4,6 +4,7 @@ import {
   fillPetitionerInformation,
   selectInput,
 } from './petition-helper';
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 3 IRS Notices', () => {
@@ -34,7 +35,10 @@ describe('File a petition - Step 3 IRS Notices', () => {
       cy.get('[data-testid="step-3-next-button"]').should('exist');
       cy.get('[data-testid="step-3-next-button"]').should('not.be.disabled');
 
-      cy.get('[data-testid="irs-notice-upload-0"]').attachFile(VALID_FILE);
+      attachFile({
+        filePath: VALID_FILE,
+        selector: '[data-testid="irs-notice-upload-0"]',
+      });
       cy.get('[data-testid="step-3-next-button"]').should('exist');
       cy.get('[data-testid="step-3-next-button"]').should('be.disabled');
 

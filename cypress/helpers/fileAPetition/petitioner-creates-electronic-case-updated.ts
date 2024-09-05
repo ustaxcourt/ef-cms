@@ -1,3 +1,4 @@
+import { attachFile } from '../file/upload-file';
 import { uploadFile } from '../file/upload-file';
 
 export function petitionerCreatesElectronicCaseUpdated(
@@ -124,9 +125,10 @@ export function petitionerAttemptsToUploadCorruptPdfUpdated() {
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
-  cy.get('[data-testid="stin-file"]').attachFile(
-    '../../helpers/file/corrupt-pdf.pdf',
-  );
+  attachFile({
+    filePath: '../../helpers/file/corrupt-pdf.pdf',
+    selector: '[data-testid="stin-file"]',
+  });
   cy.get('[data-testid="step-5-next-button"]').click();
 
   cy.get('[data-testid="atp-preview-button"]').should('exist');

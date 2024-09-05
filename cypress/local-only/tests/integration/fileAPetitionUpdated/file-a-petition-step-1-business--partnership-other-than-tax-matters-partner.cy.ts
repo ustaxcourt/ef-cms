@@ -1,4 +1,5 @@
 import { InputFillType, selectInput, textInput } from './petition-helper';
+import { attachFile } from '../../../../helpers/file/upload-file';
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition: Step 1 - Petitioner Information', () => {
@@ -131,7 +132,10 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               cy.get('[data-testid="step-1-next-button"]').focus();
               cy.get('[data-testid="step-1-next-button"]').click();
               cy.get(`[data-testid="${errorMessage}"]`).should('exist');
-              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
+              attachFile({
+                filePath: uploadFile,
+                selector: `[data-testid="${input}"]`,
+              });
             }
           });
 
@@ -199,7 +203,10 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               cy.get('[data-testid="step-1-next-button"]').focus();
               cy.get('[data-testid="step-1-next-button"]').click();
               cy.get(`[data-testid="${errorMessage}"]`).should('exist');
-              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
+              attachFile({
+                filePath: uploadFile,
+                selector: `[data-testid="${input}"]`,
+              });
             }
           });
 
@@ -300,7 +307,10 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               cy.get('[data-testid="step-1-next-button"]').focus();
               cy.get('[data-testid="step-1-next-button"]').click();
               cy.get(`[data-testid="${errorMessage}"]`).should('exist');
-              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
+              attachFile({
+                filePath: uploadFile,
+                selector: `[data-testid="${input}"]`,
+              });
             }
           });
 
@@ -368,7 +378,10 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
               cy.get('[data-testid="step-1-next-button"]').focus();
               cy.get('[data-testid="step-1-next-button"]').click();
               cy.get(`[data-testid="${errorMessage}"]`).should('exist');
-              cy.get(`[data-testid="${input}"]`).attachFile(uploadFile);
+              attachFile({
+                filePath: uploadFile,
+                selector: `[data-testid="${input}"]`,
+              });
             }
           });
 

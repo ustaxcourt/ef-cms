@@ -13,3 +13,14 @@ export function uploadFile(testId: string) {
   );
   cy.get('[data-testid="upload-file-success"]').should('exist');
 }
+
+export function attachFile({
+  filePath,
+  selector,
+}: {
+  selector: string;
+  filePath: string;
+}) {
+  cy.get(selector).attachFile(filePath);
+  cy.get('[data-testid="upload-file-success"]').should('exist');
+}
