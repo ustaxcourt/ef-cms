@@ -52,7 +52,9 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   //
   // data that has a table
   const input = { endDate: trialTermEndDate, startDate: trialTermStartDate };
-  const cases = getCases(); //?
+  const cases = applicationContext
+    .getPersistenceGateway()
+    .getReadyForTrialCases({ applicationContext });
   const specialSessions = getSpecialSessions(); //?
 
   return scheduleTrialSessions({ cases, input, specialSessions });
