@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 // One session per location per week.
-const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; //sessionScheduledPerCityPerWeek
+const MAX_SESSIONS_PER_LOCATION_PER_WEEK = 1; // sessionScheduledPerCityPerWeek
 // Maximum of 6 sessions per week overall.
 const MAX_SESSIONS_PER_WEEK = 6;
 
@@ -32,6 +32,7 @@ const HYBRID_CASE_MINIMUM_QUANTITY = 50;
 const HYBRID_CASE_MAX_QUANTITY = 100;
 
 // NOTE: will front-load term with trial sessions, and prioritize Regular > Small > Hybrid
+
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -99,7 +100,7 @@ function scheduleTrialSessions({
       sessions.push({
         cases: [],
         city: session.city,
-        sessionType: 'special',
+        sessionType: SESSION_TYPES.special,
         weekOf: session.weekOf, // Special sessions cases are handled differently
       });
 
@@ -107,7 +108,7 @@ function scheduleTrialSessions({
       sessionCountPerCity[session.city]++;
     });
 
-    const cities = cases.map(c => c.location);
+    const cities = cases.map(c => c.preferredTrialCity);
 
     for (const city of cities) {
       if (!sessionCountPerCity[city]) {
@@ -126,7 +127,7 @@ function scheduleTrialSessions({
         const regularCases = cases.filter(
           c =>
             c.procedureType === PROCEDURE_TYPES_MAP.regular &&
-            c.location === city,
+            c.preferredTrialCity === city,
         );
         if (regularCases.length >= REGULAR_CASE_MINIMUM_QUANTITY) {
           sessions.push({
@@ -146,7 +147,7 @@ function scheduleTrialSessions({
         const smallCases = cases.filter(
           c =>
             c.procedureType === PROCEDURE_TYPES_MAP.small &&
-            c.location === city,
+            c.preferredTrialCity === city,
         );
         if (smallCases.length >= SMALL_CASE_MINIMUM_QUANTITY) {
           sessions.push({
