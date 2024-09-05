@@ -295,40 +295,11 @@ export function petitionerAttemptsToUploadCorruptPdfOld() {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
   attachFile({
+    awaitSuccess: false,
     filePath: '../../helpers/file/corrupt-pdf.pdf',
     selector: '[data-testid="stin-file"]',
   });
-  cy.get('[data-testid="complete-step-1"]').click();
-  uploadFile('petition-file');
-  cy.get('[data-testid="irs-notice-Yes"]').click();
-  cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
-  uploadFile('atp-file-upload');
-
-  cy.get('[data-testid="complete-step-2"]').click();
-  cy.get('[data-testid="filing-type-0"]').click();
-
-  cy.get('[data-testid="contact-primary-name"]').type('John');
-  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
-  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
-  cy.get('[data-testid="contactPrimary.state"]').select('AL');
-  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
-  cy.get('[data-testid="phone"]').type('1111111111');
-
-  cy.get('[data-testid="complete-step-3"]').click();
-  cy.get('[data-testid="procedure-type-1"]').click();
-  cy.get('[data-testid="procedure-type-0"]').click();
-  cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
-  cy.get('[data-testid="complete-step-4"]').click();
-
-  cy.get('[data-testid="stin-preview-button"]').should('exist');
-  cy.get('[data-testid="petition-preview-button"]').should('exist');
-  cy.get('[data-testid="atp-preview-button"]').should('exist');
-
-  cy.get('[data-testid="file-petition"]').click();
-
-  cy.get('[data-testid="modal-dialog"]').should('exist');
-  cy.get('[data-testid="modal-dialog-header"]').should(
-    'contain.text',
-    'Your Request Was Not Completed',
+  cy.get('[data-testid="error-modal"]').contains(
+    'File is corrupted or in an unsupported PDF format. Ensure the file is not corrupted and/or is in a supported PDF format and try again.',
   );
 }

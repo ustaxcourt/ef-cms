@@ -109,7 +109,6 @@ describe('Advanced Search', () => {
         filePath: '../../helpers/file/sample.pdf',
         selector: '[data-testid="primary-document-file"]',
       });
-      cy.get('[data-testid="upload-file-success"]').should('exist');
       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
       cy.get(

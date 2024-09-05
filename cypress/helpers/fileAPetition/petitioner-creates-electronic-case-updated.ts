@@ -126,20 +126,12 @@ export function petitionerAttemptsToUploadCorruptPdfUpdated() {
   cy.get('[data-testid="step-4-next-button"]').click();
 
   attachFile({
+    awaitSuccess: false,
     filePath: '../../helpers/file/corrupt-pdf.pdf',
     selector: '[data-testid="stin-file"]',
   });
-  cy.get('[data-testid="step-5-next-button"]').click();
-
-  cy.get('[data-testid="atp-preview-button"]').should('exist');
-  cy.get('[data-testid="stin-preview-button"]').should('exist');
-
-  cy.get('[data-testid="step-6-next-button"]').click();
-
-  cy.get('[data-testid="modal-dialog"]').should('exist');
-  cy.get('[data-testid="modal-dialog-header"]').should(
-    'contain.text',
-    'Your Request Was Not Completed',
+  cy.get('[data-testid="error-modal"]').contains(
+    'File is corrupted or in an unsupported PDF format. Ensure the file is not corrupted and/or is in a supported PDF format and try again.',
   );
 }
 

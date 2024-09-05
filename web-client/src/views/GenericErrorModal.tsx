@@ -17,6 +17,7 @@ export const GenericErrorModal = connect(
         closeLink={false}
         confirmLabel="Close"
         confirmSequence={clearModalSequence}
+        dataTestId="error-modal"
         title={modalTitle || 'An error occured'}
       >
         {message || 'Something went wrong, please try again later.'}
