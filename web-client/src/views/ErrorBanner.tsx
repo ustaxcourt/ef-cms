@@ -21,11 +21,17 @@ export function ErrorBanner({
       role="alert"
     >
       <div className="usa-alert__body" style={{ paddingTop: '12px' }}>
-        <div style={{ fontSize: '21px', fontWeight: 'bold' }}>{title}</div>
+        <p
+          className="usa-alert__heading padding-top-0"
+          data-testid="error-alert-title"
+        >
+          {title}
+        </p>
         {showSingleMessage && (
           <p
             className="usa-alert__text"
             dangerouslySetInnerHTML={{ __html: messages[0] }}
+            data-testid="error-alert-message"
           />
         )}
         {showMultipleMessages && (

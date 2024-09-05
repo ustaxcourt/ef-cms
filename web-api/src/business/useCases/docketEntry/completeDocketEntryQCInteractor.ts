@@ -216,7 +216,7 @@ const completeDocketEntryQC = async (
 
   if (
     overridePaperServiceAddress ||
-    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType)
+    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType!)
   ) {
     if (servedParties.paper.length > 0) {
       const pdfData = await applicationContext

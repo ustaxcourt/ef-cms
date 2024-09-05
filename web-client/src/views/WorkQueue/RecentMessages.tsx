@@ -5,12 +5,7 @@ import React from 'react';
 export const RecentMessages = () => {
   return (
     <div className="margin-top-4">
-      <Button
-        link
-        className="float-right"
-        href="/messages/my/inbox"
-        overrideMargin="margin-0"
-      >
+      <Button link className="float-right" href="/messages/my/inbox">
         View All Messages
       </Button>
 
