@@ -111,7 +111,7 @@ requireEnvVars(['ENV']);
   console.log('Adding user information to Dynamo and Cognito ... ');
   const { userId } = await createOrUpdateUser(applicationContext, {
     password: environment.defaultAccountPass,
-    setPasswordAsPermanent: true,
+    setPasswordAsPermanent: false,
     user: rawUser,
   });
 

@@ -145,7 +145,7 @@ const updateDynamoJudgeUserRecord = async ({
   dynamoUser.name = updates.name || dynamoUser.name;
   dynamoUser.judgePhoneNumber = updates.phone
     ? updates.phone
-    : dynamoUser.phone;
+    : dynamoUser.judgePhoneNumber;
   dynamoUser.isSeniorJudge =
     updates.isSeniorJudge != ''
       ? updates.isSeniorJudge.toLowerCase() === 'true'
